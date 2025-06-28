@@ -21,15 +21,16 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -39,15 +40,29 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import mobile_wallet.feature.make_transfer.generated.resources.Res
+import mobile_wallet.feature.make_transfer.generated.resources.feature_make_transfer_amount
+import mobile_wallet.feature.make_transfer.generated.resources.feature_make_transfer_badge_saving
+import mobile_wallet.feature.make_transfer.generated.resources.feature_make_transfer_badge_wallet
+import mobile_wallet.feature.make_transfer.generated.resources.feature_make_transfer_check_icon_description
+import mobile_wallet.feature.make_transfer.generated.resources.feature_make_transfer_continue_button
+import mobile_wallet.feature.make_transfer.generated.resources.feature_make_transfer_description_label
+import mobile_wallet.feature.make_transfer.generated.resources.feature_make_transfer_from_account
+import mobile_wallet.feature.make_transfer.generated.resources.feature_make_transfer_loading
+import mobile_wallet.feature.make_transfer.generated.resources.feature_make_transfer_no_accounts_found
+import mobile_wallet.feature.make_transfer.generated.resources.feature_make_transfer_oops_title
+import mobile_wallet.feature.make_transfer.generated.resources.feature_make_transfer_review_title
+import mobile_wallet.feature.make_transfer.generated.resources.feature_make_transfer_to_account
+import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.mifospay.core.common.utils.maskString
 import org.mifospay.core.designsystem.component.BasicDialogState
 import org.mifospay.core.designsystem.component.LoadingDialogState
 import org.mifospay.core.designsystem.component.MifosBasicDialog
+import org.mifospay.core.designsystem.component.MifosBottomSheetScaffold
 import org.mifospay.core.designsystem.component.MifosButton
 import org.mifospay.core.designsystem.component.MifosLoadingDialog
 import org.mifospay.core.designsystem.component.MifosLoadingWheel
-import org.mifospay.core.designsystem.component.MifosScaffold
 import org.mifospay.core.designsystem.component.MifosTextField
 import org.mifospay.core.designsystem.component.MifosTopBar
 import org.mifospay.core.designsystem.icon.MifosIcons
@@ -91,6 +106,7 @@ internal fun MakeTransferScreen(
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun MakeTransferScreen(
     state: MakeTransferState,
@@ -99,16 +115,16 @@ internal fun MakeTransferScreen(
     lazyListState: LazyListState = rememberLazyListState(),
     onAction: (MakeTransferAction) -> Unit,
 ) {
-    MifosScaffold(
+    MifosBottomSheetScaffold(
         topBar = {
             MifosTopBar(
-                topBarTitle = "Review Transfer",
+                topBarTitle = stringResource(Res.string.feature_make_transfer_review_title),
                 backPress = {
                     onAction(MakeTransferAction.NavigateBack)
                 },
             )
         },
-        bottomBar = {
+        sheetContent = {
             AccountListState(
                 state = accountState,
                 selected = remember(state) {
@@ -118,6 +134,7 @@ internal fun MakeTransferScreen(
             )
         },
         modifier = modifier,
+        sheetPeekHeight = 200.dp,
     ) { paddingValues ->
         LazyColumn(
             modifier = Modifier
@@ -129,7 +146,7 @@ internal fun MakeTransferScreen(
         ) {
             item {
                 MifosTextField(
-                    label = "Amount",
+                    label = stringResource(Res.string.feature_make_transfer_amount),
                     value = state.amount,
                     isError = !state.amountIsValid,
                     onValueChange = {
@@ -140,7 +157,7 @@ internal fun MakeTransferScreen(
 
             item {
                 MifosTextField(
-                    label = "Description",
+                    label = stringResource(Res.string.feature_make_transfer_description_label),
                     value = state.description,
                     isError = !state.descriptionIsValid,
                     onValueChange = {
@@ -155,6 +172,15 @@ internal fun MakeTransferScreen(
                     modifier = Modifier,
                 )
             }
+
+            item {
+                MifosButton(
+                    onClick = { onAction(MakeTransferAction.InitiateTransfer) },
+                    modifier = Modifier.fillMaxWidth(),
+                ) {
+                    Text(text = stringResource(Res.string.feature_make_transfer_continue_button))
+                }
+            }
         }
     }
 }
@@ -166,70 +192,46 @@ private fun AccountListState(
     selected: (Account) -> Boolean,
     onAction: (MakeTransferAction) -> Unit,
 ) {
-    Surface(
-        modifier = modifier.fillMaxWidth(),
-        shadowElevation = 2.dp,
-        tonalElevation = 2.dp,
-        shape = RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp),
-        color = MaterialTheme.colorScheme.background,
+    Box(
+        modifier = modifier.fillMaxWidth()
+            .padding(16.dp),
+        contentAlignment = Alignment.Center,
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(16.dp),
-        ) {
-            Box(
-                modifier = Modifier.fillMaxWidth(),
-                contentAlignment = Alignment.Center,
-            ) {
-                when (state) {
-                    is ViewState.Loading -> {
-                        Box(modifier = Modifier.fillMaxWidth()) {
-                            MifosLoadingWheel(
-                                contentDesc = "Loading",
-                                modifier = Modifier
-                                    .align(Alignment.Center)
-                                    .padding(16.dp),
-                            )
-                        }
-                    }
-
-                    is ViewState.Empty -> {
-                        EmptyContentScreen(
-                            title = "Oops!",
-                            subTitle = "No accounts found!",
-                        )
-                    }
-
-                    is ViewState.Error -> {
-                        EmptyContentScreen(
-                            title = "Oops!",
-                            subTitle = "No accounts found!",
-                            iconTint = MaterialTheme.colorScheme.error,
-                        )
-                    }
-
-                    is ViewState.Content -> {
-                        AccountList(
-                            accounts = state.data,
-                            selected = selected,
-                            onClick = {
-                                onAction(MakeTransferAction.SelectAccount(it))
-                            },
-                        )
-                    }
+        when (state) {
+            is ViewState.Loading -> {
+                Box(modifier = Modifier.fillMaxWidth()) {
+                    MifosLoadingWheel(
+                        contentDesc = stringResource(Res.string.feature_make_transfer_loading),
+                        modifier = Modifier
+                            .align(Alignment.Center)
+                            .padding(16.dp),
+                    )
                 }
             }
 
-            MifosButton(
-                onClick = {
-                    onAction(MakeTransferAction.InitiateTransfer)
-                },
-                modifier = Modifier.fillMaxWidth(),
-            ) {
-                Text(text = "Continue")
+            is ViewState.Empty -> {
+                EmptyContentScreen(
+                    title = stringResource(Res.string.feature_make_transfer_oops_title),
+                    subTitle = stringResource(Res.string.feature_make_transfer_no_accounts_found),
+                )
+            }
+
+            is ViewState.Error -> {
+                EmptyContentScreen(
+                    title = stringResource(Res.string.feature_make_transfer_oops_title),
+                    subTitle = stringResource(Res.string.feature_make_transfer_no_accounts_found),
+                    iconTint = MaterialTheme.colorScheme.error,
+                )
+            }
+
+            is ViewState.Content -> {
+                AccountList(
+                    accounts = state.data,
+                    selected = selected,
+                    onClick = {
+                        onAction(MakeTransferAction.SelectAccount(it))
+                    },
+                )
             }
         }
     }
@@ -242,16 +244,17 @@ private fun AccountList(
     modifier: Modifier = Modifier,
     onClick: (Account) -> Unit,
 ) {
-    Column(
+    LazyColumn(
         modifier = modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
-        Text(
-            text = "From Account",
-            style = MaterialTheme.typography.labelLarge,
-        )
-
-        accounts.forEach { account ->
+        item {
+            Text(
+                text = stringResource(Res.string.feature_make_transfer_from_account),
+                style = MaterialTheme.typography.labelLarge,
+            )
+        }
+        items(items = accounts, key = { account -> account.id }) { account ->
             AccountItem(
                 account = account,
                 selected = selected(account),
@@ -300,7 +303,7 @@ private fun AccountItem(
                         } else {
                             MifosIcons.RadioButtonUnchecked
                         },
-                        contentDescription = "check",
+                        contentDescription = stringResource(Res.string.feature_make_transfer_check_icon_description),
                         tint = if (it) {
                             MaterialTheme.colorScheme.primary
                         } else {
@@ -326,7 +329,7 @@ private fun ClientCard(
         verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
         Text(
-            text = "To Account",
+            text = stringResource(Res.string.feature_make_transfer_to_account),
             style = MaterialTheme.typography.labelLarge,
         )
 
@@ -355,11 +358,11 @@ private fun ClientCard(
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
                         AccountBadge(
-                            text = "WALLET",
+                            text = stringResource(Res.string.feature_make_transfer_badge_wallet),
                         )
 
                         AccountBadge(
-                            text = "SAVING",
+                            text = stringResource(Res.string.feature_make_transfer_badge_saving),
                             borderColor = MaterialTheme.colorScheme.secondary,
                         )
                     }
