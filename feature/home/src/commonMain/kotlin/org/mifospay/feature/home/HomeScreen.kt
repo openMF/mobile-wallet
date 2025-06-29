@@ -195,7 +195,11 @@ fun HomeScreenContent(
                 }
 
                 is ViewState.Error -> {
-                    ErrorScreenContent()
+                    ErrorScreenContent(
+                        onClickRetry = {
+                            onAction(HomeAction.OnRetryClicked)
+                        },
+                    )
                 }
             }
         }

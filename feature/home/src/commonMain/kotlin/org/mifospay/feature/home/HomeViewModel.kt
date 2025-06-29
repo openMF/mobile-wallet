@@ -11,7 +11,9 @@ package org.mifospay.feature.home
 
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
@@ -32,7 +34,7 @@ private const val TRANSACTION_LIMIT = 5
 @OptIn(ExperimentalCoroutinesApi::class)
 class HomeViewModel(
     private val preferencesRepository: UserPreferencesRepository,
-    repository: SelfServiceRepository,
+    private val repository: SelfServiceRepository,
 ) : BaseViewModel<HomeState, HomeEvent, HomeAction>(
     initialState = run {
         val client = requireNotNull(preferencesRepository.client.value)
@@ -44,10 +46,26 @@ class HomeViewModel(
         )
     },
 ) {
-    val accountState = repository.getActiveAccountsWithTransactions(
-        clientId = state.client.id,
-        limit = TRANSACTION_LIMIT,
-    ).mapLatest { result ->
+    /**
+     * A trigger used to refresh the account and transaction data.
+     *
+     * This `MutableStateFlow<Boolean>` toggles its value (`true`/`false`) each time
+     * a reload is requested (e.g., when the user clicks the "Retry" button in the UI).
+     *
+     * Changing the value causes the `flatMapLatest` block in `accountState` to re-emit,
+     * which triggers a fresh API call via `repository.getActiveAccountsWithTransactions`.
+     *
+     * This mechanism ensures re-fetching only occurs when explicitly triggered, and works
+     * well in combination with UI states like `ViewState.Error`, where the retry action is visible.
+     */
+    private val reloadTrigger = MutableStateFlow(false)
+
+    val accountState = reloadTrigger.flatMapLatest {
+        repository.getActiveAccountsWithTransactions(
+            clientId = state.client.id,
+            limit = TRANSACTION_LIMIT,
+        )
+    }.mapLatest { result ->
         when (result) {
             is DataState.Error -> ViewState.Error("No accounts found")
 
@@ -139,6 +157,10 @@ class HomeViewModel(
                     }
                 }
             }
+
+            is HomeAction.OnRetryClicked -> {
+                reloadTrigger.value = !reloadTrigger.value
+            }
         }
     }
 }
@@ -191,6 +213,7 @@ sealed interface HomeAction {
     data object OnClickSeeAllTransactions : HomeAction
     data object OnDismissDialog : HomeAction
     data object OnNavigateBack : HomeAction
+    data object OnRetryClicked : HomeAction
 
     data class MarkAsDefault(val accountId: Long, val accountNo: String) : HomeAction
     data class AccountDetailsClicked(val accountId: Long) : HomeAction
