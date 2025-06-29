@@ -11,7 +11,6 @@ package org.mifospay.feature.home
 
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.mapLatest
@@ -47,49 +46,61 @@ class HomeViewModel(
     },
 ) {
     /**
-     * A trigger used to refresh the account and transaction data.
+     * Exposes the current view state for the Home screen (loading, content, or error),
+     * and automatically updates when a reload is triggered via the state.
      *
-     * This `MutableStateFlow<Boolean>` toggles its value (`true`/`false`) each time
-     * a reload is requested (e.g., when the user clicks the "Retry" button in the UI).
+     * This state is driven by [HomeState.reloadTrigger], which toggles whenever the user
+     * explicitly requests a refresh — for example, by clicking the Retry button on an error screen,
+     * or performing a pull-to-refresh gesture.
      *
-     * Changing the value causes the `flatMapLatest` block in `accountState` to re-emit,
-     * which triggers a fresh API call via `repository.getActiveAccountsWithTransactions`.
+     * The flow reacts to changes in [reloadTrigger] using `flatMapLatest`, triggering a new
+     * call to [SelfServiceRepository.getActiveAccountsWithTransactions]. The result of that call
+     * is mapped into a [ViewState], and exposed via a hot [StateFlow] for UI consumption.
      *
-     * This mechanism ensures re-fetching only occurs when explicitly triggered, and works
-     * well in combination with UI states like `ViewState.Error`, where the retry action is visible.
+     * Additionally, [HomeState.isRefreshing] is reset to false once a response (either success or error)
+     * is received, ensuring the UI (e.g. pull-to-refresh indicator) stops spinning.
      */
-    private val reloadTrigger = MutableStateFlow(false)
-
-    val accountState = reloadTrigger.flatMapLatest {
-        repository.getActiveAccountsWithTransactions(
-            clientId = state.client.id,
-            limit = TRANSACTION_LIMIT,
-        )
-    }.mapLatest { result ->
-        when (result) {
-            is DataState.Error -> ViewState.Error("No accounts found")
-
-            is DataState.Loading -> ViewState.Loading
-
-            is DataState.Success -> {
-                if (state.defaultAccountId == null && result.data.accounts.isNotEmpty()) {
-                    val accountId = result.data.accounts.first().id
-                    val accountNo = result.data.accounts.first().number
-
-                    sendAction(HomeAction.MarkAsDefault(accountId, accountNo))
+    val accountState = stateFlow
+        .mapLatest { it.reloadTrigger }
+        .flatMapLatest {
+            repository.getActiveAccountsWithTransactions(
+                clientId = state.client.id,
+                limit = TRANSACTION_LIMIT,
+            )
+        }.mapLatest { result ->
+            when (result) {
+                is DataState.Error -> {
+                    mutableStateFlow.update {
+                        it.copy(isRefreshing = false)
+                    }
+                    ViewState.Error("No accounts found")
                 }
 
-                ViewState.Content(
-                    accounts = result.data.accounts,
-                    transactions = result.data.transactions,
-                )
+                is DataState.Loading -> ViewState.Loading
+
+                is DataState.Success -> {
+                    mutableStateFlow.update {
+                        it.copy(isRefreshing = false)
+                    }
+
+                    if (state.defaultAccountId == null && result.data.accounts.isNotEmpty()) {
+                        val accountId = result.data.accounts.first().id
+                        val accountNo = result.data.accounts.first().number
+
+                        sendAction(HomeAction.MarkAsDefault(accountId, accountNo))
+                    }
+
+                    ViewState.Content(
+                        accounts = result.data.accounts,
+                        transactions = result.data.transactions,
+                    )
+                }
             }
-        }
-    }.stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(5_000),
-        initialValue = ViewState.Loading,
-    )
+        }.stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5_000),
+            initialValue = ViewState.Loading,
+        )
 
     override fun handleAction(action: HomeAction) {
         when (action) {
@@ -158,8 +169,12 @@ class HomeViewModel(
                 }
             }
 
-            is HomeAction.OnRetryClicked -> {
-                reloadTrigger.value = !reloadTrigger.value
+            is HomeAction.OnRetryClicked -> mutableStateFlow.update {
+                it.copy(reloadTrigger = !it.reloadTrigger)
+            }
+
+            is HomeAction.OnPullToRefresh -> mutableStateFlow.update {
+                it.copy(isRefreshing = true, reloadTrigger = !it.reloadTrigger)
             }
         }
     }
@@ -169,6 +184,8 @@ class HomeViewModel(
 data class HomeState(
     val client: Client,
     val defaultAccountId: Long?,
+    val reloadTrigger: Boolean = false,
+    val isRefreshing: Boolean = false,
     val dialogState: DialogState? = null,
 ) : Parcelable {
 
@@ -214,6 +231,7 @@ sealed interface HomeAction {
     data object OnDismissDialog : HomeAction
     data object OnNavigateBack : HomeAction
     data object OnRetryClicked : HomeAction
+    data object OnPullToRefresh : HomeAction
 
     data class MarkAsDefault(val accountId: Long, val accountNo: String) : HomeAction
     data class AccountDetailsClicked(val accountId: Long) : HomeAction

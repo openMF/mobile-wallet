@@ -43,12 +43,16 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
+import androidx.compose.material3.pulltorefresh.PullToRefreshState
+import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
@@ -103,6 +107,7 @@ import org.mifospay.core.ui.utils.EventsEffect
  * Show all saving accounts as stacked card
  * Show transaction history of selected account
  */
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun HomeScreen(
     onNavigateBack: () -> Unit,
@@ -118,6 +123,7 @@ internal fun HomeScreen(
 
     val homeUIState by viewModel.stateFlow.collectAsStateWithLifecycle()
     val accountState by viewModel.accountState.collectAsStateWithLifecycle()
+    val pullRefreshState = rememberPullToRefreshState()
 
     EventsEffect(viewModel) { event ->
         when (event) {
@@ -153,6 +159,8 @@ internal fun HomeScreen(
         viewState = accountState,
         defaultAccountId = homeUIState.defaultAccountId,
         snackbarHostState = snackbarState,
+        isRefreshing = homeUIState.isRefreshing,
+        pullRefreshState = pullRefreshState,
         modifier = modifier,
         onAction = remember(viewModel) {
             { viewModel.trySendAction(it) }
@@ -160,11 +168,14 @@ internal fun HomeScreen(
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreenContent(
     viewState: ViewState,
     defaultAccountId: Long?,
     snackbarHostState: SnackbarHostState,
+    isRefreshing: Boolean = false,
+    pullRefreshState: PullToRefreshState,
     modifier: Modifier = Modifier,
     onAction: (HomeAction) -> Unit,
 ) {
@@ -172,7 +183,10 @@ fun HomeScreenContent(
         modifier = modifier,
         snackbarHostState = snackbarHostState,
     ) {
-        Box(
+        PullToRefreshBox(
+            isRefreshing = isRefreshing,
+            onRefresh = { onAction(HomeAction.OnPullToRefresh) },
+            state = pullRefreshState,
             modifier = Modifier
                 .fillMaxSize()
                 .padding(it),
