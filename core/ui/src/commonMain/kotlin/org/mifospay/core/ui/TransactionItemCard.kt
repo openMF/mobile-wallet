@@ -35,7 +35,6 @@ import mobile_wallet.core.ui.generated.resources.core_ui_money_in
 import mobile_wallet.core.ui.generated.resources.core_ui_money_out
 import org.jetbrains.compose.resources.painterResource
 import org.mifospay.core.common.CurrencyFormatter
-import org.mifospay.core.designsystem.theme.black
 import org.mifospay.core.designsystem.theme.transactionTypeCredit
 import org.mifospay.core.designsystem.theme.transactionTypeDebit
 import org.mifospay.core.model.savingsaccount.Transaction
@@ -99,7 +98,7 @@ fun TransactionItemCard(
                     color = when (transaction.transactionType) {
                         TransactionType.DEBIT -> MaterialTheme.colorScheme.transactionTypeDebit
                         TransactionType.CREDIT -> MaterialTheme.colorScheme.transactionTypeCredit
-                        else -> MaterialTheme.colorScheme.black
+                        else -> MaterialTheme.colorScheme.scrim
                     },
                     textAlign = TextAlign.End,
                 ),
@@ -187,7 +186,7 @@ fun TransactionItem(
                         color = when (transaction.transactionType) {
                             TransactionType.CREDIT -> MaterialTheme.colorScheme.transactionTypeCredit
                             TransactionType.DEBIT -> MaterialTheme.colorScheme.transactionTypeDebit
-                            else -> MaterialTheme.colorScheme.black
+                            else -> MaterialTheme.colorScheme.scrim
                         },
                         textAlign = TextAlign.End,
                     ),

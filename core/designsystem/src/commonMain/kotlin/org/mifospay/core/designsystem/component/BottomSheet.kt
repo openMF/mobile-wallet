@@ -27,7 +27,6 @@ import androidx.compose.ui.unit.dp
 import com.arkivanov.essenty.backhandler.BackCallback
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.ui.tooling.preview.Preview
-import org.mifospay.core.designsystem.theme.white
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -55,7 +54,7 @@ fun MifosBottomSheet(
 
     AnimatedVisibility(visible = showBottomSheet) {
         ModalBottomSheet(
-            containerColor = MaterialTheme.colorScheme.white,
+            containerColor = MaterialTheme.colorScheme.surfaceContainerLowest,
             onDismissRequest = {
                 showBottomSheet = false
                 dismissSheet()

@@ -43,7 +43,6 @@ import mobile_wallet.feature.history.generated.resources.arrow_outward
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.vectorResource
 import org.mifospay.core.common.CurrencyFormatter
-import org.mifospay.core.designsystem.theme.black
 import org.mifospay.core.model.savingsaccount.Transaction
 import org.mifospay.core.model.savingsaccount.TransactionType
 import org.mifospay.feature.history.HistoryAction
@@ -162,7 +161,7 @@ internal fun TransactionItem(
                             blue = 0f,
                         )
 
-                        else -> MaterialTheme.colorScheme.black
+                        else -> MaterialTheme.colorScheme.scrim
                     },
                     contentDescription = null,
                 )
@@ -190,7 +189,7 @@ internal fun TransactionItem(
                                 blue = 0f,
                             )
 
-                            else -> MaterialTheme.colorScheme.black
+                            else -> MaterialTheme.colorScheme.scrim
                         },
                         textAlign = TextAlign.End,
                     ),

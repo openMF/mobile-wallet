@@ -48,8 +48,6 @@ import mobile_wallet.feature.upi_setup.generated.resources.feature_upi_setup_upi
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.mifospay.core.designsystem.theme.MifosTheme
-import org.mifospay.core.designsystem.theme.darkGray
-import org.mifospay.core.designsystem.theme.lightGray
 import org.mifospay.core.ui.VerifyStepHeader
 
 @Composable
@@ -219,9 +217,9 @@ private fun UpiPinCharView(
         text = char,
         style = MaterialTheme.typography.headlineSmall,
         color = if (isFocused) {
-            MaterialTheme.colorScheme.darkGray
+            MaterialTheme.colorScheme.outline
         } else {
-            MaterialTheme.colorScheme.lightGray
+            MaterialTheme.colorScheme.outlineVariant
         },
         textAlign = TextAlign.Center,
     )

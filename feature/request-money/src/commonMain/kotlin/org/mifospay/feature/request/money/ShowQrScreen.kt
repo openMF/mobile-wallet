@@ -30,6 +30,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import io.github.alexzhirkevich.qrose.ImageFormat
@@ -43,7 +44,6 @@ import org.mifospay.core.designsystem.component.MifosLoadingDialog
 import org.mifospay.core.designsystem.component.MifosLoadingWheel
 import org.mifospay.core.designsystem.component.MifosOutlinedButton
 import org.mifospay.core.designsystem.component.MifosScaffold
-import org.mifospay.core.designsystem.theme.white
 import org.mifospay.core.ui.utils.EventsEffect
 
 @Composable
@@ -197,7 +197,7 @@ private fun QrDataContent(
     Box(
         modifier = modifier
             .size(350.dp, 381.dp)
-            .background(MaterialTheme.colorScheme.white, shape = RoundedCornerShape(15.dp)),
+            .background(Color.White, shape = RoundedCornerShape(15.dp)),
         contentAlignment = Alignment.Center,
     ) {
         Column(

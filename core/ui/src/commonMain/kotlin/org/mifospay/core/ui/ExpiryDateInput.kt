@@ -36,8 +36,6 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import org.mifospay.core.designsystem.theme.darkGray
-import org.mifospay.core.designsystem.theme.lightGray
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
@@ -122,9 +120,9 @@ fun FormattedDateView(
         text = char,
         style = MaterialTheme.typography.headlineSmall,
         color = if (isFocused) {
-            MaterialTheme.colorScheme.darkGray
+            MaterialTheme.colorScheme.outline
         } else {
-            MaterialTheme.colorScheme.lightGray
+            MaterialTheme.colorScheme.outlineVariant
         },
         textAlign = TextAlign.Center,
     )

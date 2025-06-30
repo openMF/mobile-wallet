@@ -36,8 +36,6 @@ import androidx.compose.ui.text.input.TransformedText
 import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.mifospay.core.designsystem.theme.MifosTheme
-import org.mifospay.core.designsystem.theme.darkGray
-import org.mifospay.core.designsystem.theme.lightGray
 import org.mifospay.core.ui.ExpiryDateInput
 
 @Composable
@@ -75,8 +73,8 @@ internal fun DebitCardScreenContent(
             ),
             visualTransformation = ::formatCardNumber,
             colors = OutlinedTextFieldDefaults.colors(
-                focusedBorderColor = MaterialTheme.colorScheme.darkGray,
-                unfocusedBorderColor = MaterialTheme.colorScheme.lightGray,
+                focusedBorderColor = MaterialTheme.colorScheme.outline,
+                unfocusedBorderColor = MaterialTheme.colorScheme.outlineVariant,
                 cursorColor = MaterialTheme.colorScheme.onSurface,
             ),
         )

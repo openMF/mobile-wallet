@@ -52,7 +52,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.times
 import org.jetbrains.compose.resources.painterResource
-import org.mifospay.core.designsystem.theme.white
 import org.mifospay.feature.savedcards.createOrUpdate.AECardState
 import org.mifospay.feature.savedcards.utils.CardMaskStyle
 import org.mifospay.feature.savedcards.utils.CardType
@@ -137,8 +136,8 @@ private fun AnimatedCardNumberInput(
     cardNumber: String,
     cardType: CardType = CardType.detectCardType(cardNumber),
     maskStyle: CardMaskStyle = CardMaskStyle.ALL_EXCEPT_LAST_FOUR,
-    textColor: Color = MaterialTheme.colorScheme.white,
-    dotColor: Color = MaterialTheme.colorScheme.white,
+    textColor: Color = MaterialTheme.colorScheme.surfaceContainerLowest,
+    dotColor: Color = MaterialTheme.colorScheme.surfaceContainerLowest,
     modifier: Modifier = Modifier,
 ) {
     val groups = remember(cardNumber, cardType) {
@@ -204,8 +203,8 @@ private fun AnimatedCVVInput(
     cvv: String,
     cardType: CardType = CardType.UNKNOWN,
     isVisible: Boolean = false,
-    textColor: Color = MaterialTheme.colorScheme.white,
-    dotColor: Color = MaterialTheme.colorScheme.white,
+    textColor: Color = MaterialTheme.colorScheme.surfaceContainerLowest,
+    dotColor: Color = MaterialTheme.colorScheme.surfaceContainerLowest,
     modifier: Modifier = Modifier,
 ) {
     val paddedCVV = remember(cvv, cardType) {
@@ -222,7 +221,7 @@ private fun AnimatedCVVInput(
                 fontWeight = FontWeight.W300,
                 fontSize = 12.sp,
                 letterSpacing = 1.sp,
-                color = MaterialTheme.colorScheme.white,
+                color = MaterialTheme.colorScheme.surfaceContainerLowest,
             ),
         )
 
@@ -351,8 +350,8 @@ private fun CreditCardBackground(baseColor: Color) {
 private fun CreditCardLabelAndText(
     label: String,
     text: String,
-    labelColor: Color = MaterialTheme.colorScheme.white,
-    textColor: Color = MaterialTheme.colorScheme.white,
+    labelColor: Color = MaterialTheme.colorScheme.surfaceContainerLowest,
+    textColor: Color = MaterialTheme.colorScheme.surfaceContainerLowest,
 ) {
     Column(
         modifier = Modifier.wrapContentSize(),
@@ -487,8 +486,8 @@ private fun DisplayCardNumberInput(
     cardNumber: String,
     cardType: CardType = CardType.detectCardType(cardNumber),
     maskStyle: CardMaskStyle = CardMaskStyle.ALL_EXCEPT_LAST_FOUR,
-    textColor: Color = MaterialTheme.colorScheme.white,
-    dotColor: Color = MaterialTheme.colorScheme.white,
+    textColor: Color = MaterialTheme.colorScheme.surfaceContainerLowest,
+    dotColor: Color = MaterialTheme.colorScheme.surfaceContainerLowest,
     modifier: Modifier = Modifier,
 ) {
     val groups = remember(cardNumber, cardType) {

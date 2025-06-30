@@ -70,7 +70,6 @@ import org.mifospay.core.designsystem.component.MifosScaffold
 import org.mifospay.core.designsystem.icon.MifosIcons
 import org.mifospay.core.designsystem.theme.activeAccount
 import org.mifospay.core.designsystem.theme.approvedAccount
-import org.mifospay.core.designsystem.theme.black
 import org.mifospay.core.designsystem.theme.closedAccount
 import org.mifospay.core.designsystem.theme.defaultAccount
 import org.mifospay.core.designsystem.theme.maturedAccount
@@ -623,6 +622,6 @@ private fun StatusChip(label: String) {
     MifosSmallChip(
         label = label,
         containerColor = color,
-        contentColor = MaterialTheme.colorScheme.black,
+        contentColor = MaterialTheme.colorScheme.scrim,
     )
 }

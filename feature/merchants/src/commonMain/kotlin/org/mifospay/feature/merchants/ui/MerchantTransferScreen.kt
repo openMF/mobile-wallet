@@ -71,7 +71,6 @@ import org.mifospay.core.designsystem.component.MifosOutlinedTextField
 import org.mifospay.core.designsystem.component.MifosScaffold
 import org.mifospay.core.designsystem.icon.MifosIcons
 import org.mifospay.core.designsystem.theme.MifosTheme
-import org.mifospay.core.designsystem.theme.gray
 import org.mifospay.core.designsystem.theme.transactionTypeCredit
 import org.mifospay.core.designsystem.theme.transactionTypeDebit
 import org.mifospay.core.designsystem.theme.transactionTypeOther
@@ -202,9 +201,9 @@ private fun MerchantBottomSheet(
         content = {
             Column(
                 modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 24.dp),
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp, vertical = 24.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Text(
@@ -275,7 +274,7 @@ private fun MerchantInfo(
         Text(
             text = merchantVPA,
             style = MaterialTheme.typography.labelMedium,
-            color = MaterialTheme.colorScheme.gray,
+            color = MaterialTheme.colorScheme.outline,
         )
     }
 }
@@ -289,12 +288,12 @@ private fun MerchantInitialAvatar(
 
     Box(
         modifier =
-        modifier
-            .size(86.dp)
-            .background(
-                color = MaterialTheme.colorScheme.primary,
-                shape = CircleShape,
-            ),
+            modifier
+                .size(86.dp)
+                .background(
+                    color = MaterialTheme.colorScheme.primary,
+                    shape = CircleShape,
+                ),
         contentAlignment = Alignment.Center,
     ) {
         Text(
@@ -343,11 +342,11 @@ private fun SpecificTransactionItem(
                 )
                 Text(
                     text =
-                    when (transaction.transactionType) {
-                        TransactionType.DEBIT -> stringResource(Res.string.feature_merchants_debits)
-                        TransactionType.CREDIT -> stringResource(Res.string.feature_merchants_credits)
-                        TransactionType.OTHER -> stringResource(Res.string.feature_merchants_other)
-                    },
+                        when (transaction.transactionType) {
+                            TransactionType.DEBIT -> stringResource(Res.string.feature_merchants_debits)
+                            TransactionType.CREDIT -> stringResource(Res.string.feature_merchants_credits)
+                            TransactionType.OTHER -> stringResource(Res.string.feature_merchants_other)
+                        },
                     style = MaterialTheme.typography.bodyLarge,
                 )
             }
@@ -356,13 +355,13 @@ private fun SpecificTransactionItem(
                 text = "${transaction.currency.code}${transaction.amount}",
                 style = MaterialTheme.typography.displaySmall,
                 color =
-                when (transaction.transactionType) {
-                    TransactionType.DEBIT -> MaterialTheme.colorScheme.transactionTypeDebit
+                    when (transaction.transactionType) {
+                        TransactionType.DEBIT -> MaterialTheme.colorScheme.transactionTypeDebit
 
-                    TransactionType.CREDIT -> MaterialTheme.colorScheme.transactionTypeCredit
+                        TransactionType.CREDIT -> MaterialTheme.colorScheme.transactionTypeCredit
 
-                    TransactionType.OTHER -> MaterialTheme.colorScheme.transactionTypeOther
-                },
+                        TransactionType.OTHER -> MaterialTheme.colorScheme.transactionTypeOther
+                    },
             )
         }
     }
@@ -377,9 +376,9 @@ private fun SpecificTransactionAccountInfo(
 ) {
     Column(
         modifier =
-        modifier.clickable {
-            accountClicked(accountNo)
-        },
+            modifier.clickable {
+                accountClicked(accountNo)
+            },
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Icon(imageVector = MifosIcons.AccountCircle, contentDescription = null)
