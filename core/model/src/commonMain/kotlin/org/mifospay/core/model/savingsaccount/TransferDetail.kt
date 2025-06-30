@@ -17,7 +17,7 @@ data class TransferDetail(
     val reversed: Boolean = false,
     val currency: Currency = Currency(),
     val transferAmount: Double = 0.0,
-    val transferDate: List<Int>,
+    val transferDate: String = "",
     val transferDescription: String? = null,
     val fromOffice: FromOffice,
     val fromClient: FromClient,

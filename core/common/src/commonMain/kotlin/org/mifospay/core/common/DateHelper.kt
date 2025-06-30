@@ -69,6 +69,26 @@ object DateHelper {
     }
 
     /**
+     * Parses a date string with an auto-detected delimiter and returns it in "dd MMM yyyy" format.
+     *
+     * @param dateString The input date string, e.g., "2016-04-14", "2016/04/14", "2016.04.14"
+     * @return A formatted date string like "14 Apr 2016"
+     */
+    fun getDateAsString(dateString: String): String {
+        val delimiters = listOf("-", "/", ".")
+        val detectedDelimiter = delimiters.find { dateString.contains(it) }
+            ?: throw IllegalArgumentException("Unsupported date format: no recognized delimiter found.")
+
+        val dateComponents = dateString.split(detectedDelimiter).mapNotNull { it.toIntOrNull() }
+        if (dateComponents.size != 3) {
+            throw IllegalArgumentException("Invalid date format: expected format like yyyy-MM-dd.")
+        }
+
+        val (year, month, day) = dateComponents
+        return "$day ${getMonthName(month)} $year"
+    }
+
+    /**
      * This Method converting the dd-MM-yyyy format type date string into dd MMMM yyyy
      *
      * @param format     Final Format of date string

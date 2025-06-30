@@ -10,6 +10,7 @@
 package org.mifospay.core.designsystem.component
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.WindowInsets
@@ -17,6 +18,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.BottomSheetDefaults
+import androidx.compose.material3.BottomSheetScaffold
+import androidx.compose.material3.BottomSheetScaffoldState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.FloatingActionButton
@@ -25,14 +29,19 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.ScaffoldDefaults
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.contentColorFor
 import androidx.compose.material3.pulltorefresh.PullToRefreshDefaults
 import androidx.compose.material3.pulltorefresh.pullToRefresh
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
+import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -149,6 +158,48 @@ fun MifosScaffold(
                 )
             }
         },
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun MifosBottomSheetScaffold(
+    sheetContent: @Composable ColumnScope.() -> Unit,
+    modifier: Modifier = Modifier,
+    scaffoldState: BottomSheetScaffoldState = rememberBottomSheetScaffoldState(),
+    sheetPeekHeight: Dp = BottomSheetDefaults.SheetPeekHeight,
+    sheetMaxWidth: Dp = BottomSheetDefaults.SheetMaxWidth,
+    sheetShape: Shape = BottomSheetDefaults.ExpandedShape,
+    sheetContainerColor: Color = BottomSheetDefaults.ContainerColor,
+    sheetContentColor: Color = contentColorFor(sheetContainerColor),
+    sheetTonalElevation: Dp = 0.dp,
+    sheetShadowElevation: Dp = BottomSheetDefaults.Elevation,
+    sheetDragHandle: @Composable (() -> Unit)? = { BottomSheetDefaults.DragHandle() },
+    sheetSwipeEnabled: Boolean = true,
+    topBar: @Composable (() -> Unit)? = null,
+    snackbarHost: @Composable (SnackbarHostState) -> Unit = { SnackbarHost(it) },
+    containerColor: Color = MaterialTheme.colorScheme.surface,
+    contentColor: Color = contentColorFor(containerColor),
+    content: @Composable (PaddingValues) -> Unit,
+) {
+    BottomSheetScaffold(
+        sheetContent = sheetContent,
+        modifier = modifier,
+        scaffoldState = scaffoldState,
+        sheetPeekHeight = sheetPeekHeight,
+        sheetMaxWidth = sheetMaxWidth,
+        sheetShape = sheetShape,
+        sheetContainerColor = sheetContainerColor,
+        sheetContentColor = sheetContentColor,
+        sheetTonalElevation = sheetTonalElevation,
+        sheetShadowElevation = sheetShadowElevation,
+        sheetDragHandle = sheetDragHandle,
+        sheetSwipeEnabled = sheetSwipeEnabled,
+        topBar = topBar,
+        snackbarHost = snackbarHost,
+        containerColor = containerColor,
+        contentColor = contentColor,
+        content = content,
     )
 }
 

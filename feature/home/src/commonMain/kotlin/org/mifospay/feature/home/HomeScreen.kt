@@ -298,6 +298,7 @@ private fun AccountList(
 
     HorizontalPager(
         state = pagerState,
+        pageSpacing = 5.dp,
         modifier = modifier,
     ) {
         AccountCard(
