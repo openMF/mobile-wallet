@@ -17,6 +17,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -42,49 +44,44 @@ fun ErrorScreenContent(
     onClickRetry: () -> Unit = { },
 ) {
     Column(
-        modifier = modifier.fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = modifier
+            .padding(16.dp)
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
+            .testTag("mifos:empty"),
         verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        Column(
+        Spacer(modifier = Modifier.height(48.dp))
+
+        Text(
+            text = title,
             modifier = Modifier
-                .padding(16.dp)
-                .fillMaxSize()
-                .testTag("mifos:empty"),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally,
+                .fillMaxWidth()
+                .padding(start = 24.dp, end = 24.dp),
+            textAlign = TextAlign.Center,
+            style = MaterialTheme.typography.titleMedium,
+            fontWeight = FontWeight.Bold,
+        )
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        Text(
+            text = subTitle,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 24.dp, end = 24.dp),
+            textAlign = TextAlign.Center,
+            style = MaterialTheme.typography.bodyMedium,
+        )
+
+        MifosButton(
+            modifier = Modifier
+                .width(150.dp)
+                .padding(top = 16.dp),
+            onClick = onClickRetry,
         ) {
-            Spacer(modifier = Modifier.height(48.dp))
-
-            Text(
-                text = title,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 24.dp, end = 24.dp),
-                textAlign = TextAlign.Center,
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Bold,
-            )
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            Text(
-                text = subTitle,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 24.dp, end = 24.dp),
-                textAlign = TextAlign.Center,
-                style = MaterialTheme.typography.bodyMedium,
-            )
-
-            MifosButton(
-                modifier = Modifier
-                    .width(150.dp)
-                    .padding(top = 16.dp),
-                onClick = onClickRetry,
-            ) {
-                Text(text = stringResource(resource = Res.string.core_ui_retry))
-            }
+            Text(text = stringResource(resource = Res.string.core_ui_retry))
         }
     }
 }
