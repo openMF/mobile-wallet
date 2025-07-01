@@ -149,7 +149,7 @@ class SelfServiceRepositoryImpl(
 
         return accounts.combine(transactions) { accountList, transaction ->
             AccountsWithTransactions(accountList, transaction)
-        }.map { DataState.Success(it) }.flowOn(dispatcher)
+        }.asDataStateFlow()
     }
 
     override fun getTransactions(accountId: List<Long>, limit: Int?): Flow<List<Transaction>> {
