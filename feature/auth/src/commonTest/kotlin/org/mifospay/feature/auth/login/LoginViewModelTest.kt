@@ -23,7 +23,6 @@ import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import org.mifospay.core.common.DataState
 import org.mifospay.core.data.repository.ClientRepository
-import org.mifospay.core.data.util.Constants.INVALID_CREDENTIALS
 import org.mifospay.core.datastore.UserPreferencesRepository
 import org.mifospay.core.domain.LoginUseCase
 import org.mifospay.feature.auth.fakes.FakeAuthenticationRepository
@@ -43,7 +42,6 @@ import kotlin.test.assertTrue
 @OptIn(ExperimentalCoroutinesApi::class)
 class LoginViewModelTest {
     private val testDispatcher: CoroutineDispatcher = StandardTestDispatcher()
-    private val testScope = TestScope(testDispatcher)
 
     private lateinit var viewModel: LoginViewModel
 
@@ -93,21 +91,21 @@ class LoginViewModelTest {
     }
 
     @Test
-    fun `username change updates state`() = runTest(testDispatcher) {
+    fun loginViewModel_UsernameChanged_UpdatesUsernameState() = runTest(testDispatcher) {
         viewModel.trySendAction(LoginAction.UsernameChanged("alice"))
         advanceUntilIdle()
         assertEquals("alice", viewModel.stateFlow.value.username)
     }
 
     @Test
-    fun `password change updates state`() = runTest(testDispatcher) {
+    fun loginViewModel_PasswordChanged_UpdatesPasswordState() = runTest(testDispatcher) {
         viewModel.trySendAction(LoginAction.PasswordChanged("secret"))
         advanceUntilIdle()
         assertEquals("secret", viewModel.stateFlow.value.password)
     }
 
     @Test
-    fun loginViewModel_passwordToggle_passwordVisibleUpdate() = runTest(testDispatcher) {
+    fun loginViewModel_TogglePasswordVisibility_UpdatesVisibilityState() = runTest(testDispatcher) {
         assertFalse(viewModel.stateFlow.value.isPasswordVisible)
 
         viewModel.trySendAction(LoginAction.TogglePasswordVisibility)
@@ -120,8 +118,8 @@ class LoginViewModelTest {
     }
 
     @Test
-    fun loginViewModel_IncorrectCredentials_showError() = runTest(testDispatcher) {
-        fakeAuthRepository  = FakeAuthenticationRepository(shouldSucceed = false)
+    fun loginViewModel_IncorrectCredentials_ShowsErrorDialog() = runTest(testDispatcher) {
+        fakeAuthRepository = FakeAuthenticationRepository(shouldSucceed = false)
         loginUseCase = LoginUseCase(
             repository = fakeAuthRepository,
             ioDispatcher = testDispatcher,
@@ -134,25 +132,20 @@ class LoginViewModelTest {
         viewModel.trySendAction(LoginAction.PasswordChanged("testpass"))
         viewModel.trySendAction(LoginAction.LoginClicked)
 
-        println(viewModel.stateFlow.value)
         advanceUntilIdle()
-        println(viewModel.stateFlow.value)
 
         assertIs<LoginState.DialogState.Error>(viewModel.stateFlow.value.dialogState)
 
-        assertEquals(INVALID_CREDENTIALS, (viewModel.stateFlow.value.dialogState as LoginState.DialogState.Error).message)
+        assertEquals("Invalid Credentials", (viewModel.stateFlow.value.dialogState as LoginState.DialogState.Error).message)
     }
 
-
     @Test
-    fun loginViewModel_CorrectCredentials_noError() = runTest(testDispatcher) {
+    fun loginViewModel_CorrectCredentials_ShowsNoError() = runTest(testDispatcher) {
         viewModel.trySendAction(LoginAction.UsernameChanged("testuser"))
         viewModel.trySendAction(LoginAction.PasswordChanged("testpass"))
         viewModel.trySendAction(LoginAction.LoginClicked)
 
-        println(viewModel.stateFlow.value)
         advanceUntilIdle()
-        println(viewModel.stateFlow.value)
 
         assertNull(viewModel.stateFlow.value.dialogState)
     }
@@ -180,5 +173,4 @@ class LoginViewModelTest {
 
         assertNull(viewModel.stateFlow.value.dialogState)
     }
-
 }

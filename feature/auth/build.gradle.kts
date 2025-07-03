@@ -47,17 +47,5 @@ kotlin {
 
             implementation(libs.play.services.auth)
         }
-
-        commonTest.dependencies {
-            implementation(kotlin("test-common"))
-            implementation(kotlin("test-annotations-common"))
-            implementation(libs.kotlinx.coroutines.test)
-            implementation(libs.turbine)
-            implementation(libs.kotest.framework.engine)
-            implementation(libs.koin.test)
-            @OptIn(ExperimentalComposeLibrary::class)
-            implementation(compose.uiTest)
-        }
-
     }
 }
