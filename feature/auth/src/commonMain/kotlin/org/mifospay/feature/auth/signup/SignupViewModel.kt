@@ -11,44 +11,16 @@ package org.mifospay.feature.auth.signup
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
-import co.touchlab.kermit.Logger
-import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.persistentListOf
-import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.serialization.Serializable
-import kotlinx.serialization.Transient
-import mobile_wallet.feature.auth.generated.resources.Res
-import mobile_wallet.feature.auth.generated.resources.feature_auth_error_address_line1_required
-import mobile_wallet.feature.auth.generated.resources.feature_auth_error_address_line2_required
-import mobile_wallet.feature.auth.generated.resources.feature_auth_error_confirm_password_required
-import mobile_wallet.feature.auth.generated.resources.feature_auth_error_country_required
-import mobile_wallet.feature.auth.generated.resources.feature_auth_error_email_invalid
-import mobile_wallet.feature.auth.generated.resources.feature_auth_error_email_required
-import mobile_wallet.feature.auth.generated.resources.feature_auth_error_first_name_required
-import mobile_wallet.feature.auth.generated.resources.feature_auth_error_last_name_required
-import mobile_wallet.feature.auth.generated.resources.feature_auth_error_mobile_invalid
-import mobile_wallet.feature.auth.generated.resources.feature_auth_error_mobile_required
-import mobile_wallet.feature.auth.generated.resources.feature_auth_error_password_required
-import mobile_wallet.feature.auth.generated.resources.feature_auth_error_passwords_mismatch
-import mobile_wallet.feature.auth.generated.resources.feature_auth_error_pincode_required
-import mobile_wallet.feature.auth.generated.resources.feature_auth_error_select_savings_account
-import mobile_wallet.feature.auth.generated.resources.feature_auth_error_state_required
-import mobile_wallet.feature.auth.generated.resources.feature_auth_error_username_required
 import org.mifospay.core.common.DataState
-import org.mifospay.core.common.dialogManager.DialogManager
-import org.mifospay.core.common.dialogManager.DialogMessage.Companion.toDialogMessage
-import org.mifospay.core.common.getSerialized
-import org.mifospay.core.common.setSerialized
-import org.mifospay.core.common.utils.formatAsBulletPoints
+import org.mifospay.core.common.IgnoredOnParcel
+import org.mifospay.core.common.Parcelable
+import org.mifospay.core.common.Parcelize
 import org.mifospay.core.common.utils.isValidEmail
-import org.mifospay.core.data.repository.AssetRepository
 import org.mifospay.core.data.repository.ClientRepository
 import org.mifospay.core.data.repository.SearchRepository
 import org.mifospay.core.data.repository.UserRepository
@@ -63,26 +35,24 @@ import org.mifospay.core.ui.utils.PasswordStrength
 import org.mifospay.core.ui.utils.PasswordStrengthResult
 import org.mifospay.feature.auth.signup.SignUpAction.Internal.ReceivePasswordStrengthResult
 
+private const val KEY_STATE = "signup_state"
+private const val MIN_PASSWORD_LENGTH = 12
+private const val MAX_PASSWORD_LENGTH = 50
+
 class SignupViewModel(
     private val userRepository: UserRepository,
     private val searchRepository: SearchRepository,
     private val clientRepository: ClientRepository,
-    private val assetRepository: AssetRepository,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<SignUpState, SignUpEvent, SignUpAction>(
-    initialState = savedStateHandle.getSerialized(KEY_STATE) ?: SignUpState(),
+    initialState = savedStateHandle[KEY_STATE] ?: SignUpState(),
 ) {
-
-    companion object {
-        private const val KEY_STATE = "signup_state"
-    }
-
     private var passwordStrengthJob: Job = Job().apply { complete() }
 
     init {
-        stateFlow
-            .onEach { savedStateHandle.setSerialized(key = KEY_STATE, value = it) }
-            .launchIn(viewModelScope)
+//        stateFlow
+//            .onEach { savedStateHandle[KEY_STATE] = it }
+//            .launchIn(viewModelScope)
 
         savedStateHandle.get<String>("mobileNumber")?.let {
             viewModelScope.launch {
@@ -101,8 +71,6 @@ class SignupViewModel(
                 trySendAction(SignUpAction.BusinessNameInputChange(it))
             }
         }
-
-        loadCountriesFromJson()
     }
 
     override fun handleAction(action: SignUpAction) {
@@ -183,11 +151,7 @@ class SignupViewModel(
 
             is SignUpAction.CountryInputChange -> {
                 mutableStateFlow.update {
-                    it.copy(
-                        countryInput = action.country,
-                        // reset state when country changes
-                        stateInput = "",
-                    )
+                    it.copy(countryInput = action.country)
                 }
             }
 
@@ -196,7 +160,9 @@ class SignupViewModel(
             }
 
             is SignUpAction.ErrorDialogDismiss -> {
-                DialogManager.dismissDialog()
+                mutableStateFlow.update {
+                    it.copy(dialogState = null)
+                }
             }
 
             is ReceivePasswordStrengthResult -> handlePasswordStrengthResult(action)
@@ -204,20 +170,12 @@ class SignupViewModel(
             is SignUpAction.Internal.ReceiveRegisterResult -> handleSignUpResult(action)
 
             is SignUpAction.SubmitClick -> handleSubmitClick()
-
-            is SignUpAction.LoadCountries -> loadCountriesFromJson()
         }
     }
 
     private fun handlePasswordInput(action: SignUpAction.PasswordInputChange) {
         // Update input:
-        mutableStateFlow.update {
-            it.copy(
-                passwordInput = action.password,
-                passwordFeedback = PasswordChecker.getPasswordFeedback(action.password)
-                    .toPersistentList(),
-            )
-        }
+        mutableStateFlow.update { it.copy(passwordInput = action.password, passwordError = null) }
         // Update password strength:
         passwordStrengthJob.cancel()
         if (action.password.isEmpty()) {
@@ -248,95 +206,159 @@ class SignupViewModel(
                 }
             }
 
-            is PasswordStrengthResult.Error -> {}
+            is PasswordStrengthResult.Error -> {
+                mutableStateFlow.update {
+                    it.copy(passwordError = result.message.toString(), passwordStrengthState = PasswordStrengthState.NONE)
+                }
+            }
         }
     }
 
     private fun handleSignUpResult(action: SignUpAction.Internal.ReceiveRegisterResult) {
         when (val result = action.registerResult) {
             is DataState.Success -> {
-                DialogManager.dismissDialog()
+                mutableStateFlow.update { it.copy(dialogState = null) }
                 sendEvent(SignUpEvent.NavigateToLogin(result.data))
             }
 
             is DataState.Error -> {
-                DialogManager.showMessage(result.exception.toDialogMessage())
+                mutableStateFlow.update {
+                    it.copy(dialogState = SignUpDialog.Error(result.exception.message.toString()))
+                }
             }
 
             DataState.Loading -> {
-                DialogManager.showLoading()
+                mutableStateFlow.update { it.copy(dialogState = SignUpDialog.Loading) }
             }
+
+            else -> {}
         }
     }
 
+    // TODO:: move error messages to strings.xml
     private fun handleSubmitClick() = when {
         state.savingsProductId == 0 -> {
-            DialogManager.showMessage(Res.string.feature_auth_error_select_savings_account)
+            mutableStateFlow.update {
+                it.copy(dialogState = SignUpDialog.Error("Please select a savings account."))
+            }
         }
 
         state.firstNameInput.isEmpty() -> {
-            DialogManager.showMessage(Res.string.feature_auth_error_first_name_required)
+            mutableStateFlow.update {
+                it.copy(dialogState = SignUpDialog.Error("Please enter your first name."))
+            }
         }
 
         state.lastNameInput.isEmpty() -> {
-            DialogManager.showMessage(Res.string.feature_auth_error_last_name_required)
+            mutableStateFlow.update {
+                it.copy(dialogState = SignUpDialog.Error("Please enter your last name."))
+            }
         }
 
         state.userNameInput.isEmpty() -> {
-            DialogManager.showMessage(Res.string.feature_auth_error_username_required)
+            mutableStateFlow.update {
+                it.copy(dialogState = SignUpDialog.Error("Please enter your username."))
+            }
         }
 
         state.emailInput.isEmpty() -> {
-            DialogManager.showMessage(Res.string.feature_auth_error_email_required)
+            mutableStateFlow.update {
+                it.copy(dialogState = SignUpDialog.Error("Please enter your email."))
+            }
         }
 
         !state.emailInput.isValidEmail() -> {
-            DialogManager.showMessage(Res.string.feature_auth_error_email_invalid)
+            mutableStateFlow.update {
+                it.copy(dialogState = SignUpDialog.Error("Please enter a valid email."))
+            }
         }
 
         state.mobileNumberInput.isEmpty() -> {
-            DialogManager.showMessage(Res.string.feature_auth_error_mobile_required)
+            mutableStateFlow.update {
+                it.copy(dialogState = SignUpDialog.Error("Please enter a your mobile number."))
+            }
         }
 
         state.mobileNumberInput.length < 10 -> {
-            DialogManager.showMessage(Res.string.feature_auth_error_mobile_invalid)
+            mutableStateFlow.update {
+                it.copy(dialogState = SignUpDialog.Error("Mobile number must be 10 digits long."))
+            }
         }
 
-        state.passwordInput.isEmpty() -> {
-            DialogManager.showMessage(Res.string.feature_auth_error_password_required)
+        state.passwordInput.length < MIN_PASSWORD_LENGTH -> {
+            mutableStateFlow.update {
+                it.copy(
+                    dialogState = SignUpDialog.Error(
+                        "Password must be at least $MIN_PASSWORD_LENGTH characters long.",
+                    ),
+                )
+            }
         }
 
-        state.passwordFeedback.isNotEmpty() -> {
-            val bulletListPasswordFeedback = formatAsBulletPoints(state.passwordFeedback)
-            DialogManager.showMessage(bulletListPasswordFeedback)
+        state.passwordInput.length > MAX_PASSWORD_LENGTH -> {
+            mutableStateFlow.update {
+                it.copy(
+                    dialogState = SignUpDialog.Error(
+                        "Password must be less than $MAX_PASSWORD_LENGTH characters long.",
+                    ),
+                )
+            }
         }
 
-        state.confirmPasswordInput.isEmpty() -> {
-            DialogManager.showMessage(Res.string.feature_auth_error_confirm_password_required)
+        !state.isPasswordMatch -> {
+            mutableStateFlow.update {
+                it.copy(dialogState = SignUpDialog.Error("Passwords do not match."))
+            }
         }
 
-        state.passwordInput != state.confirmPasswordInput -> {
-            DialogManager.showMessage(Res.string.feature_auth_error_passwords_mismatch)
+        !state.isPasswordStrong -> {
+            val errorMessage = state.passwordError?.takeIf { it.isNotBlank() }
+                ?: """
+        Please ensure password contains :
+        - At least one uppercase character
+        - At least one lowercase character
+        - At least one numeric digit
+        - At least one special character
+    """
+            mutableStateFlow.update {
+                it.copy(dialogState = SignUpDialog.Error(errorMessage.lines().joinToString("\n") { "- $it" }))
+            }
         }
 
         state.addressLine1Input.isEmpty() -> {
-            DialogManager.showMessage(Res.string.feature_auth_error_address_line1_required)
+            mutableStateFlow.update {
+                it.copy(dialogState = SignUpDialog.Error("Please enter your address line 1."))
+            }
         }
 
         state.addressLine2Input.isEmpty() -> {
-            DialogManager.showMessage(Res.string.feature_auth_error_address_line2_required)
+            mutableStateFlow.update {
+                it.copy(dialogState = SignUpDialog.Error("Please enter your address line 2."))
+            }
         }
 
         state.pinCodeInput.isEmpty() -> {
-            DialogManager.showMessage(Res.string.feature_auth_error_pincode_required)
+            mutableStateFlow.update {
+                it.copy(dialogState = SignUpDialog.Error("Please enter your pincode."))
+            }
+        }
+
+        state.pinCodeInput.length < 6 -> {
+            mutableStateFlow.update {
+                it.copy(dialogState = SignUpDialog.Error("Pin code must be 6 digits long."))
+            }
         }
 
         state.countryInput.isEmpty() -> {
-            DialogManager.showMessage(Res.string.feature_auth_error_country_required)
+            mutableStateFlow.update {
+                it.copy(dialogState = SignUpDialog.Error("Please enter your country"))
+            }
         }
 
         state.stateInput.isEmpty() -> {
-            DialogManager.showMessage(Res.string.feature_auth_error_state_required)
+            mutableStateFlow.update {
+                it.copy(dialogState = SignUpDialog.Error("Please enter your state"))
+            }
         }
 
         else -> initiateSignUp()
@@ -346,7 +368,9 @@ class SignupViewModel(
         Enhancement: Move the following code in to a Use Case
      */
     private fun initiateSignUp() {
-        DialogManager.showLoading()
+        mutableStateFlow.update {
+            it.copy(dialogState = SignUpDialog.Loading)
+        }
 
         val fieldsToCheck = mapOf(
             "Username" to state.userNameInput,
@@ -366,18 +390,20 @@ class SignupViewModel(
 
             val errorMessages = results.mapNotNull { (label, result) ->
                 when (result) {
-                    is DataState.Loading -> {}
                     is DataState.Success -> {
-                        if (result.data.isNotEmpty()) "$label already exists." else null
+                        if (result.data.isNotEmpty()) "$label already exists" else null
                     }
-
                     is DataState.Error ->
-                        "Unable to check if $label is unique. Please try again later."
+                        result.exception.message
+                            ?: "Error checking $label."
+                    else -> null
                 }
             }
 
             if (errorMessages.isNotEmpty()) {
-                DialogManager.showMessage(errorMessages.joinToString("\n"))
+                mutableStateFlow.update {
+                    it.copy(dialogState = SignUpDialog.Error(errorMessages.joinToString("\n")))
+                }
             } else {
                 val newUser = NewUser(
                     state.userNameInput,
@@ -395,7 +421,10 @@ class SignupViewModel(
         viewModelScope.launch {
             when (val result = userRepository.createUser(newUser)) {
                 is DataState.Error -> {
-                    DialogManager.showMessage(result.exception.toDialogMessage())
+                    val message = result.exception.message.toString()
+                    mutableStateFlow.update {
+                        it.copy(dialogState = SignUpDialog.Error(message))
+                    }
                 }
 
                 is DataState.Success -> {
@@ -428,7 +457,9 @@ class SignupViewModel(
                 is DataState.Error -> {
                     deleteUser(userId)
                     val message = result.exception.message.toString()
-                    DialogManager.showMessage(message)
+                    mutableStateFlow.update {
+                        it.copy(dialogState = SignUpDialog.Error(message))
+                    }
                 }
 
                 is DataState.Success -> {
@@ -446,12 +477,16 @@ class SignupViewModel(
                 is DataState.Error -> {
                     deleteUser(userId)
                     deleteClient(clientId)
-                    DialogManager.showMessage(result.exception.toDialogMessage())
+                    val message = result.exception.message.toString()
+                    mutableStateFlow.update {
+                        it.copy(dialogState = SignUpDialog.Error(message))
+                    }
                 }
 
                 is DataState.Success -> {
-                    DialogManager.dismissDialog()
-
+                    mutableStateFlow.update {
+                        it.copy(dialogState = null)
+                    }
                     sendEvent(SignUpEvent.ShowToast("Registration successful."))
                     sendAction(
                         SignUpAction.Internal.ReceiveRegisterResult(
@@ -476,23 +511,9 @@ class SignupViewModel(
             clientRepository.deleteClient(clientId)
         }
     }
-
-    private fun loadCountriesFromJson() {
-        viewModelScope.launch {
-            when (val countriesWithStatesResult = assetRepository.getCountriesWithStates()) {
-                is DataState.Success ->
-                    mutableStateFlow.update {
-                        it.copy(countriesWithStates = countriesWithStatesResult.data)
-                    }
-
-                is DataState.Error -> Logger.d("Failed to load countries.json: ${countriesWithStatesResult.exception.message}")
-                is DataState.Loading -> {}
-            }
-        }
-    }
 }
 
-@Serializable
+@Parcelize
 data class SignUpState(
     val savingsProductId: Int = 0,
     val firstNameInput: String = "",
@@ -508,13 +529,36 @@ data class SignUpState(
     val stateInput: String = "",
     val countryInput: String = "",
     val businessNameInput: String = "",
+    val dialogState: SignUpDialog? = null,
     val passwordStrengthState: PasswordStrengthState = PasswordStrengthState.NONE,
-    val passwordFeedback: ImmutableList<String> = persistentListOf(),
-    val countriesWithStates: Map<String, List<String>> = emptyMap(),
-) {
-    @Transient
-    val statesForSelectedCountry =
-        countriesWithStates[countryInput]
+    val passwordError: String? = null,
+) : Parcelable {
+    @IgnoredOnParcel
+    val isPasswordStrong: Boolean
+        get() = when (passwordStrengthState) {
+            PasswordStrengthState.NONE,
+            PasswordStrengthState.WEAK_1,
+            PasswordStrengthState.WEAK_2,
+            PasswordStrengthState.WEAK_3,
+            -> false
+
+            PasswordStrengthState.GOOD,
+            PasswordStrengthState.STRONG,
+            PasswordStrengthState.VERY_STRONG,
+            -> true
+        }
+
+    @IgnoredOnParcel
+    val isPasswordMatch: Boolean
+        get() = passwordInput == confirmPasswordInput
+}
+
+sealed interface SignUpDialog : Parcelable {
+    @Parcelize
+    data object Loading : SignUpDialog
+
+    @Parcelize
+    data class Error(val message: String) : SignUpDialog
 }
 
 sealed interface SignUpEvent {
@@ -542,7 +586,6 @@ sealed interface SignUpAction {
     data object SubmitClick : SignUpAction
     data object CloseClick : SignUpAction
     data object ErrorDialogDismiss : SignUpAction
-    data object LoadCountries : SignUpAction
 
     sealed class Internal : SignUpAction {
         data class ReceiveRegisterResult(

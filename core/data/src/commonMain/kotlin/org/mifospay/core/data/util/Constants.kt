@@ -52,33 +52,4 @@ object Constants {
     const val FETCH_CLIENT_DETAILS_USE_CASE = "Fetch Client Details UseCase"
     const val ERROR_FETCHING_NOTIFICATIONS = "Error fetching notifications"
     const val UNAUTHORIZED_ERROR = "401 Unauthorized"
-
-    const val SELECT_SAVINGS_ACCOUNT = "Please select a savings account."
-    const val ENTER_FIRST_NAME = "Please enter your first name."
-    const val ENTER_LAST_NAME = "Please enter your last name."
-    const val ENTER_USERNAME = "Please enter your username."
-    const val ENTER_EMAIL = "Please enter your email."
-    const val ENTER_VALID_EMAIL = "Please enter a valid email."
-    const val ENTER_MOBILE = "Please enter your mobile number."
-    const val MOBILE_LENGTH = "Mobile number must be 10 digits long."
-    fun passwordMinLength(min: Int) = "Password must be at least $min characters long."
-    fun passwordMaxLength(max: Int) = "Password must be less than $max characters long."
-    const val PASSWORD_MISMATCH = "Passwords do not match."
-    const val PASSWORD_WEAK = """
-        Please ensure password contains :
-        - At least one uppercase character
-        - At least one lowercase character
-        - At least one numeric digit
-        - At least one special character
-    """
-    const val ENTER_ADDRESS_LINE_1 = "Please enter your address line 1."
-    const val ENTER_ADDRESS_LINE_2 = "Please enter your address line 2."
-    const val ENTER_PINCODE = "Please enter your pin code."
-    const val PIN_LENGTH = "Pin code must be 6 digits long."
-    const val ENTER_COUNTRY = "Please enter your country."
-    const val ENTER_STATE = "Please enter your state."
-
-    fun alreadyExists(field: String) = "$field already exists"
-
-    const val INVALID_CREDENTIALS = "Invalid Credentials"
 }
