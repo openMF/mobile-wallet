@@ -17,11 +17,12 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 import org.mifospay.core.common.DataState
 import org.mifospay.core.common.DateHelper
-import org.mifospay.core.common.IgnoredOnParcel
-import org.mifospay.core.common.Parcelable
-import org.mifospay.core.common.Parcelize
+import org.mifospay.core.common.getSerialized
+import org.mifospay.core.common.setSerialized
 import org.mifospay.core.data.repository.LocalAssetRepository
 import org.mifospay.core.data.repository.SavingsAccountRepository
 import org.mifospay.core.datastore.UserPreferencesRepository
@@ -35,15 +36,13 @@ import org.mifospay.feature.accounts.savingsaccount.AESAction.Internal.HandleSav
 import org.mifospay.feature.accounts.savingsaccount.AESState.ViewState.Error
 import org.mifospay.feature.accounts.savingsaccount.AESState.DialogState.Error as DialogStateError
 
-private const val KEY = "add_edit_saving_state"
-
 internal class AddEditSavingViewModel(
     private val repository: SavingsAccountRepository,
     private val userRepository: UserPreferencesRepository,
     localAssetRepository: LocalAssetRepository,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<AESState, AESEvent, AESAction>(
-    initialState = savedStateHandle[KEY] ?: run {
+    initialState = savedStateHandle.getSerialized(ADD_EDIT_SAVING_STATE_KEY) ?: run {
         val clientId = requireNotNull(userRepository.clientId.value)
         val type = SavingAccountAddEditArgs(savedStateHandle).savingsAddEditType
 
@@ -55,6 +54,11 @@ internal class AddEditSavingViewModel(
         )
     },
 ) {
+
+    companion object {
+        private const val ADD_EDIT_SAVING_STATE_KEY = "add_edit_saving_state"
+    }
+
     val localeList = localAssetRepository.localeList.stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5_000),
@@ -62,9 +66,9 @@ internal class AddEditSavingViewModel(
     )
 
     init {
-//        stateFlow
-//            .onEach { savedStateHandle[KEY] = it }
-//            .launchIn(viewModelScope)
+        stateFlow
+            .onEach { savedStateHandle.setSerialized(key = ADD_EDIT_SAVING_STATE_KEY, value = it) }
+            .launchIn(viewModelScope)
 
         repository.getSavingAccountTemplate(state.clientId).onEach {
             sendAction(HandleSavingTemplateResult(it))
@@ -319,13 +323,14 @@ internal class AddEditSavingViewModel(
     }
 }
 
-@Parcelize
+@Serializable
 internal data class AESState(
     val clientId: Long,
     val type: SavingsAddEditType,
     val viewState: ViewState,
-    val dialogState: DialogState?,
-) : Parcelable {
+    @Transient
+    val dialogState: DialogState? = null,
+) {
 
     val isInEditMode: Boolean
         get() = type is SavingsAddEditType.EditItem
@@ -336,14 +341,15 @@ internal data class AESState(
     val title: String
         get() = if (!isInEditMode) "Create Saving Account" else "Update Saving Account"
 
-    sealed interface ViewState : Parcelable {
-        @Parcelize
+    @Serializable
+    sealed interface ViewState {
+        @Serializable
         data object Loading : ViewState
 
-        @Parcelize
+        @Serializable
         data class Error(val message: String) : ViewState
 
-        @Parcelize
+        @Serializable
         data class Content(
             val template: SavingAccountTemplate,
             val minRequiredOpeningBalance: Long = 0,
@@ -361,7 +367,6 @@ internal data class AESState(
             val withHoldTax: Boolean = template.withHoldTax,
         ) : ViewState {
 
-            @IgnoredOnParcel
             val createSavingEntity: CreateNewSavingEntity
                 get() = CreateNewSavingEntity(
                     clientId = clientId,
@@ -379,7 +384,6 @@ internal data class AESState(
                     dateFormat = dateFormat,
                 )
 
-            @IgnoredOnParcel
             val updateSavingEntity: UpdateSavingAccountEntity
                 get() = UpdateSavingAccountEntity(
                     clientId = clientId,
@@ -388,11 +392,8 @@ internal data class AESState(
         }
     }
 
-    sealed interface DialogState : Parcelable {
-        @Parcelize
+    sealed interface DialogState {
         data object Loading : DialogState
-
-        @Parcelize
         data class Error(val message: String) : DialogState
     }
 }

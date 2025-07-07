@@ -13,15 +13,17 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.mapLatest
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.serialization.Serializable
 import org.mifospay.core.common.DataState
 import org.mifospay.core.common.DateHelper
-import org.mifospay.core.common.IgnoredOnParcel
-import org.mifospay.core.common.Parcelable
-import org.mifospay.core.common.Parcelize
+import org.mifospay.core.common.getSerialized
+import org.mifospay.core.common.setSerialized
 import org.mifospay.core.common.utils.capitalizeWords
 import org.mifospay.core.data.repository.AccountRepository
 import org.mifospay.core.data.util.UpiQrCodeProcessor
@@ -34,14 +36,12 @@ import org.mifospay.feature.make.transfer.MakeTransferAction.Internal.HandleTran
 import org.mifospay.feature.make.transfer.MakeTransferState.DialogState.Error
 import org.mifospay.feature.make.transfer.navigation.TRANSFER_ARG
 
-private const val KEY_STATE = "make_transfer_state"
-
 internal class MakeTransferViewModel(
     private val accountRepository: AccountRepository,
     repository: UserPreferencesRepository,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<MakeTransferState, MakeTransferEvent, MakeTransferAction>(
-    initialState = savedStateHandle[KEY_STATE] ?: run {
+    initialState = savedStateHandle.getSerialized(KEY_STATE) ?: run {
         val fromClientId = requireNotNull(repository.clientId.value)
         val defaultAccountId = requireNotNull(repository.defaultAccountId.value)
         val paymentData = requireNotNull(savedStateHandle.get<String>(TRANSFER_ARG))
@@ -54,6 +54,11 @@ internal class MakeTransferViewModel(
         )
     },
 ) {
+
+    companion object {
+        private const val KEY_STATE = "make_transfer_state"
+    }
+
     @OptIn(ExperimentalCoroutinesApi::class)
     val accountsState = accountRepository.getSelfAccounts(state.fromClientId)
         .mapLatest { result ->
@@ -76,11 +81,11 @@ internal class MakeTransferViewModel(
             initialValue = ViewState.Loading,
         )
 
-//    init {
-//        stateFlow.onEach { state ->
-//            savedStateHandle[KEY_STATE] = state
-//        }.launchIn(viewModelScope)
-//    }
+    init {
+        stateFlow
+            .onEach { savedStateHandle.setSerialized(key = KEY_STATE, value = it) }
+            .launchIn(viewModelScope)
+    }
 
     override fun handleAction(action: MakeTransferAction) {
         when (action) {
@@ -185,7 +190,7 @@ internal class MakeTransferViewModel(
     }
 }
 
-@Parcelize
+@Serializable
 internal data class MakeTransferState(
     val fromClientId: Long,
     val toClientData: PaymentQrData,
@@ -194,17 +199,13 @@ internal data class MakeTransferState(
     val description: String = "",
     val selectedAccount: Account? = null,
     val dialogState: DialogState? = null,
-) : Parcelable {
-
-    @IgnoredOnParcel
+) {
     val amountIsValid: Boolean
         get() = amount.isNotEmpty() && amount.toDoubleOrNull() != null
 
-    @IgnoredOnParcel
     val descriptionIsValid: Boolean
         get() = description.isNotEmpty()
 
-    @IgnoredOnParcel
     val transferPayload: AccountTransferPayload
         get() = AccountTransferPayload(
             fromOfficeId = toClientData.officeId,
@@ -222,11 +223,12 @@ internal data class MakeTransferState(
             transferDate = DateHelper.formattedShortDate,
         )
 
-    sealed interface DialogState : Parcelable {
-        @Parcelize
+    @Serializable
+    sealed interface DialogState {
+        @Serializable
         data object Loading : DialogState
 
-        @Parcelize
+        @Serializable
         data class Error(val message: String) : DialogState
     }
 }

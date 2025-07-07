@@ -25,10 +25,10 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.serialization.Serializable
 import org.mifospay.core.common.DataState
-import org.mifospay.core.common.IgnoredOnParcel
-import org.mifospay.core.common.Parcelable
-import org.mifospay.core.common.Parcelize
+import org.mifospay.core.common.getSerialized
+import org.mifospay.core.common.setSerialized
 import org.mifospay.core.data.repository.AccountRepository
 import org.mifospay.core.data.util.UpiQrCodeProcessor
 import org.mifospay.core.model.search.AccountResult
@@ -38,15 +38,17 @@ import org.mifospay.core.ui.utils.BaseViewModel
 import org.mifospay.feature.send.money.SendMoneyAction.HandleRequestData
 import org.mifospay.feature.send.money.SendMoneyState.DialogState.Error
 
-private const val KEY_STATE = "send_payment_state"
-
 class SendMoneyViewModel(
     private val scanner: QrScanner,
     repository: AccountRepository,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<SendMoneyState, SendMoneyEvent, SendMoneyAction>(
-    initialState = savedStateHandle[KEY_STATE] ?: SendMoneyState(),
+    initialState = savedStateHandle.getSerialized(KEY_STATE) ?: SendMoneyState(),
 ) {
+
+    companion object {
+        private const val KEY_STATE = "send_payment_state"
+    }
 
     @OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
     val accountListState = stateFlow.map { it.accountNumber }
@@ -74,9 +76,9 @@ class SendMoneyViewModel(
         )
 
     init {
-//        stateFlow.onEach {
-//            savedStateHandle[KEY_STATE] = it
-//        }.launchIn(viewModelScope)
+        stateFlow.onEach {
+            savedStateHandle.setSerialized(key = KEY_STATE, value = it)
+        }.launchIn(viewModelScope)
 
         savedStateHandle.get<String>("requestData")?.let {
             trySendAction(HandleRequestData(it))
@@ -184,24 +186,21 @@ class SendMoneyViewModel(
     }
 }
 
-@Parcelize
+@Serializable
 data class SendMoneyState(
     val amount: String = "",
     val accountNumber: String = "",
     val selectedAccount: AccountResult? = null,
     val dialogState: DialogState? = null,
-) : Parcelable {
-    @IgnoredOnParcel
+) {
     val amountIsValid: Boolean
         get() = amount.isNotEmpty() &&
             amount.toDoubleOrNull() != null &&
             amount.toDouble() > 0
 
-    @IgnoredOnParcel
     val isProceedEnabled: Boolean
         get() = selectedAccount != null && amountIsValid
 
-    @IgnoredOnParcel
     val paymentQrData: PaymentQrData
         get() = PaymentQrData(
             clientId = selectedAccount?.parentId ?: 0,
@@ -211,11 +210,12 @@ data class SendMoneyState(
             amount = amount,
         )
 
-    sealed interface DialogState : Parcelable {
-        @Parcelize
+    @Serializable
+    sealed interface DialogState {
+        @Serializable
         data object Loading : DialogState
 
-        @Parcelize
+        @Serializable
         data class Error(val message: String) : DialogState
     }
 }

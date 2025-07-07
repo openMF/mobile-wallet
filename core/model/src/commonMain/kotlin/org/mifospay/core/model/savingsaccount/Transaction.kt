@@ -10,10 +10,8 @@
 package org.mifospay.core.model.savingsaccount
 
 import kotlinx.serialization.Serializable
-import org.mifospay.core.common.Parcelable
-import org.mifospay.core.common.Parcelize
 
-@Parcelize
+@Serializable
 data class Transaction(
     val accountId: Long,
     val amount: Double,
@@ -25,12 +23,11 @@ data class Transaction(
     val transferId: Long?,
     val originalTransactionId: Long,
     val paymentDetailId: Long?,
-) : Parcelable {
+) {
     @Serializable
-    @Parcelize
     data class Type(
         val id: Long,
         val code: String,
         val value: String,
-    ) : Parcelable
+    )
 }

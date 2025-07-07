@@ -9,8 +9,6 @@
  */
 plugins {
     alias(libs.plugins.mifospay.cmp.feature)
-    alias(libs.plugins.kotlin.parcelize)
-    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
