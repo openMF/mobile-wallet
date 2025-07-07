@@ -13,7 +13,6 @@ import kotlinx.serialization.Serializable
 import org.mifospay.core.common.Parcelable
 import org.mifospay.core.common.Parcelize
 
-@Parcelize
 @Serializable
 data class Currency(
     val code: String,
@@ -23,4 +22,4 @@ data class Currency(
     val displaySymbol: String,
     val nameCode: String,
     val displayLabel: String,
-) : Parcelable
+)
