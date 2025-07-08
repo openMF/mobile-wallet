@@ -174,44 +174,84 @@ val ColorScheme.veryStrongPassword: Color
     get() = MaterialTheme.colorScheme.tertiary
 
 val ColorScheme.strongPassword: Color
-    get() = Color(0xFF41B06D)
+    @Composable
+    get() = MaterialTheme.colorScheme.primary
 
 val ColorScheme.weakPassword: Color
-    get() = Color(0xFF8B6609)
+    @Composable
+    get() = MaterialTheme.colorScheme.error
 
 // Extension Colors for PriorityChips
 val ColorScheme.veryHighPriority: Color
-    get() = Color(0xFFFF4444)
+    @Composable
+    get() = MaterialTheme.colorScheme.error
 
 val ColorScheme.highPriority: Color
-    get() = Color(0xFFFF8800)
+    @Composable
+    get() = MaterialTheme.colorScheme.errorContainer
 
 val ColorScheme.mediumPriority: Color
-    get() = Color(0xFFFFBB33)
+    @Composable
+    get() = MaterialTheme.colorScheme.secondary
 
 val ColorScheme.lowPriority: Color
-    get() = Color(0xFF99CC00)
+    @Composable
+    get() = MaterialTheme.colorScheme.tertiary
 
 // Extension Colors for SavingAccountsStatusChips
-val ColorScheme.statusChipPendingApproval: Color get() = Color(0xFFFFF9C4)
-val ColorScheme.statusChipApproved: Color get() = Color(0xFFC8E6C9)
-val ColorScheme.statusChipRejected: Color get() = Color(0xFFFFCDD2)
-val ColorScheme.statusChipWithdrawn: Color get() = Color(0xFFE1BEE7)
-val ColorScheme.statusChipActive: Color get() = Color(0xFFBBDEFB)
-val ColorScheme.statusChipClosed: Color get() = Color(0xFFCFD8DC)
-val ColorScheme.statusChipPrematurelyClosed: Color get() = Color(0xFFD7CCC8)
-val ColorScheme.statusChipTransferInProgress: Color get() = Color(0xFFFFE0B2)
-val ColorScheme.statusChipTransferOnHold: Color get() = Color(0xFFF0F4C3)
-val ColorScheme.statusChipMatured: Color get() = Color(0xFFB2DFDB)
-val ColorScheme.statusChipDefault: Color get() = Color(0xFFEFEFEF)
+val ColorScheme.statusChipPendingApproval: Color
+    @Composable
+    get() = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.6f)
+val ColorScheme.statusChipApproved: Color
+    @Composable
+    get() = MaterialTheme.colorScheme.tertiaryContainer
+val ColorScheme.statusChipRejected: Color
+    @Composable
+    get() = MaterialTheme.colorScheme.errorContainer
+val ColorScheme.statusChipWithdrawn: Color
+    @Composable
+    get() = MaterialTheme.colorScheme.secondaryContainer
+val ColorScheme.statusChipActive: Color
+    @Composable
+    get() = MaterialTheme.colorScheme.primaryContainer
+val ColorScheme.statusChipClosed: Color
+    @Composable
+    get() = MaterialTheme.colorScheme.surfaceVariant
+val ColorScheme.statusChipPrematurelyClosed: Color
+    @Composable
+    get() = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.8f)
+val ColorScheme.statusChipTransferInProgress: Color
+    @Composable
+    get() = MaterialTheme.colorScheme.tertiaryContainer.copy(alpha = 0.7f)
+val ColorScheme.statusChipTransferOnHold: Color
+    @Composable
+    get() = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.7f)
+val ColorScheme.statusChipMatured: Color
+    @Composable
+    get() = MaterialTheme.colorScheme.tertiaryContainer
+val ColorScheme.statusChipDefault: Color
+    @Composable
+    get() = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
 
 // Extension Colors for InstructionTypeChip
-val ColorScheme.SIChipHighPriorityBackground: Color get() = Color(0xFFE3F2FD)
-val ColorScheme.SIChipHighPriorityContent: Color get() = Color(0xFF1565C0)
-val ColorScheme.SIChipLowPriorityBackground: Color get() = Color(0xFFF3E5F5)
-val ColorScheme.SIChipLowPriorityContent: Color get() = Color(0xFF7B1FA2)
-val ColorScheme.SIChipDefaultPriorityBackground: Color get() = Color(0xFFF5F5F5)
-val ColorScheme.SIChipDefaultPriorityContent: Color get() = Color(0xFF616161)
+val ColorScheme.SIChipHighPriorityBackground: Color
+    @Composable
+    get() = MaterialTheme.colorScheme.primaryContainer
+val ColorScheme.SIChipHighPriorityContent: Color
+    @Composable
+    get() = MaterialTheme.colorScheme.onPrimaryContainer
+val ColorScheme.SIChipLowPriorityBackground: Color
+    @Composable
+    get() = MaterialTheme.colorScheme.tertiaryContainer
+val ColorScheme.SIChipLowPriorityContent: Color
+    @Composable
+    get() = MaterialTheme.colorScheme.onTertiaryContainer
+val ColorScheme.SIChipDefaultPriorityBackground: Color
+    @Composable
+    get() = MaterialTheme.colorScheme.surfaceVariant
+val ColorScheme.SIChipDefaultPriorityContent: Color
+    @Composable
+    get() = MaterialTheme.colorScheme.onSurfaceVariant
 
 // Extension Colors for TransactionItem
 val ColorScheme.transactionTypeCredit: Color
@@ -317,6 +357,10 @@ val ColorScheme.defaultAccount: Color
 
 // New UI Colors
 object NewUi {
-    val walletColor1 = Color(0xFF1f7dd5)
-    val walletColor2 = Color(0xFF1ec0a0)
+    val walletColor1: Color
+        @Composable
+        get() = MaterialTheme.colorScheme.primary
+    val walletColor2: Color
+        @Composable
+        get() = MaterialTheme.colorScheme.secondary
 }

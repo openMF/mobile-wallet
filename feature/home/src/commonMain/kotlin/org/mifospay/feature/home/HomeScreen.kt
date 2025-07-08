@@ -66,6 +66,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
@@ -335,10 +336,12 @@ private fun AccountCard(
     onMarkAsDefault: (Long, String) -> Unit,
     modifier: Modifier = Modifier,
     onClick: (Long) -> Unit,
+    gradientStartColor: Color = NewUi.walletColor1,
+    gradientEndColor: Color = NewUi.walletColor2,
 ) {
     val brush = remember {
         Brush.linearGradient(
-            colors = listOf(NewUi.walletColor1, NewUi.walletColor2),
+            colors = listOf(gradientStartColor, gradientEndColor),
         )
     }
 

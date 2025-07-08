@@ -43,6 +43,8 @@ import mobile_wallet.feature.history.generated.resources.arrow_outward
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.vectorResource
 import org.mifospay.core.common.CurrencyFormatter
+import org.mifospay.core.designsystem.theme.transactionTypeCredit
+import org.mifospay.core.designsystem.theme.transactionTypeDebit
 import org.mifospay.core.model.savingsaccount.Transaction
 import org.mifospay.core.model.savingsaccount.TransactionType
 import org.mifospay.feature.history.HistoryAction
@@ -149,17 +151,9 @@ internal fun TransactionItem(
                         else -> Modifier.graphicsLayer(rotationZ = 180f).size(16.dp)
                     },
                     tint = when (transaction.transactionType) {
-                        TransactionType.CREDIT -> MaterialTheme.colorScheme.onTertiaryContainer.copy(
-                            red = 0f,
-                            green = 0.51f,
-                            blue = 0.21f,
-                        )
+                        TransactionType.CREDIT -> MaterialTheme.colorScheme.transactionTypeCredit
 
-                        TransactionType.DEBIT -> MaterialTheme.colorScheme.error.copy(
-                            red = 0.8f,
-                            green = 0f,
-                            blue = 0f,
-                        )
+                        TransactionType.DEBIT -> MaterialTheme.colorScheme.transactionTypeDebit
 
                         else -> MaterialTheme.colorScheme.scrim
                     },
@@ -177,17 +171,9 @@ internal fun TransactionItem(
                         fontSize = 16.sp,
                         fontWeight = FontWeight.Normal,
                         color = when (transaction.transactionType) {
-                            TransactionType.CREDIT -> MaterialTheme.colorScheme.onTertiaryContainer.copy(
-                                red = 0f,
-                                green = 0.51f,
-                                blue = 0.21f,
-                            )
+                            TransactionType.CREDIT -> MaterialTheme.colorScheme.transactionTypeCredit
 
-                            TransactionType.DEBIT -> MaterialTheme.colorScheme.error.copy(
-                                red = 0.8f,
-                                green = 0f,
-                                blue = 0f,
-                            )
+                            TransactionType.DEBIT -> MaterialTheme.colorScheme.transactionTypeDebit
 
                             else -> MaterialTheme.colorScheme.scrim
                         },
