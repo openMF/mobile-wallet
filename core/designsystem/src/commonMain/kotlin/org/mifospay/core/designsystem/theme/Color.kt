@@ -9,105 +9,22 @@
  */
 package org.mifospay.core.designsystem.theme
 
-import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 
-// val md_theme_light_primary = Color(0xFF0673BA) // primary
-// val md_theme_light_onPrimary = Color(0xFFFFFFFF) // gradientOne
-// val md_theme_light_primaryContainer = Color(0xFFF5F5F5) // container color
-// val md_theme_light_onPrimaryContainer = Color(0xFF3E001D)
-//
-// val md_theme_light_secondary = Color(0xFF984061)
-// val md_theme_light_onSecondary = Color(0xFFFFFFFF)
-// val md_theme_light_secondaryContainer = Color(0xFFFFD9E2)
-// val md_theme_light_onSecondaryContainer = Color(0xFF3E001D)
-//
-// val md_theme_light_tertiary = Color(0xFF7D4996)
-// val md_theme_light_onTertiary = Color(0xFFFFFFFF)
-// val md_theme_light_tertiaryContainer = Color(0xFFF6D9FF)
-// val md_theme_light_onTertiaryContainer = Color(0xFF310049)
-//
-// val md_theme_light_error = Color(0xFFBA1A1A)
-// val md_theme_light_errorContainer = Color(0xFFFFDAD6)
-// val md_theme_light_onError = Color(0xFFFFFFFF)
-// val md_theme_light_onErrorContainer = Color(0xFF410002)
-//
-// val md_theme_light_background = Color(0xFFFFFBFF)
-// val md_theme_light_onBackground = Color(0xFF330045)
-//
-// val md_theme_light_surface = Color(0xFFFFFBFF)
-// val md_theme_light_onSurface = Color(0xFF333333) // onSurface
-// val md_theme_light_surfaceVariant = Color(0xFFF2DDE1)
-// val md_theme_light_onSurfaceVariant = Color(0xFF514347)
-// val md_theme_light_surfaceTint = Color(0xFF984061)
-//
-// val md_theme_light_outline = Color(0xFF837377)
-// val md_theme_light_outlineVariant = Color(0xFFD5C2C6)
-//
-// val md_theme_light_inverseOnSurface = Color(0xFFFFEBFF)
-// val md_theme_light_inverseSurface = Color(0xFF4D1661)
-// val md_theme_light_inversePrimary = Color(0xFFFFB1C8)
-//
-// val md_theme_light_shadow = Color(0xFF000000)
-// val md_theme_light_scrim = Color(0xFF000000)
-//
-//
-// // val md_theme_dark_primary = Color(0xFFFFFFFF)
-// val md_theme_dark_primary = Color(0xFF80CFFF)
-// val md_theme_dark_onPrimary = Color(0xFF000000)
-// val md_theme_dark_primaryContainer = Color(0xFF7B2949)
-// val md_theme_dark_onPrimaryContainer = Color(0xFFFFD9E2)
-//
-// val md_theme_dark_secondary = Color(0xFFFFB1C8)
-// val md_theme_dark_onSecondary = Color(0xFF5E1133)
-// val md_theme_dark_secondaryContainer = Color(0xFF7B2949)
-// val md_theme_dark_onSecondaryContainer = Color(0xFFFFD9E2)
-//
-// val md_theme_dark_tertiary = Color(0xFFE8B3FF)
-// val md_theme_dark_onTertiary = Color(0xFF4A1764)
-// val md_theme_dark_tertiaryContainer = Color(0xFF63307C)
-// val md_theme_dark_onTertiaryContainer = Color(0xFFF6D9FF)
-//
-// val md_theme_dark_error = Color(0xFFFFB4AB)
-// val md_theme_dark_errorContainer = Color(0xFF93000A)
-// val md_theme_dark_onError = Color(0xFF690005)
-// val md_theme_dark_onErrorContainer = Color(0xFFFFDAD6)
-//
-// val md_theme_dark_background = Color(0xFF330045)
-// val md_theme_dark_onBackground = Color(0xFFFAD7FF)
-//
-// // val md_theme_dark_surface = Color(0xFF000000)
-// val md_theme_dark_surface = Color(0xFF1E1E1E)
-// val md_theme_dark_onSurface = Color(0xFFFFFFFF)
-// val md_theme_dark_surfaceVariant = Color(0xFF514347)
-// val md_theme_dark_onSurfaceVariant = Color(0xFFD5C2C6)
-// val md_theme_dark_surfaceTint = Color(0xFFFFB1C8)
-//
-// val md_theme_dark_outline = Color(0xFF9E8C90)
-// val md_theme_dark_outlineVariant = Color(0xFF514347)
-//
-// val md_theme_dark_inverseOnSurface = Color(0xFF330045)
-// val md_theme_dark_inverseSurface = Color(0xFFFAD7FF)
-// val md_theme_dark_inversePrimary = Color(0xFF984061)
-//
-// val md_theme_dark_shadow = Color(0xFF000000)
-// val md_theme_dark_scrim = Color(0xFF000000)
-
-// Primary Light
-val primaryLight = Color(0xFF0673BA) // Main brand color
-val onPrimaryLight = Color(0xFFFFFFFF) // Contrast text/icon on primary
-val primaryContainerLight = Color(0xFFCEEAFD) // Lighter tone for background of components
-val onPrimaryContainerLight = Color(0xFF033D63) // 	Text/icon over container
-val secondaryLight = Color(0xFF984061) // Main secondary tone, rich and expressive
-val onSecondaryLight = Color(0xFFFFFFFF) // Best contrast for readable text/icons
-val secondaryContainerLight = Color(0xFFF0DBE3) // Soft container tone
-val onSecondaryContainerLight = Color(0xFF361722) // Dark text/icon for contrast on container
-val tertiaryLight = Color(0xFF7D4996) // Base tertiary
-val onTertiaryLight = Color(0xFFFFFFFF) // Light text/icons on tertiary
-val tertiaryContainerLight = Color(0XFFE9DDEE) // soft pastel background variant
-val onTertiaryContainerLight = Color(0xFF2B1934) // Deep tone for legibility over container
+val primaryLight = Color(0xFF0673BA)
+val onPrimaryLight = Color(0xFFFFFFFF)
+val primaryContainerLight = Color(0xFFCEEAFD)
+val onPrimaryContainerLight = Color(0xFF033D63)
+val secondaryLight = Color(0xFF984061)
+val onSecondaryLight = Color(0xFFFFFFFF)
+val secondaryContainerLight = Color(0xFFF0DBE3)
+val onSecondaryContainerLight = Color(0xFF361722)
+val tertiaryLight = Color(0xFF7D4996)
+val onTertiaryLight = Color(0xFFFFFFFF)
+val tertiaryContainerLight = Color(0XFFE9DDEE)
+val onTertiaryContainerLight = Color(0xFF2B1934)
 val errorLight = Color(0xFFBA1A1A)
 val onErrorLight = Color(0xFFFFFFFF)
 val errorContainerLight = Color(0xFFFFDAD6)
@@ -132,18 +49,18 @@ val surfaceContainerLight = Color(0xFFECEEF4)
 val surfaceContainerHighLight = Color(0xFFE6E8EE)
 val surfaceContainerHighestLight = Color(0xFFE0E2E9)
 
-val primaryDark = Color(0xFF9CD6FC) // Slightly desaturated light tone
-val onPrimaryDark = Color(0xFF033D63) // Dark enough to maintain contrast
-val primaryContainerDark = Color(0xFF044C7C) // Deep tone for component background
-val onPrimaryContainerDark = Color(0xFFE6F5FE) // Light text/icon over container
-val secondaryDark = Color(0xFFD9A5B8) // Softer tone for dark surfaces
-val onSecondaryDark = Color(0xFF361722) // Still provides strong contrast
-val secondaryContainerDark = Color(0xFF5A2639) // Deep tone for container
-val onSecondaryContainerDark = Color(0xFFF0DBE3) // 	Light foreground over container
-val tertiaryDark = Color(0xFFC7A9D6) // bright pop for dark mode
-val onTertiaryDark = Color(0xFF3A2145) // Deep text/icon for contrast
-val tertiaryContainerDark = Color(0xFF653A78) // Solid background fill
-val onTertiaryContainerDark = Color(0xFFF4EEF7) // Light text/icons over container
+val primaryDark = Color(0xFF9CD6FC)
+val onPrimaryDark = Color(0xFF033D63)
+val primaryContainerDark = Color(0xFF044C7C)
+val onPrimaryContainerDark = Color(0xFFE6F5FE)
+val secondaryDark = Color(0xFFD9A5B8)
+val onSecondaryDark = Color(0xFF361722)
+val secondaryContainerDark = Color(0xFF5A2639)
+val onSecondaryContainerDark = Color(0xFFF0DBE3)
+val tertiaryDark = Color(0xFFC7A9D6)
+val onTertiaryDark = Color(0xFF3A2145)
+val tertiaryContainerDark = Color(0xFF653A78)
+val onTertiaryContainerDark = Color(0xFFF4EEF7)
 val errorDark = Color(0xFFFFB4AB)
 val onErrorDark = Color(0xFF690005)
 val errorContainerDark = Color(0xFF93000A)
@@ -168,155 +85,11 @@ val surfaceContainerDark = Color(0xFF1C2025)
 val surfaceContainerHighDark = Color(0xFF272A2F)
 val surfaceContainerHighestDark = Color(0xFF32353A)
 
-// Extension Colors for PasswordStrengthIndicator
-val ColorScheme.veryStrongPassword: Color
-    @Composable
-    get() = MaterialTheme.colorScheme.tertiary
-
-val ColorScheme.strongPassword: Color
-    get() = Color(0xFF41B06D)
-
-val ColorScheme.weakPassword: Color
-    get() = Color(0xFF8B6609)
-
-// Extension Colors for PriorityChips
-val ColorScheme.veryHighPriority: Color
-    get() = Color(0xFFFF4444)
-
-val ColorScheme.highPriority: Color
-    get() = Color(0xFFFF8800)
-
-val ColorScheme.mediumPriority: Color
-    get() = Color(0xFFFFBB33)
-
-val ColorScheme.lowPriority: Color
-    get() = Color(0xFF99CC00)
-
-// Extension Colors for SavingAccountsStatusChips
-val ColorScheme.statusChipPendingApproval: Color get() = Color(0xFFFFF9C4)
-val ColorScheme.statusChipApproved: Color get() = Color(0xFFC8E6C9)
-val ColorScheme.statusChipRejected: Color get() = Color(0xFFFFCDD2)
-val ColorScheme.statusChipWithdrawn: Color get() = Color(0xFFE1BEE7)
-val ColorScheme.statusChipActive: Color get() = Color(0xFFBBDEFB)
-val ColorScheme.statusChipClosed: Color get() = Color(0xFFCFD8DC)
-val ColorScheme.statusChipPrematurelyClosed: Color get() = Color(0xFFD7CCC8)
-val ColorScheme.statusChipTransferInProgress: Color get() = Color(0xFFFFE0B2)
-val ColorScheme.statusChipTransferOnHold: Color get() = Color(0xFFF0F4C3)
-val ColorScheme.statusChipMatured: Color get() = Color(0xFFB2DFDB)
-val ColorScheme.statusChipDefault: Color get() = Color(0xFFEFEFEF)
-
-// Extension Colors for InstructionTypeChip
-val ColorScheme.SIChipHighPriorityBackground: Color get() = Color(0xFFE3F2FD)
-val ColorScheme.SIChipHighPriorityContent: Color get() = Color(0xFF1565C0)
-val ColorScheme.SIChipLowPriorityBackground: Color get() = Color(0xFFF3E5F5)
-val ColorScheme.SIChipLowPriorityContent: Color get() = Color(0xFF7B1FA2)
-val ColorScheme.SIChipDefaultPriorityBackground: Color get() = Color(0xFFF5F5F5)
-val ColorScheme.SIChipDefaultPriorityContent: Color get() = Color(0xFF616161)
-
-// Extension Colors for TransactionItem
-val ColorScheme.transactionTypeCredit: Color
-    @Composable
-    get() = MaterialTheme.colorScheme.onTertiaryContainer.copy(
-        red = 0f,
-        green = 0.51f,
-        blue = 0.21f,
-    )
-val ColorScheme.transactionTypeDebit: Color
-    @Composable
-    get() = MaterialTheme.colorScheme.error.copy(
-        red = 0.8f,
-        green = 0f,
-        blue = 0f,
-    )
-val ColorScheme.transactionTypeOther: Color
-    @Composable
-    get() = MaterialTheme.colorScheme.primaryContainer.copy(
-        red = 1f,
-        green = 1f,
-        blue = 0f,
-    )
-
-// Extension Colors for Accounts
-val ColorScheme.pendingApprovalAccount: Color
-    @Composable
-    get() = MaterialTheme.colorScheme.primaryContainer.copy(
-        red = 1f,
-        green = 0.976f,
-        blue = 0.77f,
-    )
-val ColorScheme.approvedAccount: Color
-    @Composable
-    get() = MaterialTheme.colorScheme.tertiaryContainer.copy(
-        red = 0.78f,
-        green = 0.90f,
-        blue = 0.79f,
-    )
-val ColorScheme.rejectedAccount: Color
-    @Composable
-    get() = MaterialTheme.colorScheme.tertiaryContainer.copy(
-        red = 1f,
-        green = 0.8f,
-        blue = 0.82f,
-    )
-val ColorScheme.withdrawnAccount: Color
-    @Composable
-    get() = MaterialTheme.colorScheme.tertiaryContainer.copy(
-        red = 0.88f,
-        green = 0.75f,
-        blue = 0.91f,
-    )
-val ColorScheme.activeAccount: Color
-    @Composable
-    get() = MaterialTheme.colorScheme.primaryContainer.copy(
-        red = 0.73f,
-        green = 0.87f,
-        blue = 0.98f,
-    )
-val ColorScheme.closedAccount: Color
-    @Composable
-    get() = MaterialTheme.colorScheme.surfaceVariant.copy(
-        red = 0.81f,
-        green = 0.85f,
-        blue = 0.86f,
-    )
-val ColorScheme.prematurelyClosedAccount: Color
-    @Composable
-    get() = MaterialTheme.colorScheme.surfaceContainer.copy(
-        red = 0.84f,
-        green = 0.8f,
-        blue = 0.78f,
-    )
-val ColorScheme.transferInProgressAccount: Color
-    @Composable
-    get() = MaterialTheme.colorScheme.primaryContainer.copy(
-        red = 1f,
-        green = 0.88f,
-        blue = 0.7f,
-    )
-val ColorScheme.transferOnHoldAccount: Color
-    @Composable
-    get() = MaterialTheme.colorScheme.primaryContainer.copy(
-        red = 0.94f,
-        green = 0.96f,
-        blue = 0.77f,
-    )
-val ColorScheme.maturedAccount: Color
-    @Composable
-    get() = MaterialTheme.colorScheme.primaryContainer.copy(
-        red = 0.7f,
-        green = 0.87f,
-        blue = 0.86f,
-    )
-val ColorScheme.defaultAccount: Color
-    @Composable
-    get() = MaterialTheme.colorScheme.surface.copy(
-        red = 0.94f,
-        green = 0.94f,
-        blue = 0.94f,
-    )
-
-// New UI Colors
 object NewUi {
-    val walletColor1 = Color(0xFF1f7dd5)
-    val walletColor2 = Color(0xFF1ec0a0)
+    val walletColor1: Color
+        @Composable
+        get() = MaterialTheme.colorScheme.primary
+    val walletColor2: Color
+        @Composable
+        get() = MaterialTheme.colorScheme.secondary
 }

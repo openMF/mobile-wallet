@@ -60,17 +60,6 @@ import org.mifospay.core.common.CurrencyFormatter
 import org.mifospay.core.designsystem.component.MfLoadingWheel
 import org.mifospay.core.designsystem.component.MifosScaffold
 import org.mifospay.core.designsystem.theme.NewUi
-import org.mifospay.core.designsystem.theme.statusChipActive
-import org.mifospay.core.designsystem.theme.statusChipApproved
-import org.mifospay.core.designsystem.theme.statusChipClosed
-import org.mifospay.core.designsystem.theme.statusChipDefault
-import org.mifospay.core.designsystem.theme.statusChipMatured
-import org.mifospay.core.designsystem.theme.statusChipPendingApproval
-import org.mifospay.core.designsystem.theme.statusChipPrematurelyClosed
-import org.mifospay.core.designsystem.theme.statusChipRejected
-import org.mifospay.core.designsystem.theme.statusChipTransferInProgress
-import org.mifospay.core.designsystem.theme.statusChipTransferOnHold
-import org.mifospay.core.designsystem.theme.statusChipWithdrawn
 import org.mifospay.core.model.account.Account
 import org.mifospay.core.model.savingsaccount.SavingAccountDetail
 import org.mifospay.core.model.savingsaccount.Status
@@ -487,17 +476,17 @@ private fun SavingAccountStatusCard(
 @Composable
 private fun StatusChip(label: String) {
     val color = when (label) {
-        "Pending Approval" -> MaterialTheme.colorScheme.statusChipPendingApproval
-        "Approved" -> MaterialTheme.colorScheme.statusChipApproved
-        "Rejected" -> MaterialTheme.colorScheme.statusChipRejected
-        "Withdrawn" -> MaterialTheme.colorScheme.statusChipWithdrawn
-        "Active" -> MaterialTheme.colorScheme.statusChipActive
-        "Closed" -> MaterialTheme.colorScheme.statusChipClosed
-        "Prematurely Closed" -> MaterialTheme.colorScheme.statusChipPrematurelyClosed
-        "Transfer in Progress" -> MaterialTheme.colorScheme.statusChipTransferInProgress
-        "Transfer on Hold" -> MaterialTheme.colorScheme.statusChipTransferOnHold
-        "Matured" -> MaterialTheme.colorScheme.statusChipMatured
-        else -> MaterialTheme.colorScheme.statusChipDefault
+        "Pending Approval" -> MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.6f)
+        "Approved" -> MaterialTheme.colorScheme.tertiaryContainer
+        "Rejected" -> MaterialTheme.colorScheme.errorContainer
+        "Withdrawn" -> MaterialTheme.colorScheme.secondaryContainer
+        "Active" -> MaterialTheme.colorScheme.primaryContainer
+        "Closed" -> MaterialTheme.colorScheme.surfaceVariant
+        "Prematurely Closed" -> MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.8f)
+        "Transfer in Progress" -> MaterialTheme.colorScheme.tertiaryContainer.copy(alpha = 0.7f)
+        "Transfer on Hold" -> MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.7f)
+        "Matured" -> MaterialTheme.colorScheme.tertiaryContainer
+        else -> MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
     }
 
     SuggestionChip(

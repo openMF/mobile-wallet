@@ -17,10 +17,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import org.mifospay.core.designsystem.theme.highPriority
-import org.mifospay.core.designsystem.theme.lowPriority
-import org.mifospay.core.designsystem.theme.mediumPriority
-import org.mifospay.core.designsystem.theme.veryHighPriority
 import org.mifospay.core.model.standinginstruction.StandingInstruction
 
 @Composable
@@ -29,10 +25,10 @@ fun PriorityChip(
     modifier: Modifier = Modifier,
 ) {
     val (backgroundColor, contentColor) = when (priority.id) {
-        1L -> MaterialTheme.colorScheme.veryHighPriority to MaterialTheme.colorScheme.surfaceContainerLowest
-        2L -> MaterialTheme.colorScheme.highPriority to MaterialTheme.colorScheme.surfaceContainerLowest
-        3L -> MaterialTheme.colorScheme.mediumPriority to MaterialTheme.colorScheme.surfaceContainerLowest
-        4L -> MaterialTheme.colorScheme.lowPriority to MaterialTheme.colorScheme.surfaceContainerLowest
+        1L -> MaterialTheme.colorScheme.error to MaterialTheme.colorScheme.surfaceContainerLowest
+        2L -> MaterialTheme.colorScheme.errorContainer to MaterialTheme.colorScheme.surfaceContainerLowest
+        3L -> MaterialTheme.colorScheme.secondary to MaterialTheme.colorScheme.surfaceContainerLowest
+        4L -> MaterialTheme.colorScheme.tertiary to MaterialTheme.colorScheme.surfaceContainerLowest
         else -> MaterialTheme.colorScheme.outline to MaterialTheme.colorScheme.surfaceContainerLowest
     }
 
