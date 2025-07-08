@@ -70,18 +70,18 @@ firebaseCrashlyticsPlugin = "3.0.2"
 firebasePerfPlugin = "1.4.2"
 
 # Kotlin KMP Dependencies
-kotlin = "2.1.0"
+kotlin = "2.1.20"
 kotlinInject = "0.7.2"
 kotlinxCoroutines = "1.9.0"
 kotlinxDatetime = "0.6.1"
 kotlinxImmutable = "0.3.8"
 kotlinxSerializationJson = "1.7.3"
-ksp = "2.1.0-1.0.29"
+ksp = "2.1.20-1.0.32"
 
 # Ktor & Ktorfit
-ktorVersion = "3.0.3"
-ktorfit = "2.2.0"
-ktorfitKsp = "2.2.0-1.0.29"
+ktorVersion = "3.1.2"
+ktorfit = "2.5.0"
+ktorfitKsp = "2.5.0"
 
 # Koin CMP Dependencies
 koin = "4.0.1-RC1"
