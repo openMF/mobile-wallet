@@ -136,7 +136,7 @@ class LoginViewModelTest {
 
         assertIs<LoginState.DialogState.Error>(viewModel.stateFlow.value.dialogState)
 
-        assertEquals("Invalid Credentials", (viewModel.stateFlow.value.dialogState as LoginState.DialogState.Error).message)
+        assertEquals("Invalid credentials", (viewModel.stateFlow.value.dialogState as LoginState.DialogState.Error).message)
     }
 
     @Test

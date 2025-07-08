@@ -211,7 +211,7 @@ lint-api = { group = "com.android.tools.lint", name = "lint-api", version.ref = 
 lint-checks = { group = "com.android.tools.lint", name = "lint-checks", version.ref = "androidTools" }
 lint-tests = { group = "com.android.tools.lint", name = "lint-tests", version.ref = "androidTools" }
 
-mokkery = {group = "dev.mokkery.gradle.plugin", name="mokkery", version.ref="mokkeryVersion"}
+mokkery = {group = "dev.mokkery", name="mokkery-gradle", version.ref="mokkeryVersion"}
 
 protobuf-kotlin-lite = { group = "com.google.protobuf", name = "protobuf-kotlin-lite", version.ref = "protobuf" }
 protobuf-protoc = { group = "com.google.protobuf", name = "protoc", version.ref = "protobuf" }
@@ -337,6 +337,8 @@ androidx-compose-ui-test = [
 ]
 
 [plugins]
+
+mokkery-plugin = {id="dev.mokkery", version.ref="mokkeryVersion"}
 # Android & Kotlin Plugins
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
 android-library = { id = "com.android.library", version.ref = "androidGradlePlugin" }

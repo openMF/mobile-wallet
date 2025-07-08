@@ -14,7 +14,7 @@ plugins {
     alias(libs.plugins.mifospay.cmp.feature)
     alias(libs.plugins.kotlin.parcelize)
     alias(libs.plugins.kotlin.serialization)
-    id("dev.mokkery") version "2.7.2"
+    alias(libs.plugins.mokkery.plugin)
 }
 
 android {

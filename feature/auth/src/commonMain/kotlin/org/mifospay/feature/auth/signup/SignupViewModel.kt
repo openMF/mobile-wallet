@@ -275,7 +275,7 @@ class SignupViewModel(
 
         state.mobileNumberInput.isEmpty() -> {
             mutableStateFlow.update {
-                it.copy(dialogState = SignUpDialog.Error("Please enter a your mobile number."))
+                it.copy(dialogState = SignUpDialog.Error("Please enter your mobile number."))
             }
         }
 
@@ -313,13 +313,11 @@ class SignupViewModel(
 
         !state.isPasswordStrong -> {
             val errorMessage = state.passwordError?.takeIf { it.isNotBlank() }
-                ?: """
-        Please ensure password contains :
-        - At least one uppercase character
-        - At least one lowercase character
-        - At least one numeric digit
-        - At least one special character
-    """
+                ?: "Please ensure password contains :" +
+                "\n- At least one uppercase character" +
+                "\n- At least one lowercase character" +
+                "\n- At least one numeric digit" +
+                "\n- At least one special character"
             mutableStateFlow.update {
                 it.copy(dialogState = SignUpDialog.Error(errorMessage.lines().joinToString("\n") { "- $it" }))
             }
@@ -339,7 +337,7 @@ class SignupViewModel(
 
         state.pinCodeInput.isEmpty() -> {
             mutableStateFlow.update {
-                it.copy(dialogState = SignUpDialog.Error("Please enter your pincode."))
+                it.copy(dialogState = SignUpDialog.Error("Please enter your pin code."))
             }
         }
 
@@ -351,13 +349,13 @@ class SignupViewModel(
 
         state.countryInput.isEmpty() -> {
             mutableStateFlow.update {
-                it.copy(dialogState = SignUpDialog.Error("Please enter your country"))
+                it.copy(dialogState = SignUpDialog.Error("Please enter your country."))
             }
         }
 
         state.stateInput.isEmpty() -> {
             mutableStateFlow.update {
-                it.copy(dialogState = SignUpDialog.Error("Please enter your state"))
+                it.copy(dialogState = SignUpDialog.Error("Please enter your state."))
             }
         }
 
@@ -391,7 +389,7 @@ class SignupViewModel(
             val errorMessages = results.mapNotNull { (label, result) ->
                 when (result) {
                     is DataState.Success -> {
-                        if (result.data.isNotEmpty()) "$label already exists" else null
+                        if (result.data.isNotEmpty()) "$label already exists." else null
                     }
                     is DataState.Error ->
                         result.exception.message

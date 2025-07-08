@@ -30,7 +30,7 @@ class LoginUseCase(
 
         return when (result) {
             is DataState.Loading -> DataState.Loading
-            is DataState.Error -> DataState.Error(Exception("Invalid Credentials"))
+            is DataState.Error -> DataState.Error(Exception("Invalid credentials"))
             is DataState.Success -> {
                 if (result.data.clients.isEmpty()) {
                     return DataState.Error(Exception("No clients found"))
