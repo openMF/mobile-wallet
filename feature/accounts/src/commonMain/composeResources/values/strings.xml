@@ -45,4 +45,119 @@
     </string>
     <string name="delete_beneficiary_title">Delete Beneficiary</string>
     <string name="delete_beneficiary_subtitle">Are you sure you want to delete this beneficiary?</string>
+
+    <!-- AccountsScreen -->
+    <string name="feature_accounts_savings_account">Savings Account</string>
+    <string name="feature_accounts_beneficiaries">Beneficiaries</string>
+    <string name="feature_accounts_add_beneficiary">Add Beneficiary</string>
+    <string name="feature_accounts_add">Add</string>
+    <string name="feature_accounts_edit">Edit</string>
+    <string name="feature_accounts_info">Info</string>
+    <string name="feature_accounts_check">Check</string>
+    <string name="feature_accounts_default">Default</string>
+    <string name="feature_accounts_edit_beneficiary">Edit Beneficiary</string>
+    <string name="feature_accounts_delete_beneficiary">Delete Beneficiary</string>
+
+    <!-- Status chips -->
+    <string name="feature_accounts_status_pending_approval">Pending Approval</string>
+    <string name="feature_accounts_status_approved">Approved</string>
+    <string name="feature_accounts_status_rejected">Rejected</string>
+    <string name="feature_accounts_status_withdrawn">Withdrawn</string>
+    <string name="feature_accounts_status_active">Active</string>
+    <string name="feature_accounts_status_closed">Closed</string>
+    <string name="feature_accounts_status_prematurely_closed">Prematurely Closed</string>
+    <string name="feature_accounts_status_transfer_in_progress">Transfer in Progress</string>
+    <string name="feature_accounts_status_transfer_on_hold">Transfer on Hold</string>
+    <string name="feature_accounts_status_matured">Matured</string>
+
+    <!-- Toast messages -->
+    <string name="feature_accounts_default_account_updated">Default account updated</string>
+    <string name="feature_accounts_beneficiary_deleted">Beneficiary deleted</string>
+    <string name="feature_accounts_beneficiary_added">Beneficiary added</string>
+    <string name="feature_accounts_beneficiary_updated">Beneficiary updated</string>
+
+    <!-- SavingAccountDetailScreen -->
+    <string name="feature_accounts_detail_account_details">Account Details</string>
+    <string name="feature_accounts_detail_account_summary">Account Summary</string>
+    <string name="feature_accounts_detail_account_balance">Account Balance</string>
+    <string name="feature_accounts_detail_total_deposits">Total Deposits</string>
+    <string name="feature_accounts_detail_total_withdrawals">Total Withdrawals</string>
+    <string name="feature_accounts_detail_available_balance">Available Balance</string>
+    <string name="feature_accounts_detail_total_interest_posted">Total Interest Posted</string>
+    <string name="feature_accounts_detail_total_overdraft">Total Overdraft</string>
+    <string name="feature_accounts_detail_interest_not_posted">Interest Not Posted</string>
+    <string name="feature_accounts_detail_product_name">Product Name</string>
+    <string name="feature_accounts_detail_wallet_balance">Wallet Balance</string>
+    <string name="feature_accounts_detail_arrow">arrow</string>
+
+    <!-- AddEditSavingAccountScreen -->
+    <string name="feature_accounts_add_client_name">Client Name</string>
+    <string name="feature_accounts_add_saving_product">Saving Product</string>
+    <string name="feature_accounts_add_product_name">Product Name</string>
+    <string name="feature_accounts_add_submit_account">Submit Account</string>
+    <string name="feature_accounts_add_nominal_annual">Nominal Annual Interest Rate</string>
+    <string name="feature_accounts_add_savings_account">Add Savings Account</string>
+    <string name="feature_accounts_edit_savings_account">Edit Savings Account</string>
+    <string name="feature_accounts_update_savings_account">Update Savings Account</string>
+
+    <!-- AddEditSavingAccountScreen Additional Fields -->
+    <string name="feature_accounts_add_external_id">External Id</string>
+    <string name="feature_accounts_add_submitted_date">Submitted Date</string>
+    <string name="feature_accounts_add_date_format">Date Format</string>
+    <string name="feature_accounts_add_locale">Locale</string>
+    <string name="feature_accounts_add_allow_overdraft">Allow Overdraft</string>
+    <string name="feature_accounts_add_overdraft_limit">Overdraft Limit</string>
+    <string name="feature_accounts_add_min_required_balance">Min Required Balance</string>
+    <string name="feature_accounts_add_opening_balance">Opening Balance</string>
+    <string name="feature_accounts_add_withdrawal_fee">Withdrawal Fee For Transfer</string>
+    <string name="feature_accounts_add_with_hold_tax">With Hold Tax</string>
+
+    <!-- BeneficiaryScreen -->
+    <string name="feature_accounts_add_beneficiary_title">Add Beneficiary</string>
+    <string name="feature_accounts_edit_beneficiary_title">Edit Beneficiary</string>
+    <string name="feature_accounts_beneficiary_name">Beneficiary Name</string>
+    <string name="feature_accounts_beneficiary_account_number">Beneficiary Account Number</string>
+    <string name="feature_accounts_beneficiary_office_name">Office Name</string>
+    <string name="feature_accounts_beneficiary_transfer_limit">Transfer Limit</string>
+    <string name="feature_accounts_beneficiary_save">Save</string>
+
+    <!-- AddEditBeneficiaryScreen -->
+    <string name="feature_accounts_beneficiary_nickname">Nickname</string>
+    <string name="feature_accounts_beneficiary_account_no">Account No</string>
+    <string name="feature_accounts_beneficiary_locale">Locale</string>
+    <string name="feature_accounts_beneficiary_account_type">Account Type</string>
+
+    <!-- AddEditBeneficiaryViewModel Error Messages -->
+    <string name="feature_accounts_error_empty_beneficiary_name">Beneficiary Name cannot be empty</string>
+    <string name="feature_accounts_error_empty_account_number">Account number cannot be empty</string>
+    <string name="feature_accounts_error_invalid_transfer_limit">Transfer limit should be greater than 0</string>
+    <string name="feature_accounts_error_select_locale">Select a locale</string>
+    <string name="feature_accounts_error_empty_office_name">Office name cannot be empty</string>
+    <string name="feature_accounts_error_select_account_type">Select an account type</string>
+
+    <!-- AddEditBeneficiaryViewModel Button and Title -->
+    <string name="feature_accounts_beneficiary_button_save">Save</string>
+    <string name="feature_accounts_beneficiary_button_update">Update</string>
+    <string name="feature_accounts_beneficiary_title_add">Add Beneficiary</string>
+    <string name="feature_accounts_beneficiary_title_update">Update Beneficiary</string>
+    <string name="feature_accounts_beneficiary_account_type_wallet">WALLET</string>
+    <string name="feature_accounts_beneficiary_account_type_other">Other</string>
+
+    <!-- AddEditSavingViewModel Error Messages -->
+    <string name="feature_accounts_error_select_saving_product">Select a Saving Product</string>
+    <string name="feature_accounts_error_client_id_required">Client ID is required</string>
+    <string name="feature_accounts_error_external_id_required">External ID is required</string>
+    <string name="feature_accounts_error_external_id_length">External ID must be at least 8 characters</string>
+    <string name="feature_accounts_error_min_opening_balance_required">Min Required Opening Balance is required</string>
+    <string name="feature_accounts_error_overdraft_limit_required">Overdraft Limit is required</string>
+    <string name="feature_accounts_error_locale_required">Locale is required</string>
+    <string name="feature_accounts_error_submitted_date_required">Submitted On Date is required</string>
+    <string name="feature_accounts_error_date_format_required">Date Format is required</string>
+    <string name="feature_accounts_error_account_id_required">Account ID is required for updating saving account</string>
+
+    <!-- AddEditSavingViewModel UI Texts -->
+    <string name="feature_accounts_saving_button_save">Save</string>
+    <string name="feature_accounts_saving_button_update">Update</string>
+    <string name="feature_accounts_saving_title_create">Create Saving Account</string>
+    <string name="feature_accounts_saving_title_update">Update Saving Account</string>
 </resources>

@@ -54,8 +54,28 @@ import kotlinx.coroutines.launch
 import mobile_wallet.feature.accounts.generated.resources.Res
 import mobile_wallet.feature.accounts.generated.resources.baseline_check
 import mobile_wallet.feature.accounts.generated.resources.baseline_unchecked
+import mobile_wallet.feature.accounts.generated.resources.feature_accounts_add
+import mobile_wallet.feature.accounts.generated.resources.feature_accounts_add_beneficiary
+import mobile_wallet.feature.accounts.generated.resources.feature_accounts_beneficiaries
+import mobile_wallet.feature.accounts.generated.resources.feature_accounts_check
+import mobile_wallet.feature.accounts.generated.resources.feature_accounts_default
+import mobile_wallet.feature.accounts.generated.resources.feature_accounts_delete_beneficiary
+import mobile_wallet.feature.accounts.generated.resources.feature_accounts_edit
+import mobile_wallet.feature.accounts.generated.resources.feature_accounts_edit_beneficiary
 import mobile_wallet.feature.accounts.generated.resources.feature_accounts_error_oops
+import mobile_wallet.feature.accounts.generated.resources.feature_accounts_info
 import mobile_wallet.feature.accounts.generated.resources.feature_accounts_loading
+import mobile_wallet.feature.accounts.generated.resources.feature_accounts_savings_account
+import mobile_wallet.feature.accounts.generated.resources.feature_accounts_status_active
+import mobile_wallet.feature.accounts.generated.resources.feature_accounts_status_approved
+import mobile_wallet.feature.accounts.generated.resources.feature_accounts_status_closed
+import mobile_wallet.feature.accounts.generated.resources.feature_accounts_status_matured
+import mobile_wallet.feature.accounts.generated.resources.feature_accounts_status_pending_approval
+import mobile_wallet.feature.accounts.generated.resources.feature_accounts_status_prematurely_closed
+import mobile_wallet.feature.accounts.generated.resources.feature_accounts_status_rejected
+import mobile_wallet.feature.accounts.generated.resources.feature_accounts_status_transfer_in_progress
+import mobile_wallet.feature.accounts.generated.resources.feature_accounts_status_transfer_on_hold
+import mobile_wallet.feature.accounts.generated.resources.feature_accounts_status_withdrawn
 import mobile_wallet.feature.accounts.generated.resources.feature_accounts_unexpected_error_subtitle
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.resources.vectorResource
@@ -156,7 +176,10 @@ internal fun AccountsScreenContent(
                         onAction(AccountAction.CreateSavingsAccount)
                     },
                 ) {
-                    Icon(imageVector = MifosIcons.Add, "Add")
+                    Icon(
+                        imageVector = MifosIcons.Add,
+                        stringResource(Res.string.feature_accounts_add),
+                    )
                 }
             }
         },
@@ -251,7 +274,7 @@ private fun AccountsList(
     ) {
         item {
             Text(
-                text = "Savings Account",
+                text = stringResource(Res.string.feature_accounts_savings_account),
                 style = MaterialTheme.typography.labelLarge,
             )
         }
@@ -278,7 +301,7 @@ private fun AccountsList(
 
         item {
             Text(
-                text = "Beneficiaries",
+                text = stringResource(Res.string.feature_accounts_beneficiaries),
                 style = MaterialTheme.typography.labelLarge,
             )
         }
@@ -311,13 +334,13 @@ private fun AccountsList(
                 MifosButton(
                     text = {
                         Text(
-                            text = "Add Beneficiary",
+                            text = stringResource(Res.string.feature_accounts_add_beneficiary),
                         )
                     },
                     leadingIcon = {
                         Icon(
                             imageVector = MifosIcons.Add,
-                            contentDescription = "add",
+                            contentDescription = stringResource(Res.string.feature_accounts_add),
                         )
                     },
                     onClick = onAddTPTBeneficiary,
@@ -349,7 +372,7 @@ private fun AccountItem(
         backgroundCardStartColor = MaterialTheme.colorScheme.tertiary,
         backgroundCardEndColor = MaterialTheme.colorScheme.secondary,
         backgroundStartActionLabel = null,
-        backgroundEndActionLabel = "Edit",
+        backgroundEndActionLabel = stringResource(Res.string.feature_accounts_edit),
         card = { shape, content ->
             Card(
                 modifier = Modifier.matchParentSize(),
@@ -377,7 +400,7 @@ private fun AccountItem(
                     ) {
                         Icon(
                             imageVector = MifosIcons.Edit2,
-                            contentDescription = "Edit",
+                            contentDescription = stringResource(Res.string.feature_accounts_edit),
                         )
                     }
                 }
@@ -387,7 +410,7 @@ private fun AccountItem(
                 ) {
                     Icon(
                         imageVector = MifosIcons.Info,
-                        contentDescription = "Info",
+                        contentDescription = stringResource(Res.string.feature_accounts_info),
                     )
                 }
             }
@@ -435,7 +458,7 @@ private fun AccountItem(
                                 ),
                             ) {
                                 Text(
-                                    text = "Default",
+                                    text = stringResource(Res.string.feature_accounts_default),
                                     style = MaterialTheme.typography.bodySmall,
                                     modifier = Modifier.padding(4.dp),
                                 )
@@ -448,7 +471,7 @@ private fun AccountItem(
                             } else {
                                 vectorResource(Res.drawable.baseline_unchecked)
                             },
-                            contentDescription = "check",
+                            contentDescription = stringResource(Res.string.feature_accounts_check),
                         )
                     }
                 },
@@ -505,7 +528,7 @@ private fun BeneficiaryItem(
                     ) {
                         Icon(
                             imageVector = MifosIcons.Edit2,
-                            contentDescription = "Edit Beneficiary",
+                            contentDescription = stringResource(Res.string.feature_accounts_edit_beneficiary),
                         )
                     }
 
@@ -520,7 +543,7 @@ private fun BeneficiaryItem(
                     ) {
                         Icon(
                             imageVector = MifosIcons.OutlinedDelete,
-                            contentDescription = "Delete Beneficiary",
+                            contentDescription = stringResource(Res.string.feature_accounts_delete_beneficiary),
                         )
                     }
                 }
@@ -569,15 +592,15 @@ private fun SavingAccountStatusCard(
     modifier: Modifier = Modifier,
 ) {
     val statusChips = listOf(
-        "Pending Approval" to status.submittedAndPendingApproval,
-        "Approved" to status.approved,
-        "Rejected" to status.rejected,
-        "Withdrawn" to status.withdrawnByApplicant,
-        "Closed" to status.closed,
-        "Prematurely Closed" to status.prematureClosed,
-        "Transfer in Progress" to status.transferInProgress,
-        "Transfer on Hold" to status.transferOnHold,
-        "Matured" to status.matured,
+        stringResource(Res.string.feature_accounts_status_pending_approval) to status.submittedAndPendingApproval,
+        stringResource(Res.string.feature_accounts_status_approved) to status.approved,
+        stringResource(Res.string.feature_accounts_status_rejected) to status.rejected,
+        stringResource(Res.string.feature_accounts_status_withdrawn) to status.withdrawnByApplicant,
+        stringResource(Res.string.feature_accounts_status_closed) to status.closed,
+        stringResource(Res.string.feature_accounts_status_prematurely_closed) to status.prematureClosed,
+        stringResource(Res.string.feature_accounts_status_transfer_in_progress) to status.transferInProgress,
+        stringResource(Res.string.feature_accounts_status_transfer_on_hold) to status.transferOnHold,
+        stringResource(Res.string.feature_accounts_status_matured) to status.matured,
     )
 
     FlowRow(
@@ -596,56 +619,66 @@ private fun SavingAccountStatusCard(
 @Composable
 private fun StatusChip(label: String) {
     val color = when (label) {
-        "Pending Approval" -> MaterialTheme.colorScheme.primaryContainer.copy(
+        stringResource(Res.string.feature_accounts_status_pending_approval) -> MaterialTheme.colorScheme.primaryContainer.copy(
             red = 1f,
             green = 0.976f,
             blue = 0.77f,
         )
-        "Approved" -> MaterialTheme.colorScheme.tertiaryContainer.copy(
+
+        stringResource(Res.string.feature_accounts_status_approved) -> MaterialTheme.colorScheme.tertiaryContainer.copy(
             red = 0.78f,
             green = 0.90f,
             blue = 0.79f,
         )
-        "Rejected" -> MaterialTheme.colorScheme.tertiaryContainer.copy(
+
+        stringResource(Res.string.feature_accounts_status_rejected) -> MaterialTheme.colorScheme.tertiaryContainer.copy(
             red = 1f,
             green = 0.8f,
             blue = 0.82f,
         )
-        "Withdrawn" -> MaterialTheme.colorScheme.tertiaryContainer.copy(
+
+        stringResource(Res.string.feature_accounts_status_withdrawn) -> MaterialTheme.colorScheme.tertiaryContainer.copy(
             red = 0.88f,
             green = 0.75f,
             blue = 0.91f,
         )
-        "Active" -> MaterialTheme.colorScheme.primaryContainer.copy(
+
+        stringResource(Res.string.feature_accounts_status_active) -> MaterialTheme.colorScheme.primaryContainer.copy(
             red = 0.73f,
             green = 0.87f,
             blue = 0.98f,
         )
-        "Closed" -> MaterialTheme.colorScheme.surfaceVariant.copy(
+
+        stringResource(Res.string.feature_accounts_status_closed) -> MaterialTheme.colorScheme.surfaceVariant.copy(
             red = 0.81f,
             green = 0.85f,
             blue = 0.86f,
         )
-        "Prematurely Closed" -> MaterialTheme.colorScheme.surfaceContainer.copy(
+
+        stringResource(Res.string.feature_accounts_status_prematurely_closed) -> MaterialTheme.colorScheme.surfaceContainer.copy(
             red = 0.84f,
             green = 0.8f,
             blue = 0.78f,
         )
-        "Transfer in Progress" -> MaterialTheme.colorScheme.primaryContainer.copy(
+
+        stringResource(Res.string.feature_accounts_status_transfer_in_progress) -> MaterialTheme.colorScheme.primaryContainer.copy(
             red = 1f,
             green = 0.88f,
             blue = 0.7f,
         )
-        "Transfer on Hold" -> MaterialTheme.colorScheme.primaryContainer.copy(
+
+        stringResource(Res.string.feature_accounts_status_transfer_on_hold) -> MaterialTheme.colorScheme.primaryContainer.copy(
             red = 0.94f,
             green = 0.96f,
             blue = 0.77f,
         )
-        "Matured" -> MaterialTheme.colorScheme.primaryContainer.copy(
+
+        stringResource(Res.string.feature_accounts_status_matured) -> MaterialTheme.colorScheme.primaryContainer.copy(
             red = 0.7f,
             green = 0.87f,
             blue = 0.86f,
         )
+
         else -> MaterialTheme.colorScheme.surface.copy(
             red = 0.94f,
             green = 0.94f,

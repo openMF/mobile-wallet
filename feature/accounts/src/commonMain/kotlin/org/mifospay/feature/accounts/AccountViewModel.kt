@@ -21,6 +21,8 @@ import kotlinx.serialization.json.Json
 import mobile_wallet.feature.accounts.generated.resources.Res
 import mobile_wallet.feature.accounts.generated.resources.delete_beneficiary_subtitle
 import mobile_wallet.feature.accounts.generated.resources.delete_beneficiary_title
+import mobile_wallet.feature.accounts.generated.resources.feature_accounts_beneficiary_deleted
+import mobile_wallet.feature.accounts.generated.resources.feature_accounts_default_account_updated
 import org.jetbrains.compose.resources.StringResource
 import org.mifospay.core.common.DataState
 import org.mifospay.core.data.repository.SelfServiceRepository
@@ -135,7 +137,7 @@ class AccountViewModel(
         }
 
         mutableStateFlow.update { it.copy(defaultAccountId = action.accountId) }
-        sendEvent(AccountEvent.ShowToast("Default account updated"))
+        sendEvent(AccountEvent.ShowToast(Res.string.feature_accounts_default_account_updated.toString()))
     }
 
     private fun handleDeleteBeneficiary(action: DeleteBeneficiary) {
@@ -155,7 +157,7 @@ class AccountViewModel(
                     it.copy(dialogState = null)
                 }
 
-                sendEvent(AccountEvent.ShowToast("Beneficiary deleted"))
+                sendEvent(AccountEvent.ShowToast(Res.string.feature_accounts_beneficiary_deleted.toString()))
             }
 
             is DataState.Error -> {
