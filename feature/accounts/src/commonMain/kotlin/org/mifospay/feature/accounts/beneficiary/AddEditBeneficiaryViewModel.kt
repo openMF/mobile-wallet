@@ -20,6 +20,19 @@ import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 import kotlinx.serialization.json.Json
+import mobile_wallet.feature.accounts.generated.resources.Res
+import mobile_wallet.feature.accounts.generated.resources.feature_accounts_beneficiary_account_type_other
+import mobile_wallet.feature.accounts.generated.resources.feature_accounts_beneficiary_account_type_wallet
+import mobile_wallet.feature.accounts.generated.resources.feature_accounts_beneficiary_button_save
+import mobile_wallet.feature.accounts.generated.resources.feature_accounts_beneficiary_button_update
+import mobile_wallet.feature.accounts.generated.resources.feature_accounts_beneficiary_title_add
+import mobile_wallet.feature.accounts.generated.resources.feature_accounts_beneficiary_title_update
+import mobile_wallet.feature.accounts.generated.resources.feature_accounts_error_empty_account_number
+import mobile_wallet.feature.accounts.generated.resources.feature_accounts_error_empty_beneficiary_name
+import mobile_wallet.feature.accounts.generated.resources.feature_accounts_error_empty_office_name
+import mobile_wallet.feature.accounts.generated.resources.feature_accounts_error_invalid_transfer_limit
+import mobile_wallet.feature.accounts.generated.resources.feature_accounts_error_select_account_type
+import mobile_wallet.feature.accounts.generated.resources.feature_accounts_error_select_locale
 import org.mifospay.core.common.DataState
 import org.mifospay.core.common.getSerialized
 import org.mifospay.core.common.setSerialized
@@ -141,37 +154,37 @@ internal class AddEditBeneficiaryViewModel(
     private fun initiateSaveBeneficiary() = when {
         state.name.isBlank() -> {
             mutableStateFlow.update {
-                it.copy(dialogState = Error("Beneficiary Name cannot be empty"))
+                it.copy(dialogState = Error(Res.string.feature_accounts_error_empty_beneficiary_name.toString()))
             }
         }
 
         state.accountNumber.isBlank() -> {
             mutableStateFlow.update {
-                it.copy(dialogState = Error("Account number cannot be empty"))
+                it.copy(dialogState = Error(Res.string.feature_accounts_error_empty_account_number.toString()))
             }
         }
 
         state.transferLimit <= 0 -> {
             mutableStateFlow.update {
-                it.copy(dialogState = Error("Transfer limit should be greater than 0"))
+                it.copy(dialogState = Error(Res.string.feature_accounts_error_invalid_transfer_limit.toString()))
             }
         }
 
         state.locale.isBlank() -> {
             mutableStateFlow.update {
-                it.copy(dialogState = Error("Select a locale"))
+                it.copy(dialogState = Error(Res.string.feature_accounts_error_select_locale.toString()))
             }
         }
 
         state.officeName.isBlank() -> {
             mutableStateFlow.update {
-                it.copy(dialogState = Error("Office name cannot be empty"))
+                it.copy(dialogState = Error(Res.string.feature_accounts_error_empty_office_name.toString()))
             }
         }
 
         state.accountType == 0 -> {
             mutableStateFlow.update {
-                it.copy(dialogState = Error("Select an account type"))
+                it.copy(dialogState = Error(Res.string.feature_accounts_error_select_account_type.toString()))
             }
         }
 
@@ -260,13 +273,25 @@ internal data class AEBState(
         get() = addEditType is BeneficiaryAddEditType.AddItem
 
     val btnText: String
-        get() = if (isAddItemMode) "Save" else "Update"
+        get() = if (isAddItemMode) {
+            Res.string.feature_accounts_beneficiary_button_save.toString()
+        } else {
+            Res.string.feature_accounts_beneficiary_button_update.toString()
+        }
 
     val title: String
-        get() = if (isAddItemMode) "Add Beneficiary" else "Update Beneficiary"
+        get() = if (isAddItemMode) {
+            Res.string.feature_accounts_beneficiary_title_add.toString()
+        } else {
+            Res.string.feature_accounts_beneficiary_title_update.toString()
+        }
 
     val accountTypeName: String
-        get() = if (accountType == SAVINGS_ACC_ID) "WALLET" else "Other"
+        get() = if (accountType == SAVINGS_ACC_ID) {
+            Res.string.feature_accounts_beneficiary_account_type_wallet.toString()
+        } else {
+            Res.string.feature_accounts_beneficiary_account_type_other.toString()
+        }
 
     sealed interface DialogState {
         data object Loading : DialogState

@@ -17,6 +17,21 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import mobile_wallet.feature.accounts.generated.resources.Res
+import mobile_wallet.feature.accounts.generated.resources.feature_accounts_error_account_id_required
+import mobile_wallet.feature.accounts.generated.resources.feature_accounts_error_client_id_required
+import mobile_wallet.feature.accounts.generated.resources.feature_accounts_error_date_format_required
+import mobile_wallet.feature.accounts.generated.resources.feature_accounts_error_external_id_length
+import mobile_wallet.feature.accounts.generated.resources.feature_accounts_error_external_id_required
+import mobile_wallet.feature.accounts.generated.resources.feature_accounts_error_locale_required
+import mobile_wallet.feature.accounts.generated.resources.feature_accounts_error_min_opening_balance_required
+import mobile_wallet.feature.accounts.generated.resources.feature_accounts_error_overdraft_limit_required
+import mobile_wallet.feature.accounts.generated.resources.feature_accounts_error_select_saving_product
+import mobile_wallet.feature.accounts.generated.resources.feature_accounts_error_submitted_date_required
+import mobile_wallet.feature.accounts.generated.resources.feature_accounts_saving_button_save
+import mobile_wallet.feature.accounts.generated.resources.feature_accounts_saving_button_update
+import mobile_wallet.feature.accounts.generated.resources.feature_accounts_saving_title_create
+import mobile_wallet.feature.accounts.generated.resources.feature_accounts_saving_title_update
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 import org.mifospay.core.common.DataState
@@ -161,55 +176,55 @@ internal class AddEditSavingViewModel(
                 is SavingsAddEditType.AddItem -> when {
                     content.productId == 0L -> {
                         mutableStateFlow.update {
-                            it.copy(dialogState = DialogStateError("Select a Saving Product"))
+                            it.copy(dialogState = DialogStateError(Res.string.feature_accounts_error_select_saving_product.toString()))
                         }
                     }
 
                     content.clientId.isEmpty() -> {
                         mutableStateFlow.update {
-                            it.copy(dialogState = DialogStateError("Client ID is required"))
+                            it.copy(dialogState = DialogStateError(Res.string.feature_accounts_error_client_id_required.toString()))
                         }
                     }
 
                     content.externalId.isEmpty() -> {
                         mutableStateFlow.update {
-                            it.copy(dialogState = DialogStateError("External ID is required"))
+                            it.copy(dialogState = DialogStateError(Res.string.feature_accounts_error_external_id_required.toString()))
                         }
                     }
 
                     content.externalId.length < 8 -> {
                         mutableStateFlow.update {
-                            it.copy(dialogState = DialogStateError("External ID must be at least 8 characters"))
+                            it.copy(dialogState = DialogStateError(Res.string.feature_accounts_error_external_id_length.toString()))
                         }
                     }
 
                     content.enforceMinRequiredBalance && content.minRequiredOpeningBalance == 0L -> {
                         mutableStateFlow.update {
-                            it.copy(dialogState = DialogStateError("Min Required Opening Balance is required"))
+                            it.copy(dialogState = DialogStateError(Res.string.feature_accounts_error_min_opening_balance_required.toString()))
                         }
                     }
 
                     content.allowOverdraft && content.overdraftLimit.isEmpty() -> {
                         mutableStateFlow.update {
-                            it.copy(dialogState = DialogStateError("Overdraft Limit is required"))
+                            it.copy(dialogState = DialogStateError(Res.string.feature_accounts_error_overdraft_limit_required.toString()))
                         }
                     }
 
                     content.locale.isEmpty() -> {
                         mutableStateFlow.update {
-                            it.copy(dialogState = DialogStateError("Locale is required"))
+                            it.copy(dialogState = DialogStateError(Res.string.feature_accounts_error_locale_required.toString()))
                         }
                     }
 
                     content.submittedOnDate.isEmpty() -> {
                         mutableStateFlow.update {
-                            it.copy(dialogState = DialogStateError("Submitted On Date is required"))
+                            it.copy(dialogState = DialogStateError(Res.string.feature_accounts_error_submitted_date_required.toString()))
                         }
                     }
 
                     content.dateFormat.isEmpty() -> {
                         mutableStateFlow.update {
-                            it.copy(dialogState = DialogStateError("Date Format is required"))
+                            it.copy(dialogState = DialogStateError(Res.string.feature_accounts_error_date_format_required.toString()))
                         }
                     }
 
@@ -219,13 +234,13 @@ internal class AddEditSavingViewModel(
                 is SavingsAddEditType.EditItem -> when {
                     content.productId == 0L -> {
                         mutableStateFlow.update {
-                            it.copy(dialogState = DialogStateError("Select a Saving Product"))
+                            it.copy(dialogState = DialogStateError(Res.string.feature_accounts_error_select_saving_product.toString()))
                         }
                     }
 
                     content.clientId.isEmpty() -> {
                         mutableStateFlow.update {
-                            it.copy(dialogState = DialogStateError("Client ID is required"))
+                            it.copy(dialogState = DialogStateError(Res.string.feature_accounts_error_client_id_required.toString()))
                         }
                     }
 
@@ -247,7 +262,7 @@ internal class AddEditSavingViewModel(
     private fun initiateUpdateSavingAccount() {
         onContent { content ->
             val accountId = requireNotNull(state.type.savingsAccountId) {
-                "Account ID is required for updating saving account"
+                Res.string.feature_accounts_error_account_id_required.toString()
             }
 
             viewModelScope.launch {
@@ -336,10 +351,18 @@ internal data class AESState(
         get() = type is SavingsAddEditType.EditItem
 
     val btnText: String
-        get() = if (!isInEditMode) "Save" else "Update"
+        get() = if (!isInEditMode) {
+            Res.string.feature_accounts_saving_button_save.toString()
+        } else {
+            Res.string.feature_accounts_saving_button_update.toString()
+        }
 
     val title: String
-        get() = if (!isInEditMode) "Create Saving Account" else "Update Saving Account"
+        get() = if (!isInEditMode) {
+            Res.string.feature_accounts_saving_title_create.toString()
+        } else {
+            Res.string.feature_accounts_saving_title_update.toString()
+        }
 
     @Serializable
     sealed interface ViewState {

@@ -57,6 +57,19 @@ import androidx.compose.ui.window.PopupProperties
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.launch
 import mobile_wallet.feature.accounts.generated.resources.Res
+import mobile_wallet.feature.accounts.generated.resources.feature_accounts_add_allow_overdraft
+import mobile_wallet.feature.accounts.generated.resources.feature_accounts_add_client_name
+import mobile_wallet.feature.accounts.generated.resources.feature_accounts_add_date_format
+import mobile_wallet.feature.accounts.generated.resources.feature_accounts_add_external_id
+import mobile_wallet.feature.accounts.generated.resources.feature_accounts_add_locale
+import mobile_wallet.feature.accounts.generated.resources.feature_accounts_add_min_required_balance
+import mobile_wallet.feature.accounts.generated.resources.feature_accounts_add_nominal_annual
+import mobile_wallet.feature.accounts.generated.resources.feature_accounts_add_opening_balance
+import mobile_wallet.feature.accounts.generated.resources.feature_accounts_add_overdraft_limit
+import mobile_wallet.feature.accounts.generated.resources.feature_accounts_add_saving_product
+import mobile_wallet.feature.accounts.generated.resources.feature_accounts_add_submitted_date
+import mobile_wallet.feature.accounts.generated.resources.feature_accounts_add_with_hold_tax
+import mobile_wallet.feature.accounts.generated.resources.feature_accounts_add_withdrawal_fee
 import mobile_wallet.feature.accounts.generated.resources.feature_accounts_error_oops
 import mobile_wallet.feature.accounts.generated.resources.feature_accounts_loading
 import org.jetbrains.compose.resources.stringResource
@@ -214,12 +227,9 @@ internal fun AddEditSavingAccountScreenContent(
         item("Client Name") {
             MifosTextField(
                 value = state.template.clientName,
-                label = "Client Name",
+                label = stringResource(Res.string.feature_accounts_add_client_name),
                 onValueChange = {},
                 readOnly = true,
-//                textStyle = TextStyle(
-//                    color = MaterialTheme.colorScheme.onSurface,
-//                ),
             )
         }
 
@@ -237,7 +247,7 @@ internal fun AddEditSavingAccountScreenContent(
                 },
             ) {
                 MifosTextField(
-                    label = "Saving Product",
+                    label = stringResource(Res.string.feature_accounts_add_saving_product),
                     value = productName,
                     showClearIcon = false,
                     readOnly = true,
@@ -247,9 +257,6 @@ internal fun AddEditSavingAccountScreenContent(
                             expanded = productToggled,
                         )
                     },
-//                    textStyle = TextStyle(
-//                        color = MaterialTheme.colorScheme.onSurface,
-//                    ),
                     modifier = Modifier
                         .fillMaxWidth()
                         .onGloballyPositioned { coordinates ->
@@ -305,7 +312,7 @@ internal fun AddEditSavingAccountScreenContent(
             item("External Id") {
                 MifosTextField(
                     value = state.externalId,
-                    label = "External Id",
+                    label = stringResource(Res.string.feature_accounts_add_external_id),
                     onValueChange = {
                         onAction(AESAction.ExternalIdChanged(it))
                     },
@@ -313,9 +320,6 @@ internal fun AddEditSavingAccountScreenContent(
                         onAction(AESAction.ExternalIdChanged(""))
                     },
                     modifier = Modifier,
-//                    textStyle = TextStyle(
-//                        color = MaterialTheme.colorScheme.onSurface,
-//                    ),
                 )
             }
 
@@ -326,27 +330,21 @@ internal fun AddEditSavingAccountScreenContent(
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     MifosTextField(
-                        label = "Submitted Date",
+                        label = stringResource(Res.string.feature_accounts_add_submitted_date),
                         value = state.submittedOnDate,
                         onValueChange = {},
                         readOnly = true,
                         showClearIcon = false,
                         modifier = Modifier.weight(1.5f),
-//                        textStyle = TextStyle(
-//                            color = MaterialTheme.colorScheme.onSurface,
-//                        ),
                     )
 
                     MifosTextField(
-                        label = "Date Format",
+                        label = stringResource(Res.string.feature_accounts_add_date_format),
                         value = state.dateFormat,
                         onValueChange = {},
                         readOnly = true,
                         showClearIcon = false,
                         modifier = Modifier.weight(1.5f),
-//                        textStyle = TextStyle(
-//                            color = MaterialTheme.colorScheme.onSurface,
-//                        ),
                     )
                 }
             }
@@ -362,7 +360,7 @@ internal fun AddEditSavingAccountScreenContent(
                     },
                 ) {
                     MifosTextField(
-                        label = "Locale",
+                        label = stringResource(Res.string.feature_accounts_add_locale),
                         value = state.locale,
                         onValueChange = {
                             onAction(AESAction.LocaleChanged(it))
@@ -375,9 +373,6 @@ internal fun AddEditSavingAccountScreenContent(
                                 expanded = localeToggled,
                             )
                         },
-//                        textStyle = TextStyle(
-//                            color = MaterialTheme.colorScheme.onSurface,
-//                        ),
                         modifier = Modifier
                             .fillMaxWidth()
                             .onGloballyPositioned { coordinates ->
@@ -430,7 +425,7 @@ internal fun AddEditSavingAccountScreenContent(
             item("Nominal Annual Interest Rate") {
                 MifosTextField(
                     value = state.nominalAnnualInterestRate.toString(),
-                    label = "Nominal Annual Interest Rate",
+                    label = stringResource(Res.string.feature_accounts_add_nominal_annual),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                     onValueChange = {
                         onAction(AESAction.NominalAnnualInterestRateChanged(it))
@@ -438,15 +433,12 @@ internal fun AddEditSavingAccountScreenContent(
                     onClickClearIcon = {
                         onAction(AESAction.NominalAnnualInterestRateChanged(""))
                     },
-//                    textStyle = TextStyle(
-//                        color = MaterialTheme.colorScheme.onSurface,
-//                    ),
                 )
             }
 
             item("Allow Overdraft") {
                 CustomCheckbox(
-                    text = "Allow Overdraft",
+                    text = stringResource(Res.string.feature_accounts_add_allow_overdraft),
                     checked = state.allowOverdraft,
                     onCheckedChange = {
                         onAction(AESAction.AllowOverdraftChanged)
@@ -458,7 +450,7 @@ internal fun AddEditSavingAccountScreenContent(
             if (state.allowOverdraft) {
                 item("Overdraft Limit") {
                     MifosTextField(
-                        label = "Overdraft Limit",
+                        label = stringResource(Res.string.feature_accounts_add_overdraft_limit),
                         value = state.overdraftLimit,
                         onValueChange = {
                             onAction(AESAction.OverdraftLimitChanged(it))
@@ -467,16 +459,13 @@ internal fun AddEditSavingAccountScreenContent(
                             onAction(AESAction.OverdraftLimitChanged(""))
                         },
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-//                        textStyle = TextStyle(
-//                            color = MaterialTheme.colorScheme.onSurface,
-//                        ),
                     )
                 }
             }
 
             item("Min Required Balance") {
                 CustomCheckbox(
-                    text = "Min Required Balance",
+                    text = stringResource(Res.string.feature_accounts_add_min_required_balance),
                     checked = state.enforceMinRequiredBalance,
                     onCheckedChange = {
                         onAction(AESAction.EnforceMinRequiredBalanceChanged)
@@ -488,7 +477,7 @@ internal fun AddEditSavingAccountScreenContent(
             if (state.enforceMinRequiredBalance) {
                 item("Required Balance") {
                     MifosTextField(
-                        label = "Opening Balance",
+                        label = stringResource(Res.string.feature_accounts_add_opening_balance),
                         value = state.minRequiredOpeningBalance.toString(),
                         onValueChange = {
                             onAction(AESAction.MinRequiredOpeningBalanceChanged(it))
@@ -497,16 +486,13 @@ internal fun AddEditSavingAccountScreenContent(
                             onAction(AESAction.MinRequiredOpeningBalanceChanged(""))
                         },
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-//                        textStyle = TextStyle(
-//                            color = MaterialTheme.colorScheme.onSurface,
-//                        ),
                     )
                 }
             }
 
             item("Withdrawal Fee For Transfers") {
                 CustomCheckbox(
-                    text = "Withdrawal Fee For Transfer",
+                    text = stringResource(Res.string.feature_accounts_add_withdrawal_fee),
                     checked = state.withdrawalFeeForTransfers,
                     onCheckedChange = {
                         onAction(AESAction.WithdrawalFeeForTransfersChanged)
@@ -517,7 +503,7 @@ internal fun AddEditSavingAccountScreenContent(
 
             item("With Hold Tax") {
                 CustomCheckbox(
-                    text = "With Hold Tax",
+                    text = stringResource(Res.string.feature_accounts_add_with_hold_tax),
                     checked = state.withHoldTax,
                     onCheckedChange = {
                         onAction(AESAction.WithHoldTaxChanged)
