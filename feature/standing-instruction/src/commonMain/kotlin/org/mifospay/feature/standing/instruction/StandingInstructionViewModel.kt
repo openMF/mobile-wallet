@@ -14,18 +14,21 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.mapLatest
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 import mobile_wallet.feature.standing_instruction.generated.resources.Res
 import mobile_wallet.feature.standing_instruction.generated.resources.feature_standing_instruction_delete
 import mobile_wallet.feature.standing_instruction.generated.resources.feature_standing_instruction_delete_message
 import org.jetbrains.compose.resources.StringResource
 import org.mifospay.core.common.DataState
-import org.mifospay.core.common.IgnoredOnParcel
-import org.mifospay.core.common.Parcelable
-import org.mifospay.core.common.Parcelize
+import org.mifospay.core.common.getSerialized
+import org.mifospay.core.common.setSerialized
 import org.mifospay.core.data.repository.StandingInstructionRepository
 import org.mifospay.core.datastore.UserPreferencesRepository
 import org.mifospay.core.designsystem.icon.MifosIcons
@@ -33,19 +36,22 @@ import org.mifospay.core.model.standinginstruction.StandingInstruction
 import org.mifospay.core.ui.utils.BaseViewModel
 import org.mifospay.feature.standing.instruction.createOrUpdate.SIAddEditType
 
-private const val KEY_STATE = "standing_instruction_state"
-
 class StandingInstructionViewModel(
     private val repository: UserPreferencesRepository,
     private val siRepository: StandingInstructionRepository,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<SIUiState, SIEvent, SIAction>(
-    initialState = savedStateHandle[KEY_STATE] ?: run {
+    initialState = savedStateHandle.getSerialized(KEY_STATE) ?: run {
         val clientId = requireNotNull(repository.clientId.value)
 
         SIUiState(clientId = clientId)
     },
 ) {
+
+    companion object {
+        private const val KEY_STATE = "standing_instruction_state"
+    }
+
     @OptIn(ExperimentalCoroutinesApi::class)
     val viewState = siRepository.getAllStandingInstructions(state.clientId).mapLatest { result ->
         when (result) {
@@ -65,11 +71,11 @@ class StandingInstructionViewModel(
         initialValue = SIViewState.Loading,
     )
 
-//    init {
-//        stateFlow
-//            .onEach { savedStateHandle[KEY_STATE] = it }
-//            .launchIn(viewModelScope)
-//    }
+    init {
+        stateFlow
+            .onEach { savedStateHandle.setSerialized(key = KEY_STATE, value = it) }
+            .launchIn(viewModelScope)
+    }
 
     override fun handleAction(action: SIAction) {
         when (action) {
@@ -149,12 +155,12 @@ class StandingInstructionViewModel(
     }
 }
 
-@Parcelize
+@Serializable
 data class SIUiState(
     val clientId: Long,
-    @IgnoredOnParcel
+    @Transient
     val dialogState: DialogState? = null,
-) : Parcelable {
+) {
 
     sealed interface DialogState {
         data object Loading : DialogState

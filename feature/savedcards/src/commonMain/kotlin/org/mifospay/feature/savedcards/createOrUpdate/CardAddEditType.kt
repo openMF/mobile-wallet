@@ -9,20 +9,18 @@
  */
 package org.mifospay.feature.savedcards.createOrUpdate
 
-import org.mifospay.core.common.Parcelable
-import org.mifospay.core.common.Parcelize
+import kotlinx.serialization.Serializable
 
-sealed class CardAddEditType : Parcelable {
+@Serializable
+sealed class CardAddEditType {
 
     abstract val savedCardId: Long?
 
-    @Parcelize
     data object AddItem : CardAddEditType() {
         override val savedCardId: Long?
             get() = null
     }
 
-    @Parcelize
     data class EditItem(
         override val savedCardId: Long,
     ) : CardAddEditType()

@@ -10,10 +10,7 @@
 package org.mifospay.core.model.savingsaccount
 
 import kotlinx.serialization.Serializable
-import org.mifospay.core.common.Parcelable
-import org.mifospay.core.common.Parcelize
 
-@Parcelize
 @Serializable
 data class SavingAccountTemplate(
     val clientId: String,
@@ -27,4 +24,4 @@ data class SavingAccountTemplate(
     val isDormancyTrackingActive: Boolean,
     val productOptions: List<SavingProductOption>,
     val chargeOptions: List<SavingCharge> = emptyList(),
-) : Parcelable
+)

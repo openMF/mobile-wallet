@@ -11,11 +11,8 @@ package org.mifospay.core.model.savingsaccount
 
 import kotlinx.serialization.Serializable
 import org.mifospay.core.common.CurrencyFormatter
-import org.mifospay.core.common.Parcelable
-import org.mifospay.core.common.Parcelize
 
 @Serializable
-@Parcelize
 data class Summary(
     val currency: Currency,
     val totalDeposits: Double = 0.0,
@@ -25,7 +22,7 @@ data class Summary(
     val totalOverdraftInterestDerived: Long = 0,
     val interestNotPosted: Long = 0,
     val availableBalance: Double = 0.0,
-) : Parcelable
+)
 
 fun Summary.formatAmount(amount: Double): String {
     return CurrencyFormatter.format(

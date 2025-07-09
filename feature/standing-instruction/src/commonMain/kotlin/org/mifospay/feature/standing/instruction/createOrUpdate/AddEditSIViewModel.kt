@@ -21,11 +21,12 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 import org.mifospay.core.common.DataState
 import org.mifospay.core.common.DateHelper
-import org.mifospay.core.common.IgnoredOnParcel
-import org.mifospay.core.common.Parcelable
-import org.mifospay.core.common.Parcelize
+import org.mifospay.core.common.getSerialized
+import org.mifospay.core.common.setSerialized
 import org.mifospay.core.data.repository.ClientRepository
 import org.mifospay.core.data.repository.LocalAssetRepository
 import org.mifospay.core.data.repository.StandingInstructionRepository
@@ -42,8 +43,6 @@ import org.mifospay.feature.standing.instruction.createOrUpdate.AddEditSIAction.
 import org.mifospay.feature.standing.instruction.createOrUpdate.AddEditSIAction.Internal.LoadClientAccount
 import org.mifospay.feature.standing.instruction.createOrUpdate.AddEditSIState.DialogState.Error
 
-private const val KEY_STATE = "add_edit_si_state"
-
 internal class AddEditSIViewModel(
     private val repository: StandingInstructionRepository,
     private val userRepository: UserPreferencesRepository,
@@ -51,7 +50,7 @@ internal class AddEditSIViewModel(
     localRepository: LocalAssetRepository,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<AddEditSIState, AddEditSIEvent, AddEditSIAction>(
-    initialState = savedStateHandle[KEY_STATE] ?: run {
+    initialState = savedStateHandle.getSerialized(KEY_STATE) ?: run {
         val client = requireNotNull(userRepository.client.value)
         val type = SIAddEditArgs(savedStateHandle).addEditType
 
@@ -62,6 +61,11 @@ internal class AddEditSIViewModel(
         )
     },
 ) {
+
+    companion object {
+        private const val KEY_STATE = "add_edit_si_state"
+    }
+
     val localList = localRepository.localeList.stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5_000),
@@ -72,9 +76,9 @@ internal class AddEditSIViewModel(
     val toClientAccounts = _toClientAccounts.asStateFlow()
 
     init {
-//        stateFlow
-//            .onEach { savedStateHandle[KEY_STATE] = it }
-//            .launchIn(viewModelScope)
+        stateFlow
+            .onEach { savedStateHandle.setSerialized(key = KEY_STATE, value = it) }
+            .launchIn(viewModelScope)
 
         repository.getStandingInstructionTemplate(
             fromOfficeId = state.client.officeId,
@@ -494,104 +498,102 @@ internal class AddEditSIViewModel(
     }
 }
 
-@Parcelize
+@Serializable
 internal data class AddEditSIState(
     val client: Client,
     val type: SIAddEditType,
     val viewState: ViewState,
+    @Transient
     val dialogState: DialogState? = null,
-) : Parcelable {
+) {
 
-    @IgnoredOnParcel
+    @Transient
     val isAddMode = type is SIAddEditType.AddItem
 
-    @IgnoredOnParcel
     val title: String get() = if (isAddMode) "Create New Instruction" else "Update Instruction"
 
-    sealed interface ViewState : Parcelable {
-        @Parcelize
+    @Serializable
+    sealed interface ViewState {
+        @Serializable
         data object Loading : ViewState
 
-        @Parcelize
+        @Serializable
         data class Error(val message: String) : ViewState
 
-        @Parcelize
+        @Serializable
         data class Content(
             val template: SITemplate,
             val payload: StandingInstructionPayload,
         ) : ViewState {
 
-            @IgnoredOnParcel
+            @Transient
             val fromOfficeName = template.fromOffice.name
 
-            @IgnoredOnParcel
+            @Transient
             val fromAccountType = template.fromAccountType.value
 
-            @IgnoredOnParcel
+            @Transient
             val fromAccountNumber = template
                 .fromAccountOptions.firstOrNull { it.id == payload.fromAccountId }?.accountNo ?: ""
 
-            @IgnoredOnParcel
+            @Transient
             val toClientOptions = template.fromClientOptions
                 .filter { it.id != payload.fromClientId }
 
-            @IgnoredOnParcel
+            @Transient
             val toClientName = template
                 .fromClientOptions.firstOrNull { it.id == payload.toClientId }?.displayName ?: ""
 
-            @IgnoredOnParcel
+            @Transient
             val toOfficeName = template.fromOffice.name
 
-            @IgnoredOnParcel
+            @Transient
             val toAccountType = template.fromAccountType.value
 
-            @IgnoredOnParcel
+            @Transient
             val transferType = template.transferTypeOptions.firstOrNull {
                 it.id == payload.transferType
             }?.value ?: ""
 
-            @IgnoredOnParcel
+            @Transient
             val instructionType = template.instructionTypeOptions.firstOrNull {
                 it.id == payload.instructionType
             }?.value ?: ""
 
-            @IgnoredOnParcel
+            @Transient
             val priority = template.priorityOptions.firstOrNull {
                 it.id == payload.priority
             }?.value ?: ""
 
-            @IgnoredOnParcel
+            @Transient
             val status = template.statusOptions.firstOrNull {
                 it.id == payload.status
             }?.value ?: ""
 
-            @IgnoredOnParcel
+            @Transient
             val recurrenceType = template.recurrenceTypeOptions.firstOrNull {
                 it.id == payload.recurrenceType
             }?.value ?: ""
 
-            @IgnoredOnParcel
+            @Transient
             val recurrenceFrequency = template.recurrenceFrequencyOptions.firstOrNull {
                 it.id == payload.recurrenceFrequency
             }?.value ?: ""
 
-            @IgnoredOnParcel
+            @Transient
             val initialDate = Clock.System.now().toEpochMilliseconds()
 
-            @IgnoredOnParcel
+            @Transient
             val requiredRecurrenceFrequency = recurrenceType == "Periodic Recurrence"
 
-            @IgnoredOnParcel
+            @Transient
             val requiredRecurrenceOnMonth =
                 recurrenceFrequency == "Months" || recurrenceFrequency == "Years"
         }
     }
 
-    sealed interface DialogState : Parcelable {
-        @Parcelize
+    sealed interface DialogState {
         data object Loading : DialogState
-
-        @Parcelize
         data class Error(val message: String) : DialogState
     }
 }

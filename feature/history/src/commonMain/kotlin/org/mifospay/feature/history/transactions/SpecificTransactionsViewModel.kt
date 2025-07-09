@@ -29,9 +29,14 @@ internal class SpecificTransactionsViewModel(
     initialState = STState(viewState = STState.ViewState.Loading),
 ) {
 
+    companion object {
+        private const val ACCOUNT_ID_KEY = "accountId"
+        private const val TRANSACTION_ID_KEY = "transactionId"
+    }
+
     init {
-        savedStateHandle.get<Long>("accountId")?.let { accountId ->
-            savedStateHandle.get<Long>("transactionId")?.let { transactionId ->
+        savedStateHandle.get<Long>(ACCOUNT_ID_KEY)?.let { accountId ->
+            savedStateHandle.get<Long>(TRANSACTION_ID_KEY)?.let { transactionId ->
                 accountRepository.getTransaction(accountId, transactionId).onEach {
                     sendAction(STAction.Internal.TransactionReceive(it))
                 }.launchIn(viewModelScope)

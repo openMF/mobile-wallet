@@ -14,28 +14,34 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.mapLatest
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.serialization.Serializable
 import org.mifospay.core.common.DataState
-import org.mifospay.core.common.Parcelable
-import org.mifospay.core.common.Parcelize
+import org.mifospay.core.common.getSerialized
+import org.mifospay.core.common.setSerialized
 import org.mifospay.core.data.repository.KycLevelRepository
 import org.mifospay.core.datastore.UserPreferencesRepository
 import org.mifospay.core.designsystem.icon.MifosIcons
 import org.mifospay.core.ui.utils.BaseViewModel
-
-private const val KEY_STATE = "kyc_state"
 
 class KYCDescriptionViewModel(
     private val repository: UserPreferencesRepository,
     kycLevelRepository: KycLevelRepository,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<KycState, KycEvent, KycAction>(
-    initialState = savedStateHandle[KEY_STATE] ?: run {
+    initialState = savedStateHandle.getSerialized(KEY_STATE) ?: run {
         val clientId = requireNotNull(repository.clientId.value)
         KycState(clientId = clientId)
     },
 ) {
+
+    companion object {
+        private const val KEY_STATE = "kyc_state"
+    }
+
     @OptIn(ExperimentalCoroutinesApi::class)
     val kycState = kycLevelRepository.fetchKYCLevel1Details(state.clientId).mapLatest { result ->
         when (result) {
@@ -61,11 +67,11 @@ class KYCDescriptionViewModel(
         initialValue = KYCDescriptionUiState.Loading,
     )
 
-//    init {
-//        stateFlow
-//            .onEach { savedStateHandle[KEY_STATE] = it }
-//            .launchIn(viewModelScope)
-//    }
+    init {
+        stateFlow
+            .onEach { savedStateHandle.setSerialized(key = KEY_STATE, value = it) }
+            .launchIn(viewModelScope)
+    }
 
     override fun handleAction(action: KycAction) {
         when (action) {
@@ -84,10 +90,10 @@ class KYCDescriptionViewModel(
     }
 }
 
-@Parcelize
+@Serializable
 data class KycState(
     val clientId: Long,
-) : Parcelable
+)
 
 sealed interface KYCDescriptionUiState {
     data class Content(val currentLevel: KycLevel?) : KYCDescriptionUiState

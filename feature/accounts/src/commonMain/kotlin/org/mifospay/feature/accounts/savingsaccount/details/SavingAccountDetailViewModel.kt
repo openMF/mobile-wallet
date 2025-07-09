@@ -14,26 +14,29 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
+import kotlinx.serialization.Serializable
 import org.mifospay.core.common.DataState
-import org.mifospay.core.common.Parcelable
-import org.mifospay.core.common.Parcelize
+import org.mifospay.core.common.getSerialized
 import org.mifospay.core.data.repository.SavingsAccountRepository
 import org.mifospay.core.model.savingsaccount.SavingAccountDetail
 import org.mifospay.core.ui.utils.BaseViewModel
 import org.mifospay.feature.accounts.savingsaccount.details.SADAction.Internal.SavingAccountDetailResultReceived
 import org.mifospay.feature.accounts.savingsaccount.details.SADState.ViewState.Error
 
-private const val KEY = "saving_account_detail"
-
 internal class SavingAccountDetailViewModel(
     savedStateHandle: SavedStateHandle,
     repository: SavingsAccountRepository,
 ) : BaseViewModel<SADState, SADEvent, SADAction>(
-    initialState = savedStateHandle[KEY] ?: SADState(
-        accountId = requireNotNull(savedStateHandle["accountId"]),
+    initialState = savedStateHandle.getSerialized(KEY) ?: SADState(
+        accountId = requireNotNull(savedStateHandle[ACCOUNT_ID_KEY]),
         viewState = SADState.ViewState.Loading,
     ),
 ) {
+
+    companion object {
+        private const val KEY = "saving_account_detail"
+        private const val ACCOUNT_ID_KEY = "accountId"
+    }
 
     init {
         repository.getAccountDetail(state.accountId).onEach {
@@ -78,19 +81,20 @@ internal class SavingAccountDetailViewModel(
     }
 }
 
-@Parcelize
+@Serializable
 internal data class SADState(
     val accountId: Long,
     val viewState: ViewState,
-) : Parcelable {
-    sealed interface ViewState : Parcelable {
-        @Parcelize
+) {
+    @Serializable
+    sealed interface ViewState {
+        @Serializable
         data object Loading : ViewState
 
-        @Parcelize
+        @Serializable
         data class Error(val message: String) : ViewState
 
-        @Parcelize
+        @Serializable
         data class Content(val data: SavingAccountDetail) : ViewState
     }
 }

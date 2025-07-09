@@ -14,12 +14,15 @@ import androidx.lifecycle.viewModelScope
 import io.github.vinceglb.filekit.core.PlatformFile
 import io.github.vinceglb.filekit.core.baseName
 import io.github.vinceglb.filekit.core.extension
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 import org.mifospay.core.common.DataState
-import org.mifospay.core.common.IgnoredOnParcel
-import org.mifospay.core.common.Parcelable
-import org.mifospay.core.common.Parcelize
+import org.mifospay.core.common.getSerialized
+import org.mifospay.core.common.setSerialized
 import org.mifospay.core.data.repository.DocumentRepository
 import org.mifospay.core.data.util.Constants
 import org.mifospay.core.datastore.UserPreferencesRepository
@@ -27,25 +30,27 @@ import org.mifospay.core.ui.utils.BaseViewModel
 import org.mifospay.feature.kyc.KycLevel2Action.Internal.HandleDocumentUploadResult
 import org.mifospay.feature.kyc.KycLevel2State.DialogState.Error
 
-private const val KEY_STATE = "kyc_level_2_state"
-
 internal class KYCLevel2ViewModel(
     private val repository: DocumentRepository,
     private val userRepository: UserPreferencesRepository,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<KycLevel2State, KycLevel2Event, KycLevel2Action>(
-    initialState = savedStateHandle[KEY_STATE] ?: run {
+    initialState = savedStateHandle.getSerialized(KEY_STATE) ?: run {
         val clientId = requireNotNull(userRepository.clientId.value)
 
         KycLevel2State(entityId = clientId)
     },
 ) {
 
-//    init {
-//        stateFlow
-//            .onEach { savedStateHandle[KEY_STATE] = it }
-//            .launchIn(viewModelScope)
-//    }
+    companion object {
+        private const val KEY_STATE = "kyc_level_2_state"
+    }
+
+    init {
+        stateFlow
+            .onEach { savedStateHandle.setSerialized(key = KEY_STATE, value = it) }
+            .launchIn(viewModelScope)
+    }
 
     override fun handleAction(action: KycLevel2Action) {
         when (action) {
@@ -191,25 +196,23 @@ internal class KYCLevel2ViewModel(
     // endregion
 }
 
-@Parcelize
+@Serializable
 internal data class KycLevel2State(
     val entityId: Long,
     val description: String = "",
-    @IgnoredOnParcel
+    @Transient
     val file: PlatformFile? = null,
     val name: String = "",
     val extension: String = "",
     val entityType: String = Constants.ENTITY_TYPE_CLIENTS,
+    @Transient
     val dialogState: DialogState? = null,
-) : Parcelable {
-    @IgnoredOnParcel
+) {
+    @Transient
     val fileName = "$name.$extension"
 
-    sealed interface DialogState : Parcelable {
-        @Parcelize
+    sealed interface DialogState {
         data object Loading : DialogState
-
-        @Parcelize
         data class Error(val message: String) : DialogState
     }
 }

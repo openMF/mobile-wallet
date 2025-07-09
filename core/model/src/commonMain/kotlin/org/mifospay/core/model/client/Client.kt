@@ -9,10 +9,9 @@
  */
 package org.mifospay.core.model.client
 
-import org.mifospay.core.common.Parcelable
-import org.mifospay.core.common.Parcelize
+import kotlinx.serialization.Serializable
 
-@Parcelize
+@Serializable
 data class Client(
     val id: Long,
     val accountNo: String,
@@ -32,4 +31,4 @@ data class Client(
     val timeline: ClientTimeline = ClientTimeline(),
     val status: ClientStatus = ClientStatus(),
     val legalForm: ClientStatus = ClientStatus(),
-) : Parcelable
+)
