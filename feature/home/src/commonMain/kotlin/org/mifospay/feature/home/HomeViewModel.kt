@@ -17,9 +17,8 @@ import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.serialization.Serializable
 import org.mifospay.core.common.DataState
-import org.mifospay.core.common.Parcelable
-import org.mifospay.core.common.Parcelize
 import org.mifospay.core.data.repository.SelfServiceRepository
 import org.mifospay.core.datastore.UserPreferencesRepository
 import org.mifospay.core.model.account.Account
@@ -180,22 +179,22 @@ class HomeViewModel(
     }
 }
 
-@Parcelize
+@Serializable
 data class HomeState(
     val client: Client,
     val defaultAccountId: Long?,
     val reloadTrigger: Boolean = false,
     val isRefreshing: Boolean = false,
     val dialogState: DialogState? = null,
-) : Parcelable {
+) {
 
-    @Parcelize
-    sealed class DialogState : Parcelable {
+    @Serializable
+    sealed class DialogState {
 
-        @Parcelize
+        @Serializable
         data object Loading : DialogState()
 
-        @Parcelize
+        @Serializable
         data class Error(val message: String) : DialogState()
     }
 }

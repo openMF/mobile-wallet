@@ -15,10 +15,11 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 import org.mifospay.core.common.DataState
-import org.mifospay.core.common.IgnoredOnParcel
-import org.mifospay.core.common.Parcelable
-import org.mifospay.core.common.Parcelize
+import org.mifospay.core.common.getSerialized
+import org.mifospay.core.common.setSerialized
 import org.mifospay.core.common.utils.isValidEmail
 import org.mifospay.core.data.repository.ClientRepository
 import org.mifospay.core.datastore.UserPreferencesRepository
@@ -30,14 +31,12 @@ import org.mifospay.feature.profile.edit.EditProfileAction.Internal.LoadClientIm
 import org.mifospay.feature.profile.edit.EditProfileAction.Internal.OnUpdateProfileResult
 import org.mifospay.feature.profile.edit.EditProfileState.DialogState.Error
 
-private const val KEY = "edit_profile_state"
-
 internal class EditProfileViewModel(
     private val preferencesRepository: UserPreferencesRepository,
     private val clientRepository: ClientRepository,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<EditProfileState, EditProfileEvent, EditProfileAction>(
-    initialState = savedStateHandle[KEY] ?: run {
+    initialState = savedStateHandle.getSerialized(KEY) ?: run {
         val client = requireNotNull(preferencesRepository.client.value)
 
         EditProfileState(
@@ -50,10 +49,15 @@ internal class EditProfileViewModel(
         )
     },
 ) {
+
+    companion object {
+        private const val KEY = "edit_profile_state"
+    }
+
     init {
-//        stateFlow
-//            .onEach { savedStateHandle[KEY] = it }
-//            .launchIn(viewModelScope)
+        stateFlow
+            .onEach { savedStateHandle.setSerialized(key = KEY, value = it) }
+            .launchIn(viewModelScope)
 
         trySendAction(LoadClientImage(state.clientId))
     }
@@ -256,7 +260,7 @@ internal class EditProfileViewModel(
     }
 }
 
-@Parcelize
+@Serializable
 internal data class EditProfileState(
     val clientId: Long,
     val firstNameInput: String,
@@ -266,8 +270,8 @@ internal data class EditProfileState(
     val externalIdInput: String,
     val imageInput: String? = null,
     val dialogState: DialogState? = null,
-) : Parcelable {
-    @IgnoredOnParcel
+) {
+    @Transient
     internal val updatedClient = UpdatedClient(
         firstname = this.firstNameInput,
         lastname = this.lastNameInput,
@@ -276,11 +280,12 @@ internal data class EditProfileState(
         externalId = this.externalIdInput,
     )
 
-    sealed interface DialogState : Parcelable {
-        @Parcelize
+    @Serializable
+    sealed interface DialogState {
+        @Serializable
         data object Loading : DialogState
 
-        @Parcelize
+        @Serializable
         data class Error(val message: String) : DialogState
     }
 }

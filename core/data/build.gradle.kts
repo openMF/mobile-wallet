@@ -10,7 +10,7 @@
 plugins {
     alias(libs.plugins.mifospay.kmp.library)
     alias(libs.plugins.kotlin.parcelize)
-    id("kotlinx-serialization")
+    alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.jetbrainsCompose)
 }
@@ -31,7 +31,7 @@ kotlin {
             api(projects.core.common)
             api(projects.core.datastore)
             api(projects.core.model)
-            implementation(projects.core.network)
+            api(projects.core.network)
             implementation(projects.core.analytics)
             implementation(libs.kotlinx.serialization.json)
             implementation(libs.jb.composeRuntime)

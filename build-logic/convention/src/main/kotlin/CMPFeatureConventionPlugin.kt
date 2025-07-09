@@ -12,6 +12,7 @@ class CMPFeatureConventionPlugin : Plugin<Project> {
                 apply("mifospay.kmp.koin")
                 apply("org.jetbrains.kotlin.plugin.compose")
                 apply("org.jetbrains.compose")
+                apply("org.jetbrains.kotlin.plugin.serialization")
             }
 
             dependencies {
@@ -30,6 +31,7 @@ class CMPFeatureConventionPlugin : Plugin<Project> {
                 add("commonMainImplementation", libs.findLibrary("jb.bundle").get())
                 add("commonMainImplementation", libs.findLibrary("jb.composeNavigation").get())
                 add("commonMainImplementation", libs.findLibrary("kotlinx.collections.immutable").get())
+                add("commonMainImplementation", libs.findLibrary("kotlinx.serialization.json").get())
 
                 add("androidMainImplementation", libs.findLibrary("androidx.lifecycle.runtimeCompose").get())
                 add("androidMainImplementation", libs.findLibrary("androidx.lifecycle.viewModelCompose").get())

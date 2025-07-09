@@ -9,8 +9,6 @@
  */
 plugins {
     alias(libs.plugins.mifospay.cmp.feature)
-    alias(libs.plugins.kotlin.parcelize)
-    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -31,7 +29,6 @@ kotlin {
             implementation(compose.components.uiToolingPreview)
             implementation(libs.jb.kotlin.stdlib)
             implementation(libs.kotlin.reflect)
-            implementation(libs.kotlinx.serialization.json)
         }
 
         androidMain.dependencies {

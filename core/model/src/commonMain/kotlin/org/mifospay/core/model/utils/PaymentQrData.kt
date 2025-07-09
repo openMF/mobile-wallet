@@ -9,8 +9,7 @@
  */
 package org.mifospay.core.model.utils
 
-import org.mifospay.core.common.Parcelable
-import org.mifospay.core.common.Parcelize
+import kotlinx.serialization.Serializable
 import org.mifospay.core.model.search.AccountResult
 
 /**
@@ -21,7 +20,7 @@ import org.mifospay.core.model.search.AccountResult
  * @property currency Currency code
  * @property amount Payment amount as a string
  */
-@Parcelize
+@Serializable
 data class PaymentQrData(
     val clientId: Long,
     val clientName: String,
@@ -31,7 +30,7 @@ data class PaymentQrData(
     val currency: String = DEFAULT_CURRENCY,
     val officeId: Long = OFFICE_ID,
     val accountTypeId: Long = ACCOUNT_TYPE_ID,
-) : Parcelable {
+) {
 
     /**
      * Companion object containing constants for default values

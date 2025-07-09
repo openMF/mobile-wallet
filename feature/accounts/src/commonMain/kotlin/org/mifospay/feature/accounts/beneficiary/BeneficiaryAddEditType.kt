@@ -9,20 +9,20 @@
  */
 package org.mifospay.feature.accounts.beneficiary
 
-import org.mifospay.core.common.Parcelable
-import org.mifospay.core.common.Parcelize
+import kotlinx.serialization.Serializable
 
-sealed class BeneficiaryAddEditType : Parcelable {
+@Serializable
+sealed class BeneficiaryAddEditType {
 
     abstract val beneficiary: String?
 
-    @Parcelize
+    @Serializable
     data object AddItem : BeneficiaryAddEditType() {
         override val beneficiary: String?
             get() = null
     }
 
-    @Parcelize
+    @Serializable
     data class EditItem(
         override val beneficiary: String,
     ) : BeneficiaryAddEditType()

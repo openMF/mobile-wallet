@@ -12,6 +12,7 @@ package org.mifospay.feature.accounts
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
@@ -51,7 +52,10 @@ class AccountViewModel(
         )
     },
 ) {
-    val accountState = repository.getAccountAndBeneficiaryList(state.clientId)
+    val accountState = mutableStateFlow
+        .flatMapLatest {
+            repository.getAccountAndBeneficiaryList(state.clientId)
+        }
         .mapLatest {
             when (it) {
                 is DataState.Loading -> AccountState.ViewState.Loading

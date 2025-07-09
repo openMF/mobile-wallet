@@ -10,12 +10,9 @@
 package org.mifospay.core.model.standinginstruction
 
 import kotlinx.serialization.Serializable
-import org.mifospay.core.common.Parcelable
-import org.mifospay.core.common.Parcelize
 import org.mifospay.core.model.savingsaccount.Currency
 
 @Serializable
-@Parcelize
 data class SITemplate(
     val fromOffice: FromOffice,
     val fromClient: FromClient,
@@ -32,18 +29,16 @@ data class SITemplate(
     val priorityOptions: List<Option>,
     val recurrenceTypeOptions: List<Option>,
     val recurrenceFrequencyOptions: List<Option>,
-) : Parcelable {
+) {
 
     @Serializable
-    @Parcelize
     data class Option(
         val id: Long,
         val code: String,
         val value: String,
-    ) : Parcelable
+    )
 
     @Serializable
-    @Parcelize
     data class FromOffice(
         val id: Long,
         val name: String,
@@ -51,10 +46,9 @@ data class SITemplate(
         val externalId: String,
         val openingDate: List<Long>,
         val hierarchy: String,
-    ) : Parcelable
+    )
 
     @Serializable
-    @Parcelize
     data class FromClient(
         val id: Long,
         val accountNo: String,
@@ -74,38 +68,34 @@ data class SITemplate(
         val timeline: Timeline,
         val savingsProductName: String,
         val legalForm: Option,
-    ) : Parcelable
+    )
 
     @Serializable
-    @Parcelize
     data class Timeline(
         val submittedOnDate: List<Long>,
         val activatedOnDate: List<Long>,
         val activatedByUsername: String,
         val activatedByFirstname: String,
         val activatedByLastname: String,
-    ) : Parcelable
+    )
 
     @Serializable
-    @Parcelize
     data class FromOfficeOption(
         val id: Long,
         val name: String,
         val nameDecorated: String,
-    ) : Parcelable
+    )
 
     @Serializable
-    @Parcelize
     data class FromClientOption(
         val id: Long,
         val displayName: String,
         val isStaff: Boolean,
         val officeId: Long,
         val officeName: String,
-    ) : Parcelable
+    )
 
     @Serializable
-    @Parcelize
     data class FromAccountOption(
         val id: Long,
         val accountNo: String,
@@ -116,5 +106,5 @@ data class SITemplate(
         val fieldOfficerId: Long,
         val currency: Currency,
         val externalId: String?,
-    ) : Parcelable
+    )
 }

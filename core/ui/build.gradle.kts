@@ -35,6 +35,7 @@ kotlin {
             implementation(libs.jb.lifecycleViewmodelSavedState)
             implementation(libs.coil.kt)
             implementation(libs.coil.kt.compose)
+            implementation(compose.materialIconsExtended)
             implementation(compose.material3)
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
