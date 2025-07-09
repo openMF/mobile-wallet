@@ -9,11 +9,10 @@
  */
 package org.mifospay.core.model.savingsaccount
 
-import org.mifospay.core.common.Parcelable
-import org.mifospay.core.common.Parcelize
+import kotlinx.serialization.Serializable
 import org.mifospay.core.model.account.Account
 
-@Parcelize
+@Serializable
 data class SavingAccountDetail(
     val id: Long,
     val accountNo: String,
@@ -36,7 +35,7 @@ data class SavingAccountDetail(
     val isDormancyTrackingActive: Boolean,
     val summary: Summary,
     val transactions: List<Transaction>,
-) : Parcelable
+)
 
 fun SavingAccountDetail.toAccount(): Account {
     return Account(

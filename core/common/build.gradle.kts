@@ -12,6 +12,7 @@ plugins {
     alias(libs.plugins.kotlin.parcelize)
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.jetbrainsCompose)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -44,6 +45,8 @@ kotlin {
             api(libs.kotlinx.datetime)
             implementation(compose.components.resources)
             implementation(libs.jb.composeRuntime)
+            implementation(libs.jb.lifecycleViewmodelSavedState)
+            implementation(libs.kotlinx.serialization.json)
         }
 
         androidMain.dependencies {

@@ -11,28 +11,37 @@ package org.mifospay.feature.auth.mobileVerify
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 import org.mifospay.core.common.DataState
-import org.mifospay.core.common.Parcelable
-import org.mifospay.core.common.Parcelize
+import org.mifospay.core.common.getSerialized
+import org.mifospay.core.common.setSerialized
 import org.mifospay.core.data.repository.SearchRepository
 import org.mifospay.core.data.util.Constants
 import org.mifospay.core.ui.utils.BaseViewModel
 import org.mifospay.feature.auth.mobileVerify.MobileVerificationAction.Internal.ReceiveOtpVerifyResult
 
-private const val KEY_STATE = "mobile_verification"
-
 class MobileVerificationViewModel(
     private val searchRepository: SearchRepository,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<MobileVerificationState, MobileVerificationEvent, MobileVerificationAction>(
-    initialState = savedStateHandle[KEY_STATE] ?: MobileVerificationState.VerifyPhoneState(),
+    initialState = savedStateHandle.getSerialized(KEY_STATE)
+        ?: MobileVerificationState.VerifyPhoneState(),
 ) {
 
-//    init {
-//        stateFlow.onEach { savedStateHandle[KEY_STATE] = it }.launchIn(viewModelScope)
-//    }
+    companion object {
+        private const val KEY_STATE = "mobile_verification"
+    }
+
+    init {
+        stateFlow
+            .onEach { savedStateHandle.setSerialized(key = KEY_STATE, value = it) }
+            .launchIn(viewModelScope)
+    }
 
     override fun handleAction(action: MobileVerificationAction) {
         when (action) {
@@ -231,31 +240,31 @@ class MobileVerificationViewModel(
     }
 }
 
-sealed class MobileVerificationState : Parcelable {
-    @Parcelize
+@Serializable
+sealed class MobileVerificationState {
+    @Serializable
     data class VerifyPhoneState(
         val phoneNo: String = "",
+        @Transient
         val dialogState: DialogState? = null,
     ) : MobileVerificationState() {
         val isPhoneNoValid: Boolean
             get() = phoneNo.length == 10
     }
 
-    @Parcelize
+    @Serializable
     data class VerifyOtpState(
         val phoneNo: String,
         val otp: String = "",
+        @Transient
         val dialogState: DialogState? = null,
     ) : MobileVerificationState() {
         val isOtpValid: Boolean
             get() = otp.length == 6
     }
 
-    sealed class DialogState : Parcelable {
-        @Parcelize
+    sealed class DialogState {
         data class Error(val message: String) : DialogState()
-
-        @Parcelize
         data object Loading : DialogState()
     }
 }

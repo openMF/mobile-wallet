@@ -14,26 +14,29 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
+import kotlinx.serialization.Serializable
 import org.mifospay.core.common.DataState
-import org.mifospay.core.common.Parcelable
-import org.mifospay.core.common.Parcelize
+import org.mifospay.core.common.getSerialized
+import org.mifospay.core.common.setSerialized
 import org.mifospay.core.data.repository.StandingInstructionRepository
 import org.mifospay.core.model.standinginstruction.StandingInstruction
 import org.mifospay.core.ui.utils.BaseViewModel
-
-private const val KEY_STATE = "sid_details_state"
 
 internal class SIDetailViewModel(
     repository: StandingInstructionRepository,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<SIDetailState, SIDEvent, SIDAction>(
-    initialState = savedStateHandle[KEY_STATE] ?: SIDetailState(ViewState.Loading),
+    initialState = savedStateHandle.getSerialized(KEY_STATE) ?: SIDetailState(ViewState.Loading),
 ) {
 
+    companion object {
+        private const val KEY_STATE = "sid_details_state"
+    }
+
     init {
-//        stateFlow
-//            .onEach { savedStateHandle[KEY_STATE] = it }
-//            .launchIn(viewModelScope)
+        stateFlow
+            .onEach { savedStateHandle.setSerialized(key = KEY_STATE, value = it) }
+            .launchIn(viewModelScope)
 
         val instructionId = requireNotNull(savedStateHandle.get<Long>("instructionId"))
 
@@ -73,19 +76,20 @@ internal class SIDetailViewModel(
     }
 }
 
-@Parcelize
+@Serializable
 internal data class SIDetailState(
     val viewState: ViewState,
-) : Parcelable
+)
 
-internal sealed interface ViewState : Parcelable {
-    @Parcelize
+@Serializable
+internal sealed interface ViewState {
+    @Serializable
     data object Loading : ViewState
 
-    @Parcelize
+    @Serializable
     data class Error(val message: String) : ViewState
 
-    @Parcelize
+    @Serializable
     data class Content(val data: StandingInstruction) : ViewState
 }
 

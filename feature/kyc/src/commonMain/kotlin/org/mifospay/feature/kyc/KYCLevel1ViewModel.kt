@@ -16,11 +16,12 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 import org.mifospay.core.common.DataState
 import org.mifospay.core.common.DateHelper
-import org.mifospay.core.common.IgnoredOnParcel
-import org.mifospay.core.common.Parcelable
-import org.mifospay.core.common.Parcelize
+import org.mifospay.core.common.getSerialized
+import org.mifospay.core.common.setSerialized
 import org.mifospay.core.common.takeUntilResultSuccess
 import org.mifospay.core.data.repository.KycLevelRepository
 import org.mifospay.core.datastore.UserPreferencesRepository
@@ -30,24 +31,26 @@ import org.mifospay.feature.kyc.KycLevel1Action.Internal.HandleLevel1Result
 import org.mifospay.feature.kyc.KycLevel1Action.Internal.KycLevel1DetailsResult
 import org.mifospay.feature.kyc.KycLevel1State.DialogState.Error
 
-private const val KEY_STATE = "kyc_level_1_state"
-
 internal class KYCLevel1ViewModel(
     private val kycLevelRepository: KycLevelRepository,
     private val repository: UserPreferencesRepository,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<KycLevel1State, KycLevel1Event, KycLevel1Action>(
-    initialState = savedStateHandle[KEY_STATE] ?: run {
+    initialState = savedStateHandle.getSerialized(KEY_STATE) ?: run {
         val clientId = requireNotNull(repository.clientId.value)
 
         KycLevel1State(clientId = clientId)
     },
 ) {
 
+    companion object {
+        private const val KEY_STATE = "kyc_level_1_state"
+    }
+
     init {
-//        stateFlow
-//            .onEach { savedStateHandle[KEY_STATE] = it }
-//            .launchIn(viewModelScope)
+        stateFlow
+            .onEach { savedStateHandle.setSerialized(key = KEY_STATE, value = it) }
+            .launchIn(viewModelScope)
 
         kycLevelRepository.fetchKYCLevel1Details(state.clientId)
             .takeUntilResultSuccess()
@@ -244,7 +247,7 @@ internal class KYCLevel1ViewModel(
     }
 }
 
-@Parcelize
+@Serializable
 internal data class KycLevel1State(
     val clientId: Long,
     val firstNameInput: String = "",
@@ -256,19 +259,16 @@ internal data class KycLevel1State(
     val currentLevelInput: String = KycLevel.KYC_LEVEL_1.name,
     val doesExist: Boolean = false,
     val dialogState: DialogState? = null,
-) : Parcelable {
-    @IgnoredOnParcel
+) {
     val title: String
         get() = if (doesExist) "Update Basic Details" else "Enter Basic Details"
 
-    @IgnoredOnParcel
     val submitButtonText: String
         get() = if (doesExist) "Update" else "Submit"
 
-    @IgnoredOnParcel
     val initialDate = Clock.System.now().toEpochMilliseconds()
 
-    @IgnoredOnParcel
+    @Transient
     val details = KYCLevel1Details(
         firstName = firstNameInput,
         lastName = lastNameInput,
@@ -279,11 +279,12 @@ internal data class KycLevel1State(
         currentLevel = currentLevelInput,
     )
 
-    sealed interface DialogState : Parcelable {
-        @Parcelize
+    @Serializable
+    sealed interface DialogState {
+        @Serializable
         data object Loading : DialogState
 
-        @Parcelize
+        @Serializable
         data class Error(val message: String) : DialogState
     }
 }

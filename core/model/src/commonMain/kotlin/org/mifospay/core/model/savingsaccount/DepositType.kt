@@ -10,25 +10,22 @@
 package org.mifospay.core.model.savingsaccount
 
 import kotlinx.serialization.Serializable
-import org.mifospay.core.common.Parcelable
-import org.mifospay.core.common.Parcelize
 
-@Parcelize
 @Serializable
 data class DepositType(
     val id: Int,
     val code: String,
     val value: String,
-) : Parcelable {
+) {
     val isRecurring: Boolean
         get() = ServerTypes.RECURRING.id == id
     val endpoint: String
         get() = ServerTypes.fromId(
-            id!!,
+            id,
         ).endpoint
     val serverType: ServerTypes
         get() = ServerTypes.fromId(
-            id!!,
+            id,
         )
 
     enum class ServerTypes(val id: Int, val code: String, val endpoint: String) {

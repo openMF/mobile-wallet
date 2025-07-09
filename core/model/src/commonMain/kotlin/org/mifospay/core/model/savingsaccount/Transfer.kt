@@ -10,16 +10,15 @@
 package org.mifospay.core.model.savingsaccount
 
 import kotlinx.serialization.Serializable
-import org.mifospay.core.common.Parcelable
-import org.mifospay.core.common.Parcelize
+import org.mifospay.core.common.DateAsStringSerializer
 
-@Parcelize
 @Serializable
 data class Transfer(
     val id: Long,
     val reversed: Boolean,
     val currency: Currency,
     val transferAmount: Double,
-    val transferDate: List<Long>,
+    @Serializable(with = DateAsStringSerializer::class)
+    val transferDate: String,
     val transferDescription: String,
-) : Parcelable
+)

@@ -9,20 +9,20 @@
  */
 package org.mifospay.feature.standing.instruction.createOrUpdate
 
-import org.mifospay.core.common.Parcelable
-import org.mifospay.core.common.Parcelize
+import kotlinx.serialization.Serializable
 
-sealed class SIAddEditType : Parcelable {
+@Serializable
+sealed class SIAddEditType {
 
     abstract val standingInsId: Long?
 
-    @Parcelize
+    @Serializable
     data object AddItem : SIAddEditType() {
         override val standingInsId: Long?
             get() = null
     }
 
-    @Parcelize
+    @Serializable
     data class EditItem(
         override val standingInsId: Long,
     ) : SIAddEditType()

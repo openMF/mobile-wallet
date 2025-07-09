@@ -10,8 +10,8 @@
 plugins {
     alias(libs.plugins.mifospay.kmp.library)
     alias(libs.plugins.ktorfit)
-    id("kotlinx-serialization")
-    id("com.google.devtools.ksp")
+    alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.ksp)
 }
 
 android {

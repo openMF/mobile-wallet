@@ -13,12 +13,16 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 import org.mifospay.core.common.DataState
-import org.mifospay.core.common.Parcelable
-import org.mifospay.core.common.Parcelize
+import org.mifospay.core.common.getSerialized
+import org.mifospay.core.common.setSerialized
 import org.mifospay.core.data.repository.UserRepository
 import org.mifospay.core.datastore.UserPreferencesRepository
 import org.mifospay.core.ui.PasswordStrengthState
@@ -30,16 +34,19 @@ import org.mifospay.feature.editpassword.EditPasswordAction.Internal.ReceivePass
 import org.mifospay.feature.editpassword.EditPasswordAction.Internal.ReceiveUpdatePasswordResult
 import org.mifospay.feature.editpassword.EditPasswordDialog.Error
 
-private const val KEY_STATE = "state"
-private const val MIN_PASSWORD_LENGTH = 8
-
 internal class EditPasswordViewModel(
     private val userRepository: UserRepository,
     userPreferencesRepository: UserPreferencesRepository,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<EditPasswordState, EditPasswordEvent, EditPasswordAction>(
-    initialState = savedStateHandle[KEY_STATE] ?: EditPasswordState(),
+    initialState = savedStateHandle.getSerialized(KEY_STATE) ?: EditPasswordState(),
 ) {
+
+    companion object {
+        private const val KEY_STATE = "state"
+        private const val MIN_PASSWORD_LENGTH = 8
+    }
+
     private val userInfo = userPreferencesRepository.userInfo.stateIn(
         scope = viewModelScope,
         started = SharingStarted.Eagerly,
@@ -48,11 +55,13 @@ internal class EditPasswordViewModel(
 
     private var passwordStrengthJob: Job = Job().apply { complete() }
 
-//    init {
-//        stateFlow
-//            .onEach { savedStateHandle[KEY_STATE] = it }
-//            .launchIn(viewModelScope)
-//    }
+    init {
+        stateFlow
+            .onEach {
+                savedStateHandle.setSerialized(key = KEY_STATE, value = it)
+            }
+            .launchIn(viewModelScope)
+    }
 
     override fun handleAction(action: EditPasswordAction) {
         when (action) {
@@ -201,14 +210,15 @@ internal class EditPasswordViewModel(
     }
 }
 
-@Parcelize
+@Serializable
 internal data class EditPasswordState(
     val currentPasswordInput: String = "",
     val newPasswordInput: String = "",
     val confirmPasswordInput: String = "",
+    @Transient
     val dialogState: EditPasswordDialog? = null,
     val passwordStrengthState: PasswordStrengthState = PasswordStrengthState.NONE,
-) : Parcelable {
+) {
     val isPasswordStrong: Boolean
         get() = when (passwordStrengthState) {
             PasswordStrengthState.NONE,
@@ -230,11 +240,8 @@ internal data class EditPasswordState(
         get() = currentPasswordInput == newPasswordInput
 }
 
-internal sealed interface EditPasswordDialog : Parcelable {
-    @Parcelize
+internal sealed interface EditPasswordDialog {
     data object Loading : EditPasswordDialog
-
-    @Parcelize
     data class Error(val message: String) : EditPasswordDialog
 }
 
