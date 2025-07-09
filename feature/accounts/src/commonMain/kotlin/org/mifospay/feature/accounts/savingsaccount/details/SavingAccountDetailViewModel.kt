@@ -23,17 +23,20 @@ import org.mifospay.core.ui.utils.BaseViewModel
 import org.mifospay.feature.accounts.savingsaccount.details.SADAction.Internal.SavingAccountDetailResultReceived
 import org.mifospay.feature.accounts.savingsaccount.details.SADState.ViewState.Error
 
-private const val KEY = "saving_account_detail"
-
 internal class SavingAccountDetailViewModel(
     savedStateHandle: SavedStateHandle,
     repository: SavingsAccountRepository,
 ) : BaseViewModel<SADState, SADEvent, SADAction>(
     initialState = savedStateHandle.getSerialized(KEY) ?: SADState(
-        accountId = requireNotNull(savedStateHandle["accountId"]),
+        accountId = requireNotNull(savedStateHandle[ACCOUNT_ID_KEY]),
         viewState = SADState.ViewState.Loading,
     ),
 ) {
+
+    companion object {
+        private const val KEY = "saving_account_detail"
+        private const val ACCOUNT_ID_KEY = "accountId"
+    }
 
     init {
         repository.getAccountDetail(state.accountId).onEach {
