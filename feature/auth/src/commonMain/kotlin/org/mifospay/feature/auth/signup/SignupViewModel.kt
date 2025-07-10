@@ -18,8 +18,12 @@ import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 import mobile_wallet.feature.auth.generated.resources.Res
 import mobile_wallet.feature.auth.generated.resources.feature_auth_error_address_line1_required
 import mobile_wallet.feature.auth.generated.resources.feature_auth_error_address_line2_required
@@ -38,11 +42,10 @@ import mobile_wallet.feature.auth.generated.resources.feature_auth_error_select_
 import mobile_wallet.feature.auth.generated.resources.feature_auth_error_state_required
 import mobile_wallet.feature.auth.generated.resources.feature_auth_error_username_required
 import org.mifospay.core.common.DataState
-import org.mifospay.core.common.IgnoredOnParcel
-import org.mifospay.core.common.Parcelable
-import org.mifospay.core.common.Parcelize
 import org.mifospay.core.common.dialogManager.DialogManager
 import org.mifospay.core.common.dialogManager.DialogMessage.Companion.toDialogMessage
+import org.mifospay.core.common.getSerialized
+import org.mifospay.core.common.setSerialized
 import org.mifospay.core.common.utils.formatAsBulletPoints
 import org.mifospay.core.common.utils.isValidEmail
 import org.mifospay.core.data.repository.AssetRepository
@@ -60,8 +63,6 @@ import org.mifospay.core.ui.utils.PasswordStrength
 import org.mifospay.core.ui.utils.PasswordStrengthResult
 import org.mifospay.feature.auth.signup.SignUpAction.Internal.ReceivePasswordStrengthResult
 
-private const val KEY_STATE = "signup_state"
-
 class SignupViewModel(
     private val userRepository: UserRepository,
     private val searchRepository: SearchRepository,
@@ -69,14 +70,19 @@ class SignupViewModel(
     private val assetRepository: AssetRepository,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<SignUpState, SignUpEvent, SignUpAction>(
-    initialState = savedStateHandle[KEY_STATE] ?: SignUpState(),
+    initialState = savedStateHandle.getSerialized(KEY_STATE) ?: SignUpState(),
 ) {
+
+    companion object {
+        private const val KEY_STATE = "signup_state"
+    }
+
     private var passwordStrengthJob: Job = Job().apply { complete() }
 
     init {
-//        stateFlow
-//            .onEach { savedStateHandle[KEY_STATE] = it }
-//            .launchIn(viewModelScope)
+        stateFlow
+            .onEach { savedStateHandle.setSerialized(key = KEY_STATE, value = it) }
+            .launchIn(viewModelScope)
 
         savedStateHandle.get<String>("mobileNumber")?.let {
             viewModelScope.launch {
@@ -486,7 +492,7 @@ class SignupViewModel(
     }
 }
 
-@Parcelize
+@Serializable
 data class SignUpState(
     val savingsProductId: Int = 0,
     val firstNameInput: String = "",
@@ -505,8 +511,8 @@ data class SignUpState(
     val passwordStrengthState: PasswordStrengthState = PasswordStrengthState.NONE,
     val passwordFeedback: ImmutableList<String> = persistentListOf(),
     val countriesWithStates: Map<String, List<String>> = emptyMap(),
-) : Parcelable {
-    @IgnoredOnParcel
+) {
+    @Transient
     val statesForSelectedCountry =
         countriesWithStates[countryInput]
 }

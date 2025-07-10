@@ -9,20 +9,20 @@
  */
 package org.mifospay.feature.accounts.savingsaccount
 
-import org.mifospay.core.common.Parcelable
-import org.mifospay.core.common.Parcelize
+import kotlinx.serialization.Serializable
 
-sealed class SavingsAddEditType : Parcelable {
+@Serializable
+sealed class SavingsAddEditType {
 
     abstract val savingsAccountId: Long?
 
-    @Parcelize
+    @Serializable
     data object AddItem : SavingsAddEditType() {
         override val savingsAccountId: Long?
             get() = null
     }
 
-    @Parcelize
+    @Serializable
     data class EditItem(
         override val savingsAccountId: Long,
     ) : SavingsAddEditType()

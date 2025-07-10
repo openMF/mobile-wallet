@@ -9,10 +9,6 @@
  */
 package org.mifospay.core.model.savingsaccount
 
-import org.mifospay.core.common.Parcelable
-import org.mifospay.core.common.Parcelize
-
-@Parcelize
 data class SavingAccount(
     val id: Long,
     val accountNo: String,
@@ -28,4 +24,4 @@ data class SavingAccount(
     val lastActiveTransactionDate: List<Long>,
     val depositType: DepositType?,
     val externalId: String?,
-) : Parcelable
+)

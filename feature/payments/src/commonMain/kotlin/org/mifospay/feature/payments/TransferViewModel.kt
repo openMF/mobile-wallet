@@ -10,18 +10,20 @@
 package org.mifospay.feature.payments
 
 import androidx.lifecycle.SavedStateHandle
-import org.mifospay.core.common.Parcelable
-import org.mifospay.core.common.Parcelize
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import kotlinx.serialization.Serializable
+import org.mifospay.core.common.getSerialized
+import org.mifospay.core.common.setSerialized
 import org.mifospay.core.datastore.UserPreferencesRepository
 import org.mifospay.core.ui.utils.BaseViewModel
-
-private const val KEY = "TransferState"
 
 class TransferViewModel(
     private val repository: UserPreferencesRepository,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<TransferState, TransferEvent, TransferAction>(
-    initialState = savedStateHandle[KEY] ?: run {
+    initialState = savedStateHandle.getSerialized(TRANSFER_STATE_KEY) ?: run {
         val client = requireNotNull(repository.client.value)
 
         TransferState(
@@ -30,10 +32,15 @@ class TransferViewModel(
         )
     },
 ) {
+
+    companion object {
+        private const val TRANSFER_STATE_KEY = "TransferState"
+    }
+
     init {
-//        stateFlow
-//            .onEach { savedStateHandle[KEY] = it }
-//            .launchIn(viewModelScope)
+        stateFlow
+            .onEach { savedStateHandle.setSerialized(key = TRANSFER_STATE_KEY, value = it) }
+            .launchIn(viewModelScope)
     }
 
     override fun handleAction(action: TransferAction) {
@@ -49,11 +56,11 @@ class TransferViewModel(
     }
 }
 
-@Parcelize
+@Serializable
 data class TransferState(
     val mobileNo: String,
     val externalId: String,
-) : Parcelable
+)
 
 sealed interface TransferEvent {
     data class OnCopyTextToClipboard(val text: String) : TransferEvent

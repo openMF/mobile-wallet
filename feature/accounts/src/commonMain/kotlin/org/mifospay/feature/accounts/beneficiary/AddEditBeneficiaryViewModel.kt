@@ -12,9 +12,13 @@ package org.mifospay.feature.accounts.beneficiary
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 import kotlinx.serialization.json.Json
 import mobile_wallet.feature.accounts.generated.resources.Res
 import mobile_wallet.feature.accounts.generated.resources.feature_accounts_beneficiary_account_type_other
@@ -30,8 +34,8 @@ import mobile_wallet.feature.accounts.generated.resources.feature_accounts_error
 import mobile_wallet.feature.accounts.generated.resources.feature_accounts_error_select_account_type
 import mobile_wallet.feature.accounts.generated.resources.feature_accounts_error_select_locale
 import org.mifospay.core.common.DataState
-import org.mifospay.core.common.Parcelable
-import org.mifospay.core.common.Parcelize
+import org.mifospay.core.common.getSerialized
+import org.mifospay.core.common.setSerialized
 import org.mifospay.core.data.repository.LocalAssetRepository
 import org.mifospay.core.data.repository.SelfServiceRepository
 import org.mifospay.core.model.beneficiary.Beneficiary
@@ -41,15 +45,13 @@ import org.mifospay.core.ui.utils.BaseViewModel
 import org.mifospay.feature.accounts.beneficiary.AEBAction.Internal.HandleBeneficiaryAddEditResult
 import org.mifospay.feature.accounts.beneficiary.AEBState.DialogState.Error
 
-private const val KEY = "AddEditBeneficiaryViewModel"
-
 internal class AddEditBeneficiaryViewModel(
     private val localAssetRepository: LocalAssetRepository,
     private val repository: SelfServiceRepository,
     private val json: Json,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<AEBState, AEBEvent, AEBAction>(
-    initialState = savedStateHandle[KEY] ?: run {
+    initialState = savedStateHandle.getSerialized(ADD_EDIT_BENEFICIARY_KEY) ?: run {
         when (val addEditType = BeneficiaryAddEditArgs(savedStateHandle).addEditType) {
             is BeneficiaryAddEditType.AddItem -> {
                 AEBState(
@@ -78,17 +80,22 @@ internal class AddEditBeneficiaryViewModel(
         }
     },
 ) {
+
+    companion object {
+        private const val ADD_EDIT_BENEFICIARY_KEY = "AddEditBeneficiaryViewModel"
+    }
+
     val filteredLocalList = localAssetRepository.localeList.stateIn(
         scope = viewModelScope,
         initialValue = emptyList(),
         started = SharingStarted.WhileSubscribed(5_000),
     )
 
-//    init {
-//        stateFlow
-//            .onEach { savedStateHandle[KEY] = it }
-//            .launchIn(viewModelScope)
-//    }
+    init {
+        stateFlow
+            .onEach { savedStateHandle.setSerialized(key = ADD_EDIT_BENEFICIARY_KEY, value = it) }
+            .launchIn(viewModelScope)
+    }
 
     override fun handleAction(action: AEBAction) {
         when (action) {
@@ -249,7 +256,7 @@ internal class AddEditBeneficiaryViewModel(
     }
 }
 
-@Parcelize
+@Serializable
 internal data class AEBState(
     val addEditType: BeneficiaryAddEditType,
     val name: String,
@@ -259,8 +266,9 @@ internal data class AEBState(
     val officeName: String = OFFICE_NAME,
     val accountType: Int = SAVINGS_ACC_ID,
     val beneficiaryId: Long? = null,
+    @Transient
     val dialogState: DialogState? = null,
-) : Parcelable {
+) {
     private val isAddItemMode: Boolean
         get() = addEditType is BeneficiaryAddEditType.AddItem
 
@@ -285,11 +293,8 @@ internal data class AEBState(
             Res.string.feature_accounts_beneficiary_account_type_other.toString()
         }
 
-    sealed interface DialogState : Parcelable {
-        @Parcelize
+    sealed interface DialogState {
         data object Loading : DialogState
-
-        @Parcelize
         data class Error(val message: String) : DialogState
     }
 

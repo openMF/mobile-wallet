@@ -9,12 +9,11 @@
  */
 package org.mifospay.core.model.account
 
-import org.mifospay.core.common.Parcelable
-import org.mifospay.core.common.Parcelize
+import kotlinx.serialization.Serializable
 import org.mifospay.core.model.savingsaccount.Currency
 import org.mifospay.core.model.savingsaccount.Status
 
-@Parcelize
+@Serializable
 data class Account(
     val image: String = "",
     val name: String,
@@ -24,4 +23,4 @@ data class Account(
     val productId: Long = 0L,
     val currency: Currency,
     val status: Status,
-) : Parcelable
+)

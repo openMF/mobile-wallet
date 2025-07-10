@@ -13,17 +13,17 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.mapLatest
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.serialization.Serializable
 import org.mifospay.core.common.DataState
-import org.mifospay.core.common.Parcelable
-import org.mifospay.core.common.Parcelize
+import org.mifospay.core.common.setSerialized
 import org.mifospay.core.data.repository.InvoiceRepository
 import org.mifospay.core.datastore.UserPreferencesRepository
 import org.mifospay.core.model.datatables.invoice.Invoice
 import org.mifospay.core.ui.utils.BaseViewModel
-
-private const val KEY_STATE = "InvoiceViewModel"
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class InvoicesViewModel(
@@ -31,17 +31,22 @@ class InvoicesViewModel(
     repository: UserPreferencesRepository,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<InvoiceState, InvoiceEvent, InvoiceAction>(
-    initialState = savedStateHandle[KEY_STATE] ?: run {
+    initialState = savedStateHandle.get(KEY_STATE) ?: run {
         val clientId = requireNotNull(repository.clientId.value)
 
         InvoiceState(clientId = clientId)
     },
 ) {
-//    init {
-//        stateFlow
-//            .onEach { savedStateHandle[KEY_STATE] = it }
-//            .launchIn(viewModelScope)
-//    }
+
+    companion object {
+        private const val KEY_STATE = "InvoiceViewModel"
+    }
+
+    init {
+        stateFlow
+            .onEach { savedStateHandle.setSerialized(key = KEY_STATE, value = it) }
+            .launchIn(viewModelScope)
+    }
 
     val invoiceUiState = invoiceRepository.getInvoices(state.clientId).mapLatest { result ->
         when (result) {
@@ -77,10 +82,10 @@ sealed interface InvoicesUiState {
     data class InvoiceList(val list: List<Invoice>) : InvoicesUiState
 }
 
-@Parcelize
+@Serializable
 data class InvoiceState(
     val clientId: Long,
-) : Parcelable
+)
 
 sealed interface InvoiceAction {
     data class InvoiceClicked(val invoiceId: Long) : InvoiceAction

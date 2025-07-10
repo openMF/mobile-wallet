@@ -11,26 +11,36 @@ package org.mifospay.feature.auth.login
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 import org.mifospay.core.common.DataState
-import org.mifospay.core.common.IgnoredOnParcel
-import org.mifospay.core.common.Parcelable
-import org.mifospay.core.common.Parcelize
+import org.mifospay.core.common.getSerialized
+import org.mifospay.core.common.setSerialized
 import org.mifospay.core.domain.LoginUseCase
 import org.mifospay.core.model.user.UserInfo
 import org.mifospay.core.ui.utils.BaseViewModel
-
-private const val KEY_STATE = "state"
 
 class LoginViewModel(
     private val loginUseCase: LoginUseCase,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<LoginState, LoginEvent, LoginAction>(
-    initialState = savedStateHandle[KEY_STATE] ?: LoginState(dialogState = null),
+    initialState = savedStateHandle.getSerialized(KEY_STATE)
+        ?: LoginState(dialogState = null),
 ) {
 
+    companion object {
+        private const val KEY_STATE = "state"
+    }
+
     init {
+        stateFlow
+            .onEach { savedStateHandle.setSerialized(key = KEY_STATE, value = it) }
+            .launchIn(viewModelScope)
+
         savedStateHandle.get<String>("username")?.let {
             trySendAction(LoginAction.UsernameChanged(it))
         }
@@ -112,19 +122,17 @@ class LoginViewModel(
     }
 }
 
-@Parcelize
+@Serializable
 data class LoginState(
     val username: String = "",
-    @IgnoredOnParcel
+    @Transient
     val password: String = "",
     val isPasswordVisible: Boolean = false,
-    val dialogState: DialogState?,
-) : Parcelable {
-    sealed class DialogState : Parcelable {
-        @Parcelize
+    @Transient
+    val dialogState: DialogState? = null,
+) {
+    sealed class DialogState {
         data class Error(val message: String) : DialogState()
-
-        @Parcelize
         data object Loading : DialogState()
     }
 }

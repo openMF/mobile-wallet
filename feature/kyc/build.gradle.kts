@@ -9,7 +9,6 @@
  */
 plugins {
     alias(libs.plugins.mifospay.cmp.feature)
-    alias(libs.plugins.kotlin.parcelize)
 }
 
 android {
@@ -24,6 +23,7 @@ kotlin {
             implementation(compose.material3)
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
+            implementation(libs.filekit.core)
             implementation(libs.filekit.compose)
             implementation(libs.coil.kt.compose)
         }

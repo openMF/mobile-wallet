@@ -29,15 +29,18 @@ import io.github.alexzhirkevich.qrose.options.circle
 import io.github.alexzhirkevich.qrose.options.roundCorners
 import io.github.alexzhirkevich.qrose.options.solid
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 import mobile_wallet.feature.request_money.generated.resources.Res
 import mobile_wallet.feature.request_money.generated.resources.logo
 import org.jetbrains.compose.resources.painterResource
-import org.mifospay.core.common.IgnoredOnParcel
-import org.mifospay.core.common.Parcelable
-import org.mifospay.core.common.Parcelize
+import org.mifospay.core.common.getSerialized
+import org.mifospay.core.common.setSerialized
 import org.mifospay.core.data.repository.LocalAssetRepository
 import org.mifospay.core.data.util.UpiQrCodeProcessor
 import org.mifospay.core.datastore.UserPreferencesRepository
@@ -47,14 +50,12 @@ import org.mifospay.core.model.utils.PaymentQrData
 import org.mifospay.core.ui.utils.BaseViewModel
 import org.mifospay.core.ui.utils.ShareUtils
 
-private const val KEY_STATE = "show_qr_state"
-
 class ShowQrViewModel(
     localRepository: LocalAssetRepository,
     repository: UserPreferencesRepository,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<ShowQrState, ShowQrEvent, ShowQrAction>(
-    initialState = savedStateHandle[KEY_STATE] ?: run {
+    initialState = savedStateHandle.getSerialized(KEY_STATE) ?: run {
         val client = requireNotNull(repository.client.value)
         val defaultAccount = requireNotNull(repository.defaultAccount.value)
 
@@ -65,6 +66,11 @@ class ShowQrViewModel(
         )
     },
 ) {
+
+    companion object {
+        private const val KEY_STATE = "show_qr_state"
+    }
+
     val currencyList = localRepository.currencyList.stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5_000),
@@ -72,9 +78,9 @@ class ShowQrViewModel(
     )
 
     init {
-//        stateFlow.onEach {
-//            savedStateHandle[KEY_STATE] = it
-//        }.launchIn(viewModelScope)
+        stateFlow.onEach {
+            savedStateHandle.setSerialized(key = KEY_STATE, value = it)
+        }.launchIn(viewModelScope)
 
         viewModelScope.launch {
             sendAction(ShowQrAction.Internal.GenerateQr)
@@ -173,13 +179,13 @@ class ShowQrViewModel(
     }
 }
 
-@Parcelize
+@Serializable
 data class ShowQrState(
     val client: Client,
 
     val defaultAccount: DefaultAccount,
 
-    @IgnoredOnParcel
+    @Transient
     val viewState: ViewState = ViewState.Loading,
 
     val qrData: PaymentQrData = PaymentQrData(
@@ -190,8 +196,9 @@ data class ShowQrState(
         currency = "USD",
         amount = "",
     ),
+    @Transient
     val dialogState: DialogState? = null,
-) : Parcelable {
+) {
 
     sealed interface ViewState {
         data object Loading : ViewState
@@ -237,11 +244,8 @@ data class ShowQrState(
         }
     }
 
-    sealed interface DialogState : Parcelable {
-        @Parcelize
+    sealed interface DialogState {
         data object Loading : DialogState
-
-        @Parcelize
         data object ShowSetAmountDialog : DialogState
     }
 }
