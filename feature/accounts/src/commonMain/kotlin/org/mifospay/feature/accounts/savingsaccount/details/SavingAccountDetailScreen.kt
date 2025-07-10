@@ -77,6 +77,7 @@ import mobile_wallet.feature.accounts.generated.resources.feature_accounts_statu
 import mobile_wallet.feature.accounts.generated.resources.feature_accounts_status_transfer_in_progress
 import mobile_wallet.feature.accounts.generated.resources.feature_accounts_status_transfer_on_hold
 import mobile_wallet.feature.accounts.generated.resources.feature_accounts_status_withdrawn
+import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.mifospay.core.common.CurrencyFormatter
@@ -470,48 +471,24 @@ private fun SavingAccountStatusCard(
     status: Status,
     modifier: Modifier = Modifier,
 ) {
-    val statusChips = listOf(
-        stringResource(Res.string.feature_accounts_status_pending_approval) to status.submittedAndPendingApproval,
-        stringResource(Res.string.feature_accounts_status_approved) to status.approved,
-        stringResource(Res.string.feature_accounts_status_rejected) to status.rejected,
-        stringResource(Res.string.feature_accounts_status_withdrawn) to status.withdrawnByApplicant,
-        stringResource(Res.string.feature_accounts_status_active) to status.active,
-        stringResource(Res.string.feature_accounts_status_closed) to status.closed,
-        stringResource(Res.string.feature_accounts_status_prematurely_closed) to status.prematureClosed,
-        stringResource(Res.string.feature_accounts_status_transfer_in_progress) to status.transferInProgress,
-        stringResource(Res.string.feature_accounts_status_transfer_on_hold) to status.transferOnHold,
-        stringResource(Res.string.feature_accounts_status_matured) to status.matured,
-    )
+    val activeStatuses = SavingAccountStatus.entries.filter { it.isActive(status) }
 
     FlowRow(
         horizontalArrangement = Arrangement.spacedBy(4.dp),
         verticalArrangement = Arrangement.spacedBy(4.dp),
         modifier = modifier,
     ) {
-        statusChips.forEach { (label, isActive) ->
-            if (isActive) {
-                StatusChip(label)
-            }
+        activeStatuses.forEach { statusEnum ->
+            StatusChip(
+                label = stringResource(statusEnum.labelRes),
+                color = statusEnum.color,
+            )
         }
     }
 }
 
 @Composable
-private fun StatusChip(label: String) {
-    val color = when (label) {
-        stringResource(Res.string.feature_accounts_status_pending_approval) -> Color(0xFFFFF9C4)
-        stringResource(Res.string.feature_accounts_status_approved) -> Color(0xFFC8E6C9)
-        stringResource(Res.string.feature_accounts_status_rejected) -> Color(0xFFFFCDD2)
-        stringResource(Res.string.feature_accounts_status_withdrawn) -> Color(0xFFE1BEE7)
-        stringResource(Res.string.feature_accounts_status_active) -> Color(0xFFBBDEFB)
-        stringResource(Res.string.feature_accounts_status_closed) -> Color(0xFFCFD8DC)
-        stringResource(Res.string.feature_accounts_status_prematurely_closed) -> Color(0xFFD7CCC8)
-        stringResource(Res.string.feature_accounts_status_transfer_in_progress) -> Color(0xFFFFE0B2)
-        stringResource(Res.string.feature_accounts_status_transfer_on_hold) -> Color(0xFFF0F4C3)
-        stringResource(Res.string.feature_accounts_status_matured) -> Color(0xFFB2DFDB)
-        else -> Color(0xFFEFEFEF)
-    }
-
+private fun StatusChip(label: String, color: Color) {
     SuggestionChip(
         onClick = { /* Handle click if needed */ },
         label = { Text(label) },
@@ -524,4 +501,21 @@ private fun StatusChip(label: String) {
         ),
         modifier = Modifier,
     )
+}
+
+enum class SavingAccountStatus(
+    val isActive: (Status) -> Boolean,
+    val labelRes: StringResource,
+    val color: Color,
+) {
+    PendingApproval({ it.submittedAndPendingApproval }, Res.string.feature_accounts_status_pending_approval, Color(0xFFFFF9C4)),
+    Approved({ it.approved }, Res.string.feature_accounts_status_approved, Color(0xFFC8E6C9)),
+    Rejected({ it.rejected }, Res.string.feature_accounts_status_rejected, Color(0xFFFFCDD2)),
+    Withdrawn({ it.withdrawnByApplicant }, Res.string.feature_accounts_status_withdrawn, Color(0xFFE1BEE7)),
+    Active({ it.active }, Res.string.feature_accounts_status_active, Color(0xFFBBDEFB)),
+    Closed({ it.closed }, Res.string.feature_accounts_status_closed, Color(0xFFCFD8DC)),
+    PrematureClosed({ it.prematureClosed }, Res.string.feature_accounts_status_prematurely_closed, Color(0xFFD7CCC8)),
+    TransferInProgress({ it.transferInProgress }, Res.string.feature_accounts_status_transfer_in_progress, Color(0xFFFFE0B2)),
+    TransferOnHold({ it.transferOnHold }, Res.string.feature_accounts_status_transfer_on_hold, Color(0xFFF0F4C3)),
+    Matured({ it.matured }, Res.string.feature_accounts_status_matured, Color(0xFFB2DFDB)),
 }
