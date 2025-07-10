@@ -141,7 +141,7 @@ class AccountViewModel(
         }
 
         mutableStateFlow.update { it.copy(defaultAccountId = action.accountId) }
-        sendEvent(AccountEvent.ShowToast(Res.string.feature_accounts_default_account_updated.toString()))
+        sendEvent(AccountEvent.ShowToast(Res.string.feature_accounts_default_account_updated))
     }
 
     private fun handleDeleteBeneficiary(action: DeleteBeneficiary) {
@@ -161,7 +161,7 @@ class AccountViewModel(
                     it.copy(dialogState = null)
                 }
 
-                sendEvent(AccountEvent.ShowToast(Res.string.feature_accounts_beneficiary_deleted.toString()))
+                sendEvent(AccountEvent.ShowToast(Res.string.feature_accounts_beneficiary_deleted))
             }
 
             is DataState.Error -> {
@@ -226,7 +226,7 @@ sealed interface AccountEvent {
     data class OnNavigateToAccountDetail(val accountId: Long) : AccountEvent
     data class OnAddOrEditTPTBeneficiary(val type: BeneficiaryAddEditType) : AccountEvent
 
-    data class ShowToast(val message: String) : AccountEvent
+    data class ShowToast(val message: StringResource) : AccountEvent
 }
 
 sealed interface AccountAction {

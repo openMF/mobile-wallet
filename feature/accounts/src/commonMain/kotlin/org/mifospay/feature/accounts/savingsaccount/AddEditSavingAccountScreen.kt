@@ -137,7 +137,7 @@ private fun SavingAccountDialogs(
     when (dialogState) {
         is AESState.DialogState.Error -> MifosBasicDialog(
             visibilityState = BasicDialogState.Shown(
-                message = dialogState.message,
+                message = stringResource(dialogState.message),
             ),
             onDismissRequest = onDismissRequest,
         )
@@ -146,6 +146,12 @@ private fun SavingAccountDialogs(
             visibilityState = LoadingDialogState.Shown,
         )
 
+        is AESState.DialogState.RuntimeError -> MifosBasicDialog(
+            visibilityState = BasicDialogState.Shown(
+                message = dialogState.message,
+            ),
+            onDismissRequest = onDismissRequest,
+        )
         null -> Unit
     }
 }
@@ -159,7 +165,7 @@ internal fun AddEditSavingAccountScreenContent(
     onAction: (AESAction) -> Unit,
 ) {
     MifosScaffold(
-        topBarTitle = state.title,
+        topBarTitle = stringResource(state.title),
         backPress = { onAction(AESAction.NavigateBack) },
         snackbarHost = { SnackbarHost(snackbarHostState) },
         modifier = modifier,
@@ -188,7 +194,7 @@ internal fun AddEditSavingAccountScreenContent(
 
                 is AESState.ViewState.Content -> {
                     AddEditSavingAccountScreenContent(
-                        btnText = state.btnText,
+                        btnText = stringResource(state.btnText),
                         isInEditMode = state.isInEditMode,
                         state = state.viewState,
                         localeList = localeList,

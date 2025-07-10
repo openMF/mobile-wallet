@@ -21,7 +21,7 @@
     <string name="feature_auth_sign_up_as_merchant">Sign up as merchant</string>
     <string name="feature_auth_sign_up_as_customer">Sign up as customer</string>
     <string name="feature_auth_or">or</string>
-    <string name="feature_auth_google_account">Ease my sign up using Google Account</string>
+    <string name="feature_auth_google_account">Ease my sign-up using Google Account</string>
     <string name="feature_auth_validate_email">Please enter a valid email address</string>
     <string name="feature_auth_all_fields_are_mandatory">All fields are mandatory.</string>
     <string name="feature_auth_complete_your_registration">Complete your registration</string>
@@ -56,7 +56,7 @@
     <string name="feature_auth_verify_otp">Verify Otp</string>
 
     <!-- Sign-up Validation Errors -->
-    <string name="feature_auth_error_select_savings_account">Please select a savings account.</string>
+    <string name="feature_auth_error_select_savings_account">Please select a saving account.</string>
     <string name="feature_auth_error_first_name_required">Please enter your first name.</string>
     <string name="feature_auth_error_last_name_required">Please enter your last name.</string>
     <string name="feature_auth_error_username_required">Please enter your username.</string>

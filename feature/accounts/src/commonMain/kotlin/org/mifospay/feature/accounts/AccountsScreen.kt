@@ -77,6 +77,7 @@ import mobile_wallet.feature.accounts.generated.resources.feature_accounts_statu
 import mobile_wallet.feature.accounts.generated.resources.feature_accounts_status_transfer_on_hold
 import mobile_wallet.feature.accounts.generated.resources.feature_accounts_status_withdrawn
 import mobile_wallet.feature.accounts.generated.resources.feature_accounts_unexpected_error_subtitle
+import org.jetbrains.compose.resources.getString
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.resources.vectorResource
 import org.koin.compose.viewmodel.koinViewModel
@@ -131,7 +132,7 @@ fun AccountsScreen(
 
             is AccountEvent.ShowToast -> {
                 scope.launch {
-                    snackbarHostState.showSnackbar(event.message)
+                    snackbarHostState.showSnackbar(getString(event.message))
                 }
             }
         }
