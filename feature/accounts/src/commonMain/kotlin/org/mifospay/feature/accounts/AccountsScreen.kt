@@ -100,16 +100,6 @@ import org.mifospay.core.ui.RevealDirection
 import org.mifospay.core.ui.RevealSwipe
 import org.mifospay.core.ui.rememberRevealState
 import org.mifospay.core.ui.utils.EventsEffect
-import org.mifospay.feature.accounts.SavingAccountStatus.Active
-import org.mifospay.feature.accounts.SavingAccountStatus.Approved
-import org.mifospay.feature.accounts.SavingAccountStatus.Closed
-import org.mifospay.feature.accounts.SavingAccountStatus.Matured
-import org.mifospay.feature.accounts.SavingAccountStatus.PendingApproval
-import org.mifospay.feature.accounts.SavingAccountStatus.PrematureClosed
-import org.mifospay.feature.accounts.SavingAccountStatus.Rejected
-import org.mifospay.feature.accounts.SavingAccountStatus.TransferInProgress
-import org.mifospay.feature.accounts.SavingAccountStatus.TransferOnHold
-import org.mifospay.feature.accounts.SavingAccountStatus.Withdrawn
 import org.mifospay.feature.accounts.beneficiary.BeneficiaryAddEditType
 import org.mifospay.feature.accounts.savingsaccount.SavingsAddEditType
 
@@ -631,7 +621,7 @@ private fun StatusChip(label: String, color: Color) {
 enum class SavingAccountStatus(
     val isActive: (Status) -> Boolean,
     val labelRes: StringResource,
-    val colorKey: ColorKey
+    val colorKey: ColorKey,
 ) {
     PendingApproval({ it.submittedAndPendingApproval }, Res.string.feature_accounts_status_pending_approval, ColorKey.PendingApproval),
     Approved({ it.approved }, Res.string.feature_accounts_status_approved, ColorKey.Approved),
@@ -661,16 +651,15 @@ enum class ColorKey {
 @Composable
 fun getStatusColor(colorKey: ColorKey): Color {
     return when (colorKey) {
-        ColorKey.PendingApproval -> MaterialTheme.colorScheme.primaryContainer.copy(red = 1f, green = 0.976f, blue = 0.77f)
-        ColorKey.Approved -> MaterialTheme.colorScheme.tertiaryContainer.copy(red = 0.78f, green = 0.90f, blue = 0.79f)
-        ColorKey.Rejected -> MaterialTheme.colorScheme.tertiaryContainer.copy(red = 1f, green = 0.8f, blue = 0.82f)
-        ColorKey.Withdrawn -> MaterialTheme.colorScheme.tertiaryContainer.copy(red = 0.88f, green = 0.75f, blue = 0.91f)
-        ColorKey.Active -> MaterialTheme.colorScheme.primaryContainer.copy(red = 0.73f, green = 0.87f, blue = 0.98f)
-        ColorKey.Closed -> MaterialTheme.colorScheme.surfaceVariant.copy(red = 0.81f, green = 0.85f, blue = 0.86f)
-        ColorKey.PrematureClosed -> MaterialTheme.colorScheme.surfaceContainer.copy(red = 0.84f, green = 0.8f, blue = 0.78f)
-        ColorKey.TransferInProgress -> MaterialTheme.colorScheme.primaryContainer.copy(red = 1f, green = 0.88f, blue = 0.7f)
-        ColorKey.TransferOnHold -> MaterialTheme.colorScheme.primaryContainer.copy(red = 0.94f, green = 0.96f, blue = 0.77f)
-        ColorKey.Matured -> MaterialTheme.colorScheme.primaryContainer.copy(red = 0.7f, green = 0.87f, blue = 0.86f)
+        ColorKey.PendingApproval -> MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.6f)
+        ColorKey.Approved -> MaterialTheme.colorScheme.tertiaryContainer
+        ColorKey.Rejected -> MaterialTheme.colorScheme.errorContainer
+        ColorKey.Withdrawn -> MaterialTheme.colorScheme.secondaryContainer
+        ColorKey.Active -> MaterialTheme.colorScheme.primaryContainer
+        ColorKey.Closed -> MaterialTheme.colorScheme.surfaceVariant
+        ColorKey.PrematureClosed -> MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.8f)
+        ColorKey.TransferInProgress -> MaterialTheme.colorScheme.tertiaryContainer.copy(alpha = 0.7f)
+        ColorKey.TransferOnHold -> MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.7f)
+        ColorKey.Matured -> MaterialTheme.colorScheme.tertiaryContainer
     }
 }
-

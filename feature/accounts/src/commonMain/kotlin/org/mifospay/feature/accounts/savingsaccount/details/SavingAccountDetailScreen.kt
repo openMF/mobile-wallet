@@ -67,17 +67,6 @@ import mobile_wallet.feature.accounts.generated.resources.feature_accounts_detai
 import mobile_wallet.feature.accounts.generated.resources.feature_accounts_detail_wallet_balance
 import mobile_wallet.feature.accounts.generated.resources.feature_accounts_error_oops
 import mobile_wallet.feature.accounts.generated.resources.feature_accounts_loading
-import mobile_wallet.feature.accounts.generated.resources.feature_accounts_status_active
-import mobile_wallet.feature.accounts.generated.resources.feature_accounts_status_approved
-import mobile_wallet.feature.accounts.generated.resources.feature_accounts_status_closed
-import mobile_wallet.feature.accounts.generated.resources.feature_accounts_status_matured
-import mobile_wallet.feature.accounts.generated.resources.feature_accounts_status_pending_approval
-import mobile_wallet.feature.accounts.generated.resources.feature_accounts_status_prematurely_closed
-import mobile_wallet.feature.accounts.generated.resources.feature_accounts_status_rejected
-import mobile_wallet.feature.accounts.generated.resources.feature_accounts_status_transfer_in_progress
-import mobile_wallet.feature.accounts.generated.resources.feature_accounts_status_transfer_on_hold
-import mobile_wallet.feature.accounts.generated.resources.feature_accounts_status_withdrawn
-import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.mifospay.core.common.CurrencyFormatter
@@ -94,6 +83,8 @@ import org.mifospay.core.ui.EmptyContentScreen
 import org.mifospay.core.ui.MifosDivider
 import org.mifospay.core.ui.TransactionHistoryCard
 import org.mifospay.core.ui.utils.EventsEffect
+import org.mifospay.feature.accounts.SavingAccountStatus
+import org.mifospay.feature.accounts.getStatusColor
 
 @Composable
 internal fun SavingAccountDetailScreen(
@@ -479,7 +470,7 @@ private fun SavingAccountStatusCard(
         modifier = modifier,
     ) {
         activeStatuses.forEach { statusEnum ->
-            val color = getStatusColor(statusEnum.color)
+            val color = getStatusColor(statusEnum.colorKey)
             StatusChip(
                 label = stringResource(statusEnum.labelRes),
                 color = color,
@@ -502,50 +493,4 @@ private fun StatusChip(label: String, color: Color) {
         ),
         modifier = Modifier,
     )
-}
-
-enum class SavingAccountStatus(
-    val isActive: (Status) -> Boolean,
-    val labelRes: StringResource,
-    val color: ColorKey,
-) {
-    PendingApproval({ it.submittedAndPendingApproval }, Res.string.feature_accounts_status_pending_approval, ColorKey.PendingApproval),
-    Approved({ it.approved }, Res.string.feature_accounts_status_approved, ColorKey.Approved),
-    Rejected({ it.rejected }, Res.string.feature_accounts_status_rejected, ColorKey.Rejected),
-    Withdrawn({ it.withdrawnByApplicant }, Res.string.feature_accounts_status_withdrawn, ColorKey.Withdrawn),
-    Active({ it.active }, Res.string.feature_accounts_status_active, ColorKey.Active),
-    Closed({ it.closed }, Res.string.feature_accounts_status_closed, ColorKey.Closed),
-    PrematureClosed({ it.prematureClosed }, Res.string.feature_accounts_status_prematurely_closed, ColorKey.PrematureClosed),
-    TransferInProgress({ it.transferInProgress }, Res.string.feature_accounts_status_transfer_in_progress, ColorKey.TransferInProgress),
-    TransferOnHold({ it.transferOnHold }, Res.string.feature_accounts_status_transfer_on_hold, ColorKey.TransferOnHold),
-    Matured({ it.matured }, Res.string.feature_accounts_status_matured, ColorKey.Matured),
-}
-
-enum class ColorKey {
-    PendingApproval,
-    Approved,
-    Rejected,
-    Withdrawn,
-    Active,
-    Closed,
-    PrematureClosed,
-    TransferInProgress,
-    TransferOnHold,
-    Matured,
-}
-
-@Composable
-fun getStatusColor(colorKey: ColorKey): Color {
-    return when (colorKey) {
-        ColorKey.PendingApproval -> MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.6f)
-        ColorKey.Approved -> MaterialTheme.colorScheme.tertiaryContainer
-        ColorKey.Rejected -> MaterialTheme.colorScheme.errorContainer
-        ColorKey.Withdrawn -> MaterialTheme.colorScheme.secondaryContainer
-        ColorKey.Active -> MaterialTheme.colorScheme.primaryContainer
-        ColorKey.Closed -> MaterialTheme.colorScheme.surfaceVariant
-        ColorKey.PrematureClosed -> MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.8f)
-        ColorKey.TransferInProgress -> MaterialTheme.colorScheme.tertiaryContainer.copy(alpha = 0.7f)
-        ColorKey.TransferOnHold -> MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.7f)
-        ColorKey.Matured -> MaterialTheme.colorScheme.tertiaryContainer
-    }
 }
