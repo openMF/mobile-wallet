@@ -9,7 +9,11 @@
  */
 package org.mifospay.core.common
 
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toPersistentList
 import kotlinx.serialization.KSerializer
+import kotlinx.serialization.builtins.ListSerializer
+import kotlinx.serialization.builtins.serializer
 import kotlinx.serialization.descriptors.PrimitiveKind
 import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
 import kotlinx.serialization.descriptors.SerialDescriptor
@@ -62,6 +66,41 @@ object DateAsStringSerializer : KSerializer<String> {
 
             else -> error("Unexpected Date format: $element")
         }
+    }
+}
+
+/**
+ * A custom [KSerializer] for serializing and deserializing an `ImmutableList<String>` using kotlinx.serialization.
+ *
+ * This serializer bridges the gap between Kotlin's `ImmutableList` from the [kotlinx.collections.immutable] package
+ * and standard JSON array representations. Internally, it uses a [ListSerializer] to handle the
+ * (de)serialization as a regular `List<String>`, then converts to or from an `ImmutableList`.
+ *
+ * ### Example Usage:
+ * ```
+ * @Serializable
+ * data class UserPreferences(
+ *     @Serializable(with = ImmutableListSerializer::class)
+ *     val favoriteTags: ImmutableList<String>
+ * )
+ * ```
+ *
+ * ### Supported Format:
+ * - JSON Array: `["tag1", "tag2", "tag3"]`
+ *
+ * ### Notes:
+ * - During serialization, the `ImmutableList` is converted to a regular list before encoding.
+ * - During deserialization, the resulting list is converted to an `ImmutableList` using `.toPersistentList()`.
+ */
+object ImmutableListSerializer : KSerializer<ImmutableList<String>> {
+    override val descriptor = ListSerializer(String.serializer()).descriptor
+
+    override fun serialize(encoder: Encoder, value: ImmutableList<String>) {
+        ListSerializer(String.serializer()).serialize(encoder, value.toList())
+    }
+
+    override fun deserialize(decoder: Decoder): ImmutableList<String> {
+        return ListSerializer(String.serializer()).deserialize(decoder).toPersistentList()
     }
 }
 

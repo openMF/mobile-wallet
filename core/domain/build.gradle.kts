@@ -9,6 +9,7 @@
  */
 plugins {
     alias(libs.plugins.mifospay.kmp.library)
+    alias(libs.plugins.kotlin.allopen)
 }
 
 android {
@@ -22,5 +23,15 @@ kotlin {
             implementation(projects.core.data)
             implementation(projects.core.model)
         }
+    }
+}
+
+// Only open classes annotated with @OpenForMokkery during test tasks
+fun isTestingTask(name: String) = name.contains("test", ignoreCase = true)
+val isTesting = gradle.startParameter.taskNames.any(::isTestingTask)
+
+if (isTesting) {
+    allOpen {
+        annotation("org.mifospay.core.common.utils.OpenForMokkery")
     }
 }

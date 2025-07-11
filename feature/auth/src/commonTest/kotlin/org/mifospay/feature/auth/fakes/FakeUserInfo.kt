@@ -20,7 +20,7 @@ val fakeUserInfo = UserInfo(
     officeName = "Main Office",
     roles = emptyList(),
     permissions = emptyList(),
-    clients = listOf(fakeClient.id),
+    clients = listOf(1),
     shouldRenewPassword = false,
     isTwoFactorAuthenticationRequired = false,
 )

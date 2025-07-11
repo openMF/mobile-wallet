@@ -73,4 +73,8 @@
     <string name="feature_auth_error_pincode_required">Please enter your pin code.</string>
     <string name="feature_auth_error_country_required">Please enter your country.</string>
     <string name="feature_auth_error_state_required">Please enter your state.</string>
+
+    <string name="feature_auth_error_field_already_exists">%1$s already exists.</string>
+    <string name="feature_auth_error_check_uniqueness_failed">Unable to check if %1$s is unique. Please try again later.</string>
+    <string name="feature_auth_registration_successful">Registration successful.</string>
 </resources>

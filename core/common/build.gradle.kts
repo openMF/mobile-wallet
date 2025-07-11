@@ -47,6 +47,7 @@ kotlin {
             implementation(libs.jb.composeRuntime)
             implementation(libs.jb.lifecycleViewmodelSavedState)
             implementation(libs.kotlinx.serialization.json)
+            implementation(libs.kotlinx.collections.immutable)
         }
 
         androidMain.dependencies {

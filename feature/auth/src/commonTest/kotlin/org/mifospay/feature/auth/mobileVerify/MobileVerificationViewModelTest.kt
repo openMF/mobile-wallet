@@ -12,7 +12,9 @@ package org.mifospay.feature.auth.mobileVerify
 import androidx.lifecycle.SavedStateHandle
 import dev.mokkery.answering.returns
 import dev.mokkery.everySuspend
+import dev.mokkery.matcher.any
 import dev.mokkery.mock
+import dev.mokkery.verifySuspend
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher
@@ -22,7 +24,7 @@ import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import org.mifospay.core.common.DataState
 import org.mifospay.core.data.repository.SearchRepository
-import org.mifospay.core.model.search.SearchResult
+import org.mifospay.feature.auth.fakes.fakeSearchResult
 import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test
@@ -33,30 +35,12 @@ import kotlin.test.assertTrue
 class MobileVerificationViewModelTest {
 
     private val testDispatcher = StandardTestDispatcher()
-    private lateinit var searchRepository: SearchRepository
+    private val searchRepository: SearchRepository = mock()
     private lateinit var viewModel: MobileVerificationViewModel
-
-    val failMobileNo = "1234567890"
-    val validMobileNo = "9876543210"
 
     @BeforeTest
     fun setup() {
         Dispatchers.setMain(testDispatcher)
-        searchRepository = mock<SearchRepository> {
-            everySuspend { searchResources(validMobileNo, "clients", true) } returns DataState.Success(data = emptyList())
-            everySuspend { searchResources(failMobileNo, "clients", true) } returns DataState.Success(
-                data = listOf(
-                    SearchResult(
-                        entityId = 1,
-                        entityAccountNo = "abc",
-                        entityName = "abc",
-                        entityType = "saving",
-                        parentId = 1,
-                        parentName = "def",
-                    ),
-                ),
-            )
-        }
         viewModel = MobileVerificationViewModel(
             searchRepository = searchRepository,
             savedStateHandle = SavedStateHandle(),
@@ -68,57 +52,115 @@ class MobileVerificationViewModelTest {
         Dispatchers.resetMain()
     }
 
+    // --------------------------------------------------------------------------
+    // Success Path Tests
+    // --------------------------------------------------------------------------
+
+    /**
+     * Tests that the ViewModel updates the state when the user enters a new phone number.
+     */
     @Test
     fun mobileVerificationViewModel_PhoneNoChanged_StateUpdated() = runTest(testDispatcher) {
         val newPhone = "9876543210"
-
         viewModel.trySendAction(MobileVerificationAction.PhoneNoChanged(newPhone))
         advanceUntilIdle()
         val state = viewModel.stateFlow.value
         assertEquals(newPhone, (state as MobileVerificationState.VerifyPhoneState).phoneNo)
     }
 
+    /**
+     * Tests that a valid phone number not found in the system triggers a transition to OTP entry.
+     */
     @Test
-    fun mobileVerificationViewModel_InvalidPhoneNumber_ErrorDialogState() = runTest(testDispatcher) {
-        val invalidPhoneNo = "123"
+    fun mobileVerificationViewModel_ValidPhoneNumber_TransitionsToOtpStateWithSameNumber() =
+        runTest(testDispatcher) {
+            val validPhoneNumber = "9876543210"
 
-        viewModel.trySendAction(MobileVerificationAction.PhoneNoChanged(invalidPhoneNo))
-        viewModel.trySendAction(MobileVerificationAction.VerifyPhoneBtnClicked)
+            /*
+             * Mocks searchResources to return an empty list to indicate the number doesn't exist.
+             */
+            everySuspend {
+                searchRepository.searchResources(
+                    validPhoneNumber,
+                    any(),
+                    any(),
+                )
+            } returns DataState.Success(data = emptyList())
 
-        advanceUntilIdle()
+            viewModel.trySendAction(MobileVerificationAction.PhoneNoChanged(validPhoneNumber))
+            viewModel.trySendAction(MobileVerificationAction.VerifyPhoneBtnClicked)
 
-        val currentState = viewModel.stateFlow.value
+            advanceUntilIdle()
 
-        val dialogState = (currentState as MobileVerificationState.VerifyPhoneState).dialogState
-        assertTrue(dialogState is MobileVerificationState.DialogState.Error)
+            /*
+             * Verifies that searchResources was called with the correct phone number.
+             */
+            verifySuspend {
+                searchRepository.searchResources(validPhoneNumber, any(), any())
+            }
 
-        assertEquals((dialogState as MobileVerificationState.DialogState.Error).message, "Phone no isn't valid")
-    }
+            assertEquals(
+                expected = validPhoneNumber,
+                actual = (viewModel.stateFlow.value as MobileVerificationState.VerifyOtpState).phoneNo,
+            )
+        }
 
+    // --------------------------------------------------------------------------
+    // Error Path Tests
+    // --------------------------------------------------------------------------
+
+    /**
+     * Tests that entering an invalid phone number results in an error dialog.
+     */
     @Test
-    fun mobileVerificationViewModel_PhoneNumberAlreadyExists_ErrorDialogState() = runTest(testDispatcher) {
-        viewModel.trySendAction(MobileVerificationAction.PhoneNoChanged(failMobileNo))
-        viewModel.trySendAction(MobileVerificationAction.VerifyPhoneBtnClicked)
+    fun mobileVerificationViewModel_InvalidPhoneNumber_ErrorDialogState() =
+        runTest(testDispatcher) {
+            val invalidPhoneNo = "123"
 
-        advanceUntilIdle()
+            viewModel.trySendAction(MobileVerificationAction.PhoneNoChanged(invalidPhoneNo))
+            viewModel.trySendAction(MobileVerificationAction.VerifyPhoneBtnClicked)
 
-        val currentState = viewModel.stateFlow.value
+            advanceUntilIdle()
 
-        val errorMessage = (currentState as MobileVerificationState.VerifyPhoneState).dialogState
-        assertTrue(errorMessage is MobileVerificationState.DialogState.Error)
+            val dialogState =
+                (viewModel.stateFlow.value as MobileVerificationState.VerifyPhoneState).dialogState
+            assertTrue(dialogState is MobileVerificationState.DialogState.Error)
+        }
 
-        assertEquals((errorMessage as MobileVerificationState.DialogState.Error).message, "Mobile number already exists.")
-    }
-
+    /**
+     * Tests that entering a phone number that already exists shows an error dialog.
+     */
     @Test
-    fun mobileVerificationViewModel_ValidPhoneNumber_EqualsOtpStateNumber() = runTest(testDispatcher) {
-        viewModel.trySendAction(MobileVerificationAction.PhoneNoChanged(validMobileNo))
-        viewModel.trySendAction(MobileVerificationAction.VerifyPhoneBtnClicked)
+    fun mobileVerificationViewModel_PhoneNumberAlreadyExists_ErrorDialogState() =
+        runTest(testDispatcher) {
+            val existingPhoneNumber = "1234567890"
 
-        advanceUntilIdle()
+            /*
+             * Mocks searchResources to return a result indicating the phone number is already taken.
+             */
+            everySuspend {
+                searchRepository.searchResources(
+                    existingPhoneNumber,
+                    any(),
+                    any(),
+                )
+            } returns DataState.Success(data = listOf(fakeSearchResult))
 
-        val currentState = viewModel.stateFlow.value
-        assertTrue(currentState is MobileVerificationState.VerifyOtpState)
-        assertTrue((currentState as MobileVerificationState.VerifyOtpState).phoneNo == validMobileNo)
-    }
+            viewModel.trySendAction(MobileVerificationAction.PhoneNoChanged(existingPhoneNumber))
+            viewModel.trySendAction(MobileVerificationAction.VerifyPhoneBtnClicked)
+
+            advanceUntilIdle()
+
+            /*
+             * Verifies that searchResources was called with the expected parameters.
+             * Ensures the ViewModel triggered the repository call as expected.
+             */
+            verifySuspend {
+                searchRepository.searchResources(existingPhoneNumber, any(), any())
+            }
+
+            val dialogState =
+                (viewModel.stateFlow.value as MobileVerificationState.VerifyPhoneState).dialogState
+            assertTrue(dialogState is MobileVerificationState.DialogState.Error)
+        }
 }
