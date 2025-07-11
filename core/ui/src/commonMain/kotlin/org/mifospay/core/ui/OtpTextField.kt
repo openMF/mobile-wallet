@@ -29,7 +29,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -94,11 +93,11 @@ fun OtpTextField(
             },
         )
         if (isError) {
-            // display erro message in text
+            // display error message in text
             Text(
                 text = "Invalid OTP",
                 style = MaterialTheme.typography.bodyMedium,
-                color = Color.Red,
+                color = MaterialTheme.colorScheme.error,
                 textAlign = TextAlign.Center,
                 modifier = Modifier.padding(top = 8.dp),
             )
@@ -125,9 +124,9 @@ fun CharView(
         text = char,
         style = MaterialTheme.typography.headlineSmall,
         color = if (isFocused) {
-            Color.DarkGray
+            MaterialTheme.colorScheme.outline
         } else {
-            Color.LightGray
+            MaterialTheme.colorScheme.outlineVariant
         },
         textAlign = TextAlign.Center,
     )

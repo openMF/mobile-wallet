@@ -16,7 +16,6 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import org.mifospay.core.model.standinginstruction.StandingInstruction
 
@@ -26,9 +25,9 @@ fun InstructionTypeChip(
     modifier: Modifier = Modifier,
 ) {
     val (backgroundColor, contentColor) = when (type.id) {
-        1L -> Color(0xFFE3F2FD) to Color(0xFF1565C0)
-        2L -> Color(0xFFF3E5F5) to Color(0xFF7B1FA2)
-        else -> Color(0xFFF5F5F5) to Color(0xFF616161)
+        1L -> MaterialTheme.colorScheme.primaryContainer to MaterialTheme.colorScheme.onPrimaryContainer
+        2L -> MaterialTheme.colorScheme.tertiaryContainer to MaterialTheme.colorScheme.onTertiaryContainer
+        else -> MaterialTheme.colorScheme.surfaceVariant to MaterialTheme.colorScheme.onSurfaceVariant
     }
 
     Surface(

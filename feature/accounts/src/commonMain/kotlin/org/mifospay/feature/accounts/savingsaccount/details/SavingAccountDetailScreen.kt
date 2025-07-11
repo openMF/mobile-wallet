@@ -45,7 +45,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -477,17 +476,17 @@ private fun SavingAccountStatusCard(
 @Composable
 private fun StatusChip(label: String) {
     val color = when (label) {
-        "Pending Approval" -> Color(0xFFFFF9C4)
-        "Approved" -> Color(0xFFC8E6C9)
-        "Rejected" -> Color(0xFFFFCDD2)
-        "Withdrawn" -> Color(0xFFE1BEE7)
-        "Active" -> Color(0xFFBBDEFB)
-        "Closed" -> Color(0xFFCFD8DC)
-        "Prematurely Closed" -> Color(0xFFD7CCC8)
-        "Transfer in Progress" -> Color(0xFFFFE0B2)
-        "Transfer on Hold" -> Color(0xFFF0F4C3)
-        "Matured" -> Color(0xFFB2DFDB)
-        else -> Color(0xFFEFEFEF)
+        "Pending Approval" -> MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.6f)
+        "Approved" -> MaterialTheme.colorScheme.tertiaryContainer
+        "Rejected" -> MaterialTheme.colorScheme.errorContainer
+        "Withdrawn" -> MaterialTheme.colorScheme.secondaryContainer
+        "Active" -> MaterialTheme.colorScheme.primaryContainer
+        "Closed" -> MaterialTheme.colorScheme.surfaceVariant
+        "Prematurely Closed" -> MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.8f)
+        "Transfer in Progress" -> MaterialTheme.colorScheme.tertiaryContainer.copy(alpha = 0.7f)
+        "Transfer on Hold" -> MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.7f)
+        "Matured" -> MaterialTheme.colorScheme.tertiaryContainer
+        else -> MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
     }
 
     SuggestionChip(

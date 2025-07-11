@@ -73,7 +73,7 @@ fun TransactionItemCard(
                     style = TextStyle(
                         fontSize = 10.sp,
                         fontWeight = FontWeight(400),
-                        color = Color(0x66000000),
+                        color = MaterialTheme.colorScheme.onSurface,
                     ),
                 )
             }
@@ -99,12 +99,14 @@ fun TransactionItemCard(
                             green = 0f,
                             blue = 0f,
                         )
+
                         TransactionType.CREDIT -> MaterialTheme.colorScheme.onTertiaryContainer.copy(
                             red = 0f,
                             green = 0.51f,
                             blue = 0.21f,
                         )
-                        else -> Color.Black
+
+                        else -> MaterialTheme.colorScheme.scrim
                     },
                     textAlign = TextAlign.End,
                 ),
@@ -195,12 +197,14 @@ fun TransactionItem(
                                 green = 0.51f,
                                 blue = 0.21f,
                             )
+
                             TransactionType.DEBIT -> MaterialTheme.colorScheme.error.copy(
                                 red = 0.8f,
                                 green = 0f,
                                 blue = 0f,
                             )
-                            else -> Color.Black
+
+                            else -> MaterialTheme.colorScheme.scrim
                         },
                         textAlign = TextAlign.End,
                     ),

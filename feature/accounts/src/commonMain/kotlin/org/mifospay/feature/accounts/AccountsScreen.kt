@@ -652,10 +652,9 @@ private fun StatusChip(label: String) {
             blue = 0.94f,
         )
     }
-
     MifosSmallChip(
         label = label,
         containerColor = color,
-        contentColor = Color.Black,
+        contentColor = MaterialTheme.colorScheme.scrim,
     )
 }

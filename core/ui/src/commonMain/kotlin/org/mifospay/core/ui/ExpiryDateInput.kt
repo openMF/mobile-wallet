@@ -26,9 +26,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.FocusRequester.Companion.FocusRequesterFactory.component1
+import androidx.compose.ui.focus.FocusRequester.Companion.FocusRequesterFactory.component2
 import androidx.compose.ui.focus.focusProperties
 import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -119,9 +120,9 @@ fun FormattedDateView(
         text = char,
         style = MaterialTheme.typography.headlineSmall,
         color = if (isFocused) {
-            Color.DarkGray
+            MaterialTheme.colorScheme.outline
         } else {
-            Color.LightGray
+            MaterialTheme.colorScheme.outlineVariant
         },
         textAlign = TextAlign.Center,
     )

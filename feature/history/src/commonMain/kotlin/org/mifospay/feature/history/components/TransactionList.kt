@@ -154,12 +154,14 @@ internal fun TransactionItem(
                             green = 0.51f,
                             blue = 0.21f,
                         )
+
                         TransactionType.DEBIT -> MaterialTheme.colorScheme.error.copy(
                             red = 0.8f,
                             green = 0f,
                             blue = 0f,
                         )
-                        else -> Color.Black
+
+                        else -> MaterialTheme.colorScheme.scrim
                     },
                     contentDescription = null,
                 )
@@ -180,12 +182,14 @@ internal fun TransactionItem(
                                 green = 0.51f,
                                 blue = 0.21f,
                             )
+
                             TransactionType.DEBIT -> MaterialTheme.colorScheme.error.copy(
                                 red = 0.8f,
                                 green = 0f,
                                 blue = 0f,
                             )
-                            else -> Color.Black
+
+                            else -> MaterialTheme.colorScheme.scrim
                         },
                         textAlign = TextAlign.End,
                     ),
