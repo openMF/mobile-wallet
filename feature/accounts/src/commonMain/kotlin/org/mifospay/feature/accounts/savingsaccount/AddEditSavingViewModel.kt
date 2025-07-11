@@ -177,55 +177,55 @@ internal class AddEditSavingViewModel(
                 is SavingsAddEditType.AddItem -> when {
                     content.productId == 0L -> {
                         mutableStateFlow.update {
-                            it.copy(dialogState = DialogStateError(Res.string.feature_accounts_error_select_saving_product))
+                            it.copy(dialogState = DialogStateError.ResourceMessage(Res.string.feature_accounts_error_select_saving_product))
                         }
                     }
 
                     content.clientId.isEmpty() -> {
                         mutableStateFlow.update {
-                            it.copy(dialogState = DialogStateError(Res.string.feature_accounts_error_client_id_required))
+                            it.copy(dialogState = DialogStateError.ResourceMessage(Res.string.feature_accounts_error_client_id_required))
                         }
                     }
 
                     content.externalId.isEmpty() -> {
                         mutableStateFlow.update {
-                            it.copy(dialogState = DialogStateError(Res.string.feature_accounts_error_external_id_required))
+                            it.copy(dialogState = DialogStateError.ResourceMessage(Res.string.feature_accounts_error_external_id_required))
                         }
                     }
 
                     content.externalId.length < 8 -> {
                         mutableStateFlow.update {
-                            it.copy(dialogState = DialogStateError(Res.string.feature_accounts_error_external_id_length))
+                            it.copy(dialogState = DialogStateError.ResourceMessage(Res.string.feature_accounts_error_external_id_length))
                         }
                     }
 
                     content.enforceMinRequiredBalance && content.minRequiredOpeningBalance == 0L -> {
                         mutableStateFlow.update {
-                            it.copy(dialogState = DialogStateError(Res.string.feature_accounts_error_min_opening_balance_required))
+                            it.copy(dialogState = DialogStateError.ResourceMessage(Res.string.feature_accounts_error_min_opening_balance_required))
                         }
                     }
 
                     content.allowOverdraft && content.overdraftLimit.isEmpty() -> {
                         mutableStateFlow.update {
-                            it.copy(dialogState = DialogStateError(Res.string.feature_accounts_error_overdraft_limit_required))
+                            it.copy(dialogState = DialogStateError.ResourceMessage(Res.string.feature_accounts_error_overdraft_limit_required))
                         }
                     }
 
                     content.locale.isEmpty() -> {
                         mutableStateFlow.update {
-                            it.copy(dialogState = DialogStateError(Res.string.feature_accounts_error_locale_required))
+                            it.copy(dialogState = DialogStateError.ResourceMessage(Res.string.feature_accounts_error_locale_required))
                         }
                     }
 
                     content.submittedOnDate.isEmpty() -> {
                         mutableStateFlow.update {
-                            it.copy(dialogState = DialogStateError(Res.string.feature_accounts_error_submitted_date_required))
+                            it.copy(dialogState = DialogStateError.ResourceMessage(Res.string.feature_accounts_error_submitted_date_required))
                         }
                     }
 
                     content.dateFormat.isEmpty() -> {
                         mutableStateFlow.update {
-                            it.copy(dialogState = DialogStateError(Res.string.feature_accounts_error_date_format_required))
+                            it.copy(dialogState = DialogStateError.ResourceMessage(Res.string.feature_accounts_error_date_format_required))
                         }
                     }
 
@@ -235,13 +235,13 @@ internal class AddEditSavingViewModel(
                 is SavingsAddEditType.EditItem -> when {
                     content.productId == 0L -> {
                         mutableStateFlow.update {
-                            it.copy(dialogState = DialogStateError(Res.string.feature_accounts_error_select_saving_product))
+                            it.copy(dialogState = DialogStateError.ResourceMessage(Res.string.feature_accounts_error_select_saving_product))
                         }
                     }
 
                     content.clientId.isEmpty() -> {
                         mutableStateFlow.update {
-                            it.copy(dialogState = DialogStateError(Res.string.feature_accounts_error_client_id_required))
+                            it.copy(dialogState = DialogStateError.ResourceMessage(Res.string.feature_accounts_error_client_id_required))
                         }
                     }
 
@@ -307,7 +307,7 @@ internal class AddEditSavingViewModel(
                 val message = action.result.exception.message
                     .toString()
                 mutableStateFlow.update {
-                    it.copy(dialogState = AESState.DialogState.RuntimeError(message))
+                    it.copy(dialogState = DialogStateError.StringMessage(message))
                 }
             }
 
@@ -419,8 +419,10 @@ internal data class AESState(
 
     sealed interface DialogState {
         data object Loading : DialogState
-        data class Error(val message: StringResource) : DialogState
-        data class RuntimeError(val message: String) : DialogState
+        sealed interface Error : DialogState {
+            data class StringMessage(val message: String) : Error
+            data class ResourceMessage(val message: StringResource) : Error
+        }
     }
 }
 

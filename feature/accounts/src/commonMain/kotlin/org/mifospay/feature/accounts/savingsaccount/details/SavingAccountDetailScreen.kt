@@ -479,9 +479,10 @@ private fun SavingAccountStatusCard(
         modifier = modifier,
     ) {
         activeStatuses.forEach { statusEnum ->
+            val color = getStatusColor(statusEnum.color)
             StatusChip(
                 label = stringResource(statusEnum.labelRes),
-                color = statusEnum.color,
+                color = color,
             )
         }
     }
@@ -506,16 +507,45 @@ private fun StatusChip(label: String, color: Color) {
 enum class SavingAccountStatus(
     val isActive: (Status) -> Boolean,
     val labelRes: StringResource,
-    val color: Color,
+    val color: ColorKey,
 ) {
-    PendingApproval({ it.submittedAndPendingApproval }, Res.string.feature_accounts_status_pending_approval, Color(0xFFFFF9C4)),
-    Approved({ it.approved }, Res.string.feature_accounts_status_approved, Color(0xFFC8E6C9)),
-    Rejected({ it.rejected }, Res.string.feature_accounts_status_rejected, Color(0xFFFFCDD2)),
-    Withdrawn({ it.withdrawnByApplicant }, Res.string.feature_accounts_status_withdrawn, Color(0xFFE1BEE7)),
-    Active({ it.active }, Res.string.feature_accounts_status_active, Color(0xFFBBDEFB)),
-    Closed({ it.closed }, Res.string.feature_accounts_status_closed, Color(0xFFCFD8DC)),
-    PrematureClosed({ it.prematureClosed }, Res.string.feature_accounts_status_prematurely_closed, Color(0xFFD7CCC8)),
-    TransferInProgress({ it.transferInProgress }, Res.string.feature_accounts_status_transfer_in_progress, Color(0xFFFFE0B2)),
-    TransferOnHold({ it.transferOnHold }, Res.string.feature_accounts_status_transfer_on_hold, Color(0xFFF0F4C3)),
-    Matured({ it.matured }, Res.string.feature_accounts_status_matured, Color(0xFFB2DFDB)),
+    PendingApproval({ it.submittedAndPendingApproval }, Res.string.feature_accounts_status_pending_approval, ColorKey.PendingApproval),
+    Approved({ it.approved }, Res.string.feature_accounts_status_approved, ColorKey.Approved),
+    Rejected({ it.rejected }, Res.string.feature_accounts_status_rejected, ColorKey.Rejected),
+    Withdrawn({ it.withdrawnByApplicant }, Res.string.feature_accounts_status_withdrawn, ColorKey.Withdrawn),
+    Active({ it.active }, Res.string.feature_accounts_status_active, ColorKey.Active),
+    Closed({ it.closed }, Res.string.feature_accounts_status_closed, ColorKey.Closed),
+    PrematureClosed({ it.prematureClosed }, Res.string.feature_accounts_status_prematurely_closed, ColorKey.PrematureClosed),
+    TransferInProgress({ it.transferInProgress }, Res.string.feature_accounts_status_transfer_in_progress, ColorKey.TransferInProgress),
+    TransferOnHold({ it.transferOnHold }, Res.string.feature_accounts_status_transfer_on_hold, ColorKey.TransferOnHold),
+    Matured({ it.matured }, Res.string.feature_accounts_status_matured, ColorKey.Matured),
+}
+
+enum class ColorKey {
+    PendingApproval,
+    Approved,
+    Rejected,
+    Withdrawn,
+    Active,
+    Closed,
+    PrematureClosed,
+    TransferInProgress,
+    TransferOnHold,
+    Matured,
+}
+
+@Composable
+fun getStatusColor(colorKey: ColorKey): Color {
+    return when (colorKey) {
+        ColorKey.PendingApproval -> MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.6f)
+        ColorKey.Approved -> MaterialTheme.colorScheme.tertiaryContainer
+        ColorKey.Rejected -> MaterialTheme.colorScheme.errorContainer
+        ColorKey.Withdrawn -> MaterialTheme.colorScheme.secondaryContainer
+        ColorKey.Active -> MaterialTheme.colorScheme.primaryContainer
+        ColorKey.Closed -> MaterialTheme.colorScheme.surfaceVariant
+        ColorKey.PrematureClosed -> MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.8f)
+        ColorKey.TransferInProgress -> MaterialTheme.colorScheme.tertiaryContainer.copy(alpha = 0.7f)
+        ColorKey.TransferOnHold -> MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.7f)
+        ColorKey.Matured -> MaterialTheme.colorScheme.tertiaryContainer
+    }
 }

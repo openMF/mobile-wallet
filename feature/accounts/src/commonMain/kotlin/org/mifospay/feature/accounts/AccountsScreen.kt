@@ -77,6 +77,7 @@ import mobile_wallet.feature.accounts.generated.resources.feature_accounts_statu
 import mobile_wallet.feature.accounts.generated.resources.feature_accounts_status_transfer_on_hold
 import mobile_wallet.feature.accounts.generated.resources.feature_accounts_status_withdrawn
 import mobile_wallet.feature.accounts.generated.resources.feature_accounts_unexpected_error_subtitle
+import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.getString
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.resources.vectorResource
@@ -99,6 +100,16 @@ import org.mifospay.core.ui.RevealDirection
 import org.mifospay.core.ui.RevealSwipe
 import org.mifospay.core.ui.rememberRevealState
 import org.mifospay.core.ui.utils.EventsEffect
+import org.mifospay.feature.accounts.SavingAccountStatus.Active
+import org.mifospay.feature.accounts.SavingAccountStatus.Approved
+import org.mifospay.feature.accounts.SavingAccountStatus.Closed
+import org.mifospay.feature.accounts.SavingAccountStatus.Matured
+import org.mifospay.feature.accounts.SavingAccountStatus.PendingApproval
+import org.mifospay.feature.accounts.SavingAccountStatus.PrematureClosed
+import org.mifospay.feature.accounts.SavingAccountStatus.Rejected
+import org.mifospay.feature.accounts.SavingAccountStatus.TransferInProgress
+import org.mifospay.feature.accounts.SavingAccountStatus.TransferOnHold
+import org.mifospay.feature.accounts.SavingAccountStatus.Withdrawn
 import org.mifospay.feature.accounts.beneficiary.BeneficiaryAddEditType
 import org.mifospay.feature.accounts.savingsaccount.SavingsAddEditType
 
@@ -592,103 +603,74 @@ private fun SavingAccountStatusCard(
     status: Status,
     modifier: Modifier = Modifier,
 ) {
-    val statusChips = listOf(
-        stringResource(Res.string.feature_accounts_status_pending_approval) to status.submittedAndPendingApproval,
-        stringResource(Res.string.feature_accounts_status_approved) to status.approved,
-        stringResource(Res.string.feature_accounts_status_rejected) to status.rejected,
-        stringResource(Res.string.feature_accounts_status_withdrawn) to status.withdrawnByApplicant,
-        stringResource(Res.string.feature_accounts_status_closed) to status.closed,
-        stringResource(Res.string.feature_accounts_status_prematurely_closed) to status.prematureClosed,
-        stringResource(Res.string.feature_accounts_status_transfer_in_progress) to status.transferInProgress,
-        stringResource(Res.string.feature_accounts_status_transfer_on_hold) to status.transferOnHold,
-        stringResource(Res.string.feature_accounts_status_matured) to status.matured,
-    )
-
+    val activeStatus = SavingAccountStatus.entries.filter { it.isActive(status) }
     FlowRow(
         horizontalArrangement = Arrangement.spacedBy(4.dp),
         verticalArrangement = Arrangement.spacedBy(4.dp),
         modifier = modifier,
     ) {
-        statusChips.forEach { (label, isActive) ->
-            if (isActive) {
-                StatusChip(label)
-            }
+        activeStatus.forEach { statusEnum ->
+            val color = getStatusColor(statusEnum.colorKey)
+            StatusChip(
+                label = stringResource(statusEnum.labelRes),
+                color = color,
+            )
         }
     }
 }
 
 @Composable
-private fun StatusChip(label: String) {
-    val color = when (label) {
-        stringResource(Res.string.feature_accounts_status_pending_approval) -> MaterialTheme.colorScheme.primaryContainer.copy(
-            red = 1f,
-            green = 0.976f,
-            blue = 0.77f,
-        )
-
-        stringResource(Res.string.feature_accounts_status_approved) -> MaterialTheme.colorScheme.tertiaryContainer.copy(
-            red = 0.78f,
-            green = 0.90f,
-            blue = 0.79f,
-        )
-
-        stringResource(Res.string.feature_accounts_status_rejected) -> MaterialTheme.colorScheme.tertiaryContainer.copy(
-            red = 1f,
-            green = 0.8f,
-            blue = 0.82f,
-        )
-
-        stringResource(Res.string.feature_accounts_status_withdrawn) -> MaterialTheme.colorScheme.tertiaryContainer.copy(
-            red = 0.88f,
-            green = 0.75f,
-            blue = 0.91f,
-        )
-
-        stringResource(Res.string.feature_accounts_status_active) -> MaterialTheme.colorScheme.primaryContainer.copy(
-            red = 0.73f,
-            green = 0.87f,
-            blue = 0.98f,
-        )
-
-        stringResource(Res.string.feature_accounts_status_closed) -> MaterialTheme.colorScheme.surfaceVariant.copy(
-            red = 0.81f,
-            green = 0.85f,
-            blue = 0.86f,
-        )
-
-        stringResource(Res.string.feature_accounts_status_prematurely_closed) -> MaterialTheme.colorScheme.surfaceContainer.copy(
-            red = 0.84f,
-            green = 0.8f,
-            blue = 0.78f,
-        )
-
-        stringResource(Res.string.feature_accounts_status_transfer_in_progress) -> MaterialTheme.colorScheme.primaryContainer.copy(
-            red = 1f,
-            green = 0.88f,
-            blue = 0.7f,
-        )
-
-        stringResource(Res.string.feature_accounts_status_transfer_on_hold) -> MaterialTheme.colorScheme.primaryContainer.copy(
-            red = 0.94f,
-            green = 0.96f,
-            blue = 0.77f,
-        )
-
-        stringResource(Res.string.feature_accounts_status_matured) -> MaterialTheme.colorScheme.primaryContainer.copy(
-            red = 0.7f,
-            green = 0.87f,
-            blue = 0.86f,
-        )
-
-        else -> MaterialTheme.colorScheme.surface.copy(
-            red = 0.94f,
-            green = 0.94f,
-            blue = 0.94f,
-        )
-    }
+private fun StatusChip(label: String, color: Color) {
     MifosSmallChip(
         label = label,
         containerColor = color,
         contentColor = MaterialTheme.colorScheme.scrim,
     )
 }
+
+enum class SavingAccountStatus(
+    val isActive: (Status) -> Boolean,
+    val labelRes: StringResource,
+    val colorKey: ColorKey
+) {
+    PendingApproval({ it.submittedAndPendingApproval }, Res.string.feature_accounts_status_pending_approval, ColorKey.PendingApproval),
+    Approved({ it.approved }, Res.string.feature_accounts_status_approved, ColorKey.Approved),
+    Rejected({ it.rejected }, Res.string.feature_accounts_status_rejected, ColorKey.Rejected),
+    Withdrawn({ it.withdrawnByApplicant }, Res.string.feature_accounts_status_withdrawn, ColorKey.Withdrawn),
+    Active({ it.active }, Res.string.feature_accounts_status_active, ColorKey.Active),
+    Closed({ it.closed }, Res.string.feature_accounts_status_closed, ColorKey.Closed),
+    PrematureClosed({ it.prematureClosed }, Res.string.feature_accounts_status_prematurely_closed, ColorKey.PrematureClosed),
+    TransferInProgress({ it.transferInProgress }, Res.string.feature_accounts_status_transfer_in_progress, ColorKey.TransferInProgress),
+    TransferOnHold({ it.transferOnHold }, Res.string.feature_accounts_status_transfer_on_hold, ColorKey.TransferOnHold),
+    Matured({ it.matured }, Res.string.feature_accounts_status_matured, ColorKey.Matured),
+}
+
+enum class ColorKey {
+    PendingApproval,
+    Approved,
+    Rejected,
+    Withdrawn,
+    Active,
+    Closed,
+    PrematureClosed,
+    TransferInProgress,
+    TransferOnHold,
+    Matured,
+}
+
+@Composable
+fun getStatusColor(colorKey: ColorKey): Color {
+    return when (colorKey) {
+        ColorKey.PendingApproval -> MaterialTheme.colorScheme.primaryContainer.copy(red = 1f, green = 0.976f, blue = 0.77f)
+        ColorKey.Approved -> MaterialTheme.colorScheme.tertiaryContainer.copy(red = 0.78f, green = 0.90f, blue = 0.79f)
+        ColorKey.Rejected -> MaterialTheme.colorScheme.tertiaryContainer.copy(red = 1f, green = 0.8f, blue = 0.82f)
+        ColorKey.Withdrawn -> MaterialTheme.colorScheme.tertiaryContainer.copy(red = 0.88f, green = 0.75f, blue = 0.91f)
+        ColorKey.Active -> MaterialTheme.colorScheme.primaryContainer.copy(red = 0.73f, green = 0.87f, blue = 0.98f)
+        ColorKey.Closed -> MaterialTheme.colorScheme.surfaceVariant.copy(red = 0.81f, green = 0.85f, blue = 0.86f)
+        ColorKey.PrematureClosed -> MaterialTheme.colorScheme.surfaceContainer.copy(red = 0.84f, green = 0.8f, blue = 0.78f)
+        ColorKey.TransferInProgress -> MaterialTheme.colorScheme.primaryContainer.copy(red = 1f, green = 0.88f, blue = 0.7f)
+        ColorKey.TransferOnHold -> MaterialTheme.colorScheme.primaryContainer.copy(red = 0.94f, green = 0.96f, blue = 0.77f)
+        ColorKey.Matured -> MaterialTheme.colorScheme.primaryContainer.copy(red = 0.7f, green = 0.87f, blue = 0.86f)
+    }
+}
+

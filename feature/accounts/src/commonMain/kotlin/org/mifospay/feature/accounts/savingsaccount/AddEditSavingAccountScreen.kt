@@ -135,22 +135,21 @@ private fun SavingAccountDialogs(
     onDismissRequest: () -> Unit,
 ) {
     when (dialogState) {
-        is AESState.DialogState.Error -> MifosBasicDialog(
+        is AESState.DialogState.Error.StringMessage -> MifosBasicDialog(
+            visibilityState = BasicDialogState.Shown(
+                message = dialogState.message,
+            ),
+            onDismissRequest = onDismissRequest,
+        )
+
+        is AESState.DialogState.Error.ResourceMessage -> MifosBasicDialog(
             visibilityState = BasicDialogState.Shown(
                 message = stringResource(dialogState.message),
             ),
             onDismissRequest = onDismissRequest,
         )
-
         is AESState.DialogState.Loading -> MifosLoadingDialog(
             visibilityState = LoadingDialogState.Shown,
-        )
-
-        is AESState.DialogState.RuntimeError -> MifosBasicDialog(
-            visibilityState = BasicDialogState.Shown(
-                message = dialogState.message,
-            ),
-            onDismissRequest = onDismissRequest,
         )
         null -> Unit
     }
