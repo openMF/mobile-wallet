@@ -72,7 +72,6 @@ import org.koin.compose.viewmodel.koinViewModel
 import org.mifospay.core.common.CurrencyFormatter
 import org.mifospay.core.designsystem.component.MfLoadingWheel
 import org.mifospay.core.designsystem.component.MifosScaffold
-import org.mifospay.core.designsystem.theme.NewUi
 import org.mifospay.core.model.account.Account
 import org.mifospay.core.model.savingsaccount.SavingAccountDetail
 import org.mifospay.core.model.savingsaccount.Status
@@ -366,8 +365,8 @@ private fun SavingAccountCard(
             .background(
                 brush = Brush.linearGradient(
                     colors = listOf(
-                        NewUi.walletColor1,
-                        NewUi.walletColor2,
+                        MaterialTheme.colorScheme.primary,
+                        MaterialTheme.colorScheme.secondary,
                     ),
                 ),
                 shape = RoundedCornerShape(16.dp),

@@ -89,7 +89,7 @@ fun CombinedPasswordErrorCard(
         PasswordStrengthState.WEAK_1 -> MaterialTheme.colorScheme.error
         PasswordStrengthState.WEAK_2 -> MaterialTheme.colorScheme.error
         PasswordStrengthState.WEAK_3 -> MaterialTheme.colorScheme.error
-        PasswordStrengthState.GOOD -> MaterialTheme.colorScheme.primary
+        PasswordStrengthState.GOOD -> MaterialTheme.colorScheme.secondary
         PasswordStrengthState.STRONG -> MaterialTheme.colorScheme.primary
         PasswordStrengthState.VERY_STRONG -> MaterialTheme.colorScheme.tertiary
     }
@@ -282,7 +282,7 @@ fun PasswordStrengthIndicator(
         PasswordStrengthState.WEAK_1 -> MaterialTheme.colorScheme.error
         PasswordStrengthState.WEAK_2 -> MaterialTheme.colorScheme.error
         PasswordStrengthState.WEAK_3 -> MaterialTheme.colorScheme.error
-        PasswordStrengthState.GOOD -> MaterialTheme.colorScheme.primary
+        PasswordStrengthState.GOOD -> MaterialTheme.colorScheme.secondary
         PasswordStrengthState.STRONG -> MaterialTheme.colorScheme.primary
         PasswordStrengthState.VERY_STRONG -> MaterialTheme.colorScheme.tertiary
     }

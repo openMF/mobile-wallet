@@ -117,7 +117,7 @@ internal fun AddEditBeneficiaryScreenContent(
     onAction: (AEBAction) -> Unit,
 ) {
     MifosScaffold(
-        topBarTitle = state.title,
+        topBarTitle = stringResource(state.title),
         backPress = { onAction(AEBAction.NavigateBack) },
         snackbarHost = { SnackbarHost(snackbarHostState) },
     ) { paddingValues ->
@@ -260,7 +260,7 @@ internal fun AddEditBeneficiaryScreenContent(
             item {
                 MifosTextField(
                     label = stringResource(Res.string.feature_accounts_beneficiary_account_type),
-                    value = state.accountTypeName,
+                    value = stringResource(state.accountTypeName),
                     readOnly = true,
                     showClearIcon = false,
                     onValueChange = {
@@ -272,7 +272,7 @@ internal fun AddEditBeneficiaryScreenContent(
             item {
                 MifosButton(
                     text = {
-                        Text(text = state.btnText)
+                        Text(text = stringResource(state.btnText))
                     },
                     onClick = {
                         onAction(AEBAction.SaveBeneficiary)
@@ -290,7 +290,7 @@ private fun BeneficiaryDialogs(
     onDismissRequest: () -> Unit,
 ) {
     when (dialogState) {
-        is AEBState.DialogState.Error -> MifosBasicDialog(
+        is AEBState.DialogState.Error.StringMessage -> MifosBasicDialog(
             visibilityState = BasicDialogState.Shown(
                 message = dialogState.message,
             ),
@@ -299,6 +299,13 @@ private fun BeneficiaryDialogs(
 
         is AEBState.DialogState.Loading -> MifosLoadingDialog(
             visibilityState = LoadingDialogState.Shown,
+        )
+
+        is AEBState.DialogState.Error.ResourceMessage -> MifosBasicDialog(
+            visibilityState = BasicDialogState.Shown(
+                message = stringResource(dialogState.message),
+            ),
+            onDismissRequest = onDismissRequest,
         )
 
         null -> Unit
