@@ -56,7 +56,7 @@ class MobileVerificationViewModelTest {
      * Tests that the ViewModel updates the state when the user enters a new phone number.
      */
     @Test
-    fun givenPhoneNumber_whenPhoneNumberChanged_thenStateIsUpdated() = runTest(testDispatcher) {
+    fun givenPhoneNumber_whenPhoneNumberChanged_thenStateIsUpdated() = runTest {
         val newPhone = "9876543210"
         viewModel.trySendAction(MobileVerificationAction.PhoneNoChanged(newPhone))
         advanceUntilIdle()
@@ -69,7 +69,7 @@ class MobileVerificationViewModelTest {
      */
     @Test
     fun givenValidPhoneNumberNotInSystem_whenVerifyPhoneClicked_thenTransitionToOtpState() =
-        runTest(testDispatcher) {
+        runTest {
             val validPhoneNumber = "9876543210"
 
             /*
@@ -106,7 +106,7 @@ class MobileVerificationViewModelTest {
      */
     @Test
     fun givenInvalidPhoneNumber_whenVerifyPhoneClicked_thenErrorDialogShown() =
-        runTest(testDispatcher) {
+        runTest {
             val invalidPhoneNo = "123"
 
             viewModel.trySendAction(MobileVerificationAction.PhoneNoChanged(invalidPhoneNo))
@@ -124,7 +124,7 @@ class MobileVerificationViewModelTest {
      */
     @Test
     fun givenExistingPhoneNumber_whenVerifyPhoneClicked_thenErrorDialogShown() =
-        runTest(testDispatcher) {
+        runTest {
             val existingPhoneNumber = "1234567890"
 
             /*

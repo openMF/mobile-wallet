@@ -62,7 +62,7 @@ class LoginViewModelTest {
      * Verifies initial state values are set correctly on ViewModel init.
      */
     @Test
-    fun givenInitialState_whenViewModelInitialized_thenValidInitialConditions() = runTest(testDispatcher) {
+    fun givenInitialState_whenViewModelInitialized_thenValidInitialConditions() {
         assertEquals("", viewModel.stateFlow.value.username)
         assertEquals("", viewModel.stateFlow.value.password)
         assertFalse(viewModel.stateFlow.value.isPasswordVisible)
@@ -73,7 +73,7 @@ class LoginViewModelTest {
      * Tests that the username input updates the ViewModel state correctly.
      */
     @Test
-    fun givenUsernameInput_whenUsernameChanged_thenStateUpdated() = runTest(testDispatcher) {
+    fun givenUsernameInput_whenUsernameChanged_thenStateUpdated() = runTest {
         viewModel.trySendAction(LoginAction.UsernameChanged("alice"))
         advanceUntilIdle()
         assertEquals("alice", viewModel.stateFlow.value.username)
@@ -83,7 +83,7 @@ class LoginViewModelTest {
      * Tests that the password input updates the ViewModel state correctly.
      */
     @Test
-    fun givenPasswordInput_whenPasswordChanged_thenStateUpdated() = runTest(testDispatcher) {
+    fun givenPasswordInput_whenPasswordChanged_thenStateUpdated() = runTest {
         viewModel.trySendAction(LoginAction.PasswordChanged("secret"))
         advanceUntilIdle()
         assertEquals("secret", viewModel.stateFlow.value.password)
@@ -93,7 +93,7 @@ class LoginViewModelTest {
      * Tests the toggle password visibility logic.
      */
     @Test
-    fun whenTogglePasswordVisibility_thenVisibilityStateUpdated() = runTest(testDispatcher) {
+    fun whenTogglePasswordVisibility_thenVisibilityStateUpdated() = runTest {
         assertFalse(viewModel.stateFlow.value.isPasswordVisible)
 
         viewModel.trySendAction(LoginAction.TogglePasswordVisibility)
@@ -111,7 +111,7 @@ class LoginViewModelTest {
      * Uses [everySuspend] to mock suspend call and [verifySuspend] to verify usage.
      */
     @Test
-    fun givenCorrectCredentials_whenLoginClicked_thenNoErrorShown() = runTest(testDispatcher) {
+    fun givenCorrectCredentials_whenLoginClicked_thenNoErrorShown() = runTest {
         /*
          * Mocks the LoginUseCase to return a successful user info when invoked.
          */
@@ -153,7 +153,7 @@ class LoginViewModelTest {
      * Tests that incorrect credentials show an error dialog with appropriate message.
      */
     @Test
-    fun givenIncorrectCredentials_whenLoginClicked_thenErrorDialogShown() = runTest(testDispatcher) {
+    fun givenIncorrectCredentials_whenLoginClicked_thenErrorDialogShown() = runTest {
         /*
          * Mocks the LoginUseCase to return DataState.Error for wrong credentials.
          */
