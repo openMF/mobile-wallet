@@ -83,7 +83,7 @@ import org.mifospay.core.ui.MifosDivider
 import org.mifospay.core.ui.TransactionHistoryCard
 import org.mifospay.core.ui.utils.EventsEffect
 import org.mifospay.feature.accounts.SavingAccountStatus
-import org.mifospay.feature.accounts.getStatusColor
+import org.mifospay.feature.accounts.color
 
 @Composable
 internal fun SavingAccountDetailScreen(
@@ -469,10 +469,9 @@ private fun SavingAccountStatusCard(
         modifier = modifier,
     ) {
         activeStatuses.forEach { statusEnum ->
-            val color = getStatusColor(statusEnum.colorKey)
             StatusChip(
                 label = stringResource(statusEnum.labelRes),
-                color = color,
+                color = statusEnum.color,
             )
         }
     }
