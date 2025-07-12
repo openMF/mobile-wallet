@@ -22,7 +22,7 @@ import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import org.mifospay.core.common.DataState
 import org.mifospay.core.domain.LoginUseCase
-import org.mifospay.feature.auth.fakes.fakeUserInfo
+import org.mifospay.core.model.user.UserInfo
 import org.mifospay.feature.auth.login.LoginAction
 import org.mifospay.feature.auth.login.LoginState
 import org.mifospay.feature.auth.login.LoginViewModel
@@ -58,30 +58,22 @@ class LoginViewModelTest {
         Dispatchers.resetMain()
     }
 
-    // --------------------------------------------------------------------------
-    // Boundary Case
-    // --------------------------------------------------------------------------
-
     /**
      * Verifies initial state values are set correctly on ViewModel init.
      */
     @Test
-    fun loginViewModel_InitialState_ValidInitialConditions() = runTest(testDispatcher) {
+    fun givenInitialState_whenViewModelInitialized_thenValidInitialConditions() = runTest(testDispatcher) {
         assertEquals("", viewModel.stateFlow.value.username)
         assertEquals("", viewModel.stateFlow.value.password)
         assertFalse(viewModel.stateFlow.value.isPasswordVisible)
         assertEquals(null, viewModel.stateFlow.value.dialogState)
     }
 
-    // --------------------------------------------------------------------------
-    // Success Path Tests
-    // --------------------------------------------------------------------------
-
     /**
      * Tests that the username input updates the ViewModel state correctly.
      */
     @Test
-    fun loginViewModel_UsernameChanged_UpdatesUsernameState() = runTest(testDispatcher) {
+    fun givenUsernameInput_whenUsernameChanged_thenStateUpdated() = runTest(testDispatcher) {
         viewModel.trySendAction(LoginAction.UsernameChanged("alice"))
         advanceUntilIdle()
         assertEquals("alice", viewModel.stateFlow.value.username)
@@ -91,7 +83,7 @@ class LoginViewModelTest {
      * Tests that the password input updates the ViewModel state correctly.
      */
     @Test
-    fun loginViewModel_PasswordChanged_UpdatesPasswordState() = runTest(testDispatcher) {
+    fun givenPasswordInput_whenPasswordChanged_thenStateUpdated() = runTest(testDispatcher) {
         viewModel.trySendAction(LoginAction.PasswordChanged("secret"))
         advanceUntilIdle()
         assertEquals("secret", viewModel.stateFlow.value.password)
@@ -101,7 +93,7 @@ class LoginViewModelTest {
      * Tests the toggle password visibility logic.
      */
     @Test
-    fun loginViewModel_TogglePasswordVisibility_UpdatesVisibilityState() = runTest(testDispatcher) {
+    fun whenTogglePasswordVisibility_thenVisibilityStateUpdated() = runTest(testDispatcher) {
         assertFalse(viewModel.stateFlow.value.isPasswordVisible)
 
         viewModel.trySendAction(LoginAction.TogglePasswordVisibility)
@@ -119,13 +111,27 @@ class LoginViewModelTest {
      * Uses [everySuspend] to mock suspend call and [verifySuspend] to verify usage.
      */
     @Test
-    fun loginViewModel_CorrectCredentials_ShowsNoError() = runTest(testDispatcher) {
+    fun givenCorrectCredentials_whenLoginClicked_thenNoErrorShown() = runTest(testDispatcher) {
         /*
          * Mocks the LoginUseCase to return a successful user info when invoked.
          */
         everySuspend {
             loginUseCase.invoke("Mifos", "MifosPassword")
-        } returns DataState.Success(fakeUserInfo)
+        } returns DataState.Success(
+            UserInfo(
+                userId = 1,
+                username = "abc",
+                base64EncodedAuthenticationKey = "fake-auth-key",
+                authenticated = true,
+                officeId = 1,
+                officeName = "Main Office",
+                roles = emptyList(),
+                permissions = emptyList(),
+                clients = listOf(1),
+                shouldRenewPassword = false,
+                isTwoFactorAuthenticationRequired = false,
+            ),
+        )
 
         viewModel.trySendAction(LoginAction.UsernameChanged("Mifos"))
         viewModel.trySendAction(LoginAction.PasswordChanged("MifosPassword"))
@@ -143,15 +149,11 @@ class LoginViewModelTest {
         assertNull(viewModel.stateFlow.value.dialogState)
     }
 
-    // --------------------------------------------------------------------------
-    // Error Path Tests
-    // --------------------------------------------------------------------------
-
     /**
      * Tests that incorrect credentials show an error dialog with appropriate message.
      */
     @Test
-    fun loginViewModel_IncorrectCredentials_ShowsErrorDialog() = runTest(testDispatcher) {
+    fun givenIncorrectCredentials_whenLoginClicked_thenErrorDialogShown() = runTest(testDispatcher) {
         /*
          * Mocks the LoginUseCase to return DataState.Error for wrong credentials.
          */

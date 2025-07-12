@@ -24,7 +24,7 @@ import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import org.mifospay.core.common.DataState
 import org.mifospay.core.data.repository.SearchRepository
-import org.mifospay.feature.auth.fakes.fakeSearchResult
+import org.mifospay.core.model.search.SearchResult
 import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test
@@ -52,15 +52,11 @@ class MobileVerificationViewModelTest {
         Dispatchers.resetMain()
     }
 
-    // --------------------------------------------------------------------------
-    // Success Path Tests
-    // --------------------------------------------------------------------------
-
     /**
      * Tests that the ViewModel updates the state when the user enters a new phone number.
      */
     @Test
-    fun mobileVerificationViewModel_PhoneNoChanged_StateUpdated() = runTest(testDispatcher) {
+    fun givenPhoneNumber_whenPhoneNumberChanged_thenStateIsUpdated() = runTest(testDispatcher) {
         val newPhone = "9876543210"
         viewModel.trySendAction(MobileVerificationAction.PhoneNoChanged(newPhone))
         advanceUntilIdle()
@@ -72,7 +68,7 @@ class MobileVerificationViewModelTest {
      * Tests that a valid phone number not found in the system triggers a transition to OTP entry.
      */
     @Test
-    fun mobileVerificationViewModel_ValidPhoneNumber_TransitionsToOtpStateWithSameNumber() =
+    fun givenValidPhoneNumberNotInSystem_whenVerifyPhoneClicked_thenTransitionToOtpState() =
         runTest(testDispatcher) {
             val validPhoneNumber = "9876543210"
 
@@ -105,15 +101,11 @@ class MobileVerificationViewModelTest {
             )
         }
 
-    // --------------------------------------------------------------------------
-    // Error Path Tests
-    // --------------------------------------------------------------------------
-
     /**
      * Tests that entering an invalid phone number results in an error dialog.
      */
     @Test
-    fun mobileVerificationViewModel_InvalidPhoneNumber_ErrorDialogState() =
+    fun givenInvalidPhoneNumber_whenVerifyPhoneClicked_thenErrorDialogShown() =
         runTest(testDispatcher) {
             val invalidPhoneNo = "123"
 
@@ -131,7 +123,7 @@ class MobileVerificationViewModelTest {
      * Tests that entering a phone number that already exists shows an error dialog.
      */
     @Test
-    fun mobileVerificationViewModel_PhoneNumberAlreadyExists_ErrorDialogState() =
+    fun givenExistingPhoneNumber_whenVerifyPhoneClicked_thenErrorDialogShown() =
         runTest(testDispatcher) {
             val existingPhoneNumber = "1234567890"
 
@@ -144,7 +136,18 @@ class MobileVerificationViewModelTest {
                     any(),
                     any(),
                 )
-            } returns DataState.Success(data = listOf(fakeSearchResult))
+            } returns DataState.Success(
+                data = listOf(
+                    SearchResult(
+                        entityId = 1,
+                        entityAccountNo = "123",
+                        entityName = "SameUserName",
+                        entityType = "savings",
+                        parentId = 1,
+                        parentName = "smith",
+                    ),
+                ),
+            )
 
             viewModel.trySendAction(MobileVerificationAction.PhoneNoChanged(existingPhoneNumber))
             viewModel.trySendAction(MobileVerificationAction.VerifyPhoneBtnClicked)

@@ -32,7 +32,7 @@ import org.mifospay.core.data.repository.AssetRepository
 import org.mifospay.core.data.repository.ClientRepository
 import org.mifospay.core.data.repository.SearchRepository
 import org.mifospay.core.data.repository.UserRepository
-import org.mifospay.feature.auth.fakes.fakeSearchResult
+import org.mifospay.core.model.search.SearchResult
 import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test
@@ -54,6 +54,15 @@ class SignUpViewModelTest {
     }
 
     private lateinit var viewModel: SignupViewModel
+
+    private val fakeSearchResult = SearchResult(
+        entityId = 1,
+        entityAccountNo = "123",
+        entityName = "SameUserName",
+        entityType = "savings",
+        parentId = 1,
+        parentName = "smith",
+    )
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @BeforeTest
@@ -87,15 +96,11 @@ class SignUpViewModelTest {
         Dispatchers.resetMain()
     }
 
-    // --------------------------------------------------------------------------
-    // Success Path Tests
-    // --------------------------------------------------------------------------
-
     /**
      * Ensures the first name is updated in the state when user inputs it.
      */
     @Test
-    fun signupViewModel_FirstNameInputChange_FirstNameUpdated() = runTest(testDispatcher) {
+    fun givenFirstName_whenInputChanged_thenFirstNameIsUpdated() = runTest(testDispatcher) {
         val firstName = "John"
         viewModel.trySendAction(SignUpAction.FirstNameInputChange(firstName))
         advanceUntilIdle()
@@ -106,7 +111,7 @@ class SignUpViewModelTest {
      * Ensures the last name is updated in the state when user inputs it.
      */
     @Test
-    fun signupViewModel_LastNameInputChange_LastNameUpdated() = runTest(testDispatcher) {
+    fun givenLastName_whenInputChanged_thenLastNameIsUpdated() = runTest(testDispatcher) {
         val lastName = "Doe"
         viewModel.trySendAction(SignUpAction.LastNameInputChange(lastName))
         advanceUntilIdle()
@@ -117,7 +122,7 @@ class SignUpViewModelTest {
      * Ensures the username is updated in the state.
      */
     @Test
-    fun signupViewModel_UserNameInputChange_UserNameUpdated() = runTest(testDispatcher) {
+    fun givenUsername_whenInputChanged_thenUsernameIsUpdated() = runTest(testDispatcher) {
         val username = "john_doe"
         viewModel.trySendAction(SignUpAction.UserNameInputChange(username))
         advanceUntilIdle()
@@ -128,7 +133,7 @@ class SignUpViewModelTest {
      * Verifies the email input updates the corresponding state.
      */
     @Test
-    fun signupViewModel_EmailInputChange_EmailUpdated() = runTest(testDispatcher) {
+    fun givenEmail_whenInputChanged_thenEmailIsUpdated() = runTest(testDispatcher) {
         val email = "john@example.com"
         viewModel.trySendAction(SignUpAction.EmailInputChange(email))
         advanceUntilIdle()
@@ -139,7 +144,7 @@ class SignUpViewModelTest {
      * Confirms the mobile number field updates properly in the state.
      */
     @Test
-    fun signupViewModel_MobileNumberInputChange_MobileNumberUpdated() = runTest(testDispatcher) {
+    fun givenMobileNumber_whenInputChanged_thenMobileNumberIsUpdated() = runTest(testDispatcher) {
         val mobile = "9876543210"
         viewModel.trySendAction(SignUpAction.MobileNumberInputChange(mobile))
         advanceUntilIdle()
@@ -150,7 +155,7 @@ class SignUpViewModelTest {
      * Ensures password field gets updated on input.
      */
     @Test
-    fun signupViewModel_PasswordInputChange_PasswordUpdated() = runTest(testDispatcher) {
+    fun givenPassword_whenInputChanged_thenPasswordIsUpdated() = runTest(testDispatcher) {
         val password = "Test@1234"
         viewModel.trySendAction(SignUpAction.PasswordInputChange(password))
         advanceUntilIdle()
@@ -161,7 +166,7 @@ class SignUpViewModelTest {
      * Ensures confirm password field gets updated on input.
      */
     @Test
-    fun signupViewModel_ConfirmPasswordInputChange_ConfirmPasswordUpdated() =
+    fun givenConfirmPassword_whenInputChanged_thenConfirmPasswordIsUpdated() =
         runTest(testDispatcher) {
             val confirmPassword = "Test@1234"
             viewModel.trySendAction(SignUpAction.ConfirmPasswordInputChange(confirmPassword))
@@ -173,7 +178,7 @@ class SignUpViewModelTest {
      * Verifies Address Line 1 updates correctly.
      */
     @Test
-    fun signupViewModel_AddressLine1InputChange_AddressLine1Updated() = runTest(testDispatcher) {
+    fun givenAddressLine1_whenInputChanged_thenAddressLine1IsUpdated() = runTest(testDispatcher) {
         val address1 = "123 Main Street"
         viewModel.trySendAction(SignUpAction.AddressLine1InputChange(address1))
         advanceUntilIdle()
@@ -184,7 +189,7 @@ class SignUpViewModelTest {
      * Verifies Address Line 2 updates correctly.
      */
     @Test
-    fun signupViewModel_AddressLine2InputChange_AddressLine2Updated() = runTest(testDispatcher) {
+    fun givenAddressLine2_whenInputChanged_thenAddressLine2IsUpdated() = runTest(testDispatcher) {
         val address2 = "Suite 456"
         viewModel.trySendAction(SignUpAction.AddressLine2InputChange(address2))
         advanceUntilIdle()
@@ -195,7 +200,7 @@ class SignUpViewModelTest {
      * Checks the pincode input updates its field correctly.
      */
     @Test
-    fun signupViewModel_PinCodeInputChange_PinCodeUpdated() = runTest(testDispatcher) {
+    fun givenPinCode_whenInputChanged_thenPinCodeIsUpdated() = runTest(testDispatcher) {
         val pincode = "56000"
         viewModel.trySendAction(SignUpAction.PinCodeInputChange(pincode))
         advanceUntilIdle()
@@ -206,7 +211,7 @@ class SignUpViewModelTest {
      * Ensures country change updates the country field and resets the state field.
      */
     @Test
-    fun signupViewModel_CountryInputChange_CountryUpdatedAndStateReset() = runTest(testDispatcher) {
+    fun givenCountry_whenInputChanged_thenCountryIsUpdatedAndStateReset() = runTest(testDispatcher) {
         val country = "USA"
         viewModel.trySendAction(SignUpAction.CountryInputChange(country))
         advanceUntilIdle()
@@ -218,7 +223,7 @@ class SignUpViewModelTest {
      * Ensures the selected state updates correctly in the ViewModel state.
      */
     @Test
-    fun signupViewModel_StateInputChange_StateUpdated() = runTest(testDispatcher) {
+    fun givenState_whenInputChanged_thenStateIsUpdated() = runTest(testDispatcher) {
         val state = "KA"
         viewModel.trySendAction(SignUpAction.StateInputChange(state))
         advanceUntilIdle()
@@ -231,7 +236,7 @@ class SignUpViewModelTest {
      * Includes verification of call to [mockAssetRepository.getCountriesWithStates]
      */
     @Test
-    fun signupViewModel_StatesForSelectedCountry_ReturnsExpectedStates() = runTest(testDispatcher) {
+    fun givenCountrySelected_whenFetchingStates_thenReturnExpectedStates() = runTest(testDispatcher) {
         viewModel.trySendAction(SignUpAction.CountryInputChange("Afghanistan"))
         advanceUntilIdle()
 
@@ -253,7 +258,7 @@ class SignUpViewModelTest {
      * - Ensuring no error dialog is shown at the end.
      */
     @Test
-    fun signUpViewModel_SuccessfulSubmission_CreatesUserAndClient() = runTest(testDispatcher) {
+    fun givenValidInputs_whenSubmitClicked_thenUserAndClientAreCreatedSuccessfully() = runTest(testDispatcher) {
         /* Mock the SearchRepository to simulate that both the entered username and mobile number are available.
          * This means the backend did not find any existing user or client with the provided credentials,
          * so it returns an empty list, indicating no conflicts.
@@ -306,10 +311,6 @@ class SignUpViewModelTest {
         assertNull(viewModel.stateFlow.value.dialogState)
     }
 
-    // --------------------------------------------------------------------------
-    // Error Path Tests
-    // --------------------------------------------------------------------------
-
     /**
      * Tests that if the entered username already exists, the ViewModel shows an error dialog.
      *
@@ -317,7 +318,7 @@ class SignUpViewModelTest {
      * a username that is already taken.
      */
     @Test
-    fun signUpViewModel_UsernameAlreadyExists_ShowsErrorDialog() = runTest(testDispatcher) {
+    fun givenExistingUsername_whenSubmitClicked_thenErrorDialogShown() = runTest(testDispatcher) {
         /* Mocks searchResources to return a result indicating the username or mobile already exists.
          * This simulates the backend identifying a duplicate username during the signup process.
          */
@@ -361,7 +362,7 @@ class SignUpViewModelTest {
      * This ensures the UI prevents duplicate registrations using an already registered mobile number.
      */
     @Test
-    fun signUpViewModel_MobileNumberAlreadyExists_ShowsErrorDialog() = runTest(testDispatcher) {
+    fun givenExistingMobileNumber_whenSubmitClicked_thenErrorDialogShown() = runTest(testDispatcher) {
         /*
          * Mocks searchResources to return a result indicating the username or mobile already exists.
          * Specifically simulates a conflict on the mobile number while keeping the username valid.
@@ -412,7 +413,7 @@ class SignUpViewModelTest {
      * This validates the system's ability to detect and handle multiple field conflicts in one go.
      */
     @Test
-    fun signUpViewModel_UsernameAndMobileAlreadyExist_ShowsCombinedErrorDialog() =
+    fun givenExistingUsernameAndMobileNumber_whenSubmitClicked_thenErrorDialogShown() =
         runTest(testDispatcher) {
             /* Mocks searchResources to return a result showing both username and mobile are taken.
              * This covers the scenario where a new user attempts to register with fully duplicated credentials.
@@ -456,7 +457,7 @@ class SignUpViewModelTest {
      * the ViewModel responds with a validation error dialog.
      */
     @Test
-    fun signUpViewModel_FirstNameMissing_ShowsFirstNameRequiredError() = runTest(testDispatcher) {
+    fun givenMissingFirstName_whenSubmitClicked_thenErrorDialogShown() = runTest(testDispatcher) {
         viewModel.trySendAction(SignUpAction.SubmitClick)
         advanceUntilIdle()
         assertTrue(viewModel.stateFlow.value.dialogState is SignUpState.DialogState.Error)
@@ -466,7 +467,7 @@ class SignUpViewModelTest {
      * Tests that a missing last name triggers a required field error dialog.
      */
     @Test
-    fun signUpViewModel_LastNameMissing_ShowsLastNameRequiredError() = runTest(testDispatcher) {
+    fun givenMissingLastName_whenSubmitClicked_thenErrorDialogShown() = runTest(testDispatcher) {
         enterFirstName()
         viewModel.trySendAction(SignUpAction.SubmitClick)
         advanceUntilIdle()
@@ -477,7 +478,7 @@ class SignUpViewModelTest {
      * Tests that a missing username triggers a required field error dialog.
      */
     @Test
-    fun signUpViewModel_UsernameMissing_ShowsUsernameRequiredError() = runTest(testDispatcher) {
+    fun givenMissingUsername_whenSubmitClicked_thenErrorDialogShown() = runTest(testDispatcher) {
         enterLastName()
         viewModel.trySendAction(SignUpAction.SubmitClick)
         advanceUntilIdle()
@@ -488,7 +489,7 @@ class SignUpViewModelTest {
      * Tests that a missing email triggers a required field error dialog.
      */
     @Test
-    fun signUpViewModel_EmailMissing_ShowsEmailRequiredError() = runTest(testDispatcher) {
+    fun givenMissingEmail_whenSubmitClicked_thenErrorDialogShown() = runTest(testDispatcher) {
         enterUserName()
         viewModel.trySendAction(SignUpAction.SubmitClick)
         advanceUntilIdle()
@@ -499,7 +500,7 @@ class SignUpViewModelTest {
      * Tests that an invalid email format leads to a validation error.
      */
     @Test
-    fun signUpViewModel_InvalidEmail_ShowsInvalidEmailError() = runTest(testDispatcher) {
+    fun givenInvalidEmailFormat_whenSubmitClicked_thenErrorDialogShown() = runTest(testDispatcher) {
         enterUserName()
         viewModel.trySendAction(SignUpAction.EmailInputChange("not-an-email"))
 
@@ -513,7 +514,7 @@ class SignUpViewModelTest {
      * Tests that an empty mobile number field shows a required field error.
      */
     @Test
-    fun signUpViewModel_MobileNumberMissing_ShowsMobileNumberRequiredError() =
+    fun givenMissingMobileNumber_whenSubmitClicked_thenErrorDialogShown() =
         runTest(testDispatcher) {
             enterEmail()
             viewModel.trySendAction(SignUpAction.SubmitClick)
@@ -525,7 +526,7 @@ class SignUpViewModelTest {
      * Tests that entering a short (invalid) mobile number triggers an error.
      */
     @Test
-    fun signUpViewModel_ShortMobileNumber_ShowsMobileInvalidError() = runTest(testDispatcher) {
+    fun givenShortMobileNumber_whenSubmitClicked_thenErrorDialogShown() = runTest(testDispatcher) {
         enterEmail()
         viewModel.trySendAction(SignUpAction.MobileNumberInputChange("12345"))
 
@@ -539,7 +540,7 @@ class SignUpViewModelTest {
      * Tests that a missing password results in a required field error dialog.
      */
     @Test
-    fun signUpViewModel_PasswordMissing_ShowsPasswordRequiredError() = runTest(testDispatcher) {
+    fun givenMissingPassword_whenSubmitClicked_thenErrorDialogShown() = runTest(testDispatcher) {
         enterMobileNumber()
         viewModel.trySendAction(SignUpAction.SubmitClick)
         advanceUntilIdle()
@@ -550,7 +551,7 @@ class SignUpViewModelTest {
      * Tests that if confirm password is not entered, an error dialog is shown.
      */
     @Test
-    fun signUpViewModel_ConfirmPasswordMissing_ShowsConfirmPasswordRequiredError() =
+    fun givenMissingConfirmPassword_whenSubmitClicked_thenErrorDialogShown() =
         runTest(testDispatcher) {
             enterPassword()
             viewModel.trySendAction(SignUpAction.SubmitClick)
@@ -562,7 +563,7 @@ class SignUpViewModelTest {
      * Tests that a mismatch between password and confirm password triggers an error.
      */
     @Test
-    fun signUpViewModel_PasswordMismatch_ShowsMismatchError() = runTest(testDispatcher) {
+    fun givenPasswordMismatch_whenSubmitClicked_thenErrorDialogShown() = runTest(testDispatcher) {
         enterPassword()
         viewModel.trySendAction(SignUpAction.ConfirmPasswordInputChange("DifferentPassword"))
 
@@ -575,7 +576,7 @@ class SignUpViewModelTest {
      * Tests that missing Address Line 1 results in a validation error dialog.
      */
     @Test
-    fun signUpViewModel_AddressLine1Missing_ShowsAddressLine1RequiredError() =
+    fun givenMissingAddressLine1_whenSubmitClicked_thenErrorDialogShown() =
         runTest(testDispatcher) {
             enterConfirmPassword()
             viewModel.trySendAction(SignUpAction.SubmitClick)
@@ -587,7 +588,7 @@ class SignUpViewModelTest {
      * Tests that missing Address Line 2 triggers a required field error.
      */
     @Test
-    fun signUpViewModel_AddressLine2Missing_ShowsAddressLine2RequiredError() =
+    fun givenMissingAddressLine2_whenSubmitClicked_thenErrorDialogShown() =
         runTest(testDispatcher) {
             enterAddressLine1()
             viewModel.trySendAction(SignUpAction.SubmitClick)
@@ -599,7 +600,7 @@ class SignUpViewModelTest {
      * Tests that missing pincode results in a validation error message.
      */
     @Test
-    fun signUpViewModel_PinCodeMissing_ShowsPinCodeRequiredError() = runTest(testDispatcher) {
+    fun givenMissingPinCode_whenSubmitClicked_thenErrorDialogShown() = runTest(testDispatcher) {
         enterAddressLine2()
         viewModel.trySendAction(SignUpAction.SubmitClick)
         advanceUntilIdle()
@@ -610,7 +611,7 @@ class SignUpViewModelTest {
      * Tests that not selecting a country during sign-up shows a required field error.
      */
     @Test
-    fun signUpViewModel_CountryMissing_ShowsCountryRequiredError() = runTest(testDispatcher) {
+    fun givenMissingCountry_whenSubmitClicked_thenErrorDialogShown() = runTest(testDispatcher) {
         enterPinCode()
         viewModel.trySendAction(SignUpAction.SubmitClick)
         advanceUntilIdle()
@@ -621,16 +622,12 @@ class SignUpViewModelTest {
      * Tests that not selecting a state results in an error dialog.
      */
     @Test
-    fun signUpViewModel_StateMissing_ShowsStateRequiredError() = runTest(testDispatcher) {
+    fun givenMissingState_whenSubmitClicked_thenErrorDialogShown() = runTest(testDispatcher) {
         enterCountry()
         viewModel.trySendAction(SignUpAction.SubmitClick)
         advanceUntilIdle()
         assertTrue(viewModel.stateFlow.value.dialogState is SignUpState.DialogState.Error)
     }
-
-    // ------------------------------------------------------------
-    // Helpers
-    // ------------------------------------------------------------
 
     /**
      * Fills in savings account number, business name, and first name.
