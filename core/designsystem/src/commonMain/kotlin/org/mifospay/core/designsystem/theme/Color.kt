@@ -9,8 +9,6 @@
  */
 package org.mifospay.core.designsystem.theme
 
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 
 val primaryLight = Color(0xFF0673BA)
@@ -84,12 +82,3 @@ val surfaceContainerLowDark = Color(0xFF181C20)
 val surfaceContainerDark = Color(0xFF1C2025)
 val surfaceContainerHighDark = Color(0xFF272A2F)
 val surfaceContainerHighestDark = Color(0xFF32353A)
-
-object NewUi {
-    val walletColor1: Color
-        @Composable
-        get() = MaterialTheme.colorScheme.primary
-    val walletColor2: Color
-        @Composable
-        get() = MaterialTheme.colorScheme.secondary
-}

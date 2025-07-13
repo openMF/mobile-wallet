@@ -96,7 +96,6 @@ import org.mifospay.core.designsystem.component.scrollbar.DraggableScrollbar
 import org.mifospay.core.designsystem.component.scrollbar.rememberDraggableScroller
 import org.mifospay.core.designsystem.component.scrollbar.scrollbarState
 import org.mifospay.core.designsystem.icon.MifosIcons
-import org.mifospay.core.designsystem.theme.NewUi
 import org.mifospay.core.model.account.Account
 import org.mifospay.core.ui.ErrorScreenContent
 import org.mifospay.core.ui.MifosSmallChip
@@ -336,8 +335,8 @@ private fun AccountCard(
     onMarkAsDefault: (Long, String) -> Unit,
     modifier: Modifier = Modifier,
     onClick: (Long) -> Unit,
-    gradientStartColor: Color = NewUi.walletColor1,
-    gradientEndColor: Color = NewUi.walletColor2,
+    gradientStartColor: Color = MaterialTheme.colorScheme.primary,
+    gradientEndColor: Color = MaterialTheme.colorScheme.secondary,
 ) {
     val brush = remember {
         Brush.linearGradient(
