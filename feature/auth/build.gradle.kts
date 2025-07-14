@@ -53,5 +53,9 @@ kotlin {
 
             implementation(libs.play.services.auth)
         }
+
+        commonTest.dependencies {
+            implementation(libs.turbine)
+        }
     }
 }

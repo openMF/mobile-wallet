@@ -10,6 +10,7 @@
 package org.mifospay.feature.auth.signup
 
 import androidx.lifecycle.SavedStateHandle
+import app.cash.turbine.test
 import dev.mokkery.answering.returns
 import dev.mokkery.everySuspend
 import dev.mokkery.matcher.any
@@ -305,10 +306,87 @@ class SignUpViewModelTest {
             mockSearchRepository.searchResources("9876543210", any(), any())
             mockUserRepository.createUser(any())
             mockClientRepository.createClient(any())
-            mockUserRepository.assignClientToUser(any(), any())
+            mockUserRepository.assignClientToUser(123, 456)
         }
 
         assertNull(viewModel.stateFlow.value.dialogState)
+    }
+
+    /**
+     * Tests a complete and successful signup process:
+     *
+     * - Verifies that both username and mobile number pass uniqueness checks.
+     * - Ensures user and client are created successfully.
+     * - Confirms the client is assigned to the user.
+     * - Validates the emitted events:
+     *   - A toast message confirming signup success.
+     *   - A navigation event redirecting the user to the login screen.
+     */
+    @Test
+    fun givenValidInputs_whenSignUpSucceeds_thenShowToastAndNavigateToLogin() = runTest {
+        /* Mock the SearchRepository to simulate that both the entered username and mobile number are available.
+         * This means the backend did not find any existing user or client with the provided credentials,
+         * so it returns an empty list, indicating no conflicts.
+         * This sets up the scenario for a successful registration flow.
+         */
+        everySuspend {
+            mockSearchRepository.searchResources(
+                or(eq("john_doe"), eq("9876543210")),
+                any(),
+                any(),
+            )
+        } returns DataState.Success(emptyList())
+
+        // Mock user creation
+        everySuspend { mockUserRepository.createUser(any()) } returns DataState.Success(101)
+
+        // Mock client creation
+        everySuspend { mockClientRepository.createClient(any()) } returns DataState.Success(202)
+
+        // Mock client-user assignment
+        everySuspend { mockUserRepository.assignClientToUser(101, 202) } returns DataState.Success(Unit)
+
+        enterAllFields()
+
+        viewModel.trySendAction(SignUpAction.SubmitClick)
+        advanceUntilIdle()
+
+        // Verify that all critical suspend calls were made as expected
+        verifySuspend {
+            mockSearchRepository.searchResources("john_doe", any(), any())
+            mockSearchRepository.searchResources("9876543210", any(), any())
+            mockUserRepository.createUser(any())
+            mockClientRepository.createClient(any())
+            mockUserRepository.assignClientToUser(any(), any())
+        }
+
+        viewModel.eventFlow.test {
+            // Assert: Show toast
+            val toastEvent = awaitItem()
+            assertTrue(toastEvent is SignUpEvent.ShowToast)
+            assertEquals("Mock String", toastEvent.message)
+
+            // Assert: Navigate to login
+            val navigationEvent = awaitItem()
+            assertTrue(navigationEvent is SignUpEvent.NavigateToLogin)
+            assertEquals("john_doe", navigationEvent.username)
+        }
+    }
+
+    /**
+     * Tests that when the user clicks the close button during signup,
+     * the ViewModel emits a [SignUpEvent.NavigateBack] event to trigger back navigation.
+     */
+    @Test
+    fun whenCloseClicked_thenNavigateBackEventEmitted() = runTest {
+        viewModel.eventFlow.test {
+            // Act: simulate clicking the close/back button
+            viewModel.trySendAction(SignUpAction.CloseClick)
+
+            // Assert: the viewModel emits a NavigateBack event
+            val event = awaitItem()
+            assertTrue(event is SignUpEvent.NavigateBack)
+        }
     }
 
     /**

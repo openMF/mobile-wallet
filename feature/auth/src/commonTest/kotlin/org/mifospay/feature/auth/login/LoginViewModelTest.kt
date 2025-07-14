@@ -8,6 +8,7 @@
  * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
  */
 import androidx.lifecycle.SavedStateHandle
+import app.cash.turbine.test
 import dev.mokkery.answering.returns
 import dev.mokkery.everySuspend
 import dev.mokkery.mock
@@ -24,6 +25,7 @@ import org.mifospay.core.common.DataState
 import org.mifospay.core.domain.LoginUseCase
 import org.mifospay.core.model.user.UserInfo
 import org.mifospay.feature.auth.login.LoginAction
+import org.mifospay.feature.auth.login.LoginEvent
 import org.mifospay.feature.auth.login.LoginState
 import org.mifospay.feature.auth.login.LoginViewModel
 import kotlin.test.AfterTest
@@ -177,5 +179,57 @@ class LoginViewModelTest {
         val dialog = viewModel.stateFlow.value.dialogState
         assertIs<LoginState.DialogState.Error>(dialog)
         assertEquals("Invalid Credentials", dialog.message)
+    }
+
+    /**
+     * Tests that signup click triggers navigation to signup screen.
+     */
+    @Test
+    fun whenSignupClicked_thenNavigateToSignupEventEmitted() = runTest {
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(LoginAction.SignupClicked)
+            assertIs<LoginEvent.NavigateToSignup>(awaitItem())
+        }
+    }
+
+    /**
+     * Tests that successful login triggers navigation to passcode screen.
+     */
+    @Test
+    fun givenCorrectCredentials_whenLoginSucceeds_thenNavigateToPasscodeScreenEmitted() = runTest {
+        everySuspend {
+            loginUseCase.invoke("validUser", "validPass")
+        } returns DataState.Success(
+            UserInfo(
+                userId = 1,
+                username = "validUser",
+                base64EncodedAuthenticationKey = "auth",
+                authenticated = true,
+                officeId = 1,
+                officeName = "HQ",
+                roles = emptyList(),
+                permissions = emptyList(),
+                clients = listOf(1),
+                shouldRenewPassword = false,
+                isTwoFactorAuthenticationRequired = false,
+            ),
+        )
+
+        viewModel.trySendAction(LoginAction.UsernameChanged("validUser"))
+        viewModel.trySendAction(LoginAction.PasswordChanged("validPass"))
+        viewModel.trySendAction(LoginAction.LoginClicked)
+        advanceUntilIdle()
+
+        /*
+         * Verifies that loginUseCase was invoked with the correct credentials.
+         */
+        verifySuspend {
+            loginUseCase.invoke("validUser", "validPass")
+        }
+
+        viewModel.eventFlow.test {
+            // Expect NavigateToPasscodeScreen after successful login
+            assertTrue(awaitItem() is LoginEvent.NavigateToPasscodeScreen)
+        }
     }
 }
