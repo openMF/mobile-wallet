@@ -75,6 +75,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.launch
 import mobile_wallet.feature.home.generated.resources.Res
+import mobile_wallet.feature.home.generated.resources.account_type
 import mobile_wallet.feature.home.generated.resources.arrow_backward
 import mobile_wallet.feature.home.generated.resources.arrow_up
 import mobile_wallet.feature.home.generated.resources.coin_image
@@ -109,6 +110,7 @@ import org.mifospay.core.ui.ErrorScreenContent
 import org.mifospay.core.ui.MifosSmallChip
 import org.mifospay.core.ui.TransactionHistoryCard
 import org.mifospay.core.ui.utils.EventsEffect
+import kotlin.contracts.contract
 
 /*
  * Feature Enhancement
@@ -146,7 +148,7 @@ internal fun HomeScreen(
             is HomeEvent.NavigateToTransactionScreen -> {}
             is HomeEvent.ShowToast -> {
                 scope.launch {
-                    snackbarState.showSnackbar(event.message.toString())
+                    snackbarState.showSnackbar("${event.message}")
                 }
             }
 
@@ -379,7 +381,7 @@ private fun AccountCard(
             ) {
                 Column {
                     Text(
-                        text = "Account Type",
+                        text = stringResource(Res.string.account_type),
                         fontWeight = FontWeight(300),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.surface,

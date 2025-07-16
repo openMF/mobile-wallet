@@ -23,6 +23,7 @@
     <string name="send">Send</string>
     <string name="send_money">Send Money</string>
     <string name="coin_image">Coin</string>
+    <string name="account_type">Account type</string>
 
 
     /* HomeScreenViewModel */
