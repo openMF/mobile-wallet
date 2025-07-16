@@ -13,6 +13,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import androidx.core.content.FileProvider
+import co.touchlab.kermit.Logger
 import io.github.vinceglb.filekit.FileKit
 import io.github.vinceglb.filekit.ImageFormat
 import io.github.vinceglb.filekit.compressImage
@@ -78,19 +79,21 @@ actual object ShareUtils {
     actual suspend fun shareFile(file: ShareFileModel) {
         val context = activityProvider.invoke().application.baseContext
 
-        runCatching {
+        try {
             withContext(Dispatchers.IO) {
                 val compressedBytes = if (file.mime == MimeType.IMAGE) {
                     compressImage(file.bytes)
                 } else {
                     file.bytes
                 }
+
                 val savedFile = saveFile(file.fileName, compressedBytes, context = context)
                 val uri = FileProvider.getUriForFile(
                     context,
                     "${context.packageName}.provider",
                     savedFile,
                 )
+
                 withContext(Dispatchers.Main) {
                     val intent = Intent(Intent.ACTION_SEND).apply {
                         putExtra(Intent.EXTRA_STREAM, uri)
@@ -102,6 +105,9 @@ actual object ShareUtils {
                     activityProvider.invoke().startActivity(chooser)
                 }
             }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Logger.e(e) { "Failed to share file: ${e.message}" }
         }
     }
 

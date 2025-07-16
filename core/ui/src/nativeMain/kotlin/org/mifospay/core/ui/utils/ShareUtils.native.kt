@@ -9,6 +9,7 @@
  */
 package org.mifospay.core.ui.utils
 
+import co.touchlab.kermit.Logger
 import io.github.vinceglb.filekit.FileKit
 import io.github.vinceglb.filekit.ImageFormat
 import io.github.vinceglb.filekit.compressImage
@@ -57,7 +58,7 @@ actual object ShareUtils {
      * @param file A [ShareFileModel] containing the file to be shared.
      */
     actual suspend fun shareFile(file: ShareFileModel) {
-        runCatching {
+        try {
             val url = withContext(Dispatchers.IO) {
                 val compressedBytes = if (file.mime == MimeType.IMAGE) {
                     compressImage(file.bytes)
@@ -72,6 +73,9 @@ actual object ShareUtils {
                 animated = true,
                 completion = null,
             )
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Logger.e(e) { "Failed to share file: ${e.message}" }
         }
     }
 
