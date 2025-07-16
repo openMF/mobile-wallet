@@ -61,7 +61,6 @@ import mobile_wallet.feature.send_money.generated.resources.feature_send_money_c
 import mobile_wallet.feature.send_money.generated.resources.feature_send_money_error_account_cannot_be_empty
 import mobile_wallet.feature.send_money.generated.resources.feature_send_money_error_amount_cannot_be_empty
 import mobile_wallet.feature.send_money.generated.resources.feature_send_money_error_invalid_amount
-import mobile_wallet.feature.send_money.generated.resources.feature_send_money_error_requesting_payment_qr_but_found
 import mobile_wallet.feature.send_money.generated.resources.feature_send_money_loading
 import mobile_wallet.feature.send_money.generated.resources.feature_send_money_no_accounts_found
 import mobile_wallet.feature.send_money.generated.resources.feature_send_money_oops
@@ -511,16 +510,11 @@ private fun SendMoneyDialogs(
 ) {
     when (dialogState) {
         is SendMoneyState.DialogState.Error -> {
-            val resolvedMessage = when (dialogState.key) {
-                Strings.ERROR_AMOUNT_EMPTY -> stringResource(Res.string.feature_send_money_error_amount_cannot_be_empty)
-                Strings.ERROR_INVALID_AMOUNT -> stringResource(Res.string.feature_send_money_error_invalid_amount)
-                Strings.ERROR_ACCOUNT_EMPTY -> stringResource(Res.string.feature_send_money_error_account_cannot_be_empty)
-                Strings.ERROR_INVALID_QR -> stringResource(
-                    Res.string.feature_send_money_error_requesting_payment_qr_but_found,
-                    *dialogState.args.toTypedArray(),
-                )
-
-                else -> dialogState.key
+            val resolvedMessage = when (dialogState.message) {
+                SendMoneyActionError.ERROR_AMOUNT_EMPTY -> stringResource(Res.string.feature_send_money_error_amount_cannot_be_empty)
+                SendMoneyActionError.ERROR_INVALID_AMOUNT -> stringResource(Res.string.feature_send_money_error_invalid_amount)
+                SendMoneyActionError.ERROR_ACCOUNT_EMPTY -> stringResource(Res.string.feature_send_money_error_account_cannot_be_empty)
+                else -> dialogState.message
             }
 
             MifosBasicDialog(
