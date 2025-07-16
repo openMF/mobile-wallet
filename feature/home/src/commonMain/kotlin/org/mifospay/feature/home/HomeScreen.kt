@@ -89,6 +89,7 @@ import mobile_wallet.feature.home.generated.resources.send_money
 import mobile_wallet.feature.home.generated.resources.start_sending_your_money_tax_free
 import mobile_wallet.feature.home.generated.resources.view_more
 import mobile_wallet.feature.home.generated.resources.wallet_balance
+import org.jetbrains.compose.resources.getString
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.resources.vectorResource
@@ -110,7 +111,6 @@ import org.mifospay.core.ui.ErrorScreenContent
 import org.mifospay.core.ui.MifosSmallChip
 import org.mifospay.core.ui.TransactionHistoryCard
 import org.mifospay.core.ui.utils.EventsEffect
-import kotlin.contracts.contract
 
 /*
  * Feature Enhancement
@@ -148,7 +148,7 @@ internal fun HomeScreen(
             is HomeEvent.NavigateToTransactionScreen -> {}
             is HomeEvent.ShowToast -> {
                 scope.launch {
-                    snackbarState.showSnackbar("${event.message}")
+                    snackbarState.showSnackbar(getString( event.message))
                 }
             }
 
