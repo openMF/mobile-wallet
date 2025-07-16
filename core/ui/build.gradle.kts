@@ -40,7 +40,6 @@ kotlin {
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
             implementation(libs.jb.composeNavigation)
-            implementation(libs.filekit.compose)
             implementation(libs.filekit.core)
         }
         androidInstrumentedTest.dependencies {

@@ -34,8 +34,9 @@ import coil3.ImageLoader
 import coil3.compose.AsyncImage
 import coil3.compose.LocalPlatformContext
 import coil3.request.ImageRequest
-import io.github.vinceglb.filekit.compose.rememberFilePickerLauncher
-import io.github.vinceglb.filekit.core.PickerMode
+import io.github.vinceglb.filekit.dialogs.FileKitMode
+import io.github.vinceglb.filekit.dialogs.compose.rememberFilePickerLauncher
+import io.github.vinceglb.filekit.readBytes
 import kotlinx.coroutines.launch
 import mobile_wallet.feature.profile.generated.resources.Res
 import mobile_wallet.feature.profile.generated.resources.placeholder
@@ -105,33 +106,10 @@ fun EditableProfileImage(
     }
 
     // Pick files from Compose
-    val launcher = rememberFilePickerLauncher(mode = PickerMode.Single) { file ->
+    val launcher = rememberFilePickerLauncher(mode = FileKitMode.Single) { file ->
         scope.launch {
             if (file != null) {
-                bytes = if (file.supportsStreams()) {
-                    val size = file.getSize()
-                    if (size != null && size > 0L) {
-                        val buffer = ByteArray(size.toInt())
-                        val tmpBuffer = ByteArray(1000)
-                        var totalBytesRead = 0
-                        file.getStream().use {
-                            while (it.hasBytesAvailable()) {
-                                val numRead = it.readInto(tmpBuffer, 1000)
-                                tmpBuffer.copyInto(
-                                    buffer,
-                                    destinationOffset = totalBytesRead,
-                                    endIndex = numRead,
-                                )
-                                totalBytesRead += numRead
-                            }
-                        }
-                        buffer
-                    } else {
-                        file.readBytes()
-                    }
-                } else {
-                    file.readBytes()
-                }
+                bytes = file.readBytes()
                 bytes?.let {
                     onChooseImage(Base64.encode(it))
                 }

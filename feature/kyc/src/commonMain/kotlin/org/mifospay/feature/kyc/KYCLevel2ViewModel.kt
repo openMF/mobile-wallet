@@ -11,9 +11,10 @@ package org.mifospay.feature.kyc
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
-import io.github.vinceglb.filekit.core.PlatformFile
-import io.github.vinceglb.filekit.core.baseName
-import io.github.vinceglb.filekit.core.extension
+import io.github.vinceglb.filekit.PlatformFile
+import io.github.vinceglb.filekit.extension
+import io.github.vinceglb.filekit.name
+import io.github.vinceglb.filekit.readBytes
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
@@ -58,7 +59,7 @@ internal class KYCLevel2ViewModel(
                 mutableStateFlow.update {
                     it.copy(
                         file = action.file,
-                        name = action.file.baseName,
+                        name = action.file.name,
                         extension = action.file.extension,
                     )
                 }
@@ -120,32 +121,7 @@ internal class KYCLevel2ViewModel(
         }
 
         viewModelScope.launch {
-            val file = state.file?.let { file ->
-                if (file.supportsStreams()) {
-                    val size = file.getSize()
-                    if (size != null && size > 0L) {
-                        val buffer = ByteArray(size.toInt())
-                        val tmpBuffer = ByteArray(1000)
-                        var totalBytesRead = 0
-                        file.getStream().use {
-                            while (it.hasBytesAvailable()) {
-                                val numRead = it.readInto(tmpBuffer, 1000)
-                                tmpBuffer.copyInto(
-                                    buffer,
-                                    destinationOffset = totalBytesRead,
-                                    endIndex = numRead,
-                                )
-                                totalBytesRead += numRead
-                            }
-                        }
-                        buffer
-                    } else {
-                        file.readBytes()
-                    }
-                } else {
-                    file.readBytes()
-                }
-            }
+            val file = state.file?.readBytes()
 
             file?.let {
                 val result = repository.createDocument(

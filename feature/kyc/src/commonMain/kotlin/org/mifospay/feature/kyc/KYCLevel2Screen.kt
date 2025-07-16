@@ -43,9 +43,10 @@ import coil3.compose.LocalPlatformContext
 import coil3.compose.SubcomposeAsyncImage
 import coil3.compose.SubcomposeAsyncImageContent
 import coil3.compose.rememberAsyncImagePainter
-import io.github.vinceglb.filekit.compose.rememberFilePickerLauncher
-import io.github.vinceglb.filekit.core.PickerMode
-import io.github.vinceglb.filekit.core.PlatformFile
+import io.github.vinceglb.filekit.PlatformFile
+import io.github.vinceglb.filekit.dialogs.FileKitMode
+import io.github.vinceglb.filekit.dialogs.compose.rememberFilePickerLauncher
+import io.github.vinceglb.filekit.readBytes
 import kotlinx.coroutines.launch
 import mobile_wallet.feature.kyc.generated.resources.Res
 import mobile_wallet.feature.kyc.generated.resources.feature_kyc_file_name
@@ -203,36 +204,12 @@ private fun DocumentPicker(
     )
 
     val filePicker = rememberFilePickerLauncher(
-        mode = PickerMode.Single,
+        mode = FileKitMode.Single,
     ) {
         scope.launch {
             it?.let { file ->
                 onChooseDocument(file)
-
-                uploadedImage = if (file.supportsStreams()) {
-                    val size = file.getSize()
-                    if (size != null && size > 0L) {
-                        val buffer = ByteArray(size.toInt())
-                        val tmpBuffer = ByteArray(1000)
-                        var totalBytesRead = 0
-                        file.getStream().use {
-                            while (it.hasBytesAvailable()) {
-                                val numRead = it.readInto(tmpBuffer, 1000)
-                                tmpBuffer.copyInto(
-                                    buffer,
-                                    destinationOffset = totalBytesRead,
-                                    endIndex = numRead,
-                                )
-                                totalBytesRead += numRead
-                            }
-                        }
-                        buffer
-                    } else {
-                        file.readBytes()
-                    }
-                } else {
-                    file.readBytes()
-                }
+                uploadedImage = file.readBytes()
             }
         }
     }
