@@ -76,10 +76,18 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.launch
 import mobile_wallet.feature.home.generated.resources.Res
 import mobile_wallet.feature.home.generated.resources.arrow_backward
+import mobile_wallet.feature.home.generated.resources.arrow_up
 import mobile_wallet.feature.home.generated.resources.coin_image
 import mobile_wallet.feature.home.generated.resources.feature_home_desc
 import mobile_wallet.feature.home.generated.resources.feature_home_loading
+import mobile_wallet.feature.home.generated.resources.mark_default
+import mobile_wallet.feature.home.generated.resources.request
+import mobile_wallet.feature.home.generated.resources.request_money
+import mobile_wallet.feature.home.generated.resources.send
+import mobile_wallet.feature.home.generated.resources.send_money
 import mobile_wallet.feature.home.generated.resources.start_sending_your_money_tax_free
+import mobile_wallet.feature.home.generated.resources.view_more
+import mobile_wallet.feature.home.generated.resources.wallet_balance
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.resources.vectorResource
@@ -138,7 +146,7 @@ internal fun HomeScreen(
             is HomeEvent.NavigateToTransactionScreen -> {}
             is HomeEvent.ShowToast -> {
                 scope.launch {
-                    snackbarState.showSnackbar(event.message)
+                    snackbarState.showSnackbar(event.message.toString())
                 }
             }
 
@@ -423,7 +431,7 @@ private fun AccountCard(
             ) {
                 Column {
                     Text(
-                        text = "Wallet Balance",
+                        text = stringResource(Res.string.wallet_balance),
                         fontWeight = FontWeight(300),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.surface,
@@ -447,7 +455,7 @@ private fun AccountCard(
                         .graphicsLayer(rotationZ = 90f)
                         .padding(4.dp),
                     imageVector = Icons.Filled.KeyboardArrowUp,
-                    contentDescription = "arrow",
+                    contentDescription = stringResource(Res.string.arrow_up),
                     tint = MaterialTheme.colorScheme.surface,
                 )
             }
@@ -473,7 +481,7 @@ fun CardDropdownBox(
         ) {
             Icon(
                 imageVector = MifosIcons.MoreVert,
-                contentDescription = "View More",
+                contentDescription = stringResource(Res.string.view_more),
             )
         }
 
@@ -482,7 +490,7 @@ fun CardDropdownBox(
             onDismissRequest = { showDropdown = false },
         ) {
             DropdownMenuItem(
-                text = { Text("Mark as Default") },
+                text = { Text(stringResource(Res.string.mark_default)) },
                 onClick = {
                     onClickDefault()
                     showDropdown = false
@@ -506,7 +514,7 @@ private fun PayRequestScreen(
             modifier = Modifier
                 .weight(1f)
                 .height(55.dp),
-            text = "Request",
+            text = stringResource(Res.string.request),
             onClick = onRequest,
             leadingIcon = {
                 Icon(
@@ -515,7 +523,7 @@ private fun PayRequestScreen(
                     imageVector = vectorResource(
                         Res.drawable.arrow_backward,
                     ),
-                    contentDescription = "request money",
+                    contentDescription = stringResource(Res.string.request_money),
                 )
             },
         )
@@ -526,7 +534,7 @@ private fun PayRequestScreen(
             modifier = Modifier
                 .weight(1f)
                 .height(55.dp),
-            text = "Send",
+            text = stringResource(Res.string.send),
             onClick = onSend,
             leadingIcon = {
                 Icon(
@@ -534,7 +542,7 @@ private fun PayRequestScreen(
                         .size(26.dp)
                         .graphicsLayer(rotationZ = 180f),
                     imageVector = vectorResource(Res.drawable.arrow_backward),
-                    contentDescription = "Send money",
+                    contentDescription = stringResource(Res.string.send_money),
                 )
             },
         )
@@ -578,7 +586,7 @@ private fun MifosSendMoneyFreeCard(
                 modifier = Modifier.weight(2.5f),
                 contentScale = ContentScale.Fit,
                 painter = painterResource(Res.drawable.coin_image),
-                contentDescription = "coin Image",
+                contentDescription = stringResource(Res.string.coin_image),
             )
         }
     }
