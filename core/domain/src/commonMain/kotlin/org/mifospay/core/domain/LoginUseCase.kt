@@ -12,11 +12,13 @@ package org.mifospay.core.domain
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import org.mifospay.core.common.DataState
+import org.mifospay.core.common.utils.OpenForMokkery
 import org.mifospay.core.data.repository.AuthenticationRepository
 import org.mifospay.core.data.repository.ClientRepository
 import org.mifospay.core.datastore.UserPreferencesRepository
 import org.mifospay.core.model.user.UserInfo
 
+@OpenForMokkery
 class LoginUseCase(
     private val repository: AuthenticationRepository,
     private val clientRepository: ClientRepository,

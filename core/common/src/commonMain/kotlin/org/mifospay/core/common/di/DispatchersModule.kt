@@ -16,7 +16,13 @@ import kotlinx.coroutines.SupervisorJob
 import org.koin.core.module.Module
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
+import org.mifospay.core.common.DefaultStringProvider
 import org.mifospay.core.common.MifosDispatchers
+import org.mifospay.core.common.StringProvider
+
+val stringProviderModule = module {
+    single<StringProvider> { DefaultStringProvider() }
+}
 
 val DispatchersModule = module {
     includes(ioDispatcherModule)

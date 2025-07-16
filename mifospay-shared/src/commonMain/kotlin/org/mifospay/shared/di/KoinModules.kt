@@ -16,6 +16,7 @@ import org.koin.dsl.koinApplication
 import org.koin.dsl.module
 import org.mifos.library.passcode.di.PasscodeModule
 import org.mifospay.core.common.di.DispatchersModule
+import org.mifospay.core.common.di.stringProviderModule
 import org.mifospay.core.data.di.RepositoryModule
 import org.mifospay.core.datastore.di.PreferencesModule
 import org.mifospay.core.domain.di.DomainModule
@@ -46,6 +47,7 @@ import org.mifospay.shared.MifosPayViewModel
 
 object KoinModules {
     private val commonModules = module {
+        includes(stringProviderModule)
         includes(DispatchersModule)
     }
     private val dataModules = module {

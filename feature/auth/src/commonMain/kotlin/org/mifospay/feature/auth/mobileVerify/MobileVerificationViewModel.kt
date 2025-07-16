@@ -144,7 +144,7 @@ class MobileVerificationViewModel(
         viewModelScope.launch {
             // TODO:: Call repository request an otp to this phone no.
             mutableStateFlow.update {
-                MobileVerificationState.VerifyOtpState(phoneNo)
+                MobileVerificationState.VerifyOtpState(phoneNo = phoneNo)
             }
             trySendAction(MobileVerificationAction.DismissDialog)
         }
