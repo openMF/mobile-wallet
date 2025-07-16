@@ -56,7 +56,18 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import mobile_wallet.feature.send_money.generated.resources.Res
 import mobile_wallet.feature.send_money.generated.resources.feature_send_money_amount
+import mobile_wallet.feature.send_money.generated.resources.feature_send_money_bottom_bar
+import mobile_wallet.feature.send_money.generated.resources.feature_send_money_close
+import mobile_wallet.feature.send_money.generated.resources.feature_send_money_loading
+import mobile_wallet.feature.send_money.generated.resources.feature_send_money_no_accounts_found
+import mobile_wallet.feature.send_money.generated.resources.feature_send_money_oops
+import mobile_wallet.feature.send_money.generated.resources.feature_send_money_proceed
+import mobile_wallet.feature.send_money.generated.resources.feature_send_money_scan_qr
+import mobile_wallet.feature.send_money.generated.resources.feature_send_money_selected
 import mobile_wallet.feature.send_money.generated.resources.feature_send_money_send
+import mobile_wallet.feature.send_money.generated.resources.feature_send_money_something_went_wrong
+import mobile_wallet.feature.send_money.generated.resources.feature_send_money_to_account
+import mobile_wallet.feature.send_money.generated.resources.feature_send_money_vpa_mobile_account_number
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.mifospay.core.common.utils.maskString
@@ -149,7 +160,7 @@ private fun SendMoneyScreen(
                             ) {
                                 Icon(
                                     imageVector = MifosIcons.Scan,
-                                    contentDescription = "Scan QR",
+                                    contentDescription = stringResource(Res.string.feature_send_money_scan_qr),
                                 )
                             }
                         },
@@ -216,7 +227,7 @@ private fun SendMoneyBottomBar(
         ) {
             AnimatedVisibility(
                 visible = showDetails && selectedAccount != null,
-                label = "BottomBar",
+                label = stringResource(Res.string.feature_send_money_bottom_bar),
                 enter = fadeIn() + slideInVertically(
                     initialOffsetY = { fullHeight ->
                         fullHeight / 4
@@ -242,7 +253,7 @@ private fun SendMoneyBottomBar(
                 enabled = showDetails,
                 modifier = Modifier.fillMaxWidth(),
             ) {
-                Text(text = "Proceed")
+                Text(text = stringResource(Res.string.feature_send_money_proceed))
             }
         }
     }
@@ -260,7 +271,7 @@ private fun SelectedAccountCard(
         verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
         Text(
-            text = "To Account",
+            text = stringResource(Res.string.feature_send_money_to_account),
             style = MaterialTheme.typography.labelLarge,
         )
 
@@ -304,7 +315,7 @@ private fun SelectedAccountCard(
                         ) {
                             Icon(
                                 imageVector = Icons.Default.Close,
-                                contentDescription = "Close",
+                                contentDescription = stringResource(Res.string.feature_send_money_close),
                             )
                         }
                     }
@@ -374,7 +385,7 @@ private fun SendMoneyCard(
             )
 
             MifosTextField(
-                label = "VPA/Mobile/Account Number",
+                label = stringResource(Res.string.feature_send_money_vpa_mobile_account_number),
                 value = state.accountNumber,
                 onValueChange = remember(onAction) {
                     { onAction(SendMoneyAction.AccountNumberChanged(it)) }
@@ -399,7 +410,7 @@ private fun LazyListScope.accountListContent(
                     modifier = Modifier.fillParentMaxWidth(),
                     contentAlignment = Alignment.Center,
                 ) {
-                    MifosLoadingWheel(contentDesc = "Loading")
+                    MifosLoadingWheel(contentDesc = stringResource(Res.string.feature_send_money_loading))
                 }
             }
         }
@@ -407,8 +418,8 @@ private fun LazyListScope.accountListContent(
         is ViewState.Error -> {
             item {
                 EmptyContentScreen(
-                    title = "Oops!",
-                    subTitle = "Something went wrong!",
+                    title = stringResource(Res.string.feature_send_money_oops),
+                    subTitle = stringResource(Res.string.feature_send_money_something_went_wrong),
                     modifier = Modifier.fillParentMaxSize(),
                     iconTint = MaterialTheme.colorScheme.error,
                 )
@@ -418,8 +429,8 @@ private fun LazyListScope.accountListContent(
         is ViewState.Empty -> {
             item {
                 EmptyContentScreen(
-                    title = "Oops!",
-                    subTitle = "No accounts found!",
+                    title = stringResource(Res.string.feature_send_money_oops),
+                    subTitle = stringResource(Res.string.feature_send_money_no_accounts_found),
                     modifier = Modifier.fillParentMaxSize(),
                 )
             }
@@ -477,7 +488,7 @@ private fun AccountCard(
             ) {
                 Icon(
                     imageVector = MifosIcons.Check,
-                    contentDescription = "Selected",
+                    contentDescription = stringResource(Res.string.feature_send_money_selected),
                 )
             }
         },
