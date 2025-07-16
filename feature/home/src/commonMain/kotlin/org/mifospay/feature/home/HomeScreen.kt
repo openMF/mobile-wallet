@@ -148,7 +148,7 @@ internal fun HomeScreen(
             is HomeEvent.NavigateToTransactionScreen -> {}
             is HomeEvent.ShowToast -> {
                 scope.launch {
-                    snackbarState.showSnackbar(getString( event.message))
+                    snackbarState.showSnackbar(getString(event.message))
                 }
             }
 
