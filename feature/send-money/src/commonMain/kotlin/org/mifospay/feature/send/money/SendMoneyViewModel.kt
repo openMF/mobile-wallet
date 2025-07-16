@@ -138,11 +138,11 @@ class SendMoneyViewModel(
     }
 
     private fun validateTransferFlow() = when {
-        state.amount.isBlank() -> updateErrorState("Amount cannot be empty")
+        state.amount.isBlank() -> updateErrorState(Strings.ERROR_AMOUNT_EMPTY)
 
-        state.amount.toDoubleOrNull() == null -> updateErrorState("Invalid amount")
+        state.amount.toDoubleOrNull() == null -> updateErrorState(Strings.ERROR_INVALID_AMOUNT)
 
-        state.selectedAccount == null -> updateErrorState("Account cannot be empty")
+        state.selectedAccount == null -> updateErrorState(Strings.ERROR_ACCOUNT_EMPTY)
 
         else -> initiateTransfer()
     }
@@ -159,9 +159,9 @@ class SendMoneyViewModel(
         }
     }
 
-    private fun updateErrorState(message: String) {
+    private fun updateErrorState(key: String, args: List<String> = emptyList()) {
         mutableStateFlow.update {
-            it.copy(dialogState = Error(message))
+            it.copy(dialogState = Error(key, args))
         }
     }
 
@@ -179,7 +179,7 @@ class SendMoneyViewModel(
                 }
             } catch (e: Exception) {
                 mutableStateFlow.update {
-                    it.copy(dialogState = Error("Requesting payment QR but found - ${action.requestData}"))
+                    it.copy(dialogState = Error(Strings.ERROR_INVALID_QR, listOf(action.requestData)))
                 }
             }
         }
@@ -216,7 +216,10 @@ data class SendMoneyState(
         data object Loading : DialogState
 
         @Serializable
-        data class Error(val message: String) : DialogState
+        data class Error(
+            val key: String,
+            val args: List<String> = emptyList(),
+        ) : DialogState
     }
 }
 
@@ -252,4 +255,11 @@ sealed interface SendMoneyAction {
     data object OnProceedClicked : SendMoneyAction
 
     data class HandleRequestData(val requestData: String) : SendMoneyAction
+}
+
+object Strings {
+    const val ERROR_AMOUNT_EMPTY = "error_amount_empty"
+    const val ERROR_INVALID_AMOUNT = "error_invalid_amount"
+    const val ERROR_ACCOUNT_EMPTY = "error_account_empty"
+    const val ERROR_INVALID_QR = "error_invalid_qr"
 }
