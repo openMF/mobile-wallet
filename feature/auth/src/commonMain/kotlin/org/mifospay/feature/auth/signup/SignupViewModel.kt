@@ -27,10 +27,12 @@ import kotlinx.serialization.Transient
 import mobile_wallet.feature.auth.generated.resources.Res
 import mobile_wallet.feature.auth.generated.resources.feature_auth_error_address_line1_required
 import mobile_wallet.feature.auth.generated.resources.feature_auth_error_address_line2_required
+import mobile_wallet.feature.auth.generated.resources.feature_auth_error_check_uniqueness_failed
 import mobile_wallet.feature.auth.generated.resources.feature_auth_error_confirm_password_required
 import mobile_wallet.feature.auth.generated.resources.feature_auth_error_country_required
 import mobile_wallet.feature.auth.generated.resources.feature_auth_error_email_invalid
 import mobile_wallet.feature.auth.generated.resources.feature_auth_error_email_required
+import mobile_wallet.feature.auth.generated.resources.feature_auth_error_field_already_exists
 import mobile_wallet.feature.auth.generated.resources.feature_auth_error_first_name_required
 import mobile_wallet.feature.auth.generated.resources.feature_auth_error_last_name_required
 import mobile_wallet.feature.auth.generated.resources.feature_auth_error_mobile_invalid
@@ -41,9 +43,11 @@ import mobile_wallet.feature.auth.generated.resources.feature_auth_error_pincode
 import mobile_wallet.feature.auth.generated.resources.feature_auth_error_select_savings_account
 import mobile_wallet.feature.auth.generated.resources.feature_auth_error_state_required
 import mobile_wallet.feature.auth.generated.resources.feature_auth_error_username_required
+import mobile_wallet.feature.auth.generated.resources.feature_auth_registration_successful
+import org.jetbrains.compose.resources.StringResource
 import org.mifospay.core.common.DataState
-import org.mifospay.core.common.dialogManager.DialogManager
-import org.mifospay.core.common.dialogManager.DialogMessage.Companion.toDialogMessage
+import org.mifospay.core.common.ImmutableListSerializer
+import org.mifospay.core.common.StringProvider
 import org.mifospay.core.common.getSerialized
 import org.mifospay.core.common.setSerialized
 import org.mifospay.core.common.utils.formatAsBulletPoints
@@ -62,12 +66,14 @@ import org.mifospay.core.ui.utils.PasswordChecker
 import org.mifospay.core.ui.utils.PasswordStrength
 import org.mifospay.core.ui.utils.PasswordStrengthResult
 import org.mifospay.feature.auth.signup.SignUpAction.Internal.ReceivePasswordStrengthResult
+import org.mifospay.feature.auth.signup.SignUpState.DialogState
 
 class SignupViewModel(
     private val userRepository: UserRepository,
     private val searchRepository: SearchRepository,
     private val clientRepository: ClientRepository,
     private val assetRepository: AssetRepository,
+    private val stringProvider: StringProvider,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<SignUpState, SignUpEvent, SignUpAction>(
     initialState = savedStateHandle.getSerialized(KEY_STATE) ?: SignUpState(),
@@ -80,8 +86,7 @@ class SignupViewModel(
     private var passwordStrengthJob: Job = Job().apply { complete() }
 
     init {
-        stateFlow
-            .onEach { savedStateHandle.setSerialized(key = KEY_STATE, value = it) }
+        stateFlow.onEach { savedStateHandle.setSerialized(key = KEY_STATE, value = it) }
             .launchIn(viewModelScope)
 
         savedStateHandle.get<String>("mobileNumber")?.let {
@@ -196,7 +201,9 @@ class SignupViewModel(
             }
 
             is SignUpAction.ErrorDialogDismiss -> {
-                DialogManager.dismissDialog()
+                mutableStateFlow.update {
+                    it.copy(dialogState = null)
+                }
             }
 
             is ReceivePasswordStrengthResult -> handlePasswordStrengthResult(action)
@@ -255,88 +262,160 @@ class SignupViewModel(
     private fun handleSignUpResult(action: SignUpAction.Internal.ReceiveRegisterResult) {
         when (val result = action.registerResult) {
             is DataState.Success -> {
-                DialogManager.dismissDialog()
+                mutableStateFlow.update {
+                    it.copy(dialogState = null)
+                }
                 sendEvent(SignUpEvent.NavigateToLogin(result.data))
             }
 
             is DataState.Error -> {
-                DialogManager.showMessage(result.exception.toDialogMessage())
+                mutableStateFlow.update {
+                    it.copy(dialogState = DialogState.Error.StringMessage(result.exception.toString()))
+                }
             }
 
             DataState.Loading -> {
-                DialogManager.showLoading()
+                mutableStateFlow.update { it.copy(dialogState = DialogState.Loading) }
             }
         }
     }
 
     private fun handleSubmitClick() = when {
         state.savingsProductId == 0 -> {
-            DialogManager.showMessage(Res.string.feature_auth_error_select_savings_account)
+            mutableStateFlow.update {
+                it.copy(
+                    dialogState = DialogState.Error.ResourceMessage(Res.string.feature_auth_error_select_savings_account),
+                )
+            }
         }
 
         state.firstNameInput.isEmpty() -> {
-            DialogManager.showMessage(Res.string.feature_auth_error_first_name_required)
+            mutableStateFlow.update {
+                it.copy(
+                    dialogState = DialogState.Error.ResourceMessage(Res.string.feature_auth_error_first_name_required),
+                )
+            }
         }
 
         state.lastNameInput.isEmpty() -> {
-            DialogManager.showMessage(Res.string.feature_auth_error_last_name_required)
+            mutableStateFlow.update {
+                it.copy(
+                    dialogState = DialogState.Error.ResourceMessage(Res.string.feature_auth_error_last_name_required),
+                )
+            }
         }
 
         state.userNameInput.isEmpty() -> {
-            DialogManager.showMessage(Res.string.feature_auth_error_username_required)
+            mutableStateFlow.update {
+                it.copy(
+                    dialogState = DialogState.Error.ResourceMessage(Res.string.feature_auth_error_username_required),
+                )
+            }
         }
 
         state.emailInput.isEmpty() -> {
-            DialogManager.showMessage(Res.string.feature_auth_error_email_required)
+            mutableStateFlow.update {
+                it.copy(
+                    dialogState = DialogState.Error.ResourceMessage(Res.string.feature_auth_error_email_required),
+                )
+            }
         }
 
         !state.emailInput.isValidEmail() -> {
-            DialogManager.showMessage(Res.string.feature_auth_error_email_invalid)
+            mutableStateFlow.update {
+                it.copy(
+                    dialogState = DialogState.Error.ResourceMessage(Res.string.feature_auth_error_email_invalid),
+                )
+            }
         }
 
         state.mobileNumberInput.isEmpty() -> {
-            DialogManager.showMessage(Res.string.feature_auth_error_mobile_required)
+            mutableStateFlow.update {
+                it.copy(
+                    dialogState = DialogState.Error.ResourceMessage(Res.string.feature_auth_error_mobile_required),
+                )
+            }
         }
 
         state.mobileNumberInput.length < 10 -> {
-            DialogManager.showMessage(Res.string.feature_auth_error_mobile_invalid)
+            mutableStateFlow.update {
+                it.copy(
+                    dialogState = DialogState.Error.ResourceMessage(Res.string.feature_auth_error_mobile_invalid),
+                )
+            }
         }
 
         state.passwordInput.isEmpty() -> {
-            DialogManager.showMessage(Res.string.feature_auth_error_password_required)
+            mutableStateFlow.update {
+                it.copy(
+                    dialogState = DialogState.Error.ResourceMessage(Res.string.feature_auth_error_password_required),
+                )
+            }
         }
 
         state.passwordFeedback.isNotEmpty() -> {
             val bulletListPasswordFeedback = formatAsBulletPoints(state.passwordFeedback)
-            DialogManager.showMessage(bulletListPasswordFeedback)
+            mutableStateFlow.update {
+                it.copy(
+                    dialogState = DialogState.Error.StringMessage(bulletListPasswordFeedback),
+                )
+            }
         }
 
         state.confirmPasswordInput.isEmpty() -> {
-            DialogManager.showMessage(Res.string.feature_auth_error_confirm_password_required)
+            mutableStateFlow.update {
+                it.copy(
+                    dialogState = DialogState.Error.ResourceMessage(Res.string.feature_auth_error_confirm_password_required),
+                )
+            }
         }
 
         state.passwordInput != state.confirmPasswordInput -> {
-            DialogManager.showMessage(Res.string.feature_auth_error_passwords_mismatch)
+            mutableStateFlow.update {
+                it.copy(
+                    dialogState = DialogState.Error.ResourceMessage(Res.string.feature_auth_error_passwords_mismatch),
+                )
+            }
         }
 
         state.addressLine1Input.isEmpty() -> {
-            DialogManager.showMessage(Res.string.feature_auth_error_address_line1_required)
+            mutableStateFlow.update {
+                it.copy(
+                    dialogState = DialogState.Error.ResourceMessage(Res.string.feature_auth_error_address_line1_required),
+                )
+            }
         }
 
         state.addressLine2Input.isEmpty() -> {
-            DialogManager.showMessage(Res.string.feature_auth_error_address_line2_required)
+            mutableStateFlow.update {
+                it.copy(
+                    dialogState = DialogState.Error.ResourceMessage(Res.string.feature_auth_error_address_line2_required),
+                )
+            }
         }
 
         state.pinCodeInput.isEmpty() -> {
-            DialogManager.showMessage(Res.string.feature_auth_error_pincode_required)
+            mutableStateFlow.update {
+                it.copy(
+                    dialogState = DialogState.Error.ResourceMessage(Res.string.feature_auth_error_pincode_required),
+                )
+            }
         }
 
         state.countryInput.isEmpty() -> {
-            DialogManager.showMessage(Res.string.feature_auth_error_country_required)
+            mutableStateFlow.update {
+                it.copy(
+                    dialogState = DialogState.Error.ResourceMessage(Res.string.feature_auth_error_country_required),
+                )
+            }
         }
 
         state.stateInput.isEmpty() -> {
-            DialogManager.showMessage(Res.string.feature_auth_error_state_required)
+            mutableStateFlow.update {
+                it.copy(
+                    dialogState = DialogState.Error.ResourceMessage(Res.string.feature_auth_error_state_required),
+                )
+            }
         }
 
         else -> initiateSignUp()
@@ -346,7 +425,9 @@ class SignupViewModel(
         Enhancement: Move the following code in to a Use Case
      */
     private fun initiateSignUp() {
-        DialogManager.showLoading()
+        mutableStateFlow.update {
+            it.copy(dialogState = DialogState.Loading)
+        }
 
         val fieldsToCheck = mapOf(
             "Username" to state.userNameInput,
@@ -368,16 +449,31 @@ class SignupViewModel(
                 when (result) {
                     is DataState.Loading -> {}
                     is DataState.Success -> {
-                        if (result.data.isNotEmpty()) "$label already exists." else null
+                        if (result.data.isNotEmpty()) {
+                            stringProvider.get(
+                                resource = Res.string.feature_auth_error_field_already_exists,
+                                label,
+                            )
+                        } else {
+                            null
+                        }
                     }
 
-                    is DataState.Error ->
-                        "Unable to check if $label is unique. Please try again later."
+                    is DataState.Error -> stringProvider.get(
+                        Res.string.feature_auth_error_check_uniqueness_failed,
+                        label,
+                    )
                 }
             }
 
             if (errorMessages.isNotEmpty()) {
-                DialogManager.showMessage(errorMessages.joinToString("\n"))
+                mutableStateFlow.update {
+                    it.copy(
+                        dialogState = DialogState.Error.StringMessage(
+                            errorMessages.joinToString("\n"),
+                        ),
+                    )
+                }
             } else {
                 val newUser = NewUser(
                     state.userNameInput,
@@ -395,7 +491,13 @@ class SignupViewModel(
         viewModelScope.launch {
             when (val result = userRepository.createUser(newUser)) {
                 is DataState.Error -> {
-                    DialogManager.showMessage(result.exception.toDialogMessage())
+                    mutableStateFlow.update {
+                        it.copy(
+                            dialogState = DialogState.Error.StringMessage(
+                                result.exception.message.toString(),
+                            ),
+                        )
+                    }
                 }
 
                 is DataState.Success -> {
@@ -428,7 +530,11 @@ class SignupViewModel(
                 is DataState.Error -> {
                     deleteUser(userId)
                     val message = result.exception.message.toString()
-                    DialogManager.showMessage(message)
+                    mutableStateFlow.update {
+                        it.copy(
+                            dialogState = DialogState.Error.StringMessage(message),
+                        )
+                    }
                 }
 
                 is DataState.Success -> {
@@ -446,13 +552,21 @@ class SignupViewModel(
                 is DataState.Error -> {
                     deleteUser(userId)
                     deleteClient(clientId)
-                    DialogManager.showMessage(result.exception.toDialogMessage())
+                    mutableStateFlow.update {
+                        it.copy(
+                            dialogState = DialogState.Error.StringMessage(
+                                result.exception.toString(),
+                            ),
+                        )
+                    }
                 }
 
                 is DataState.Success -> {
-                    DialogManager.dismissDialog()
+                    mutableStateFlow.update {
+                        it.copy(dialogState = null)
+                    }
 
-                    sendEvent(SignUpEvent.ShowToast("Registration successful."))
+                    sendEvent(SignUpEvent.ShowToast(stringProvider.get(Res.string.feature_auth_registration_successful)))
                     sendAction(
                         SignUpAction.Internal.ReceiveRegisterResult(
                             DataState.Success(state.userNameInput),
@@ -480,10 +594,9 @@ class SignupViewModel(
     private fun loadCountriesFromJson() {
         viewModelScope.launch {
             when (val countriesWithStatesResult = assetRepository.getCountriesWithStates()) {
-                is DataState.Success ->
-                    mutableStateFlow.update {
-                        it.copy(countriesWithStates = countriesWithStatesResult.data)
-                    }
+                is DataState.Success -> mutableStateFlow.update {
+                    it.copy(countriesWithStates = countriesWithStatesResult.data)
+                }
 
                 is DataState.Error -> Logger.d("Failed to load countries.json: ${countriesWithStatesResult.exception.message}")
                 is DataState.Loading -> {}
@@ -508,13 +621,23 @@ data class SignUpState(
     val stateInput: String = "",
     val countryInput: String = "",
     val businessNameInput: String = "",
+    @Transient val dialogState: DialogState? = null,
     val passwordStrengthState: PasswordStrengthState = PasswordStrengthState.NONE,
+    @Serializable(with = ImmutableListSerializer::class)
     val passwordFeedback: ImmutableList<String> = persistentListOf(),
     val countriesWithStates: Map<String, List<String>> = emptyMap(),
 ) {
     @Transient
-    val statesForSelectedCountry =
-        countriesWithStates[countryInput]
+    val statesForSelectedCountry = countriesWithStates[countryInput]
+
+    sealed interface DialogState {
+        sealed interface Error : DialogState {
+            data class StringMessage(val message: String) : Error
+            data class ResourceMessage(val message: StringResource) : Error
+        }
+
+        data object Loading : DialogState
+    }
 }
 
 sealed interface SignUpEvent {

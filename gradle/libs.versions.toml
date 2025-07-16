@@ -37,9 +37,15 @@ mlkit="17.3.0"
 # Testing Dependencies
 espresso-core = "3.6.1"
 junitVersion = "4.13.2"
+kotestVersion = "5.9.1"
+mokkeryVersion = "2.7.2"
 truth = "1.4.4"
+turbineVersion = "1.2.1"
 roborazzi = "1.26.0"
 zxingVersion = "3.5.3"
+coreKtx = "1.6.1"
+composeTest = "1.6.8"
+mokkery = "2.8.0"
 
 # Utility Dependencies
 dependencyGuard = "0.5.0"
@@ -206,10 +212,13 @@ lint-api = { group = "com.android.tools.lint", name = "lint-api", version.ref = 
 lint-checks = { group = "com.android.tools.lint", name = "lint-checks", version.ref = "androidTools" }
 lint-tests = { group = "com.android.tools.lint", name = "lint-tests", version.ref = "androidTools" }
 
+mokkery = {group = "dev.mokkery", name="mokkery-gradle", version.ref="mokkeryVersion"}
+
 protobuf-kotlin-lite = { group = "com.google.protobuf", name = "protobuf-kotlin-lite", version.ref = "protobuf" }
 protobuf-protoc = { group = "com.google.protobuf", name = "protoc", version.ref = "protobuf" }
 
 truth = { group = "com.google.truth", name = "truth", version.ref = "truth" }
+turbine = { group = "app.cash.turbine", name = "turbine", version.ref = "turbineVersion" }
 espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espresso-core" }
 
 zxing = { group = "com.google.zxing", name = "core", version.ref = "zxingVersion" }
@@ -230,6 +239,11 @@ jb-bundle = { module = "org.jetbrains.androidx.core:core-bundle", version.ref = 
 jb-savedstate = { module = "org.jetbrains.androidx.savedstate:savedstate", version.ref = "jbSavedState" }
 jb-composeNavigation = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "composeNavigation" }
 jb-navigation = { module = "org.jetbrains.androidx.navigation:navigation-common", version.ref = "composeNavigation" }
+
+kotest-assertions-core = { module = "io.kotest:kotest-assertions-core", version.ref = "kotestVersion" }
+kotest-framework-engine = { module = "io.kotest:kotest-framework-engine", version.ref = "kotestVersion" }
+kotest-framework-datatest = { module = "io.kotest:kotest-framework-datatest", version.ref = "kotestVersion" }
+kotest-runner-junit5 = { module = "io.kotest:kotest-runner-junit5", version.ref = "kotestVersion" }
 
 koin-android = { group = "io.insert-koin", name = "koin-android", version.ref = "koin" }
 koin-androidx-compose = { group = "io.insert-koin", name = "koin-androidx-compose", version.ref = "koin" }
@@ -313,6 +327,10 @@ moko-permission-compose = { group = "dev.icerock.moko", name = "permissions-comp
 
 window-size = { group = "dev.chrisbanes.material3", name = "material3-window-size-class-multiplatform", version.ref = "windowsSizeClass" }
 
+compose-ui-test-junit4-android = { module = "androidx.compose.ui:ui-test-junit4-android", version.ref = "composeTest" }
+compose-ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest", version.ref = "composeTest" }
+core-ktx = { group = "androidx.test", name = "core-ktx", version.ref = "coreKtx" }
+
 [bundles]
 androidx-compose-ui-test = [
     "androidx-compose-ui-test",
@@ -320,11 +338,16 @@ androidx-compose-ui-test = [
 ]
 
 [plugins]
+
+mokkery-plugin = {id="dev.mokkery", version.ref="mokkeryVersion"}
 # Android & Kotlin Plugins
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
 android-library = { id = "com.android.library", version.ref = "androidGradlePlugin" }
 android-test = { id = "com.android.test", version.ref = "androidGradlePlugin" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+kotlin-allopen = { id = "org.jetbrains.kotlin.plugin.allopen", version.ref = "kotlin" }
+mokkery = { id = "dev.mokkery", version.ref = "mokkery" }
+
 
 mifospay-android-application = { id = "mifospay.android.application", version = "unspecified" }
 mifospay-android-application-compose = { id = "mifospay.android.application.compose", version = "unspecified" }
@@ -365,4 +388,3 @@ detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
 ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint" }
 spotless = { id = "com.diffplug.spotless", version.ref = "spotlessVersion" }
 version-catalog-linter = { id = "io.github.pemistahl.version-catalog-linter", version.ref = "versionCatalogLinterVersion" }
-
