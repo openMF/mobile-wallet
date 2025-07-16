@@ -1095,6 +1095,9 @@
 |    |    |    |         +--- org.jetbrains.kotlinx:kotlinx-serialization-bom:1.8.0 (*)
 |    |    |    |         +--- org.jetbrains.kotlin:kotlin-stdlib:2.1.0 -> 2.1.21 (*)
 |    |    |    |         \--- org.jetbrains.kotlinx:kotlinx-serialization-core:1.8.0 (*)
+|    |    |    +--- org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.8
+|    |    |    |    \--- org.jetbrains.kotlinx:kotlinx-collections-immutable-jvm:0.3.8
+|    |    |    |         \--- org.jetbrains.kotlin:kotlin-stdlib:1.9.21 -> 2.1.21 (*)
 |    |    |    \--- org.jetbrains.kotlin:kotlin-parcelize-runtime:2.1.20
 |    |    |         +--- org.jetbrains.kotlin:kotlin-stdlib:2.1.20 -> 2.1.21 (*)
 |    |    |         \--- org.jetbrains.kotlin:kotlin-android-extensions-runtime:2.1.20
@@ -1616,9 +1619,7 @@
 |    +--- org.jetbrains.androidx.savedstate:savedstate:1.2.2 (*)
 |    +--- org.jetbrains.androidx.core:core-bundle:1.0.1 (*)
 |    +--- org.jetbrains.androidx.navigation:navigation-compose:2.8.0-alpha10 (*)
-|    +--- org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.8
-|    |    \--- org.jetbrains.kotlinx:kotlinx-collections-immutable-jvm:0.3.8
-|    |         \--- org.jetbrains.kotlin:kotlin-stdlib:1.9.21 -> 2.1.21 (*)
+|    +--- org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.8 (*)
 |    +--- org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.3 -> 1.8.0 (*)
 |    +--- project :core:domain
 |    |    +--- org.jetbrains.kotlin:kotlin-stdlib:2.1.20 -> 2.1.21 (*)
