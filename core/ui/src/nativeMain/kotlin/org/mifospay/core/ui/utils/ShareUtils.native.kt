@@ -12,18 +12,13 @@ package org.mifospay.core.ui.utils
 import co.touchlab.kermit.Logger
 import io.github.vinceglb.filekit.FileKit
 import io.github.vinceglb.filekit.ImageFormat
+import io.github.vinceglb.filekit.PlatformFile
+import io.github.vinceglb.filekit.absolutePath
+import io.github.vinceglb.filekit.cacheDir
 import io.github.vinceglb.filekit.compressImage
-import kotlinx.cinterop.ExperimentalForeignApi
-import kotlinx.cinterop.addressOf
-import kotlinx.cinterop.usePinned
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.IO
-import kotlinx.coroutines.withContext
-import platform.Foundation.NSData
-import platform.Foundation.NSTemporaryDirectory
+import io.github.vinceglb.filekit.dialogs.shareFile
+import io.github.vinceglb.filekit.write
 import platform.Foundation.NSURL
-import platform.Foundation.dataWithBytes
-import platform.Foundation.writeToFile
 import platform.UIKit.UIActivityViewController
 import platform.UIKit.UIApplication
 
@@ -39,7 +34,7 @@ actual object ShareUtils {
      *
      * @param text The text content to be shared.
      */
-    actual fun shareText(text: String) {
+    actual suspend fun shareText(text: String) {
         val currentViewController = UIApplication.sharedApplication().keyWindow?.rootViewController
         val activityViewController = UIActivityViewController(listOf(text), null)
         currentViewController?.presentViewController(
@@ -50,51 +45,54 @@ actual object ShareUtils {
     }
 
     /**
-     * Shares a file using the iOS share sheet (`UIActivityViewController`).
+     * Shares a file (image or other binary) using the iOS share sheet.
      *
-     * If the file is an image, it is optionally compressed before sharing.
-     * The file is temporarily saved to disk before being shared.
+     * If the file is an image, it will be compressed before sharing.
      *
-     * @param file A [ShareFileModel] containing the file to be shared.
+     * @param file The file metadata and byte content to share.
      */
     actual suspend fun shareFile(file: ShareFileModel) {
         try {
-            val url = withContext(Dispatchers.IO) {
-                val compressedBytes = if (file.mime == MimeType.IMAGE) {
-                    compressImage(file.bytes)
-                } else {
-                    file.bytes
-                }
-                saveFile(bytes = compressedBytes, name = file.fileName)
+            val compressedBytes = if (file.mime == MimeType.IMAGE) {
+                compressImage(file.bytes)
+            } else {
+                file.bytes
             }
-            val activityViewController = UIActivityViewController(listOf(url), null)
-            UIApplication.sharedApplication.keyWindow?.rootViewController?.presentViewController(
-                activityViewController,
-                animated = true,
-                completion = null,
-            )
+
+            val fileToShare = saveFile(data = compressedBytes, fileName = file.fileName)
+            FileKit.shareFile(fileToShare)
         } catch (e: Exception) {
-            e.printStackTrace()
             Logger.e(e) { "Failed to share file: ${e.message}" }
+            e.printStackTrace()
         }
     }
 
     /**
-     * Saves the given byte array to a temporary file in the device's cache directory.
+     * Saves a byte array as a file inside the iOS app's cache directory.
      *
-     * @param bytes The content of the file to save.
-     * @param name The desired filename (including extension).
-     * @return An [NSURL] pointing to the saved file, or `null` if saving failed.
+     * Converts the resulting file path to a properly scoped [NSURL],
+     * which is necessary for iOS to allow sharing via `UIActivityViewController`.
+     *
+     * @param data The file content to write.
+     * @param fileName The name of the file to create.
+     * @return A [PlatformFile] backed by a scoped `NSURL`, ready for sharing.
      */
-    @OptIn(ExperimentalForeignApi::class)
-    private fun saveFile(bytes: ByteArray, name: String): NSURL? {
-        val tempDir = NSTemporaryDirectory()
-        val sharedFile = tempDir + name
-        val saved = bytes.usePinned {
-            val nsData = NSData.dataWithBytes(it.addressOf(0), bytes.size.toULong())
-            nsData.writeToFile(sharedFile, true)
-        }
-        return if (saved) NSURL.fileURLWithPath(sharedFile) else null
+    private suspend fun saveFile(data: ByteArray, fileName: String): PlatformFile {
+        val tempFile = PlatformFile(FileKit.cacheDir, fileName)
+        tempFile.write(data)
+
+        /**
+         * iOS requires file URLs used in `UIActivityViewController` to be created
+         * with `NSURL.fileURLWithPath(...)` to ensure they have proper sandbox access.
+         *
+         * If the file is created from a raw path string, the system may reject it
+         * with a sandbox extension error (e.g., "Cannot issue sandbox extension for URL").
+         *
+         * Wrapping the path in `NSURL` ensures the file is treated as a valid
+         * security-scoped resource.
+         */
+        val nsUrl = NSURL.fileURLWithPath(tempFile.absolutePath())
+        return PlatformFile(nsUrl)
     }
 
     /**

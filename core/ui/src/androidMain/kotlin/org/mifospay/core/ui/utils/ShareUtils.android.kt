@@ -58,7 +58,7 @@ actual object ShareUtils {
      *
      * @param text The text content to share.
      */
-    actual fun shareText(text: String) {
+    actual suspend fun shareText(text: String) {
         val intent = Intent(Intent.ACTION_SEND).apply {
             type = "text/plain"
             putExtra(Intent.EXTRA_TEXT, text)

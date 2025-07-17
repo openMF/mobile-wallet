@@ -1603,15 +1603,30 @@
 |    |    |    +--- org.jetbrains.compose.runtime:runtime-saveable:1.7.0-beta02 -> 1.8.2 (*)
 |    |    |    +--- org.jetbrains.compose.ui:ui:1.7.0-beta02 -> 1.8.2 (*)
 |    |    |    \--- org.jetbrains.kotlinx:kotlinx-serialization-core:1.6.2 -> 1.8.0 (*)
-|    |    \--- io.github.vinceglb:filekit-core:0.10.0-beta04
-|    |         \--- io.github.vinceglb:filekit-core-android:0.10.0-beta04
-|    |              +--- androidx.documentfile:documentfile:1.1.0 (*)
-|    |              +--- androidx.startup:startup-runtime:1.2.0 (*)
+|    |    +--- io.github.vinceglb:filekit-core:0.10.0-beta04
+|    |    |    \--- io.github.vinceglb:filekit-core-android:0.10.0-beta04
+|    |    |         +--- androidx.documentfile:documentfile:1.1.0 (*)
+|    |    |         +--- androidx.startup:startup-runtime:1.2.0 (*)
+|    |    |         +--- androidx.exifinterface:exifinterface:1.4.1 (*)
+|    |    |         +--- org.jetbrains.kotlinx:kotlinx-io-core:0.7.0 (*)
+|    |    |         +--- org.jetbrains.kotlin:kotlin-stdlib:2.1.21-RC2 -> 2.1.21 (*)
+|    |    |         +--- androidx.annotation:annotation:1.9.1 (*)
+|    |    |         \--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2 (*)
+|    |    \--- io.github.vinceglb:filekit-dialogs-compose:0.10.0-beta04
+|    |         \--- io.github.vinceglb:filekit-dialogs-compose-android:0.10.0-beta04
+|    |              +--- androidx.activity:activity-compose:1.10.1 (*)
 |    |              +--- androidx.exifinterface:exifinterface:1.4.1 (*)
-|    |              +--- org.jetbrains.kotlinx:kotlinx-io-core:0.7.0 (*)
+|    |              +--- io.github.vinceglb:filekit-dialogs:0.10.0-beta04
+|    |              |    \--- io.github.vinceglb:filekit-dialogs-android:0.10.0-beta04
+|    |              |         +--- androidx.activity:activity-ktx:1.10.1 (*)
+|    |              |         +--- io.github.vinceglb:filekit-core:0.10.0-beta04 (*)
+|    |              |         +--- org.jetbrains.kotlin:kotlin-stdlib:2.1.21-RC2 -> 2.1.21 (*)
+|    |              |         \--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2 (*)
 |    |              +--- org.jetbrains.kotlin:kotlin-stdlib:2.1.21-RC2 -> 2.1.21 (*)
-|    |              +--- androidx.annotation:annotation:1.9.1 (*)
-|    |              \--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2 (*)
+|    |              +--- org.jetbrains.compose.runtime:runtime:1.8.0 -> 1.8.2 (*)
+|    |              +--- org.jetbrains.compose.ui:ui:1.8.0 -> 1.8.2 (*)
+|    |              +--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2 (*)
+|    |              \--- androidx.annotation:annotation:1.9.1 (*)
 |    +--- project :core:designsystem (*)
 |    +--- io.insert-koin:koin-compose:4.0.1-RC1 (*)
 |    +--- io.insert-koin:koin-compose-viewmodel:4.0.1-RC1
@@ -1914,22 +1929,8 @@
 |    |    +--- org.jetbrains.compose.components:components-ui-tooling-preview:1.8.2 (*)
 |    |    +--- io.coil-kt.coil3:coil-compose-core:3.0.0-alpha10 (*)
 |    |    +--- io.github.vinceglb:filekit-core:0.10.0-beta04 (*)
-|    |    +--- io.github.vinceglb:filekit-dialogs:0.10.0-beta04
-|    |    |    \--- io.github.vinceglb:filekit-dialogs-android:0.10.0-beta04
-|    |    |         +--- androidx.activity:activity-ktx:1.10.1 (*)
-|    |    |         +--- io.github.vinceglb:filekit-core:0.10.0-beta04 (*)
-|    |    |         +--- org.jetbrains.kotlin:kotlin-stdlib:2.1.21-RC2 -> 2.1.21 (*)
-|    |    |         \--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2 (*)
-|    |    \--- io.github.vinceglb:filekit-dialogs-compose:0.10.0-beta04
-|    |         \--- io.github.vinceglb:filekit-dialogs-compose-android:0.10.0-beta04
-|    |              +--- androidx.activity:activity-compose:1.10.1 (*)
-|    |              +--- androidx.exifinterface:exifinterface:1.4.1 (*)
-|    |              +--- io.github.vinceglb:filekit-dialogs:0.10.0-beta04 (*)
-|    |              +--- org.jetbrains.kotlin:kotlin-stdlib:2.1.21-RC2 -> 2.1.21 (*)
-|    |              +--- org.jetbrains.compose.runtime:runtime:1.8.0 -> 1.8.2 (*)
-|    |              +--- org.jetbrains.compose.ui:ui:1.8.0 -> 1.8.2 (*)
-|    |              +--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2 (*)
-|    |              \--- androidx.annotation:annotation:1.9.1 (*)
+|    |    +--- io.github.vinceglb:filekit-dialogs:0.10.0-beta04 (*)
+|    |    \--- io.github.vinceglb:filekit-dialogs-compose:0.10.0-beta04 (*)
 |    +--- project :feature:history
 |    |    +--- androidx.lifecycle:lifecycle-runtime-compose:2.8.7 (*)
 |    |    +--- androidx.lifecycle:lifecycle-viewmodel-compose:2.8.7 (*)

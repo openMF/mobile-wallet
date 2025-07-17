@@ -22,7 +22,7 @@ expect object ShareUtils {
      *
      * @param text The text content to be shared.
      */
-    fun shareText(text: String)
+    suspend fun shareText(text: String)
 
     /**
      * Shares a file using the platform's native sharing mechanism.

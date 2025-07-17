@@ -41,6 +41,7 @@ kotlin {
             implementation(compose.components.uiToolingPreview)
             implementation(libs.jb.composeNavigation)
             implementation(libs.filekit.core)
+            implementation(libs.filekit.dialogs.compose)
         }
         androidInstrumentedTest.dependencies {
             implementation(libs.bundles.androidx.compose.ui.test)
