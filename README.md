@@ -42,7 +42,7 @@ Following recommended architecture and design patterns, the application is devel
 > To run the iOS app, you must have a macOS device with Xcode installed. Currently, the `mifospay-web-wasm` app is not working as expected. We are working on it and it will be available soon.
 
 ### Demo Credentials
-- **Fineract Instance**: `venus.mifos.io`
+- **Fineract Instance**: `venus.mifos.community`
 - **Username**: `venus`
 - **Password**: `Venus2023#`
 

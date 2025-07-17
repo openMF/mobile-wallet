@@ -26,6 +26,14 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
+import mobile_wallet.feature.send_money.generated.resources.Res
+import mobile_wallet.feature.send_money.generated.resources.feature_send_money_error_account_cannot_be_empty
+import mobile_wallet.feature.send_money.generated.resources.feature_send_money_error_amount_cannot_be_empty
+import mobile_wallet.feature.send_money.generated.resources.feature_send_money_error_invalid_amount
+import mobile_wallet.feature.send_money.generated.resources.feature_send_money_error_requesting_payment_qr_but_found
+import mobile_wallet.feature.send_money.generated.resources.feature_send_money_error_requesting_payment_qr_data_missing
+import org.jetbrains.compose.resources.StringResource
+import org.jetbrains.compose.resources.getString
 import org.mifospay.core.common.DataState
 import org.mifospay.core.common.getSerialized
 import org.mifospay.core.common.setSerialized
@@ -37,6 +45,7 @@ import org.mifospay.core.model.utils.toAccount
 import org.mifospay.core.ui.utils.BaseViewModel
 import org.mifospay.feature.send.money.SendMoneyAction.HandleRequestData
 import org.mifospay.feature.send.money.SendMoneyState.DialogState.Error
+import org.mifospay.feature.send.money.SendMoneyState.DialogState.ValidationError
 
 class SendMoneyViewModel(
     private val scanner: QrScanner,
@@ -138,11 +147,11 @@ class SendMoneyViewModel(
     }
 
     private fun validateTransferFlow() = when {
-        state.amount.isBlank() -> updateErrorState("Amount cannot be empty")
+        state.amount.isBlank() -> updateErrorState(Res.string.feature_send_money_error_amount_cannot_be_empty)
 
-        state.amount.toDoubleOrNull() == null -> updateErrorState("Invalid amount")
+        state.amount.toDoubleOrNull() == null -> updateErrorState(Res.string.feature_send_money_error_invalid_amount)
 
-        state.selectedAccount == null -> updateErrorState("Account cannot be empty")
+        state.selectedAccount == null -> updateErrorState(Res.string.feature_send_money_error_account_cannot_be_empty)
 
         else -> initiateTransfer()
     }
@@ -159,9 +168,9 @@ class SendMoneyViewModel(
         }
     }
 
-    private fun updateErrorState(message: String) {
+    private fun updateErrorState(res: StringResource) {
         mutableStateFlow.update {
-            it.copy(dialogState = Error(message))
+            it.copy(dialogState = ValidationError(res))
         }
     }
 
@@ -178,8 +187,17 @@ class SendMoneyViewModel(
                     )
                 }
             } catch (e: Exception) {
+                val message = if (action.requestData.isNotEmpty()) {
+                    getString(
+                        Res.string.feature_send_money_error_requesting_payment_qr_but_found,
+                        action.requestData,
+                    )
+                } else {
+                    getString(Res.string.feature_send_money_error_requesting_payment_qr_data_missing)
+                }
+
                 mutableStateFlow.update {
-                    it.copy(dialogState = Error("Requesting payment QR but found - ${action.requestData}"))
+                    it.copy(dialogState = Error(message))
                 }
             }
         }
@@ -217,6 +235,8 @@ data class SendMoneyState(
 
         @Serializable
         data class Error(val message: String) : DialogState
+
+        data class ValidationError(val res: StringResource) : DialogState
     }
 }
 

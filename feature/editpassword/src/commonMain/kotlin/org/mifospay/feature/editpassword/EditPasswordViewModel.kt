@@ -20,6 +20,13 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
+import mobile_wallet.feature.editpassword.generated.resources.Res
+import mobile_wallet.feature.editpassword.generated.resources.feature_editpassword_error_empty_current_password
+import mobile_wallet.feature.editpassword.generated.resources.feature_editpassword_error_password_min_length
+import mobile_wallet.feature.editpassword.generated.resources.feature_editpassword_error_password_mismatch
+import mobile_wallet.feature.editpassword.generated.resources.feature_editpassword_error_password_weak
+import mobile_wallet.feature.editpassword.generated.resources.feature_editpassword_error_same_password
+import org.jetbrains.compose.resources.StringResource
 import org.mifospay.core.common.DataState
 import org.mifospay.core.common.getSerialized
 import org.mifospay.core.common.setSerialized
@@ -144,7 +151,7 @@ internal class EditPasswordViewModel(
 
             is DataState.Error -> {
                 mutableStateFlow.update {
-                    it.copy(dialogState = Error(result.exception.message.toString()))
+                    it.copy(dialogState = EditPasswordDialog.ApiError(result.exception.message.toString()))
                 }
             }
 
@@ -157,13 +164,13 @@ internal class EditPasswordViewModel(
     private fun handleSubmitClick() = when {
         state.currentPasswordInput.isEmpty() -> {
             mutableStateFlow.update {
-                it.copy(dialogState = Error("Please Enter Your Current Password"))
+                it.copy(dialogState = Error(Res.string.feature_editpassword_error_empty_current_password))
             }
         }
 
         state.isSamePassword -> {
             mutableStateFlow.update {
-                it.copy(dialogState = Error("New password cannot be same as current password"))
+                it.copy(dialogState = Error(Res.string.feature_editpassword_error_same_password))
             }
         }
 
@@ -171,7 +178,8 @@ internal class EditPasswordViewModel(
             mutableStateFlow.update {
                 it.copy(
                     dialogState = Error(
-                        "Password must be at least $MIN_PASSWORD_LENGTH characters long.",
+                        Res.string.feature_editpassword_error_password_min_length,
+                        listOf(MIN_PASSWORD_LENGTH)
                     ),
                 )
             }
@@ -179,13 +187,13 @@ internal class EditPasswordViewModel(
 
         !state.isPasswordMatch -> {
             mutableStateFlow.update {
-                it.copy(dialogState = Error("Passwords do not match."))
+                it.copy(dialogState = Error(Res.string.feature_editpassword_error_password_mismatch))
             }
         }
 
         !state.isPasswordStrong -> {
             mutableStateFlow.update {
-                it.copy(dialogState = Error("Password is weak."))
+                it.copy(dialogState = Error(Res.string.feature_editpassword_error_password_weak))
             }
         }
 
@@ -225,12 +233,12 @@ internal data class EditPasswordState(
             PasswordStrengthState.WEAK_1,
             PasswordStrengthState.WEAK_2,
             PasswordStrengthState.WEAK_3,
-            -> false
+                -> false
 
             PasswordStrengthState.GOOD,
             PasswordStrengthState.STRONG,
             PasswordStrengthState.VERY_STRONG,
-            -> true
+                -> true
         }
 
     val isPasswordMatch: Boolean
@@ -242,7 +250,11 @@ internal data class EditPasswordState(
 
 internal sealed interface EditPasswordDialog {
     data object Loading : EditPasswordDialog
-    data class Error(val message: String) : EditPasswordDialog
+    data class Error(
+        val message: StringResource,
+        val formatArgs: List<Any> = emptyList()
+    ) : EditPasswordDialog
+    data class ApiError(val message: String) : EditPasswordDialog
 }
 
 internal sealed interface EditPasswordEvent {

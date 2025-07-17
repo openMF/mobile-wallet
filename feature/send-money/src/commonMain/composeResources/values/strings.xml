@@ -21,4 +21,21 @@
     <string name="feature_send_money_submit">Submit</string>
     <string name="feature_send_money_please_wait">Please wait…</string>
     <string name="feature_send_money_phone_number">Phone Number</string>
+
+    <string name="feature_send_money_oops">Oops!</string>
+    <string name="feature_send_money_something_went_wrong">Something went wrong!</string>
+    <string name="feature_send_money_no_accounts_found">No accounts found!</string>
+    <string name="feature_send_money_vpa_mobile_account_number">VPA/Mobile/Account Number</string>
+    <string name="feature_send_money_to_account">To Account</string>
+    <string name="feature_send_money_proceed">Proceed</string>
+    <string name="feature_send_money_bottom_bar">Bottom Bar</string>
+    <string name="feature_send_money_scan_qr">Scan QR</string>
+    <string name="feature_send_money_close">Close</string>
+    <string name="feature_send_money_loading">Loading</string>
+    <string name="feature_send_money_selected">Selected</string>
+    <string name="feature_send_money_error_amount_cannot_be_empty">Amount cannot be empty</string>
+    <string name="feature_send_money_error_invalid_amount">Invalid amount</string>
+    <string name="feature_send_money_error_account_cannot_be_empty">Account cannot be empty</string>
+    <string name="feature_send_money_error_requesting_payment_qr_but_found">Requesting payment QR but found - %1$s</string>
+    <string name="feature_send_money_error_requesting_payment_qr_data_missing">Failed to request payment QR: required data is missing</string>
 </resources>
