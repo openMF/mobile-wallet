@@ -14,24 +14,25 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.mapLatest
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.serialization.Serializable
 import org.mifospay.core.common.DataState
-import org.mifospay.core.common.Parcelable
-import org.mifospay.core.common.Parcelize
+import org.mifospay.core.common.getSerialized
+import org.mifospay.core.common.setSerialized
 import org.mifospay.core.data.repository.SavedCardRepository
 import org.mifospay.core.datastore.UserPreferencesRepository
 import org.mifospay.core.model.savedcards.SavedCard
 import org.mifospay.core.ui.utils.BaseViewModel
-
-private const val KEY_STATE = "card_detail_state"
 
 internal class CardDetailViewModel(
     repository: SavedCardRepository,
     userRepository: UserPreferencesRepository,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<CardDetailState, CardDetailEvent, CardDetailAction>(
-    initialState = savedStateHandle[KEY_STATE] ?: run {
+    initialState = savedStateHandle.getSerialized(KEY_STATE) ?: run {
         val clientId = requireNotNull(userRepository.clientId.value)
         val cardId = requireNotNull(savedStateHandle.get<Long>("cardId"))
 
@@ -41,6 +42,11 @@ internal class CardDetailViewModel(
         )
     },
 ) {
+
+    companion object {
+        private const val KEY_STATE = "card_detail_state"
+    }
+
     @OptIn(ExperimentalCoroutinesApi::class)
     val cartDetailState = repository.getSavedCard(state.clientId, state.cardId)
         .mapLatest { result ->
@@ -55,11 +61,11 @@ internal class CardDetailViewModel(
             initialValue = ViewState.Loading,
         )
 
-//    init {
-//        stateFlow
-//            .onEach { savedStateHandle[KEY_STATE] = it }
-//            .launchIn(viewModelScope)
-//    }
+    init {
+        stateFlow
+            .onEach { savedStateHandle.setSerialized(key = KEY_STATE, value = it) }
+            .launchIn(viewModelScope)
+    }
 
     override fun handleAction(action: CardDetailAction) {
         when (action) {
@@ -70,11 +76,11 @@ internal class CardDetailViewModel(
     }
 }
 
-@Parcelize
+@Serializable
 internal data class CardDetailState(
     val clientId: Long,
     val cardId: Long,
-) : Parcelable
+)
 
 internal sealed interface ViewState {
     data object Loading : ViewState

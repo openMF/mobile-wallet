@@ -12,6 +12,7 @@ package org.mifospay.feature.accounts
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
@@ -21,6 +22,8 @@ import kotlinx.serialization.json.Json
 import mobile_wallet.feature.accounts.generated.resources.Res
 import mobile_wallet.feature.accounts.generated.resources.delete_beneficiary_subtitle
 import mobile_wallet.feature.accounts.generated.resources.delete_beneficiary_title
+import mobile_wallet.feature.accounts.generated.resources.feature_accounts_beneficiary_deleted
+import mobile_wallet.feature.accounts.generated.resources.feature_accounts_default_account_updated
 import org.jetbrains.compose.resources.StringResource
 import org.mifospay.core.common.DataState
 import org.mifospay.core.data.repository.SelfServiceRepository
@@ -51,7 +54,10 @@ class AccountViewModel(
         )
     },
 ) {
-    val accountState = repository.getAccountAndBeneficiaryList(state.clientId)
+    val accountState = mutableStateFlow
+        .flatMapLatest {
+            repository.getAccountAndBeneficiaryList(state.clientId)
+        }
         .mapLatest {
             when (it) {
                 is DataState.Loading -> AccountState.ViewState.Loading
@@ -135,7 +141,7 @@ class AccountViewModel(
         }
 
         mutableStateFlow.update { it.copy(defaultAccountId = action.accountId) }
-        sendEvent(AccountEvent.ShowToast("Default account updated"))
+        sendEvent(AccountEvent.ShowToast(Res.string.feature_accounts_default_account_updated))
     }
 
     private fun handleDeleteBeneficiary(action: DeleteBeneficiary) {
@@ -155,7 +161,7 @@ class AccountViewModel(
                     it.copy(dialogState = null)
                 }
 
-                sendEvent(AccountEvent.ShowToast("Beneficiary deleted"))
+                sendEvent(AccountEvent.ShowToast(Res.string.feature_accounts_beneficiary_deleted))
             }
 
             is DataState.Error -> {
@@ -220,7 +226,7 @@ sealed interface AccountEvent {
     data class OnNavigateToAccountDetail(val accountId: Long) : AccountEvent
     data class OnAddOrEditTPTBeneficiary(val type: BeneficiaryAddEditType) : AccountEvent
 
-    data class ShowToast(val message: String) : AccountEvent
+    data class ShowToast(val message: StringResource) : AccountEvent
 }
 
 sealed interface AccountAction {

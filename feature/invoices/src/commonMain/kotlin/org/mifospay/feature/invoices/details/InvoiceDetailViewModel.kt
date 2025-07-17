@@ -14,9 +14,10 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
+import kotlinx.serialization.Serializable
 import org.mifospay.core.common.DataState
-import org.mifospay.core.common.Parcelable
-import org.mifospay.core.common.Parcelize
+import org.mifospay.core.common.getSerialized
+import org.mifospay.core.common.setSerialized
 import org.mifospay.core.data.repository.InvoiceRepository
 import org.mifospay.core.datastore.UserPreferencesRepository
 import org.mifospay.core.model.datatables.invoice.Invoice
@@ -25,14 +26,12 @@ import org.mifospay.feature.invoices.details.InvoiceDetailAction.Internal.Invoic
 import org.mifospay.feature.invoices.details.InvoiceDetailState.ViewState.Content
 import org.mifospay.feature.invoices.details.InvoiceDetailState.ViewState.Error
 
-private const val KEY_STATE = "invoice_detail_state"
-
 internal class InvoiceDetailViewModel(
     private val preferencesRepository: UserPreferencesRepository,
     repository: InvoiceRepository,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<InvoiceDetailState, InvoiceDetailEvent, InvoiceDetailAction>(
-    initialState = savedStateHandle[KEY_STATE] ?: run {
+    initialState = savedStateHandle.getSerialized(KEY_STATE) ?: run {
         val clientId = requireNotNull(preferencesRepository.clientId.value)
         val invoiceId = requireNotNull(savedStateHandle.get<Long>("invoiceId"))
 
@@ -44,10 +43,14 @@ internal class InvoiceDetailViewModel(
     },
 ) {
 
+    companion object {
+        private const val KEY_STATE = "invoice_detail_state"
+    }
+
     init {
-//        stateFlow
-//            .onEach { savedStateHandle[KEY_STATE] = it }
-//            .launchIn(viewModelScope)
+        stateFlow
+            .onEach { savedStateHandle.setSerialized(key = KEY_STATE, value = it) }
+            .launchIn(viewModelScope)
 
         repository.getInvoice(state.clientId, state.invoiceId).onEach {
             sendAction(InvoiceDetailResultReceived(it))
@@ -88,20 +91,21 @@ internal class InvoiceDetailViewModel(
     }
 }
 
-@Parcelize
+@Serializable
 internal data class InvoiceDetailState(
     val clientId: Long,
     val invoiceId: Long,
     val viewState: ViewState,
-) : Parcelable {
-    sealed interface ViewState : Parcelable {
-        @Parcelize
+) {
+    @Serializable
+    sealed interface ViewState {
+        @Serializable
         data object Loading : ViewState
 
-        @Parcelize
+        @Serializable
         data class Error(val message: String) : ViewState
 
-        @Parcelize
+        @Serializable
         data class Content(val invoice: Invoice) : ViewState
     }
 }

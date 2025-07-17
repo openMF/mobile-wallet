@@ -32,7 +32,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
@@ -218,9 +217,9 @@ private fun UpiPinCharView(
         text = char,
         style = MaterialTheme.typography.headlineSmall,
         color = if (isFocused) {
-            Color.DarkGray
+            MaterialTheme.colorScheme.outline
         } else {
-            Color.LightGray
+            MaterialTheme.colorScheme.outlineVariant
         },
         textAlign = TextAlign.Center,
     )
@@ -229,7 +228,7 @@ private fun UpiPinCharView(
 @Preview
 @Composable
 private fun UpiScreenPreview() {
-    MifosTheme {
+    MifosTheme(darkTheme = true) {
         UpiPinScreen({}, verificationStatus = false, contentVisibility = true)
     }
 }

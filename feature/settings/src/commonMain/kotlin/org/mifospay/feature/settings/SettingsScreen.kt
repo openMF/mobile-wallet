@@ -154,7 +154,7 @@ private fun SettingsScreenContent(
             SettingsCardItem(
                 title = stringResource(Res.string.feature_settings_disable_account),
                 icon = MifosIcons.OutlinedLock,
-                color = Color.Red,
+                color = MaterialTheme.colorScheme.error,
                 onClick = {
                     onAction(SettingsAction.DisableAccount)
                 },

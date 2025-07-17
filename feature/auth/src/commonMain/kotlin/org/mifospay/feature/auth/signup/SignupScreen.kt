@@ -9,6 +9,8 @@
  */
 package org.mifospay.feature.auth.signup
 
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -67,9 +69,12 @@ import org.mifospay.core.designsystem.component.MifosOutlinedTextField
 import org.mifospay.core.designsystem.component.MifosScaffold
 import org.mifospay.core.designsystem.component.MifosTopAppBar
 import org.mifospay.core.designsystem.icon.MifosIcons
+import org.mifospay.core.ui.CombinedPasswordErrorCard
+import org.mifospay.core.ui.DropdownBoxItem
+import org.mifospay.core.ui.ExposedDropdownBox
 import org.mifospay.core.ui.MifosPasswordField
-import org.mifospay.core.ui.PasswordStrengthIndicator
 import org.mifospay.core.ui.utils.EventsEffect
+import org.mifospay.feature.auth.signup.SignUpState.DialogState
 
 @Composable
 internal fun SignupScreen(
@@ -164,7 +169,6 @@ private fun SignupScreenContent(
                 value = state.firstNameInput,
                 label = stringResource(Res.string.feature_auth_first_name),
                 modifier = Modifier.fillMaxWidth(),
-                isError = state.firstNameInput.isEmpty(),
                 keyboardOptions = KeyboardOptions(
                     capitalization = KeyboardCapitalization.Words,
                 ),
@@ -179,7 +183,6 @@ private fun SignupScreenContent(
                 value = state.lastNameInput,
                 label = stringResource(Res.string.feature_auth_last_name),
                 modifier = Modifier.fillMaxWidth(),
-                isError = state.lastNameInput.isEmpty(),
                 keyboardOptions = KeyboardOptions(
                     capitalization = KeyboardCapitalization.Words,
                 ),
@@ -194,7 +197,6 @@ private fun SignupScreenContent(
                 value = state.userNameInput,
                 label = stringResource(Res.string.feature_auth_username),
                 modifier = Modifier.fillMaxWidth(),
-                isError = state.userNameInput.isEmpty(),
                 keyboardOptions = KeyboardOptions(
                     capitalization = KeyboardCapitalization.None,
                 ),
@@ -209,7 +211,6 @@ private fun SignupScreenContent(
                 value = state.emailInput,
                 label = stringResource(Res.string.feature_auth_email),
                 modifier = Modifier.fillMaxWidth(),
-                isError = state.emailInput.isEmpty(),
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Email,
                 ),
@@ -224,7 +225,6 @@ private fun SignupScreenContent(
                 value = state.mobileNumberInput,
                 label = stringResource(Res.string.feature_auth_mobile_no),
                 modifier = Modifier.fillMaxWidth(),
-                isError = state.mobileNumberInput.isEmpty(),
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Phone,
                 ),
@@ -237,6 +237,8 @@ private fun SignupScreenContent(
         item {
             Column {
                 var showPassword by rememberSaveable { mutableStateOf(false) }
+                val interactionSource = remember { MutableInteractionSource() }
+                val isFocused by interactionSource.collectIsFocusedAsState()
 
                 MifosPasswordField(
                     value = state.passwordInput,
@@ -247,12 +249,15 @@ private fun SignupScreenContent(
                     },
                     showPassword = showPassword,
                     showPasswordChange = { showPassword = !showPassword },
+                    interactionSource = interactionSource,
                 )
                 Spacer(modifier = Modifier.height(4.dp))
-                PasswordStrengthIndicator(
+                CombinedPasswordErrorCard(
                     modifier = Modifier.fillMaxWidth(),
-                    state = state.passwordStrengthState,
+                    errors = state.passwordFeedback,
+                    passwordStrengthState = state.passwordStrengthState,
                     currentCharacterCount = state.passwordInput.length,
+                    isPasswordFieldFocused = isFocused,
                 )
             }
         }
@@ -277,7 +282,6 @@ private fun SignupScreenContent(
                 value = state.addressLine1Input,
                 label = stringResource(Res.string.feature_auth_address_line_1),
                 modifier = Modifier.fillMaxWidth(),
-                isError = state.addressLine1Input.isEmpty(),
                 onValueChange = {
                     onAction(SignUpAction.AddressLine1InputChange(it))
                 },
@@ -289,7 +293,6 @@ private fun SignupScreenContent(
                 value = state.addressLine2Input,
                 modifier = Modifier.fillMaxWidth(),
                 label = stringResource(Res.string.feature_auth_address_line_2),
-                isError = state.addressLine2Input.isEmpty(),
                 onValueChange = {
                     onAction(SignUpAction.AddressLine2InputChange(it))
                 },
@@ -301,7 +304,6 @@ private fun SignupScreenContent(
                 value = state.pinCodeInput,
                 label = stringResource(Res.string.feature_auth_pin_code),
                 modifier = Modifier.fillMaxWidth(),
-                isError = state.pinCodeInput.isEmpty(),
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Number,
                 ),
@@ -317,25 +319,57 @@ private fun SignupScreenContent(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
             ) {
-                MifosOutlinedTextField(
-                    value = state.countryInput,
-                    label = stringResource(Res.string.feature_auth_country),
-                    onValueChange = {
-                        onAction(SignUpAction.CountryInputChange(it))
-                    },
-                    modifier = Modifier.weight(1.5f),
-                    isError = state.countryInput.isEmpty(),
-                )
+                var isCountryDropdownExpanded by remember { mutableStateOf(false) }
+                var isStateDropdownExpanded by remember { mutableStateOf(false) }
 
-                MifosOutlinedTextField(
-                    value = state.stateInput,
-                    label = stringResource(Res.string.feature_auth_state),
-                    onValueChange = {
-                        onAction(SignUpAction.StateInputChange(it))
-                    },
+                // Country Dropdown
+                ExposedDropdownBox(
+                    expanded = isCountryDropdownExpanded,
+                    label = stringResource(Res.string.feature_auth_country),
+                    value = state.countryInput,
+                    onExpandChange = { isCountryDropdownExpanded = it },
                     modifier = Modifier.weight(1.5f),
-                    isError = state.stateInput.isEmpty(),
-                )
+                ) {
+                    state.countriesWithStates.keys.forEach { country ->
+                        DropdownBoxItem(
+                            text = country,
+                            onClick = {
+                                onAction(SignUpAction.CountryInputChange(country))
+                                isCountryDropdownExpanded = false
+                            },
+                        )
+                    }
+                }
+
+                // State Dropdown
+                if (state.statesForSelectedCountry.isNullOrEmpty()) {
+                    MifosOutlinedTextField(
+                        value = state.stateInput,
+                        label = stringResource(Res.string.feature_auth_state),
+                        onValueChange = {
+                            onAction(SignUpAction.StateInputChange(it))
+                        },
+                        modifier = Modifier.weight(1.5f),
+                    )
+                } else {
+                    ExposedDropdownBox(
+                        expanded = isStateDropdownExpanded,
+                        label = stringResource(Res.string.feature_auth_state),
+                        value = state.stateInput,
+                        onExpandChange = { isStateDropdownExpanded = it },
+                        modifier = Modifier.weight(1.5f),
+                    ) {
+                        state.statesForSelectedCountry.forEach { stateName ->
+                            DropdownBoxItem(
+                                text = stateName,
+                                onClick = {
+                                    onAction(SignUpAction.StateInputChange(stateName))
+                                    isStateDropdownExpanded = false
+                                },
+                            )
+                        }
+                    }
+                }
             }
         }
 
@@ -359,21 +393,24 @@ private fun SignupScreenContent(
 
 @Composable
 private fun SignUpDialogs(
-    dialogState: SignUpDialog?,
+    dialogState: DialogState?,
     onDismissRequest: () -> Unit,
 ) {
     when (dialogState) {
-        is SignUpDialog.Error -> MifosBasicDialog(
-            visibilityState = BasicDialogState.Shown(
-                message = dialogState.message,
-            ),
-            onDismissRequest = onDismissRequest,
-        )
-
-        is SignUpDialog.Loading -> MifosLoadingDialog(
+        DialogState.Loading -> MifosLoadingDialog(
             visibilityState = LoadingDialogState.Shown,
         )
 
-        null -> Unit
+        is DialogState.Error.StringMessage -> MifosBasicDialog(
+            visibilityState = BasicDialogState.Shown(dialogState.message),
+            onDismissRequest = onDismissRequest,
+        )
+
+        is DialogState.Error.ResourceMessage -> MifosBasicDialog(
+            visibilityState = BasicDialogState.Shown(stringResource(dialogState.message)),
+            onDismissRequest = onDismissRequest,
+        )
+
+        else -> Unit
     }
 }

@@ -13,7 +13,10 @@ import io.ktor.client.HttpClient
 import io.ktor.client.plugins.HttpClientPlugin
 import io.ktor.client.request.HttpRequestPipeline
 import io.ktor.client.request.header
+import io.ktor.client.statement.HttpResponsePipeline
+import io.ktor.http.HttpStatusCode
 import io.ktor.util.AttributeKey
+import org.mifospay.core.common.GlobalAuthManager
 import org.mifospay.core.datastore.UserPreferencesRepository
 
 class KtorInterceptor(
@@ -37,6 +40,13 @@ class KtorInterceptor(
                         context.headers[HEADER_AUTH] = "Basic $token"
                     }
                 }
+            }
+
+            scope.responsePipeline.intercept(HttpResponsePipeline.After) {
+                if (context.response.status == HttpStatusCode.Unauthorized) {
+                    GlobalAuthManager.markUnauthorized()
+                }
+                proceedWith(subject)
             }
         }
 
@@ -74,6 +84,13 @@ class KtorInterceptorRe(
                         context.headers[HEADER_AUTH] = "Basic $token"
                     }
                 }
+            }
+
+            scope.responsePipeline.intercept(HttpResponsePipeline.After) {
+                if (context.response.status == HttpStatusCode.Unauthorized) {
+                    GlobalAuthManager.markUnauthorized()
+                }
+                proceedWith(subject)
             }
         }
 

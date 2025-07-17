@@ -15,4 +15,16 @@
     <string name="feature_make_transfer_amount">Amount</string>
     <string name="feature_make_transfer_transaction_success">Transaction successful</string>
     <string name="feature_make_transfer_transaction_unable_to_process">Unable to process transfer</string>
+
+    <string name="feature_make_transfer_review_title">Review Transfer</string>
+    <string name="feature_make_transfer_description_label">Description</string>
+    <string name="feature_make_transfer_to_account">To Account</string>
+    <string name="feature_make_transfer_from_account">From Account</string>
+    <string name="feature_make_transfer_continue_button">Continue</string>
+    <string name="feature_make_transfer_oops_title">Oops!</string>
+    <string name="feature_make_transfer_no_accounts_found">No accounts found!</string>
+    <string name="feature_make_transfer_check_icon_description">check</string>
+    <string name="feature_make_transfer_badge_wallet">WALLET</string>
+    <string name="feature_make_transfer_badge_saving">SAVING</string>
+    <string name="feature_make_transfer_icon_selected_description">Selected account indicator</string>
 </resources>

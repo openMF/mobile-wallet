@@ -10,14 +10,19 @@
 package org.mifospay.shared
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.rememberNavController
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
+import org.mifospay.core.common.GlobalAuthManager
 import org.mifospay.core.data.util.NetworkMonitor
 import org.mifospay.core.data.util.TimeZoneMonitor
+import org.mifospay.core.designsystem.component.MifosDialogBox
 import org.mifospay.core.designsystem.theme.MifosTheme
 import org.mifospay.shared.MainUiState.Success
 import org.mifospay.shared.navigation.MifosNavGraph.LOGIN_GRAPH
@@ -42,6 +47,35 @@ private fun MifosPayApp(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val navController = rememberNavController()
+
+    var showErrorDialog = remember { mutableStateOf<Boolean>(false) }
+    val isUnauthorized by GlobalAuthManager.isUnauthorized.collectAsStateWithLifecycle()
+
+    LaunchedEffect(isUnauthorized) {
+        if (isUnauthorized) {
+            showErrorDialog.value = true
+        }
+    }
+
+    if (showErrorDialog.value) {
+        MifosDialogBox(
+            title = "Unauthorized User",
+            showDialogState = showErrorDialog.value,
+            confirmButtonText = "Ok",
+            onConfirm = {
+                showErrorDialog.value = false
+                viewModel.logOut()
+                navController.navigate(LOGIN_GRAPH) {
+                    popUpTo(navController.graph.id) {
+                        inclusive = true
+                    }
+                }
+                GlobalAuthManager.reset()
+            },
+            onDismiss = {},
+            message = "Please login again to continue",
+        )
+    }
 
     val navDestination = when (uiState) {
         is MainUiState.Loading -> LOGIN_GRAPH

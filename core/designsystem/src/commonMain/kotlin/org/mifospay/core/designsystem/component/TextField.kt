@@ -53,7 +53,7 @@ fun MifosOutlinedTextField(
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
     isError: Boolean = false,
-    errorMessage: String = "",
+    errorMessage: String? = null,
     singleLine: Boolean = false,
     showClearIcon: Boolean = true,
     readOnly: Boolean = false,
@@ -74,9 +74,10 @@ fun MifosOutlinedTextField(
         value = value,
         onValueChange = onValueChange,
         label = label,
+        isError = isError,
         readOnly = readOnly,
-        supportingText = {
-            if (isError) {
+        supportingText = errorMessage?.let {
+            {
                 Text(text = errorMessage)
             }
         },

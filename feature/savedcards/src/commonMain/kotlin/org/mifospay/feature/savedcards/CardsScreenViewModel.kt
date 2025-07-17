@@ -20,14 +20,15 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 import mobile_wallet.feature.savedcards.generated.resources.Res
 import mobile_wallet.feature.savedcards.generated.resources.feature_savedcards_confirm_delete_card
 import mobile_wallet.feature.savedcards.generated.resources.feature_savedcards_delete_card
 import org.jetbrains.compose.resources.StringResource
 import org.mifospay.core.common.DataState
-import org.mifospay.core.common.IgnoredOnParcel
-import org.mifospay.core.common.Parcelable
-import org.mifospay.core.common.Parcelize
+import org.mifospay.core.common.getSerialized
+import org.mifospay.core.common.setSerialized
 import org.mifospay.core.data.repository.SavedCardRepository
 import org.mifospay.core.datastore.UserPreferencesRepository
 import org.mifospay.core.designsystem.icon.MifosIcons
@@ -36,19 +37,22 @@ import org.mifospay.core.ui.utils.BaseViewModel
 import org.mifospay.feature.savedcards.CardAction.Internal.HandleCardDeleteResult
 import org.mifospay.feature.savedcards.createOrUpdate.CardAddEditType
 
-private const val KEY_STATE = "saved_card_state"
-
 class CardsScreenViewModel(
     private val repository: SavedCardRepository,
     userRepository: UserPreferencesRepository,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<CardState, CardEvent, CardAction>(
-    initialState = savedStateHandle[KEY_STATE] ?: run {
+    initialState = savedStateHandle.getSerialized(key = KEY_STATE) ?: run {
         val clientId = requireNotNull(userRepository.clientId.value)
 
         CardState(clientId = clientId)
     },
 ) {
+
+    companion object {
+        private const val KEY_STATE = "saved_card_state"
+    }
+
     @OptIn(ExperimentalCoroutinesApi::class)
     val cardState = repository.getSavedCards(state.clientId)
         .mapLatest { result ->
@@ -68,7 +72,7 @@ class CardsScreenViewModel(
 
     init {
         stateFlow
-            .onEach { savedStateHandle[KEY_STATE] = it }
+            .onEach { savedStateHandle.setSerialized(key = KEY_STATE, value = it) }
             .launchIn(viewModelScope)
     }
 
@@ -150,12 +154,12 @@ class CardsScreenViewModel(
     }
 }
 
-@Parcelize
+@Serializable
 data class CardState(
     val clientId: Long,
-    @IgnoredOnParcel
+    @Transient
     val dialogState: DialogState? = null,
-) : Parcelable {
+) {
 
     sealed interface DialogState {
         data object Loading : DialogState

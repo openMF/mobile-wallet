@@ -9,12 +9,11 @@
  */
 package org.mifospay.core.model.client
 
-import org.mifospay.core.common.Parcelable
-import org.mifospay.core.common.Parcelize
+import kotlinx.serialization.Serializable
 
-@Parcelize
+@Serializable
 data class ClientStatus(
     val id: Int = 0,
     val code: String = "",
     val value: String = "",
-) : Parcelable
+)

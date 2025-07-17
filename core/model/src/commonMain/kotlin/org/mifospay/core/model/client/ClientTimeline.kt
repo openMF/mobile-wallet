@@ -9,14 +9,13 @@
  */
 package org.mifospay.core.model.client
 
-import org.mifospay.core.common.Parcelable
-import org.mifospay.core.common.Parcelize
+import kotlinx.serialization.Serializable
 
-@Parcelize
+@Serializable
 data class ClientTimeline(
     val submittedOnDate: List<Long> = emptyList(),
     val activatedOnDate: List<Long> = emptyList(),
     val activatedByUsername: String? = null,
     val activatedByFirstname: String? = null,
     val activatedByLastname: String? = null,
-) : Parcelable
+)

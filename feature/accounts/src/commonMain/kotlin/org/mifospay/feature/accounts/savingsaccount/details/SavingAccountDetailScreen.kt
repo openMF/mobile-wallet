@@ -53,6 +53,18 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.launch
 import mobile_wallet.feature.accounts.generated.resources.Res
+import mobile_wallet.feature.accounts.generated.resources.feature_accounts_detail_account_balance
+import mobile_wallet.feature.accounts.generated.resources.feature_accounts_detail_account_details
+import mobile_wallet.feature.accounts.generated.resources.feature_accounts_detail_account_summary
+import mobile_wallet.feature.accounts.generated.resources.feature_accounts_detail_arrow
+import mobile_wallet.feature.accounts.generated.resources.feature_accounts_detail_available_balance
+import mobile_wallet.feature.accounts.generated.resources.feature_accounts_detail_interest_not_posted
+import mobile_wallet.feature.accounts.generated.resources.feature_accounts_detail_product_name
+import mobile_wallet.feature.accounts.generated.resources.feature_accounts_detail_total_deposits
+import mobile_wallet.feature.accounts.generated.resources.feature_accounts_detail_total_interest_posted
+import mobile_wallet.feature.accounts.generated.resources.feature_accounts_detail_total_overdraft
+import mobile_wallet.feature.accounts.generated.resources.feature_accounts_detail_total_withdrawals
+import mobile_wallet.feature.accounts.generated.resources.feature_accounts_detail_wallet_balance
 import mobile_wallet.feature.accounts.generated.resources.feature_accounts_error_oops
 import mobile_wallet.feature.accounts.generated.resources.feature_accounts_loading
 import org.jetbrains.compose.resources.stringResource
@@ -60,7 +72,6 @@ import org.koin.compose.viewmodel.koinViewModel
 import org.mifospay.core.common.CurrencyFormatter
 import org.mifospay.core.designsystem.component.MfLoadingWheel
 import org.mifospay.core.designsystem.component.MifosScaffold
-import org.mifospay.core.designsystem.theme.NewUi
 import org.mifospay.core.model.account.Account
 import org.mifospay.core.model.savingsaccount.SavingAccountDetail
 import org.mifospay.core.model.savingsaccount.Status
@@ -71,6 +82,8 @@ import org.mifospay.core.ui.EmptyContentScreen
 import org.mifospay.core.ui.MifosDivider
 import org.mifospay.core.ui.TransactionHistoryCard
 import org.mifospay.core.ui.utils.EventsEffect
+import org.mifospay.feature.accounts.SavingAccountStatus
+import org.mifospay.feature.accounts.color
 
 @Composable
 internal fun SavingAccountDetailScreen(
@@ -122,7 +135,7 @@ internal fun SavingAccountDetailScreen(
         backPress = {
             onAction(SADAction.NavigateBack)
         },
-        topBarTitle = "Account Details",
+        topBarTitle = stringResource(Res.string.feature_accounts_detail_account_details),
         snackbarHost = { SnackbarHost(snackbarHostState) },
         modifier = modifier,
     ) {
@@ -229,7 +242,7 @@ private fun SavingAccountSummaryCard(
             verticalArrangement = Arrangement.spacedBy(4.dp),
         ) {
             Text(
-                text = "Account Summary",
+                text = stringResource(Res.string.feature_accounts_detail_account_summary),
                 color = MaterialTheme.colorScheme.primary,
                 fontWeight = FontWeight(500),
                 modifier = Modifier.padding(8.dp),
@@ -238,7 +251,7 @@ private fun SavingAccountSummaryCard(
             MifosDivider()
 
             RowBlock {
-                Text(text = "Account Balance")
+                Text(text = stringResource(Res.string.feature_accounts_detail_account_balance))
                 Text(
                     text = summary.formatAmount(summary.accountBalance),
                     style = MaterialTheme.typography.bodyMedium,
@@ -250,7 +263,7 @@ private fun SavingAccountSummaryCard(
             MifosDivider()
 
             RowBlock {
-                Text(text = "Total Deposits")
+                Text(text = stringResource(Res.string.feature_accounts_detail_total_deposits))
                 Text(
                     text = summary.formatAmount(summary.totalDeposits),
                     style = MaterialTheme.typography.bodyMedium,
@@ -262,7 +275,7 @@ private fun SavingAccountSummaryCard(
             MifosDivider()
 
             RowBlock {
-                Text(text = "Total Withdrawals")
+                Text(text = stringResource(Res.string.feature_accounts_detail_total_withdrawals))
                 Text(
                     text = summary.formatAmount(summary.totalWithdrawals),
                     style = MaterialTheme.typography.bodyMedium,
@@ -274,7 +287,7 @@ private fun SavingAccountSummaryCard(
             MifosDivider()
 
             RowBlock {
-                Text(text = "Available Balance")
+                Text(text = stringResource(Res.string.feature_accounts_detail_available_balance))
                 Text(
                     text = summary.formatAmount(summary.availableBalance),
                     style = MaterialTheme.typography.bodyMedium,
@@ -286,7 +299,7 @@ private fun SavingAccountSummaryCard(
             MifosDivider()
 
             RowBlock {
-                Text(text = "Total Interest Posted")
+                Text(text = stringResource(Res.string.feature_accounts_detail_total_interest_posted))
                 Text(
                     text = summary.totalInterestPosted.toString(),
                     style = MaterialTheme.typography.bodyMedium,
@@ -298,7 +311,7 @@ private fun SavingAccountSummaryCard(
             MifosDivider()
 
             RowBlock {
-                Text(text = "Total Overdraft")
+                Text(text = stringResource(Res.string.feature_accounts_detail_total_overdraft))
                 Text(
                     text = summary.totalOverdraftInterestDerived.toString(),
                     style = MaterialTheme.typography.bodyMedium,
@@ -310,7 +323,7 @@ private fun SavingAccountSummaryCard(
             MifosDivider()
 
             RowBlock {
-                Text(text = "Interest Not Posted")
+                Text(text = stringResource(Res.string.feature_accounts_detail_interest_not_posted))
                 Text(
                     text = summary.interestNotPosted.toString(),
                     style = MaterialTheme.typography.bodyMedium,
@@ -352,8 +365,8 @@ private fun SavingAccountCard(
             .background(
                 brush = Brush.linearGradient(
                     colors = listOf(
-                        NewUi.walletColor1,
-                        NewUi.walletColor2,
+                        MaterialTheme.colorScheme.primary,
+                        MaterialTheme.colorScheme.secondary,
                     ),
                 ),
                 shape = RoundedCornerShape(16.dp),
@@ -373,7 +386,7 @@ private fun SavingAccountCard(
             ) {
                 Column {
                     Text(
-                        text = "Product Name",
+                        text = stringResource(Res.string.feature_accounts_detail_product_name),
                         fontWeight = FontWeight(300),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.surface,
@@ -410,7 +423,7 @@ private fun SavingAccountCard(
             ) {
                 Column {
                     Text(
-                        text = "Wallet Balance",
+                        text = stringResource(Res.string.feature_accounts_detail_wallet_balance),
                         fontWeight = FontWeight(300),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.surface,
@@ -434,7 +447,7 @@ private fun SavingAccountCard(
                         .graphicsLayer(rotationZ = 90f)
                         .padding(4.dp),
                     imageVector = Icons.Filled.KeyboardArrowUp,
-                    contentDescription = "arrow",
+                    contentDescription = stringResource(Res.string.feature_accounts_detail_arrow),
                     tint = MaterialTheme.colorScheme.surface,
                 )
             }
@@ -448,48 +461,24 @@ private fun SavingAccountStatusCard(
     status: Status,
     modifier: Modifier = Modifier,
 ) {
-    val statusChips = listOf(
-        "Pending Approval" to status.submittedAndPendingApproval,
-        "Approved" to status.approved,
-        "Rejected" to status.rejected,
-        "Withdrawn" to status.withdrawnByApplicant,
-        "Active" to status.active,
-        "Closed" to status.closed,
-        "Prematurely Closed" to status.prematureClosed,
-        "Transfer in Progress" to status.transferInProgress,
-        "Transfer on Hold" to status.transferOnHold,
-        "Matured" to status.matured,
-    )
+    val activeStatuses = SavingAccountStatus.entries.filter { it.isActive(status) }
 
     FlowRow(
         horizontalArrangement = Arrangement.spacedBy(4.dp),
         verticalArrangement = Arrangement.spacedBy(4.dp),
         modifier = modifier,
     ) {
-        statusChips.forEach { (label, isActive) ->
-            if (isActive) {
-                StatusChip(label)
-            }
+        activeStatuses.forEach { statusEnum ->
+            StatusChip(
+                label = stringResource(statusEnum.labelRes),
+                color = statusEnum.color,
+            )
         }
     }
 }
 
 @Composable
-private fun StatusChip(label: String) {
-    val color = when (label) {
-        "Pending Approval" -> Color(0xFFFFF9C4)
-        "Approved" -> Color(0xFFC8E6C9)
-        "Rejected" -> Color(0xFFFFCDD2)
-        "Withdrawn" -> Color(0xFFE1BEE7)
-        "Active" -> Color(0xFFBBDEFB)
-        "Closed" -> Color(0xFFCFD8DC)
-        "Prematurely Closed" -> Color(0xFFD7CCC8)
-        "Transfer in Progress" -> Color(0xFFFFE0B2)
-        "Transfer on Hold" -> Color(0xFFF0F4C3)
-        "Matured" -> Color(0xFFB2DFDB)
-        else -> Color(0xFFEFEFEF)
-    }
-
+private fun StatusChip(label: String, color: Color) {
     SuggestionChip(
         onClick = { /* Handle click if needed */ },
         label = { Text(label) },

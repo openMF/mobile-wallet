@@ -45,6 +45,14 @@ import androidx.compose.ui.unit.toSize
 import androidx.compose.ui.window.PopupProperties
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.launch
+import mobile_wallet.feature.accounts.generated.resources.Res
+import mobile_wallet.feature.accounts.generated.resources.feature_accounts_beneficiary_account_no
+import mobile_wallet.feature.accounts.generated.resources.feature_accounts_beneficiary_account_type
+import mobile_wallet.feature.accounts.generated.resources.feature_accounts_beneficiary_locale
+import mobile_wallet.feature.accounts.generated.resources.feature_accounts_beneficiary_nickname
+import mobile_wallet.feature.accounts.generated.resources.feature_accounts_beneficiary_office_name
+import mobile_wallet.feature.accounts.generated.resources.feature_accounts_beneficiary_transfer_limit
+import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.mifospay.core.designsystem.component.BasicDialogState
 import org.mifospay.core.designsystem.component.LoadingDialogState
@@ -109,7 +117,7 @@ internal fun AddEditBeneficiaryScreenContent(
     onAction: (AEBAction) -> Unit,
 ) {
     MifosScaffold(
-        topBarTitle = state.title,
+        topBarTitle = stringResource(state.title),
         backPress = { onAction(AEBAction.NavigateBack) },
         snackbarHost = { SnackbarHost(snackbarHostState) },
     ) { paddingValues ->
@@ -123,7 +131,7 @@ internal fun AddEditBeneficiaryScreenContent(
         ) {
             item {
                 MifosTextField(
-                    label = "Nickname",
+                    label = stringResource(Res.string.feature_accounts_beneficiary_nickname),
                     value = state.name,
                     onValueChange = {
                         onAction(AEBAction.ChangeName(it))
@@ -133,7 +141,7 @@ internal fun AddEditBeneficiaryScreenContent(
 
             item {
                 MifosTextField(
-                    label = "Account No",
+                    label = stringResource(Res.string.feature_accounts_beneficiary_account_no),
                     value = state.accountNumber,
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Number,
@@ -146,7 +154,7 @@ internal fun AddEditBeneficiaryScreenContent(
 
             item {
                 MifosTextField(
-                    label = "Transfer Limit",
+                    label = stringResource(Res.string.feature_accounts_beneficiary_transfer_limit),
                     value = state.transferLimit.toString(),
                     onValueChange = {
                         onAction(AEBAction.ChangeTransferLimit(it))
@@ -177,7 +185,7 @@ internal fun AddEditBeneficiaryScreenContent(
                     },
                 ) {
                     MifosTextField(
-                        label = "Locale",
+                        label = stringResource(Res.string.feature_accounts_beneficiary_locale),
                         value = state.locale,
                         onValueChange = {
                             localeToggled = true
@@ -239,7 +247,7 @@ internal fun AddEditBeneficiaryScreenContent(
 
             item {
                 MifosTextField(
-                    label = "Office Name",
+                    label = stringResource(Res.string.feature_accounts_beneficiary_office_name),
                     value = state.officeName,
                     showClearIcon = false,
                     readOnly = true,
@@ -251,8 +259,8 @@ internal fun AddEditBeneficiaryScreenContent(
 
             item {
                 MifosTextField(
-                    label = "Account Type",
-                    value = state.accountTypeName,
+                    label = stringResource(Res.string.feature_accounts_beneficiary_account_type),
+                    value = stringResource(state.accountTypeName),
                     readOnly = true,
                     showClearIcon = false,
                     onValueChange = {
@@ -264,7 +272,7 @@ internal fun AddEditBeneficiaryScreenContent(
             item {
                 MifosButton(
                     text = {
-                        Text(text = state.btnText)
+                        Text(text = stringResource(state.btnText))
                     },
                     onClick = {
                         onAction(AEBAction.SaveBeneficiary)
@@ -282,7 +290,7 @@ private fun BeneficiaryDialogs(
     onDismissRequest: () -> Unit,
 ) {
     when (dialogState) {
-        is AEBState.DialogState.Error -> MifosBasicDialog(
+        is AEBState.DialogState.Error.StringMessage -> MifosBasicDialog(
             visibilityState = BasicDialogState.Shown(
                 message = dialogState.message,
             ),
@@ -291,6 +299,13 @@ private fun BeneficiaryDialogs(
 
         is AEBState.DialogState.Loading -> MifosLoadingDialog(
             visibilityState = LoadingDialogState.Shown,
+        )
+
+        is AEBState.DialogState.Error.ResourceMessage -> MifosBasicDialog(
+            visibilityState = BasicDialogState.Shown(
+                message = stringResource(dialogState.message),
+            ),
+            onDismissRequest = onDismissRequest,
         )
 
         null -> Unit

@@ -9,12 +9,11 @@
  */
 package org.mifospay.core.model.account
 
-import org.mifospay.core.common.Parcelable
-import org.mifospay.core.common.Parcelize
+import kotlinx.serialization.Serializable
 import org.mifospay.core.model.beneficiary.Beneficiary
 
-@Parcelize
+@Serializable
 data class AccountContent(
     val accounts: List<Account>,
     val beneficiaries: List<Beneficiary>,
-) : Parcelable
+)

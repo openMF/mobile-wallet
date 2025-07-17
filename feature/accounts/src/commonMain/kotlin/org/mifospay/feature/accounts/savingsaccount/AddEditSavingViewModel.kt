@@ -17,11 +17,28 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
+import mobile_wallet.feature.accounts.generated.resources.Res
+import mobile_wallet.feature.accounts.generated.resources.feature_accounts_error_account_id_required
+import mobile_wallet.feature.accounts.generated.resources.feature_accounts_error_client_id_required
+import mobile_wallet.feature.accounts.generated.resources.feature_accounts_error_date_format_required
+import mobile_wallet.feature.accounts.generated.resources.feature_accounts_error_external_id_length
+import mobile_wallet.feature.accounts.generated.resources.feature_accounts_error_external_id_required
+import mobile_wallet.feature.accounts.generated.resources.feature_accounts_error_locale_required
+import mobile_wallet.feature.accounts.generated.resources.feature_accounts_error_min_opening_balance_required
+import mobile_wallet.feature.accounts.generated.resources.feature_accounts_error_overdraft_limit_required
+import mobile_wallet.feature.accounts.generated.resources.feature_accounts_error_select_saving_product
+import mobile_wallet.feature.accounts.generated.resources.feature_accounts_error_submitted_date_required
+import mobile_wallet.feature.accounts.generated.resources.feature_accounts_saving_button_save
+import mobile_wallet.feature.accounts.generated.resources.feature_accounts_saving_button_update
+import mobile_wallet.feature.accounts.generated.resources.feature_accounts_saving_title_create
+import mobile_wallet.feature.accounts.generated.resources.feature_accounts_saving_title_update
+import org.jetbrains.compose.resources.StringResource
 import org.mifospay.core.common.DataState
 import org.mifospay.core.common.DateHelper
-import org.mifospay.core.common.IgnoredOnParcel
-import org.mifospay.core.common.Parcelable
-import org.mifospay.core.common.Parcelize
+import org.mifospay.core.common.getSerialized
+import org.mifospay.core.common.setSerialized
 import org.mifospay.core.data.repository.LocalAssetRepository
 import org.mifospay.core.data.repository.SavingsAccountRepository
 import org.mifospay.core.datastore.UserPreferencesRepository
@@ -35,15 +52,13 @@ import org.mifospay.feature.accounts.savingsaccount.AESAction.Internal.HandleSav
 import org.mifospay.feature.accounts.savingsaccount.AESState.ViewState.Error
 import org.mifospay.feature.accounts.savingsaccount.AESState.DialogState.Error as DialogStateError
 
-private const val KEY = "add_edit_saving_state"
-
 internal class AddEditSavingViewModel(
     private val repository: SavingsAccountRepository,
     private val userRepository: UserPreferencesRepository,
     localAssetRepository: LocalAssetRepository,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<AESState, AESEvent, AESAction>(
-    initialState = savedStateHandle[KEY] ?: run {
+    initialState = savedStateHandle.getSerialized(ADD_EDIT_SAVING_STATE_KEY) ?: run {
         val clientId = requireNotNull(userRepository.clientId.value)
         val type = SavingAccountAddEditArgs(savedStateHandle).savingsAddEditType
 
@@ -55,6 +70,11 @@ internal class AddEditSavingViewModel(
         )
     },
 ) {
+
+    companion object {
+        private const val ADD_EDIT_SAVING_STATE_KEY = "add_edit_saving_state"
+    }
+
     val localeList = localAssetRepository.localeList.stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5_000),
@@ -62,9 +82,9 @@ internal class AddEditSavingViewModel(
     )
 
     init {
-//        stateFlow
-//            .onEach { savedStateHandle[KEY] = it }
-//            .launchIn(viewModelScope)
+        stateFlow
+            .onEach { savedStateHandle.setSerialized(key = ADD_EDIT_SAVING_STATE_KEY, value = it) }
+            .launchIn(viewModelScope)
 
         repository.getSavingAccountTemplate(state.clientId).onEach {
             sendAction(HandleSavingTemplateResult(it))
@@ -157,55 +177,55 @@ internal class AddEditSavingViewModel(
                 is SavingsAddEditType.AddItem -> when {
                     content.productId == 0L -> {
                         mutableStateFlow.update {
-                            it.copy(dialogState = DialogStateError("Select a Saving Product"))
+                            it.copy(dialogState = DialogStateError.ResourceMessage(Res.string.feature_accounts_error_select_saving_product))
                         }
                     }
 
                     content.clientId.isEmpty() -> {
                         mutableStateFlow.update {
-                            it.copy(dialogState = DialogStateError("Client ID is required"))
+                            it.copy(dialogState = DialogStateError.ResourceMessage(Res.string.feature_accounts_error_client_id_required))
                         }
                     }
 
                     content.externalId.isEmpty() -> {
                         mutableStateFlow.update {
-                            it.copy(dialogState = DialogStateError("External ID is required"))
+                            it.copy(dialogState = DialogStateError.ResourceMessage(Res.string.feature_accounts_error_external_id_required))
                         }
                     }
 
                     content.externalId.length < 8 -> {
                         mutableStateFlow.update {
-                            it.copy(dialogState = DialogStateError("External ID must be at least 8 characters"))
+                            it.copy(dialogState = DialogStateError.ResourceMessage(Res.string.feature_accounts_error_external_id_length))
                         }
                     }
 
                     content.enforceMinRequiredBalance && content.minRequiredOpeningBalance == 0L -> {
                         mutableStateFlow.update {
-                            it.copy(dialogState = DialogStateError("Min Required Opening Balance is required"))
+                            it.copy(dialogState = DialogStateError.ResourceMessage(Res.string.feature_accounts_error_min_opening_balance_required))
                         }
                     }
 
                     content.allowOverdraft && content.overdraftLimit.isEmpty() -> {
                         mutableStateFlow.update {
-                            it.copy(dialogState = DialogStateError("Overdraft Limit is required"))
+                            it.copy(dialogState = DialogStateError.ResourceMessage(Res.string.feature_accounts_error_overdraft_limit_required))
                         }
                     }
 
                     content.locale.isEmpty() -> {
                         mutableStateFlow.update {
-                            it.copy(dialogState = DialogStateError("Locale is required"))
+                            it.copy(dialogState = DialogStateError.ResourceMessage(Res.string.feature_accounts_error_locale_required))
                         }
                     }
 
                     content.submittedOnDate.isEmpty() -> {
                         mutableStateFlow.update {
-                            it.copy(dialogState = DialogStateError("Submitted On Date is required"))
+                            it.copy(dialogState = DialogStateError.ResourceMessage(Res.string.feature_accounts_error_submitted_date_required))
                         }
                     }
 
                     content.dateFormat.isEmpty() -> {
                         mutableStateFlow.update {
-                            it.copy(dialogState = DialogStateError("Date Format is required"))
+                            it.copy(dialogState = DialogStateError.ResourceMessage(Res.string.feature_accounts_error_date_format_required))
                         }
                     }
 
@@ -215,13 +235,13 @@ internal class AddEditSavingViewModel(
                 is SavingsAddEditType.EditItem -> when {
                     content.productId == 0L -> {
                         mutableStateFlow.update {
-                            it.copy(dialogState = DialogStateError("Select a Saving Product"))
+                            it.copy(dialogState = DialogStateError.ResourceMessage(Res.string.feature_accounts_error_select_saving_product))
                         }
                     }
 
                     content.clientId.isEmpty() -> {
                         mutableStateFlow.update {
-                            it.copy(dialogState = DialogStateError("Client ID is required"))
+                            it.copy(dialogState = DialogStateError.ResourceMessage(Res.string.feature_accounts_error_client_id_required))
                         }
                     }
 
@@ -243,7 +263,7 @@ internal class AddEditSavingViewModel(
     private fun initiateUpdateSavingAccount() {
         onContent { content ->
             val accountId = requireNotNull(state.type.savingsAccountId) {
-                "Account ID is required for updating saving account"
+                Res.string.feature_accounts_error_account_id_required
             }
 
             viewModelScope.launch {
@@ -284,9 +304,10 @@ internal class AddEditSavingViewModel(
             }
 
             is DataState.Error -> {
-                val message = action.result.exception.message.toString()
+                val message = action.result.exception.message
+                    .toString()
                 mutableStateFlow.update {
-                    it.copy(dialogState = DialogStateError(message))
+                    it.copy(dialogState = DialogStateError.StringMessage(message))
                 }
             }
 
@@ -319,31 +340,41 @@ internal class AddEditSavingViewModel(
     }
 }
 
-@Parcelize
+@Serializable
 internal data class AESState(
     val clientId: Long,
     val type: SavingsAddEditType,
     val viewState: ViewState,
-    val dialogState: DialogState?,
-) : Parcelable {
+    @Transient
+    val dialogState: DialogState? = null,
+) {
 
     val isInEditMode: Boolean
         get() = type is SavingsAddEditType.EditItem
 
-    val btnText: String
-        get() = if (!isInEditMode) "Save" else "Update"
+    val btnText: StringResource
+        get() = if (!isInEditMode) {
+            Res.string.feature_accounts_saving_button_save
+        } else {
+            Res.string.feature_accounts_saving_button_update
+        }
 
-    val title: String
-        get() = if (!isInEditMode) "Create Saving Account" else "Update Saving Account"
+    val title: StringResource
+        get() = if (!isInEditMode) {
+            Res.string.feature_accounts_saving_title_create
+        } else {
+            Res.string.feature_accounts_saving_title_update
+        }
 
-    sealed interface ViewState : Parcelable {
-        @Parcelize
+    @Serializable
+    sealed interface ViewState {
+        @Serializable
         data object Loading : ViewState
 
-        @Parcelize
+        @Serializable
         data class Error(val message: String) : ViewState
 
-        @Parcelize
+        @Serializable
         data class Content(
             val template: SavingAccountTemplate,
             val minRequiredOpeningBalance: Long = 0,
@@ -361,7 +392,6 @@ internal data class AESState(
             val withHoldTax: Boolean = template.withHoldTax,
         ) : ViewState {
 
-            @IgnoredOnParcel
             val createSavingEntity: CreateNewSavingEntity
                 get() = CreateNewSavingEntity(
                     clientId = clientId,
@@ -379,7 +409,6 @@ internal data class AESState(
                     dateFormat = dateFormat,
                 )
 
-            @IgnoredOnParcel
             val updateSavingEntity: UpdateSavingAccountEntity
                 get() = UpdateSavingAccountEntity(
                     clientId = clientId,
@@ -388,12 +417,12 @@ internal data class AESState(
         }
     }
 
-    sealed interface DialogState : Parcelable {
-        @Parcelize
+    sealed interface DialogState {
         data object Loading : DialogState
-
-        @Parcelize
-        data class Error(val message: String) : DialogState
+        sealed interface Error : DialogState {
+            data class StringMessage(val message: String) : Error
+            data class ResourceMessage(val message: StringResource) : Error
+        }
     }
 }
 

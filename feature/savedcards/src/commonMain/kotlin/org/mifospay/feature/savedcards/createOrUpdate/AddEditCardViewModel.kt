@@ -16,10 +16,11 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 import org.mifospay.core.common.DataState
-import org.mifospay.core.common.IgnoredOnParcel
-import org.mifospay.core.common.Parcelable
-import org.mifospay.core.common.Parcelize
+import org.mifospay.core.common.getSerialized
+import org.mifospay.core.common.setSerialized
 import org.mifospay.core.data.repository.SavedCardRepository
 import org.mifospay.core.datastore.UserPreferencesRepository
 import org.mifospay.core.model.savedcards.CardPayload
@@ -34,14 +35,12 @@ import org.mifospay.feature.savedcards.utils.CreditCardUtils.isValidCreditCardNu
 import org.mifospay.feature.savedcards.utils.CreditCardUtils.isValidExpiryDate
 import org.mifospay.feature.savedcards.utils.creditCardColors
 
-private const val KEY = "add_edit_card_state"
-
 internal class AddEditCardViewModel(
     private val repository: SavedCardRepository,
     userRepository: UserPreferencesRepository,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<AECardState, AECardEvent, AECardAction>(
-    initialState = savedStateHandle[KEY] ?: run {
+    initialState = savedStateHandle.getSerialized(ADD_EDIT_CARD_STATE_KEY) ?: run {
         val clientId = requireNotNull(userRepository.clientId.value)
         val type = CardAddEditArgs(savedStateHandle).cardAddEditType
 
@@ -52,10 +51,14 @@ internal class AddEditCardViewModel(
     },
 ) {
 
+    companion object {
+        private const val ADD_EDIT_CARD_STATE_KEY = "add_edit_card_state"
+    }
+
     init {
-//        stateFlow
-//            .onEach { savedStateHandle[KEY] = it }
-//            .launchIn(viewModelScope)
+        stateFlow
+            .onEach { savedStateHandle.setSerialized(key = ADD_EDIT_CARD_STATE_KEY, value = it) }
+            .launchIn(viewModelScope)
 
         if (state.type is CardAddEditType.EditItem) {
             repository.getSavedCard(state.clientId, state.type.savedCardId!!).onEach {
@@ -258,7 +261,7 @@ internal class AddEditCardViewModel(
     }
 }
 
-@Parcelize
+@Serializable
 internal data class AECardState(
     val clientId: Long,
     val type: CardAddEditType,
@@ -268,25 +271,21 @@ internal data class AECardState(
     val cvv: String = "",
     val expiryDate: String = "",
     val backgroundColor: String = creditCardColors.first().value.toString(),
+    @Transient
     val dialogState: DialogState? = null,
-) : Parcelable {
-    @IgnoredOnParcel
+) {
+
     val isAddMode: Boolean
         get() = type == CardAddEditType.AddItem
 
-    @IgnoredOnParcel
     val title: String get() = if (isAddMode) "Add New Card" else "Update Card Details"
 
-    @IgnoredOnParcel
     val buttonText: String get() = if (isAddMode) "Add New Card" else "Update"
 
-    @IgnoredOnParcel
     val cardType: CardType get() = cardNumber.detectCardType()
 
-    @IgnoredOnParcel
     val fullName: String get() = "$firstName $lastName"
 
-    @IgnoredOnParcel
     val expiryDateFormatted: String
         get() = if (expiryDate.length == 4) {
             "${expiryDate.substring(0, 2)}/${expiryDate.substring(2, 4)}"
@@ -294,16 +293,15 @@ internal data class AECardState(
             expiryDate
         }
 
-    @IgnoredOnParcel
     val maskedCVV get() = "*".repeat(cardType.cvvLength)
 
-    @IgnoredOnParcel
+    @Transient
     val backgroundColors = creditCardColors
 
-    @IgnoredOnParcel
+    @Transient
     val selectedColor = Color(backgroundColor.toULong())
 
-    @IgnoredOnParcel
+    @Transient
     val cardPayload = CardPayload(
         firstName = firstName,
         lastName = lastName,
@@ -313,11 +311,8 @@ internal data class AECardState(
         backgroundColor = backgroundColor,
     )
 
-    sealed interface DialogState : Parcelable {
-        @Parcelize
+    sealed interface DialogState {
         data object Loading : DialogState
-
-        @Parcelize
         data class Error(val message: String) : DialogState
     }
 }

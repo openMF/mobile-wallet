@@ -28,7 +28,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import coil3.ImageLoader
@@ -167,7 +166,7 @@ fun EditableProfileImage(
                 .size(36.dp)
                 .clip(CircleShape)
                 .align(Alignment.BottomCenter),
-            colors = IconButtonDefaults.iconButtonColors(Color.White),
+            colors = IconButtonDefaults.iconButtonColors(MaterialTheme.colorScheme.surface),
         ) {
             Icon(
                 imageVector = MifosIcons.Edit2,

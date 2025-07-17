@@ -29,8 +29,12 @@ internal class TransactionDetailViewModel(
     initialState = TransactionDetailState(TransactionDetailState.ViewState.Loading),
 ) {
 
+    companion object {
+        private const val TRANSFER_ID_KEY = "transferId"
+    }
+
     init {
-        savedStateHandle.get<Long>("transferId")?.let { transferId ->
+        savedStateHandle.get<Long>(TRANSFER_ID_KEY)?.let { transferId ->
             accountRepository.getAccountTransfer(transferId).onEach {
                 sendAction(TransferDetailReceive(it))
             }.launchIn(viewModelScope)
@@ -92,5 +96,6 @@ internal sealed interface TransactionDetailEvent {
 internal sealed interface TransactionDetailAction {
     data object NavigateBack : TransactionDetailAction
     data object ShareTransaction : TransactionDetailAction
-    data class TransferDetailReceive(val result: DataState<TransferDetail>) : TransactionDetailAction
+    data class TransferDetailReceive(val result: DataState<TransferDetail>) :
+        TransactionDetailAction
 }

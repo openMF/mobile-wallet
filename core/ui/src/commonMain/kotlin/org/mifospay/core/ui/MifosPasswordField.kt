@@ -9,6 +9,7 @@
  */
 package org.mifospay.core.ui
 
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Icon
@@ -49,13 +50,16 @@ fun MifosPasswordField(
     readOnly: Boolean = false,
     singleLine: Boolean = true,
     hint: String? = null,
+    isError: Boolean = false,
     showPasswordTestTag: String? = null,
     autoFocus: Boolean = false,
     keyboardType: KeyboardType = KeyboardType.Password,
     imeAction: ImeAction = ImeAction.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
+    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
 ) {
     val focusRequester = remember { FocusRequester() }
+
     MifosCustomTextField(
         modifier = modifier
             .tabNavigation()
@@ -74,6 +78,7 @@ fun MifosPasswordField(
             keyboardType = keyboardType,
             imeAction = imeAction,
         ),
+        isError = isError,
         keyboardActions = keyboardActions,
         supportingText = hint?.let {
             {
@@ -91,9 +96,9 @@ fun MifosPasswordField(
                 ),
             ) {
                 val imageVector = if (showPassword) {
-                    MifosIcons.OutlinedVisibilityOff
-                } else {
                     MifosIcons.OutlinedVisibility
+                } else {
+                    MifosIcons.OutlinedVisibilityOff
                 }
 
                 Icon(
@@ -106,6 +111,7 @@ fun MifosPasswordField(
         textStyle = TextStyle(
             color = MaterialTheme.colorScheme.onSurface,
         ),
+        interactionSource = interactionSource,
     )
     if (autoFocus) {
         LaunchedEffect(Unit) { focusRequester.requestFocus() }
