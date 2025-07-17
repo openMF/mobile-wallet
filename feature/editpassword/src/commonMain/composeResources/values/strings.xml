@@ -9,6 +9,7 @@
     See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
 -->
 <resources>
+    <!-- Edit Password Screen -->
     <string name="feature_editpassword_password_changed_successfully">Password changed successfull</string>
     <string name="feature_editpassword_change_password">Change Password</string>
     <string name="feature_editpassword_current_password">Current Password</string>
@@ -19,4 +20,11 @@
     <string name="feature_editpassword_password_mismatch_error">Password mismatch</string>
     <string name="feature_editpassword_cancel">Cancel</string>
     <string name="feature_editpassword_save">Save</string>
+
+    <!-- EditPasswordViewModel Error Messages -->
+    <string name="feature_editpassword_error_empty_current_password">Please Enter Your Current Password</string>
+    <string name="feature_editpassword_error_same_password">New password cannot be same as current password</string>
+    <string name="feature_editpassword_error_password_min_length">Password must be at least %1$d characters long.</string>
+    <string name="feature_editpassword_error_password_mismatch">Passwords do not match.</string>
+    <string name="feature_editpassword_error_password_weak">Password is weak.</string>
 </resources>

@@ -179,15 +179,29 @@ private fun EditPasswordDialogs(
     onDismissRequest: () -> Unit,
 ) {
     when (dialogState) {
-        is EditPasswordDialog.Error -> MifosBasicDialog(
+        is EditPasswordDialog.Error -> {
+            val message = if (dialogState.formatArgs.isNotEmpty()) {
+                stringResource(dialogState.message, *dialogState.formatArgs.toTypedArray())
+            } else {
+                stringResource(dialogState.message)
+            }
+            MifosBasicDialog(
+                visibilityState = BasicDialogState.Shown(
+                    message = message,
+                ),
+                onDismissRequest = onDismissRequest,
+            )
+        }
+
+        is EditPasswordDialog.Loading -> MifosLoadingDialog(
+            visibilityState = LoadingDialogState.Shown,
+        )
+
+        is EditPasswordDialog.ApiError -> MifosBasicDialog(
             visibilityState = BasicDialogState.Shown(
                 message = dialogState.message,
             ),
             onDismissRequest = onDismissRequest,
-        )
-
-        is EditPasswordDialog.Loading -> MifosLoadingDialog(
-            visibilityState = LoadingDialogState.Shown,
         )
 
         null -> Unit
