@@ -58,9 +58,6 @@ import mobile_wallet.feature.send_money.generated.resources.Res
 import mobile_wallet.feature.send_money.generated.resources.feature_send_money_amount
 import mobile_wallet.feature.send_money.generated.resources.feature_send_money_bottom_bar
 import mobile_wallet.feature.send_money.generated.resources.feature_send_money_close
-import mobile_wallet.feature.send_money.generated.resources.feature_send_money_error_account_cannot_be_empty
-import mobile_wallet.feature.send_money.generated.resources.feature_send_money_error_amount_cannot_be_empty
-import mobile_wallet.feature.send_money.generated.resources.feature_send_money_error_invalid_amount
 import mobile_wallet.feature.send_money.generated.resources.feature_send_money_loading
 import mobile_wallet.feature.send_money.generated.resources.feature_send_money_no_accounts_found
 import mobile_wallet.feature.send_money.generated.resources.feature_send_money_oops
@@ -74,7 +71,7 @@ import mobile_wallet.feature.send_money.generated.resources.feature_send_money_v
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.mifospay.core.common.utils.maskString
-import org.mifospay.core.designsystem.component.BasicDialogState
+import org.mifospay.core.designsystem.component.BasicDialogState.Shown
 import org.mifospay.core.designsystem.component.LoadingDialogState
 import org.mifospay.core.designsystem.component.MifosBasicDialog
 import org.mifospay.core.designsystem.component.MifosButton
@@ -509,24 +506,22 @@ private fun SendMoneyDialogs(
     onDismissRequest: () -> Unit,
 ) {
     when (dialogState) {
-        is SendMoneyState.DialogState.Error -> {
-            val resolvedMessage = when (dialogState.message) {
-                SendMoneyActionError.ERROR_AMOUNT_EMPTY -> stringResource(Res.string.feature_send_money_error_amount_cannot_be_empty)
-                SendMoneyActionError.ERROR_INVALID_AMOUNT -> stringResource(Res.string.feature_send_money_error_invalid_amount)
-                SendMoneyActionError.ERROR_ACCOUNT_EMPTY -> stringResource(Res.string.feature_send_money_error_account_cannot_be_empty)
-                else -> dialogState.message
-            }
-
-            MifosBasicDialog(
-                visibilityState = BasicDialogState.Shown(
-                    message = resolvedMessage,
-                ),
-                onDismissRequest = onDismissRequest,
-            )
-        }
+        is SendMoneyState.DialogState.Error -> MifosBasicDialog(
+            visibilityState = Shown(
+                message = dialogState.message,
+            ),
+            onDismissRequest = onDismissRequest,
+        )
 
         is SendMoneyState.DialogState.Loading -> MifosLoadingDialog(
             visibilityState = LoadingDialogState.Shown,
+        )
+
+        is SendMoneyState.DialogState.ValidationError -> MifosBasicDialog(
+            visibilityState = Shown(
+                message = stringResource(dialogState.res),
+            ),
+            onDismissRequest = onDismissRequest,
         )
 
         null -> Unit

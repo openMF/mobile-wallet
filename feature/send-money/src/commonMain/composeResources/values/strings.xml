@@ -37,4 +37,5 @@
     <string name="feature_send_money_error_invalid_amount">Invalid amount</string>
     <string name="feature_send_money_error_account_cannot_be_empty">Account cannot be empty</string>
     <string name="feature_send_money_error_requesting_payment_qr_but_found">Requesting payment QR but found - %1$s</string>
+    <string name="feature_send_money_error_requesting_payment_qr_data_missing">Failed to request payment QR: required data is missing</string>
 </resources>
