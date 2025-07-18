@@ -25,6 +25,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
 import mobile_wallet.feature.send_money.generated.resources.Res
 import mobile_wallet.feature.send_money.generated.resources.feature_send_money_error_account_cannot_be_empty
@@ -33,7 +34,6 @@ import mobile_wallet.feature.send_money.generated.resources.feature_send_money_e
 import mobile_wallet.feature.send_money.generated.resources.feature_send_money_error_requesting_payment_qr_but_found
 import mobile_wallet.feature.send_money.generated.resources.feature_send_money_error_requesting_payment_qr_data_missing
 import org.jetbrains.compose.resources.StringResource
-import org.jetbrains.compose.resources.getString
 import org.mifospay.core.common.DataState
 import org.mifospay.core.common.getSerialized
 import org.mifospay.core.common.setSerialized
@@ -45,7 +45,6 @@ import org.mifospay.core.model.utils.toAccount
 import org.mifospay.core.ui.utils.BaseViewModel
 import org.mifospay.feature.send.money.SendMoneyAction.HandleRequestData
 import org.mifospay.feature.send.money.SendMoneyState.DialogState.Error
-import org.mifospay.feature.send.money.SendMoneyState.DialogState.ValidationError
 
 class SendMoneyViewModel(
     private val scanner: QrScanner,
@@ -170,7 +169,7 @@ class SendMoneyViewModel(
 
     private fun updateErrorState(res: StringResource) {
         mutableStateFlow.update {
-            it.copy(dialogState = ValidationError(res))
+            it.copy(dialogState = Error.ResourceMessage(res))
         }
     }
 
@@ -187,17 +186,19 @@ class SendMoneyViewModel(
                     )
                 }
             } catch (e: Exception) {
-                val message = if (action.requestData.isNotEmpty()) {
-                    getString(
+                val errorState = if (action.requestData.isNotEmpty()) {
+                    Error.GenericResourceMessage(
                         Res.string.feature_send_money_error_requesting_payment_qr_but_found,
-                        action.requestData,
+                        listOf(action.requestData),
                     )
                 } else {
-                    getString(Res.string.feature_send_money_error_requesting_payment_qr_data_missing)
+                    Error.ResourceMessage(Res.string.feature_send_money_error_requesting_payment_qr_data_missing)
                 }
 
                 mutableStateFlow.update {
-                    it.copy(dialogState = Error(message))
+                    it.copy(
+                        dialogState = errorState,
+                    )
                 }
             }
         }
@@ -234,9 +235,16 @@ data class SendMoneyState(
         data object Loading : DialogState
 
         @Serializable
-        data class Error(val message: String) : DialogState
+        sealed interface Error : DialogState {
+            @Serializable
+            data class ResourceMessage(@Contextual val message: StringResource) : Error
 
-        data class ValidationError(val res: StringResource) : DialogState
+            @Serializable
+            data class GenericResourceMessage(
+                @Contextual val message: StringResource,
+                val args: List<String>,
+            ) : Error
+        }
     }
 }
 
