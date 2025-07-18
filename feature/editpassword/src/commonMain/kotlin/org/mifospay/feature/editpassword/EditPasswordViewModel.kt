@@ -179,7 +179,7 @@ internal class EditPasswordViewModel(
                 it.copy(
                     dialogState = Error(
                         Res.string.feature_editpassword_error_password_min_length,
-                        listOf(MIN_PASSWORD_LENGTH)
+                        listOf(MIN_PASSWORD_LENGTH),
                     ),
                 )
             }
@@ -233,12 +233,12 @@ internal data class EditPasswordState(
             PasswordStrengthState.WEAK_1,
             PasswordStrengthState.WEAK_2,
             PasswordStrengthState.WEAK_3,
-                -> false
+            -> false
 
             PasswordStrengthState.GOOD,
             PasswordStrengthState.STRONG,
             PasswordStrengthState.VERY_STRONG,
-                -> true
+            -> true
         }
 
     val isPasswordMatch: Boolean
@@ -252,7 +252,7 @@ internal sealed interface EditPasswordDialog {
     data object Loading : EditPasswordDialog
     data class Error(
         val message: StringResource,
-        val formatArgs: List<Any> = emptyList()
+        val formatArgs: List<Any> = emptyList(),
     ) : EditPasswordDialog
     data class ApiError(val message: String) : EditPasswordDialog
 }
