@@ -11,12 +11,15 @@
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 import androidx.compose.ui.window.rememberWindowState
+import io.github.vinceglb.filekit.FileKit
 import org.mifospay.shared.MifosPaySharedApp
 import org.mifospay.shared.di.initKoin
 
 fun main() {
     application {
         initKoin()
+        // Initialize FileKit
+        FileKit.init(appId = "org.mifospay.desktop")
         val windowState = rememberWindowState()
         Window(
             onCloseRequest = ::exitApplication,
