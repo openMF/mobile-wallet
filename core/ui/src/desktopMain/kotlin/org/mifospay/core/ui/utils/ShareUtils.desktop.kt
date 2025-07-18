@@ -34,7 +34,7 @@ actual object ShareUtils {
         val newFile = FileKit.openFileSaver(
             suggestedName = "text.txt",
         )
-        newFile?.write(text.toByteArray())
+        newFile?.write(text.encodeToByteArray())
     }
 
     /**

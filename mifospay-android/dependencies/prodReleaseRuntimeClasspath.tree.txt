@@ -2605,6 +2605,7 @@
 |    \--- org.jetbrains.kotlin:kotlin-parcelize-runtime:2.1.20 (*)
 +--- project :core:data (*)
 +--- project :core:ui (*)
++--- io.github.vinceglb:filekit-dialogs:0.10.0-beta04 (*)
 +--- androidx.core:core-ktx:1.15.0 (*)
 +--- androidx.appcompat:appcompat:1.7.0 (*)
 +--- androidx.activity:activity-compose:1.9.3 -> 1.10.1 (*)

@@ -11,7 +11,6 @@ package org.mifospay.core.ui.utils
 
 import io.github.vinceglb.filekit.FileKit
 import io.github.vinceglb.filekit.download
-import io.ktor.utils.io.core.toByteArray
 
 /**
  * Provides utility functions for sharing content on JS and WASM platforms.
@@ -31,7 +30,7 @@ actual object ShareUtils {
      * @param text The plain text content to be shared.
      */
     actual suspend fun shareText(text: String) {
-        FileKit.download(bytes = text.toByteArray(), fileName = "text.txt")
+        FileKit.download(bytes = text.encodeToByteArray(), fileName = "text.txt")
     }
 
     /**

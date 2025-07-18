@@ -11,6 +11,10 @@ package org.mifospay.feature.profile.edit
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import io.github.vinceglb.filekit.FileKit
+import io.github.vinceglb.filekit.dialogs.FileKitType
+import io.github.vinceglb.filekit.dialogs.openFilePicker
+import io.github.vinceglb.filekit.readBytes
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
@@ -104,7 +108,7 @@ internal class EditProfileViewModel(
                 sendEvent(EditProfileEvent.NavigateBack)
             }
 
-            is EditProfileAction.ProfileImageChange -> handleChangeProfileImage(action)
+            is EditProfileAction.PickProfileImage -> handlePickProfileImage(action)
 
             is OnUpdateProfileResult -> handleUpdateProfileResult(action)
 
@@ -122,7 +126,7 @@ internal class EditProfileViewModel(
         when (action.result) {
             is DataState.Success -> {
                 mutableStateFlow.update {
-                    it.copy(imageInput = action.result.data)
+                    it.copy(profileImage = action.result.data.encodeToByteArray())
                 }
             }
 
@@ -146,9 +150,14 @@ internal class EditProfileViewModel(
         }.launchIn(viewModelScope)
     }
 
-    private fun handleChangeProfileImage(action: EditProfileAction.ProfileImageChange) {
-        mutableStateFlow.update {
-            it.copy(imageInput = action.imageString)
+    private fun handlePickProfileImage(action: EditProfileAction.PickProfileImage) {
+        viewModelScope.launch {
+            val file = FileKit.openFilePicker(FileKitType.Image)
+            file?.let {
+                mutableStateFlow.update { state ->
+                    state.copy(profileImage = it.readBytes())
+                }
+            }
         }
     }
 
@@ -216,10 +225,10 @@ internal class EditProfileViewModel(
 
             is DataState.Success -> {
                 viewModelScope.launch {
-                    if (state.imageInput != null) {
+                    if (state.profileImage != null) {
                         val result = clientRepository.updateClientImage(
                             state.clientId,
-                            state.imageInput!!,
+                            state.profileImage!!.decodeToString(),
                         )
                         sendAction(HandleUpdateClientImageResult(result))
                     }
@@ -268,7 +277,7 @@ internal data class EditProfileState(
     val phoneNumberInput: String,
     val emailInput: String,
     val externalIdInput: String,
-    val imageInput: String? = null,
+    val profileImage: ByteArray? = null,
     val dialogState: DialogState? = null,
 ) {
     @Transient
@@ -288,6 +297,38 @@ internal data class EditProfileState(
         @Serializable
         data class Error(val message: String) : DialogState
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other == null || this::class != other::class) return false
+
+        other as EditProfileState
+
+        if (clientId != other.clientId) return false
+        if (firstNameInput != other.firstNameInput) return false
+        if (lastNameInput != other.lastNameInput) return false
+        if (phoneNumberInput != other.phoneNumberInput) return false
+        if (emailInput != other.emailInput) return false
+        if (externalIdInput != other.externalIdInput) return false
+        if (!profileImage.contentEquals(other.profileImage)) return false
+        if (dialogState != other.dialogState) return false
+        if (updatedClient != other.updatedClient) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = clientId.hashCode()
+        result = 31 * result + firstNameInput.hashCode()
+        result = 31 * result + lastNameInput.hashCode()
+        result = 31 * result + phoneNumberInput.hashCode()
+        result = 31 * result + emailInput.hashCode()
+        result = 31 * result + externalIdInput.hashCode()
+        result = 31 * result + (profileImage?.contentHashCode() ?: 0)
+        result = 31 * result + (dialogState?.hashCode() ?: 0)
+        result = 31 * result + updatedClient.hashCode()
+        return result
+    }
 }
 
 sealed interface EditProfileEvent {
@@ -302,12 +343,11 @@ sealed interface EditProfileAction {
     data class EmailInputChange(val email: String) : EditProfileAction
     data class ExternalIdInputChange(val externalId: String) : EditProfileAction
 
-    data class ProfileImageChange(val imageString: String) : EditProfileAction
-
     data object DismissErrorDialog : EditProfileAction
     data object NavigateBack : EditProfileAction
 
     data object UpdateProfile : EditProfileAction
+    data object PickProfileImage : EditProfileAction
 
     sealed interface Internal : EditProfileAction {
         data class LoadClientImage(val clientId: Long) : Internal

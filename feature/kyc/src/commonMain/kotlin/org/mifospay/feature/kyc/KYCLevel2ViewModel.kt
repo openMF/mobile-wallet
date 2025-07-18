@@ -11,7 +11,9 @@ package org.mifospay.feature.kyc
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
-import io.github.vinceglb.filekit.PlatformFile
+import io.github.vinceglb.filekit.FileKit
+import io.github.vinceglb.filekit.dialogs.FileKitMode
+import io.github.vinceglb.filekit.dialogs.openFilePicker
 import io.github.vinceglb.filekit.extension
 import io.github.vinceglb.filekit.name
 import io.github.vinceglb.filekit.readBytes
@@ -55,13 +57,18 @@ internal class KYCLevel2ViewModel(
 
     override fun handleAction(action: KycLevel2Action) {
         when (action) {
-            is KycLevel2Action.FileChanged -> {
-                mutableStateFlow.update {
-                    it.copy(
-                        file = action.file,
-                        name = action.file.name,
-                        extension = action.file.extension,
-                    )
+            is KycLevel2Action.PickFile -> {
+                viewModelScope.launch {
+                    val file = FileKit.openFilePicker(mode = FileKitMode.Single)
+                    file?.let {
+                        mutableStateFlow.update { state ->
+                            state.copy(
+                                uploadedFile = it.readBytes(),
+                                name = it.name,
+                                extension = it.extension,
+                            )
+                        }
+                    }
                 }
             }
 
@@ -94,7 +101,7 @@ internal class KYCLevel2ViewModel(
     }
 
     private fun initiateUploadDocument() = when {
-        state.file == null -> {
+        state.uploadedFile == null -> {
             mutableStateFlow.update {
                 it.copy(dialogState = Error("Upload an image or pdf"))
             }
@@ -121,9 +128,7 @@ internal class KYCLevel2ViewModel(
         }
 
         viewModelScope.launch {
-            val file = state.file?.readBytes()
-
-            file?.let {
+            state.uploadedFile?.let {
                 val result = repository.createDocument(
                     entityType = state.entityType,
                     entityId = state.entityId,
@@ -137,7 +142,6 @@ internal class KYCLevel2ViewModel(
         }
     }
 
-    // region HandleDocumentUploadResult
     /**
      * API call to upload document fails with the following error:
      * Unable to create parent directories
@@ -169,15 +173,13 @@ internal class KYCLevel2ViewModel(
             }
         }
     }
-    // endregion
 }
 
 @Serializable
 internal data class KycLevel2State(
     val entityId: Long,
     val description: String = "",
-    @Transient
-    val file: PlatformFile? = null,
+    @Transient val uploadedFile: ByteArray? = null,
     val name: String = "",
     val extension: String = "",
     val entityType: String = Constants.ENTITY_TYPE_CLIENTS,
@@ -191,6 +193,36 @@ internal data class KycLevel2State(
         data object Loading : DialogState
         data class Error(val message: String) : DialogState
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other == null || this::class != other::class) return false
+
+        other as KycLevel2State
+
+        if (entityId != other.entityId) return false
+        if (description != other.description) return false
+        if (!uploadedFile.contentEquals(other.uploadedFile)) return false
+        if (name != other.name) return false
+        if (extension != other.extension) return false
+        if (entityType != other.entityType) return false
+        if (dialogState != other.dialogState) return false
+        if (fileName != other.fileName) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = entityId.hashCode()
+        result = 31 * result + description.hashCode()
+        result = 31 * result + (uploadedFile?.contentHashCode() ?: 0)
+        result = 31 * result + name.hashCode()
+        result = 31 * result + extension.hashCode()
+        result = 31 * result + entityType.hashCode()
+        result = 31 * result + (dialogState?.hashCode() ?: 0)
+        result = 31 * result + fileName.hashCode()
+        return result
+    }
 }
 
 internal sealed interface KycLevel2Event {
@@ -201,13 +233,13 @@ internal sealed interface KycLevel2Event {
 
 internal sealed interface KycLevel2Action {
     data class DescriptionChanged(val desc: String) : KycLevel2Action
-    data class FileChanged(val file: PlatformFile) : KycLevel2Action
     data class NameChanged(val name: String) : KycLevel2Action
 
     data object SubmitClicked : KycLevel2Action
 
     data object NavigateBack : KycLevel2Action
     data object DismissDialog : KycLevel2Action
+    data object PickFile : KycLevel2Action
 
     sealed interface Internal : KycLevel2Action {
         data class HandleDocumentUploadResult(val result: DataState<String>) : Internal
