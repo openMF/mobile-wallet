@@ -37,6 +37,7 @@ kotlin {
                 implementation(compose.desktop.currentOs)
                 implementation(libs.jb.kotlin.stdlib)
                 implementation(libs.kotlin.reflect)
+                implementation(libs.filekit.core)
             }
         }
     }

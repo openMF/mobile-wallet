@@ -28,8 +28,6 @@ kotlin {
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
             implementation(libs.coil.kt.compose)
-            implementation(libs.filekit.core)
-            implementation(libs.filekit.compose)
         }
 
         androidMain.dependencies {

@@ -24,8 +24,9 @@ kotlin {
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
             implementation(libs.filekit.core)
-            implementation(libs.filekit.compose)
             implementation(libs.coil.kt.compose)
+            implementation(libs.filekit.dialogs)
+            implementation(libs.filekit.dialogs.compose)
         }
     }
 }

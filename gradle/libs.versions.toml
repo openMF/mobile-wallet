@@ -103,7 +103,7 @@ mokoPermission = "0.18.0"
 qroseVersion = "1.0.1"
 okioVersion = "3.9.1"
 kermit = "2.0.4"
-fileKit = "0.8.7"
+fileKit = "0.10.0-beta04"
 wire = "5.0.0"
 
 # Jetbrains CMP
@@ -311,7 +311,8 @@ squareup-okio = { group = "com.squareup.okio", name = "okio", version.ref = "oki
 back-handler = { group = "com.arkivanov.essenty", name = "back-handler", version.ref = "backHandlerVersion" }
 constraint-layout = { group = "tech.annexflow.compose", name="constraintlayout-compose-multiplatform", version.ref = "constraintLayout" }
 filekit-core = { group = "io.github.vinceglb", name = "filekit-core", version.ref = "fileKit" }
-filekit-compose = { group = "io.github.vinceglb", name = "filekit-compose", version.ref = "fileKit" }
+filekit-dialogs = { module = "io.github.vinceglb:filekit-dialogs", version.ref = "fileKit" }
+filekit-dialogs-compose = { module = "io.github.vinceglb:filekit-dialogs-compose", version.ref = "fileKit" }
 qrose = { group = "io.github.alexzhirkevich", name="qrose", version.ref = "qroseVersion" }
 
 kermit-logging = { group = "co.touchlab", name = "kermit", version.ref = "kermit" }

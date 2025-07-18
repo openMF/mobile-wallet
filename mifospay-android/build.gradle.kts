@@ -84,6 +84,8 @@ dependencies {
     implementation(projects.core.data)
     implementation(projects.core.ui)
 
+    implementation(libs.filekit.dialogs)
+
     // Compose
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)

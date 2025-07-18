@@ -19,12 +19,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -34,9 +28,6 @@ import coil3.ImageLoader
 import coil3.compose.AsyncImage
 import coil3.compose.LocalPlatformContext
 import coil3.request.ImageRequest
-import io.github.vinceglb.filekit.compose.rememberFilePickerLauncher
-import io.github.vinceglb.filekit.core.PickerMode
-import kotlinx.coroutines.launch
 import mobile_wallet.feature.profile.generated.resources.Res
 import mobile_wallet.feature.profile.generated.resources.placeholder
 import org.jetbrains.compose.resources.painterResource
@@ -86,58 +77,10 @@ fun ProfileImage(
 @Composable
 fun EditableProfileImage(
     modifier: Modifier = Modifier,
-    serverImage: String? = null,
-    onChooseImage: (String) -> Unit,
+    profileImage: ByteArray? = null,
+    onPickImage: () -> Unit,
 ) {
     val context = LocalPlatformContext.current
-    val scope = rememberCoroutineScope()
-
-    var bytes by remember(serverImage) { mutableStateOf<ByteArray?>(null) }
-
-    LaunchedEffect(serverImage) {
-        if (serverImage != null) {
-            bytes = try {
-                Base64.decode(serverImage)
-            } catch (e: Exception) {
-                null
-            }
-        }
-    }
-
-    // Pick files from Compose
-    val launcher = rememberFilePickerLauncher(mode = PickerMode.Single) { file ->
-        scope.launch {
-            if (file != null) {
-                bytes = if (file.supportsStreams()) {
-                    val size = file.getSize()
-                    if (size != null && size > 0L) {
-                        val buffer = ByteArray(size.toInt())
-                        val tmpBuffer = ByteArray(1000)
-                        var totalBytesRead = 0
-                        file.getStream().use {
-                            while (it.hasBytesAvailable()) {
-                                val numRead = it.readInto(tmpBuffer, 1000)
-                                tmpBuffer.copyInto(
-                                    buffer,
-                                    destinationOffset = totalBytesRead,
-                                    endIndex = numRead,
-                                )
-                                totalBytesRead += numRead
-                            }
-                        }
-                        buffer
-                    } else {
-                        file.readBytes()
-                    }
-                } else {
-                    file.readBytes()
-                }
-                bytes?.let {
-                    onChooseImage(Base64.encode(it))
-                }
-            }
-        }
-    }
 
     Box(
         modifier = modifier
@@ -145,7 +88,7 @@ fun EditableProfileImage(
         contentAlignment = Alignment.Center,
     ) {
         AsyncImage(
-            model = bytes,
+            model = profileImage,
             error = painterResource(Res.drawable.placeholder),
             fallback = painterResource(Res.drawable.placeholder),
             imageLoader = ImageLoader(context),
@@ -158,9 +101,7 @@ fun EditableProfileImage(
         )
 
         IconButton(
-            onClick = {
-                launcher.launch()
-            },
+            onClick = onPickImage,
             modifier = Modifier
                 .offset(y = 12.dp)
                 .size(36.dp)
