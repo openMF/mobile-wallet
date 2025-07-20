@@ -21,6 +21,16 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
+import mobile_wallet.feature.profile.generated.resources.Res
+import mobile_wallet.feature.profile.generated.resources.feature_profile_error_empty_email
+import mobile_wallet.feature.profile.generated.resources.feature_profile_error_empty_firstname
+import mobile_wallet.feature.profile.generated.resources.feature_profile_error_empty_lastname
+import mobile_wallet.feature.profile.generated.resources.feature_profile_error_empty_phone
+import mobile_wallet.feature.profile.generated.resources.feature_profile_error_invalid_email
+import mobile_wallet.feature.profile.generated.resources.feature_profile_error_invalid_phone_length
+import mobile_wallet.feature.profile.generated.resources.feature_profile_profile_image_updated_successfully
+import mobile_wallet.feature.profile.generated.resources.feature_profile_profile_updated_successfully
+import org.jetbrains.compose.resources.StringResource
 import org.mifospay.core.common.DataState
 import org.mifospay.core.common.getSerialized
 import org.mifospay.core.common.setSerialized
@@ -33,7 +43,7 @@ import org.mifospay.feature.profile.edit.EditProfileAction.Internal.HandleLoadCl
 import org.mifospay.feature.profile.edit.EditProfileAction.Internal.HandleUpdateClientImageResult
 import org.mifospay.feature.profile.edit.EditProfileAction.Internal.LoadClientImage
 import org.mifospay.feature.profile.edit.EditProfileAction.Internal.OnUpdateProfileResult
-import org.mifospay.feature.profile.edit.EditProfileState.DialogState.Error
+import org.mifospay.feature.profile.edit.EditProfileDialog.Error
 
 internal class EditProfileViewModel(
     private val preferencesRepository: UserPreferencesRepository,
@@ -138,7 +148,7 @@ internal class EditProfileViewModel(
 
             is DataState.Loading -> {
                 mutableStateFlow.update {
-                    it.copy(dialogState = EditProfileState.DialogState.Loading)
+                    it.copy(dialogState = EditProfileDialog.Loading)
                 }
             }
         }
@@ -164,37 +174,37 @@ internal class EditProfileViewModel(
     private fun handleUpdateProfile() = when {
         state.firstNameInput.isEmpty() -> {
             mutableStateFlow.update {
-                it.copy(dialogState = Error("Please enter client firstname."))
+                it.copy(dialogState = Error(Res.string.feature_profile_error_empty_firstname))
             }
         }
 
         state.lastNameInput.isEmpty() -> {
             mutableStateFlow.update {
-                it.copy(dialogState = Error("Please enter client lastname."))
+                it.copy(dialogState = Error(Res.string.feature_profile_error_empty_lastname))
             }
         }
 
         state.emailInput.isEmpty() -> {
             mutableStateFlow.update {
-                it.copy(dialogState = Error("Please enter your email."))
+                it.copy(dialogState = Error(Res.string.feature_profile_error_empty_email))
             }
         }
 
         !state.emailInput.isValidEmail() -> {
             mutableStateFlow.update {
-                it.copy(dialogState = Error("Please enter a valid email."))
+                it.copy(dialogState = Error(Res.string.feature_profile_error_invalid_email))
             }
         }
 
         state.phoneNumberInput.isEmpty() -> {
             mutableStateFlow.update {
-                it.copy(dialogState = Error("Please enter your mobile number."))
+                it.copy(dialogState = Error(Res.string.feature_profile_error_empty_phone))
             }
         }
 
         state.phoneNumberInput.length < 10 -> {
             mutableStateFlow.update {
-                it.copy(dialogState = Error("Mobile number must be 10 digits long."))
+                it.copy(dialogState = Error(Res.string.feature_profile_error_invalid_phone_length))
             }
         }
 
@@ -211,18 +221,6 @@ internal class EditProfileViewModel(
 
     private fun handleUpdateProfileResult(action: OnUpdateProfileResult) {
         when (action.result) {
-            is DataState.Error -> {
-                mutableStateFlow.update {
-                    it.copy(dialogState = Error(action.result.exception.message ?: ""))
-                }
-            }
-
-            is DataState.Loading -> {
-                mutableStateFlow.update {
-                    it.copy(dialogState = EditProfileState.DialogState.Loading)
-                }
-            }
-
             is DataState.Success -> {
                 viewModelScope.launch {
                     if (state.profileImage != null) {
@@ -237,12 +235,24 @@ internal class EditProfileViewModel(
 
                     when (result) {
                         is DataState.Success -> {
-                            sendEvent(EditProfileEvent.ShowToast("Profile updated successfully"))
-                            trySendAction(EditProfileAction.NavigateBack)
+                            sendEvent(EditProfileEvent.ShowToast(Res.string.feature_profile_profile_updated_successfully))
+                            sendEvent(EditProfileEvent.NavigateBack)
                         }
 
                         else -> {}
                     }
+                }
+            }
+
+            is DataState.Error -> {
+                mutableStateFlow.update {
+                    it.copy(dialogState = EditProfileDialog.ApiError(action.result.exception.message.toString()))
+                }
+            }
+
+            is DataState.Loading -> {
+                mutableStateFlow.update {
+                    it.copy(dialogState = EditProfileDialog.Loading)
                 }
             }
         }
@@ -250,20 +260,20 @@ internal class EditProfileViewModel(
 
     private fun handleUpdateClientImageResult(action: HandleUpdateClientImageResult) {
         when (action.result) {
+            is DataState.Success -> {
+                sendEvent(EditProfileEvent.ShowToast(Res.string.feature_profile_profile_image_updated_successfully))
+            }
+
             is DataState.Error -> {
                 mutableStateFlow.update {
-                    it.copy(dialogState = Error(action.result.exception.message ?: ""))
+                    it.copy(dialogState = EditProfileDialog.ApiError(action.result.exception.message.toString()))
                 }
             }
 
             is DataState.Loading -> {
                 mutableStateFlow.update {
-                    it.copy(dialogState = EditProfileState.DialogState.Loading)
+                    it.copy(dialogState = EditProfileDialog.Loading)
                 }
-            }
-
-            is DataState.Success -> {
-                sendEvent(EditProfileEvent.ShowToast("Profile image updated successfully"))
             }
         }
     }
@@ -278,7 +288,8 @@ internal data class EditProfileState(
     val emailInput: String,
     val externalIdInput: String,
     val profileImage: ByteArray? = null,
-    val dialogState: DialogState? = null,
+    @Transient
+    val dialogState: EditProfileDialog? = null,
 ) {
     @Transient
     internal val updatedClient = UpdatedClient(
@@ -288,52 +299,20 @@ internal data class EditProfileState(
         mobileNo = this.phoneNumberInput,
         externalId = this.externalIdInput,
     )
+}
 
-    @Serializable
-    sealed interface DialogState {
-        @Serializable
-        data object Loading : DialogState
-
-        @Serializable
-        data class Error(val message: String) : DialogState
-    }
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (other == null || this::class != other::class) return false
-
-        other as EditProfileState
-
-        if (clientId != other.clientId) return false
-        if (firstNameInput != other.firstNameInput) return false
-        if (lastNameInput != other.lastNameInput) return false
-        if (phoneNumberInput != other.phoneNumberInput) return false
-        if (emailInput != other.emailInput) return false
-        if (externalIdInput != other.externalIdInput) return false
-        if (!profileImage.contentEquals(other.profileImage)) return false
-        if (dialogState != other.dialogState) return false
-        if (updatedClient != other.updatedClient) return false
-
-        return true
-    }
-
-    override fun hashCode(): Int {
-        var result = clientId.hashCode()
-        result = 31 * result + firstNameInput.hashCode()
-        result = 31 * result + lastNameInput.hashCode()
-        result = 31 * result + phoneNumberInput.hashCode()
-        result = 31 * result + emailInput.hashCode()
-        result = 31 * result + externalIdInput.hashCode()
-        result = 31 * result + (profileImage?.contentHashCode() ?: 0)
-        result = 31 * result + (dialogState?.hashCode() ?: 0)
-        result = 31 * result + updatedClient.hashCode()
-        return result
-    }
+internal sealed interface EditProfileDialog {
+    data object Loading : EditProfileDialog
+    data class Error(
+        val message: StringResource,
+        val formatArgs: List<Any> = emptyList(),
+    ) : EditProfileDialog
+    data class ApiError(val message: String) : EditProfileDialog
 }
 
 sealed interface EditProfileEvent {
     data object NavigateBack : EditProfileEvent
-    data class ShowToast(val message: String) : EditProfileEvent
+    data class ShowToast(val message: StringResource) : EditProfileEvent
 }
 
 sealed interface EditProfileAction {
@@ -345,9 +324,9 @@ sealed interface EditProfileAction {
 
     data object DismissErrorDialog : EditProfileAction
     data object NavigateBack : EditProfileAction
+    data object PickProfileImage : EditProfileAction
 
     data object UpdateProfile : EditProfileAction
-    data object PickProfileImage : EditProfileAction
 
     sealed interface Internal : EditProfileAction {
         data class LoadClientImage(val clientId: Long) : Internal

@@ -29,8 +29,10 @@ import coil3.compose.AsyncImage
 import coil3.compose.LocalPlatformContext
 import coil3.request.ImageRequest
 import mobile_wallet.feature.profile.generated.resources.Res
+import mobile_wallet.feature.profile.generated.resources.feature_profile_profile_image_description
 import mobile_wallet.feature.profile.generated.resources.placeholder
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 import org.mifospay.core.designsystem.icon.MifosIcons
 import kotlin.io.encoding.Base64
 import kotlin.io.encoding.ExperimentalEncodingApi
@@ -92,7 +94,7 @@ fun EditableProfileImage(
             error = painterResource(Res.drawable.placeholder),
             fallback = painterResource(Res.drawable.placeholder),
             imageLoader = ImageLoader(context),
-            contentDescription = "Profile Image",
+            contentDescription = stringResource(Res.string.feature_profile_profile_image_description),
             contentScale = ContentScale.Crop,
             modifier = Modifier
                 .size(150.dp)
