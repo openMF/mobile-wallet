@@ -81,7 +81,7 @@ kotlin {
 
 android {
     namespace = "org.mifospay.shared"
-    compileSdk = 34
+    compileSdk = 36
 
     defaultConfig {
         minSdk = 24
