@@ -200,7 +200,7 @@ private fun EditProfileDialogs(
     onDismissRequest: () -> Unit,
 ) {
     when (dialogState) {
-        is EditProfileDialog.Error -> { // Change this line
+        is EditProfileDialog.Error -> {
             val message = if (dialogState.formatArgs.isNotEmpty()) {
                 stringResource(dialogState.message, *dialogState.formatArgs.toTypedArray())
             } else {
