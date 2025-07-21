@@ -27,10 +27,8 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -43,9 +41,6 @@ import coil3.compose.LocalPlatformContext
 import coil3.compose.SubcomposeAsyncImage
 import coil3.compose.SubcomposeAsyncImageContent
 import coil3.compose.rememberAsyncImagePainter
-import io.github.vinceglb.filekit.compose.rememberFilePickerLauncher
-import io.github.vinceglb.filekit.core.PickerMode
-import io.github.vinceglb.filekit.core.PlatformFile
 import kotlinx.coroutines.launch
 import mobile_wallet.feature.kyc.generated.resources.Res
 import mobile_wallet.feature.kyc.generated.resources.feature_kyc_file_name
@@ -143,8 +138,9 @@ private fun KYCLevel2ScreenContent(
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         DocumentPicker(
-            onChooseDocument = {
-                onAction(KycLevel2Action.FileChanged(it))
+            uploadedFile = state.uploadedFile,
+            onPickFile = {
+                onAction(KycLevel2Action.PickFile)
             },
         )
 
@@ -157,9 +153,6 @@ private fun KYCLevel2ScreenContent(
             onClickClearIcon = {
                 onAction(KycLevel2Action.NameChanged(""))
             },
-//            textStyle = TextStyle(
-//                color = MaterialTheme.colorScheme.onSurface,
-//            ),
         )
 
         MifosTextField(
@@ -171,9 +164,6 @@ private fun KYCLevel2ScreenContent(
             onClickClearIcon = {
                 onAction(KycLevel2Action.DescriptionChanged(""))
             },
-//            textStyle = TextStyle(
-//                color = MaterialTheme.colorScheme.onSurface,
-//            ),
         )
 
         MifosButton(
@@ -190,52 +180,15 @@ private fun KYCLevel2ScreenContent(
 @Composable
 private fun DocumentPicker(
     modifier: Modifier = Modifier,
-    onChooseDocument: (PlatformFile) -> Unit,
+    uploadedFile: ByteArray?,
+    onPickFile: () -> Unit,
 ) {
-    val scope = rememberCoroutineScope()
     val context = LocalPlatformContext.current
 
-    var uploadedImage by remember { mutableStateOf<ByteArray?>(null) }
-
     val painter = rememberAsyncImagePainter(
-        model = uploadedImage,
+        model = uploadedFile,
         imageLoader = ImageLoader(context),
     )
-
-    val filePicker = rememberFilePickerLauncher(
-        mode = PickerMode.Single,
-    ) {
-        scope.launch {
-            it?.let { file ->
-                onChooseDocument(file)
-
-                uploadedImage = if (file.supportsStreams()) {
-                    val size = file.getSize()
-                    if (size != null && size > 0L) {
-                        val buffer = ByteArray(size.toInt())
-                        val tmpBuffer = ByteArray(1000)
-                        var totalBytesRead = 0
-                        file.getStream().use {
-                            while (it.hasBytesAvailable()) {
-                                val numRead = it.readInto(tmpBuffer, 1000)
-                                tmpBuffer.copyInto(
-                                    buffer,
-                                    destinationOffset = totalBytesRead,
-                                    endIndex = numRead,
-                                )
-                                totalBytesRead += numRead
-                            }
-                        }
-                        buffer
-                    } else {
-                        file.readBytes()
-                    }
-                } else {
-                    file.readBytes()
-                }
-            }
-        }
-    }
 
     OutlinedCard(
         modifier = modifier
@@ -253,14 +206,14 @@ private fun DocumentPicker(
                 ),
             ),
         ),
-        onClick = filePicker::launch,
+        onClick = onPickFile,
     ) {
         Box(
             modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.Center,
         ) {
             SubcomposeAsyncImage(
-                model = uploadedImage,
+                model = uploadedFile,
                 imageLoader = ImageLoader(context),
                 contentScale = ContentScale.None,
                 contentDescription = "Uploaded Image",
@@ -278,18 +231,11 @@ private fun DocumentPicker(
                     }
 
                     is AsyncImagePainter.State.Error -> {
-                        if (uploadedImage == null) {
-                            AvatarBox(
-                                icon = MifosIcons.Add,
-                                size = 120,
-                                contentColor = MaterialTheme.colorScheme.secondary,
-                            )
-                        } else {
-                            Text(
-                                text = "Unsupported Media Type for Preview",
-                                modifier = Modifier.align(Alignment.Center),
-                            )
-                        }
+                        AvatarBox(
+                            icon = MifosIcons.Add,
+                            size = 120,
+                            contentColor = MaterialTheme.colorScheme.secondary,
+                        )
                     }
 
                     is AsyncImagePainter.State.Loading -> {

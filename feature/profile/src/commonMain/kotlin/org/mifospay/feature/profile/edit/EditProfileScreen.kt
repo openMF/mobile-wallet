@@ -114,9 +114,9 @@ private fun EditProfileScreenContent(
         ) {
             item {
                 EditableProfileImage(
-                    serverImage = state.imageInput,
-                    onChooseImage = {
-                        onAction(EditProfileAction.ProfileImageChange(it))
+                    profileImage = state.profileImage,
+                    onPickImage = {
+                        onAction(EditProfileAction.PickProfileImage)
                     },
                 )
             }

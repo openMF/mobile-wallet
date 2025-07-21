@@ -48,6 +48,8 @@ import org.mifospay.core.model.account.DefaultAccount
 import org.mifospay.core.model.client.Client
 import org.mifospay.core.model.utils.PaymentQrData
 import org.mifospay.core.ui.utils.BaseViewModel
+import org.mifospay.core.ui.utils.MimeType
+import org.mifospay.core.ui.utils.ShareFileModel
 import org.mifospay.core.ui.utils.ShareUtils
 
 class ShowQrViewModel(
@@ -127,9 +129,12 @@ class ShowQrViewModel(
 
             is ShowQrAction.ShareQrCode -> {
                 viewModelScope.launch {
-                    ShareUtils.shareImage(
-                        title = "Share QR Code",
-                        byte = action.data,
+                    ShareUtils.shareFile(
+                        file = ShareFileModel(
+                            fileName = "qr_code.png",
+                            bytes = action.data,
+                            mime = MimeType.IMAGE,
+                        ),
                     )
                 }
             }
