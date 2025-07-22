@@ -17,59 +17,59 @@ import org.mifospay.core.common.Parcelize
 @Parcelize
 data class StandingInstruction(
     val id: Long,
-    val accountDetailId: Long,
-    val name: String,
-    val fromOffice: FromAndToOffice,
-    val fromClient: FromAndToClient,
-    val fromAccountType: Option,
-    val fromAccount: FromAndToAccount,
-    val toOffice: FromAndToOffice,
-    val toClient: FromAndToClient,
-    val toAccountType: Option,
-    val toAccount: FromAndToAccount,
-    val transferType: Option,
-    val priority: Option,
-    val instructionType: Option,
-    val status: Option,
-    val amount: Double,
-    val validFrom: List<Int>,
-    val validTill: List<Int>,
-    val recurrenceType: Option,
-    val recurrenceFrequency: Option,
-    val recurrenceInterval: Long,
-    val recurrenceOnMonthDay: List<Int> = emptyList(),
+    val accountDetailId: Long? = null,
+    val name: String? = null,
+    val fromOffice: FromAndToOffice? = null,
+    val fromClient: FromAndToClient? = null,
+    val fromAccountType: String? = null,
+    val fromAccount: FromAndToAccount? = null,
+    val toOffice: FromAndToOffice? = null,
+    val toClient: FromAndToClient? = null,
+    val toAccountType: String? = null,
+    val toAccount: FromAndToAccount? = null,
+    val transferType: String? = null,
+    val priority: Option? = null,
+    val instructionType: String? = null,
+    val status: Option? = null,
+    val amount: Double? = null,
+    val validFrom: String? = null,
+    val validTill: String? = null,
+    val recurrenceType: String? = null,
+    val recurrenceFrequency: String? = null,
+    val recurrenceInterval: Long? = null,
+    val recurrenceOnMonthDay: List<Int>? = emptyList(),
 ) : Parcelable {
 
     @Serializable
     @Parcelize
     data class FromAndToAccount(
-        val id: Long,
-        val accountNo: String,
-        val productId: Long,
-        val productName: String,
+        val id: Long? = null,
+        val accountNo: String? = null,
+        val productId: Long? = null,
+        val productName: String? = null,
     ) : Parcelable
 
     @Serializable
     @Parcelize
     data class FromAndToOffice(
-        val id: Long,
-        val name: String,
+        val id: Long? = null,
+        val name: String? = null,
     ) : Parcelable
 
     @Serializable
     @Parcelize
     data class FromAndToClient(
-        val id: Long,
-        val displayName: String,
-        val officeId: Long,
-        val officeName: String,
+        val id: Long? = null,
+        val displayName: String? = null,
+        val officeId: Long? = null,
+        val officeName: String? = null,
     ) : Parcelable
 
     @Serializable
     @Parcelize
     data class Option(
-        val id: Long,
-        val code: String,
-        val value: String,
+        val id: Long? = null,
+        val code: String? = null,
+        val value: String? = null,
     ) : Parcelable
 }

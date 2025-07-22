@@ -21,10 +21,10 @@ import org.mifospay.core.model.standinginstruction.StandingInstruction
 
 @Composable
 fun PriorityChip(
-    priority: StandingInstruction.Option,
+    priority: StandingInstruction.Option?,
     modifier: Modifier = Modifier,
 ) {
-    val (backgroundColor, contentColor) = when (priority.id) {
+    val (backgroundColor, contentColor) = when (priority?.id) {
         1L -> MaterialTheme.colorScheme.error to MaterialTheme.colorScheme.surfaceContainerLowest
         2L -> MaterialTheme.colorScheme.errorContainer to MaterialTheme.colorScheme.surfaceContainerLowest
         3L -> MaterialTheme.colorScheme.secondary to MaterialTheme.colorScheme.surfaceContainerLowest
@@ -39,7 +39,7 @@ fun PriorityChip(
         contentColor = contentColor,
     ) {
         Text(
-            text = priority.value,
+            text = priority?.value ?: "",
             modifier = Modifier.padding(4.dp),
             style = MaterialTheme.typography.bodySmall,
             maxLines = 1,

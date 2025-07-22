@@ -19,11 +19,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import org.mifospay.core.model.standinginstruction.StandingInstruction
 
 @Composable
 internal fun FrequencyChip(
-    option: StandingInstruction.Option,
+    option: String,
     interval: String,
     modifier: Modifier = Modifier,
 ) {
@@ -37,7 +36,7 @@ internal fun FrequencyChip(
         ),
     ) {
         Text(
-            text = "$interval ${option.value}",
+            text = "$interval $option",
             modifier = Modifier.padding(4.dp),
             color = MaterialTheme.colorScheme.onSurface,
             style = MaterialTheme.typography.bodyMedium,

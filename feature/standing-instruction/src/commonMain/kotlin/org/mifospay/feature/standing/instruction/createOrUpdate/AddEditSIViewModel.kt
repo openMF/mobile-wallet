@@ -446,11 +446,11 @@ internal class AddEditSIViewModel(
         viewModelScope.launch {
             updatePayload { payload ->
                 payload.copy(
-                    priority = result.priority.id,
-                    status = result.status.id,
+                    priority = result.priority?.id,
+                    status = result.status?.id,
                     locale = "en_IN",
-                    validFrom = DateHelper.formatTransferDate(dateComponents = result.validFrom),
-                    validTill = DateHelper.formatTransferDate(dateComponents = result.validTill),
+                    validFrom = result.validFrom ?: "",
+                    validTill = result.validTill ?: "",
                     dateFormat = DateHelper.SHORT_MONTH,
                 )
             }

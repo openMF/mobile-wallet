@@ -289,7 +289,7 @@ private fun SIItem(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 IconButton(
-                    onClick = { onClickEdit(item.id) },
+                    onClick = { item.id?.let { onClickEdit(it) } },
                 ) {
                     Icon(
                         imageVector = MifosIcons.Edit2,
@@ -298,7 +298,7 @@ private fun SIItem(
                 }
 
                 IconButton(
-                    onClick = { onClickDelete(item.id) },
+                    onClick = { item.id?.let { onClickDelete(it) } },
                 ) {
                     Icon(
                         imageVector = MifosIcons.Delete,
@@ -307,9 +307,9 @@ private fun SIItem(
                 }
             }
         },
-        onContentClick = { onClick(item.id) },
+        onContentClick = { item.id?.let { onClick(it) } },
     ) {
-        val priorityColor = when (item.priority.id) {
+        val priorityColor = when (item.priority?.id) {
             1L -> MaterialTheme.colorScheme.error.copy(
                 red = 1f,
                 green = 0.27f,
@@ -365,20 +365,22 @@ private fun SIItem(
             ) {
                 ListItem(
                     headlineContent = {
-                        Text(text = item.name)
+                        item.name?.let { it1 -> Text(text = it1) }
                     },
                     supportingContent = {
-                        Text(text = "${item.toClient.displayName} | ${item.status.value}")
+                        Text(text = "${item.toClient?.displayName} | ${item.status?.value}")
                     },
                     trailingContent = {
                         Row(
                             horizontalArrangement = Arrangement.spacedBy(8.dp),
                             verticalAlignment = Alignment.CenterVertically,
                         ) {
-                            FrequencyChip(
-                                option = item.recurrenceFrequency,
-                                interval = item.recurrenceInterval.toString(),
-                            )
+                            item.recurrenceFrequency?.let { it1 ->
+                                FrequencyChip(
+                                    option = it1,
+                                    interval = item.recurrenceInterval.toString(),
+                                )
+                            }
 
                             val amount = CurrencyFormatter.format(
                                 balance = item.amount,

@@ -44,7 +44,7 @@ data class SITemplate(
         val name: String,
         val nameDecorated: String,
         val externalId: String,
-        val openingDate: List<Long>,
+        val openingDate: String,
         val hierarchy: String,
     )
 
@@ -55,13 +55,13 @@ data class SITemplate(
         val externalId: String,
         val status: Option,
         val active: Boolean,
-        val activationDate: List<Long>,
+        val activationDate: String,
         val firstname: String,
         val lastname: String,
         val displayName: String,
         val mobileNo: String,
         val emailAddress: String,
-        val dateOfBirth: List<Long>,
+        val dateOfBirth: String,
         val isStaff: Boolean,
         val officeId: Long,
         val officeName: String,
@@ -72,8 +72,8 @@ data class SITemplate(
 
     @Serializable
     data class Timeline(
-        val submittedOnDate: List<Long>,
-        val activatedOnDate: List<Long>,
+        val submittedOnDate: String,
+        val activatedOnDate: String,
         val activatedByUsername: String,
         val activatedByFirstname: String,
         val activatedByLastname: String,

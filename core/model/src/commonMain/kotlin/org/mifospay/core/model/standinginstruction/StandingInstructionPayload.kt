@@ -30,8 +30,8 @@ data class StandingInstructionPayload(
     val amount: String = "",
     val transferType: Long = 0,
     val instructionType: Long = 0,
-    val priority: Long = 0,
-    val status: Long = 0,
+    val priority: Long? = 0,
+    val status: Long? = 0,
     val recurrenceType: Long = 0,
     val recurrenceFrequency: Long = 0,
     val recurrenceInterval: String = "",
@@ -46,8 +46,8 @@ data class StandingInstructionPayload(
 
 fun StandingInstructionPayload.toSIUploadPayload(): SIUpdatePayload {
     return SIUpdatePayload(
-        priority = priority,
-        status = status,
+        priority = priority ?: 0L,
+        status = status ?: 0L,
         locale = locale,
         validFrom = validFrom,
         validTill = validTill,
