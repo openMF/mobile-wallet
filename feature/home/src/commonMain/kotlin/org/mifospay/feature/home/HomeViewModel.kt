@@ -18,6 +18,11 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
+import mobile_wallet.feature.home.generated.resources.Res
+import mobile_wallet.feature.home.generated.resources.account_error
+import mobile_wallet.feature.home.generated.resources.account_success
+import mobile_wallet.feature.home.generated.resources.no_account
+import org.jetbrains.compose.resources.StringResource
 import org.mifospay.core.common.DataState
 import org.mifospay.core.data.repository.SelfServiceRepository
 import org.mifospay.core.datastore.UserPreferencesRepository
@@ -72,7 +77,7 @@ class HomeViewModel(
                     mutableStateFlow.update {
                         it.copy(isRefreshing = false)
                     }
-                    ViewState.Error("No accounts found")
+                    ViewState.Error(Res.string.no_account)
                 }
 
                 is DataState.Loading -> ViewState.Loading
@@ -155,14 +160,14 @@ class HomeViewModel(
                     when (result) {
                         is DataState.Loading -> {}
                         is DataState.Error -> {
-                            sendEvent(HomeEvent.ShowToast("Error marking account as default"))
+                            sendEvent(HomeEvent.ShowToast(Res.string.account_error))
                         }
 
                         is DataState.Success -> {
                             mutableStateFlow.update {
                                 it.copy(defaultAccountId = action.accountId)
                             }
-                            sendEvent(HomeEvent.ShowToast("Account marked as default"))
+                            sendEvent(HomeEvent.ShowToast(Res.string.account_success))
                         }
                     }
                 }
@@ -202,7 +207,7 @@ data class HomeState(
 sealed interface ViewState {
     data object Loading : ViewState
 
-    data class Error(val message: String) : ViewState
+    data class Error(val message: StringResource) : ViewState
 
     data class Content(
         val accounts: List<Account>,
@@ -219,7 +224,7 @@ sealed interface HomeEvent {
     data class NavigateToTransactionDetail(val accountId: Long, val transactionId: Long) : HomeEvent
     data class NavigateToAccountDetail(val accountId: Long) : HomeEvent
 
-    data class ShowToast(val message: String) : HomeEvent
+    data class ShowToast(val message: StringResource) : HomeEvent
 }
 
 sealed interface HomeAction {
