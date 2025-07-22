@@ -17,9 +17,7 @@ plugins {
 }
 
 kotlin {
-    jvm("desktop") {
-        withJava()
-    }
+    jvm("desktop")
 
     jvmToolchain(17)
 
@@ -43,17 +41,17 @@ kotlin {
     }
 }
 
-val packageName: String = libs.versions.packageName.get()
-val packageNameSpace: String = libs.versions.packageNamespace.get()
-val packageVersion: String = libs.versions.packageVersion.get()
+val appPackageName: String = libs.versions.packageName.get()
+val appPackageNameSpace: String = libs.versions.packageNamespace.get()
+val appPackageVersion: String = libs.versions.packageVersion.get()
 
 compose.desktop {
     application {
         mainClass = "MainKt"
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Exe, TargetFormat.Deb)
-            packageName = this@Build_gradle.packageName
-            packageVersion = this@Build_gradle.packageVersion
+            packageName = appPackageName
+            packageVersion = appPackageVersion
             description = "Mifos Wallet Desktop Application"
             copyright = "© 2024 Mifos Initiative. All rights reserved."
             vendor = "Mifos Initiative"
@@ -61,8 +59,8 @@ compose.desktop {
             includeAllModules = true
 
             macOS {
-                bundleID = packageNameSpace
-                dockName = this@Build_gradle.packageName
+                bundleID = appPackageNameSpace
+                dockName = appPackageName
                 iconFile.set(project.file("icons/ic_launcher.icns"))
                 notarization {
                     val providers = project.providers
@@ -73,7 +71,7 @@ compose.desktop {
             }
 
             windows {
-                menuGroup = this@Build_gradle.packageName
+                menuGroup = appPackageName
                 shortcut = true
                 dirChooser = true
                 perUserInstall = true

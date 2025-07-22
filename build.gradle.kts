@@ -52,7 +52,7 @@ tasks.register("versionFile") {
 // Used by module graph generator script
 tasks.register("printModulePaths") {
     subprojects {
-        if (subprojects.size == 0) {
+        if (subprojects.isEmpty()) {
             println(this.path)
         }
     }
