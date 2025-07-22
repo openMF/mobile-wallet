@@ -8,7 +8,7 @@ plugins {
 
 kotlin {
     js(IR) {
-        moduleName = "mifospay-web"
+        outputModuleName = "mifospay-web"
         browser {
             commonWebpackConfig {
                 outputFileName = "mifospay-web.js"
@@ -19,7 +19,7 @@ kotlin {
 
     @OptIn(ExperimentalWasmDsl::class)
     wasmJs {
-        moduleName = "mifospay-wasm"
+        outputModuleName = "mifospay-wasm"
         browser {
             commonWebpackConfig {
                 outputFileName = "mifospay-wasm.js"
