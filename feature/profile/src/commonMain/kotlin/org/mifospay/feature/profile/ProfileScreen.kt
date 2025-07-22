@@ -180,7 +180,7 @@ private fun ProfileScreenContent(
                 onAction(ProfileAction.NavigateToLinkBankAccount)
             },
             leadingIcon = {
-                Icon(imageVector = MifosIcons.AttachMoney, contentDescription = stringResource(Res.string.feature_profile_link_bank_account))
+                Icon(imageVector = MifosIcons.AttachMoney, contentDescription = "")
             },
         )
 

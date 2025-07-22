@@ -196,15 +196,14 @@ private fun EditProfileScreenContent(
 
 @Composable
 private fun EditProfileDialogs(
-    dialogState: EditProfileDialog?,
+    dialogState: EditProfileState.DialogState?,
     onDismissRequest: () -> Unit,
 ) {
     when (dialogState) {
-        is EditProfileDialog.Error -> {
-            val message = if (dialogState.formatArgs.isNotEmpty()) {
-                stringResource(dialogState.message, *dialogState.formatArgs.toTypedArray())
-            } else {
-                stringResource(dialogState.message)
+        is EditProfileState.DialogState.Error -> {
+            val message = when (dialogState) {
+                is EditProfileState.DialogState.Error.StringMessage -> dialogState.message
+                is EditProfileState.DialogState.Error.ResourceMessage -> stringResource(dialogState.message)
             }
             MifosBasicDialog(
                 visibilityState = BasicDialogState.Shown(
@@ -214,15 +213,8 @@ private fun EditProfileDialogs(
             )
         }
 
-        is EditProfileDialog.Loading -> MifosLoadingDialog(
+        is EditProfileState.DialogState.Loading -> MifosLoadingDialog(
             visibilityState = LoadingDialogState.Shown,
-        )
-
-        is EditProfileDialog.ApiError -> MifosBasicDialog(
-            visibilityState = BasicDialogState.Shown(
-                message = dialogState.message,
-            ),
-            onDismissRequest = onDismissRequest,
         )
 
         null -> Unit
