@@ -63,7 +63,10 @@ internal fun TransactionDetail(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                Text(text = stringResource(Res.string.feature_history_transaction_id), style = MaterialTheme.typography.labelLarge)
+                Text(
+                    text = stringResource(Res.string.feature_history_transaction_id),
+                    style = MaterialTheme.typography.labelLarge,
+                )
                 Text(text = detail.id.toString())
             }
 
@@ -76,7 +79,10 @@ internal fun TransactionDetail(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                Text(text = stringResource(Res.string.feature_history_transaction_date), style = MaterialTheme.typography.labelLarge)
+                Text(
+                    text = stringResource(Res.string.feature_history_transaction_date),
+                    style = MaterialTheme.typography.labelLarge,
+                )
                 val date = DateHelper.getDateAsString(detail.transferDate)
                 Text(text = date)
             }
