@@ -38,6 +38,7 @@ import mobile_wallet.feature.profile.generated.resources.feature_profile_lastnam
 import mobile_wallet.feature.profile.generated.resources.feature_profile_mobile
 import mobile_wallet.feature.profile.generated.resources.feature_profile_save
 import mobile_wallet.feature.profile.generated.resources.feature_profile_vpa
+import org.jetbrains.compose.resources.getString
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.mifospay.core.designsystem.component.BasicDialogState
@@ -66,7 +67,8 @@ internal fun EditProfileScreen(
             is EditProfileEvent.NavigateBack -> onBackClick.invoke()
             is EditProfileEvent.ShowToast -> {
                 scope.launch {
-                    snackbarHostState.showSnackbar(event.message)
+                    val message = getString(event.message)
+                    snackbarHostState.showSnackbar(message)
                 }
             }
         }
@@ -198,12 +200,18 @@ private fun EditProfileDialogs(
     onDismissRequest: () -> Unit,
 ) {
     when (dialogState) {
-        is EditProfileState.DialogState.Error -> MifosBasicDialog(
-            visibilityState = BasicDialogState.Shown(
-                message = dialogState.message,
-            ),
-            onDismissRequest = onDismissRequest,
-        )
+        is EditProfileState.DialogState.Error -> {
+            val message = when (dialogState) {
+                is EditProfileState.DialogState.Error.StringMessage -> dialogState.message
+                is EditProfileState.DialogState.Error.ResourceMessage -> stringResource(dialogState.message)
+            }
+            MifosBasicDialog(
+                visibilityState = BasicDialogState.Shown(
+                    message = message,
+                ),
+                onDismissRequest = onDismissRequest,
+            )
+        }
 
         is EditProfileState.DialogState.Loading -> MifosLoadingDialog(
             visibilityState = LoadingDialogState.Shown,

@@ -30,6 +30,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import mobile_wallet.feature.profile.generated.resources.Res
 import mobile_wallet.feature.profile.generated.resources.feature_profile_link_bank_account
+import mobile_wallet.feature.profile.generated.resources.feature_profile_loading
 import mobile_wallet.feature.profile.generated.resources.feature_profile_personal_qr_code
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
@@ -99,7 +100,7 @@ internal fun ProfileScreenContent(
             when (clientState) {
                 is ProfileState.ViewState.Loading -> {
                     MifosOverlayLoadingWheel(
-                        contentDesc = "ProfileLoading",
+                        contentDesc = stringResource(Res.string.feature_profile_loading),
                         modifier = Modifier.align(Alignment.Center),
                     )
                 }
@@ -161,7 +162,7 @@ private fun ProfileScreenContent(
             leadingIcon = {
                 Icon(
                     imageVector = MifosIcons.QrCode,
-                    contentDescription = "Personal QR Code",
+                    contentDescription = stringResource(Res.string.feature_profile_personal_qr_code),
                 )
             },
         )
@@ -195,7 +196,7 @@ private fun ProfileDialogs(
     when (dialogState) {
         is ProfileState.DialogState.Error -> MifosBasicDialog(
             visibilityState = BasicDialogState.Shown(
-                message = dialogState.message,
+                message = stringResource(dialogState.message),
             ),
             onDismissRequest = onDismissRequest,
         )
