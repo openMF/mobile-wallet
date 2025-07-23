@@ -29,6 +29,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import mobile_wallet.feature.history.generated.resources.Res
+import mobile_wallet.feature.history.generated.resources.feature_history_debited_from
+import mobile_wallet.feature.history.generated.resources.feature_history_paid_to
+import mobile_wallet.feature.history.generated.resources.feature_history_transaction_date
+import mobile_wallet.feature.history.generated.resources.feature_history_transaction_id
+import org.jetbrains.compose.resources.stringResource
 import org.mifospay.core.common.CurrencyFormatter
 import org.mifospay.core.common.DateHelper
 import org.mifospay.core.model.savingsaccount.TransferDetail
@@ -57,7 +63,10 @@ internal fun TransactionDetail(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                Text(text = "Transaction ID", style = MaterialTheme.typography.labelLarge)
+                Text(
+                    text = stringResource(Res.string.feature_history_transaction_id),
+                    style = MaterialTheme.typography.labelLarge,
+                )
                 Text(text = detail.id.toString())
             }
 
@@ -70,7 +79,10 @@ internal fun TransactionDetail(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                Text(text = "Transaction Date", style = MaterialTheme.typography.labelLarge)
+                Text(
+                    text = stringResource(Res.string.feature_history_transaction_date),
+                    style = MaterialTheme.typography.labelLarge,
+                )
                 val date = DateHelper.getDateAsString(detail.transferDate)
                 Text(text = date)
             }
@@ -80,7 +92,7 @@ internal fun TransactionDetail(
             )
 
             Text(
-                text = "Paid To",
+                text = stringResource(Res.string.feature_history_paid_to),
                 style = MaterialTheme.typography.labelLarge,
             )
 
@@ -148,7 +160,7 @@ internal fun TransactionDetail(
             )
 
             Text(
-                text = "Debited From",
+                text = stringResource(Res.string.feature_history_debited_from),
                 style = MaterialTheme.typography.labelLarge,
             )
 

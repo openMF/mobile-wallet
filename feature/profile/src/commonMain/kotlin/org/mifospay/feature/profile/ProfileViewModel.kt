@@ -17,6 +17,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.StringResource
 import org.mifospay.core.common.DataState
 import org.mifospay.core.data.repository.ClientRepository
 import org.mifospay.core.datastore.UserPreferencesRepository
@@ -120,8 +121,7 @@ internal data class ProfileState(
 
     sealed interface DialogState {
         data object Loading : DialogState
-
-        data class Error(val message: String) : DialogState
+        data class Error(val message: StringResource) : DialogState
     }
 }
 
