@@ -14,6 +14,9 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
+import mobile_wallet.feature.history.generated.resources.Res
+import mobile_wallet.feature.history.generated.resources.feature_history_error_fallback
+import org.jetbrains.compose.resources.StringResource
 import org.mifospay.core.common.DataState
 import org.mifospay.core.data.repository.AccountRepository
 import org.mifospay.core.model.savingsaccount.TransferDetail
@@ -58,8 +61,13 @@ internal class TransactionDetailViewModel(
     private fun handleTransferDetailReceive(action: TransferDetailReceive) {
         when (action.result) {
             is DataState.Error -> {
+                val message = action.result.exception.message
                 mutableStateFlow.update {
-                    it.copy(viewState = Error(action.result.exception.message ?: "Error"))
+                    if (message.isNullOrEmpty()) {
+                        it.copy(viewState = Error.ResourceMessage(Res.string.feature_history_error_fallback))
+                    } else {
+                        it.copy(Error.StringMessage(message))
+                    }
                 }
             }
 
@@ -83,7 +91,11 @@ internal data class TransactionDetailState(
 ) {
     internal sealed interface ViewState {
         data object Loading : ViewState
-        data class Error(val message: String) : ViewState
+
+        sealed interface Error : ViewState {
+            data class StringMessage(val message: String) : Error
+            data class ResourceMessage(val message: StringResource) : Error
+        }
         data class Content(val transaction: TransferDetail) : ViewState
     }
 }
