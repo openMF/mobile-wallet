@@ -96,7 +96,7 @@ internal class AddEditSIViewModel(
             }
 
             is AddEditSIAction.FromAccountTypeChanged -> updatePayload {
-                it.copy(fromAccountType = action.accountType.toLong())
+                it.copy(fromAccountType = action.accountType)
             }
 
             is AddEditSIAction.FromClientChanged -> updatePayload {
@@ -112,7 +112,7 @@ internal class AddEditSIViewModel(
             }
 
             is AddEditSIAction.ToAccountTypeChanged -> updatePayload {
-                it.copy(toAccountType = action.accountType.toLong())
+                it.copy(toAccountType = action.accountType)
             }
 
             is AddEditSIAction.ToClientChanged -> {
@@ -217,12 +217,12 @@ internal class AddEditSIViewModel(
             when {
                 data.fromOfficeId == 0L && state.isAddMode -> showError("From Office is Required")
                 data.fromClientId == 0L && state.isAddMode -> showError("From Client is Required")
-                data.fromAccountType == 0L && state.isAddMode -> showError("From Account Type is Required")
+                data.fromAccountType.isEmpty() && state.isAddMode -> showError("From Account Type is Required")
                 data.fromAccountId == 0L && state.isAddMode -> showError("From Account is Required")
 
                 data.toOfficeId == 0L && state.isAddMode -> showError("To Office is Required")
                 data.toClientId == 0L && state.isAddMode -> showError("To Client is Required")
-                data.toAccountType == 0L && state.isAddMode -> showError("To Account Type is Required")
+                data.toAccountType.isEmpty() && state.isAddMode -> showError("To Account Type is Required")
                 data.toAccountId == 0L && state.isAddMode -> showError("To Account is Required")
 
                 data.name.isBlank() && state.isAddMode -> showError("Name is Required")
@@ -344,24 +344,24 @@ internal class AddEditSIViewModel(
                             template = action.result.data,
                             payload = if (state.isAddMode) {
                                 StandingInstructionPayload(
-                                    fromClientId = action.result.data.fromClient.id,
-                                    fromOfficeId = action.result.data.fromOffice.id,
-                                    fromAccountType = action.result.data.fromAccountType.id,
-                                    fromAccountId = action.result.data.fromAccountOptions.first().id,
+                                    fromClientId = action.result.data.fromClient?.id ?: 0L,
+                                    fromOfficeId = action.result.data.fromOffice?.id ?: 0L,
+                                    fromAccountType = action.result.data.fromAccountType ?: "",
+                                    fromAccountId = action.result.data.fromAccountOptions?.firstOrNull()?.id ?: -1,
 
-                                    toOfficeId = action.result.data.toOfficeOptions.first().id,
-                                    toAccountType = action.result.data.fromAccountType.id,
+                                    toOfficeId = action.result.data.toOfficeOptions?.firstOrNull()?.id ?: -1,
+                                    toAccountType = action.result.data.fromAccountType ?: "",
                                     toClientId = 0,
                                     toAccountId = 0,
 
                                     name = "",
                                     amount = "",
-                                    transferType = action.result.data.transferTypeOptions.first().id,
-                                    instructionType = action.result.data.instructionTypeOptions.first().id,
-                                    priority = action.result.data.priorityOptions.first().id,
-                                    status = action.result.data.statusOptions.first().id,
-                                    recurrenceType = action.result.data.recurrenceTypeOptions.first().id,
-                                    recurrenceFrequency = action.result.data.recurrenceFrequencyOptions.first().id,
+                                    transferType = action.result.data.transferTypeOptions?.firstOrNull()?.id ?: -1,
+                                    instructionType = action.result.data.instructionTypeOptions?.firstOrNull()?.id ?: -1,
+                                    priority = action.result.data.priorityOptions?.firstOrNull()?.id,
+                                    status = action.result.data.statusOptions?.firstOrNull()?.id,
+                                    recurrenceType = action.result.data.recurrenceTypeOptions?.firstOrNull()?.id ?: -1,
+                                    recurrenceFrequency = action.result.data.recurrenceFrequencyOptions?.firstOrNull()?.id ?: -1,
                                     recurrenceInterval = "",
 
                                     locale = "en_IN",
@@ -527,56 +527,56 @@ internal data class AddEditSIState(
         ) : ViewState {
 
             @Transient
-            val fromOfficeName = template.fromOffice.name
+            val fromOfficeName = template.fromOffice?.name
 
             @Transient
-            val fromAccountType = template.fromAccountType.value
+            val fromAccountType = template.fromAccountType
 
             @Transient
             val fromAccountNumber = template
-                .fromAccountOptions.firstOrNull { it.id == payload.fromAccountId }?.accountNo ?: ""
+                .fromAccountOptions?.firstOrNull { it.id == payload.fromAccountId }?.accountNo ?: ""
 
             @Transient
             val toClientOptions = template.fromClientOptions
-                .filter { it.id != payload.fromClientId }
+                ?.filter { it.id != payload.fromClientId }
 
             @Transient
             val toClientName = template
-                .fromClientOptions.firstOrNull { it.id == payload.toClientId }?.displayName ?: ""
+                .fromClientOptions?.firstOrNull { it.id == payload.toClientId }?.displayName ?: ""
 
             @Transient
-            val toOfficeName = template.fromOffice.name
+            val toOfficeName = template.fromOffice?.name
 
             @Transient
-            val toAccountType = template.fromAccountType.value
+            val toAccountType = template.fromAccountType
 
             @Transient
-            val transferType = template.transferTypeOptions.firstOrNull {
+            val transferType = template.transferTypeOptions?.firstOrNull {
                 it.id == payload.transferType
             }?.value ?: ""
 
             @Transient
-            val instructionType = template.instructionTypeOptions.firstOrNull {
+            val instructionType = template.instructionTypeOptions?.firstOrNull {
                 it.id == payload.instructionType
             }?.value ?: ""
 
             @Transient
-            val priority = template.priorityOptions.firstOrNull {
+            val priority = template.priorityOptions?.firstOrNull {
                 it.id == payload.priority
             }?.value ?: ""
 
             @Transient
-            val status = template.statusOptions.firstOrNull {
+            val status = template.statusOptions?.firstOrNull {
                 it.id == payload.status
             }?.value ?: ""
 
             @Transient
-            val recurrenceType = template.recurrenceTypeOptions.firstOrNull {
+            val recurrenceType = template.recurrenceTypeOptions?.firstOrNull {
                 it.id == payload.recurrenceType
             }?.value ?: ""
 
             @Transient
-            val recurrenceFrequency = template.recurrenceFrequencyOptions.firstOrNull {
+            val recurrenceFrequency = template.recurrenceFrequencyOptions?.firstOrNull {
                 it.id == payload.recurrenceFrequency
             }?.value ?: ""
 

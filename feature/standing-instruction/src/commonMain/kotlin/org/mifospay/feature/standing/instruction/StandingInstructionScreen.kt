@@ -289,7 +289,7 @@ private fun SIItem(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 IconButton(
-                    onClick = { item.id?.let { onClickEdit(it) } },
+                    onClick = { onClickEdit(item.id) },
                 ) {
                     Icon(
                         imageVector = MifosIcons.Edit2,
@@ -298,7 +298,7 @@ private fun SIItem(
                 }
 
                 IconButton(
-                    onClick = { item.id?.let { onClickDelete(it) } },
+                    onClick = { onClickDelete(item.id) },
                 ) {
                     Icon(
                         imageVector = MifosIcons.Delete,
@@ -307,7 +307,7 @@ private fun SIItem(
                 }
             }
         },
-        onContentClick = { item.id?.let { onClick(it) } },
+        onContentClick = { onClick(item.id) },
     ) {
         val priorityColor = when (item.priority?.id) {
             1L -> MaterialTheme.colorScheme.error.copy(

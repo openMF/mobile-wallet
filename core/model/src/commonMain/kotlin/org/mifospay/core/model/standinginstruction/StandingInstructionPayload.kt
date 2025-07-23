@@ -18,12 +18,12 @@ import org.mifospay.core.common.Parcelize
 data class StandingInstructionPayload(
     val fromOfficeId: Long = 0,
     val fromClientId: Long = 0,
-    val fromAccountType: Long = 0,
+    val fromAccountType: String = "",
     val fromAccountId: Long = 0,
 
     val toOfficeId: Long = 0,
     val toClientId: Long = 0,
-    val toAccountType: Long = 0,
+    val toAccountType: String = "",
     val toAccountId: Long = 0,
 
     val name: String = "",

@@ -14,21 +14,21 @@ import org.mifospay.core.model.savingsaccount.Currency
 
 @Serializable
 data class SITemplate(
-    val fromOffice: FromOffice,
-    val fromClient: FromClient,
-    val fromAccountType: Option,
-    val fromOfficeOptions: List<FromOfficeOption>,
-    val fromClientOptions: List<FromClientOption>,
-    val fromAccountTypeOptions: List<Option>,
-    val fromAccountOptions: List<FromAccountOption>,
-    val toOfficeOptions: List<FromOfficeOption>,
-    val toAccountTypeOptions: List<Option>,
-    val transferTypeOptions: List<Option>,
-    val statusOptions: List<Option>,
-    val instructionTypeOptions: List<Option>,
-    val priorityOptions: List<Option>,
-    val recurrenceTypeOptions: List<Option>,
-    val recurrenceFrequencyOptions: List<Option>,
+    val fromOffice: FromOffice? = null,
+    val fromClient: FromClient? = null,
+    val fromAccountType: String? = null,
+    val fromOfficeOptions: List<FromOfficeOption>? = emptyList(),
+    val fromClientOptions: List<FromClientOption>? = emptyList(),
+    val fromAccountTypeOptions: List<Option>? = emptyList(),
+    val fromAccountOptions: List<FromAccountOption>? = emptyList(),
+    val toOfficeOptions: List<FromOfficeOption>? = emptyList(),
+    val toAccountTypeOptions: List<Option>? = emptyList(),
+    val transferTypeOptions: List<Option>? = emptyList(),
+    val statusOptions: List<Option>? = emptyList(),
+    val instructionTypeOptions: List<Option>? = emptyList(),
+    val priorityOptions: List<Option>? = emptyList(),
+    val recurrenceTypeOptions: List<Option>? = emptyList(),
+    val recurrenceFrequencyOptions: List<Option>? = emptyList(),
 ) {
 
     @Serializable

@@ -239,17 +239,19 @@ private fun AddEditSIScreenContent(
 
             item(key = "FromClient&FromOffice") {
                 RowBlock {
-                    MifosTextField(
-                        value = state.template.fromClient.displayName,
-                        label = "From Client",
-                        onValueChange = {},
-                        readOnly = true,
-                        showClearIcon = false,
-                        modifier = Modifier.weight(1f),
-                    )
+                    state.template.fromClient?.let {
+                        MifosTextField(
+                            value = it.displayName,
+                            label = "From Client",
+                            onValueChange = {},
+                            readOnly = true,
+                            showClearIcon = false,
+                            modifier = Modifier.weight(1f),
+                        )
+                    }
 
                     MifosTextField(
-                        value = state.fromOfficeName,
+                        value = state.fromOfficeName ?: "",
                         label = "From Office",
                         onValueChange = {},
                         readOnly = true,
@@ -260,14 +262,16 @@ private fun AddEditSIScreenContent(
             }
 
             item(key = "FromAccountType") {
-                MifosTextField(
-                    value = state.fromAccountType,
-                    label = "From Account Type",
-                    onValueChange = {},
-                    readOnly = true,
-                    showClearIcon = false,
-                    modifier = Modifier.fillMaxWidth(),
-                )
+                state.fromAccountType?.let {
+                    MifosTextField(
+                        value = it,
+                        label = "From Account Type",
+                        onValueChange = {},
+                        readOnly = true,
+                        showClearIcon = false,
+                        modifier = Modifier.fillMaxWidth(),
+                    )
+                }
             }
 
             item(key = "FromAccount") {
@@ -282,7 +286,7 @@ private fun AddEditSIScreenContent(
                     },
                     modifier = Modifier.fillMaxWidth(),
                 ) {
-                    state.template.fromAccountOptions.forEachIndexed { index, it ->
+                    state.template.fromAccountOptions?.forEachIndexed { index, it ->
                         DropdownBoxItem(
                             text = it.accountNo,
                             onClick = {
@@ -291,7 +295,7 @@ private fun AddEditSIScreenContent(
                             },
                         )
 
-                        if (index < state.template.fromAccountOptions.size - 1) {
+                        if (index < state.template.fromAccountOptions!!.size - 1) {
                             MifosDivider()
                         }
                     }
@@ -301,7 +305,7 @@ private fun AddEditSIScreenContent(
             item(key = "ToOffice&ToAccountType") {
                 RowBlock {
                     MifosTextField(
-                        value = state.toOfficeName,
+                        value = state.toOfficeName ?: "",
                         label = "To Office",
                         onValueChange = {},
                         readOnly = true,
@@ -309,14 +313,16 @@ private fun AddEditSIScreenContent(
                         modifier = Modifier.weight(1f),
                     )
 
-                    MifosTextField(
-                        value = state.toAccountType,
-                        label = "To Account Type",
-                        onValueChange = {},
-                        readOnly = true,
-                        showClearIcon = false,
-                        modifier = Modifier.weight(1f),
-                    )
+                    state.toAccountType?.let {
+                        MifosTextField(
+                            value = it,
+                            label = "To Account Type",
+                            onValueChange = {},
+                            readOnly = true,
+                            showClearIcon = false,
+                            modifier = Modifier.weight(1f),
+                        )
+                    }
                 }
             }
 
@@ -332,7 +338,7 @@ private fun AddEditSIScreenContent(
                     },
                     modifier = Modifier.fillMaxWidth(),
                 ) {
-                    state.toClientOptions.forEachIndexed { index, it ->
+                    state.toClientOptions?.forEachIndexed { index, it ->
                         DropdownBoxItem(
                             text = it.displayName,
                             onClick = {
@@ -346,7 +352,7 @@ private fun AddEditSIScreenContent(
                         }
                     }
 
-                    if (state.toClientOptions.isEmpty()) {
+                    if (state.toClientOptions?.isEmpty() == true) {
                         DropdownBoxItem(
                             text = "No Clients Found",
                             onClick = {
@@ -433,7 +439,7 @@ private fun AddEditSIScreenContent(
                     },
                     modifier = Modifier.fillMaxWidth(),
                 ) {
-                    state.template.transferTypeOptions.forEachIndexed { index, it ->
+                    state.template.transferTypeOptions?.forEachIndexed { index, it ->
                         DropdownBoxItem(
                             text = it.value,
                             onClick = {
@@ -442,7 +448,7 @@ private fun AddEditSIScreenContent(
                             },
                         )
 
-                        if (index < state.template.transferTypeOptions.size - 1) {
+                        if (index < state.template.transferTypeOptions!!.size - 1) {
                             MifosDivider()
                         }
                     }
@@ -461,7 +467,7 @@ private fun AddEditSIScreenContent(
                     },
                     modifier = Modifier.fillMaxWidth(),
                 ) {
-                    state.template.instructionTypeOptions.forEachIndexed { index, it ->
+                    state.template.instructionTypeOptions?.forEachIndexed { index, it ->
                         DropdownBoxItem(
                             text = it.value,
                             onClick = {
@@ -470,7 +476,7 @@ private fun AddEditSIScreenContent(
                             },
                         )
 
-                        if (index < state.template.instructionTypeOptions.size - 1) {
+                        if (index < state.template.instructionTypeOptions!!.size - 1) {
                             MifosDivider()
                         }
                     }
@@ -490,7 +496,7 @@ private fun AddEditSIScreenContent(
                 },
                 modifier = Modifier.fillMaxWidth(),
             ) {
-                state.template.priorityOptions.forEachIndexed { index, it ->
+                state.template.priorityOptions?.forEachIndexed { index, it ->
                     DropdownBoxItem(
                         text = it.value,
                         onClick = {
@@ -499,7 +505,7 @@ private fun AddEditSIScreenContent(
                         },
                     )
 
-                    if (index < state.template.priorityOptions.size - 1) {
+                    if (index < state.template.priorityOptions!!.size - 1) {
                         MifosDivider()
                     }
                 }
@@ -518,7 +524,7 @@ private fun AddEditSIScreenContent(
                 },
                 modifier = Modifier.fillMaxWidth(),
             ) {
-                state.template.statusOptions.forEachIndexed { index, it ->
+                state.template.statusOptions?.forEachIndexed { index, it ->
                     DropdownBoxItem(
                         text = it.value,
                         onClick = {
@@ -527,7 +533,7 @@ private fun AddEditSIScreenContent(
                         },
                     )
 
-                    if (index < state.template.statusOptions.size - 1) {
+                    if (index < state.template.statusOptions!!.size - 1) {
                         MifosDivider()
                     }
                 }
@@ -547,7 +553,7 @@ private fun AddEditSIScreenContent(
                     },
                     modifier = Modifier.fillMaxWidth(),
                 ) {
-                    state.template.recurrenceTypeOptions.forEachIndexed { index, it ->
+                    state.template.recurrenceTypeOptions?.forEachIndexed { index, it ->
                         DropdownBoxItem(
                             text = it.value,
                             onClick = {
@@ -556,7 +562,7 @@ private fun AddEditSIScreenContent(
                             },
                         )
 
-                        if (index < state.template.recurrenceTypeOptions.size - 1) {
+                        if (index < state.template.recurrenceTypeOptions!!.size - 1) {
                             MifosDivider()
                         }
                     }
@@ -576,7 +582,7 @@ private fun AddEditSIScreenContent(
                         },
                         modifier = Modifier.fillMaxWidth(),
                     ) {
-                        state.template.recurrenceFrequencyOptions.forEachIndexed { index, it ->
+                        state.template.recurrenceFrequencyOptions?.forEachIndexed { index, it ->
                             DropdownBoxItem(
                                 text = it.value,
                                 onClick = {
@@ -585,7 +591,7 @@ private fun AddEditSIScreenContent(
                                 },
                             )
 
-                            if (index < state.template.recurrenceFrequencyOptions.size - 1) {
+                            if (index < state.template.recurrenceFrequencyOptions!!.size - 1) {
                                 MifosDivider()
                             }
                         }
