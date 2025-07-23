@@ -25,6 +25,8 @@ import mobile_wallet.feature.history.generated.resources.Res
 import mobile_wallet.feature.history.generated.resources.feature_history_error
 import mobile_wallet.feature.history.generated.resources.feature_history_error_oops
 import mobile_wallet.feature.history.generated.resources.feature_history_loading
+import mobile_wallet.feature.history.generated.resources.feature_history_share
+import mobile_wallet.feature.history.generated.resources.feature_history_transaction_details
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.mifospay.core.designsystem.component.MifosLoadingWheel
@@ -68,7 +70,7 @@ internal fun TransactionDetailScreenContent(
 ) {
     MifosScaffold(
         backPress = { onAction(TransactionDetailAction.NavigateBack) },
-        topBarTitle = "Transaction Details",
+        topBarTitle = stringResource(Res.string.feature_history_transaction_details),
         actions = {
             IconButton(
                 onClick = {
@@ -77,7 +79,7 @@ internal fun TransactionDetailScreenContent(
             ) {
                 Icon(
                     imageVector = MifosIcons.OutlinedShare,
-                    contentDescription = "Share",
+                    contentDescription = stringResource(Res.string.feature_history_share),
                 )
             }
         },
