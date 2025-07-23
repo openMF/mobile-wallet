@@ -295,7 +295,7 @@ private fun AddEditSIScreenContent(
                             },
                         )
 
-                        if (index < state.template.fromAccountOptions!!.size - 1) {
+                        if (state.template.fromAccountOptions?.let { index < it.size - 1 } == true) {
                             MifosDivider()
                         }
                     }
@@ -448,7 +448,7 @@ private fun AddEditSIScreenContent(
                             },
                         )
 
-                        if (index < state.template.transferTypeOptions!!.size - 1) {
+                        if (state.template.transferTypeOptions?.let { index < it.size - 1 } == true) {
                             MifosDivider()
                         }
                     }
@@ -476,7 +476,7 @@ private fun AddEditSIScreenContent(
                             },
                         )
 
-                        if (index < state.template.instructionTypeOptions!!.size - 1) {
+                        if (state.template.instructionTypeOptions?.let { index < it.size - 1 } == true) {
                             MifosDivider()
                         }
                     }
@@ -505,7 +505,7 @@ private fun AddEditSIScreenContent(
                         },
                     )
 
-                    if (index < state.template.priorityOptions!!.size - 1) {
+                    if (state.template.priorityOptions?.let { index < it.size - 1 } == true) {
                         MifosDivider()
                     }
                 }
@@ -533,7 +533,7 @@ private fun AddEditSIScreenContent(
                         },
                     )
 
-                    if (index < state.template.statusOptions!!.size - 1) {
+                    if (state.template.statusOptions?.let { index < it.size - 1 } == true) {
                         MifosDivider()
                     }
                 }
@@ -562,7 +562,7 @@ private fun AddEditSIScreenContent(
                             },
                         )
 
-                        if (index < state.template.recurrenceTypeOptions!!.size - 1) {
+                        if (state.template.recurrenceTypeOptions?.let { index < it.size - 1 } == true) {
                             MifosDivider()
                         }
                     }
@@ -591,7 +591,7 @@ private fun AddEditSIScreenContent(
                                 },
                             )
 
-                            if (index < state.template.recurrenceFrequencyOptions!!.size - 1) {
+                            if (state.template.recurrenceFrequencyOptions?.let { index < it.size - 1 } == true) {
                                 MifosDivider()
                             }
                         }
@@ -674,7 +674,11 @@ private fun AddEditSIScreenContent(
                         TextButton(
                             onClick = {
                                 showDialog = false
-                                onAction(AddEditSIAction.ValidFromChanged(dateState.selectedDateMillis!!))
+                                onAction(
+                                    AddEditSIAction.ValidFromChanged(
+                                        dateState.selectedDateMillis ?: state.initialDate,
+                                    ),
+                                )
                             },
                             enabled = confirmEnabled.value,
                         ) {
@@ -738,7 +742,11 @@ private fun AddEditSIScreenContent(
                         TextButton(
                             onClick = {
                                 showDialog = false
-                                onAction(AddEditSIAction.ValidTillChanged(dateState.selectedDateMillis!!))
+                                onAction(
+                                    AddEditSIAction.ValidTillChanged(
+                                        dateState.selectedDateMillis ?: state.initialDate,
+                                    ),
+                                )
                             },
                             enabled = confirmEnabled.value,
                         ) {
@@ -798,7 +806,12 @@ private fun AddEditSIScreenContent(
                             TextButton(
                                 onClick = {
                                     showDialog = false
-                                    onAction(AddEditSIAction.RecurrenceOnMonthDayChanged(dateState.selectedDateMillis!!))
+                                    onAction(
+                                        AddEditSIAction.RecurrenceOnMonthDayChanged(
+                                            dateState.selectedDateMillis
+                                                ?: state.initialDate,
+                                        ),
+                                    )
                                 },
                                 enabled = confirmEnabled.value,
                             ) {

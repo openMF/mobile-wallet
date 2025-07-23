@@ -186,11 +186,13 @@ private fun SIDetailsCard(
                     )
                 }
 
-                RowBlock {
-                    Text(
-                        text = "Status",
-                    )
-                    Text(text = item.status?.value ?: "", fontWeight = FontWeight.SemiBold)
+                if (item.status?.value?.isEmpty() == false) {
+                    RowBlock {
+                        Text(
+                            text = "Status",
+                        )
+                        Text(text = item.status?.value ?: "", fontWeight = FontWeight.SemiBold)
+                    }
                 }
 
                 RowBlock {
@@ -205,14 +207,16 @@ private fun SIDetailsCard(
                     }
                 }
 
-                RowBlock {
-                    Text(
-                        text = "Priority",
-                    )
+                if (item.priority != null) {
+                    RowBlock {
+                        Text(
+                            text = "Priority",
+                        )
 
-                    PriorityChip(
-                        priority = item.priority,
-                    )
+                        PriorityChip(
+                            priority = item.priority,
+                        )
+                    }
                 }
 
                 RowBlock {

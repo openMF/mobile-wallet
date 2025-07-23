@@ -16,7 +16,7 @@ import org.mifospay.core.common.Parcelize
 @Serializable
 @Parcelize
 data class StandingInstruction(
-    val id: Long,
+    val id: Long? = null,
     val accountDetailId: Long? = null,
     val name: String? = null,
     val fromOffice: FromAndToOffice? = null,
@@ -43,33 +43,33 @@ data class StandingInstruction(
     @Serializable
     @Parcelize
     data class FromAndToAccount(
-        val id: Long? = null,
-        val accountNo: String? = null,
-        val productId: Long? = null,
-        val productName: String? = null,
+        val id: Long,
+        val accountNo: String,
+        val productId: Long,
+        val productName: String,
     ) : Parcelable
 
     @Serializable
     @Parcelize
     data class FromAndToOffice(
-        val id: Long? = null,
-        val name: String? = null,
+        val id: Long,
+        val name: String,
     ) : Parcelable
 
     @Serializable
     @Parcelize
     data class FromAndToClient(
-        val id: Long? = null,
-        val displayName: String? = null,
-        val officeId: Long? = null,
-        val officeName: String? = null,
+        val id: Long,
+        val displayName: String,
+        val officeId: Long,
+        val officeName: String,
     ) : Parcelable
 
     @Serializable
     @Parcelize
     data class Option(
-        val id: Long? = null,
-        val code: String? = null,
-        val value: String? = null,
+        val id: Long,
+        val code: String,
+        val value: String,
     ) : Parcelable
 }

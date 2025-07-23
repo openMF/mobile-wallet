@@ -231,7 +231,7 @@ private fun StandingInstructionScreenContent(
     ) {
         items(
             items = state.list,
-            key = { item -> item.id },
+            key = { item -> item.id ?: item.hashCode() },
         ) { item ->
             SIItem(
                 item = item,
@@ -289,7 +289,9 @@ private fun SIItem(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 IconButton(
-                    onClick = { onClickEdit(item.id) },
+                    onClick = {
+                        item.id?.let { onClickEdit(it) }
+                    },
                 ) {
                     Icon(
                         imageVector = MifosIcons.Edit2,
@@ -298,7 +300,7 @@ private fun SIItem(
                 }
 
                 IconButton(
-                    onClick = { onClickDelete(item.id) },
+                    onClick = { item.id?.let { onClickDelete(it) } },
                 ) {
                     Icon(
                         imageVector = MifosIcons.Delete,
@@ -307,7 +309,7 @@ private fun SIItem(
                 }
             }
         },
-        onContentClick = { onClick(item.id) },
+        onContentClick = { item.id?.let { onClick(it) } },
     ) {
         val priorityColor = when (item.priority?.id) {
             1L -> MaterialTheme.colorScheme.error.copy(
@@ -368,7 +370,15 @@ private fun SIItem(
                         item.name?.let { it1 -> Text(text = it1) }
                     },
                     supportingContent = {
-                        Text(text = "${item.toClient?.displayName} | ${item.status?.value}")
+                        Text(
+                            text = buildString {
+                                append(item.toClient?.displayName ?: "")
+                                item.status?.value?.let {
+                                    append(" | ")
+                                    append(it)
+                                }
+                            },
+                        )
                     },
                     trailingContent = {
                         Row(
