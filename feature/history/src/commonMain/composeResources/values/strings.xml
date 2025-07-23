@@ -23,5 +23,10 @@
     <string name="feature_history_loading">Loading</string>
     <string name="feature_history_no_transactions_found">No transactions found</string>
     <string name="feature_history_specific_transactions_history">Specific Transactions History</string>
+    <string name="feature_history_transaction_details">Transaction Details</string>
+    <string name="feature_history_share">Share</string>
+    <string name="feature_history_paid_to">Paid To</string>
+    <string name="feature_history_debited_from">Debited From</string>
+    <string name="feature_history_error_fallback">Error</string>
 
 </resources>
