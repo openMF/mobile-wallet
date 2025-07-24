@@ -18,20 +18,20 @@ import org.mifospay.core.common.Parcelize
 data class StandingInstructionPayload(
     val fromOfficeId: Long = 0,
     val fromClientId: Long = 0,
-    val fromAccountType: Long = 0,
+    val fromAccountType: String = "",
     val fromAccountId: Long = 0,
 
     val toOfficeId: Long = 0,
     val toClientId: Long = 0,
-    val toAccountType: Long = 0,
+    val toAccountType: String = "",
     val toAccountId: Long = 0,
 
     val name: String = "",
     val amount: String = "",
     val transferType: Long = 0,
     val instructionType: Long = 0,
-    val priority: Long = 0,
-    val status: Long = 0,
+    val priority: Long? = 0,
+    val status: Long? = 0,
     val recurrenceType: Long = 0,
     val recurrenceFrequency: Long = 0,
     val recurrenceInterval: String = "",
@@ -46,8 +46,8 @@ data class StandingInstructionPayload(
 
 fun StandingInstructionPayload.toSIUploadPayload(): SIUpdatePayload {
     return SIUpdatePayload(
-        priority = priority,
-        status = status,
+        priority = priority ?: 0L,
+        status = status ?: 0L,
         locale = locale,
         validFrom = validFrom,
         validTill = validTill,
