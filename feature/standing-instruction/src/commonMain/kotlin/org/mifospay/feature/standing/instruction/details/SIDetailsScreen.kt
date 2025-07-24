@@ -30,6 +30,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -162,12 +163,11 @@ private fun SIDetailsCard(
                     Text(
                         text = "Instruction Name",
                     )
-                    item.name?.let {
-                        Text(
-                            text = it,
-                            fontWeight = FontWeight.SemiBold,
-                        )
-                    }
+                    Text(
+                        text = item.name ?: "Not Available",
+                        color = colorForMissing(item.name),
+                        fontWeight = FontWeight.SemiBold,
+                    )
                 }
 
                 val amount = CurrencyFormatter.format(
@@ -199,12 +199,11 @@ private fun SIDetailsCard(
                     Text(
                         text = "Transfer Type",
                     )
-                    item.transferType?.let {
-                        Text(
-                            text = it,
-                            fontWeight = FontWeight.SemiBold,
-                        )
-                    }
+                    Text(
+                        text = item.transferType ?: "Not Available",
+                        color = colorForMissing(item.transferType),
+                        fontWeight = FontWeight.SemiBold,
+                    )
                 }
 
                 if (item.priority != null) {
@@ -223,11 +222,9 @@ private fun SIDetailsCard(
                     Text(
                         text = "Instruction Type",
                     )
-                    item.instructionType?.let {
-                        InstructionTypeChip(
-                            type = it,
-                        )
-                    }
+                    InstructionTypeChip(
+                        type = item.instructionType,
+                    )
                 }
 
                 RowBlock {
@@ -235,12 +232,10 @@ private fun SIDetailsCard(
                         text = "Recurrence Frequency",
                     )
 
-                    item.recurrenceFrequency?.let {
-                        FrequencyChip(
-                            option = it,
-                            interval = item.recurrenceInterval.toString(),
-                        )
-                    }
+                    FrequencyChip(
+                        option = item.recurrenceFrequency,
+                        interval = item.recurrenceInterval,
+                    )
                 }
 
                 RowBlock {
@@ -253,12 +248,11 @@ private fun SIDetailsCard(
                     Text(
                         text = "Valid From",
                     )
-                    if (validFrom != null) {
-                        Text(
-                            text = validFrom,
-                            fontWeight = FontWeight.SemiBold,
-                        )
-                    }
+                    Text(
+                        text = validFrom ?: "Not Available",
+                        fontWeight = FontWeight.SemiBold,
+                        color = colorForMissing(validFrom),
+                    )
                 }
 
                 item.recurrenceOnMonthDay?.let {
@@ -270,12 +264,11 @@ private fun SIDetailsCard(
                         Text(
                             text = "Valid Till",
                         )
-                        if (validTill != null) {
-                            Text(
-                                text = validTill,
-                                fontWeight = FontWeight.SemiBold,
-                            )
-                        }
+                        Text(
+                            text = validTill ?: "Not Available",
+                            color = colorForMissing(validTill),
+                            fontWeight = FontWeight.SemiBold,
+                        )
                     }
                 }
 
@@ -287,12 +280,12 @@ private fun SIDetailsCard(
                         Text(
                             text = "Recurrence On Month Day",
                         )
-                        if (recurrenceOnMonthDay != null) {
-                            Text(
-                                text = recurrenceOnMonthDay,
-                                fontWeight = FontWeight.SemiBold,
-                            )
-                        }
+
+                        Text(
+                            text = recurrenceOnMonthDay ?: "Not Available",
+                            color = colorForMissing(recurrenceOnMonthDay),
+                            fontWeight = FontWeight.SemiBold,
+                        )
                     }
                 }
             }
@@ -315,50 +308,44 @@ private fun SIDetailsCard(
                     Text(
                         text = "From Office",
                     )
-                    item.fromOffice?.let {
-                        it.name?.let { it1 ->
-                            Text(
-                                text = it1,
-                                fontWeight = FontWeight.SemiBold,
-                            )
-                        }
-                    }
+                    Text(
+                        text = item.fromOffice?.name ?: "Not Available",
+                        color = colorForMissing(item.fromOffice?.name),
+                        fontWeight = FontWeight.SemiBold,
+                    )
                 }
 
                 RowBlock {
                     Text(
                         text = "From Client",
                     )
-                    item.fromClient?.displayName?.let {
-                        Text(
-                            text = it,
-                            fontWeight = FontWeight.SemiBold,
-                        )
-                    }
+                    Text(
+                        text = item.fromClient?.displayName ?: "Not Available",
+                        color = colorForMissing(item.fromClient?.displayName),
+                        fontWeight = FontWeight.SemiBold,
+                    )
                 }
 
                 RowBlock {
                     Text(
                         text = "From Account Type",
                     )
-                    item.fromAccountType?.let {
-                        Text(
-                            text = it,
-                            fontWeight = FontWeight.SemiBold,
-                        )
-                    }
+                    Text(
+                        text = item.fromAccountType ?: "Not Available",
+                        color = colorForMissing(item.fromAccountType),
+                        fontWeight = FontWeight.SemiBold,
+                    )
                 }
 
                 RowBlock(false) {
                     Text(
                         text = "From Account",
                     )
-                    item.fromAccount?.accountNo?.let {
-                        Text(
-                            text = it,
-                            fontWeight = FontWeight.SemiBold,
-                        )
-                    }
+                    Text(
+                        text = item.fromAccount?.accountNo ?: "Not Available",
+                        color = colorForMissing(item.fromAccount?.accountNo),
+                        fontWeight = FontWeight.SemiBold,
+                    )
                 }
             }
         }
@@ -380,50 +367,44 @@ private fun SIDetailsCard(
                     Text(
                         text = "To Office",
                     )
-                    item.toOffice?.let {
-                        it.name?.let { it1 ->
-                            Text(
-                                text = it1,
-                                fontWeight = FontWeight.SemiBold,
-                            )
-                        }
-                    }
+                    Text(
+                        text = item.toOffice?.name ?: "Not Available",
+                        color = colorForMissing(item.toOffice?.name),
+                        fontWeight = FontWeight.SemiBold,
+                    )
                 }
 
                 RowBlock {
                     Text(
                         text = "To Client",
                     )
-                    item.toClient?.displayName?.let {
-                        Text(
-                            text = it,
-                            fontWeight = FontWeight.SemiBold,
-                        )
-                    }
+                    Text(
+                        text = item.toClient?.displayName ?: "Not Available",
+                        color = colorForMissing(item.toClient?.displayName),
+                        fontWeight = FontWeight.SemiBold,
+                    )
                 }
 
                 RowBlock {
                     Text(
                         text = "To Account Type",
                     )
-                    item.toAccountType?.let {
-                        Text(
-                            text = it,
-                            fontWeight = FontWeight.SemiBold,
-                        )
-                    }
+                    Text(
+                        text = item.toAccountType ?: "Not Available",
+                        color = colorForMissing(item.toAccountType),
+                        fontWeight = FontWeight.SemiBold,
+                    )
                 }
 
                 RowBlock(false) {
                     Text(
                         text = "To Account",
                     )
-                    item.toAccount?.accountNo?.let {
-                        Text(
-                            text = it,
-                            fontWeight = FontWeight.SemiBold,
-                        )
-                    }
+                    Text(
+                        text = item.toAccount?.accountNo ?: "Not Available",
+                        color = colorForMissing(item.toAccount?.accountNo),
+                        fontWeight = FontWeight.SemiBold,
+                    )
                 }
             }
         }
@@ -452,5 +433,14 @@ private inline fun RowBlock(
         if (showDivider) {
             MifosDivider()
         }
+    }
+}
+
+@Composable
+fun colorForMissing(value: String?): Color {
+    return if (value == null) {
+        MaterialTheme.colorScheme.error
+    } else {
+        MaterialTheme.colorScheme.onBackground
     }
 }
