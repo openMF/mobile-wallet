@@ -27,4 +27,20 @@
     <string name="feature_make_transfer_badge_wallet">WALLET</string>
     <string name="feature_make_transfer_badge_saving">SAVING</string>
     <string name="feature_make_transfer_icon_selected_description">Selected account indicator</string>
+
+<!--  Transfer Success Screen  -->
+    <string name="back_to_home">Back To Home</string>
+    <string name="success">Success</string>
+    <string name="payment_success">Payment Success</string>
+    <string name="payment_done">Your payment has been successfully done.</string>
+
+<!--  MakeTransferViewmodel  -->
+    <string name="error_empty_amount">Amount cannot be empty</string>
+    <string name="error_invalid_amount">Please enter a valid amount</string>
+    <string name="error_empty_description">Description cannot be empty</string>
+    <string name="error_select_account">Please select an account</string>
+    <string name="error_inactive_account">Account is inactive</string>
+    <string name="error_same_account">Cannot transfer to the same account</string>
+    <string name="error_insufficient_balance">Insufficient balance</string>
+
 </resources>

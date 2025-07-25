@@ -20,6 +20,15 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
+import mobile_wallet.feature.make_transfer.generated.resources.Res
+import mobile_wallet.feature.make_transfer.generated.resources.error_empty_amount
+import mobile_wallet.feature.make_transfer.generated.resources.error_empty_description
+import mobile_wallet.feature.make_transfer.generated.resources.error_inactive_account
+import mobile_wallet.feature.make_transfer.generated.resources.error_insufficient_balance
+import mobile_wallet.feature.make_transfer.generated.resources.error_invalid_amount
+import mobile_wallet.feature.make_transfer.generated.resources.error_same_account
+import mobile_wallet.feature.make_transfer.generated.resources.error_select_account
+import org.jetbrains.compose.resources.StringResource
 import org.mifospay.core.common.DataState
 import org.mifospay.core.common.DateHelper
 import org.mifospay.core.common.getSerialized
@@ -124,24 +133,24 @@ internal class MakeTransferViewModel(
     }
 
     private fun validateTransfer() = when {
-        state.amount.isBlank() -> updateErrorState("Amount cannot be empty")
+        state.amount.isBlank() -> updateErrorState(Res.string.error_empty_amount)
 
-        state.amount.toDoubleOrNull() == null -> updateErrorState("Please enter a valid amount")
+        state.amount.toDoubleOrNull() == null -> updateErrorState(Res.string.error_invalid_amount)
 
-        state.description.isBlank() -> updateErrorState("Description cannot be empty")
+        state.description.isBlank() -> updateErrorState(Res.string.error_empty_description)
 
-        state.selectedAccount == null -> updateErrorState("Please select an account")
+        state.selectedAccount == null -> updateErrorState(Res.string.error_select_account)
 
         state.selectedAccount?.status?.active == false -> {
-            updateErrorState("Account is inactive")
+            updateErrorState(Res.string.error_inactive_account)
         }
 
         state.selectedAccount?.id == state.toClientData.accountId -> {
-            updateErrorState("Cannot transfer to the same account")
+            updateErrorState(Res.string.error_same_account)
         }
 
         state.amount.toDouble() > state.selectedAccount?.balance!! -> {
-            updateErrorState("Insufficient balance")
+            updateErrorState(Res.string.error_insufficient_balance)
         }
 
         else -> initiateTransfer()
@@ -169,7 +178,7 @@ internal class MakeTransferViewModel(
 
             is DataState.Error -> {
                 mutableStateFlow.update {
-                    it.copy(dialogState = Error(action.result.message))
+                    it.copy(dialogState = Error.StringMessage(action.result.message))
                 }
             }
 
@@ -183,9 +192,9 @@ internal class MakeTransferViewModel(
         }
     }
 
-    private fun updateErrorState(message: String) {
+    private fun updateErrorState(message: StringResource) {
         mutableStateFlow.update {
-            it.copy(dialogState = Error(message))
+            it.copy(dialogState = Error.ResourceMessage(message))
         }
     }
 }
@@ -229,7 +238,10 @@ internal data class MakeTransferState(
         data object Loading : DialogState
 
         @Serializable
-        data class Error(val message: String) : DialogState
+        sealed interface Error : DialogState {
+            data class StringMessage(val message: String) : Error
+            data class ResourceMessage(val message: StringResource) : Error
+        }
     }
 }
 
