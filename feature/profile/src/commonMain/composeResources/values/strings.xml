@@ -34,4 +34,20 @@
     <string name="feature_profile_change_profile_picture">Pick profile picture from device</string>
     <string name="feature_profile_remove_profile_picture">Remove profile picture</string>
     <string name="feature_profile_updated_sucessfully">Updated Successfully</string>
+
+    <!-- New error messages for EditProfileViewModel -->
+    <string name="feature_profile_error_empty_firstname">Please enter client firstname.</string>
+    <string name="feature_profile_error_empty_lastname">Please enter client lastname.</string>
+    <string name="feature_profile_error_empty_email">Please enter your email.</string>
+    <string name="feature_profile_error_invalid_email">Please enter a valid email.</string>
+    <string name="feature_profile_error_empty_phone">Please enter your mobile number.</string>
+    <string name="feature_profile_error_invalid_phone_length">Mobile number must be 10 digits long.</string>
+    <string name="feature_profile_error_loading_client_image">Failed to load client image.</string>
+    <string name="feature_profile_error_updating_client_image">Failed to update client image.</string>
+
+    <!-- Success messages -->
+    <string name="feature_profile_profile_updated_successfully">Profile updated successfully</string>
+    <string name="feature_profile_profile_image_updated_successfully">Profile image updated successfully</string>
+
+    <string name="feature_profile_profile_image_description">Profile Image</string>
 </resources>

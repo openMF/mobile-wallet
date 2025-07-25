@@ -162,10 +162,12 @@ private fun SIDetailsCard(
                     Text(
                         text = "Instruction Name",
                     )
-                    Text(
-                        text = item.name,
-                        fontWeight = FontWeight.SemiBold,
-                    )
+                    item.name?.let {
+                        Text(
+                            text = it,
+                            fontWeight = FontWeight.SemiBold,
+                        )
+                    }
                 }
 
                 val amount = CurrencyFormatter.format(
@@ -184,40 +186,48 @@ private fun SIDetailsCard(
                     )
                 }
 
-                RowBlock {
-                    Text(
-                        text = "Status",
-                    )
-                    Text(text = item.status.value, fontWeight = FontWeight.SemiBold)
+                if (item.status?.value?.isEmpty() == false) {
+                    RowBlock {
+                        Text(
+                            text = "Status",
+                        )
+                        Text(text = item.status?.value ?: "", fontWeight = FontWeight.SemiBold)
+                    }
                 }
 
                 RowBlock {
                     Text(
                         text = "Transfer Type",
                     )
-                    Text(
-                        text = item.transferType.value,
-                        fontWeight = FontWeight.SemiBold,
-                    )
+                    item.transferType?.let {
+                        Text(
+                            text = it,
+                            fontWeight = FontWeight.SemiBold,
+                        )
+                    }
                 }
 
-                RowBlock {
-                    Text(
-                        text = "Priority",
-                    )
+                if (item.priority != null) {
+                    RowBlock {
+                        Text(
+                            text = "Priority",
+                        )
 
-                    PriorityChip(
-                        priority = item.priority,
-                    )
+                        PriorityChip(
+                            priority = item.priority,
+                        )
+                    }
                 }
 
                 RowBlock {
                     Text(
                         text = "Instruction Type",
                     )
-                    InstructionTypeChip(
-                        type = item.instructionType,
-                    )
+                    item.instructionType?.let {
+                        InstructionTypeChip(
+                            type = it,
+                        )
+                    }
                 }
 
                 RowBlock {
@@ -225,52 +235,64 @@ private fun SIDetailsCard(
                         text = "Recurrence Frequency",
                     )
 
-                    FrequencyChip(
-                        option = item.recurrenceFrequency,
-                        interval = item.recurrenceInterval.toString(),
-                    )
+                    item.recurrenceFrequency?.let {
+                        FrequencyChip(
+                            option = it,
+                            interval = item.recurrenceInterval.toString(),
+                        )
+                    }
                 }
 
                 RowBlock {
-                    val validFrom = DateHelper.getDateAsString(
-                        item.validFrom,
-                    )
+                    val validFrom = item.validFrom?.let {
+                        DateHelper.getDateAsString(
+                            it,
+                        )
+                    }
 
                     Text(
                         text = "Valid From",
                     )
-                    Text(
-                        text = validFrom,
-                        fontWeight = FontWeight.SemiBold,
-                    )
+                    if (validFrom != null) {
+                        Text(
+                            text = validFrom,
+                            fontWeight = FontWeight.SemiBold,
+                        )
+                    }
                 }
 
-                RowBlock(
-                    showDivider = item.recurrenceOnMonthDay.isNotEmpty(),
-                ) {
-                    val validTill = DateHelper.getDateAsString(item.validTill)
+                item.recurrenceOnMonthDay?.let {
+                    RowBlock(
+                        showDivider = it.isNotEmpty(),
+                    ) {
+                        val validTill = item.validTill?.let { DateHelper.getDateAsString(it) }
 
-                    Text(
-                        text = "Valid Till",
-                    )
-                    Text(
-                        text = validTill,
-                        fontWeight = FontWeight.SemiBold,
-                    )
+                        Text(
+                            text = "Valid Till",
+                        )
+                        if (validTill != null) {
+                            Text(
+                                text = validTill,
+                                fontWeight = FontWeight.SemiBold,
+                            )
+                        }
+                    }
                 }
 
-                if (item.recurrenceOnMonthDay.isNotEmpty()) {
+                if (item.recurrenceOnMonthDay?.isNotEmpty() == true) {
                     val recurrenceOnMonthDay =
-                        DateHelper.getDateMonthString(item.recurrenceOnMonthDay)
+                        item.recurrenceOnMonthDay?.let { DateHelper.getDateMonthString(it) }
 
                     RowBlock(false) {
                         Text(
                             text = "Recurrence On Month Day",
                         )
-                        Text(
-                            text = recurrenceOnMonthDay,
-                            fontWeight = FontWeight.SemiBold,
-                        )
+                        if (recurrenceOnMonthDay != null) {
+                            Text(
+                                text = recurrenceOnMonthDay,
+                                fontWeight = FontWeight.SemiBold,
+                            )
+                        }
                     }
                 }
             }
@@ -293,40 +315,50 @@ private fun SIDetailsCard(
                     Text(
                         text = "From Office",
                     )
-                    Text(
-                        text = item.fromOffice.name,
-                        fontWeight = FontWeight.SemiBold,
-                    )
+                    item.fromOffice?.let {
+                        it.name?.let { it1 ->
+                            Text(
+                                text = it1,
+                                fontWeight = FontWeight.SemiBold,
+                            )
+                        }
+                    }
                 }
 
                 RowBlock {
                     Text(
                         text = "From Client",
                     )
-                    Text(
-                        text = item.fromClient.displayName,
-                        fontWeight = FontWeight.SemiBold,
-                    )
+                    item.fromClient?.displayName?.let {
+                        Text(
+                            text = it,
+                            fontWeight = FontWeight.SemiBold,
+                        )
+                    }
                 }
 
                 RowBlock {
                     Text(
                         text = "From Account Type",
                     )
-                    Text(
-                        text = item.fromAccountType.value,
-                        fontWeight = FontWeight.SemiBold,
-                    )
+                    item.fromAccountType?.let {
+                        Text(
+                            text = it,
+                            fontWeight = FontWeight.SemiBold,
+                        )
+                    }
                 }
 
                 RowBlock(false) {
                     Text(
                         text = "From Account",
                     )
-                    Text(
-                        text = item.fromAccount.accountNo,
-                        fontWeight = FontWeight.SemiBold,
-                    )
+                    item.fromAccount?.accountNo?.let {
+                        Text(
+                            text = it,
+                            fontWeight = FontWeight.SemiBold,
+                        )
+                    }
                 }
             }
         }
@@ -348,40 +380,50 @@ private fun SIDetailsCard(
                     Text(
                         text = "To Office",
                     )
-                    Text(
-                        text = item.toOffice.name,
-                        fontWeight = FontWeight.SemiBold,
-                    )
+                    item.toOffice?.let {
+                        it.name?.let { it1 ->
+                            Text(
+                                text = it1,
+                                fontWeight = FontWeight.SemiBold,
+                            )
+                        }
+                    }
                 }
 
                 RowBlock {
                     Text(
                         text = "To Client",
                     )
-                    Text(
-                        text = item.toClient.displayName,
-                        fontWeight = FontWeight.SemiBold,
-                    )
+                    item.toClient?.displayName?.let {
+                        Text(
+                            text = it,
+                            fontWeight = FontWeight.SemiBold,
+                        )
+                    }
                 }
 
                 RowBlock {
                     Text(
                         text = "To Account Type",
                     )
-                    Text(
-                        text = item.toAccountType.value,
-                        fontWeight = FontWeight.SemiBold,
-                    )
+                    item.toAccountType?.let {
+                        Text(
+                            text = it,
+                            fontWeight = FontWeight.SemiBold,
+                        )
+                    }
                 }
 
                 RowBlock(false) {
                     Text(
                         text = "To Account",
                     )
-                    Text(
-                        text = item.toAccount.accountNo,
-                        fontWeight = FontWeight.SemiBold,
-                    )
+                    item.toAccount?.accountNo?.let {
+                        Text(
+                            text = it,
+                            fontWeight = FontWeight.SemiBold,
+                        )
+                    }
                 }
             }
         }
