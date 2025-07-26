@@ -34,7 +34,7 @@ kotlin {
         val jsWasmMain by creating {
             dependsOn(commonMain.get())
             dependencies {
-                implementation(projects.mifospayShared)
+                implementation(projects.cmpShared)
                 implementation(projects.core.common)
                 implementation(projects.core.data)
                 implementation(projects.core.model)

@@ -80,7 +80,7 @@ android {
 }
 
 dependencies {
-    implementation(projects.mifospayShared)
+    implementation(projects.cmpShared)
     implementation(projects.core.data)
     implementation(projects.core.ui)
 

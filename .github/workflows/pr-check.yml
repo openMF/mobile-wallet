@@ -84,8 +84,8 @@ jobs:
     uses: openMF/mifos-x-actionhub/.github/workflows/pr-check.yaml@v1.0.2
     secrets: inherit
     with:
-      android_package_name: 'mifospay-android' # <-- Change Your Android Package Name
-      desktop_package_name: 'mifospay-desktop' # <-- Change Your Desktop Package Name
-      web_package_name: 'mifospay-web' # <-- Change Your Web Package Name
-      ios_package_name: 'mifospay-ios' # <-- Change Your iOS Package Name
+      android_package_name: 'cmp-android' # <-- Change Your Android Package Name
+      desktop_package_name: 'cmp-desktop' # <-- Change Your Desktop Package Name
+      web_package_name: 'cmp-web' # <-- Change Your Web Package Name
+      ios_package_name: 'cmp-ios' # <-- Change Your iOS Package Name
       build_ios: true

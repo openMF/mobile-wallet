@@ -1,5 +1,5 @@
-package: name='org.mifospay' versionCode='1' versionName='2025.7.4-beta.0.4' platformBuildVersionName='15' platformBuildVersionCode='35' compileSdkVersion='35' compileSdkVersionCodename='15'
-sdkVersion:'26'
+package: name='org.mifospay' versionCode='1' versionName='2025.7.4-beta.0.5' platformBuildVersionName='15' platformBuildVersionCode='35' compileSdkVersion='35' compileSdkVersionCodename='15'
+minSdkVersion:'26'
 targetSdkVersion:'34'
 uses-permission: name='android.permission.INTERNET'
 uses-permission: name='android.permission.CAMERA'
