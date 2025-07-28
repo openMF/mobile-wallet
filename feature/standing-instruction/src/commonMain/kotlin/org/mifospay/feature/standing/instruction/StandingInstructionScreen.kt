@@ -385,12 +385,10 @@ private fun SIItem(
                             horizontalArrangement = Arrangement.spacedBy(8.dp),
                             verticalAlignment = Alignment.CenterVertically,
                         ) {
-                            item.recurrenceFrequency?.let { it1 ->
-                                FrequencyChip(
-                                    option = it1,
-                                    interval = item.recurrenceInterval.toString(),
-                                )
-                            }
+                            FrequencyChip(
+                                option = item.recurrenceFrequency,
+                                interval = item.recurrenceInterval,
+                            )
 
                             val amount = CurrencyFormatter.format(
                                 balance = item.amount,
