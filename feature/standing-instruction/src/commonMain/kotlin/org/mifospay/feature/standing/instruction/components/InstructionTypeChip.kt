@@ -20,12 +20,20 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun InstructionTypeChip(
-    type: String,
+    type: String?,
     modifier: Modifier = Modifier,
 ) {
-    val (backgroundColor, contentColor) = when (type) {
-        "" -> MaterialTheme.colorScheme.primaryContainer to MaterialTheme.colorScheme.onPrimaryContainer
-        "test" -> MaterialTheme.colorScheme.tertiaryContainer to MaterialTheme.colorScheme.onTertiaryContainer
+    val typeEnum = StandingInstructionType.fromString(type)
+
+    val (backgroundColor, contentColor) = when (typeEnum) {
+        StandingInstructionType.FIXED ->
+            MaterialTheme.colorScheme.primaryContainer to
+                MaterialTheme.colorScheme.onPrimaryContainer
+
+        StandingInstructionType.DUES ->
+            MaterialTheme.colorScheme.tertiaryContainer to
+                MaterialTheme.colorScheme.onTertiaryContainer
+
         else -> MaterialTheme.colorScheme.surfaceVariant to MaterialTheme.colorScheme.onSurfaceVariant
     }
 
@@ -36,9 +44,26 @@ fun InstructionTypeChip(
         contentColor = contentColor,
     ) {
         Text(
-            text = type,
+            text = typeEnum?.name ?: "Not Available",
             modifier = Modifier.padding(4.dp),
+            color = if (typeEnum == null) {
+                MaterialTheme.colorScheme.error
+            } else {
+                MaterialTheme.colorScheme.onBackground
+            },
             style = MaterialTheme.typography.bodySmall,
         )
+    }
+}
+
+enum class StandingInstructionType {
+    FIXED,
+    DUES,
+    ;
+
+    companion object {
+        fun fromString(value: String?): StandingInstructionType? {
+            return entries.find { it.name.equals(value, ignoreCase = true) }
+        }
     }
 }
