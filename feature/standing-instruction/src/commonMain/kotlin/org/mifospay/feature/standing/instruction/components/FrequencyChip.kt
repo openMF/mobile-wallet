@@ -22,10 +22,13 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 internal fun FrequencyChip(
-    option: String,
-    interval: String,
+    option: String?,
+    interval: Long?,
     modifier: Modifier = Modifier,
 ) {
+    val isInvalid = option == null || interval == null
+    val displayText = if (isInvalid) "Not Available" else "$interval $option"
+
     Surface(
         modifier = modifier,
         shape = RoundedCornerShape(4.dp),
@@ -36,9 +39,13 @@ internal fun FrequencyChip(
         ),
     ) {
         Text(
-            text = "$interval $option",
+            text = displayText,
             modifier = Modifier.padding(4.dp),
-            color = MaterialTheme.colorScheme.onSurface,
+            color = if (isInvalid) {
+                MaterialTheme.colorScheme.error
+            } else {
+                MaterialTheme.colorScheme.onBackground
+            },
             style = MaterialTheme.typography.bodyMedium,
         )
     }
