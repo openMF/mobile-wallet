@@ -29,7 +29,7 @@ kotlin {
                 implementation(projects.core.model)
                 implementation(projects.core.datastore)
 
-                implementation(projects.mifospayShared)
+                implementation(projects.cmpShared)
 
                 implementation(libs.kotlinx.coroutines.swing)
                 implementation(compose.desktop.currentOs)

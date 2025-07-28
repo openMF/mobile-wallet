@@ -7,9 +7,9 @@ module FastlaneConfig
     }
 
     BUILD_CONFIG = {
-      project_path: "mifospay-ios/iosApp.xcodeproj",
+      project_path: "cmp-ios/iosApp.xcodeproj",
       scheme: "iosApp",
-      output_directory: "mifospay-ios/build"
+      output_directory: "cmp-ios/build"
     }
   end
 end

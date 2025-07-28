@@ -3,7 +3,7 @@ accompanist = "0.36.0"
 
 # Android
 androidDesugarJdkLibs = "2.1.5"
-androidGradlePlugin = "8.7.3"
+androidGradlePlugin = "8.11.1"
 androidTools = "31.11.1"
 
 # AndroidX Dependencies
@@ -82,12 +82,12 @@ kotlinxCoroutines = "1.9.0"
 kotlinxDatetime = "0.6.1"
 kotlinxImmutable = "0.3.8"
 kotlinxSerializationJson = "1.7.3"
-ksp = "2.1.20-1.0.32"
+ksp = "2.1.20-2.0.1"
 
 # Ktor & Ktorfit
 ktorVersion = "3.1.2"
-ktorfit = "2.5.0"
-ktorfitKsp = "2.5.0"
+ktorfit = "2.5.2"
+ktorfitKsp = "2.5.1"
 
 # Koin CMP Dependencies
 koin = "4.1.0"
