@@ -8,7 +8,7 @@
  * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
  */
 import com.google.gms.googleservices.GoogleServicesPlugin.GoogleServicesPluginConfig
-import org.mifospay.MifosBuildType
+import org.mifospay.AppBuildType
 import org.mifospay.dynamicVersion
 
 plugins {
@@ -45,14 +45,14 @@ android {
 
     buildTypes {
         debug {
-            applicationIdSuffix = MifosBuildType.DEBUG.applicationIdSuffix
+            applicationIdSuffix = AppBuildType.DEBUG.applicationIdSuffix
         }
 
         // Disabling proguard for now until
         // https://github.com/openMF/mobile-wallet/issues/1815 this issue is resolved
         release {
             isMinifyEnabled = false
-            applicationIdSuffix = MifosBuildType.RELEASE.applicationIdSuffix
+            applicationIdSuffix = AppBuildType.RELEASE.applicationIdSuffix
             isShrinkResources = false
             isDebuggable = false
             isJniDebuggable = false

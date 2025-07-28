@@ -9,8 +9,8 @@
  */
 
 plugins {
-    alias(libs.plugins.mifospay.kmp.library)
-    alias(libs.plugins.mifospay.cmp.feature)
+    alias(libs.plugins.kmp.library.convention)
+    alias(libs.plugins.cmp.feature.convention)
     alias(libs.plugins.android.library)
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.jetbrainsCompose)
