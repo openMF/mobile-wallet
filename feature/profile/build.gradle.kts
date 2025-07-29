@@ -9,7 +9,7 @@
  */
 
 plugins {
-    alias(libs.plugins.mifospay.cmp.feature)
+    alias(libs.plugins.cmp.feature.convention)
 }
 
 android {
