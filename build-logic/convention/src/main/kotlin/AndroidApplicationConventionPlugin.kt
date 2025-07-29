@@ -6,6 +6,7 @@ import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.getByType
 import org.mifospay.configureBadgingTasks
+import org.mifospay.configureGradleManagedDevices
 import org.mifospay.configureKotlinAndroid
 import org.mifospay.configurePrintApksTask
 
@@ -19,6 +20,8 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
                 apply("mifos.detekt.plugin")
                 apply("mifos.spotless.plugin")
                 apply("mifos.git.hooks")
+                apply("org.convention.android.application.lint")
+                apply("org.convention.android.application.firebase")
             }
 
             extensions.configure<ApplicationExtension> {
@@ -26,6 +29,7 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
                 defaultConfig.targetSdk = 34
                 @Suppress("UnstableApiUsage")
                 testOptions.animationsDisabled = true
+                configureGradleManagedDevices(this)
             }
             extensions.configure<ApplicationAndroidComponentsExtension> {
                 configurePrintApksTask(this)

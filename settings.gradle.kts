@@ -35,10 +35,10 @@ rootProject.name = "mobile-wallet"
 
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
-include(":mifospay-shared")
-include(":mifospay-android")
-include(":mifospay-desktop")
-include(":mifospay-web")
+include(":cmp-shared")
+include(":cmp-android")
+include(":cmp-desktop")
+include(":cmp-web")
 
 include(":core:data")
 include(":core:domain")

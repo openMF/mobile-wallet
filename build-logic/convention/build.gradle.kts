@@ -29,6 +29,8 @@ dependencies {
     compileOnly(libs.ktlint.gradlePlugin)
     compileOnly(libs.spotless.gradle)
     implementation(libs.truth)
+    compileOnly(libs.firebase.crashlytics.gradlePlugin)
+    compileOnly(libs.firebase.performance.gradlePlugin)
 }
 
 tasks {
@@ -55,18 +57,29 @@ gradlePlugin {
             implementationClass = "AndroidApplicationFlavorsConventionPlugin"
         }
 
+        register("androidFirebase") {
+            id = "org.convention.android.application.firebase"
+            implementationClass = "AndroidApplicationFirebaseConventionPlugin"
+        }
+
+        register("androidLint") {
+            id = "org.convention.android.application.lint"
+            implementationClass = "AndroidLintConventionPlugin"
+        }
+
         // KMP & CMP Plugins
         register("cmpFeature") {
-            id = "mifospay.cmp.feature"
+            id = "org.convention.cmp.feature"
             implementationClass = "CMPFeatureConventionPlugin"
         }
 
         register("kmpKoin") {
-            id = "mifospay.kmp.koin"
+            id = "org.convention.kmp.koin"
             implementationClass = "KMPKoinConventionPlugin"
         }
+
         register("kmpLibrary") {
-            id = "mifospay.kmp.library"
+            id = "org.convention.kmp.library"
             implementationClass = "KMPLibraryConventionPlugin"
         }
 
