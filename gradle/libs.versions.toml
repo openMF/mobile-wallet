@@ -382,6 +382,7 @@ android-test = { id = "com.android.test", version.ref = "androidGradlePlugin" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-allopen = { id = "org.jetbrains.kotlin.plugin.allopen", version.ref = "kotlin" }
 mokkery = { id = "dev.mokkery", version.ref = "mokkery" }
+kotlinCocoapods = { id = "org.jetbrains.kotlin.native.cocoapods", version.ref = "kotlin" }
 
 
 mifospay-android-application = { id = "mifospay.android.application", version = "unspecified" }
