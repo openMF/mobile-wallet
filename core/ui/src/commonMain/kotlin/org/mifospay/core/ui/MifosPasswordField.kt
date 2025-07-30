@@ -15,7 +15,6 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -38,6 +37,7 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.mifospay.core.designsystem.component.MifosCustomTextField
 import org.mifospay.core.designsystem.icon.MifosIcons
 import org.mifospay.core.designsystem.utils.tabNavigation
+import template.core.base.designsystem.theme.KptTheme
 
 @Composable
 fun MifosPasswordField(
@@ -84,7 +84,7 @@ fun MifosPasswordField(
             {
                 Text(
                     text = hint,
-                    style = MaterialTheme.typography.bodySmall,
+                    style = KptTheme.typography.bodySmall,
                 )
             }
         },
@@ -92,7 +92,7 @@ fun MifosPasswordField(
             IconButton(
                 onClick = { showPasswordChange.invoke(!showPassword) },
                 colors = IconButtonDefaults.iconButtonColors(
-                    contentColor = MaterialTheme.colorScheme.primary,
+                    contentColor = KptTheme.colorScheme.primary,
                 ),
             ) {
                 val imageVector = if (showPassword) {
@@ -109,7 +109,7 @@ fun MifosPasswordField(
             }
         },
         textStyle = TextStyle(
-            color = MaterialTheme.colorScheme.onSurface,
+            color = KptTheme.colorScheme.onSurface,
         ),
         interactionSource = interactionSource,
     )

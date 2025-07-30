@@ -14,13 +14,13 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material3.AssistChip
 import androidx.compose.material3.AssistChipDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import org.mifospay.core.designsystem.icon.MifosIcons
+import template.core.base.designsystem.theme.KptTheme
 
 @Composable
 fun AddCardChip(
@@ -35,11 +35,11 @@ fun AddCardChip(
         label = {
             Text(
                 text = text,
-                style = MaterialTheme.typography.bodyLarge.copy(
+                style = KptTheme.typography.bodyLarge.copy(
                     fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onPrimary,
+                    color = KptTheme.colorScheme.onPrimary,
                 ),
-                modifier = Modifier.padding(horizontal = 8.dp),
+                modifier = Modifier.padding(horizontal = KptTheme.spacing.sm),
             )
         },
         leadingIcon = {
@@ -47,11 +47,11 @@ fun AddCardChip(
                 imageVector = MifosIcons.Add,
                 contentDescription = btnText,
                 modifier = Modifier.size(16.dp),
-                tint = MaterialTheme.colorScheme.onPrimary,
+                tint = KptTheme.colorScheme.onPrimary,
             )
         },
         colors = AssistChipDefaults.assistChipColors(
-            containerColor = MaterialTheme.colorScheme.primary,
+            containerColor = KptTheme.colorScheme.primary,
         ),
     )
 }

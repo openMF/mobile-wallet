@@ -20,7 +20,6 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -36,6 +35,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.ui.tooling.preview.Preview
+import template.core.base.designsystem.theme.KptTheme
 
 @Composable
 fun OtpTextField(
@@ -49,7 +49,7 @@ fun OtpTextField(
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .padding(16.dp),
+            .padding(KptTheme.spacing.md),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         BasicTextField(
@@ -87,7 +87,7 @@ fun OtpTextField(
                             index = index,
                             text = otpText,
                         )
-                        Spacer(modifier = Modifier.width(8.dp))
+                        Spacer(modifier = Modifier.width(KptTheme.spacing.sm))
                     }
                 }
             },
@@ -96,10 +96,10 @@ fun OtpTextField(
             // display error message in text
             Text(
                 text = "Invalid OTP",
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.error,
+                style = KptTheme.typography.bodyMedium,
+                color = KptTheme.colorScheme.error,
                 textAlign = TextAlign.Center,
-                modifier = Modifier.padding(top = 8.dp),
+                modifier = Modifier.padding(top = KptTheme.spacing.sm),
             )
         }
     }
@@ -122,11 +122,11 @@ fun CharView(
             .width(40.dp)
             .wrapContentHeight(align = Alignment.CenterVertically),
         text = char,
-        style = MaterialTheme.typography.headlineSmall,
+        style = KptTheme.typography.headlineSmall,
         color = if (isFocused) {
-            MaterialTheme.colorScheme.outline
+            KptTheme.colorScheme.outline
         } else {
-            MaterialTheme.colorScheme.outlineVariant
+            KptTheme.colorScheme.outlineVariant
         },
         textAlign = TextAlign.Center,
     )

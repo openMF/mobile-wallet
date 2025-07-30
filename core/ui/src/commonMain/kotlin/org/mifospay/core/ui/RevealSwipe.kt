@@ -190,7 +190,7 @@ fun RevealSwipe(
                 hiddenContentStart()
             }
         },
-        content = {
+        content = { shape ->
             val clickableModifier = when {
                 onContentClick != null && !closeOnContentClick -> {
                     Modifier.combinedClickable(
@@ -263,7 +263,7 @@ fun RevealSwipe(
                     }
                 },
             ) {
-                content(it)
+                content(shape)
             }
         },
     )

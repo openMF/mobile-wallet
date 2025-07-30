@@ -19,7 +19,6 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -36,6 +35,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import template.core.base.designsystem.theme.KptTheme
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
@@ -49,7 +49,7 @@ fun ExpiryDateInput(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .padding(8.dp),
+            .padding(KptTheme.spacing.sm),
         verticalAlignment = Alignment.Bottom,
     ) {
         BasicTextField(
@@ -91,7 +91,7 @@ fun ExpiryDateInput(
                             index = index,
                             text = date,
                         )
-                        Spacer(modifier = Modifier.width(8.dp))
+                        Spacer(modifier = Modifier.width(KptTheme.spacing.sm))
                     }
                 }
             },
@@ -118,11 +118,11 @@ fun FormattedDateView(
             .width(40.dp)
             .wrapContentHeight(align = Alignment.CenterVertically),
         text = char,
-        style = MaterialTheme.typography.headlineSmall,
+        style = KptTheme.typography.headlineSmall,
         color = if (isFocused) {
-            MaterialTheme.colorScheme.outline
+            KptTheme.colorScheme.outline
         } else {
-            MaterialTheme.colorScheme.outlineVariant
+            KptTheme.colorScheme.outlineVariant
         },
         textAlign = TextAlign.Center,
     )

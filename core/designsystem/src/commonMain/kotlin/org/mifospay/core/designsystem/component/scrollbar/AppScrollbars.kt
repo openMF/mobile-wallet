@@ -27,7 +27,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.State
@@ -51,6 +50,7 @@ import kotlinx.coroutines.delay
 import org.mifospay.core.designsystem.component.scrollbar.ThumbState.Active
 import org.mifospay.core.designsystem.component.scrollbar.ThumbState.Dormant
 import org.mifospay.core.designsystem.component.scrollbar.ThumbState.Inactive
+import template.core.base.designsystem.theme.KptTheme
 
 /**
  * The time period for showing the scrollbar thumb after interacting with it, before it fades away
@@ -216,8 +216,8 @@ private fun scrollbarThumbColor(
 
     val color = animateColorAsState(
         targetValue = when (state) {
-            Active -> MaterialTheme.colorScheme.onSurface.copy(0.5f)
-            Inactive -> MaterialTheme.colorScheme.onSurface.copy(alpha = 0.2f)
+            Active -> KptTheme.colorScheme.onSurface.copy(0.5f)
+            Inactive -> KptTheme.colorScheme.onSurface.copy(alpha = 0.2f)
             Dormant -> Color.Transparent
         },
         animationSpec = SpringSpec(

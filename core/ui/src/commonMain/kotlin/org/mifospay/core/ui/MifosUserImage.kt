@@ -12,13 +12,13 @@ package org.mifospay.core.ui
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import org.mifospay.core.designsystem.component.MifosTextUserImage
+import template.core.base.designsystem.theme.KptTheme
 
 @Composable
 fun MifosUserImage(
@@ -35,7 +35,7 @@ fun MifosUserImage(
         Image(
             modifier = modifier
                 .clip(CircleShape)
-                .background(MaterialTheme.colorScheme.primary),
+                .background(KptTheme.colorScheme.primary),
             bitmap = bitmap,
             contentDescription = "Profile Image",
             contentScale = ContentScale.Crop,

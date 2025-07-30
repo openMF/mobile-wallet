@@ -24,7 +24,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.LocalTextStyle
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
@@ -45,6 +44,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import org.mifospay.core.designsystem.icon.MifosIcons
+import template.core.base.designsystem.theme.KptTheme
 
 @Composable
 fun MifosOutlinedTextField(
@@ -104,7 +104,7 @@ fun MifosOutlinedTextField(
         keyboardOptions = keyboardOptions,
         interactionSource = interactionSource,
         textStyle = LocalDensity.current.run {
-            TextStyle(color = MaterialTheme.colorScheme.onSurface)
+            TextStyle(color = KptTheme.colorScheme.onSurface)
         },
         placeholder = placeholder,
     )
@@ -173,12 +173,12 @@ fun MifosTextField(
             {
                 Text(
                     text = it,
-                    color = MaterialTheme.colorScheme.error,
+                    color = KptTheme.colorScheme.error,
                 )
             }
         },
         textStyle = LocalDensity.current.run {
-            TextStyle(color = MaterialTheme.colorScheme.onSurface)
+            TextStyle(color = KptTheme.colorScheme.onSurface)
         },
     )
 }
@@ -191,7 +191,7 @@ fun MifosCustomTextField(
     label: String,
     modifier: Modifier = Modifier
         .fillMaxWidth()
-        .padding(horizontal = 20.dp),
+        .padding(horizontal = KptTheme.spacing.lg),
     enabled: Boolean = true,
     readOnly: Boolean = false,
     textStyle: TextStyle = LocalTextStyle.current,
@@ -209,16 +209,16 @@ fun MifosCustomTextField(
     supportingText: @Composable (() -> Unit)? = null,
 ) {
     val colors = TextFieldDefaults.colors(
-        focusedLabelColor = MaterialTheme.colorScheme.primary,
-        unfocusedLabelColor = MaterialTheme.colorScheme.primary,
-        cursorColor = MaterialTheme.colorScheme.onSurface,
+        focusedLabelColor = KptTheme.colorScheme.primary,
+        unfocusedLabelColor = KptTheme.colorScheme.primary,
+        cursorColor = KptTheme.colorScheme.onSurface,
         focusedContainerColor = Color.Transparent,
         unfocusedContainerColor = Color.Transparent,
         errorContainerColor = Color.Transparent,
-        focusedIndicatorColor = MaterialTheme.colorScheme.primary,
-        unfocusedIndicatorColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.05f),
-        focusedTrailingIconColor = MaterialTheme.colorScheme.onSurface.copy(0.15f),
-        unfocusedTrailingIconColor = MaterialTheme.colorScheme.onSurface.copy(0.15f),
+        focusedIndicatorColor = KptTheme.colorScheme.primary,
+        unfocusedIndicatorColor = KptTheme.colorScheme.onSurface.copy(alpha = 0.05f),
+        focusedTrailingIconColor = KptTheme.colorScheme.onSurface.copy(0.15f),
+        unfocusedTrailingIconColor = KptTheme.colorScheme.onSurface.copy(0.15f),
     )
     BasicTextField(
         value = value,
@@ -234,7 +234,7 @@ fun MifosCustomTextField(
         maxLines = maxLines,
         minLines = minLines,
         keyboardOptions = keyboardOptions,
-        cursorBrush = SolidColor(MaterialTheme.colorScheme.primary),
+        cursorBrush = SolidColor(KptTheme.colorScheme.primary),
     ) {
         TextFieldDefaults.DecorationBox(
             value = value,
@@ -246,8 +246,8 @@ fun MifosCustomTextField(
             label = {
                 Text(
                     text = label,
-                    style = MaterialTheme.typography.labelLarge,
-                    modifier = Modifier.padding(bottom = 10.dp),
+                    style = KptTheme.typography.labelLarge,
+                    modifier = Modifier.padding(bottom = KptTheme.spacing.md),
                 )
             },
             placeholder = placeholder,
@@ -256,7 +256,7 @@ fun MifosCustomTextField(
             supportingText = supportingText,
             colors = colors,
             isError = isError,
-            contentPadding = PaddingValues(bottom = 10.dp),
+            contentPadding = PaddingValues(bottom = KptTheme.spacing.md),
             container = {
                 TextFieldDefaults.Container(
                     enabled = enabled,
@@ -280,7 +280,7 @@ fun MifosCustomTextField(
     label: String,
     modifier: Modifier = Modifier
         .fillMaxWidth()
-        .padding(horizontal = 20.dp),
+        .padding(horizontal = KptTheme.spacing.lg),
     enabled: Boolean = true,
     readOnly: Boolean = false,
     textStyle: TextStyle = LocalTextStyle.current,
@@ -298,14 +298,14 @@ fun MifosCustomTextField(
     supportingText: @Composable (() -> Unit)? = null,
 ) {
     val colors = TextFieldDefaults.colors().copy(
-        cursorColor = MaterialTheme.colorScheme.primary,
+        cursorColor = KptTheme.colorScheme.primary,
         focusedContainerColor = Color.Transparent,
         unfocusedContainerColor = Color.Transparent,
         errorContainerColor = Color.Transparent,
-        focusedIndicatorColor = MaterialTheme.colorScheme.primary,
-        unfocusedIndicatorColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.05f),
-        focusedTrailingIconColor = MaterialTheme.colorScheme.onSurface.copy(0.15f),
-        unfocusedTrailingIconColor = MaterialTheme.colorScheme.onSurface.copy(0.15f),
+        focusedIndicatorColor = KptTheme.colorScheme.primary,
+        unfocusedIndicatorColor = KptTheme.colorScheme.onSurface.copy(alpha = 0.05f),
+        focusedTrailingIconColor = KptTheme.colorScheme.onSurface.copy(0.15f),
+        unfocusedTrailingIconColor = KptTheme.colorScheme.onSurface.copy(0.15f),
     )
     BasicTextField(
         value = value,
@@ -321,7 +321,7 @@ fun MifosCustomTextField(
         maxLines = maxLines,
         minLines = minLines,
         keyboardOptions = keyboardOptions,
-        cursorBrush = SolidColor(MaterialTheme.colorScheme.primary),
+        cursorBrush = SolidColor(KptTheme.colorScheme.primary),
     ) {
         TextFieldDefaults.DecorationBox(
             value = value.text,
@@ -333,9 +333,9 @@ fun MifosCustomTextField(
             label = {
                 Text(
                     text = label,
-                    color = MaterialTheme.colorScheme.primary,
-                    style = MaterialTheme.typography.labelLarge,
-                    modifier = Modifier.padding(bottom = 10.dp),
+                    color = KptTheme.colorScheme.primary,
+                    style = KptTheme.typography.labelLarge,
+                    modifier = Modifier.padding(bottom = KptTheme.spacing.md),
                 )
             },
             trailingIcon = trailingIcon,
@@ -344,7 +344,7 @@ fun MifosCustomTextField(
             colors = colors,
             isError = isError,
             placeholder = placeholder,
-            contentPadding = PaddingValues(bottom = 10.dp),
+            contentPadding = PaddingValues(bottom = KptTheme.spacing.md),
             container = {
                 TextFieldDefaults.Container(
                     enabled = enabled,
@@ -367,7 +367,7 @@ private fun ClearIconButton(
     onClickClearIcon: () -> Unit,
     modifier: Modifier = Modifier,
     containerColor: Color = Color.Unspecified,
-    contentColor: Color = MaterialTheme.colorScheme.primary,
+    contentColor: Color = KptTheme.colorScheme.primary,
 ) {
     AnimatedVisibility(
         visible = showClearIcon,

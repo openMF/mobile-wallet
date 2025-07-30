@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.sp
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.mifospay.core.designsystem.icon.MifosIcons
 import org.mifospay.core.designsystem.theme.MifosTheme
+import template.core.base.designsystem.theme.KptTheme
 
 @Composable
 fun VerifyStepHeader(
@@ -41,11 +42,11 @@ fun VerifyStepHeader(
     ) {
         Text(
             text = text,
-            color = MaterialTheme.colorScheme.onSurface,
+            color = KptTheme.colorScheme.onSurface,
             fontSize = 17.sp,
             overflow = TextOverflow.Ellipsis,
             modifier = Modifier
-                .padding(16.dp)
+                .padding(KptTheme.spacing.md)
                 .weight(1f),
             textAlign = TextAlign.Start,
             style = TextStyle(fontWeight = FontWeight.Bold),
@@ -57,7 +58,7 @@ fun VerifyStepHeader(
                 Icon(
                     imageVector = MifosIcons.Check,
                     contentDescription = null,
-                    tint = if (isVerified) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.outline,
+                    tint = if (isVerified) KptTheme.colorScheme.onSurface else MaterialTheme.colorScheme.outline,
                     modifier = Modifier.size(24.dp),
                 )
             }

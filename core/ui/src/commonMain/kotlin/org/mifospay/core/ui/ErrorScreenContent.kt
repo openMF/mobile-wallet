@@ -19,7 +19,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -35,6 +34,7 @@ import mobile_wallet.core.ui.generated.resources.core_ui_try_again
 import org.jetbrains.compose.resources.stringResource
 import org.mifospay.core.designsystem.component.MifosButton
 import org.mifospay.core.designsystem.theme.MifosTheme
+import template.core.base.designsystem.theme.KptTheme
 
 @Composable
 fun ErrorScreenContent(
@@ -45,40 +45,40 @@ fun ErrorScreenContent(
 ) {
     Column(
         modifier = modifier
-            .padding(16.dp)
+            .padding(KptTheme.spacing.md)
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
             .testTag("mifos:empty"),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        Spacer(modifier = Modifier.height(48.dp))
+        Spacer(modifier = Modifier.height(KptTheme.spacing.xxl))
 
         Text(
             text = title,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(start = 24.dp, end = 24.dp),
+                .padding(start = KptTheme.spacing.lg, end = KptTheme.spacing.lg),
             textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.titleMedium,
+            style = KptTheme.typography.titleMedium,
             fontWeight = FontWeight.Bold,
         )
 
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(KptTheme.spacing.sm))
 
         Text(
             text = subTitle,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(start = 24.dp, end = 24.dp),
+                .padding(start = KptTheme.spacing.lg, end = KptTheme.spacing.lg),
             textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.bodyMedium,
+            style = KptTheme.typography.bodyMedium,
         )
 
         MifosButton(
             modifier = Modifier
                 .width(150.dp)
-                .padding(top = 16.dp),
+                .padding(top = KptTheme.spacing.md),
             onClick = onClickRetry,
         ) {
             Text(text = stringResource(resource = Res.string.core_ui_retry))

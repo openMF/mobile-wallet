@@ -10,13 +10,14 @@
 package org.mifospay.core.designsystem.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import template.core.base.designsystem.KptMaterialTheme
+import template.core.base.designsystem.theme.kptTheme
 
 // private val LightDefaultColorScheme = lightColorScheme(
 //    primary = md_theme_light_primary,
@@ -164,7 +165,7 @@ fun MifosTheme(
     content: @Composable () -> Unit,
 ) {
     // Color scheme
-    val colorScheme = when {
+    val selectedColorScheme = when {
         else -> if (darkTheme) DarkDefaultColorScheme else LightDefaultColorScheme
     }
     val lightGradientColors = GradientColors(
@@ -193,15 +194,67 @@ fun MifosTheme(
         else -> TintTheme()
     }
 
+    val fontFamily = getFontFamily()
+
     // Composition locals
     CompositionLocalProvider(
         LocalGradientColors provides gradientColors,
         LocalBackgroundTheme provides backgroundTheme,
         LocalTintTheme provides tintTheme,
     ) {
-        MaterialTheme(
-            colorScheme = colorScheme,
-            typography = mifosTypography(),
+        KptMaterialTheme(
+            darkTheme = darkTheme,
+            themeBuilder = { isDark ->
+                kptTheme {
+                    colors {
+                        primary = selectedColorScheme.primary
+                        onPrimary = selectedColorScheme.onPrimary
+                        primaryContainer = selectedColorScheme.primaryContainer
+                        onPrimaryContainer = selectedColorScheme.onPrimaryContainer
+                        secondary = selectedColorScheme.secondary
+                        onSecondary = selectedColorScheme.onSecondary
+                        secondaryContainer = selectedColorScheme.secondaryContainer
+                        onSecondaryContainer = selectedColorScheme.onSecondaryContainer
+                        tertiary = selectedColorScheme.tertiary
+                        onTertiary = selectedColorScheme.onTertiary
+                        tertiaryContainer = selectedColorScheme.tertiaryContainer
+                        onTertiaryContainer = selectedColorScheme.onTertiaryContainer
+                        error = selectedColorScheme.error
+                        onError = selectedColorScheme.onError
+                        errorContainer = selectedColorScheme.errorContainer
+                        onErrorContainer = selectedColorScheme.onErrorContainer
+                        background = selectedColorScheme.background
+                        onBackground = selectedColorScheme.onBackground
+                        surface = selectedColorScheme.surface
+                        onSurface = selectedColorScheme.onSurface
+                        surfaceVariant = selectedColorScheme.surfaceVariant
+                        onSurfaceVariant = selectedColorScheme.onSurfaceVariant
+                        outline = selectedColorScheme.outline
+                        outlineVariant = selectedColorScheme.outlineVariant
+                    }
+                    typography {
+                        mifosTypography.displayLarge.copy(fontFamily = fontFamily)
+                        mifosTypography.displayMedium.copy(fontFamily = fontFamily)
+                        mifosTypography.displaySmall.copy(fontFamily = fontFamily)
+
+                        mifosTypography.headlineLarge.copy(fontFamily = fontFamily)
+                        mifosTypography.headlineMedium.copy(fontFamily = fontFamily)
+                        mifosTypography.headlineSmall.copy(fontFamily = fontFamily)
+
+                        mifosTypography.titleLarge.copy(fontFamily = fontFamily)
+                        mifosTypography.titleMedium.copy(fontFamily = fontFamily)
+                        mifosTypography.titleSmall.copy(fontFamily = fontFamily)
+
+                        mifosTypography.bodyLarge.copy(fontFamily = fontFamily)
+                        mifosTypography.bodyMedium.copy(fontFamily = fontFamily)
+                        mifosTypography.bodySmall.copy(fontFamily = fontFamily)
+
+                        mifosTypography.labelLarge.copy(fontFamily = fontFamily)
+                        mifosTypography.labelMedium.copy(fontFamily = fontFamily)
+                        mifosTypography.labelSmall.copy(fontFamily = fontFamily)
+                    }
+                }
+            },
             content = content,
         )
     }

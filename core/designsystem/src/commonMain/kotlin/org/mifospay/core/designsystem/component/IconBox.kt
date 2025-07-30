@@ -9,17 +9,16 @@
  */
 package org.mifospay.core.designsystem.component
 
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedIconButton
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.mifospay.core.designsystem.icon.MifosIcons
 import org.mifospay.core.designsystem.theme.MifosTheme
+import template.core.base.designsystem.theme.KptTheme
 
 @Composable
 fun IconBox(
@@ -30,7 +29,7 @@ fun IconBox(
     OutlinedIconButton(
         onClick = onClick,
         modifier = modifier,
-        shape = RoundedCornerShape(12.dp),
+        shape = KptTheme.shapes.medium,
     ) {
         Icon(
             imageVector = icon,

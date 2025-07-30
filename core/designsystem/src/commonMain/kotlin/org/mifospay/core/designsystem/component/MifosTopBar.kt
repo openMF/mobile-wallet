@@ -12,13 +12,13 @@ package org.mifospay.core.designsystem.component
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import org.mifospay.core.designsystem.icon.MifosIcons
+import template.core.base.designsystem.theme.KptTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -32,7 +32,7 @@ fun MifosTopBar(
         title = {
             Text(
                 text = topBarTitle,
-                style = MaterialTheme.typography.titleMedium,
+                style = KptTheme.typography.titleMedium,
             )
         },
         navigationIcon = {

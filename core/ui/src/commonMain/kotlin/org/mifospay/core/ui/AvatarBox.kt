@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
@@ -25,12 +24,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import template.core.base.designsystem.theme.KptTheme
 
 @Composable
 fun AvatarBox(
     name: String,
     size: Int = 40,
-    backgroundColor: Color = MaterialTheme.colorScheme.secondaryContainer,
+    backgroundColor: Color = KptTheme.colorScheme.secondaryContainer,
 ) {
     val initials = name.split(" ")
         .mapNotNull { it.firstOrNull()?.toString() }
@@ -48,7 +48,7 @@ fun AvatarBox(
         Text(
             text = initials,
             color = contentColorFor(backgroundColor),
-            style = MaterialTheme.typography.labelMedium,
+            style = KptTheme.typography.labelMedium,
             fontWeight = FontWeight.SemiBold,
         )
     }
@@ -59,7 +59,7 @@ fun AvatarBox(
     icon: ImageVector,
     size: Int = 40,
     modifier: Modifier = Modifier,
-    backgroundColor: Color = MaterialTheme.colorScheme.surfaceContainerLow,
+    backgroundColor: Color = KptTheme.colorScheme.surfaceContainerLow,
     contentColor: Color = contentColorFor(backgroundColor),
 ) {
     Box(

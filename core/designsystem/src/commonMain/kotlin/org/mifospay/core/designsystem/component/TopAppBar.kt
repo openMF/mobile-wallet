@@ -15,7 +15,6 @@ import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarColors
 import androidx.compose.material3.TopAppBarDefaults
@@ -27,6 +26,7 @@ import androidx.compose.ui.platform.testTag
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.mifospay.core.designsystem.icon.MifosIcons
 import org.mifospay.core.designsystem.theme.MifosTheme
+import template.core.base.designsystem.theme.KptTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -49,7 +49,7 @@ fun MifosTopAppBar(
                     Icon(
                         imageVector = navigationIcon,
                         contentDescription = navigationIconContentDescription,
-                        tint = MaterialTheme.colorScheme.onSurface,
+                        tint = KptTheme.colorScheme.onSurface,
                     )
                 }
             }
@@ -60,7 +60,7 @@ fun MifosTopAppBar(
                     Icon(
                         imageVector = actionIcon,
                         contentDescription = actionIconContentDescription,
-                        tint = MaterialTheme.colorScheme.onSurface,
+                        tint = KptTheme.colorScheme.onSurface,
                     )
                 }
             }

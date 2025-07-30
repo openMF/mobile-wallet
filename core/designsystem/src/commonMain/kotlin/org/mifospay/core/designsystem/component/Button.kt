@@ -23,7 +23,6 @@ import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ButtonElevation
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -35,6 +34,7 @@ import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.mifospay.core.designsystem.icon.MifosIcons
 import org.mifospay.core.designsystem.theme.MifosTheme
+import template.core.base.designsystem.theme.KptTheme
 
 /**
  * Mifos Wallet filled button with generic content slot. Wraps Material 3 [Button].
@@ -53,7 +53,7 @@ fun MifosButton(
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
     contentPadding: PaddingValues = ButtonDefaults.ContentPadding,
-    disabledColor: Color = MaterialTheme.colorScheme.surfaceContainerHighest,
+    disabledColor: Color = KptTheme.colorScheme.surfaceContainerHighest,
     content: @Composable RowScope.() -> Unit = {},
 ) {
     Button(
@@ -214,7 +214,7 @@ fun MifosTextButton(
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
     colors: ButtonColors = ButtonDefaults.textButtonColors(
-        contentColor = MaterialTheme.colorScheme.onBackground,
+        contentColor = KptTheme.colorScheme.onBackground,
     ),
     content: @Composable RowScope.() -> Unit = {},
 ) {
