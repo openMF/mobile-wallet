@@ -21,13 +21,13 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 import mobile_wallet.feature.make_transfer.generated.resources.Res
-import mobile_wallet.feature.make_transfer.generated.resources.error_empty_amount
-import mobile_wallet.feature.make_transfer.generated.resources.error_empty_description
-import mobile_wallet.feature.make_transfer.generated.resources.error_inactive_account
-import mobile_wallet.feature.make_transfer.generated.resources.error_insufficient_balance
-import mobile_wallet.feature.make_transfer.generated.resources.error_invalid_amount
-import mobile_wallet.feature.make_transfer.generated.resources.error_same_account
-import mobile_wallet.feature.make_transfer.generated.resources.error_select_account
+import mobile_wallet.feature.make_transfer.generated.resources.feature_make_transfer_error_empty_amount
+import mobile_wallet.feature.make_transfer.generated.resources.feature_make_transfer_error_empty_description
+import mobile_wallet.feature.make_transfer.generated.resources.feature_make_transfer_error_inactive_account
+import mobile_wallet.feature.make_transfer.generated.resources.feature_make_transfer_error_insufficient_balance
+import mobile_wallet.feature.make_transfer.generated.resources.feature_make_transfer_error_invalid_amount
+import mobile_wallet.feature.make_transfer.generated.resources.feature_make_transfer_error_same_account
+import mobile_wallet.feature.make_transfer.generated.resources.feature_make_transfer_error_select_account
 import org.jetbrains.compose.resources.StringResource
 import org.mifospay.core.common.DataState
 import org.mifospay.core.common.DateHelper
@@ -133,24 +133,24 @@ internal class MakeTransferViewModel(
     }
 
     private fun validateTransfer() = when {
-        state.amount.isBlank() -> updateErrorState(Res.string.error_empty_amount)
+        state.amount.isBlank() -> updateErrorState(Res.string.feature_make_transfer_error_empty_amount)
 
-        state.amount.toDoubleOrNull() == null -> updateErrorState(Res.string.error_invalid_amount)
+        state.amount.toDoubleOrNull() == null -> updateErrorState(Res.string.feature_make_transfer_error_invalid_amount)
 
-        state.description.isBlank() -> updateErrorState(Res.string.error_empty_description)
+        state.description.isBlank() -> updateErrorState(Res.string.feature_make_transfer_error_empty_description)
 
-        state.selectedAccount == null -> updateErrorState(Res.string.error_select_account)
+        state.selectedAccount == null -> updateErrorState(Res.string.feature_make_transfer_error_select_account)
 
         state.selectedAccount?.status?.active == false -> {
-            updateErrorState(Res.string.error_inactive_account)
+            updateErrorState(Res.string.feature_make_transfer_error_inactive_account)
         }
 
         state.selectedAccount?.id == state.toClientData.accountId -> {
-            updateErrorState(Res.string.error_same_account)
+            updateErrorState(Res.string.feature_make_transfer_error_same_account)
         }
 
         state.amount.toDouble() > state.selectedAccount?.balance!! -> {
-            updateErrorState(Res.string.error_insufficient_balance)
+            updateErrorState(Res.string.feature_make_transfer_error_insufficient_balance)
         }
 
         else -> initiateTransfer()
