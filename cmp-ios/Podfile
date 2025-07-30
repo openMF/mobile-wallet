@@ -1,0 +1,12 @@
+platform :ios, '16.0'
+use_frameworks!
+
+target 'iosApp' do
+  project 'iosApp.xcodeproj'
+  pod 'cmp_shared', :path => '../cmp-shared'
+
+  # Native Firebase iOS Pods required by firebase-kotlin-sdk
+  pod 'FirebaseCore'
+  pod 'FirebaseAnalytics'
+  pod 'FirebaseCrashlytics'
+end
