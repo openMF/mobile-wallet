@@ -332,7 +332,7 @@ platform :ios do
     )
 
     build_ios_app(
-      project: ios_config[:project_path],
+      workspace: ios_config[:workspace_path],
       scheme: ios_config[:scheme],
       configuration: options[:configuration],
       skip_codesigning: "true",

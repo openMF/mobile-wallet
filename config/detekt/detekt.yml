@@ -432,6 +432,7 @@ naming:
         "**/androidInstrumentedTest/**",
         "**/jsTest/**",
         "**/iosTest/**",
+        "**/generated/**",
       ]
     functionPattern: "[a-z][a-zA-Z0-9]*"
     excludeClassPattern: "$^"
@@ -450,6 +451,17 @@ naming:
   MatchingDeclarationName:
     active: true
     mustBeFirst: true
+    excludes:
+      [
+        "**/*.android.*",
+        "**/*.desktop.*",
+        "**/*.js.*",
+        "**/*.native.*",
+        "**/*.jvm.*",
+        "**/*.linux.*",
+        "**/*.macos.*",
+        "**/*.wasmJs.*",
+      ]
   MemberNameEqualsClassName:
     active: true
     ignoreOverridden: true
@@ -465,6 +477,10 @@ naming:
   PackageNaming:
     active: true
     packagePattern: '[a-z]+(\.[a-z][A-Za-z0-9]*)*'
+    excludes:
+      [
+        "**/generated/**",
+      ]
   TopLevelPropertyNaming:
     active: true
     constantPattern: "[A-Z][_A-Z0-9]*"

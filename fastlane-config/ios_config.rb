@@ -8,6 +8,7 @@ module FastlaneConfig
 
     BUILD_CONFIG = {
       project_path: "cmp-ios/iosApp.xcodeproj",
+      workspace_path: "cmp-ios/iosApp.xcworkspace",
       scheme: "iosApp",
       output_directory: "cmp-ios/build"
     }
