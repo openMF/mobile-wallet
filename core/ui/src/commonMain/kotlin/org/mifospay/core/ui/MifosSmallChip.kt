@@ -10,29 +10,27 @@
 package org.mifospay.core.ui
 
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Text
 import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
+import template.core.base.designsystem.theme.KptTheme
 
 @Composable
 fun MifosSmallChip(
     label: String,
     modifier: Modifier = Modifier,
-    containerColor: Color = MaterialTheme.colorScheme.primaryContainer,
+    containerColor: Color = KptTheme.colorScheme.primaryContainer,
     contentColor: Color = contentColorFor(containerColor),
     onClick: () -> Unit = {},
 ) {
     OutlinedCard(
         onClick = onClick,
         modifier = modifier,
-        shape = RoundedCornerShape(4.dp),
+        shape = KptTheme.shapes.extraSmall,
         colors = CardDefaults.outlinedCardColors(
             containerColor = containerColor,
             contentColor = contentColor,
@@ -40,8 +38,8 @@ fun MifosSmallChip(
     ) {
         Text(
             text = label,
-            style = MaterialTheme.typography.bodySmall,
-            modifier = Modifier.padding(4.dp),
+            style = KptTheme.typography.bodySmall,
+            modifier = Modifier.padding(KptTheme.spacing.xs),
         )
     }
 }

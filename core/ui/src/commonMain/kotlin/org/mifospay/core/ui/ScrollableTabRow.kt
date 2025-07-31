@@ -11,17 +11,16 @@ package org.mifospay.core.ui
 
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ScrollableTabRow
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
 import org.mifospay.core.designsystem.component.MifosTab
 import org.mifospay.core.ui.utility.TabContent
+import template.core.base.designsystem.theme.KptTheme
 
 @Suppress("MultipleEmitters")
 @Composable
@@ -29,11 +28,11 @@ fun MifosScrollableTabRow(
     tabContents: List<TabContent>,
     pagerState: PagerState,
     modifier: Modifier = Modifier,
-    containerColor: Color = MaterialTheme.colorScheme.surfaceContainerLow,
-    selectedContentColor: Color = MaterialTheme.colorScheme.primary,
-    unselectedContentColor: Color = MaterialTheme.colorScheme.surfaceContainerLow,
-    unselectedBorderColor: Color = MaterialTheme.colorScheme.primary,
-    edgePadding: Dp = 8.dp,
+    containerColor: Color = KptTheme.colorScheme.surfaceContainerLow,
+    selectedContentColor: Color = KptTheme.colorScheme.primary,
+    unselectedContentColor: Color = KptTheme.colorScheme.surfaceContainerLow,
+    unselectedBorderColor: Color = KptTheme.colorScheme.primary,
+    edgePadding: Dp = KptTheme.spacing.sm,
 ) {
     val scope = rememberCoroutineScope()
 

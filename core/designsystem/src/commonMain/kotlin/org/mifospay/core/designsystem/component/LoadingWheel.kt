@@ -28,8 +28,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -50,6 +48,7 @@ import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.mifospay.core.designsystem.theme.MifosTheme
+import template.core.base.designsystem.theme.KptTheme
 
 @Composable
 fun MifosLoadingWheel(
@@ -87,8 +86,8 @@ fun MifosLoadingWheel(
     )
 
     // Specifies the color animation for the base-to-progress line color change
-    val baseLineColor = MaterialTheme.colorScheme.onBackground
-    val progressLineColor = MaterialTheme.colorScheme.inversePrimary
+    val baseLineColor = KptTheme.colorScheme.onBackground
+    val progressLineColor = KptTheme.colorScheme.inversePrimary
 
     val colorAnimValues = (0 until NUM_OF_LINES).map { index ->
         infiniteTransition.animateColor(
@@ -111,7 +110,7 @@ fun MifosLoadingWheel(
     Canvas(
         modifier = modifier
             .size(48.dp)
-            .padding(8.dp)
+            .padding(KptTheme.spacing.sm)
             .graphicsLayer { rotationZ = rotationAnim }
             .semantics { contentDescription = contentDesc }
             .testTag("loadingWheel"),
@@ -138,9 +137,9 @@ fun MifosOverlayLoadingWheel(
     modifier: Modifier = Modifier,
 ) {
     Surface(
-        shape = RoundedCornerShape(60.dp),
-        shadowElevation = 8.dp,
-        color = MaterialTheme.colorScheme.surface.copy(alpha = 0.83f),
+        shape = KptTheme.shapes.extraLarge,
+        shadowElevation = KptTheme.elevation.level5,
+        color = KptTheme.colorScheme.surface.copy(alpha = 0.83f),
         modifier = modifier
             .size(60.dp),
     ) {
@@ -158,7 +157,7 @@ fun MfOverlayLoadingWheel(
     Box(
         modifier = modifier
             .fillMaxSize()
-            .background(color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f))
+            .background(color = KptTheme.colorScheme.onSurface.copy(alpha = 0.6f))
             .focusable(),
         contentAlignment = Alignment.Center,
     ) {
@@ -173,7 +172,7 @@ fun MfOverlayLoadingWheel(
 fun MfLoadingWheel(
     modifier: Modifier = Modifier,
     contentDesc: String = "Loading",
-    backgroundColor: Color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
+    backgroundColor: Color = KptTheme.colorScheme.onSurface.copy(alpha = 0.6f),
 ) {
     Box(
         modifier = modifier

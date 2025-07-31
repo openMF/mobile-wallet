@@ -14,8 +14,6 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
 import androidx.compose.material3.contentColorFor
@@ -24,6 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import template.core.base.designsystem.theme.KptTheme
 
 @Composable
 fun MifosTab(
@@ -31,8 +30,8 @@ fun MifosTab(
     selected: Boolean,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    selectedColor: Color = MaterialTheme.colorScheme.primary,
-    unselectedColor: Color = MaterialTheme.colorScheme.primaryContainer,
+    selectedColor: Color = KptTheme.colorScheme.primary,
+    unselectedColor: Color = KptTheme.colorScheme.primaryContainer,
     unselectedBorderColor: Color = Color.Unspecified,
 ) {
     Tab(
@@ -45,13 +44,13 @@ fun MifosTab(
         unselectedContentColor = contentColorFor(unselectedColor),
         modifier = modifier
             .height(40.dp)
-            .padding(horizontal = 4.dp)
-            .clip(RoundedCornerShape(25.dp))
+            .padding(horizontal = KptTheme.spacing.xs)
+            .clip(KptTheme.shapes.extraLarge)
             .background(if (selected) selectedColor else unselectedColor)
             .border(
                 width = 1.dp,
                 color = if (!selected) unselectedBorderColor else Color.Transparent,
-                shape = RoundedCornerShape(25.dp),
+                shape = KptTheme.shapes.extraLarge,
             ),
     )
 }

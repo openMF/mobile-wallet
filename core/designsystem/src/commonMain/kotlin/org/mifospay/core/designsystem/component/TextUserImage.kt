@@ -13,7 +13,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -22,6 +21,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import template.core.base.designsystem.theme.KptTheme
 
 @Composable
 fun MifosTextUserImage(
@@ -33,12 +33,12 @@ fun MifosTextUserImage(
         modifier = modifier
             .size(size)
             .clip(CircleShape)
-            .background(color = MaterialTheme.colorScheme.primary),
+            .background(color = KptTheme.colorScheme.primary),
         contentAlignment = Alignment.Center,
     ) {
         Text(
             text = text,
-            color = MaterialTheme.colorScheme.onPrimary,
+            color = KptTheme.colorScheme.onPrimary,
             fontSize = with(LocalDensity.current) { (size / 2).toSp() },
         )
     }

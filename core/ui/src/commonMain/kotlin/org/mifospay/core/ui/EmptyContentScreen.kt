@@ -19,7 +19,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -39,6 +38,7 @@ import org.jetbrains.compose.resources.painterResource
 import org.mifospay.core.designsystem.component.MifosButton
 import org.mifospay.core.designsystem.icon.MifosIcons
 import org.mifospay.core.designsystem.theme.MifosTheme
+import template.core.base.designsystem.theme.KptTheme
 
 @Composable
 fun EmptyContentScreen(
@@ -54,7 +54,7 @@ fun EmptyContentScreen(
     ) {
         Column(
             modifier = Modifier
-                .padding(16.dp)
+                .padding(KptTheme.spacing.md)
                 .fillMaxSize()
                 .testTag("mifos:empty"),
             verticalArrangement = Arrangement.Center,
@@ -62,28 +62,28 @@ fun EmptyContentScreen(
         ) {
             imageContent()
 
-            Spacer(modifier = Modifier.height(48.dp))
+            Spacer(modifier = Modifier.height(KptTheme.spacing.xxl))
 
             Text(
                 text = title,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(start = 24.dp, end = 24.dp),
+                    .padding(start = KptTheme.spacing.lg, end = KptTheme.spacing.lg),
                 textAlign = TextAlign.Center,
-                style = MaterialTheme.typography.titleMedium,
+                style = KptTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
             )
 
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(KptTheme.spacing.sm))
 
             Text(
                 text = subTitle,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(start = 24.dp, end = 24.dp),
+                    .padding(start = KptTheme.spacing.lg, end = KptTheme.spacing.lg),
                 textAlign = TextAlign.Center,
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurface,
+                style = KptTheme.typography.bodyMedium,
+                color = KptTheme.colorScheme.onSurface,
             )
         }
     }
@@ -106,7 +106,7 @@ fun EmptyContentScreen(
     ) {
         Column(
             modifier = Modifier
-                .padding(16.dp)
+                .padding(KptTheme.spacing.md)
                 .fillMaxSize()
                 .testTag("mifos:empty"),
             verticalArrangement = Arrangement.Center,
@@ -114,31 +114,31 @@ fun EmptyContentScreen(
         ) {
             imageContent()
 
-            Spacer(modifier = Modifier.height(48.dp))
+            Spacer(modifier = Modifier.height(KptTheme.spacing.xxl))
 
             Text(
                 text = title,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(start = 24.dp, end = 24.dp),
+                    .padding(start = KptTheme.spacing.lg, end = KptTheme.spacing.lg),
                 textAlign = TextAlign.Center,
-                style = MaterialTheme.typography.titleMedium,
+                style = KptTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
             )
 
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(KptTheme.spacing.sm))
 
             Text(
                 text = subTitle,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(start = 24.dp, end = 24.dp),
+                    .padding(start = KptTheme.spacing.lg, end = KptTheme.spacing.lg),
                 textAlign = TextAlign.Center,
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurface,
+                style = KptTheme.typography.bodyMedium,
+                color = KptTheme.colorScheme.onSurface,
             )
 
-            Spacer(modifier = Modifier.height(48.dp))
+            Spacer(modifier = Modifier.height(KptTheme.spacing.xxl))
 
             MifosButton(
                 text = {
@@ -163,7 +163,7 @@ fun EmptyContentScreen(
     subTitle: String,
     iconDrawable: DrawableResource,
     modifier: Modifier = Modifier,
-    iconTint: Color = MaterialTheme.colorScheme.surfaceTint,
+    iconTint: Color = KptTheme.colorScheme.surfaceTint,
 ) {
     EmptyContentScreen(
         title = title,
@@ -186,7 +186,7 @@ fun EmptyContentScreen(
     subTitle: String,
     modifier: Modifier = Modifier,
     drawableResource: DrawableResource = Res.drawable.artwork,
-    iconTint: Color = MaterialTheme.colorScheme.surfaceTint,
+    iconTint: Color = KptTheme.colorScheme.surfaceTint,
 ) {
     EmptyContentScreen(
         title = title,
@@ -211,7 +211,7 @@ fun EmptyContentScreen(
     btnIcon: ImageVector,
     modifier: Modifier = Modifier,
     icon: ImageVector = MifosIcons.Info,
-    iconTint: Color = MaterialTheme.colorScheme.primary,
+    iconTint: Color = KptTheme.colorScheme.primary,
     onClick: () -> Unit,
 ) {
     EmptyContentScreen(
@@ -241,7 +241,7 @@ fun EmptyContentScreenDrawableImagePreview() {
             subTitle = "Please check you connection or try again",
             iconDrawable = Res.drawable.core_ui_money_in,
             modifier = Modifier,
-            iconTint = MaterialTheme.colorScheme.primary,
+            iconTint = KptTheme.colorScheme.primary,
         )
     }
 }
@@ -254,7 +254,7 @@ fun EmptyContentScreenImageVectorPreview() {
             title = "No data found",
             subTitle = "Please check you connection or try again",
             modifier = Modifier,
-            iconTint = MaterialTheme.colorScheme.primary,
+            iconTint = KptTheme.colorScheme.primary,
         )
     }
 }

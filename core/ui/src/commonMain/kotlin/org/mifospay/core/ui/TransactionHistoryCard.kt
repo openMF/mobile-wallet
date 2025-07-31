@@ -19,14 +19,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
 import org.mifospay.core.model.savingsaccount.Transaction
+import template.core.base.designsystem.theme.KptTheme
 
 @Composable
 fun TransactionHistoryCard(
@@ -41,7 +40,7 @@ fun TransactionHistoryCard(
         modifier = modifier
             .fillMaxWidth(),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surface,
+            containerColor = KptTheme.colorScheme.surface,
         ),
     ) {
         Column(
@@ -51,7 +50,7 @@ fun TransactionHistoryCard(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(12.dp),
+                    .padding(KptTheme.spacing.md),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically,
             ) {
@@ -68,7 +67,7 @@ fun TransactionHistoryCard(
                     ) {
                         Text(
                             text = "See All",
-                            style = MaterialTheme.typography.bodySmall,
+                            style = KptTheme.typography.bodySmall,
                             fontWeight = FontWeight(300),
                         )
                     }
@@ -84,7 +83,7 @@ fun TransactionHistoryCard(
 
                 if (i != transactions.size - 1) {
                     MifosDivider(
-                        modifier = Modifier.padding(horizontal = 6.dp),
+                        modifier = Modifier.padding(horizontal = KptTheme.spacing.sm),
                     )
                 }
             }
@@ -92,8 +91,8 @@ fun TransactionHistoryCard(
             if (transactions.isEmpty()) {
                 Text(
                     text = "No transactions found",
-                    modifier = Modifier.padding(12.dp),
-                    style = MaterialTheme.typography.bodySmall,
+                    modifier = Modifier.padding(KptTheme.spacing.md),
+                    style = KptTheme.typography.bodySmall,
                     fontWeight = FontWeight(300),
                 )
             }

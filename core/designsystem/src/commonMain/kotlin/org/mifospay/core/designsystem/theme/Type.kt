@@ -45,7 +45,7 @@ private fun fontFamily(): FontFamily {
 
 // Set of Material typography styles to start with
 @Composable
-internal fun mifosTypography() = Typography(
+internal fun getTypography() = Typography(
     displayLarge = TextStyle(
         fontFamily = fontFamily(),
         fontWeight = FontWeight.Normal,

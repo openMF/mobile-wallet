@@ -27,7 +27,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Close
@@ -57,6 +56,8 @@ import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.mifospay.core.designsystem.icon.MifosIcons
 import org.mifospay.core.designsystem.theme.MifosTheme
+import org.mifospay.core.designsystem.theme.toRoundedCornerShape
+import template.core.base.designsystem.theme.KptTheme
 
 @Suppress("LongMethod", "CyclomaticComplexMethod")
 @Composable
@@ -85,13 +86,13 @@ fun CombinedPasswordErrorCard(
     )
 
     val indicatorColor = when (passwordStrengthState) {
-        PasswordStrengthState.NONE -> MaterialTheme.colorScheme.error
-        PasswordStrengthState.WEAK_1 -> MaterialTheme.colorScheme.error
-        PasswordStrengthState.WEAK_2 -> MaterialTheme.colorScheme.error
-        PasswordStrengthState.WEAK_3 -> MaterialTheme.colorScheme.error
-        PasswordStrengthState.GOOD -> MaterialTheme.colorScheme.secondary
-        PasswordStrengthState.STRONG -> MaterialTheme.colorScheme.primary
-        PasswordStrengthState.VERY_STRONG -> MaterialTheme.colorScheme.tertiary
+        PasswordStrengthState.NONE -> KptTheme.colorScheme.error
+        PasswordStrengthState.WEAK_1 -> KptTheme.colorScheme.error
+        PasswordStrengthState.WEAK_2 -> KptTheme.colorScheme.error
+        PasswordStrengthState.WEAK_3 -> KptTheme.colorScheme.error
+        PasswordStrengthState.GOOD -> KptTheme.colorScheme.secondary
+        PasswordStrengthState.STRONG -> KptTheme.colorScheme.primary
+        PasswordStrengthState.VERY_STRONG -> KptTheme.colorScheme.tertiary
     }
 
     val animatedIndicatorColor by animateColorAsState(
@@ -109,11 +110,11 @@ fun CombinedPasswordErrorCard(
                 .testTag("passwordErrorCard"),
             shape = MaterialTheme.shapes.medium,
             colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.error.copy(alpha = 0.05f),
+                containerColor = KptTheme.colorScheme.error.copy(alpha = 0.05f),
             ),
             border = BorderStroke(
                 width = 1.dp,
-                color = MaterialTheme.colorScheme.error.copy(alpha = 0.2f),
+                color = KptTheme.colorScheme.error.copy(alpha = 0.2f),
             ),
         ) {
             Column {
@@ -122,13 +123,18 @@ fun CombinedPasswordErrorCard(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(4.dp)
-                        .background(MaterialTheme.colorScheme.surfaceContainerHigh),
+                        .background(KptTheme.colorScheme.surfaceContainerHigh),
                 ) {
                     Box(
                         modifier = Modifier
                             .fillMaxHeight()
                             .fillMaxWidth()
-                            .clip(RoundedCornerShape(topStart = 8.dp, topEnd = 8.dp))
+                            .clip(
+                                KptTheme.shapes.toRoundedCornerShape(
+                                    topStart = KptTheme.spacing.sm,
+                                    topEnd = KptTheme.spacing.sm,
+                                ),
+                            )
                             .graphicsLayer {
                                 transformOrigin =
                                     TransformOrigin(pivotFractionX = 0f, pivotFractionY = 0f)
@@ -141,8 +147,8 @@ fun CombinedPasswordErrorCard(
                 }
 
                 Column(
-                    modifier = Modifier.padding(12.dp),
-                    verticalArrangement = Arrangement.spacedBy(8.dp),
+                    modifier = Modifier.padding(KptTheme.spacing.md),
+                    verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.md),
                 ) {
                     // Header row with "Password Requirements" and strength label
                     Row(
@@ -152,18 +158,18 @@ fun CombinedPasswordErrorCard(
                     ) {
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(6.dp),
+                            horizontalArrangement = Arrangement.spacedBy(KptTheme.spacing.md),
                         ) {
                             Icon(
                                 imageVector = MifosIcons.OutlinedInfo,
                                 contentDescription = stringResource(Res.string.core_ui_error_icon_description),
-                                tint = MaterialTheme.colorScheme.error,
-                                modifier = Modifier.size(16.dp),
+                                tint = KptTheme.colorScheme.error,
+                                modifier = Modifier.size(KptTheme.spacing.md),
                             )
                             Text(
                                 text = stringResource(Res.string.core_ui_password_requirements),
-                                style = MaterialTheme.typography.labelLarge,
-                                color = MaterialTheme.colorScheme.error,
+                                style = KptTheme.typography.labelLarge,
+                                color = KptTheme.colorScheme.error,
                                 fontWeight = FontWeight.Medium,
                             )
                         }
@@ -173,14 +179,17 @@ fun CombinedPasswordErrorCard(
                                 modifier = Modifier
                                     .background(
                                         color = animatedIndicatorColor,
-                                        shape = RoundedCornerShape(4.dp),
+                                        shape = KptTheme.shapes.extraSmall,
                                     )
-                                    .padding(horizontal = 8.dp, vertical = 4.dp),
+                                    .padding(
+                                        horizontal = KptTheme.spacing.sm,
+                                        vertical = KptTheme.spacing.xs,
+                                    ),
                             ) {
                                 Text(
                                     text = strengthLabel,
-                                    style = MaterialTheme.typography.labelSmall,
-                                    color = MaterialTheme.colorScheme.onPrimary,
+                                    style = KptTheme.typography.labelSmall,
+                                    color = KptTheme.colorScheme.onPrimary,
                                     fontWeight = FontWeight.Medium,
                                 )
                             }
@@ -202,21 +211,21 @@ fun CombinedPasswordErrorCard(
                                 .fillMaxWidth()
                                 .testTag("passwordError"),
                             verticalAlignment = Alignment.Top,
-                            horizontalArrangement = Arrangement.spacedBy(8.dp),
+                            horizontalArrangement = Arrangement.spacedBy(KptTheme.spacing.md),
                         ) {
                             Box(
                                 modifier = Modifier
                                     .size(4.dp)
                                     .background(
-                                        color = MaterialTheme.colorScheme.error,
+                                        color = KptTheme.colorScheme.error,
                                         shape = CircleShape,
                                     )
-                                    .padding(top = 6.dp),
+                                    .padding(top = KptTheme.spacing.md),
                             )
                             Text(
                                 text = stringResource(it),
-                                style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.error,
+                                style = KptTheme.typography.bodySmall,
+                                color = KptTheme.colorScheme.error,
                                 modifier = Modifier.weight(1f),
                             )
                         }
@@ -230,7 +239,7 @@ fun CombinedPasswordErrorCard(
                                 .testTag("passwordError_$index"),
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.spacedBy(
-                                space = 8.dp,
+                                space = KptTheme.spacing.md,
                                 alignment = Alignment.CenterHorizontally,
                             ),
                         ) {
@@ -238,15 +247,15 @@ fun CombinedPasswordErrorCard(
                                 modifier = Modifier
                                     .size(4.dp)
                                     .background(
-                                        color = MaterialTheme.colorScheme.error,
+                                        color = KptTheme.colorScheme.error,
                                         shape = CircleShape,
                                     )
-                                    .padding(top = 6.dp),
+                                    .padding(top = KptTheme.spacing.md),
                             )
                             Text(
                                 text = error,
-                                style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.error,
+                                style = KptTheme.typography.bodySmall,
+                                color = KptTheme.colorScheme.error,
                                 modifier = Modifier.weight(1f),
                             )
                         }
@@ -278,13 +287,13 @@ fun PasswordStrengthIndicator(
         label = "Width Percent State",
     )
     val indicatorColor = when (state) {
-        PasswordStrengthState.NONE -> MaterialTheme.colorScheme.error
-        PasswordStrengthState.WEAK_1 -> MaterialTheme.colorScheme.error
-        PasswordStrengthState.WEAK_2 -> MaterialTheme.colorScheme.error
-        PasswordStrengthState.WEAK_3 -> MaterialTheme.colorScheme.error
-        PasswordStrengthState.GOOD -> MaterialTheme.colorScheme.secondary
-        PasswordStrengthState.STRONG -> MaterialTheme.colorScheme.primary
-        PasswordStrengthState.VERY_STRONG -> MaterialTheme.colorScheme.tertiary
+        PasswordStrengthState.NONE -> KptTheme.colorScheme.error
+        PasswordStrengthState.WEAK_1 -> KptTheme.colorScheme.error
+        PasswordStrengthState.WEAK_2 -> KptTheme.colorScheme.error
+        PasswordStrengthState.WEAK_3 -> KptTheme.colorScheme.error
+        PasswordStrengthState.GOOD -> KptTheme.colorScheme.secondary
+        PasswordStrengthState.STRONG -> KptTheme.colorScheme.primary
+        PasswordStrengthState.VERY_STRONG -> KptTheme.colorScheme.tertiary
     }
     val animatedIndicatorColor by animateColorAsState(
         targetValue = indicatorColor,
@@ -301,7 +310,7 @@ fun PasswordStrengthIndicator(
             Modifier
                 .fillMaxWidth()
                 .height(4.dp)
-                .background(MaterialTheme.colorScheme.surfaceContainerHigh),
+                .background(KptTheme.colorScheme.surfaceContainerHigh),
         ) {
             Box(
                 modifier = Modifier
@@ -330,7 +339,7 @@ fun PasswordStrengthIndicator(
             }
             Text(
                 text = strengthLabel,
-                style = MaterialTheme.typography.labelSmall,
+                style = KptTheme.typography.labelSmall,
                 color = indicatorColor,
             )
         }
@@ -345,9 +354,9 @@ private fun MinimumCharacterCount(
 ) {
     val characterCountColor by animateColorAsState(
         targetValue = if (minimumRequirementMet) {
-            MaterialTheme.colorScheme.primary
+            KptTheme.colorScheme.primary
         } else {
-            MaterialTheme.colorScheme.surfaceDim
+            KptTheme.colorScheme.surfaceDim
         },
         label = "minimumCharacterCountColor",
     )
@@ -374,7 +383,7 @@ private fun MinimumCharacterCount(
         Text(
             text = "$minimumCharacterCount characters",
             color = characterCountColor,
-            style = MaterialTheme.typography.labelSmall,
+            style = KptTheme.typography.labelSmall,
         )
     }
 }
