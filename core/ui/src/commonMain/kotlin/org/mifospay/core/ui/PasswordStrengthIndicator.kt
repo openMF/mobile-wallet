@@ -27,7 +27,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Close
@@ -57,6 +56,7 @@ import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.mifospay.core.designsystem.icon.MifosIcons
 import org.mifospay.core.designsystem.theme.MifosTheme
+import org.mifospay.core.designsystem.theme.toRoundedCornerShape
 import template.core.base.designsystem.theme.KptTheme
 
 @Suppress("LongMethod", "CyclomaticComplexMethod")
@@ -130,11 +130,9 @@ fun CombinedPasswordErrorCard(
                             .fillMaxHeight()
                             .fillMaxWidth()
                             .clip(
-                                KptTheme.shapes.small.copy(
-                                    topStart = KptTheme.shapes.small.topStart,
-                                    topEnd = KptTheme.shapes.small.topEnd,
-                                    bottomStart = CornerSize(0.dp),
-                                    bottomEnd = CornerSize(0.dp),
+                                KptTheme.shapes.toRoundedCornerShape(
+                                    topStart = KptTheme.spacing.sm,
+                                    topEnd = KptTheme.spacing.sm,
                                 ),
                             )
                             .graphicsLayer {
@@ -183,7 +181,10 @@ fun CombinedPasswordErrorCard(
                                         color = animatedIndicatorColor,
                                         shape = KptTheme.shapes.extraSmall,
                                     )
-                                    .padding(horizontal = KptTheme.spacing.sm, vertical = KptTheme.spacing.xs),
+                                    .padding(
+                                        horizontal = KptTheme.spacing.sm,
+                                        vertical = KptTheme.spacing.xs,
+                                    ),
                             ) {
                                 Text(
                                     text = strengthLabel,
