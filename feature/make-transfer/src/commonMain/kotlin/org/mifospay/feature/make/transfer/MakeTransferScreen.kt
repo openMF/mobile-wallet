@@ -403,17 +403,21 @@ private fun MakeTransferDialogs(
     onDismissRequest: () -> Unit,
 ) {
     when (dialogState) {
-        is MakeTransferState.DialogState.Error -> MifosBasicDialog(
-            visibilityState = BasicDialogState.Shown(
-                message = dialogState.message,
-            ),
-            onDismissRequest = onDismissRequest,
-        )
-
+        is MakeTransferState.DialogState.Error -> {
+            val message = when (dialogState) {
+                is MakeTransferState.DialogState.Error.StringMessage -> dialogState.message
+                is MakeTransferState.DialogState.Error.ResourceMessage -> stringResource(dialogState.message)
+            }
+            MifosBasicDialog(
+                visibilityState = BasicDialogState.Shown(
+                    message = message,
+                ),
+                onDismissRequest = onDismissRequest,
+            )
+        }
         is MakeTransferState.DialogState.Loading -> MifosLoadingDialog(
             visibilityState = LoadingDialogState.Shown,
         )
-
         null -> Unit
     }
 }

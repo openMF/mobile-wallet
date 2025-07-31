@@ -14,20 +14,20 @@
     <string name="feature_home_desc">Mifos Pay is the best place for users to receive and send money. Start saving money now!</string>
 
     /* HomeScreen.kt  */
-    <string name="wallet_balance">Wallet Balance</string>
-    <string name="arrow_up">arrow_up</string>
-    <string name="view_more">View More</string>
-    <string name="mark_default">Mark as Default</string>
-    <string name="request">Request</string>
-    <string name="request_money">Request Money</string>
-    <string name="send">Send</string>
-    <string name="send_money">Send Money</string>
-    <string name="coin_image">Coin</string>
-    <string name="account_type">Account type</string>
+    <string name="feature_home_wallet_balance">Wallet Balance</string>
+    <string name="feature_home_arrow_up">arrow_up</string>
+    <string name="feature_home_view_more">View More</string>
+    <string name="feature_home_mark_default">Mark as Default</string>
+    <string name="feature_home_request">Request</string>
+    <string name="feature_home_request_money">Request Money</string>
+    <string name="feature_home_send">Send</string>
+    <string name="feature_home_send_money">Send Money</string>
+    <string name="feature_home_coin_image">Coin</string>
+    <string name="feature_home_account_type">Account type</string>
 
 
     /* HomeScreenViewModel */
-    <string name="account_success">Account marked as default</string>
-    <string name="account_error">Error marking account as default</string>
-    <string name="no_account">"No accounts found"</string>
+    <string name="feature_home_account_success">Account marked as default</string>
+    <string name="feature_home_account_error">Error marking account as default</string>
+    <string name="feature_home_no_account">"No accounts found"</string>
 </resources>

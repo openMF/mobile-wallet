@@ -75,20 +75,21 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.launch
 import mobile_wallet.feature.home.generated.resources.Res
-import mobile_wallet.feature.home.generated.resources.account_type
 import mobile_wallet.feature.home.generated.resources.arrow_backward
-import mobile_wallet.feature.home.generated.resources.arrow_up
 import mobile_wallet.feature.home.generated.resources.coin_image
+import mobile_wallet.feature.home.generated.resources.feature_home_account_type
+import mobile_wallet.feature.home.generated.resources.feature_home_arrow_up
+import mobile_wallet.feature.home.generated.resources.feature_home_coin_image
 import mobile_wallet.feature.home.generated.resources.feature_home_desc
 import mobile_wallet.feature.home.generated.resources.feature_home_loading
-import mobile_wallet.feature.home.generated.resources.mark_default
-import mobile_wallet.feature.home.generated.resources.request
-import mobile_wallet.feature.home.generated.resources.request_money
-import mobile_wallet.feature.home.generated.resources.send
-import mobile_wallet.feature.home.generated.resources.send_money
+import mobile_wallet.feature.home.generated.resources.feature_home_mark_default
+import mobile_wallet.feature.home.generated.resources.feature_home_request
+import mobile_wallet.feature.home.generated.resources.feature_home_request_money
+import mobile_wallet.feature.home.generated.resources.feature_home_send
+import mobile_wallet.feature.home.generated.resources.feature_home_send_money
+import mobile_wallet.feature.home.generated.resources.feature_home_view_more
+import mobile_wallet.feature.home.generated.resources.feature_home_wallet_balance
 import mobile_wallet.feature.home.generated.resources.start_sending_your_money_tax_free
-import mobile_wallet.feature.home.generated.resources.view_more
-import mobile_wallet.feature.home.generated.resources.wallet_balance
 import org.jetbrains.compose.resources.getString
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
@@ -381,7 +382,7 @@ private fun AccountCard(
             ) {
                 Column {
                     Text(
-                        text = stringResource(Res.string.account_type),
+                        text = stringResource(Res.string.feature_home_account_type),
                         fontWeight = FontWeight(300),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.surface,
@@ -433,7 +434,7 @@ private fun AccountCard(
             ) {
                 Column {
                     Text(
-                        text = stringResource(Res.string.wallet_balance),
+                        text = stringResource(Res.string.feature_home_wallet_balance),
                         fontWeight = FontWeight(300),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.surface,
@@ -457,7 +458,7 @@ private fun AccountCard(
                         .graphicsLayer(rotationZ = 90f)
                         .padding(4.dp),
                     imageVector = Icons.Filled.KeyboardArrowUp,
-                    contentDescription = stringResource(Res.string.arrow_up),
+                    contentDescription = stringResource(Res.string.feature_home_arrow_up),
                     tint = MaterialTheme.colorScheme.surface,
                 )
             }
@@ -483,7 +484,7 @@ fun CardDropdownBox(
         ) {
             Icon(
                 imageVector = MifosIcons.MoreVert,
-                contentDescription = stringResource(Res.string.view_more),
+                contentDescription = stringResource(Res.string.feature_home_view_more),
             )
         }
 
@@ -492,7 +493,7 @@ fun CardDropdownBox(
             onDismissRequest = { showDropdown = false },
         ) {
             DropdownMenuItem(
-                text = { Text(stringResource(Res.string.mark_default)) },
+                text = { Text(stringResource(Res.string.feature_home_mark_default)) },
                 onClick = {
                     onClickDefault()
                     showDropdown = false
@@ -516,7 +517,7 @@ private fun PayRequestScreen(
             modifier = Modifier
                 .weight(1f)
                 .height(55.dp),
-            text = stringResource(Res.string.request),
+            text = stringResource(Res.string.feature_home_request),
             onClick = onRequest,
             leadingIcon = {
                 Icon(
@@ -525,7 +526,7 @@ private fun PayRequestScreen(
                     imageVector = vectorResource(
                         Res.drawable.arrow_backward,
                     ),
-                    contentDescription = stringResource(Res.string.request_money),
+                    contentDescription = stringResource(Res.string.feature_home_request_money),
                 )
             },
         )
@@ -536,7 +537,7 @@ private fun PayRequestScreen(
             modifier = Modifier
                 .weight(1f)
                 .height(55.dp),
-            text = stringResource(Res.string.send),
+            text = stringResource(Res.string.feature_home_send),
             onClick = onSend,
             leadingIcon = {
                 Icon(
@@ -544,7 +545,7 @@ private fun PayRequestScreen(
                         .size(26.dp)
                         .graphicsLayer(rotationZ = 180f),
                     imageVector = vectorResource(Res.drawable.arrow_backward),
-                    contentDescription = stringResource(Res.string.send_money),
+                    contentDescription = stringResource(Res.string.feature_home_send_money),
                 )
             },
         )
@@ -588,7 +589,7 @@ private fun MifosSendMoneyFreeCard(
                 modifier = Modifier.weight(2.5f),
                 contentScale = ContentScale.Fit,
                 painter = painterResource(Res.drawable.coin_image),
-                contentDescription = stringResource(Res.string.coin_image),
+                contentDescription = stringResource(Res.string.feature_home_coin_image),
             )
         }
     }
