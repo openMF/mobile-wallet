@@ -19,9 +19,9 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 import mobile_wallet.feature.home.generated.resources.Res
-import mobile_wallet.feature.home.generated.resources.account_error
-import mobile_wallet.feature.home.generated.resources.account_success
-import mobile_wallet.feature.home.generated.resources.no_account
+import mobile_wallet.feature.home.generated.resources.feature_home_account_error
+import mobile_wallet.feature.home.generated.resources.feature_home_account_success
+import mobile_wallet.feature.home.generated.resources.feature_home_no_account
 import org.jetbrains.compose.resources.StringResource
 import org.mifospay.core.common.DataState
 import org.mifospay.core.data.repository.SelfServiceRepository
@@ -77,7 +77,7 @@ class HomeViewModel(
                     mutableStateFlow.update {
                         it.copy(isRefreshing = false)
                     }
-                    ViewState.Error(Res.string.no_account)
+                    ViewState.Error(Res.string.feature_home_no_account)
                 }
 
                 is DataState.Loading -> ViewState.Loading
@@ -160,14 +160,14 @@ class HomeViewModel(
                     when (result) {
                         is DataState.Loading -> {}
                         is DataState.Error -> {
-                            sendEvent(HomeEvent.ShowToast(Res.string.account_error))
+                            sendEvent(HomeEvent.ShowToast(Res.string.feature_home_account_error))
                         }
 
                         is DataState.Success -> {
                             mutableStateFlow.update {
                                 it.copy(defaultAccountId = action.accountId)
                             }
-                            sendEvent(HomeEvent.ShowToast(Res.string.account_success))
+                            sendEvent(HomeEvent.ShowToast(Res.string.feature_home_account_success))
                         }
                     }
                 }

@@ -24,7 +24,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import mobile_wallet.feature.make_transfer.generated.resources.Res
+import mobile_wallet.feature.make_transfer.generated.resources.feature_make_transfer_back_to_home
+import mobile_wallet.feature.make_transfer.generated.resources.feature_make_transfer_payment_done
+import mobile_wallet.feature.make_transfer.generated.resources.feature_make_transfer_payment_success
+import mobile_wallet.feature.make_transfer.generated.resources.feature_make_transfer_success
 import mobile_wallet.feature.make_transfer.generated.resources.process_ring
+import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.resources.vectorResource
 import org.mifospay.core.designsystem.component.MifosButton
 import org.mifospay.core.designsystem.component.MifosScaffold
@@ -47,7 +52,7 @@ internal fun TransferSuccessScreen(
                         .fillMaxWidth()
                         .padding(16.dp),
                 ) {
-                    Text(text = "Back to Home")
+                    Text(text = stringResource(Res.string.feature_make_transfer_back_to_home))
                 }
             }
         },
@@ -65,17 +70,17 @@ internal fun TransferSuccessScreen(
             ) {
                 Image(
                     imageVector = vectorResource(Res.drawable.process_ring),
-                    contentDescription = "Success",
+                    contentDescription = stringResource(Res.string.feature_make_transfer_success),
                     modifier = Modifier.size(200.dp),
                 )
 
                 Text(
-                    text = "Payment Success!",
+                    text = stringResource(Res.string.feature_make_transfer_payment_success),
                     style = MaterialTheme.typography.headlineMedium,
                 )
 
                 Text(
-                    text = "Your payment has been successfully done.",
+                    text = stringResource(Res.string.feature_make_transfer_payment_done),
                     style = MaterialTheme.typography.bodyMedium,
                 )
             }
