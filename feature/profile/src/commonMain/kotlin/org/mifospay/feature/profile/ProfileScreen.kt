@@ -46,6 +46,7 @@ import org.mifospay.core.ui.ErrorScreenContent
 import org.mifospay.core.ui.utils.EventsEffect
 import org.mifospay.feature.profile.components.ProfileDetailsCard
 import org.mifospay.feature.profile.components.ProfileImage
+import template.core.base.designsystem.theme.KptTheme
 
 @Composable
 internal fun ProfileScreen(
@@ -136,9 +137,9 @@ private fun ProfileScreenContent(
         modifier = modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
-            .padding(12.dp),
+            .padding(horizontal = KptTheme.spacing.md),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(16.dp),
+        verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.md),
     ) {
         ProfileImage(bitmap = clientImage)
 

@@ -15,20 +15,17 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.ListItemDefaults
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
 import mobile_wallet.feature.history.generated.resources.Res
 import mobile_wallet.feature.history.generated.resources.feature_history_debited_from
 import mobile_wallet.feature.history.generated.resources.feature_history_paid_to
@@ -39,6 +36,7 @@ import org.mifospay.core.common.CurrencyFormatter
 import org.mifospay.core.common.DateHelper
 import org.mifospay.core.model.savingsaccount.TransferDetail
 import org.mifospay.core.ui.AvatarBox
+import template.core.base.designsystem.theme.KptTheme
 
 @Composable
 internal fun TransactionDetail(
@@ -47,7 +45,7 @@ internal fun TransactionDetail(
 ) {
     Card(
         modifier = modifier.fillMaxSize(),
-        shape = RoundedCornerShape(8.dp),
+        shape = KptTheme.shapes.small,
         colors = CardDefaults.cardColors(
             containerColor = Color.Transparent,
         ),
@@ -55,8 +53,8 @@ internal fun TransactionDetail(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(12.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp),
+                .padding(horizontal = KptTheme.spacing.md),
+            verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.md),
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -65,7 +63,7 @@ internal fun TransactionDetail(
             ) {
                 Text(
                     text = stringResource(Res.string.feature_history_transaction_id),
-                    style = MaterialTheme.typography.labelLarge,
+                    style = KptTheme.typography.labelLarge,
                 )
                 Text(text = detail.id.toString())
             }
@@ -81,7 +79,7 @@ internal fun TransactionDetail(
             ) {
                 Text(
                     text = stringResource(Res.string.feature_history_transaction_date),
-                    style = MaterialTheme.typography.labelLarge,
+                    style = KptTheme.typography.labelLarge,
                 )
                 val date = DateHelper.getDateAsString(detail.transferDate)
                 Text(text = date)
@@ -93,12 +91,12 @@ internal fun TransactionDetail(
 
             Text(
                 text = stringResource(Res.string.feature_history_paid_to),
-                style = MaterialTheme.typography.labelLarge,
+                style = KptTheme.typography.labelLarge,
             )
 
             Card(
                 modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(4.dp),
+                shape = KptTheme.shapes.extraSmall,
                 colors = CardDefaults.cardColors(
                     containerColor = Color.Transparent,
                 ),
@@ -123,7 +121,7 @@ internal fun TransactionDetail(
                         )
                         Text(
                             text = amount,
-                            style = MaterialTheme.typography.labelLarge,
+                            style = KptTheme.typography.labelLarge,
                             fontWeight = FontWeight.Bold,
                         )
                     },
@@ -133,24 +131,24 @@ internal fun TransactionDetail(
                 )
 
                 Row(
-                    modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp),
+                    modifier = Modifier.fillMaxWidth().padding(horizontal = KptTheme.spacing.xs),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(
-                        4.dp,
+                        KptTheme.spacing.xs,
                         Alignment.CenterHorizontally,
                     ),
                 ) {
                     Text(
                         text = detail.toOffice.name,
-                        style = MaterialTheme.typography.labelSmall,
+                        style = KptTheme.typography.labelSmall,
                     )
                     Text(
                         text = "|",
-                        style = MaterialTheme.typography.labelSmall,
+                        style = KptTheme.typography.labelSmall,
                     )
                     Text(
                         text = detail.toAccountType.value,
-                        style = MaterialTheme.typography.labelSmall,
+                        style = KptTheme.typography.labelSmall,
                     )
                 }
             }
@@ -161,12 +159,12 @@ internal fun TransactionDetail(
 
             Text(
                 text = stringResource(Res.string.feature_history_debited_from),
-                style = MaterialTheme.typography.labelLarge,
+                style = KptTheme.typography.labelLarge,
             )
 
             Card(
                 modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(4.dp),
+                shape = KptTheme.shapes.extraSmall,
                 colors = CardDefaults.cardColors(
                     containerColor = Color.Transparent,
                 ),
@@ -189,7 +187,7 @@ internal fun TransactionDetail(
                         )
                         Text(
                             text = amount,
-                            style = MaterialTheme.typography.labelLarge,
+                            style = KptTheme.typography.labelLarge,
                             fontWeight = FontWeight.Bold,
                         )
                     },
@@ -198,24 +196,24 @@ internal fun TransactionDetail(
                     ),
                 )
                 Row(
-                    modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp),
+                    modifier = Modifier.fillMaxWidth().padding(horizontal = KptTheme.spacing.xs),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(
-                        4.dp,
+                        KptTheme.spacing.xs,
                         Alignment.CenterHorizontally,
                     ),
                 ) {
                     Text(
                         text = detail.fromOffice.name,
-                        style = MaterialTheme.typography.labelSmall,
+                        style = KptTheme.typography.labelSmall,
                     )
                     Text(
                         text = "|",
-                        style = MaterialTheme.typography.labelSmall,
+                        style = KptTheme.typography.labelSmall,
                     )
                     Text(
                         text = detail.fromAccountType.value,
-                        style = MaterialTheme.typography.labelSmall,
+                        style = KptTheme.typography.labelSmall,
                     )
                 }
             }

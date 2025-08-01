@@ -11,14 +11,13 @@ package org.mifospay.feature.standing.instruction.components
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import template.core.base.designsystem.theme.KptTheme
 
 @Composable
 internal fun FrequencyChip(
@@ -31,22 +30,22 @@ internal fun FrequencyChip(
 
     Surface(
         modifier = modifier,
-        shape = RoundedCornerShape(4.dp),
+        shape = KptTheme.shapes.extraSmall,
         color = Color.Transparent,
         border = BorderStroke(
             width = 1.dp,
-            color = MaterialTheme.colorScheme.outline,
+            color = KptTheme.colorScheme.outline,
         ),
     ) {
         Text(
             text = displayText,
-            modifier = Modifier.padding(4.dp),
+            modifier = Modifier.padding(KptTheme.spacing.xs),
             color = if (isInvalid) {
-                MaterialTheme.colorScheme.error
+                KptTheme.colorScheme.error
             } else {
-                MaterialTheme.colorScheme.onBackground
+                KptTheme.colorScheme.onBackground
             },
-            style = MaterialTheme.typography.bodyMedium,
+            style = KptTheme.typography.bodyMedium,
         )
     }
 }

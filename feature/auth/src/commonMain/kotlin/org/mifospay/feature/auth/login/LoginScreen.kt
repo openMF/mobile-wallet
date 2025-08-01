@@ -21,7 +21,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -32,7 +31,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.launch
 import mobile_wallet.feature.auth.generated.resources.Res
@@ -55,6 +53,7 @@ import org.mifospay.core.designsystem.theme.MifosTheme
 import org.mifospay.core.designsystem.theme.styleNormal18sp
 import org.mifospay.core.ui.MifosPasswordField
 import org.mifospay.core.ui.utils.EventsEffect
+import template.core.base.designsystem.theme.KptTheme
 
 @Composable
 internal fun LoginScreen(
@@ -109,7 +108,7 @@ private fun LoginScreen(
     MifosScaffold(
         snackbarHostState = snackbarHostState,
         modifier = modifier.fillMaxSize(),
-        containerColor = MaterialTheme.colorScheme.background,
+        containerColor = KptTheme.colorScheme.background,
     ) { paddingValues ->
         LoginScreenContent(
             state = state,
@@ -152,22 +151,22 @@ private fun LoginScreenContent(
         modifier = modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
-            .padding(horizontal = 24.dp)
-            .padding(top = 100.dp),
+            .padding(horizontal = KptTheme.spacing.lg)
+            .padding(top = KptTheme.spacing.xxl),
         horizontalAlignment = Alignment.Start,
     ) {
         Text(
             text = stringResource(Res.string.feature_auth_login),
-            style = MaterialTheme.typography.titleLarge,
-            color = MaterialTheme.colorScheme.primary,
+            style = KptTheme.typography.titleLarge,
+            color = KptTheme.colorScheme.primary,
         )
         Text(
             modifier = Modifier
-                .padding(top = 24.dp),
+                .padding(top = KptTheme.spacing.lg),
             text = stringResource(Res.string.feature_auth_welcome_back),
             style = styleNormal18sp,
         )
-        Spacer(modifier = Modifier.padding(top = 32.dp))
+        Spacer(modifier = Modifier.padding(top = KptTheme.spacing.xl))
         MifosOutlinedTextField(
             label = stringResource(Res.string.feature_auth_username),
             value = state.username,
@@ -176,7 +175,7 @@ private fun LoginScreenContent(
             },
             modifier = Modifier.fillMaxWidth(),
         )
-        Spacer(modifier = Modifier.padding(top = 16.dp))
+        Spacer(modifier = Modifier.padding(horizontal = KptTheme.spacing.md))
         MifosPasswordField(
             label = stringResource(Res.string.feature_auth_password),
             value = state.password,
@@ -193,16 +192,16 @@ private fun LoginScreenContent(
         MifosButton(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 16.dp),
+                .padding(horizontal = KptTheme.spacing.md),
             enabled = isLoginButtonEnabled,
             onClick = {
                 onAction(LoginAction.LoginClicked)
             },
-            contentPadding = PaddingValues(12.dp),
+            contentPadding = PaddingValues(KptTheme.spacing.md),
         ) {
             Text(
                 text = stringResource(Res.string.feature_auth_login).uppercase(),
-                style = MaterialTheme.typography.labelLarge,
+                style = KptTheme.typography.labelLarge,
             )
         }
 
@@ -221,12 +220,12 @@ private fun SignupButton(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(top = 24.dp),
+            .padding(top = KptTheme.spacing.lg),
         horizontalArrangement = Arrangement.Center,
     ) {
         Text(
             text = "Don’t have an account yet? ",
-            style = MaterialTheme.typography.labelLarge,
+            style = KptTheme.typography.labelLarge,
         )
         Text(
             modifier = Modifier.clickable(
@@ -237,8 +236,8 @@ private fun SignupButton(
             },
             text = stringResource(Res.string.feature_auth_sign_up),
             fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colorScheme.primary,
-            style = MaterialTheme.typography.labelLarge.copy(
+            color = KptTheme.colorScheme.primary,
+            style = KptTheme.typography.labelLarge.copy(
                 textDecoration = TextDecoration.Underline,
             ),
         )

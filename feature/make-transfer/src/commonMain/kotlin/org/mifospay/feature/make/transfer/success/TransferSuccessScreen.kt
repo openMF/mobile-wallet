@@ -17,7 +17,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -33,6 +32,7 @@ import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.resources.vectorResource
 import org.mifospay.core.designsystem.component.MifosButton
 import org.mifospay.core.designsystem.component.MifosScaffold
+import template.core.base.designsystem.theme.KptTheme
 
 @Composable
 internal fun TransferSuccessScreen(
@@ -50,7 +50,7 @@ internal fun TransferSuccessScreen(
                     onClick = navigateBack,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(16.dp),
+                        .padding(KptTheme.spacing.md),
                 ) {
                     Text(text = stringResource(Res.string.feature_make_transfer_back_to_home))
                 }
@@ -66,7 +66,10 @@ internal fun TransferSuccessScreen(
             Column(
                 modifier = Modifier.fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterVertically),
+                verticalArrangement = Arrangement.spacedBy(
+                    KptTheme.spacing.md,
+                    Alignment.CenterVertically,
+                ),
             ) {
                 Image(
                     imageVector = vectorResource(Res.drawable.process_ring),
@@ -76,12 +79,12 @@ internal fun TransferSuccessScreen(
 
                 Text(
                     text = stringResource(Res.string.feature_make_transfer_payment_success),
-                    style = MaterialTheme.typography.headlineMedium,
+                    style = KptTheme.typography.headlineMedium,
                 )
 
                 Text(
                     text = stringResource(Res.string.feature_make_transfer_payment_done),
-                    style = MaterialTheme.typography.bodyMedium,
+                    style = KptTheme.typography.bodyMedium,
                 )
             }
         }

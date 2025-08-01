@@ -25,9 +25,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
@@ -68,6 +66,7 @@ import org.mifospay.core.ui.MifosPasswordField
 import org.mifospay.core.ui.utils.EventsEffect
 import org.mifospay.feature.savedcards.components.CreditCard
 import org.mifospay.feature.savedcards.components.getCardNumberTransformation
+import template.core.base.designsystem.theme.KptTheme
 
 @Composable
 internal fun AddEditCardScreen(
@@ -164,8 +163,8 @@ private fun AddEditCardScreenContent(
         modifier = modifier
             .fillMaxSize(),
         state = lazyListState,
-        contentPadding = PaddingValues(16.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp),
+        contentPadding = PaddingValues(KptTheme.spacing.md),
+        verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.md),
     ) {
         item {
             CreditCard(
@@ -209,9 +208,6 @@ private fun AddEditCardScreenContent(
                     capitalization = KeyboardCapitalization.Characters,
                     keyboardType = KeyboardType.Text,
                 ),
-//                textStyle = TextStyle(
-//                    color = MaterialTheme.colorScheme.onSurface,
-//                ),
             )
         }
 
@@ -236,9 +232,6 @@ private fun AddEditCardScreenContent(
                 modifier = Modifier
                     .fillMaxWidth()
                     .onFocusChanged { isFocused = it.isFocused },
-//                textStyle = TextStyle(
-//                    color = MaterialTheme.colorScheme.onSurface,
-//                ),
             )
         }
 
@@ -248,7 +241,7 @@ private fun AddEditCardScreenContent(
             Row(
                 modifier = Modifier
                     .fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(16.dp),
+                horizontalArrangement = Arrangement.spacedBy(KptTheme.spacing.md),
             ) {
                 MifosTextField(
                     value = state.expiryDateFormatted,
@@ -260,9 +253,6 @@ private fun AddEditCardScreenContent(
                             onAction(AECardAction.ExpiryDateChanged(newValue))
                         }
                     },
-//                    textStyle = TextStyle(
-//                        color = MaterialTheme.colorScheme.onSurface,
-//                    ),
                 )
 
                 MifosPasswordField(
@@ -292,7 +282,7 @@ private fun AddEditCardScreenContent(
                 },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 16.dp),
+                    .padding(horizontal = KptTheme.spacing.md),
                 onClick = { onAction(AECardAction.SaveCard) },
             )
         }
@@ -311,7 +301,7 @@ fun CreditCardColorSelector(
             .fillMaxWidth()
             .horizontalScroll(rememberScrollState()),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(4.dp),
+        horizontalArrangement = Arrangement.spacedBy(KptTheme.spacing.xs),
     ) {
         cardColors.forEach {
             ColorSelector(
@@ -329,13 +319,13 @@ fun ColorSelector(
     isSelected: Boolean,
     onColorSelected: () -> Unit,
 ) {
-    val borderColor = if (isSelected) MaterialTheme.colorScheme.onSurface else Color.Transparent
+    val borderColor = if (isSelected) KptTheme.colorScheme.onSurface else Color.Transparent
     val borderWidth = if (isSelected) 2.dp else 0.dp
 
     Box(
         modifier = Modifier
             .size(48.dp)
-            .clip(RoundedCornerShape(2.dp))
+            .clip(KptTheme.shapes.extraSmall)
             .border(borderWidth, borderColor)
             .background(color)
             .clickable { onColorSelected() },

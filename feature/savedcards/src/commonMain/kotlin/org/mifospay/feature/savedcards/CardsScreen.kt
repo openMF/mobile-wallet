@@ -23,7 +23,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.FilledTonalIconButton
@@ -32,7 +31,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.ListItemDefaults
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
@@ -67,6 +65,7 @@ import org.mifospay.core.ui.utils.EventsEffect
 import org.mifospay.feature.savedcards.createOrUpdate.CardAddEditType
 import org.mifospay.feature.savedcards.utils.CreditCardUtils.detectCardType
 import org.mifospay.feature.savedcards.utils.CreditCardUtils.maskCreditCardNumber
+import template.core.base.designsystem.theme.KptTheme
 
 /**
  * Known Issue, On deleting card, state isn't updating automatically
@@ -205,7 +204,7 @@ internal fun CardsScreen(
                         title = stringResource(Res.string.feature_savedcards_error_oops),
                         subTitle = stringResource(Res.string.feature_savedcards_subtitle),
                         modifier = Modifier,
-                        iconTint = MaterialTheme.colorScheme.error,
+                        iconTint = KptTheme.colorScheme.error,
                     )
                 }
 
@@ -228,8 +227,8 @@ private fun CardsScreenContent(
 ) {
     LazyColumn(
         modifier = modifier.fillMaxSize(),
-        contentPadding = PaddingValues(16.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp),
+        contentPadding = PaddingValues(KptTheme.spacing.md),
+        verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.md),
     ) {
         items(
             items = state.cards,
@@ -261,7 +260,7 @@ private fun SavedCardItem(
 ) {
     OutlinedCard(
         modifier = modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(8.dp),
+        shape = KptTheme.shapes.small,
         colors = CardDefaults.outlinedCardColors(
             containerColor = Color.Transparent,
         ),
@@ -295,15 +294,15 @@ private fun SavedCardItem(
             trailingContent = {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(4.dp),
+                    horizontalArrangement = Arrangement.spacedBy(KptTheme.spacing.xs),
                 ) {
                     FilledTonalIconButton(
                         onClick = {
                             onClickEdit(savedCard.id)
                         },
                         colors = IconButtonDefaults.filledTonalIconButtonColors(
-                            containerColor = MaterialTheme.colorScheme.surfaceContainerHighest,
-                            contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                            containerColor = KptTheme.colorScheme.surfaceContainerHighest,
+                            contentColor = KptTheme.colorScheme.onSurfaceVariant,
                         ),
                     ) {
                         Icon(
@@ -317,8 +316,8 @@ private fun SavedCardItem(
                             onClickDelete(savedCard.id)
                         },
                         colors = IconButtonDefaults.filledTonalIconButtonColors(
-                            containerColor = MaterialTheme.colorScheme.errorContainer,
-                            contentColor = MaterialTheme.colorScheme.error,
+                            containerColor = KptTheme.colorScheme.errorContainer,
+                            contentColor = KptTheme.colorScheme.error,
                         ),
                     ) {
                         Icon(

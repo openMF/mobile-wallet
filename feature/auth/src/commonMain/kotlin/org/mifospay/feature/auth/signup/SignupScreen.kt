@@ -23,7 +23,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
@@ -39,7 +38,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.launch
 import mobile_wallet.feature.auth.generated.resources.Res
@@ -75,6 +73,7 @@ import org.mifospay.core.ui.ExposedDropdownBox
 import org.mifospay.core.ui.MifosPasswordField
 import org.mifospay.core.ui.utils.EventsEffect
 import org.mifospay.feature.auth.signup.SignUpState.DialogState
+import template.core.base.designsystem.theme.KptTheme
 
 @Composable
 internal fun SignupScreen(
@@ -130,7 +129,7 @@ private fun SignupScreen(
     MifosScaffold(
         snackbarHostState = snackbarHostState,
         modifier = modifier,
-        containerColor = MaterialTheme.colorScheme.background,
+        containerColor = KptTheme.colorScheme.background,
         topBar = {
             MifosTopAppBar(
                 title = stringResource(Res.string.feature_auth_complete_your_registration),
@@ -161,8 +160,8 @@ private fun SignupScreenContent(
     LazyColumn(
         modifier = modifier
             .fillMaxSize(),
-        contentPadding = PaddingValues(12.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp),
+        contentPadding = PaddingValues(KptTheme.spacing.md),
+        verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.sm),
     ) {
         item {
             MifosOutlinedTextField(
@@ -251,7 +250,7 @@ private fun SignupScreenContent(
                     showPasswordChange = { showPassword = !showPassword },
                     interactionSource = interactionSource,
                 )
-                Spacer(modifier = Modifier.height(4.dp))
+                Spacer(modifier = Modifier.height(KptTheme.spacing.xs))
                 CombinedPasswordErrorCard(
                     modifier = Modifier.fillMaxWidth(),
                     errors = state.passwordFeedback,
@@ -317,7 +316,7 @@ private fun SignupScreenContent(
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                horizontalArrangement = Arrangement.spacedBy(KptTheme.spacing.sm),
             ) {
                 var isCountryDropdownExpanded by remember { mutableStateOf(false) }
                 var isStateDropdownExpanded by remember { mutableStateOf(false) }
@@ -381,7 +380,7 @@ private fun SignupScreenContent(
                 onClick = {
                     onAction(SignUpAction.SubmitClick)
                 },
-                contentPadding = PaddingValues(12.dp),
+                contentPadding = PaddingValues(KptTheme.spacing.md),
             ) {
                 Text(
                     text = stringResource(Res.string.feature_auth_complete),

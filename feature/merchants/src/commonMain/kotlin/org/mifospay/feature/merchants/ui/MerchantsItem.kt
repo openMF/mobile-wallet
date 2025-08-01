@@ -19,7 +19,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -32,6 +31,7 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.mifospay.core.designsystem.component.MifosCard
 import org.mifospay.core.designsystem.theme.styleMedium16sp
 import org.mifospay.core.model.savingsaccount.SavingsWithAssociationsEntity
+import template.core.base.designsystem.theme.KptTheme
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -48,41 +48,41 @@ internal fun MerchantsItem(
                 onMerchantLongPressed(savingsWithAssociations.id.toString())
             },
         ),
-        colors = CardDefaults.cardColors(MaterialTheme.colorScheme.surface),
+        colors = CardDefaults.cardColors(KptTheme.colorScheme.surface),
     ) {
         Column {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 16.dp),
+                    .padding(horizontal = KptTheme.spacing.md),
             ) {
                 Icon(
                     painter = painterResource(Res.drawable.feature_merchants_ic_bank),
                     contentDescription = null,
                     modifier = Modifier
                         .align(Alignment.CenterVertically)
-                        .padding(start = 16.dp, end = 16.dp)
+                        .padding(start = KptTheme.spacing.md, end = KptTheme.spacing.md)
                         .size(39.dp),
                 )
 
                 Column {
                     Text(
                         text = savingsWithAssociations.clientName,
-                        color = MaterialTheme.colorScheme.onSurface,
+                        color = KptTheme.colorScheme.onSurface,
                     )
                     Text(
                         text = savingsWithAssociations.accountNo,
-                        modifier = Modifier.padding(top = 4.dp),
+                        modifier = Modifier.padding(top = KptTheme.spacing.xs),
                         style = styleMedium16sp,
-                        color = MaterialTheme.colorScheme.onSurface,
+                        color = KptTheme.colorScheme.onSurface,
                     )
                 }
             }
         }
         HorizontalDivider(
             thickness = 1.dp,
-            modifier = Modifier.padding(8.dp),
-            color = MaterialTheme.colorScheme.outlineVariant,
+            modifier = Modifier.padding(KptTheme.spacing.sm),
+            color = KptTheme.colorScheme.outlineVariant,
         )
     }
 }

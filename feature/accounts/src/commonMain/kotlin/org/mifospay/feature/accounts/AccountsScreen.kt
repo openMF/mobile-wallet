@@ -25,7 +25,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.FabPosition
@@ -37,7 +36,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.ListItemDefaults
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
@@ -102,6 +100,7 @@ import org.mifospay.core.ui.rememberRevealState
 import org.mifospay.core.ui.utils.EventsEffect
 import org.mifospay.feature.accounts.beneficiary.BeneficiaryAddEditType
 import org.mifospay.feature.accounts.savingsaccount.SavingsAddEditType
+import template.core.base.designsystem.theme.KptTheme
 
 @Composable
 fun AccountsScreen(
@@ -204,7 +203,7 @@ internal fun AccountsScreenContent(
                         title = stringResource(Res.string.feature_accounts_error_oops),
                         subTitle = stringResource(Res.string.feature_accounts_unexpected_error_subtitle),
                         modifier = Modifier,
-                        iconTint = MaterialTheme.colorScheme.error,
+                        iconTint = KptTheme.colorScheme.error,
                     )
                 }
 
@@ -271,13 +270,13 @@ private fun AccountsList(
         modifier = modifier
             .fillMaxSize(),
         state = lazyListState,
-        contentPadding = PaddingValues(12.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp),
+        contentPadding = PaddingValues(KptTheme.spacing.md),
+        verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.md),
     ) {
         item {
             Text(
                 text = stringResource(Res.string.feature_accounts_savings_account),
-                style = MaterialTheme.typography.labelLarge,
+                style = KptTheme.typography.labelLarge,
             )
         }
 
@@ -304,7 +303,7 @@ private fun AccountsList(
         item {
             Text(
                 text = stringResource(Res.string.feature_accounts_beneficiaries),
-                style = MaterialTheme.typography.labelLarge,
+                style = KptTheme.typography.labelLarge,
             )
         }
 
@@ -323,7 +322,7 @@ private fun AccountsList(
             HorizontalDivider(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(vertical = 8.dp),
+                    .padding(vertical = KptTheme.spacing.sm),
             )
         }
 
@@ -370,16 +369,16 @@ private fun AccountItem(
     RevealSwipe(
         modifier = modifier,
         state = state,
-        shape = RoundedCornerShape(8.dp),
-        backgroundCardStartColor = MaterialTheme.colorScheme.tertiary,
-        backgroundCardEndColor = MaterialTheme.colorScheme.secondary,
+        shape = KptTheme.shapes.small,
+        backgroundCardStartColor = KptTheme.colorScheme.tertiary,
+        backgroundCardEndColor = KptTheme.colorScheme.secondary,
         backgroundStartActionLabel = null,
         backgroundEndActionLabel = stringResource(Res.string.feature_accounts_edit),
         card = { shape, content ->
             Card(
                 modifier = Modifier.matchParentSize(),
                 colors = CardDefaults.cardColors(
-                    contentColor = MaterialTheme.colorScheme.onSecondary,
+                    contentColor = KptTheme.colorScheme.onSecondary,
                     containerColor = Color.Transparent,
                 ),
                 shape = shape,
@@ -391,7 +390,10 @@ private fun AccountItem(
                 modifier = Modifier
                     .fillMaxWidth()
                     .align(Alignment.Center),
-                horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally),
+                horizontalArrangement = Arrangement.spacedBy(
+                    KptTheme.spacing.sm,
+                    Alignment.CenterHorizontally,
+                ),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 AnimatedVisibility(
@@ -428,7 +430,7 @@ private fun AccountItem(
             shape = it,
             colors = CardDefaults.outlinedCardColors(
                 containerColor = Color.Transparent,
-                contentColor = MaterialTheme.colorScheme.onSurface,
+                contentColor = KptTheme.colorScheme.onSurface,
             ),
         ) {
             ListItem(
@@ -441,12 +443,12 @@ private fun AccountItem(
                 leadingContent = {
                     AvatarBox(
                         icon = MifosIcons.Bank,
-                        backgroundColor = MaterialTheme.colorScheme.secondaryContainer,
+                        backgroundColor = KptTheme.colorScheme.secondaryContainer,
                     )
                 },
                 trailingContent = {
                     Row(
-                        horizontalArrangement = Arrangement.spacedBy(4.dp),
+                        horizontalArrangement = Arrangement.spacedBy(KptTheme.spacing.xs),
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
                         SavingAccountStatusCard(account.status)
@@ -454,15 +456,15 @@ private fun AccountItem(
                         AnimatedVisibility(isDefault) {
                             OutlinedCard(
                                 onClick = {},
-                                shape = RoundedCornerShape(4.dp),
+                                shape = KptTheme.shapes.extraSmall,
                                 colors = CardDefaults.outlinedCardColors(
-                                    containerColor = MaterialTheme.colorScheme.tertiary,
+                                    containerColor = KptTheme.colorScheme.tertiary,
                                 ),
                             ) {
                                 Text(
                                     text = stringResource(Res.string.feature_accounts_default),
-                                    style = MaterialTheme.typography.bodySmall,
-                                    modifier = Modifier.padding(4.dp),
+                                    style = KptTheme.typography.bodySmall,
+                                    modifier = Modifier.padding(KptTheme.spacing.xs),
                                 )
                             }
                         }
@@ -494,10 +496,10 @@ private fun BeneficiaryItem(
 ) {
     OutlinedCard(
         modifier = modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(8.dp),
+        shape = KptTheme.shapes.small,
         colors = CardDefaults.outlinedCardColors(
             containerColor = Color.Transparent,
-            contentColor = MaterialTheme.colorScheme.onSurface,
+            contentColor = KptTheme.colorScheme.onSurface,
         ),
     ) {
         ListItem(
@@ -510,22 +512,22 @@ private fun BeneficiaryItem(
             leadingContent = {
                 AvatarBox(
                     icon = MifosIcons.AccountCircle,
-                    backgroundColor = MaterialTheme.colorScheme.tertiaryContainer,
-                    contentColor = MaterialTheme.colorScheme.tertiary,
+                    backgroundColor = KptTheme.colorScheme.tertiaryContainer,
+                    contentColor = KptTheme.colorScheme.tertiary,
                 )
             },
             trailingContent = {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(4.dp),
+                    horizontalArrangement = Arrangement.spacedBy(KptTheme.spacing.xs),
                 ) {
                     FilledTonalIconButton(
                         onClick = {
                             onClickEdit(beneficiary)
                         },
                         colors = IconButtonDefaults.filledTonalIconButtonColors(
-                            containerColor = MaterialTheme.colorScheme.surfaceContainerHighest,
-                            contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                            containerColor = KptTheme.colorScheme.surfaceContainerHighest,
+                            contentColor = KptTheme.colorScheme.onSurfaceVariant,
                         ),
                     ) {
                         Icon(
@@ -539,8 +541,8 @@ private fun BeneficiaryItem(
                             onClickDelete(beneficiary.id)
                         },
                         colors = IconButtonDefaults.filledTonalIconButtonColors(
-                            containerColor = MaterialTheme.colorScheme.errorContainer,
-                            contentColor = MaterialTheme.colorScheme.error,
+                            containerColor = KptTheme.colorScheme.errorContainer,
+                            contentColor = KptTheme.colorScheme.error,
                         ),
                     ) {
                         Icon(
@@ -595,8 +597,8 @@ private fun SavingAccountStatusCard(
 ) {
     val activeStatus = SavingAccountStatus.entries.filter { it.isActive(status) }
     FlowRow(
-        horizontalArrangement = Arrangement.spacedBy(4.dp),
-        verticalArrangement = Arrangement.spacedBy(4.dp),
+        horizontalArrangement = Arrangement.spacedBy(KptTheme.spacing.xs),
+        verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.xs),
         modifier = modifier,
     ) {
         activeStatus.forEach { statusEnum ->
@@ -613,7 +615,7 @@ private fun StatusChip(label: String, color: Color) {
     MifosSmallChip(
         label = label,
         containerColor = color,
-        contentColor = MaterialTheme.colorScheme.scrim,
+        contentColor = KptTheme.colorScheme.scrim,
     )
 }
 
@@ -621,28 +623,34 @@ enum class SavingAccountStatus(
     val isActive: (Status) -> Boolean,
     val labelRes: StringResource,
 ) {
-    PendingApproval({ it.submittedAndPendingApproval }, Res.string.feature_accounts_status_pending_approval),
+    PendingApproval(
+        { it.submittedAndPendingApproval },
+        Res.string.feature_accounts_status_pending_approval,
+    ),
     Approved({ it.approved }, Res.string.feature_accounts_status_approved),
     Rejected({ it.rejected }, Res.string.feature_accounts_status_rejected),
     Withdrawn({ it.withdrawnByApplicant }, Res.string.feature_accounts_status_withdrawn),
     Active({ it.active }, Res.string.feature_accounts_status_active),
     Closed({ it.closed }, Res.string.feature_accounts_status_closed),
     PrematureClosed({ it.prematureClosed }, Res.string.feature_accounts_status_prematurely_closed),
-    TransferInProgress({ it.transferInProgress }, Res.string.feature_accounts_status_transfer_in_progress),
+    TransferInProgress(
+        { it.transferInProgress },
+        Res.string.feature_accounts_status_transfer_in_progress,
+    ),
     TransferOnHold({ it.transferOnHold }, Res.string.feature_accounts_status_transfer_on_hold),
     Matured({ it.matured }, Res.string.feature_accounts_status_matured),
 }
 
 val SavingAccountStatus.color: Color
     @Composable get() = when (this) {
-        SavingAccountStatus.PendingApproval -> MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.6f)
-        SavingAccountStatus.Approved -> MaterialTheme.colorScheme.tertiaryContainer
-        SavingAccountStatus.Rejected -> MaterialTheme.colorScheme.errorContainer
-        SavingAccountStatus.Withdrawn -> MaterialTheme.colorScheme.secondaryContainer
-        SavingAccountStatus.Active -> MaterialTheme.colorScheme.primaryContainer
-        SavingAccountStatus.Closed -> MaterialTheme.colorScheme.surfaceVariant
-        SavingAccountStatus.PrematureClosed -> MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.8f)
-        SavingAccountStatus.TransferInProgress -> MaterialTheme.colorScheme.tertiaryContainer.copy(alpha = 0.7f)
-        SavingAccountStatus.TransferOnHold -> MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.7f)
-        SavingAccountStatus.Matured -> MaterialTheme.colorScheme.tertiaryContainer
+        SavingAccountStatus.PendingApproval -> KptTheme.colorScheme.primaryContainer.copy(alpha = 0.6f)
+        SavingAccountStatus.Approved -> KptTheme.colorScheme.tertiaryContainer
+        SavingAccountStatus.Rejected -> KptTheme.colorScheme.errorContainer
+        SavingAccountStatus.Withdrawn -> KptTheme.colorScheme.secondaryContainer
+        SavingAccountStatus.Active -> KptTheme.colorScheme.primaryContainer
+        SavingAccountStatus.Closed -> KptTheme.colorScheme.surfaceVariant
+        SavingAccountStatus.PrematureClosed -> KptTheme.colorScheme.surfaceVariant.copy(alpha = 0.8f)
+        SavingAccountStatus.TransferInProgress -> KptTheme.colorScheme.tertiaryContainer.copy(alpha = 0.7f)
+        SavingAccountStatus.TransferOnHold -> KptTheme.colorScheme.secondaryContainer.copy(alpha = 0.7f)
+        SavingAccountStatus.Matured -> KptTheme.colorScheme.tertiaryContainer
     }

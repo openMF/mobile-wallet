@@ -19,7 +19,6 @@ import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButtonDefaults
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -43,6 +42,7 @@ import org.koin.compose.viewmodel.koinViewModel
 import org.mifospay.core.designsystem.icon.MifosIcons
 import org.mifospay.core.designsystem.theme.MifosTheme
 import org.mifospay.core.ui.utils.EventsEffect
+import template.core.base.designsystem.theme.KptTheme
 
 @Composable
 fun RequestScreen(
@@ -82,19 +82,19 @@ private fun RequestScreenContent(
         modifier = modifier
             .fillMaxSize()
             .padding(20.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp),
+        verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.md),
     ) {
         Text(
-            modifier = Modifier.padding(top = 10.dp),
+            modifier = Modifier.padding(top = KptTheme.spacing.sm),
             text = stringResource(Res.string.feature_payments_receive),
-            style = MaterialTheme.typography.titleMedium,
-            color = MaterialTheme.colorScheme.primary,
+            style = KptTheme.typography.titleMedium,
+            color = KptTheme.colorScheme.primary,
         )
 
         Column(
             modifier = Modifier
                 .fillMaxWidth(),
-            verticalArrangement = Arrangement.spacedBy(12.dp),
+            verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.md),
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -102,13 +102,13 @@ private fun RequestScreenContent(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Column(
-                    verticalArrangement = Arrangement.spacedBy(4.dp),
+                    verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.xs),
                     horizontalAlignment = Alignment.Start,
                 ) {
                     Text(text = stringResource(Res.string.feature_payments_vpa))
                     Text(
                         text = state.externalId,
-                        style = MaterialTheme.typography.bodyMedium,
+                        style = KptTheme.typography.bodyMedium,
                     )
                 }
 
@@ -127,7 +127,7 @@ private fun RequestScreenContent(
 
             HorizontalDivider(
                 thickness = 1.dp,
-                color = MaterialTheme.colorScheme.outlineVariant,
+                color = KptTheme.colorScheme.outlineVariant,
             )
 
             Row(
@@ -137,12 +137,12 @@ private fun RequestScreenContent(
             ) {
                 Column(
                     modifier = Modifier,
-                    verticalArrangement = Arrangement.spacedBy(4.dp),
+                    verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.xs),
                 ) {
                     Text(text = stringResource(Res.string.feature_payments_mobile_number))
                     Text(
                         text = state.mobileNo,
-                        style = MaterialTheme.typography.bodyMedium,
+                        style = KptTheme.typography.bodyMedium,
                     )
                 }
 

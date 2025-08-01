@@ -18,7 +18,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import mobile_wallet.feature.history.generated.resources.Res
 import mobile_wallet.feature.history.generated.resources.feature_history_error
@@ -33,6 +32,7 @@ import org.mifospay.core.ui.ErrorScreenContent
 import org.mifospay.core.ui.utils.EventsEffect
 import org.mifospay.feature.history.components.TransactionDetail
 import org.mifospay.feature.history.components.TransactionItem
+import template.core.base.designsystem.theme.KptTheme
 
 @Composable
 internal fun SpecificTransactionsScreen(
@@ -113,8 +113,8 @@ private fun TransactionDetails(
     Column(
         modifier = modifier
             .fillMaxSize()
-            .padding(vertical = 12.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp),
+            .padding(horizontal = KptTheme.spacing.md),
+        verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.md),
     ) {
         TransactionItem(
             transaction = state.transaction,

@@ -17,13 +17,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.ListItemDefaults
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -34,7 +32,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import mobile_wallet.feature.kyc.generated.resources.Res
 import mobile_wallet.feature.kyc.generated.resources.feature_kyc_check
@@ -49,6 +46,7 @@ import org.mifospay.core.designsystem.icon.MifosIcons
 import org.mifospay.core.ui.AvatarBox
 import org.mifospay.core.ui.EmptyContentScreen
 import org.mifospay.core.ui.utils.EventsEffect
+import template.core.base.designsystem.theme.KptTheme
 
 @Composable
 fun KYCScreen(
@@ -97,7 +95,7 @@ private fun KYCDescriptionScreen(
                     title = stringResource(Res.string.feature_kyc_error_oops),
                     subTitle = stringResource(Res.string.feature_kyc_unexpected_error_subtitle),
                     modifier = Modifier,
-                    iconTint = MaterialTheme.colorScheme.error,
+                    iconTint = KptTheme.colorScheme.error,
                 )
             }
 
@@ -124,16 +122,16 @@ private fun KYCDescriptionScreen(
     Column(
         modifier = modifier
             .fillMaxSize()
-            .padding(16.dp)
+            .padding(KptTheme.spacing.md)
             .verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(16.dp),
+        verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.md),
     ) {
         Text(
             text = stringResource(Res.string.feature_kyc_complete_kyc),
-            modifier = Modifier.padding(vertical = 20.dp),
+            modifier = Modifier.padding(horizontal = KptTheme.spacing.lg),
             textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.titleMedium,
+            style = KptTheme.typography.titleMedium,
         )
 
         KycLevel.entries.forEach { kycLevel ->
@@ -166,15 +164,15 @@ private fun KYCLevelCard(
     Row(
         modifier = modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        horizontalArrangement = Arrangement.spacedBy(KptTheme.spacing.sm),
     ) {
         OutlinedCard(
             enabled = enabled,
             onClick = onClick,
-            shape = RoundedCornerShape(4.dp),
+            shape = KptTheme.shapes.extraSmall,
             colors = CardDefaults.outlinedCardColors(
                 containerColor = Color.Transparent,
-                disabledContainerColor = MaterialTheme.colorScheme.surfaceContainerHighest,
+                disabledContainerColor = KptTheme.colorScheme.surfaceContainerHighest,
             ),
             border = CardDefaults.outlinedCardBorder(enabled = true),
             modifier = Modifier.weight(2.5f, false),
@@ -186,7 +184,7 @@ private fun KYCLevelCard(
                 leadingContent = {
                     AvatarBox(
                         icon = icon,
-                        backgroundColor = MaterialTheme.colorScheme.secondaryContainer,
+                        backgroundColor = KptTheme.colorScheme.secondaryContainer,
                     )
                 },
                 trailingContent = {

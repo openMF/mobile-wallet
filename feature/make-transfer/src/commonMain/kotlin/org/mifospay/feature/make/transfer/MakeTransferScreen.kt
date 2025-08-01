@@ -23,13 +23,11 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.ListItemDefaults
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -71,6 +69,7 @@ import org.mifospay.core.model.utils.PaymentQrData
 import org.mifospay.core.ui.AvatarBox
 import org.mifospay.core.ui.EmptyContentScreen
 import org.mifospay.core.ui.utils.EventsEffect
+import template.core.base.designsystem.theme.KptTheme
 
 @Composable
 internal fun MakeTransferScreen(
@@ -141,8 +140,8 @@ internal fun MakeTransferScreen(
                 .fillMaxSize()
                 .padding(paddingValues),
             state = lazyListState,
-            contentPadding = PaddingValues(16.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp),
+            contentPadding = PaddingValues(KptTheme.spacing.md),
+            verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.md),
         ) {
             item {
                 MifosTextField(
@@ -194,7 +193,7 @@ private fun AccountListState(
 ) {
     Box(
         modifier = modifier.fillMaxWidth()
-            .padding(16.dp),
+            .padding(KptTheme.spacing.md),
         contentAlignment = Alignment.Center,
     ) {
         when (state) {
@@ -204,7 +203,7 @@ private fun AccountListState(
                         contentDesc = stringResource(Res.string.feature_make_transfer_loading),
                         modifier = Modifier
                             .align(Alignment.Center)
-                            .padding(16.dp),
+                            .padding(KptTheme.spacing.md),
                     )
                 }
             }
@@ -220,7 +219,7 @@ private fun AccountListState(
                 EmptyContentScreen(
                     title = stringResource(Res.string.feature_make_transfer_oops_title),
                     subTitle = stringResource(Res.string.feature_make_transfer_no_accounts_found),
-                    iconTint = MaterialTheme.colorScheme.error,
+                    iconTint = KptTheme.colorScheme.error,
                 )
             }
 
@@ -246,12 +245,12 @@ private fun AccountList(
 ) {
     LazyColumn(
         modifier = modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(16.dp),
+        verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.md),
     ) {
         item {
             Text(
                 text = stringResource(Res.string.feature_make_transfer_from_account),
-                style = MaterialTheme.typography.labelLarge,
+                style = KptTheme.typography.labelLarge,
             )
         }
         items(items = accounts, key = { account -> account.id }) { account ->
@@ -290,7 +289,7 @@ private fun AccountItem(
             leadingContent = {
                 AvatarBox(
                     icon = MifosIcons.Bank,
-                    backgroundColor = MaterialTheme.colorScheme.surfaceContainerHigh,
+                    backgroundColor = KptTheme.colorScheme.surfaceContainerHigh,
                 )
             },
             trailingContent = {
@@ -305,9 +304,9 @@ private fun AccountItem(
                         },
                         contentDescription = stringResource(Res.string.feature_make_transfer_check_icon_description),
                         tint = if (it) {
-                            MaterialTheme.colorScheme.primary
+                            KptTheme.colorScheme.primary
                         } else {
-                            MaterialTheme.colorScheme.outlineVariant
+                            KptTheme.colorScheme.outlineVariant
                         },
                     )
                 }
@@ -326,11 +325,11 @@ private fun ClientCard(
 ) {
     Column(
         modifier = modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(12.dp),
+        verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.md),
     ) {
         Text(
             text = stringResource(Res.string.feature_make_transfer_to_account),
-            style = MaterialTheme.typography.labelLarge,
+            style = KptTheme.typography.labelLarge,
         )
 
         OutlinedCard(
@@ -349,12 +348,12 @@ private fun ClientCard(
                 leadingContent = {
                     AvatarBox(
                         icon = MifosIcons.Bank,
-                        backgroundColor = MaterialTheme.colorScheme.surfaceContainerHigh,
+                        backgroundColor = KptTheme.colorScheme.surfaceContainerHigh,
                     )
                 },
                 trailingContent = {
                     Row(
-                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        horizontalArrangement = Arrangement.spacedBy(KptTheme.spacing.sm),
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
                         AccountBadge(
@@ -363,7 +362,7 @@ private fun ClientCard(
 
                         AccountBadge(
                             text = stringResource(Res.string.feature_make_transfer_badge_saving),
-                            borderColor = MaterialTheme.colorScheme.secondary,
+                            borderColor = KptTheme.colorScheme.secondary,
                         )
                     }
                 },
@@ -379,7 +378,7 @@ private fun ClientCard(
 private fun AccountBadge(
     text: String,
     modifier: Modifier = Modifier,
-    borderColor: Color = MaterialTheme.colorScheme.primary,
+    borderColor: Color = KptTheme.colorScheme.primary,
 ) {
     OutlinedCard(
         modifier = modifier,
@@ -387,12 +386,12 @@ private fun AccountBadge(
             containerColor = Color.Transparent,
         ),
         border = BorderStroke(1.dp, borderColor),
-        shape = RoundedCornerShape(2.dp),
+        shape = KptTheme.shapes.extraSmall,
     ) {
         Text(
             text = text,
-            style = MaterialTheme.typography.labelSmall,
-            modifier = Modifier.padding(4.dp),
+            style = KptTheme.typography.labelSmall,
+            modifier = Modifier.padding(KptTheme.spacing.xs),
         )
     }
 }

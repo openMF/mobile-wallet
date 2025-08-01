@@ -30,7 +30,6 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -77,6 +76,7 @@ import org.mifospay.core.model.savingsaccount.TransactionType
 import org.mifospay.core.ui.EmptyContentScreen
 import org.mifospay.feature.merchants.MerchantTransferUiState
 import org.mifospay.feature.merchants.MerchantTransferViewModel
+import template.core.base.designsystem.theme.KptTheme
 
 @Composable
 internal fun MerchantTransferScreenRoute(
@@ -125,7 +125,7 @@ internal fun MerchantTransferScreen(
                     is MerchantTransferUiState.Loading -> {
                         MfLoadingWheel(
                             contentDesc = stringResource(Res.string.feature_merchants_loading),
-                            backgroundColor = MaterialTheme.colorScheme.surface,
+                            backgroundColor = KptTheme.colorScheme.surface,
                         )
                     }
 
@@ -134,7 +134,7 @@ internal fun MerchantTransferScreen(
                             modifier = Modifier,
                             title = stringResource(Res.string.feature_merchants_error_oops),
                             subTitle = stringResource(Res.string.feature_merchants_unexpected_error_subtitle),
-                            iconTint = MaterialTheme.colorScheme.error,
+                            iconTint = KptTheme.colorScheme.error,
                         )
                     }
 
@@ -200,17 +200,17 @@ private fun MerchantBottomSheet(
                 modifier =
                 Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 24.dp),
+                    .padding(horizontal = KptTheme.spacing.md, vertical = KptTheme.spacing.lg),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Text(
                     text = stringResource(Res.string.feature_merchants_transfer_money_to_this_merchant),
-                    color = MaterialTheme.colorScheme.tertiaryContainer.copy(
+                    color = KptTheme.colorScheme.tertiaryContainer.copy(
                         red = 0.38f,
                         green = 0f,
                         blue = 0.93f,
                     ),
-                    style = MaterialTheme.typography.bodyMedium,
+                    style = KptTheme.typography.bodyMedium,
                 )
                 Spacer(modifier = Modifier.height(24.dp))
 
@@ -235,12 +235,12 @@ private fun MerchantBottomSheet(
                             merchantVPA,
                         )
                     },
-                    colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.primary),
+                    colors = ButtonDefaults.buttonColors(KptTheme.colorScheme.primary),
                     modifier = Modifier.width(155.dp),
                 ) {
                     Text(
                         stringResource(Res.string.feature_merchants_submit),
-                        color = MaterialTheme.colorScheme.onPrimary,
+                        color = KptTheme.colorScheme.onPrimary,
                     )
                 }
             }
@@ -258,20 +258,20 @@ private fun MerchantInfo(
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(10.dp),
+        verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.sm),
         modifier = modifier,
     ) {
         MerchantInitialAvatar(merchantName)
 
         Text(
             text = merchantName,
-            style = MaterialTheme.typography.labelMedium,
+            style = KptTheme.typography.labelMedium,
         )
 
         Text(
             text = merchantVPA,
-            style = MaterialTheme.typography.labelMedium,
-            color = MaterialTheme.colorScheme.outline,
+            style = KptTheme.typography.labelMedium,
+            color = KptTheme.colorScheme.outline,
         )
     }
 }
@@ -288,14 +288,14 @@ private fun MerchantInitialAvatar(
         modifier
             .size(86.dp)
             .background(
-                color = MaterialTheme.colorScheme.primary,
+                color = KptTheme.colorScheme.primary,
                 shape = CircleShape,
             ),
         contentAlignment = Alignment.Center,
     ) {
         Text(
             text = initial,
-            color = MaterialTheme.colorScheme.onPrimary,
+            color = KptTheme.colorScheme.onPrimary,
             fontSize = 44.sp,
             fontWeight = FontWeight.Medium,
         )
@@ -307,7 +307,7 @@ private fun SpecificTransactionItem(
     transaction: Transaction,
     modifier: Modifier = Modifier,
 ) {
-    Column(modifier = modifier.padding(horizontal = 12.dp)) {
+    Column(modifier = modifier.padding(horizontal = KptTheme.spacing.md)) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             SpecificTransactionAccountInfo(
                 amount = transaction.amount.toString(),
@@ -323,19 +323,19 @@ private fun SpecificTransactionItem(
         }
         Spacer(modifier = Modifier.height(12.dp))
         Row(
-            modifier = Modifier.padding(horizontal = 8.dp),
+            modifier = Modifier.padding(horizontal = KptTheme.spacing.sm),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Column {
                 Text(
                     text = stringResource(Res.string.feature_merchants_transaction_id) + transaction.transactionId,
-                    style = MaterialTheme.typography.bodyLarge,
-                    color = MaterialTheme.colorScheme.primary,
+                    style = KptTheme.typography.bodyLarge,
+                    color = KptTheme.colorScheme.primary,
                 )
                 Text(
                     text = stringResource(Res.string.feature_merchants_transaction_date) + transaction.date,
-                    style = MaterialTheme.typography.bodyLarge,
+                    style = KptTheme.typography.bodyLarge,
                 )
                 Text(
                     text =
@@ -344,28 +344,28 @@ private fun SpecificTransactionItem(
                         TransactionType.CREDIT -> stringResource(Res.string.feature_merchants_credits)
                         TransactionType.OTHER -> stringResource(Res.string.feature_merchants_other)
                     },
-                    style = MaterialTheme.typography.bodyLarge,
+                    style = KptTheme.typography.bodyLarge,
                 )
             }
             Spacer(modifier = Modifier.weight(1f))
             Text(
                 text = "${transaction.currency.code}${transaction.amount}",
-                style = MaterialTheme.typography.displaySmall,
+                style = KptTheme.typography.displaySmall,
                 color =
                 when (transaction.transactionType) {
-                    TransactionType.DEBIT -> MaterialTheme.colorScheme.error.copy(
+                    TransactionType.DEBIT -> KptTheme.colorScheme.error.copy(
                         red = 0.8f,
                         green = 0f,
                         blue = 0f,
                     )
 
-                    TransactionType.CREDIT -> MaterialTheme.colorScheme.onTertiaryContainer.copy(
+                    TransactionType.CREDIT -> KptTheme.colorScheme.onTertiaryContainer.copy(
                         red = 0f,
                         green = 0.51f,
                         blue = 0.21f,
                     )
 
-                    TransactionType.OTHER -> MaterialTheme.colorScheme.primaryContainer.copy(
+                    TransactionType.OTHER -> KptTheme.colorScheme.primaryContainer.copy(
                         red = 1f,
                         green = 1f,
                         blue = 0f,
@@ -393,11 +393,11 @@ private fun SpecificTransactionAccountInfo(
         Icon(imageVector = MifosIcons.AccountCircle, contentDescription = null)
         Text(
             text = accountNo,
-            style = MaterialTheme.typography.titleSmall,
+            style = KptTheme.typography.titleSmall,
         )
         Text(
             text = amount,
-            style = MaterialTheme.typography.bodyMedium,
+            style = KptTheme.typography.bodyMedium,
         )
     }
 }

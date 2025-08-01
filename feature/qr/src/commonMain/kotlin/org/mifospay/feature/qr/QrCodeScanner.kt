@@ -18,7 +18,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
-import androidx.compose.ui.unit.dp
+import template.core.base.designsystem.theme.KptTheme
 
 @Composable
 expect fun QrCodeScanner(
@@ -45,7 +45,7 @@ fun QrScannerWithPermissions(
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Text(
-                    modifier = Modifier.padding(6.dp),
+                    modifier = Modifier.padding(KptTheme.spacing.sm),
                     text = permissionText,
                 )
                 Button(

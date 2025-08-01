@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
@@ -37,6 +36,7 @@ import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.mifospay.core.designsystem.theme.MifosTheme
 import org.mifospay.core.ui.ExpiryDateInput
+import template.core.base.designsystem.theme.KptTheme
 
 @Composable
 internal fun DebitCardScreenContent(
@@ -55,7 +55,7 @@ internal fun DebitCardScreenContent(
             label = {
                 Text(
                     text = "Debit Card Number",
-                    style = TextStyle(color = MaterialTheme.colorScheme.onSurface),
+                    style = TextStyle(color = KptTheme.colorScheme.onSurface),
                 )
             },
             value = cardNumber,
@@ -73,9 +73,9 @@ internal fun DebitCardScreenContent(
             ),
             visualTransformation = ::formatCardNumber,
             colors = OutlinedTextFieldDefaults.colors(
-                focusedBorderColor = MaterialTheme.colorScheme.outline,
-                unfocusedBorderColor = MaterialTheme.colorScheme.outlineVariant,
-                cursorColor = MaterialTheme.colorScheme.onSurface,
+                focusedBorderColor = KptTheme.colorScheme.outline,
+                unfocusedBorderColor = KptTheme.colorScheme.outlineVariant,
+                cursorColor = KptTheme.colorScheme.onSurface,
             ),
         )
 

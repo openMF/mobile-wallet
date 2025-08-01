@@ -10,13 +10,11 @@
 package org.mifospay.feature.standing.instruction.components
 
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
+import template.core.base.designsystem.theme.KptTheme
 
 @Composable
 fun InstructionTypeChip(
@@ -27,31 +25,31 @@ fun InstructionTypeChip(
 
     val (backgroundColor, contentColor) = when (typeEnum) {
         StandingInstructionType.FIXED ->
-            MaterialTheme.colorScheme.primaryContainer to
-                MaterialTheme.colorScheme.onPrimaryContainer
+            KptTheme.colorScheme.primaryContainer to
+                KptTheme.colorScheme.onPrimaryContainer
 
         StandingInstructionType.DUES ->
-            MaterialTheme.colorScheme.tertiaryContainer to
-                MaterialTheme.colorScheme.onTertiaryContainer
+            KptTheme.colorScheme.tertiaryContainer to
+                KptTheme.colorScheme.onTertiaryContainer
 
-        else -> MaterialTheme.colorScheme.surfaceVariant to MaterialTheme.colorScheme.onSurfaceVariant
+        else -> KptTheme.colorScheme.surfaceVariant to KptTheme.colorScheme.onSurfaceVariant
     }
 
     Surface(
         modifier = modifier,
-        shape = RoundedCornerShape(4.dp),
+        shape = KptTheme.shapes.extraSmall,
         color = backgroundColor,
         contentColor = contentColor,
     ) {
         Text(
             text = typeEnum?.name ?: "Not Available",
-            modifier = Modifier.padding(4.dp),
+            modifier = Modifier.padding(KptTheme.spacing.xs),
             color = if (typeEnum == null) {
-                MaterialTheme.colorScheme.error
+                KptTheme.colorScheme.error
             } else {
-                MaterialTheme.colorScheme.onBackground
+                KptTheme.colorScheme.onBackground
             },
-            style = MaterialTheme.typography.bodySmall,
+            style = KptTheme.typography.bodySmall,
         )
     }
 }

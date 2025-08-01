@@ -17,10 +17,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -58,6 +56,7 @@ import org.mifospay.core.designsystem.component.MifosTextField
 import org.mifospay.core.designsystem.icon.MifosIcons
 import org.mifospay.core.ui.AvatarBox
 import org.mifospay.core.ui.utils.EventsEffect
+import template.core.base.designsystem.theme.KptTheme
 
 @Composable
 internal fun KYCLevel2Screen(
@@ -133,8 +132,11 @@ private fun KYCLevel2ScreenContent(
         modifier = modifier
             .verticalScroll(rememberScrollState())
             .fillMaxSize()
-            .padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterVertically),
+            .padding(KptTheme.spacing.md),
+        verticalArrangement = Arrangement.spacedBy(
+            KptTheme.spacing.md,
+            Alignment.CenterVertically,
+        ),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         DocumentPicker(
@@ -194,15 +196,15 @@ private fun DocumentPicker(
         modifier = modifier
             .fillMaxWidth()
             .height(200.dp),
-        shape = RoundedCornerShape(8.dp),
+        shape = KptTheme.shapes.small,
         border = CardDefaults.outlinedCardBorder(
             enabled = true,
         ).copy(
             width = 1.dp,
             brush = Brush.sweepGradient(
                 colors = listOf(
-                    MaterialTheme.colorScheme.primary,
-                    MaterialTheme.colorScheme.secondary,
+                    KptTheme.colorScheme.primary,
+                    KptTheme.colorScheme.secondary,
                 ),
             ),
         ),
@@ -226,7 +228,7 @@ private fun DocumentPicker(
                         AvatarBox(
                             icon = MifosIcons.Add,
                             size = 120,
-                            contentColor = MaterialTheme.colorScheme.secondary,
+                            contentColor = KptTheme.colorScheme.secondary,
                         )
                     }
 
@@ -234,7 +236,7 @@ private fun DocumentPicker(
                         AvatarBox(
                             icon = MifosIcons.Add,
                             size = 120,
-                            contentColor = MaterialTheme.colorScheme.secondary,
+                            contentColor = KptTheme.colorScheme.secondary,
                         )
                     }
 

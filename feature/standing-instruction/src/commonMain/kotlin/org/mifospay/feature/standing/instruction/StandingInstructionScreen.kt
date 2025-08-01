@@ -28,7 +28,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.FabPosition
@@ -37,7 +36,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.ListItemDefaults
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
@@ -66,6 +64,7 @@ import org.mifospay.core.designsystem.component.MifosLoadingDialog
 import org.mifospay.core.designsystem.component.MifosLoadingWheel
 import org.mifospay.core.designsystem.component.MifosScaffold
 import org.mifospay.core.designsystem.icon.MifosIcons
+import org.mifospay.core.designsystem.theme.toRoundedCornerShape
 import org.mifospay.core.model.standinginstruction.StandingInstruction
 import org.mifospay.core.ui.EmptyContentScreen
 import org.mifospay.core.ui.RevealDirection
@@ -74,6 +73,7 @@ import org.mifospay.core.ui.rememberRevealState
 import org.mifospay.core.ui.utils.EventsEffect
 import org.mifospay.feature.standing.instruction.components.FrequencyChip
 import org.mifospay.feature.standing.instruction.createOrUpdate.SIAddEditType
+import template.core.base.designsystem.theme.KptTheme
 
 @Composable
 fun StandingInstructionsScreen(
@@ -188,7 +188,7 @@ internal fun StandingInstructionScreen(
                         title = stringResource(Res.string.feature_standing_instruction_error_oops),
                         subTitle = stringResource(Res.string.feature_standing_instruction_error_fetching_si_list),
                         modifier = Modifier,
-                        iconTint = MaterialTheme.colorScheme.error,
+                        iconTint = KptTheme.colorScheme.error,
                     )
                 }
 
@@ -226,8 +226,8 @@ private fun StandingInstructionScreenContent(
     LazyColumn(
         modifier = modifier.fillMaxSize(),
         state = lazyListState,
-        contentPadding = PaddingValues(16.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp),
+        contentPadding = PaddingValues(KptTheme.spacing.md),
+        verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.md),
     ) {
         items(
             items = state.list,
@@ -264,16 +264,16 @@ private fun SIItem(
     RevealSwipe(
         modifier = modifier,
         state = state,
-        shape = RoundedCornerShape(8.dp),
-        backgroundCardStartColor = MaterialTheme.colorScheme.tertiary,
-        backgroundCardEndColor = MaterialTheme.colorScheme.secondary,
+        shape = KptTheme.shapes.small,
+        backgroundCardStartColor = KptTheme.colorScheme.tertiary,
+        backgroundCardEndColor = KptTheme.colorScheme.secondary,
         backgroundStartActionLabel = null,
         backgroundEndActionLabel = "Edit",
         card = { shape, content ->
             Card(
                 modifier = Modifier.matchParentSize(),
                 colors = CardDefaults.cardColors(
-                    contentColor = MaterialTheme.colorScheme.onSecondary,
+                    contentColor = KptTheme.colorScheme.onSecondary,
                     containerColor = Color.Transparent,
                 ),
                 shape = shape,
@@ -285,7 +285,7 @@ private fun SIItem(
                 modifier = Modifier
                     .fillMaxWidth()
                     .align(Alignment.Center),
-                horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally),
+                horizontalArrangement = Arrangement.spacedBy(KptTheme.spacing.sm, Alignment.CenterHorizontally),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 IconButton(
@@ -310,30 +310,30 @@ private fun SIItem(
             }
         },
         onContentClick = { item.id?.let { onClick(it) } },
-    ) {
+    ) { shape ->
         val priorityColor = when (item.priority?.id) {
-            1L -> MaterialTheme.colorScheme.error.copy(
+            1L -> KptTheme.colorScheme.error.copy(
                 red = 1f,
                 green = 0.27f,
                 blue = 0.27f,
             )
-            2L -> MaterialTheme.colorScheme.primaryContainer.copy(
+            2L -> KptTheme.colorScheme.primaryContainer.copy(
                 red = 1f,
                 green = 0.53f,
                 blue = 0f,
             )
-            3L -> MaterialTheme.colorScheme.primaryContainer.copy(
+            3L -> KptTheme.colorScheme.primaryContainer.copy(
                 red = 1f,
                 green = 0.73f,
                 blue = 0.2f,
             )
 
-            4L -> MaterialTheme.colorScheme.secondaryContainer.copy(
+            4L -> KptTheme.colorScheme.secondaryContainer.copy(
                 red = 0.6f,
                 green = 0.8f,
                 blue = 0f,
             )
-            else -> MaterialTheme.colorScheme.outlineVariant.copy(
+            else -> KptTheme.colorScheme.outlineVariant.copy(
                 red = 0.5f,
                 green = 0.5f,
                 blue = 0.5f,
@@ -344,7 +344,7 @@ private fun SIItem(
             modifier = modifier
                 .fillMaxWidth()
                 .height(IntrinsicSize.Min)
-                .clip(it),
+                .clip(shape),
         ) {
             Box(
                 modifier = Modifier
@@ -352,17 +352,20 @@ private fun SIItem(
                     .fillMaxHeight()
                     .background(
                         color = priorityColor,
-                        shape = RoundedCornerShape(topStart = 8.dp, bottomStart = 8.dp),
+                        shape = KptTheme.shapes.toRoundedCornerShape(
+                            topEnd = KptTheme.spacing.sm,
+                            bottomEnd = KptTheme.spacing.sm,
+                        ),
                     )
                     .align(Alignment.CenterStart),
             )
 
             OutlinedCard(
                 modifier = modifier.fillMaxWidth(),
-                shape = it,
+                shape = shape,
                 colors = CardDefaults.outlinedCardColors(
                     containerColor = Color.Transparent,
-                    contentColor = MaterialTheme.colorScheme.onSurface,
+                    contentColor = KptTheme.colorScheme.onSurface,
                 ),
             ) {
                 ListItem(
@@ -382,7 +385,7 @@ private fun SIItem(
                     },
                     trailingContent = {
                         Row(
-                            horizontalArrangement = Arrangement.spacedBy(8.dp),
+                            horizontalArrangement = Arrangement.spacedBy(KptTheme.spacing.sm),
                             verticalAlignment = Alignment.CenterVertically,
                         ) {
                             FrequencyChip(
@@ -398,7 +401,7 @@ private fun SIItem(
 
                             Text(
                                 text = amount,
-                                style = MaterialTheme.typography.titleMedium,
+                                style = KptTheme.typography.titleMedium,
                                 fontWeight = FontWeight.SemiBold,
                             )
                         }
