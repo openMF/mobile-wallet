@@ -22,7 +22,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DatePicker
@@ -33,7 +32,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.ListItemDefaults
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.SelectableDates
 import androidx.compose.material3.SnackbarHost
@@ -52,7 +50,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.launch
 import mobile_wallet.feature.standing_instruction.generated.resources.Res
@@ -78,6 +75,7 @@ import org.mifospay.core.ui.EmptyContentScreen
 import org.mifospay.core.ui.ExposedDropdownBox
 import org.mifospay.core.ui.MifosDivider
 import org.mifospay.core.ui.utils.EventsEffect
+import template.core.base.designsystem.theme.KptTheme
 
 @Composable
 internal fun AddEditSIScreen(
@@ -179,7 +177,7 @@ internal fun AddEditSIScreen(
                         title = stringResource(Res.string.feature_standing_instruction_error_oops),
                         subTitle = state.viewState.message,
                         modifier = Modifier,
-                        iconTint = MaterialTheme.colorScheme.error,
+                        iconTint = KptTheme.colorScheme.error,
                     )
                 }
 
@@ -211,8 +209,8 @@ private fun AddEditSIScreenContent(
 ) {
     LazyColumn(
         modifier = modifier.fillMaxSize(),
-        contentPadding = PaddingValues(12.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp),
+        contentPadding = PaddingValues(KptTheme.spacing.md),
+        verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.md),
         state = lazyListState,
     ) {
         if (isAddMode) {
@@ -221,7 +219,7 @@ private fun AddEditSIScreenContent(
                     colors = CardDefaults.outlinedCardColors(
                         containerColor = Color.Transparent,
                     ),
-                    shape = RoundedCornerShape(4.dp),
+                    shape = KptTheme.shapes.extraSmall,
                 ) {
                     ListItem(
                         headlineContent = {
@@ -874,7 +872,7 @@ inline fun RowBlock(
     Row(
         modifier = Modifier
             .fillMaxWidth(),
-        horizontalArrangement = Arrangement.spacedBy(12.dp),
+        horizontalArrangement = Arrangement.spacedBy(KptTheme.spacing.md),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         content()

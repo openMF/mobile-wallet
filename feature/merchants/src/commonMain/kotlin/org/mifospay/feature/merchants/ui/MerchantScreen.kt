@@ -19,7 +19,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SearchBar
 import androidx.compose.material3.SearchBarDefaults
 import androidx.compose.material3.Text
@@ -31,7 +30,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.rememberNavController
 import mobile_wallet.feature.merchants.generated.resources.Res
@@ -62,6 +60,7 @@ import org.mifospay.core.ui.EmptyContentScreen
 import org.mifospay.feature.merchants.MerchantUiState
 import org.mifospay.feature.merchants.MerchantViewModel
 import org.mifospay.feature.merchants.navigation.navigateToMerchantTransferScreen
+import template.core.base.designsystem.theme.KptTheme
 
 @Composable
 fun MerchantScreen(
@@ -121,14 +120,14 @@ internal fun MerchantScreen(
                         title = stringResource(Res.string.feature_merchants_error_oops),
                         subTitle = stringResource(Res.string.feature_merchants_unexpected_error_subtitle),
                         modifier = Modifier,
-                        iconTint = MaterialTheme.colorScheme.error,
+                        iconTint = KptTheme.colorScheme.error,
                     )
                 }
 
                 MerchantUiState.Loading -> {
                     MfLoadingWheel(
                         contentDesc = stringResource(Res.string.feature_merchants_loading),
-                        backgroundColor = MaterialTheme.colorScheme.surface,
+                        backgroundColor = KptTheme.colorScheme.surface,
                     )
                 }
 
@@ -177,7 +176,7 @@ private fun MerchantList(
     LazyColumn(
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp),
+            .padding(horizontal = KptTheme.spacing.md),
     ) {
         items(merchantList.size) { index ->
             MerchantsItem(
@@ -186,7 +185,7 @@ private fun MerchantList(
                     navController.navigateToMerchantTransferScreen(
                         merchantVPA = merchantList[index].accountNo,
                         merchantName = merchantList[index].clientName,
-                        merchantAccountNumber = merchantList[index].accountNo.toString(),
+                        merchantAccountNumber = merchantList[index].accountNo,
                     )
 //                    val intent = Intent(context, MerchantTransferActivity::class.java)
 //                    intent.putExtra(Constants.MERCHANT_NAME, merchantList[index].clientName)
@@ -246,7 +245,7 @@ private fun SearchBarScreen(
         onExpandedChange = {},
         modifier = modifier
             .fillMaxWidth()
-            .padding(vertical = 16.dp, horizontal = 16.dp),
+            .padding(vertical = KptTheme.spacing.md, horizontal = KptTheme.spacing.md),
         shape = SearchBarDefaults.inputFieldShape,
         colors = SearchBarDefaults.colors(),
         tonalElevation = SearchBarDefaults.TonalElevation,

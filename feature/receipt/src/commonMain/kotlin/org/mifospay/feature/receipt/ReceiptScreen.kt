@@ -13,7 +13,6 @@ import androidx.annotation.VisibleForTesting
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -26,6 +25,7 @@ import org.koin.compose.viewmodel.koinViewModel
 import org.mifospay.core.designsystem.component.MifosLoadingWheel
 import org.mifospay.core.designsystem.component.MifosScaffold
 import org.mifospay.core.ui.EmptyContentScreen
+import template.core.base.designsystem.theme.KptTheme
 
 @Composable
 internal fun ReceiptScreenRoute(
@@ -69,7 +69,7 @@ internal fun ReceiptScreen(
                     EmptyContentScreen(
                         title = "Oops!",
                         subTitle = uiState.message,
-                        iconTint = MaterialTheme.colorScheme.error,
+                        iconTint = KptTheme.colorScheme.error,
                     )
                 }
 

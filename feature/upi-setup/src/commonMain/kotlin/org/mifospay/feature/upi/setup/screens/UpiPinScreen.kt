@@ -22,7 +22,6 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -49,6 +48,7 @@ import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.mifospay.core.designsystem.theme.MifosTheme
 import org.mifospay.core.ui.VerifyStepHeader
+import template.core.base.designsystem.theme.KptTheme
 
 @Composable
 internal fun UpiPinScreen(
@@ -61,13 +61,13 @@ internal fun UpiPinScreen(
         modifier = modifier
             .fillMaxWidth()
             .padding(
-                top = 15.dp,
-                bottom = 15.dp,
-                start = 10.dp,
-                end = 10.dp,
+                top = KptTheme.spacing.md,
+                bottom = KptTheme.spacing.md,
+                start = KptTheme.spacing.sm,
+                end = KptTheme.spacing.sm,
             ),
         elevation = CardDefaults.cardElevation(
-            defaultElevation = 1.dp,
+            defaultElevation = KptTheme.elevation.level1,
         ),
     ) {
         Column(
@@ -102,9 +102,9 @@ private fun UpiPinScreenContent(
         } else {
             stringResource(Res.string.feature_upi_setup_reenter_upi)
         },
-        color = MaterialTheme.colorScheme.onSurface,
+        color = KptTheme.colorScheme.onSurface,
         fontSize = 18.sp,
-        style = MaterialTheme.typography.headlineMedium,
+        style = KptTheme.typography.headlineMedium,
     )
 
     if (steps1.intValue == 0) {
@@ -143,7 +143,7 @@ private fun UpiPinScreenContent(
             },
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp),
+                .padding(KptTheme.spacing.md),
         )
     } else {
         BasicTextField(
@@ -187,7 +187,7 @@ private fun UpiPinScreenContent(
             },
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp),
+                .padding(KptTheme.spacing.md),
         )
     }
 }
@@ -215,11 +215,11 @@ private fun UpiPinCharView(
             .width(40.dp)
             .wrapContentHeight(align = Alignment.CenterVertically),
         text = char,
-        style = MaterialTheme.typography.headlineSmall,
+        style = KptTheme.typography.headlineSmall,
         color = if (isFocused) {
-            MaterialTheme.colorScheme.outline
+            KptTheme.colorScheme.outline
         } else {
-            MaterialTheme.colorScheme.outlineVariant
+            KptTheme.colorScheme.outlineVariant
         },
         textAlign = TextAlign.Center,
     )

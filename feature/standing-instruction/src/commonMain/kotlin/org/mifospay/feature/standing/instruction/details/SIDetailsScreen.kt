@@ -23,7 +23,6 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -32,7 +31,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import mobile_wallet.feature.standing_instruction.generated.resources.Res
 import mobile_wallet.feature.standing_instruction.generated.resources.feature_standing_instruction_error_oops
@@ -49,6 +47,7 @@ import org.mifospay.core.ui.utils.EventsEffect
 import org.mifospay.feature.standing.instruction.components.FrequencyChip
 import org.mifospay.feature.standing.instruction.components.InstructionTypeChip
 import org.mifospay.feature.standing.instruction.components.PriorityChip
+import template.core.base.designsystem.theme.KptTheme
 
 @Composable
 internal fun SIDetailsScreen(
@@ -101,7 +100,7 @@ internal fun SIDetailsScreen(
                     EmptyContentScreen(
                         title = stringResource(Res.string.feature_standing_instruction_error_oops),
                         subTitle = state.viewState.message,
-                        iconTint = MaterialTheme.colorScheme.error,
+                        iconTint = KptTheme.colorScheme.error,
                     )
                 }
 
@@ -125,8 +124,8 @@ private fun SIDetailsContent(
     LazyColumn(
         modifier = modifier.fillMaxSize(),
         state = lazyListState,
-        contentPadding = PaddingValues(12.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp),
+        contentPadding = PaddingValues(KptTheme.spacing.md),
+        verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.md),
         horizontalAlignment = Alignment.Start,
     ) {
         item {
@@ -145,19 +144,19 @@ private fun SIDetailsCard(
 ) {
     Column(
         modifier = modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(8.dp),
+        verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.sm),
     ) {
         ElevatedCard(
             modifier = Modifier
                 .fillMaxWidth(),
             colors = CardDefaults.elevatedCardColors(
-                containerColor = MaterialTheme.colorScheme.surface,
+                containerColor = KptTheme.colorScheme.surface,
             ),
         ) {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(8.dp),
+                    .padding(KptTheme.spacing.sm),
             ) {
                 RowBlock {
                     Text(
@@ -295,14 +294,14 @@ private fun SIDetailsCard(
             modifier = Modifier
                 .fillMaxWidth(),
             colors = CardDefaults.elevatedCardColors(
-                containerColor = MaterialTheme.colorScheme.surface,
-                contentColor = MaterialTheme.colorScheme.onSurface,
+                containerColor = KptTheme.colorScheme.surface,
+                contentColor = KptTheme.colorScheme.onSurface,
             ),
         ) {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(8.dp),
+                    .padding(KptTheme.spacing.sm),
             ) {
                 RowBlock {
                     Text(
@@ -354,14 +353,14 @@ private fun SIDetailsCard(
             modifier = Modifier
                 .fillMaxWidth(),
             colors = CardDefaults.elevatedCardColors(
-                containerColor = MaterialTheme.colorScheme.surface,
-                contentColor = MaterialTheme.colorScheme.onSurface,
+                containerColor = KptTheme.colorScheme.surface,
+                contentColor = KptTheme.colorScheme.onSurface,
             ),
         ) {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(8.dp),
+                    .padding(KptTheme.spacing.sm),
             ) {
                 RowBlock {
                     Text(
@@ -418,12 +417,12 @@ private inline fun RowBlock(
 ) {
     Column(
         modifier = Modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(4.dp),
+        verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.xs),
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = 8.dp),
+                .padding(horizontal = KptTheme.spacing.sm),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
         ) {
@@ -439,8 +438,8 @@ private inline fun RowBlock(
 @Composable
 fun colorForMissing(value: String?): Color {
     return if (value == null) {
-        MaterialTheme.colorScheme.error
+        KptTheme.colorScheme.error
     } else {
-        MaterialTheme.colorScheme.onBackground
+        KptTheme.colorScheme.onBackground
     }
 }

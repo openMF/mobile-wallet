@@ -19,7 +19,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.ListItem
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -49,6 +48,7 @@ import org.mifospay.core.ui.AvatarBox
 import org.mifospay.core.ui.DropdownBox
 import org.mifospay.core.ui.DropdownBoxItem
 import org.mifospay.core.ui.MifosDivider
+import template.core.base.designsystem.theme.KptTheme
 
 @Composable
 internal fun SetAmountDialog(
@@ -67,12 +67,12 @@ internal fun SetAmountDialog(
                 shape = RoundedCornerShape(16.dp),
             ) {
                 Column(
-                    modifier = Modifier.padding(16.dp),
-                    verticalArrangement = Arrangement.spacedBy(16.dp),
+                    modifier = Modifier.padding(KptTheme.spacing.md),
+                    verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.md),
                 ) {
                     Text(
                         text = stringResource(Res.string.feature_request_money_set_amount),
-                        style = MaterialTheme.typography.titleMedium,
+                        style = KptTheme.typography.titleMedium,
                     )
 
                     val amountValidator by remember(amount) {
@@ -88,7 +88,7 @@ internal fun SetAmountDialog(
                                     "Please enter a valid amount"
                                 }
 
-                                amount.trim().toDouble().compareTo(0.0) <= 0 -> {
+                                amount.trim().toDouble() <= 0.0 -> {
                                     "Please enter a valid amount"
                                 }
 
@@ -196,7 +196,6 @@ private fun CurrencyDropdownItem(
         headlineContent = {
             Text(
                 text = currency.countryName,
-//                color = MaterialTheme.colorScheme.onSurface,
             )
         },
         leadingContent = {
@@ -207,7 +206,7 @@ private fun CurrencyDropdownItem(
         trailingContent = {
             Text(
                 text = currency.currencyCode,
-                color = MaterialTheme.colorScheme.onSurface,
+                color = KptTheme.colorScheme.onSurface,
             )
         },
         modifier = modifier

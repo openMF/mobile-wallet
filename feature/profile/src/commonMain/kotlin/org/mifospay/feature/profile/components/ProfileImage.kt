@@ -17,7 +17,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -34,6 +33,7 @@ import mobile_wallet.feature.profile.generated.resources.placeholder
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.mifospay.core.designsystem.icon.MifosIcons
+import template.core.base.designsystem.theme.KptTheme
 import kotlin.io.encoding.Base64
 import kotlin.io.encoding.ExperimentalEncodingApi
 
@@ -70,7 +70,7 @@ fun ProfileImage(
             modifier = Modifier
                 .size(150.dp)
                 .clip(CircleShape)
-                .border(4.dp, MaterialTheme.colorScheme.primary, CircleShape),
+                .border(4.dp, KptTheme.colorScheme.primary, CircleShape),
         )
     }
 }
@@ -99,7 +99,7 @@ fun EditableProfileImage(
             modifier = Modifier
                 .size(150.dp)
                 .clip(CircleShape)
-                .border(4.dp, MaterialTheme.colorScheme.primary, CircleShape),
+                .border(4.dp, KptTheme.colorScheme.primary, CircleShape),
         )
 
         IconButton(
@@ -109,7 +109,7 @@ fun EditableProfileImage(
                 .size(36.dp)
                 .clip(CircleShape)
                 .align(Alignment.BottomCenter),
-            colors = IconButtonDefaults.iconButtonColors(MaterialTheme.colorScheme.surface),
+            colors = IconButtonDefaults.iconButtonColors(KptTheme.colorScheme.surface),
         ) {
             Icon(
                 imageVector = MifosIcons.Edit2,

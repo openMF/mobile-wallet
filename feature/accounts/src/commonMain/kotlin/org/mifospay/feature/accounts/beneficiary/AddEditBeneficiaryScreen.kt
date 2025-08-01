@@ -65,6 +65,7 @@ import org.mifospay.core.model.utils.Locale
 import org.mifospay.core.model.utils.filterLocales
 import org.mifospay.core.ui.MifosDivider
 import org.mifospay.core.ui.utils.EventsEffect
+import template.core.base.designsystem.theme.KptTheme
 
 @Composable
 internal fun AddEditBeneficiaryScreen(
@@ -125,8 +126,8 @@ internal fun AddEditBeneficiaryScreenContent(
             modifier = modifier
                 .fillMaxSize()
                 .padding(paddingValues),
-            contentPadding = PaddingValues(16.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp),
+            contentPadding = PaddingValues(KptTheme.spacing.md),
+            verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.md),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             item {

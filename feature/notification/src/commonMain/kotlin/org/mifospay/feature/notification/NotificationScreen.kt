@@ -18,11 +18,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.ListItemDefaults
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -30,7 +28,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import mobile_wallet.feature.notification.generated.resources.Res
 import mobile_wallet.feature.notification.generated.resources.feature_notification_error_oops
@@ -49,6 +46,7 @@ import org.mifospay.core.designsystem.component.MifosScaffold
 import org.mifospay.core.designsystem.theme.MifosTheme
 import org.mifospay.core.model.notification.Notification
 import org.mifospay.core.ui.EmptyContentScreen
+import template.core.base.designsystem.theme.KptTheme
 
 @Composable
 internal fun NotificationScreen(
@@ -89,7 +87,7 @@ internal fun NotificationScreen(
                         title = stringResource(Res.string.feature_notification_error_oops),
                         subTitle = stringResource(Res.string.feature_notification_unexpected_error_subtitle),
                         modifier = Modifier,
-                        iconTint = MaterialTheme.colorScheme.error,
+                        iconTint = KptTheme.colorScheme.error,
                     )
                 }
 
@@ -124,8 +122,8 @@ private fun NotificationScreenContent(
 ) {
     LazyColumn(
         modifier = modifier.fillMaxSize(),
-        contentPadding = PaddingValues(16.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp),
+        contentPadding = PaddingValues(KptTheme.spacing.md),
+        verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.md),
     ) {
         items(
             items = state.notificationList,
@@ -148,7 +146,7 @@ private fun NotificationListItem(
     OutlinedCard(
         modifier = modifier
             .fillMaxWidth(),
-        shape = RoundedCornerShape(12.dp),
+        shape = KptTheme.shapes.medium,
         colors = CardDefaults.outlinedCardColors(
             containerColor = Color.Transparent,
         ),

@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -35,6 +34,7 @@ import org.mifospay.core.designsystem.icon.MifosIcons
 import org.mifospay.core.ui.EmptyContentScreen
 import org.mifospay.core.ui.utils.EventsEffect
 import org.mifospay.feature.history.components.TransactionDetail
+import template.core.base.designsystem.theme.KptTheme
 
 @Composable
 internal fun TransactionDetailScreen(
@@ -103,7 +103,7 @@ internal fun TransactionDetailScreenContent(
                         title = stringResource(Res.string.feature_history_error_oops),
                         subTitle = stringResource(Res.string.feature_history_error),
                         modifier = Modifier.align(Alignment.Center),
-                        iconTint = MaterialTheme.colorScheme.error,
+                        iconTint = KptTheme.colorScheme.error,
                     )
                 }
 

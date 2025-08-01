@@ -10,18 +10,15 @@
 package org.mifospay.feature.invoices
 
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.ListItemDefaults
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
 import mobile_wallet.feature.invoices.generated.resources.Res
 import mobile_wallet.feature.invoices.generated.resources.ic_check
 import mobile_wallet.feature.invoices.generated.resources.ic_remove
@@ -29,6 +26,7 @@ import org.jetbrains.compose.resources.vectorResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.mifospay.core.model.datatables.invoice.Invoice
 import org.mifospay.core.ui.AvatarBox
+import template.core.base.designsystem.theme.KptTheme
 
 @Composable
 internal fun InvoiceItem(
@@ -42,7 +40,7 @@ internal fun InvoiceItem(
         onClick = {
             onClick(invoice.invoiceId)
         },
-        shape = RoundedCornerShape(8.dp),
+        shape = KptTheme.shapes.small,
         colors = CardDefaults.cardColors(
             containerColor = Color.Transparent,
         ),
@@ -64,9 +62,9 @@ internal fun InvoiceItem(
                         },
                     ),
                     contentColor = if (invoice.status == 1L) {
-                        MaterialTheme.colorScheme.primary
+                        KptTheme.colorScheme.primary
                     } else {
-                        MaterialTheme.colorScheme.error
+                        KptTheme.colorScheme.error
                     },
                 )
             },
@@ -74,7 +72,7 @@ internal fun InvoiceItem(
                 Text(
                     text = invoice.amount.toString(),
                     fontWeight = FontWeight.SemiBold,
-                    style = MaterialTheme.typography.titleSmall,
+                    style = KptTheme.typography.titleSmall,
                 )
             },
             colors = ListItemDefaults.colors(

@@ -10,14 +10,12 @@
 package org.mifospay.feature.standing.instruction.components
 
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import org.mifospay.core.model.standinginstruction.StandingInstruction
+import template.core.base.designsystem.theme.KptTheme
 
 @Composable
 fun PriorityChip(
@@ -25,23 +23,23 @@ fun PriorityChip(
     modifier: Modifier = Modifier,
 ) {
     val (backgroundColor, contentColor) = when (priority?.id) {
-        1L -> MaterialTheme.colorScheme.error to MaterialTheme.colorScheme.surfaceContainerLowest
-        2L -> MaterialTheme.colorScheme.errorContainer to MaterialTheme.colorScheme.surfaceContainerLowest
-        3L -> MaterialTheme.colorScheme.secondary to MaterialTheme.colorScheme.surfaceContainerLowest
-        4L -> MaterialTheme.colorScheme.tertiary to MaterialTheme.colorScheme.surfaceContainerLowest
-        else -> MaterialTheme.colorScheme.outline to MaterialTheme.colorScheme.surfaceContainerLowest
+        1L -> KptTheme.colorScheme.error to KptTheme.colorScheme.surfaceContainerLowest
+        2L -> KptTheme.colorScheme.errorContainer to KptTheme.colorScheme.surfaceContainerLowest
+        3L -> KptTheme.colorScheme.secondary to KptTheme.colorScheme.surfaceContainerLowest
+        4L -> KptTheme.colorScheme.tertiary to KptTheme.colorScheme.surfaceContainerLowest
+        else -> KptTheme.colorScheme.outline to KptTheme.colorScheme.surfaceContainerLowest
     }
 
     Surface(
         modifier = modifier,
-        shape = RoundedCornerShape(4.dp),
+        shape = KptTheme.shapes.extraSmall,
         color = backgroundColor,
         contentColor = contentColor,
     ) {
         Text(
             text = priority?.value ?: "",
-            modifier = Modifier.padding(4.dp),
-            style = MaterialTheme.typography.bodySmall,
+            modifier = Modifier.padding(KptTheme.spacing.xs),
+            style = KptTheme.typography.bodySmall,
             maxLines = 1,
         )
     }

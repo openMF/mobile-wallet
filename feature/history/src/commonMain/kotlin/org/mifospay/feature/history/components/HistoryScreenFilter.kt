@@ -17,7 +17,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -25,7 +24,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
 import mobile_wallet.feature.history.generated.resources.Res
 import mobile_wallet.feature.history.generated.resources.feature_history_all
 import mobile_wallet.feature.history.generated.resources.feature_history_credits
@@ -33,6 +31,7 @@ import mobile_wallet.feature.history.generated.resources.feature_history_debits
 import org.jetbrains.compose.resources.stringResource
 import org.mifospay.core.model.savingsaccount.TransactionType
 import org.mifospay.feature.history.HistoryAction
+import template.core.base.designsystem.theme.KptTheme
 
 @Composable
 internal fun HistoryScreenFilter(
@@ -44,9 +43,9 @@ internal fun HistoryScreenFilter(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 12.dp),
+                .padding(horizontal = KptTheme.spacing.md),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(12.dp),
+            horizontalArrangement = Arrangement.spacedBy(KptTheme.spacing.md),
         ) {
             TransactionType.entries.forEach { transactionType ->
                 FilterItem(
@@ -65,8 +64,8 @@ private fun FilterItem(
     transactionType: TransactionType,
     isSelected: Boolean,
     onAction: (HistoryAction.SetFilter) -> Unit,
-    selectedColor: Color = MaterialTheme.colorScheme.primary,
-    unSelectedColor: Color = MaterialTheme.colorScheme.surface,
+    selectedColor: Color = KptTheme.colorScheme.primary,
+    unSelectedColor: Color = KptTheme.colorScheme.surface,
     modifier: Modifier = Modifier,
 ) {
     val containerColor = if (isSelected) selectedColor else unSelectedColor
@@ -87,7 +86,7 @@ private fun FilterItem(
                     minWidth = ButtonDefaults.MinWidth,
                     minHeight = ButtonDefaults.MinHeight,
                 )
-                .padding(horizontal = 24.dp, vertical = 8.dp),
+                .padding(horizontal = KptTheme.spacing.lg, vertical = KptTheme.spacing.sm),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center,
         ) {
@@ -97,7 +96,7 @@ private fun FilterItem(
                     TransactionType.DEBIT -> stringResource(Res.string.feature_history_debits)
                     TransactionType.CREDIT -> stringResource(Res.string.feature_history_credits)
                 },
-                style = MaterialTheme.typography.bodyMedium,
+                style = KptTheme.typography.bodyMedium,
                 textAlign = TextAlign.Center,
             )
         }

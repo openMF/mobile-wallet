@@ -50,6 +50,7 @@ import org.mifospay.core.designsystem.component.MifosScaffold
 import org.mifospay.core.designsystem.component.MifosTextField
 import org.mifospay.core.ui.utils.EventsEffect
 import org.mifospay.feature.profile.components.EditableProfileImage
+import template.core.base.designsystem.theme.KptTheme
 
 @Composable
 internal fun EditProfileScreen(
@@ -110,8 +111,8 @@ private fun EditProfileScreenContent(
             modifier = modifier
                 .padding(paddingValues)
                 .fillMaxSize(),
-            contentPadding = PaddingValues(12.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp),
+            contentPadding = PaddingValues(KptTheme.spacing.md),
+            verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.md),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             item {

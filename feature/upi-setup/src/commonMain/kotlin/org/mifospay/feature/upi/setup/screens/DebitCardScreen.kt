@@ -21,7 +21,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
@@ -30,6 +29,7 @@ import org.mifospay.core.designsystem.theme.MifosTheme
 import org.mifospay.core.ui.VerifyStepHeader
 import org.mifospay.feature.upi.setup.viewmodel.DebitCardUiState
 import org.mifospay.feature.upi.setup.viewmodel.DebitCardViewModel
+import template.core.base.designsystem.theme.KptTheme
 
 @Composable
 internal fun DebitCardScreen(
@@ -67,17 +67,17 @@ internal fun DebitCardScreenWithHeaderAndContent(
     Card(
         modifier = modifier
             .fillMaxWidth()
-            .padding(20.dp),
+            .padding(KptTheme.spacing.lg),
         elevation = CardDefaults.cardElevation(
-            defaultElevation = 1.dp,
+            defaultElevation = KptTheme.elevation.level1,
         ),
     ) {
         Column(
             modifier = Modifier.padding(
-                top = 15.dp,
-                bottom = 15.dp,
-                start = 10.dp,
-                end = 10.dp,
+                top = KptTheme.spacing.md,
+                bottom = KptTheme.spacing.md,
+                start = KptTheme.spacing.sm,
+                end = KptTheme.spacing.sm,
             ),
         ) {
             VerifyStepHeader("Debit Card Details ", verificationStatus)
@@ -85,7 +85,7 @@ internal fun DebitCardScreenWithHeaderAndContent(
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(start = 12.dp),
+                        .padding(start = KptTheme.spacing.md),
                 ) {
                     // handle debit card ui state
                     Box(

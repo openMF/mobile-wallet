@@ -24,12 +24,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -38,6 +36,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -50,6 +49,7 @@ import org.koin.compose.viewmodel.koinViewModel
 import org.mifospay.core.designsystem.component.MifosTopBar
 import org.mifospay.core.designsystem.icon.MifosIcons
 import org.mifospay.core.ui.utils.EventsEffect
+import template.core.base.designsystem.theme.KptTheme
 
 @Composable
 internal fun FaqScreenRoute(
@@ -111,7 +111,7 @@ private fun FaqScreen(
                     HorizontalDivider(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(horizontal = 20.dp),
+                            .padding(horizontal = KptTheme.spacing.lg),
                     )
                 }
             }
@@ -134,12 +134,12 @@ private fun FaqItemScreen(
         colors = CardDefaults.cardColors(
             containerColor = Color.Transparent,
         ),
-        shape = RoundedCornerShape(0.dp),
+        shape = RectangleShape,
     ) {
         Column(
             modifier = Modifier.padding(
-                horizontal = 20.dp,
-                vertical = 25.dp,
+                horizontal = KptTheme.spacing.lg,
+                vertical = KptTheme.spacing.lg,
             ),
         ) {
             Row {
@@ -173,10 +173,10 @@ private fun FaqItemScreen(
                 ) {
                     Text(
                         text = stringResource(faq.answer),
-                        style = MaterialTheme.typography.bodySmall,
+                        style = KptTheme.typography.bodySmall,
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(top = 4.dp)
+                            .padding(top = KptTheme.spacing.xs)
                             .weight(1f),
                     )
                 }

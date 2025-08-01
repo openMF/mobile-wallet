@@ -22,8 +22,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -45,6 +43,7 @@ import org.mifospay.core.designsystem.component.MifosLoadingWheel
 import org.mifospay.core.designsystem.component.MifosOutlinedButton
 import org.mifospay.core.designsystem.component.MifosScaffold
 import org.mifospay.core.ui.utils.EventsEffect
+import template.core.base.designsystem.theme.KptTheme
 
 @Composable
 internal fun ShowQrScreen(
@@ -154,9 +153,9 @@ private fun ShowQrScreenContent(
         modifier = modifier
             .fillMaxSize(),
         state = lazyListState,
-        contentPadding = PaddingValues(16.dp),
+        contentPadding = PaddingValues(KptTheme.spacing.md),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(16.dp),
+        verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.md),
     ) {
         item {
             QrDataContent(
@@ -197,7 +196,7 @@ private fun QrDataContent(
     Box(
         modifier = modifier
             .size(350.dp, 381.dp)
-            .background(Color.White, shape = RoundedCornerShape(15.dp)),
+            .background(Color.White, shape = KptTheme.shapes.large),
         contentAlignment = Alignment.Center,
     ) {
         Column(
@@ -205,19 +204,22 @@ private fun QrDataContent(
                 .fillMaxSize()
                 .align(Alignment.Center),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(20.dp, Alignment.CenterVertically),
+            verticalArrangement = Arrangement.spacedBy(
+                KptTheme.spacing.lg,
+                Alignment.CenterVertically,
+            ),
         ) {
             Text(
                 text = "Mifos Pay",
-                style = MaterialTheme.typography.titleLarge,
-                color = MaterialTheme.colorScheme.primary,
+                style = KptTheme.typography.titleLarge,
+                color = KptTheme.colorScheme.primary,
             )
 
             Image(
                 painter = painter,
                 contentDescription = null,
                 modifier = Modifier
-                    .padding(bottom = 45.dp)
+                    .padding(bottom = KptTheme.spacing.xxl)
                     .size(260.dp),
             )
         }

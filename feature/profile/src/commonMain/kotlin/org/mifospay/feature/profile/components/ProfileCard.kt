@@ -15,11 +15,9 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -33,6 +31,7 @@ import mobile_wallet.feature.profile.generated.resources.feature_profile_usernam
 import mobile_wallet.feature.profile.generated.resources.feature_profile_vpa
 import org.jetbrains.compose.resources.stringResource
 import org.mifospay.core.model.client.Client
+import template.core.base.designsystem.theme.KptTheme
 
 @Composable
 fun ProfileDetailsCard(
@@ -43,17 +42,17 @@ fun ProfileDetailsCard(
         modifier = modifier
             .fillMaxWidth(),
         elevation = CardDefaults.cardElevation(),
-        shape = RoundedCornerShape(15.dp),
+        shape = KptTheme.shapes.large,
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.primaryContainer,
-            contentColor = MaterialTheme.colorScheme.onPrimary,
+            containerColor = KptTheme.colorScheme.primaryContainer,
+            contentColor = KptTheme.colorScheme.onPrimary,
         ),
     ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(12.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp),
+                .padding(horizontal = KptTheme.spacing.md),
+            verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.md),
         ) {
             ProfileItem(
                 label = stringResource(Res.string.feature_profile_username),
@@ -79,8 +78,8 @@ fun ProfileDetailsCard(
 fun ProfileItem(
     label: String,
     value: String,
-    labelColor: Color = MaterialTheme.colorScheme.primary,
-    textColor: Color = MaterialTheme.colorScheme.onSurface,
+    labelColor: Color = KptTheme.colorScheme.primary,
+    textColor: Color = KptTheme.colorScheme.onSurface,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -89,13 +88,13 @@ fun ProfileItem(
         Text(
             text = label,
             color = labelColor,
-            style = MaterialTheme.typography.labelLarge,
+            style = KptTheme.typography.labelLarge,
         )
         Spacer(modifier = Modifier.height(10.dp))
         Text(
             text = value,
             color = textColor,
-            style = MaterialTheme.typography.labelLarge,
+            style = KptTheme.typography.labelLarge,
             fontWeight = FontWeight(400),
         )
         Spacer(modifier = Modifier.height(4.dp))

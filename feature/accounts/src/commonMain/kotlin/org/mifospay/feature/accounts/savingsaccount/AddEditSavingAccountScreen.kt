@@ -32,7 +32,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MenuAnchorType
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -87,6 +86,7 @@ import org.mifospay.core.model.utils.filterLocales
 import org.mifospay.core.ui.EmptyContentScreen
 import org.mifospay.core.ui.MifosDivider
 import org.mifospay.core.ui.utils.EventsEffect
+import template.core.base.designsystem.theme.KptTheme
 
 @Composable
 internal fun AddEditSavingAccountScreen(
@@ -187,7 +187,7 @@ internal fun AddEditSavingAccountScreenContent(
                         title = stringResource(Res.string.feature_accounts_error_oops),
                         subTitle = state.viewState.message,
                         modifier = Modifier,
-                        iconTint = MaterialTheme.colorScheme.error,
+                        iconTint = KptTheme.colorScheme.error,
                     )
                 }
 
@@ -226,8 +226,8 @@ internal fun AddEditSavingAccountScreenContent(
         modifier = modifier
             .fillMaxSize(),
         state = lazyListState,
-        contentPadding = PaddingValues(16.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp),
+        contentPadding = PaddingValues(KptTheme.spacing.md),
+        verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.md),
     ) {
         item("Client Name") {
             MifosTextField(
@@ -296,7 +296,7 @@ internal fun AddEditSavingAccountScreenContent(
                             text = {
                                 Text(
                                     text = product.name,
-                                    color = MaterialTheme.colorScheme.onSurface,
+                                    color = KptTheme.colorScheme.onSurface,
                                 )
                             },
                         )
@@ -305,7 +305,7 @@ internal fun AddEditSavingAccountScreenContent(
                             HorizontalDivider(
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .padding(start = 44.dp),
+                                    .padding(start = KptTheme.spacing.xl),
                             )
                         }
                     }
@@ -331,7 +331,7 @@ internal fun AddEditSavingAccountScreenContent(
             item("Submitted Date & Date Format") {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    horizontalArrangement = Arrangement.spacedBy(KptTheme.spacing.sm),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     MifosTextField(
@@ -412,14 +412,14 @@ internal fun AddEditSavingAccountScreenContent(
                                 text = {
                                     Text(
                                         text = locale.countryName,
-                                        color = MaterialTheme.colorScheme.onSurface,
+                                        color = KptTheme.colorScheme.onSurface,
                                     )
                                 },
                             )
 
                             if (index != filteredLocalList.size - 1) {
                                 MifosDivider(
-                                    color = MaterialTheme.colorScheme.outlineVariant,
+                                    color = KptTheme.colorScheme.outlineVariant,
                                 )
                             }
                         }
@@ -552,7 +552,7 @@ private fun CustomCheckbox(
             modifier = Modifier
                 .fillMaxHeight(),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            horizontalArrangement = Arrangement.spacedBy(KptTheme.spacing.sm),
         ) {
             Checkbox(
                 checked = checked,

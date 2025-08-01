@@ -34,7 +34,6 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -56,6 +55,7 @@ import org.mifospay.feature.savedcards.createOrUpdate.AECardState
 import org.mifospay.feature.savedcards.utils.CardMaskStyle
 import org.mifospay.feature.savedcards.utils.CardType
 import org.mifospay.feature.savedcards.utils.creditCardColors
+import template.core.base.designsystem.theme.KptTheme
 
 @Composable
 internal fun CreditCard(
@@ -66,7 +66,7 @@ internal fun CreditCard(
 ) {
     Card(
         modifier = modifier.fillMaxWidth().aspectRatio(bankCardAspectRatio),
-        elevation = CardDefaults.cardElevation(defaultElevation = 16.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = KptTheme.elevation.level5),
     ) {
         Box {
             CreditCardBackground(baseColor = baseColor)
@@ -78,7 +78,7 @@ internal fun CreditCard(
             // Positioned to corner top left
             SpaceWrapper(
                 modifier = Modifier.align(Alignment.TopStart),
-                space = 32.dp,
+                space = KptTheme.spacing.xl,
                 top = true,
                 left = true,
             ) {
@@ -90,7 +90,7 @@ internal fun CreditCard(
             // Positioned to corner bottom left
             SpaceWrapper(
                 modifier = Modifier.align(Alignment.BottomStart),
-                space = 32.dp,
+                space = KptTheme.spacing.xl,
                 bottom = true,
                 left = true,
             ) {
@@ -99,7 +99,7 @@ internal fun CreditCard(
                         label = "expires",
                         text = card.expiryDateFormatted,
                     )
-                    Spacer(modifier = Modifier.width(16.dp))
+                    Spacer(modifier = Modifier.width(KptTheme.spacing.md))
                     CreditCardLabelAndText(
                         label = "cvv",
                         text = card.maskedCVV,
@@ -109,7 +109,7 @@ internal fun CreditCard(
             // Positioned to corner bottom right
             SpaceWrapper(
                 modifier = Modifier.align(Alignment.BottomEnd),
-                space = 32.dp,
+                space = KptTheme.spacing.xl,
                 bottom = true,
                 right = true,
             ) {
@@ -122,7 +122,8 @@ internal fun CreditCard(
                     Image(
                         painter = painterResource(card.cardType.cardImage),
                         contentDescription = "Card Image",
-                        modifier = Modifier.size(CardConfig.logoSize).padding(top = 10.dp),
+                        modifier = Modifier.size(CardConfig.logoSize)
+                            .padding(top = KptTheme.spacing.sm),
                         colorFilter = CardConfig.logoTint?.let { ColorFilter.tint(it) },
                     )
                 }
@@ -136,8 +137,8 @@ private fun AnimatedCardNumberInput(
     cardNumber: String,
     cardType: CardType = CardType.detectCardType(cardNumber),
     maskStyle: CardMaskStyle = CardMaskStyle.ALL_EXCEPT_LAST_FOUR,
-    textColor: Color = MaterialTheme.colorScheme.surfaceContainerLowest,
-    dotColor: Color = MaterialTheme.colorScheme.surfaceContainerLowest,
+    textColor: Color = KptTheme.colorScheme.surfaceContainerLowest,
+    dotColor: Color = KptTheme.colorScheme.surfaceContainerLowest,
     modifier: Modifier = Modifier,
 ) {
     val groups = remember(cardNumber, cardType) {
@@ -169,7 +170,7 @@ private fun AnimatedCardNumberInput(
     }
 
     Box(
-        modifier = modifier.fillMaxSize().padding(horizontal = 32.dp),
+        modifier = modifier.fillMaxSize().padding(horizontal = KptTheme.spacing.xl),
         contentAlignment = Alignment.Center,
     ) {
         Row(
@@ -203,8 +204,8 @@ private fun AnimatedCVVInput(
     cvv: String,
     cardType: CardType = CardType.UNKNOWN,
     isVisible: Boolean = false,
-    textColor: Color = MaterialTheme.colorScheme.surfaceContainerLowest,
-    dotColor: Color = MaterialTheme.colorScheme.surfaceContainerLowest,
+    textColor: Color = KptTheme.colorScheme.surfaceContainerLowest,
+    dotColor: Color = KptTheme.colorScheme.surfaceContainerLowest,
     modifier: Modifier = Modifier,
 ) {
     val paddedCVV = remember(cvv, cardType) {
@@ -221,7 +222,7 @@ private fun AnimatedCVVInput(
                 fontWeight = FontWeight.W300,
                 fontSize = 12.sp,
                 letterSpacing = 1.sp,
-                color = MaterialTheme.colorScheme.surfaceContainerLowest,
+                color = KptTheme.colorScheme.surfaceContainerLowest,
             ),
         )
 
@@ -350,8 +351,8 @@ private fun CreditCardBackground(baseColor: Color) {
 private fun CreditCardLabelAndText(
     label: String,
     text: String,
-    labelColor: Color = MaterialTheme.colorScheme.surfaceContainerLowest,
-    textColor: Color = MaterialTheme.colorScheme.surfaceContainerLowest,
+    labelColor: Color = KptTheme.colorScheme.surfaceContainerLowest,
+    textColor: Color = KptTheme.colorScheme.surfaceContainerLowest,
 ) {
     Column(
         modifier = Modifier.wrapContentSize(),
@@ -415,7 +416,7 @@ internal fun CreditCard(
 ) {
     Card(
         modifier = modifier.fillMaxWidth().aspectRatio(bankCardAspectRatio),
-        elevation = CardDefaults.cardElevation(defaultElevation = 16.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = KptTheme.elevation.level5),
         onClick = onClick,
     ) {
         Box {
@@ -428,7 +429,7 @@ internal fun CreditCard(
             // Positioned to corner top left
             SpaceWrapper(
                 modifier = Modifier.align(Alignment.TopStart),
-                space = 32.dp,
+                space = KptTheme.spacing.xl,
                 top = true,
                 left = true,
             ) {
@@ -440,7 +441,7 @@ internal fun CreditCard(
             // Positioned to corner bottom left
             SpaceWrapper(
                 modifier = Modifier.align(Alignment.BottomStart),
-                space = 32.dp,
+                space = KptTheme.spacing.xl,
                 bottom = true,
                 left = true,
             ) {
@@ -459,7 +460,7 @@ internal fun CreditCard(
             // Positioned to corner bottom right
             SpaceWrapper(
                 modifier = Modifier.align(Alignment.BottomEnd),
-                space = 32.dp,
+                space = KptTheme.spacing.xl,
                 bottom = true,
                 right = true,
             ) {
@@ -472,7 +473,7 @@ internal fun CreditCard(
                     Image(
                         painter = painterResource(cardType.cardImage),
                         contentDescription = "Card Image",
-                        modifier = Modifier.size(CardConfig.logoSize).padding(top = 10.dp),
+                        modifier = Modifier.size(CardConfig.logoSize).padding(top = KptTheme.spacing.sm),
                         colorFilter = CardConfig.logoTint?.let { ColorFilter.tint(it) },
                     )
                 }
@@ -486,8 +487,8 @@ private fun DisplayCardNumberInput(
     cardNumber: String,
     cardType: CardType = CardType.detectCardType(cardNumber),
     maskStyle: CardMaskStyle = CardMaskStyle.ALL_EXCEPT_LAST_FOUR,
-    textColor: Color = MaterialTheme.colorScheme.surfaceContainerLowest,
-    dotColor: Color = MaterialTheme.colorScheme.surfaceContainerLowest,
+    textColor: Color = KptTheme.colorScheme.surfaceContainerLowest,
+    dotColor: Color = KptTheme.colorScheme.surfaceContainerLowest,
     modifier: Modifier = Modifier,
 ) {
     val groups = remember(cardNumber, cardType) {
@@ -523,7 +524,7 @@ private fun DisplayCardNumberInput(
     }
 
     Box(
-        modifier = modifier.fillMaxSize().padding(horizontal = 32.dp),
+        modifier = modifier.fillMaxSize().padding(horizontal = KptTheme.spacing.xl),
         contentAlignment = Alignment.Center,
     ) {
         Row(

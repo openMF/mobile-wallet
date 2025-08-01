@@ -24,7 +24,6 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -54,6 +53,7 @@ import org.mifospay.core.ui.utils.EventsEffect
 import org.mifospay.feature.savedcards.components.CreditCard
 import org.mifospay.feature.savedcards.utils.CardMaskStyle
 import org.mifospay.feature.savedcards.utils.CreditCardUtils.maskCreditCardNumber
+import template.core.base.designsystem.theme.KptTheme
 
 @Composable
 internal fun CardDetailScreen(
@@ -101,7 +101,7 @@ internal fun CardDetailScreen(
                 is ViewState.Loading -> {
                     MfLoadingWheel(
                         contentDesc = stringResource(Res.string.feature_savedcards_loading),
-                        backgroundColor = MaterialTheme.colorScheme.surface,
+                        backgroundColor = KptTheme.colorScheme.surface,
                     )
                 }
 
@@ -110,7 +110,7 @@ internal fun CardDetailScreen(
                         title = stringResource(Res.string.feature_savedcards_error_oops),
                         subTitle = stringResource(Res.string.feature_savedcards_subtitle),
                         modifier = Modifier,
-                        iconTint = MaterialTheme.colorScheme.error,
+                        iconTint = KptTheme.colorScheme.error,
                     )
                 }
 
@@ -134,8 +134,8 @@ private fun CardDetailScreenContent(
     LazyColumn(
         modifier = modifier.fillMaxSize(),
         state = lazyListState,
-        contentPadding = PaddingValues(16.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp),
+        contentPadding = PaddingValues(KptTheme.spacing.md),
+        verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.md),
     ) {
         item {
             var isCardNumberVisible by remember { mutableStateOf(false) }
@@ -172,7 +172,7 @@ private fun CardDetailScreenContent(
         item {
             CardDetail(
                 savedCard = state.savedCard,
-                containerColor = MaterialTheme.colorScheme.surface,
+                containerColor = KptTheme.colorScheme.surface,
             )
         }
     }
@@ -182,7 +182,7 @@ private fun CardDetailScreenContent(
 private fun CardDetail(
     savedCard: SavedCard,
     modifier: Modifier = Modifier,
-    containerColor: Color = MaterialTheme.colorScheme.surface,
+    containerColor: Color = KptTheme.colorScheme.surface,
 ) {
     ElevatedCard(
         modifier = modifier.fillMaxWidth(),
@@ -193,24 +193,24 @@ private fun CardDetail(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(8.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp),
+                .padding(KptTheme.spacing.sm),
+            verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.sm),
         ) {
             CreditCardLabelAndText(
                 label = "Card Holder",
                 text = savedCard.fullName,
             )
-            MifosDivider(color = MaterialTheme.colorScheme.outlineVariant)
+            MifosDivider(color = KptTheme.colorScheme.outlineVariant)
             CreditCardLabelAndText(
                 label = "Card Number",
                 text = savedCard.cardNumber.maskCreditCardNumber(),
             )
-            MifosDivider(color = MaterialTheme.colorScheme.outlineVariant)
+            MifosDivider(color = KptTheme.colorScheme.outlineVariant)
             CreditCardLabelAndText(
                 label = "Expiry Date",
                 text = savedCard.formattedExpiryDate,
             )
-            MifosDivider(color = MaterialTheme.colorScheme.outlineVariant)
+            MifosDivider(color = KptTheme.colorScheme.outlineVariant)
             CreditCardLabelAndText(
                 label = "CVV",
                 text = savedCard.maskedCvv,
@@ -223,8 +223,8 @@ private fun CardDetail(
 private fun CreditCardLabelAndText(
     label: String,
     text: String,
-    labelColor: Color = MaterialTheme.colorScheme.primary,
-    textColor: Color = MaterialTheme.colorScheme.onSurface,
+    labelColor: Color = KptTheme.colorScheme.primary,
+    textColor: Color = KptTheme.colorScheme.onSurface,
 ) {
     Column(
         modifier = Modifier
@@ -233,7 +233,7 @@ private fun CreditCardLabelAndText(
     ) {
         Text(
             text = label.uppercase(),
-            style = MaterialTheme.typography.labelSmall,
+            style = KptTheme.typography.labelSmall,
             color = labelColor,
         )
         Spacer(modifier = Modifier.height(4.dp))

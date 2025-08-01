@@ -16,10 +16,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentWidth
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -40,6 +38,7 @@ import org.mifospay.core.designsystem.component.MifosScaffold
 import org.mifospay.core.designsystem.component.MifosTopAppBar
 import org.mifospay.core.designsystem.icon.MifosIcons
 import org.mifospay.core.designsystem.theme.MifosTheme
+import template.core.base.designsystem.theme.KptTheme
 
 @Composable
 internal fun SignupMethodScreen(
@@ -100,34 +99,34 @@ private fun SignupMethodScreenContent(
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Text(
-            modifier = Modifier.padding(top = 16.dp),
+            modifier = Modifier.padding(horizontal = KptTheme.spacing.md),
             text = stringResource(Res.string.feature_auth_create_an_account),
         )
 
         MifosOutlinedButton(
-            modifier = Modifier.padding(top = 48.dp),
+            modifier = Modifier.padding(top = KptTheme.spacing.xl),
             onClick = onSignUpAsMerchant,
             border = BorderStroke(
                 1.dp,
-                MaterialTheme.colorScheme.primary,
+                KptTheme.colorScheme.primary,
             ),
-            shape = RoundedCornerShape(4.dp),
+            shape = KptTheme.shapes.extraSmall,
         ) {
             Text(
                 text = stringResource(Res.string.feature_auth_sign_up_as_merchant).uppercase(),
-                style = MaterialTheme.typography.labelMedium,
+                style = KptTheme.typography.labelMedium,
             )
         }
 
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 24.dp),
+                .padding(horizontal = KptTheme.spacing.lg),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             HorizontalDivider(
                 modifier = Modifier
-                    .padding(start = 24.dp, end = 8.dp)
+                    .padding(start = KptTheme.spacing.lg, end = KptTheme.spacing.sm)
                     .weight(.4f),
                 thickness = 1.dp,
             )
@@ -139,24 +138,24 @@ private fun SignupMethodScreenContent(
             )
             HorizontalDivider(
                 modifier = Modifier
-                    .padding(start = 8.dp, end = 24.dp)
+                    .padding(start = KptTheme.spacing.sm, end = KptTheme.spacing.lg)
                     .weight(.4f),
                 thickness = 1.dp,
             )
         }
 
         MifosOutlinedButton(
-            modifier = Modifier.padding(top = 24.dp),
+            modifier = Modifier.padding(horizontal = KptTheme.spacing.lg),
             onClick = onSignupAsCustomer,
             border = BorderStroke(
                 1.dp,
-                MaterialTheme.colorScheme.primary,
+                KptTheme.colorScheme.primary,
             ),
-            shape = RoundedCornerShape(4.dp),
+            shape = KptTheme.shapes.extraSmall,
         ) {
             Text(
                 text = stringResource(Res.string.feature_auth_sign_up_as_customer).uppercase(),
-                style = MaterialTheme.typography.labelMedium,
+                style = KptTheme.typography.labelMedium,
             )
         }
     }

@@ -47,7 +47,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
@@ -112,6 +111,7 @@ import org.mifospay.core.ui.ErrorScreenContent
 import org.mifospay.core.ui.MifosSmallChip
 import org.mifospay.core.ui.TransactionHistoryCard
 import org.mifospay.core.ui.utils.EventsEffect
+import template.core.base.designsystem.theme.KptTheme
 
 /*
  * Feature Enhancement
@@ -253,7 +253,7 @@ private fun HomeScreenContent(
             modifier = modifier
                 .fillMaxSize(),
             state = state,
-            contentPadding = PaddingValues(12.dp),
+            contentPadding = PaddingValues(KptTheme.spacing.md),
         ) {
             item {
                 AccountList(
@@ -270,7 +270,7 @@ private fun HomeScreenContent(
 
             item {
                 PayRequestScreen(
-                    modifier = Modifier.padding(vertical = 20.dp),
+                    modifier = Modifier.padding(horizontal = KptTheme.spacing.lg),
                     onRequest = {
                         onAction(HomeAction.RequestClicked)
                     },
@@ -286,7 +286,7 @@ private fun HomeScreenContent(
 
             item {
                 TransactionHistoryCard(
-                    modifier = Modifier.padding(vertical = 20.dp),
+                    modifier = Modifier.padding(horizontal = KptTheme.spacing.lg),
                     transactions = viewState.transactions,
                     onClickViewAll = {
                         onAction(HomeAction.OnClickSeeAllTransactions)
@@ -303,7 +303,7 @@ private fun HomeScreenContent(
                 modifier = Modifier
                     .fillMaxHeight()
                     .windowInsetsPadding(WindowInsets.systemBars)
-                    .padding(horizontal = 1.dp)
+                    .padding(horizontal = KptTheme.spacing.xs)
                     .align(Alignment.CenterEnd),
                 state = scrollbarState,
                 orientation = Orientation.Vertical,
@@ -327,7 +327,7 @@ private fun AccountList(
 
     HorizontalPager(
         state = pagerState,
-        pageSpacing = 5.dp,
+        pageSpacing = KptTheme.spacing.xs,
         modifier = modifier,
     ) {
         AccountCard(
@@ -346,8 +346,8 @@ private fun AccountCard(
     onMarkAsDefault: (Long, String) -> Unit,
     modifier: Modifier = Modifier,
     onClick: (Long) -> Unit,
-    gradientStartColor: Color = MaterialTheme.colorScheme.primary,
-    gradientEndColor: Color = MaterialTheme.colorScheme.secondary,
+    gradientStartColor: Color = KptTheme.colorScheme.primary,
+    gradientEndColor: Color = KptTheme.colorScheme.secondary,
 ) {
     val brush = remember {
         Brush.linearGradient(
@@ -361,7 +361,7 @@ private fun AccountCard(
             .height(200.dp)
             .background(
                 brush = brush,
-                shape = RoundedCornerShape(16.dp),
+                shape = KptTheme.shapes.large,
             )
             .clip(RoundedCornerShape(16.dp))
             .clickable {
@@ -371,7 +371,7 @@ private fun AccountCard(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(16.dp),
+                .padding(KptTheme.spacing.md),
             verticalArrangement = Arrangement.SpaceBetween,
         ) {
             Row(
@@ -384,14 +384,14 @@ private fun AccountCard(
                     Text(
                         text = stringResource(Res.string.feature_home_account_type),
                         fontWeight = FontWeight(300),
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.surface,
+                        style = KptTheme.typography.bodySmall,
+                        color = KptTheme.colorScheme.surface,
                     )
 
                     Text(
                         text = account.name,
                         fontWeight = FontWeight(400),
-                        color = MaterialTheme.colorScheme.surface,
+                        color = KptTheme.colorScheme.surface,
                     )
                 }
 
@@ -401,7 +401,7 @@ private fun AccountCard(
                     if (it) {
                         MifosSmallChip(
                             label = "Default",
-                            containerColor = MaterialTheme.colorScheme.primary,
+                            containerColor = KptTheme.colorScheme.primary,
                         )
                     } else {
                         CardDropdownBox(
@@ -420,8 +420,8 @@ private fun AccountCard(
                 Text(
                     text = account.number,
                     fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.surface,
-                    style = MaterialTheme.typography.headlineMedium,
+                    color = KptTheme.colorScheme.surface,
+                    style = KptTheme.typography.headlineMedium,
                     letterSpacing = 0.50.sp,
                 )
             }
@@ -436,8 +436,8 @@ private fun AccountCard(
                     Text(
                         text = stringResource(Res.string.feature_home_wallet_balance),
                         fontWeight = FontWeight(300),
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.surface,
+                        style = KptTheme.typography.bodySmall,
+                        color = KptTheme.colorScheme.surface,
                     )
 
                     val accountBalance = CurrencyFormatter.format(
@@ -448,8 +448,8 @@ private fun AccountCard(
 
                     Text(
                         text = accountBalance,
-                        color = MaterialTheme.colorScheme.surface,
-                        style = MaterialTheme.typography.headlineLarge,
+                        color = KptTheme.colorScheme.surface,
+                        style = KptTheme.typography.headlineLarge,
                     )
                 }
 
@@ -459,7 +459,7 @@ private fun AccountCard(
                         .padding(4.dp),
                     imageVector = Icons.Filled.KeyboardArrowUp,
                     contentDescription = stringResource(Res.string.feature_home_arrow_up),
-                    tint = MaterialTheme.colorScheme.surface,
+                    tint = KptTheme.colorScheme.surface,
                 )
             }
         }
@@ -479,7 +479,7 @@ fun CardDropdownBox(
                 showDropdown = !showDropdown
             },
             colors = IconButtonDefaults.iconButtonColors(
-                contentColor = MaterialTheme.colorScheme.surface,
+                contentColor = KptTheme.colorScheme.surface,
             ),
         ) {
             Icon(
@@ -560,7 +560,7 @@ private fun MifosSendMoneyFreeCard(
     Card(
         modifier = modifier,
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surface,
+            containerColor = KptTheme.colorScheme.surface,
         ),
     ) {
         Row(
@@ -569,18 +569,23 @@ private fun MifosSendMoneyFreeCard(
         ) {
             Column(
                 modifier = Modifier
-                    .padding(start = 20.dp, end = 10.dp, top = 20.dp, bottom = 20.dp)
+                    .padding(
+                        start = KptTheme.spacing.lg,
+                        end = KptTheme.spacing.md,
+                        top = KptTheme.spacing.lg,
+                        bottom = KptTheme.spacing.lg,
+                    )
                     .weight(7.5f),
             ) {
                 Text(
                     text = stringResource(Res.string.start_sending_your_money_tax_free),
-                    color = MaterialTheme.colorScheme.primary,
+                    color = KptTheme.colorScheme.primary,
                     fontWeight = FontWeight(500),
-                    style = MaterialTheme.typography.bodyLarge,
+                    style = KptTheme.typography.bodyLarge,
                 )
                 Text(
                     text = stringResource(Res.string.feature_home_desc),
-                    style = MaterialTheme.typography.bodySmall,
+                    style = KptTheme.typography.bodySmall,
                     fontWeight = FontWeight(300),
                 )
             }
@@ -606,8 +611,8 @@ private fun PaymentButton(
         modifier = modifier,
         onClick = onClick,
         colors = ButtonDefaults.buttonColors(
-            containerColor = MaterialTheme.colorScheme.surface,
-            contentColor = MaterialTheme.colorScheme.onSurface,
+            containerColor = KptTheme.colorScheme.surface,
+            contentColor = KptTheme.colorScheme.onSurface,
         ),
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {

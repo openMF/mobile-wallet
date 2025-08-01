@@ -30,7 +30,6 @@ import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
@@ -40,7 +39,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.ListItemDefaults
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -82,11 +80,13 @@ import org.mifospay.core.designsystem.component.MifosScaffold
 import org.mifospay.core.designsystem.component.MifosTextField
 import org.mifospay.core.designsystem.component.MifosTopBar
 import org.mifospay.core.designsystem.icon.MifosIcons
+import org.mifospay.core.designsystem.theme.toRoundedCornerShape
 import org.mifospay.core.model.search.AccountResult
 import org.mifospay.core.ui.AvatarBox
 import org.mifospay.core.ui.EmptyContentScreen
 import org.mifospay.core.ui.MifosDivider
 import org.mifospay.core.ui.utils.EventsEffect
+import template.core.base.designsystem.theme.KptTheme
 
 @Composable
 fun SendMoneyScreen(
@@ -185,13 +185,13 @@ private fun SendMoneyScreen(
                     .fillMaxWidth()
                     .padding(paddingValues),
                 state = lazyListState,
-                contentPadding = PaddingValues(bottom = 12.dp),
+                contentPadding = PaddingValues(bottom = KptTheme.spacing.md),
             ) {
                 stickyHeader {
                     SendMoneyCard(
                         state = state,
                         onAction = onAction,
-                        modifier = Modifier.padding(bottom = 8.dp),
+                        modifier = Modifier.padding(bottom = KptTheme.spacing.sm),
                     )
                 }
 
@@ -215,15 +215,18 @@ private fun SendMoneyBottomBar(
 ) {
     Surface(
         modifier = modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(topStart = 8.dp, topEnd = 8.dp),
-        color = MaterialTheme.colorScheme.surface,
+        shape = KptTheme.shapes.toRoundedCornerShape(
+            topStart = KptTheme.spacing.sm,
+            topEnd = KptTheme.spacing.sm,
+        ),
+        color = KptTheme.colorScheme.surface,
     ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp),
+                .padding(KptTheme.spacing.md),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(12.dp),
+            verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.md),
         ) {
             AnimatedVisibility(
                 visible = showDetails && selectedAccount != null,
@@ -268,11 +271,11 @@ private fun SelectedAccountCard(
     Column(
         modifier = modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.Start,
-        verticalArrangement = Arrangement.spacedBy(8.dp),
+        verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.sm),
     ) {
         Text(
             text = stringResource(Res.string.feature_send_money_to_account),
-            style = MaterialTheme.typography.labelLarge,
+            style = KptTheme.typography.labelLarge,
         )
 
         OutlinedCard(
@@ -280,7 +283,7 @@ private fun SelectedAccountCard(
             colors = CardDefaults.outlinedCardColors(
                 containerColor = Color.Transparent,
             ),
-            border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary),
+            border = BorderStroke(1.dp, KptTheme.colorScheme.primary),
         ) {
             ListItem(
                 headlineContent = {
@@ -298,7 +301,7 @@ private fun SelectedAccountCard(
                 },
                 trailingContent = {
                     Row(
-                        horizontalArrangement = Arrangement.spacedBy(4.dp),
+                        horizontalArrangement = Arrangement.spacedBy(KptTheme.spacing.xs),
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
                         AccountBadge(
@@ -307,7 +310,7 @@ private fun SelectedAccountCard(
 
                         AccountBadge(
                             text = account.entityType,
-                            borderColor = MaterialTheme.colorScheme.secondary,
+                            borderColor = KptTheme.colorScheme.secondary,
                         )
 
                         IconButton(
@@ -332,7 +335,7 @@ private fun SelectedAccountCard(
 private fun AccountBadge(
     text: String,
     modifier: Modifier = Modifier,
-    borderColor: Color = MaterialTheme.colorScheme.primary,
+    borderColor: Color = KptTheme.colorScheme.primary,
 ) {
     OutlinedCard(
         modifier = modifier,
@@ -340,12 +343,12 @@ private fun AccountBadge(
             containerColor = Color.Transparent,
         ),
         border = BorderStroke(1.dp, borderColor),
-        shape = RoundedCornerShape(2.dp),
+        shape = KptTheme.shapes.extraSmall,
     ) {
         Text(
             text = text,
-            style = MaterialTheme.typography.labelSmall,
-            modifier = Modifier.padding(4.dp),
+            style = KptTheme.typography.labelSmall,
+            modifier = Modifier.padding(KptTheme.spacing.xs),
         )
     }
 }
@@ -360,14 +363,17 @@ private fun SendMoneyCard(
         modifier = modifier
             .fillMaxWidth(),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surface,
+            containerColor = KptTheme.colorScheme.surface,
         ),
-        shape = RoundedCornerShape(bottomStart = 12.dp, bottomEnd = 12.dp),
+        shape = KptTheme.shapes.toRoundedCornerShape(
+            bottomStart = KptTheme.spacing.md,
+            bottomEnd = KptTheme.spacing.md,
+        ),
     ) {
         Column(
-            modifier = modifier.fillMaxWidth().padding(16.dp),
+            modifier = modifier.fillMaxWidth().padding(KptTheme.spacing.md),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(16.dp),
+            verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.md),
         ) {
             MifosTextField(
                 label = stringResource(Res.string.feature_send_money_amount),
@@ -379,9 +385,6 @@ private fun SendMoneyCard(
                 onValueChange = remember(onAction) {
                     { onAction(SendMoneyAction.AmountChanged(it)) }
                 },
-//                textStyle = TextStyle(
-//                    color = MaterialTheme.colorScheme.onSurface,
-//                ),
             )
 
             MifosTextField(
@@ -390,9 +393,6 @@ private fun SendMoneyCard(
                 onValueChange = remember(onAction) {
                     { onAction(SendMoneyAction.AccountNumberChanged(it)) }
                 },
-//                textStyle = TextStyle(
-//                    color = MaterialTheme.colorScheme.onSurface,
-//                ),
             )
         }
     }
@@ -421,7 +421,7 @@ private fun LazyListScope.accountListContent(
                     title = stringResource(Res.string.feature_send_money_oops),
                     subTitle = stringResource(Res.string.feature_send_money_something_went_wrong),
                     modifier = Modifier.fillParentMaxSize(),
-                    iconTint = MaterialTheme.colorScheme.error,
+                    iconTint = KptTheme.colorScheme.error,
                 )
             }
         }
@@ -476,7 +476,7 @@ private fun AccountCard(
         leadingContent = {
             AvatarBox(
                 icon = MifosIcons.Bank,
-                backgroundColor = MaterialTheme.colorScheme.tertiary,
+                backgroundColor = KptTheme.colorScheme.tertiary,
             )
         },
         colors = ListItemDefaults.colors(

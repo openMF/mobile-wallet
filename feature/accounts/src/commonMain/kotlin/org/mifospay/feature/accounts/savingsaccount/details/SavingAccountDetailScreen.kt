@@ -26,13 +26,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SuggestionChip
@@ -84,6 +82,7 @@ import org.mifospay.core.ui.TransactionHistoryCard
 import org.mifospay.core.ui.utils.EventsEffect
 import org.mifospay.feature.accounts.SavingAccountStatus
 import org.mifospay.feature.accounts.color
+import template.core.base.designsystem.theme.KptTheme
 
 @Composable
 internal fun SavingAccountDetailScreen(
@@ -149,7 +148,7 @@ internal fun SavingAccountDetailScreen(
                 is SADState.ViewState.Loading -> {
                     MfLoadingWheel(
                         contentDesc = stringResource(Res.string.feature_accounts_loading),
-                        backgroundColor = MaterialTheme.colorScheme.surface,
+                        backgroundColor = KptTheme.colorScheme.surface,
                     )
                 }
 
@@ -158,7 +157,7 @@ internal fun SavingAccountDetailScreen(
                         title = stringResource(Res.string.feature_accounts_error_oops),
                         subTitle = state.message,
                         modifier = Modifier,
-                        iconTint = MaterialTheme.colorScheme.error,
+                        iconTint = KptTheme.colorScheme.error,
                     )
                 }
 
@@ -198,9 +197,9 @@ private fun SavingAccountDetails(
     LazyColumn(
         modifier = modifier.fillMaxSize(),
         state = lazyListState,
-        contentPadding = PaddingValues(12.dp),
+        contentPadding = PaddingValues(KptTheme.spacing.md),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(12.dp),
+        verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.md),
     ) {
         item {
             SavingAccountCard(
@@ -235,17 +234,17 @@ private fun SavingAccountSummaryCard(
         modifier = modifier
             .fillMaxWidth(),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surface,
+            containerColor = KptTheme.colorScheme.surface,
         ),
     ) {
         Column(
-            verticalArrangement = Arrangement.spacedBy(4.dp),
+            verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.xs),
         ) {
             Text(
                 text = stringResource(Res.string.feature_accounts_detail_account_summary),
-                color = MaterialTheme.colorScheme.primary,
+                color = KptTheme.colorScheme.primary,
                 fontWeight = FontWeight(500),
-                modifier = Modifier.padding(8.dp),
+                modifier = Modifier.padding(KptTheme.spacing.sm),
             )
 
             MifosDivider()
@@ -254,9 +253,9 @@ private fun SavingAccountSummaryCard(
                 Text(text = stringResource(Res.string.feature_accounts_detail_account_balance))
                 Text(
                     text = summary.formatAmount(summary.accountBalance),
-                    style = MaterialTheme.typography.bodyMedium,
+                    style = KptTheme.typography.bodyMedium,
                     fontWeight = FontWeight.SemiBold,
-                    color = MaterialTheme.colorScheme.onSurface,
+                    color = KptTheme.colorScheme.onSurface,
                 )
             }
 
@@ -266,9 +265,9 @@ private fun SavingAccountSummaryCard(
                 Text(text = stringResource(Res.string.feature_accounts_detail_total_deposits))
                 Text(
                     text = summary.formatAmount(summary.totalDeposits),
-                    style = MaterialTheme.typography.bodyMedium,
+                    style = KptTheme.typography.bodyMedium,
                     fontWeight = FontWeight.SemiBold,
-                    color = MaterialTheme.colorScheme.onSurface,
+                    color = KptTheme.colorScheme.onSurface,
                 )
             }
 
@@ -278,9 +277,9 @@ private fun SavingAccountSummaryCard(
                 Text(text = stringResource(Res.string.feature_accounts_detail_total_withdrawals))
                 Text(
                     text = summary.formatAmount(summary.totalWithdrawals),
-                    style = MaterialTheme.typography.bodyMedium,
+                    style = KptTheme.typography.bodyMedium,
                     fontWeight = FontWeight.SemiBold,
-                    color = MaterialTheme.colorScheme.onSurface,
+                    color = KptTheme.colorScheme.onSurface,
                 )
             }
 
@@ -290,9 +289,9 @@ private fun SavingAccountSummaryCard(
                 Text(text = stringResource(Res.string.feature_accounts_detail_available_balance))
                 Text(
                     text = summary.formatAmount(summary.availableBalance),
-                    style = MaterialTheme.typography.bodyMedium,
+                    style = KptTheme.typography.bodyMedium,
                     fontWeight = FontWeight.SemiBold,
-                    color = MaterialTheme.colorScheme.onSurface,
+                    color = KptTheme.colorScheme.onSurface,
                 )
             }
 
@@ -302,9 +301,9 @@ private fun SavingAccountSummaryCard(
                 Text(text = stringResource(Res.string.feature_accounts_detail_total_interest_posted))
                 Text(
                     text = summary.totalInterestPosted.toString(),
-                    style = MaterialTheme.typography.bodyMedium,
+                    style = KptTheme.typography.bodyMedium,
                     fontWeight = FontWeight.SemiBold,
-                    color = MaterialTheme.colorScheme.onSurface,
+                    color = KptTheme.colorScheme.onSurface,
                 )
             }
 
@@ -314,9 +313,9 @@ private fun SavingAccountSummaryCard(
                 Text(text = stringResource(Res.string.feature_accounts_detail_total_overdraft))
                 Text(
                     text = summary.totalOverdraftInterestDerived.toString(),
-                    style = MaterialTheme.typography.bodyMedium,
+                    style = KptTheme.typography.bodyMedium,
                     fontWeight = FontWeight.SemiBold,
-                    color = MaterialTheme.colorScheme.onSurface,
+                    color = KptTheme.colorScheme.onSurface,
                 )
             }
 
@@ -326,9 +325,9 @@ private fun SavingAccountSummaryCard(
                 Text(text = stringResource(Res.string.feature_accounts_detail_interest_not_posted))
                 Text(
                     text = summary.interestNotPosted.toString(),
-                    style = MaterialTheme.typography.bodyMedium,
+                    style = KptTheme.typography.bodyMedium,
                     fontWeight = FontWeight.SemiBold,
-                    color = MaterialTheme.colorScheme.onSurface,
+                    color = KptTheme.colorScheme.onSurface,
                 )
             }
         }
@@ -343,7 +342,7 @@ private inline fun RowBlock(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 12.dp, vertical = 8.dp),
+                .padding(horizontal = KptTheme.spacing.md, vertical = KptTheme.spacing.sm),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
         ) {
@@ -365,17 +364,17 @@ private fun SavingAccountCard(
             .background(
                 brush = Brush.linearGradient(
                     colors = listOf(
-                        MaterialTheme.colorScheme.primary,
-                        MaterialTheme.colorScheme.secondary,
+                        KptTheme.colorScheme.primary,
+                        KptTheme.colorScheme.secondary,
                     ),
                 ),
-                shape = RoundedCornerShape(16.dp),
+                shape = KptTheme.shapes.large,
             ),
     ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(12.dp),
+                .padding(horizontal = KptTheme.spacing.md),
             verticalArrangement = Arrangement.SpaceBetween,
         ) {
             Row(
@@ -388,14 +387,14 @@ private fun SavingAccountCard(
                     Text(
                         text = stringResource(Res.string.feature_accounts_detail_product_name),
                         fontWeight = FontWeight(300),
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.surface,
+                        style = KptTheme.typography.bodySmall,
+                        color = KptTheme.colorScheme.surface,
                     )
 
                     Text(
                         text = account.name,
                         fontWeight = FontWeight(400),
-                        color = MaterialTheme.colorScheme.surface,
+                        color = KptTheme.colorScheme.surface,
                     )
                 }
 
@@ -409,8 +408,8 @@ private fun SavingAccountCard(
                 Text(
                     text = account.number,
                     fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.surface,
-                    style = MaterialTheme.typography.headlineMedium,
+                    color = KptTheme.colorScheme.surface,
+                    style = KptTheme.typography.headlineMedium,
                     letterSpacing = 0.50.sp,
                 )
             }
@@ -425,8 +424,8 @@ private fun SavingAccountCard(
                     Text(
                         text = stringResource(Res.string.feature_accounts_detail_wallet_balance),
                         fontWeight = FontWeight(300),
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.surface,
+                        style = KptTheme.typography.bodySmall,
+                        color = KptTheme.colorScheme.surface,
                     )
 
                     val accountBalance = CurrencyFormatter.format(
@@ -437,18 +436,18 @@ private fun SavingAccountCard(
 
                     Text(
                         text = accountBalance,
-                        color = MaterialTheme.colorScheme.surface,
-                        style = MaterialTheme.typography.headlineLarge,
+                        color = KptTheme.colorScheme.surface,
+                        style = KptTheme.typography.headlineLarge,
                     )
                 }
 
                 Icon(
                     modifier = Modifier
                         .graphicsLayer(rotationZ = 90f)
-                        .padding(4.dp),
+                        .padding(KptTheme.spacing.xs),
                     imageVector = Icons.Filled.KeyboardArrowUp,
                     contentDescription = stringResource(Res.string.feature_accounts_detail_arrow),
-                    tint = MaterialTheme.colorScheme.surface,
+                    tint = KptTheme.colorScheme.surface,
                 )
             }
         }
@@ -464,8 +463,8 @@ private fun SavingAccountStatusCard(
     val activeStatuses = SavingAccountStatus.entries.filter { it.isActive(status) }
 
     FlowRow(
-        horizontalArrangement = Arrangement.spacedBy(4.dp),
-        verticalArrangement = Arrangement.spacedBy(4.dp),
+        horizontalArrangement = Arrangement.spacedBy(KptTheme.spacing.xs),
+        verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.xs),
         modifier = modifier,
     ) {
         activeStatuses.forEach { statusEnum ->

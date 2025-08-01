@@ -24,7 +24,6 @@ import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration.Indefinite
 import androidx.compose.material3.SnackbarHost
@@ -64,6 +63,7 @@ import org.mifospay.feature.profile.navigation.navigateToEditProfile
 import org.mifospay.feature.settings.navigation.navigateToSettings
 import org.mifospay.shared.navigation.MifosNavHost
 import org.mifospay.shared.utils.TopLevelDestination
+import template.core.base.designsystem.theme.KptTheme
 
 @Composable
 internal fun MifosApp(
@@ -99,7 +99,7 @@ internal fun MifosApp(
         Scaffold(
             modifier = Modifier,
             containerColor = Color.Transparent,
-            contentColor = MaterialTheme.colorScheme.onBackground,
+            contentColor = KptTheme.colorScheme.onBackground,
             snackbarHost = { SnackbarHost(snackbarHostState) },
             bottomBar = {
                 if (appState.shouldShowBottomBar && destination != null) {
@@ -185,7 +185,7 @@ private fun MifosAppBar(
                 when (destination) {
                     TopLevelDestination.HOME -> {
                         Row(
-                            horizontalArrangement = Arrangement.spacedBy(4.dp),
+                            horizontalArrangement = Arrangement.spacedBy(KptTheme.spacing.xs),
                         ) {
                             IconBox(
                                 icon = MifosIcons.OutlinedNotifications,
@@ -289,7 +289,7 @@ private fun MifosBottomBar(
 
 private fun Modifier.notificationDot(): Modifier =
     composed {
-        val tertiaryColor = MaterialTheme.colorScheme.tertiary
+        val tertiaryColor = KptTheme.colorScheme.tertiary
         drawWithContent {
             drawContent()
             drawCircle(

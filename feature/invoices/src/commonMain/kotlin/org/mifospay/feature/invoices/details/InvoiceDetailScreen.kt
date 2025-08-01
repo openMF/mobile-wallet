@@ -21,7 +21,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -29,7 +28,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import mobile_wallet.feature.invoices.generated.resources.Res
 import mobile_wallet.feature.invoices.generated.resources.feature_invoices_amount
@@ -53,6 +51,7 @@ import org.mifospay.core.ui.utils.EventsEffect
 import org.mifospay.feature.invoices.details.InvoiceDetailState.ViewState.Content
 import org.mifospay.feature.invoices.details.InvoiceDetailState.ViewState.Error
 import org.mifospay.feature.invoices.details.InvoiceDetailState.ViewState.Loading
+import template.core.base.designsystem.theme.KptTheme
 
 @Composable
 internal fun InvoiceDetailScreen(
@@ -128,8 +127,8 @@ private fun InvoiceDetailContent(
     LazyColumn(
         modifier = modifier.fillMaxSize(),
         state = lazyListState,
-        contentPadding = PaddingValues(16.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp),
+        contentPadding = PaddingValues(KptTheme.spacing.md),
+        verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.md),
     ) {
         item {
             InvoiceDetailCard(
@@ -153,7 +152,7 @@ private fun InvoiceDetailCard(
             Text(text = stringResource(Res.string.feature_invoices_merchant_id))
             Text(
                 text = invoice.consumerId,
-                style = MaterialTheme.typography.bodyMedium,
+                style = KptTheme.typography.bodyMedium,
                 fontWeight = FontWeight.SemiBold,
             )
         }
@@ -162,7 +161,7 @@ private fun InvoiceDetailCard(
             Text(text = stringResource(Res.string.feature_invoices_consumer_id))
             Text(
                 text = invoice.consumerName,
-                style = MaterialTheme.typography.bodyMedium,
+                style = KptTheme.typography.bodyMedium,
                 fontWeight = FontWeight.SemiBold,
             )
         }
@@ -171,7 +170,7 @@ private fun InvoiceDetailCard(
             Text(text = stringResource(Res.string.feature_invoices_amount))
             Text(
                 text = invoice.amount.toString(),
-                style = MaterialTheme.typography.bodyMedium,
+                style = KptTheme.typography.bodyMedium,
                 fontWeight = FontWeight.SemiBold,
             )
         }
@@ -180,7 +179,7 @@ private fun InvoiceDetailCard(
             Text(text = stringResource(Res.string.feature_invoices_items_bought))
             Text(
                 text = invoice.itemsBought,
-                style = MaterialTheme.typography.bodyMedium,
+                style = KptTheme.typography.bodyMedium,
                 fontWeight = FontWeight.SemiBold,
             )
         }
@@ -190,7 +189,7 @@ private fun InvoiceDetailCard(
 
             Text(
                 text = if (invoice.status == 1L) Constants.DONE else Constants.PENDING,
-                style = MaterialTheme.typography.bodyMedium,
+                style = KptTheme.typography.bodyMedium,
                 fontWeight = FontWeight.SemiBold,
             )
         }
@@ -199,7 +198,7 @@ private fun InvoiceDetailCard(
             Text(text = stringResource(Res.string.feature_invoices_transaction_id))
             Text(
                 text = invoice.transactionId,
-                style = MaterialTheme.typography.bodyMedium,
+                style = KptTheme.typography.bodyMedium,
                 fontWeight = FontWeight.SemiBold,
             )
         }
@@ -209,7 +208,7 @@ private fun InvoiceDetailCard(
 
             Text(
                 text = invoice.date,
-                style = MaterialTheme.typography.bodyMedium,
+                style = KptTheme.typography.bodyMedium,
                 fontWeight = FontWeight.SemiBold,
             )
         }
@@ -224,12 +223,12 @@ private inline fun RowBlock(
 ) {
     Column(
         modifier = modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(4.dp),
+        verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.xs),
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = 8.dp),
+                .padding(horizontal = KptTheme.spacing.sm),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
         ) {

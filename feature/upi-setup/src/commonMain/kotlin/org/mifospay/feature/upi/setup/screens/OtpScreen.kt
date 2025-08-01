@@ -15,12 +15,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import mobile_wallet.feature.upi_setup.generated.resources.Res
 import mobile_wallet.feature.upi_setup.generated.resources.feature_upi_setup_enter_otp
@@ -29,6 +27,7 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.mifospay.core.designsystem.theme.MifosTheme
 import org.mifospay.core.ui.OtpTextField
 import org.mifospay.core.ui.VerifyStepHeader
+import template.core.base.designsystem.theme.KptTheme
 
 @Composable
 internal fun OtpScreen(
@@ -42,13 +41,13 @@ internal fun OtpScreen(
         modifier = modifier
             .fillMaxWidth()
             .padding(
-                top = 15.dp,
-                bottom = 15.dp,
-                start = 10.dp,
-                end = 10.dp,
+                top = KptTheme.spacing.md,
+                bottom = KptTheme.spacing.md,
+                start = KptTheme.spacing.sm,
+                end = KptTheme.spacing.sm,
             ),
         elevation = CardDefaults.cardElevation(
-            defaultElevation = 1.dp,
+            defaultElevation = KptTheme.elevation.level1,
         ),
     ) {
         Column(
@@ -73,15 +72,15 @@ private fun OtpScreenContent(
     Column(modifier) {
         Text(
             text = stringResource(Res.string.feature_upi_setup_enter_otp),
-            color = MaterialTheme.colorScheme.onSurface,
+            color = KptTheme.colorScheme.onSurface,
             fontSize = 18.sp,
-            style = MaterialTheme.typography.headlineMedium,
+            style = KptTheme.typography.headlineMedium,
         )
         OtpTextField(
             onOtpTextCorrectlyEntered = {
                 onOtpTextCorrectlyEntered()
             },
-            modifier = Modifier.padding(top = 20.dp),
+            modifier = Modifier.padding(top = KptTheme.spacing.lg),
             realOtp = realOtp,
         )
     }
