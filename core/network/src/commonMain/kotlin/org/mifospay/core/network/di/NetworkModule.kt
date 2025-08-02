@@ -45,7 +45,7 @@ val NetworkModule = module {
                 .httpClient(client = get<HttpClient>())
                 .baseUrl(BaseURL.selfServiceUrl)
                 .converterFactories(FlowConverterFactory())
-                .build()
+                .build(),
         )
     }
 
