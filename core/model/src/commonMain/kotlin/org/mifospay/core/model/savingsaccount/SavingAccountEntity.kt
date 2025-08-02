@@ -26,5 +26,5 @@ data class SavingAccountEntity(
     val subStatus: SubStatus,
     val lastActiveTransactionDate: List<Long> = emptyList(),
     val depositType: DepositType?,
-    val externalId: String?,
+    val externalId: String? = null,
 )

@@ -43,6 +43,7 @@ kotlin {
             implementation(libs.ktor.serialization.kotlinx.json)
             implementation(libs.ktorfit.lib)
             implementation(libs.squareup.okio)
+            api(projects.coreBase.network)
         }
 
         androidMain.dependencies {

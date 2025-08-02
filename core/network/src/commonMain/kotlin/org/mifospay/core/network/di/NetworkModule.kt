@@ -9,23 +9,26 @@
  */
 package org.mifospay.core.network.di
 
+import de.jensklingenberg.ktorfit.Ktorfit
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.auth.Auth
 import io.ktor.client.plugins.auth.providers.BasicAuthCredentials
-import io.ktor.client.plugins.auth.providers.basic
-import io.ktor.client.plugins.defaultRequest
-import io.ktor.client.request.header
 import org.koin.dsl.module
+import org.mifos.corebase.network.httpClient
+import org.mifos.corebase.network.setupDefaultHttpClient
 import org.mifospay.core.datastore.UserPreferencesRepository
 import org.mifospay.core.network.FineractApiManager
 import org.mifospay.core.network.KtorfitClient
 import org.mifospay.core.network.SelfServiceApiManager
 import org.mifospay.core.network.ktorHttpClient
 import org.mifospay.core.network.utils.BaseURL
+import org.mifospay.core.network.utils.FlowConverterFactory
 import org.mifospay.core.network.utils.KtorInterceptor
+import kotlin.io.encoding.ExperimentalEncodingApi
 
+@OptIn(ExperimentalEncodingApi::class)
 val NetworkModule = module {
-    single<HttpClient>(KtorClient) {
+    single<HttpClient> {
         val preferencesRepository = get<UserPreferencesRepository>()
 
         ktorHttpClient.config {
@@ -36,41 +39,43 @@ val NetworkModule = module {
         }
     }
 
-    // TODO:: This could be removed, added for testing
-    single<HttpClient>(KtorBaseClient) {
-        ktorHttpClient.config {
-            install(Auth) {
-                basic {
-                    sendWithoutRequest { true }
-                    credentials {
-                        BasicAuthCredentials(
-                            username = "mifos",
-                            password = "password",
-                        )
-                    }
-                }
-            }
-
-            defaultRequest {
-                header("Fineract-Platform-TenantId", "venus")
-                header("Content-Type", "application/json")
-                header("Accept", "application/json")
-            }
-        }
+    single<KtorfitClient>(qualifier = SelfClient) {
+        KtorfitClient(
+            Ktorfit.Builder()
+                .httpClient(client = get<HttpClient>())
+                .baseUrl(BaseURL.selfServiceUrl)
+                .converterFactories(FlowConverterFactory())
+                .build()
+        )
     }
 
-    single<KtorfitClient>(BaseClient) {
-        KtorfitClient.builder()
-            .httpClient(get(KtorBaseClient))
-            .baseURL(BaseURL.url)
-            .build()
-    }
-
-    single<KtorfitClient>(SelfClient) {
-        KtorfitClient.builder()
-            .httpClient(get(KtorClient))
-            .baseURL(BaseURL.selfServiceUrl)
-            .build()
+    single<KtorfitClient>(qualifier = BaseClient) {
+        KtorfitClient(
+            Ktorfit.Builder()
+                .httpClient(
+                    client = httpClient(
+                        config = setupDefaultHttpClient(
+                            baseUrl = BaseURL.url,
+                            basicCredentialsProvider = {
+                                BasicAuthCredentials(
+                                    username = "mifos",
+                                    password = "password",
+                                )
+                            },
+                            defaultHeaders = mapOf(
+                                "Fineract-Platform-TenantId" to "venus",
+                                "Content-Type" to "application/json",
+                                "Accept" to "application/json",
+                            ),
+                            loggableHosts = listOf("venus.mifos.community"),
+                        ),
+                    ),
+                )
+                .converterFactories(
+                    FlowConverterFactory(),
+                )
+                .build(),
+        )
     }
 
     single {
