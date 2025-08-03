@@ -10,8 +10,6 @@
 package org.mifospay.core.network.di
 
 import de.jensklingenberg.ktorfit.Ktorfit
-import io.ktor.client.HttpClient
-import io.ktor.client.plugins.auth.Auth
 import io.ktor.client.plugins.auth.providers.BasicAuthCredentials
 import org.koin.dsl.module
 import org.mifos.corebase.network.httpClient
@@ -20,7 +18,6 @@ import org.mifospay.core.datastore.UserPreferencesRepository
 import org.mifospay.core.network.FineractApiManager
 import org.mifospay.core.network.KtorfitClient
 import org.mifospay.core.network.SelfServiceApiManager
-import org.mifospay.core.network.ktorHttpClient
 import org.mifospay.core.network.utils.BaseURL
 import org.mifospay.core.network.utils.FlowConverterFactory
 import org.mifospay.core.network.utils.KtorInterceptor
@@ -28,22 +25,22 @@ import kotlin.io.encoding.ExperimentalEncodingApi
 
 @OptIn(ExperimentalEncodingApi::class)
 val NetworkModule = module {
-    single<HttpClient> {
-        val preferencesRepository = get<UserPreferencesRepository>()
-
-        ktorHttpClient.config {
-            install(Auth)
-            install(KtorInterceptor) {
-                getToken = { preferencesRepository.authToken }
-            }
-        }
-    }
-
     single<KtorfitClient>(qualifier = SelfClient) {
+        val preferencesRepository = get<UserPreferencesRepository>()
         KtorfitClient(
             Ktorfit.Builder()
-                .httpClient(client = get<HttpClient>())
-                .baseUrl(BaseURL.selfServiceUrl)
+                .httpClient(
+                    client = httpClient(
+                        config = setupDefaultHttpClient(
+                            baseUrl = BaseURL.selfServiceUrl,
+                            loggableHosts = listOf("venus.mifos.community"),
+                        ),
+                    ).config {
+                        install(KtorInterceptor) {
+                            getToken = { preferencesRepository.authToken }
+                        }
+                    },
+                )
                 .converterFactories(FlowConverterFactory())
                 .build(),
         )

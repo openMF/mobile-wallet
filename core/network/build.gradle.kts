@@ -34,37 +34,10 @@ kotlin {
             implementation(projects.core.model)
             implementation(projects.core.datastore)
             implementation(libs.kotlinx.serialization.json)
-            implementation(libs.ktor.client.core)
             implementation(libs.ktor.client.json)
-            implementation(libs.ktor.client.logging)
             implementation(libs.ktor.client.serialization)
-            implementation(libs.ktor.client.content.negotiation)
-            implementation(libs.ktor.client.auth)
-            implementation(libs.ktor.serialization.kotlinx.json)
-            implementation(libs.ktorfit.lib)
             implementation(libs.squareup.okio)
             api(projects.coreBase.network)
-        }
-
-        androidMain.dependencies {
-            implementation(libs.ktor.client.okhttp)
-            implementation(libs.koin.android)
-        }
-
-        nativeMain.dependencies {
-            implementation(libs.ktor.client.darwin)
-        }
-
-        val desktopMain by getting {
-            dependencies {
-                implementation(libs.ktor.client.okhttp)
-            }
-        }
-        jsMain.dependencies {
-            implementation(libs.ktor.client.js)
-        }
-        wasmJsMain.dependencies {
-            implementation(libs.ktor.client.js)
         }
     }
 }
