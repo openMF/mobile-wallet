@@ -288,7 +288,7 @@ internal data class EditProfileState(
     val emailInput: String,
     val externalIdInput: String,
     val profileImage: ByteArray? = null,
-    val dialogState: DialogState? = null,
+    @Transient val dialogState: DialogState? = null,
 ) {
     @Transient
     internal val updatedClient = UpdatedClient(
@@ -299,7 +299,6 @@ internal data class EditProfileState(
         externalId = this.externalIdInput,
     )
 
-    @Serializable
     sealed interface DialogState {
         data object Loading : DialogState
 

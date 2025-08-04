@@ -20,6 +20,7 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 import mobile_wallet.feature.make_transfer.generated.resources.Res
 import mobile_wallet.feature.make_transfer.generated.resources.feature_make_transfer_error_empty_amount
 import mobile_wallet.feature.make_transfer.generated.resources.feature_make_transfer_error_empty_description
@@ -207,7 +208,7 @@ internal data class MakeTransferState(
     val amount: String = toClientData.amount,
     val description: String = "",
     val selectedAccount: Account? = null,
-    val dialogState: DialogState? = null,
+    @Transient val dialogState: DialogState? = null,
 ) {
     val amountIsValid: Boolean
         get() = amount.isNotEmpty() && amount.toDoubleOrNull() != null
@@ -232,12 +233,9 @@ internal data class MakeTransferState(
             transferDate = DateHelper.formattedShortDate,
         )
 
-    @Serializable
     sealed interface DialogState {
-        @Serializable
         data object Loading : DialogState
 
-        @Serializable
         sealed interface Error : DialogState {
             data class StringMessage(val message: String) : Error
             data class ResourceMessage(val message: StringResource) : Error
