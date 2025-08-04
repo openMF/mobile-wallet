@@ -154,6 +154,7 @@ private fun LoginScreenContent(
             .padding(horizontal = KptTheme.spacing.lg)
             .padding(top = KptTheme.spacing.xxl),
         horizontalAlignment = Alignment.Start,
+        verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.sm),
     ) {
         Text(
             text = stringResource(Res.string.feature_auth_login),

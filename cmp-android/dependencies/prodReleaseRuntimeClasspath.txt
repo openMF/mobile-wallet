@@ -1,5 +1,6 @@
 :cmp-shared
 :core-base:designsystem
+:core-base:network
 :core:analytics
 :core:common
 :core:data

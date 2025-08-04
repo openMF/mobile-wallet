@@ -270,7 +270,7 @@ private fun HomeScreenContent(
 
             item {
                 PayRequestScreen(
-                    modifier = Modifier.padding(horizontal = KptTheme.spacing.lg),
+                    modifier = Modifier.padding(vertical = KptTheme.spacing.md),
                     onRequest = {
                         onAction(HomeAction.RequestClicked)
                     },
@@ -286,7 +286,7 @@ private fun HomeScreenContent(
 
             item {
                 TransactionHistoryCard(
-                    modifier = Modifier.padding(horizontal = KptTheme.spacing.lg),
+                    modifier = Modifier.padding(vertical = KptTheme.spacing.md),
                     transactions = viewState.transactions,
                     onClickViewAll = {
                         onAction(HomeAction.OnClickSeeAllTransactions)
@@ -456,7 +456,7 @@ private fun AccountCard(
                 Icon(
                     modifier = Modifier
                         .graphicsLayer(rotationZ = 90f)
-                        .padding(4.dp),
+                        .padding(KptTheme.spacing.xs),
                     imageVector = Icons.Filled.KeyboardArrowUp,
                     contentDescription = stringResource(Res.string.feature_home_arrow_up),
                     tint = KptTheme.colorScheme.surface,

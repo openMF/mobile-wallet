@@ -10,7 +10,6 @@
 package org.mifospay.core.network
 
 import de.jensklingenberg.ktorfit.Ktorfit
-import io.ktor.client.HttpClient
 import org.mifospay.core.network.services.createAccountTransfersService
 import org.mifospay.core.network.services.createAuthenticationService
 import org.mifospay.core.network.services.createBeneficiaryService
@@ -28,7 +27,6 @@ import org.mifospay.core.network.services.createStandingInstructionService
 import org.mifospay.core.network.services.createThirdPartyTransferService
 import org.mifospay.core.network.services.createTwoFactorAuthService
 import org.mifospay.core.network.services.createUserService
-import org.mifospay.core.network.utils.FlowConverterFactory
 
 class KtorfitClient(
     ktorfit: Ktorfit,
@@ -66,35 +64,4 @@ class KtorfitClient(
     internal val standingInstructionApi by lazy { ktorfit.createStandingInstructionService() }
 
     internal val beneficiaryApi by lazy { ktorfit.createBeneficiaryService() }
-
-    class Builder internal constructor() {
-        private lateinit var baseURL: String
-        private lateinit var httpClient: HttpClient
-
-        fun baseURL(baseURL: String): Builder {
-            this.baseURL = baseURL
-            return this
-        }
-
-        fun httpClient(ktorHttpClient: HttpClient): Builder {
-            this.httpClient = ktorHttpClient
-            return this
-        }
-
-        fun build(): KtorfitClient {
-            val ktorfitBuilder = Ktorfit.Builder()
-                .httpClient(httpClient)
-                .baseUrl(baseURL)
-                .converterFactories(FlowConverterFactory())
-                .build()
-
-            return KtorfitClient(ktorfitBuilder)
-        }
-    }
-
-    companion object {
-        fun builder(): Builder {
-            return Builder()
-        }
-    }
 }
