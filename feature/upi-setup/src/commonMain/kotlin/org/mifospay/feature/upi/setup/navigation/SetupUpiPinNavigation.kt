@@ -17,7 +17,6 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import org.mifospay.core.common.Constants
 import org.mifospay.core.model.bank.BankAccountDetails
-import org.mifospay.feature.upi.setup.screens.SetupUpiPinScreenRoute
 
 const val SETUP_UPI_PIN_ROUTE = "setup_upi_pin_route"
 
@@ -41,15 +40,15 @@ fun NavGraphBuilder.setupUpiPinScreen(
             isUpiEnabled = false,
             upiPin = null,
         )
-        val index = backStackEntry.arguments?.getInt(Constants.INDEX) ?: 0
-        val type = backStackEntry.arguments?.getString(Constants.TYPE) ?: ""
+//        val index = backStackEntry.arguments?.getInt(Constants.INDEX) ?: 0
+//        val type = backStackEntry.arguments?.getString(Constants.TYPE) ?: ""
 
-        SetupUpiPinScreenRoute(
-            type = type,
-            index = index,
-            bankAccountDetails = bankAccountDetails,
-            onBackPress = navigateBack,
-        )
+//        SetupUpiPinScreenRoute(
+//            type = type,
+//            index = index,
+//            bankAccountDetails = bankAccountDetails,
+//            onBackPress = navigateBack,
+//        )
     }
 }
 
@@ -65,5 +64,5 @@ fun NavController.navigateToSetupUpiPin(
         this.launchSingleTop = true
         this.restoreState = true
     }
-    currentBackStackEntry?.arguments?.putAll(bundle)
+//    currentBackStackEntry?.arguments?.putAll(bundle)
 }
