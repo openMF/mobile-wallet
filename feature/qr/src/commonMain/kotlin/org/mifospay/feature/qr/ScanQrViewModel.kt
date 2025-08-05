@@ -13,6 +13,7 @@ import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.update
+import org.mifospay.core.data.util.StandardUpiQrCodeProcessor
 import org.mifospay.core.data.util.UpiQrCodeProcessor
 
 class ScanQrViewModel : ViewModel() {
@@ -22,7 +23,15 @@ class ScanQrViewModel : ViewModel() {
 
     fun onScanned(data: String): Boolean {
         return try {
-            UpiQrCodeProcessor.decodeUpiString(data)
+            try {
+                UpiQrCodeProcessor.decodeUpiString(data)
+            } catch (e: Exception) {
+                if (StandardUpiQrCodeProcessor.isValidUpiQrCode(data)) {
+                    StandardUpiQrCodeProcessor.parseUpiQrCode(data)
+                } else {
+                    throw e
+                }
+            }
 
             _eventFlow.update {
                 ScanQrEvent.OnNavigateToSendScreen(data)
