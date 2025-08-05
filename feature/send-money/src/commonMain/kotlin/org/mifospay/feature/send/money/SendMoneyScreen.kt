@@ -16,7 +16,6 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -109,6 +108,11 @@ fun SendMoneyScreen(
             }
 
             is SendMoneyEvent.NavigateToScanQrScreen -> navigateToScanQrScreen.invoke()
+
+            is SendMoneyEvent.ShowToast -> {
+                // TODO: Implement toast message display
+                // For now, we'll just ignore it
+            }
         }
     }
 
@@ -130,7 +134,6 @@ fun SendMoneyScreen(
     )
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun SendMoneyScreen(
     state: SendMoneyState,

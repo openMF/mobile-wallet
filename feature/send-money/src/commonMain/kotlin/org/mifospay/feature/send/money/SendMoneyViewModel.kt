@@ -33,11 +33,13 @@ import mobile_wallet.feature.send_money.generated.resources.feature_send_money_e
 import mobile_wallet.feature.send_money.generated.resources.feature_send_money_error_invalid_amount
 import mobile_wallet.feature.send_money.generated.resources.feature_send_money_error_requesting_payment_qr_but_found
 import mobile_wallet.feature.send_money.generated.resources.feature_send_money_error_requesting_payment_qr_data_missing
+import mobile_wallet.feature.send_money.generated.resources.feature_send_money_upi_qr_parsed_successfully
 import org.jetbrains.compose.resources.StringResource
 import org.mifospay.core.common.DataState
 import org.mifospay.core.common.getSerialized
 import org.mifospay.core.common.setSerialized
 import org.mifospay.core.data.repository.AccountRepository
+import org.mifospay.core.data.util.StandardUpiQrCodeProcessor
 import org.mifospay.core.data.util.UpiQrCodeProcessor
 import org.mifospay.core.model.search.AccountResult
 import org.mifospay.core.model.utils.PaymentQrData
@@ -176,7 +178,16 @@ class SendMoneyViewModel(
     private fun handleRequestData(action: HandleRequestData) {
         viewModelScope.launch {
             try {
-                val requestData = UpiQrCodeProcessor.decodeUpiString(action.requestData)
+                val requestData = try {
+                    UpiQrCodeProcessor.decodeUpiString(action.requestData)
+                } catch (e: Exception) {
+                    if (StandardUpiQrCodeProcessor.isValidUpiQrCode(action.requestData)) {
+                        val standardData = StandardUpiQrCodeProcessor.parseUpiQrCode(action.requestData)
+                        StandardUpiQrCodeProcessor.toPaymentQrData(standardData)
+                    } else {
+                        throw e
+                    }
+                }
 
                 mutableStateFlow.update { state ->
                     state.copy(
@@ -185,6 +196,8 @@ class SendMoneyViewModel(
                         selectedAccount = requestData.toAccount(),
                     )
                 }
+
+                sendEvent(SendMoneyEvent.ShowToast(Res.string.feature_send_money_upi_qr_parsed_successfully))
             } catch (e: Exception) {
                 val errorState = if (action.requestData.isNotEmpty()) {
                     Error.GenericResourceMessage(
@@ -260,6 +273,7 @@ sealed interface SendMoneyEvent {
     data object OnNavigateBack : SendMoneyEvent
     data class NavigateToTransferScreen(val data: String) : SendMoneyEvent
     data object NavigateToScanQrScreen : SendMoneyEvent
+    data class ShowToast(val message: StringResource) : SendMoneyEvent
 }
 
 sealed interface SendMoneyAction {
