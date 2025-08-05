@@ -36,7 +36,7 @@ platform :android do
     generateVersion = generateVersion()
 
     buildAndSignApp(
-      taskName: "bundle",
+      taskName: "assemble",
       buildType: "Release",
       **signing_config
     )
@@ -116,7 +116,7 @@ platform :android do
     releaseNotes = generateReleaseNote()
 
     # Write the generated release notes to default.txt
-    buildConfigPath = "metadata/android/en-GB/changelogs/default.txt"
+    buildConfigPath = "metadata/android/en-US/changelogs/default.txt"
     FileUtils.mkdir_p(File.dirname(buildConfigPath))
     File.write(buildConfigPath, releaseNotes)
 
@@ -132,7 +132,6 @@ platform :android do
       skip_upload_metadata: true,
       skip_upload_images: true,
       skip_upload_screenshots: true,
-      skip_upload_apk: true,
     )
   end
 
@@ -320,27 +319,90 @@ platform :android do
 end
 
 platform :ios do
-  desc "Build iOS application"
-  lane :build_ios do |options|
-    # Set default configuration if not provided
-    options[:configuration] ||= "Debug"
-    ios_config = FastlaneConfig::IosConfig::BUILD_CONFIG
 
-    update_code_signing_settings(
-      use_automatic_signing: true,
-      path: ios_config[:project_path]
-    )
+  #############################
+  # Shared Private Lane Helpers
+  #############################
 
-    build_ios_app(
-      workspace: ios_config[:workspace_path],
-      scheme: ios_config[:scheme],
-      configuration: options[:configuration],
-      skip_codesigning: "true",
-      output_directory: ios_config[:output_directory],
-      skip_archive: "true"
-    )
+  private_lane :setup_ci_if_needed do
+      unless ENV['CI']
+          UI.message("🖥️ Running locally, skipping CI-specific setup.")
+      else
+          setup_ci(
+            provider: "circleci"
+          )
+      end
   end
 
+  private_lane :load_api_key do |options|
+      ios_config = FastlaneConfig::IosConfig::BUILD_CONFIG
+
+      app_store_connect_api_key(
+        key_id: options[:appstore_key_id] || ios_config[:key_id],
+        issuer_id: options[:appstore_issuer_id] || ios_config[:issuer_id],
+        key_filepath: options[:key_filepath] || ios_config[:key_filepath],
+        duration: 1200
+      )
+  end
+
+  private_lane :fetch_certificates_with_match do |options|
+      ios_config = FastlaneConfig::IosConfig::BUILD_CONFIG
+      match(
+        type: options[:match_type] || ios_config[:match_type],
+        app_identifier: options[:app_identifier] || ios_config[:app_identifier],
+        readonly: false,
+        git_url: options[:git_url] || ios_config[:git_url],
+        git_branch: options[:git_branch] || ios_config[:git_branch],
+        git_private_key: options[:git_private_key] || ios_config[:match_git_private_key],
+        force_for_new_devices: true,
+        api_key: Actions.lane_context[SharedValues::APP_STORE_CONNECT_API_KEY]
+      )
+  end
+
+  private_lane :build_ios_project do |options|
+      ios_config = FastlaneConfig::IosConfig::BUILD_CONFIG
+      app_identifier = options[:app_identifier] || ios_config[:app_identifier]
+      provisioning_profile_name = options[:provisioning_profile_name] || ios_config[:provisioning_profile_name]
+
+      build_ios_app(
+        scheme: ios_config[:scheme],
+        workspace: ios_config[:workspace_path],
+        output_name: ios_config[:output_name],
+        output_directory: ios_config[:output_directory],
+        export_options: {
+          provisioningProfiles: {
+            app_identifier => provisioning_profile_name
+          }
+        }
+      )
+  end
+
+  ###################
+  # Main Public lanes
+  ###################
+
+  desc "Build Ios application"
+  lane :build_ios do |options|
+      ios_config = FastlaneConfig::IosConfig::BUILD_CONFIG
+      build_ios_app(
+          scheme: ios_config[:scheme],
+          workspace: ios_config[:workspace_path],
+          output_name: ios_config[:output_name],
+          output_directory: ios_config[:output_directory],
+          skip_codesigning: true,
+          skip_archive: true
+      )
+  end
+
+  desc "Build Signed Ios application"
+  lane :build_signed_ios do |options|
+      setup_ci_if_needed
+      load_api_key(options)
+      fetch_certificates_with_match(options)
+      build_ios_project(options)
+  end
+
+  desc "Increment build number from latest Firebase release"
   lane :increment_version do |options|
     firebase_config = FastlaneConfig.get_firebase_config(:ios)
     ios_config = FastlaneConfig::IosConfig::BUILD_CONFIG
@@ -350,26 +412,14 @@ platform :ios do
       service_credentials_file: options[:serviceCredsFile] || firebase_config[:serviceCredsFile]
     )
 
-    increment_build_number(
-      xcodeproj: ios_config[:project_path],
-      build_number: latest_release[:buildVersion].to_i + 1
-    )
-  end
-
-  desc "Upload iOS application to Firebase App Distribution"
-  lane :deploy_on_firebase do |options|
-    firebase_config = FastlaneConfig.get_firebase_config(:ios)
-
-    increment_version(serviceCredsFile: firebase_config[:serviceCredsFile])
-    build_ios()
-    releaseNotes = generateReleaseNote()
-
-    firebase_app_distribution(
-      app: firebase_config[:appId],
-      service_credentials_file: firebase_config[:serviceCredsFile],
-      release_notes: releaseNotes,
-      groups: firebase_config[:groups]
-    )
+    if latest_release
+      increment_build_number(
+        xcodeproj: ios_config[:project_path],
+        build_number: latest_release[:buildVersion].to_i + 1
+      )
+    else
+      UI.important("⚠️ No existing Firebase release found. Skipping build number increment.")
+    end
   end
 
   desc "Generate release notes"
@@ -379,5 +429,139 @@ platform :ios do
       commits_count: 1,
     )
     releaseNotes
+  end
+
+  desc "Upload iOS application to Firebase App Distribution"
+  lane :deploy_on_firebase do |options|
+    firebase_config = FastlaneConfig.get_firebase_config(:ios)
+
+    increment_version(serviceCredsFile: firebase_config[:serviceCredsFile])
+
+    build_signed_ios(
+        options.merge(
+            match_type: "adhoc",
+            provisioning_profile_name: "match AdHoc org.mifospay"
+        )
+    )
+
+    releaseNotes = generateReleaseNote()
+
+    firebase_app_distribution(
+      app: options[:firebase_app_id] || firebase_config[:appId],
+      service_credentials_file: options[:serviceCredsFile] || firebase_config[:serviceCredsFile],
+      release_notes: releaseNotes,
+      groups: options[:groups] || firebase_config[:groups]
+    )
+  end
+
+  desc "Upload beta build to TestFlight"
+  lane :beta do |options|
+
+      ios_config = FastlaneConfig::IosConfig::BUILD_CONFIG
+
+      setup_ci_if_needed
+      load_api_key(options)
+      fetch_certificates_with_match(
+        options.merge(match_type: "appstore")
+      )
+
+      increment_version_number(
+        xcodeproj: ios_config[:project_path],
+        version_number: ios_config[:version_number]
+      )
+
+      latest_build_number = latest_testflight_build_number(
+        app_identifier: options[:app_identifier] || ios_config[:app_identifier],
+        api_key: Actions.lane_context[SharedValues::APP_STORE_CONNECT_API_KEY]
+      )
+
+      increment_build_number(
+        xcodeproj: ios_config[:project_path],
+        build_number: latest_build_number + 1
+      )
+
+      build_ios_project(
+        options.merge(
+            provisioning_profile_name: "match AppStore org.mifospay"
+        )
+      )
+
+      pilot(
+        api_key: Actions.lane_context[SharedValues::APP_STORE_CONNECT_API_KEY],
+        skip_waiting_for_build_processing: true
+      )
+  end
+
+  desc "Upload iOS Application to AppStore"
+  lane :release do |options|
+
+     ios_config = FastlaneConfig::IosConfig::BUILD_CONFIG
+
+      setup_ci_if_needed
+      load_api_key(options)
+      fetch_certificates_with_match(
+        options.merge(match_type: "appstore")
+      )
+
+      increment_version_number(
+        xcodeproj: ios_config[:project_path],
+        version_number: ios_config[:version_number]
+      )
+
+      latest_build_number = latest_testflight_build_number(
+        app_identifier: options[:app_identifier] || ios_config[:app_identifier],
+        api_key: Actions.lane_context[SharedValues::APP_STORE_CONNECT_API_KEY]
+      )
+
+      increment_build_number(
+        xcodeproj: ios_config[:project_path],
+        build_number: latest_build_number + 1
+      )
+
+      update_plist(
+        plist_path: ios_config[:plist_path],
+        block: proc do |plist|
+          plist['NSContactsUsageDescription'] = 'This app does not access your contacts. This message is required for compliance only.'
+          plist['NSLocationWhenInUseUsageDescription'] = 'This app does not access your location. This message is required for compliance only.'
+          plist['NSBluetoothAlwaysUsageDescription'] = 'This app does not use Bluetooth. This message is required for compliance only.'
+        end
+      )
+
+      build_ios_project(
+        options.merge(
+            provisioning_profile_name: "match AppStore org.mifospay"
+        )
+      )
+
+      deliver(
+        metadata_path: options[:metadata_path] || ios_config[:metadata_path],
+        submit_for_review: true, # Set to true if you want to auto-submit for review
+        automatic_release: true, # Set to true if you want to auto-release once it approved
+        api_key: Actions.lane_context[SharedValues::APP_STORE_CONNECT_API_KEY],
+        skip_app_version_update: true,
+        force: true, # Skips HTML report verification
+        precheck_include_in_app_purchases: false,
+        overwrite_screenshots: true,
+        reject_if_possible: true,
+        app_rating_config_path: ios_config[:app_rating_config_path],
+        submission_information: {
+          add_id_info_uses_idfa: false,
+          add_id_info_limits_tracking: false,
+          add_id_info_serves_ads: false,
+          add_id_info_tracks_action: false,
+          add_id_info_tracks_install: false,
+          content_rights_has_rights: true,
+          content_rights_contains_third_party_content: false,
+          export_compliance_platform: 'ios',
+          export_compliance_compliance_required: false,
+          export_compliance_encryption_updated: false,
+          export_compliance_app_type: nil,
+          export_compliance_uses_encryption: false,
+          export_compliance_is_exempt: true,
+          export_compliance_contains_third_party_cryptography: false,
+          export_compliance_contains_proprietary_cryptography: false,
+          export_compliance_available_on_french_store: true
+        }
+      )
   end
 end
