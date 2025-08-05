@@ -36,7 +36,7 @@ platform :android do
     generateVersion = generateVersion()
 
     buildAndSignApp(
-      taskName: "assemble",
+      taskName: "bundle",
       buildType: "Release",
       **signing_config
     )
@@ -116,7 +116,7 @@ platform :android do
     releaseNotes = generateReleaseNote()
 
     # Write the generated release notes to default.txt
-    buildConfigPath = "metadata/android/en-US/changelogs/default.txt"
+    buildConfigPath = "metadata/android/en-GB/changelogs/default.txt"
     FileUtils.mkdir_p(File.dirname(buildConfigPath))
     File.write(buildConfigPath, releaseNotes)
 
