@@ -18,7 +18,6 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.Transient
 import mobile_wallet.feature.home.generated.resources.Res
 import mobile_wallet.feature.home.generated.resources.feature_home_account_error
 import mobile_wallet.feature.home.generated.resources.feature_home_account_success
@@ -191,13 +190,16 @@ data class HomeState(
     val defaultAccountId: Long?,
     val reloadTrigger: Boolean = false,
     val isRefreshing: Boolean = false,
-    @Transient val dialogState: DialogState? = null,
+    val dialogState: DialogState? = null,
 ) {
 
+    @Serializable
     sealed class DialogState {
 
+        @Serializable
         data object Loading : DialogState()
 
+        @Serializable
         data class Error(val message: String) : DialogState()
     }
 }
