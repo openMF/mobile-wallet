@@ -19,8 +19,8 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.Transient
 import mobile_wallet.feature.make_transfer.generated.resources.Res
 import mobile_wallet.feature.make_transfer.generated.resources.feature_make_transfer_error_empty_amount
 import mobile_wallet.feature.make_transfer.generated.resources.feature_make_transfer_error_empty_description
@@ -179,7 +179,7 @@ internal class MakeTransferViewModel(
 
             is DataState.Error -> {
                 mutableStateFlow.update {
-                    it.copy(dialogState = Error.StringMessage(action.result.message))
+                    it.copy(dialogState = Error.MakeTransferStringMessage(action.result.message))
                 }
             }
 
@@ -195,7 +195,7 @@ internal class MakeTransferViewModel(
 
     private fun updateErrorState(message: StringResource) {
         mutableStateFlow.update {
-            it.copy(dialogState = Error.ResourceMessage(message))
+            it.copy(dialogState = Error.MakeTransferResourceMessage(message))
         }
     }
 }
@@ -208,7 +208,7 @@ internal data class MakeTransferState(
     val amount: String = toClientData.amount,
     val description: String = "",
     val selectedAccount: Account? = null,
-    @Transient val dialogState: DialogState? = null,
+    val dialogState: DialogState? = null,
 ) {
     val amountIsValid: Boolean
         get() = amount.isNotEmpty() && amount.toDoubleOrNull() != null
@@ -233,12 +233,18 @@ internal data class MakeTransferState(
             transferDate = DateHelper.formattedShortDate,
         )
 
+    @Serializable
     sealed interface DialogState {
+        @Serializable
         data object Loading : DialogState
 
-        sealed interface Error : DialogState {
-            data class StringMessage(val message: String) : Error
-            data class ResourceMessage(val message: StringResource) : Error
+        @Serializable
+        sealed class Error : DialogState {
+            @Serializable
+            data class MakeTransferStringMessage(val message: String) : Error()
+
+            @Serializable
+            data class MakeTransferResourceMessage(@Contextual val message: StringResource) : Error()
         }
     }
 }

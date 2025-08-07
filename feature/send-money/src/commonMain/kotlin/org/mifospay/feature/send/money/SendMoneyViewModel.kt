@@ -25,8 +25,8 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.Transient
 import mobile_wallet.feature.send_money.generated.resources.Res
 import mobile_wallet.feature.send_money.generated.resources.feature_send_money_error_account_cannot_be_empty
 import mobile_wallet.feature.send_money.generated.resources.feature_send_money_error_amount_cannot_be_empty
@@ -169,7 +169,7 @@ class SendMoneyViewModel(
 
     private fun updateErrorState(res: StringResource) {
         mutableStateFlow.update {
-            it.copy(dialogState = Error.ResourceMessage(res))
+            it.copy(dialogState = Error.SendMoneyResourceMessage(res))
         }
     }
 
@@ -187,12 +187,12 @@ class SendMoneyViewModel(
                 }
             } catch (e: Exception) {
                 val errorState = if (action.requestData.isNotEmpty()) {
-                    Error.GenericResourceMessage(
+                    Error.SendMoneyGenericResourceMessage(
                         Res.string.feature_send_money_error_requesting_payment_qr_but_found,
                         listOf(action.requestData),
                     )
                 } else {
-                    Error.ResourceMessage(Res.string.feature_send_money_error_requesting_payment_qr_data_missing)
+                    Error.SendMoneyResourceMessage(Res.string.feature_send_money_error_requesting_payment_qr_data_missing)
                 }
 
                 mutableStateFlow.update {
@@ -210,7 +210,7 @@ data class SendMoneyState(
     val amount: String = "",
     val accountNumber: String = "",
     val selectedAccount: AccountResult? = null,
-    @Transient val dialogState: DialogState? = null,
+    val dialogState: DialogState? = null,
 ) {
     val amountIsValid: Boolean
         get() = amount.isNotEmpty() &&
@@ -229,16 +229,21 @@ data class SendMoneyState(
             amount = amount,
         )
 
+    @Serializable
     sealed interface DialogState {
+        @Serializable
         data object Loading : DialogState
 
-        sealed interface Error : DialogState {
-            data class ResourceMessage(val message: StringResource) : Error
+        @Serializable
+        sealed class Error : DialogState {
+            @Serializable
+            data class SendMoneyResourceMessage(@Contextual val message: StringResource) : Error()
 
-            data class GenericResourceMessage(
-                val message: StringResource,
+            @Serializable
+            data class SendMoneyGenericResourceMessage(
+                @Contextual val message: StringResource,
                 val args: List<String>,
-            ) : Error
+            ) : Error()
         }
     }
 }

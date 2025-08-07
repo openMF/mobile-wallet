@@ -404,8 +404,8 @@ private fun MakeTransferDialogs(
     when (dialogState) {
         is MakeTransferState.DialogState.Error -> {
             val message = when (dialogState) {
-                is MakeTransferState.DialogState.Error.StringMessage -> dialogState.message
-                is MakeTransferState.DialogState.Error.ResourceMessage -> stringResource(dialogState.message)
+                is MakeTransferState.DialogState.Error.MakeTransferStringMessage -> dialogState.message
+                is MakeTransferState.DialogState.Error.MakeTransferResourceMessage -> stringResource(dialogState.message)
             }
             MifosBasicDialog(
                 visibilityState = BasicDialogState.Shown(

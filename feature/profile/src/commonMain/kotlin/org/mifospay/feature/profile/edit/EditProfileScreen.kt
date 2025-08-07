@@ -203,8 +203,8 @@ private fun EditProfileDialogs(
     when (dialogState) {
         is EditProfileState.DialogState.Error -> {
             val message = when (dialogState) {
-                is EditProfileState.DialogState.Error.StringMessage -> dialogState.message
-                is EditProfileState.DialogState.Error.ResourceMessage -> stringResource(dialogState.message)
+                is EditProfileState.DialogState.Error.EditProfileStringMessage -> dialogState.message
+                is EditProfileState.DialogState.Error.EditProfileResourceMessage -> stringResource(dialogState.message)
             }
             MifosBasicDialog(
                 visibilityState = BasicDialogState.Shown(
