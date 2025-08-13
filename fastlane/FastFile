@@ -328,9 +328,7 @@ platform :ios do
       unless ENV['CI']
           UI.message("🖥️ Running locally, skipping CI-specific setup.")
       else
-          setup_ci(
-            provider: "circleci"
-          )
+          setup_ci
       end
   end
 
@@ -350,7 +348,7 @@ platform :ios do
       match(
         type: options[:match_type] || ios_config[:match_type],
         app_identifier: options[:app_identifier] || ios_config[:app_identifier],
-        readonly: false,
+        readonly: true,
         git_url: options[:git_url] || ios_config[:git_url],
         git_branch: options[:git_branch] || ios_config[:git_branch],
         git_private_key: options[:git_private_key] || ios_config[:match_git_private_key],
@@ -364,16 +362,29 @@ platform :ios do
       app_identifier = options[:app_identifier] || ios_config[:app_identifier]
       provisioning_profile_name = options[:provisioning_profile_name] || ios_config[:provisioning_profile_name]
 
+      cocoapods(
+        podfile: ios_config[:podfile_path],
+        clean_install: true,
+        repo_update: true
+      )
+
+      # Manual signing for your main app target
+      update_code_signing_settings(
+        use_automatic_signing: false,
+        path: ios_config[:project_path],
+        targets: [ios_config[:target]],
+        team_id: ios_config[:team_id],
+        code_sign_identity: ios_config[:code_sign_identity],
+        profile_name: ios_config[:provisioning_profile_name],
+        bundle_identifier: ios_config[:app_identifier]
+      )
+
       build_ios_app(
         scheme: ios_config[:scheme],
         workspace: ios_config[:workspace_path],
         output_name: ios_config[:output_name],
         output_directory: ios_config[:output_directory],
-        export_options: {
-          provisioningProfiles: {
-            app_identifier => provisioning_profile_name
-          }
-        }
+        configuration: ios_config[:configuration]
       )
   end
 
@@ -384,6 +395,13 @@ platform :ios do
   desc "Build Ios application"
   lane :build_ios do |options|
       ios_config = FastlaneConfig::IosConfig::BUILD_CONFIG
+
+      cocoapods(
+        podfile: ios_config[:podfile_path],
+        clean_install: true,
+        repo_update: true
+      )
+
       build_ios_app(
           scheme: ios_config[:scheme],
           workspace: ios_config[:workspace_path],
