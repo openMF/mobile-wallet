@@ -40,4 +40,12 @@
     <string name="feature_send_money_error_requesting_payment_qr_data_missing">Failed to request payment QR: required data is missing</string>
     <string name="feature_send_money_upi_qr_parsed_successfully">UPI QR code parsed successfully</string>
     <string name="feature_send_money_external_upi_payment">External UPI Payment</string>
+    <string name="feature_send_money_choose_method">Choose how you want to send money</string>
+    <string name="feature_send_money_scan_qr_code">Scan any QR code</string>
+    <string name="feature_send_money_pay_anyone">Pay anyone</string>
+    <string name="feature_send_money_bank_transfer">Bank Transfer</string>
+    <string name="feature_send_money_fineract_payments">Fineract Payments</string>
+    <string name="feature_send_money_people">People</string>
+    <string name="feature_send_money_merchants">Merchants</string>
+    <string name="feature_send_money_more">More</string>
 </resources>

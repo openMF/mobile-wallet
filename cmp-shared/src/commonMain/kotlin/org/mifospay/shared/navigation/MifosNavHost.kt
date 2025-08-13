@@ -72,7 +72,10 @@ import org.mifospay.feature.savedcards.details.cardDetailRoute
 import org.mifospay.feature.savedcards.details.navigateToCardDetails
 import org.mifospay.feature.send.money.SendMoneyScreen
 import org.mifospay.feature.send.money.navigation.SEND_MONEY_BASE_ROUTE
+import org.mifospay.feature.send.money.navigation.SEND_MONEY_OPTIONS_ROUTE
+import org.mifospay.feature.send.money.navigation.navigateToSendMoneyOptionsScreen
 import org.mifospay.feature.send.money.navigation.navigateToSendMoneyScreen
+import org.mifospay.feature.send.money.navigation.sendMoneyOptionsScreen
 import org.mifospay.feature.send.money.navigation.sendMoneyScreen
 import org.mifospay.feature.settings.navigation.settingsScreen
 import org.mifospay.feature.standing.instruction.StandingInstructionsScreen
@@ -160,7 +163,7 @@ internal fun MifosNavHost(
             onRequest = {
                 navController.navigateToShowQrScreen()
             },
-            onPay = navController::navigateToSendMoneyScreen,
+            onPay = navController::navigateToSendMoneyOptionsScreen,
             navigateToTransactionDetail = navController::navigateToSpecificTransaction,
             navigateToAccountDetail = navController::navigateToSavingAccountDetails,
         )
@@ -277,6 +280,32 @@ internal fun MifosNavHost(
 
         showQrScreen(
             navigateBack = navController::navigateUp,
+        )
+
+        sendMoneyOptionsScreen(
+            onBackClick = navController::popBackStack,
+            onScanQrClick = {
+                // This is now handled by the ViewModel using ML Kit scanner
+            },
+            onPayAnyoneClick = {
+                // TODO: Navigate to Pay Anyone screen
+            },
+            onBankTransferClick = {
+                // TODO: Navigate to Bank Transfer screen
+            },
+            onFineractPaymentsClick = {
+                navController.navigateToSendMoneyScreen()
+            },
+            onQrCodeScanned = { qrData ->
+                navController.navigateToSendMoneyScreen(
+                    requestData = qrData,
+                    navOptions = navOptions {
+                        popUpTo(SEND_MONEY_OPTIONS_ROUTE) {
+                            inclusive = true
+                        }
+                    },
+                )
+            },
         )
 
         sendMoneyScreen(
