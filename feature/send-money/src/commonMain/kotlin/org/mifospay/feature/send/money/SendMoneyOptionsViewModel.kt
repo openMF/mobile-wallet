@@ -12,6 +12,8 @@ package org.mifospay.feature.send.money
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import org.mifospay.core.data.util.StandardUpiQrCodeProcessor
+import org.mifospay.core.ui.utils.BackgroundEvent
 import org.mifospay.core.ui.utils.BaseViewModel
 
 class SendMoneyOptionsViewModel(
@@ -29,7 +31,14 @@ class SendMoneyOptionsViewModel(
                 // Use ML Kit QR scanner directly
                 scanner.startScanning().onEach { data ->
                     data?.let { result ->
-                        sendEvent(SendMoneyOptionsEvent.QrCodeScanned(result))
+                        // Check if it's a UPI QR code or regular QR code
+                        if (StandardUpiQrCodeProcessor.isValidUpiQrCode(result)) {
+                            // Navigate to payee details screen for UPI QR codes
+                            sendEvent(SendMoneyOptionsEvent.NavigateToPayeeDetails(result))
+                        } else {
+                            // For non-UPI QR codes, navigate to Fineract payment
+                            sendEvent(SendMoneyOptionsEvent.QrCodeScanned(result))
+                        }
                     }
                 }.launchIn(viewModelScope)
             }
@@ -55,7 +64,8 @@ sealed interface SendMoneyOptionsEvent {
     data object NavigateToPayAnyone : SendMoneyOptionsEvent
     data object NavigateToBankTransfer : SendMoneyOptionsEvent
     data object NavigateToFineractPayments : SendMoneyOptionsEvent
-    data class QrCodeScanned(val data: String) : SendMoneyOptionsEvent
+    data class QrCodeScanned(val data: String) : SendMoneyOptionsEvent, BackgroundEvent
+    data class NavigateToPayeeDetails(val qrCodeData: String) : SendMoneyOptionsEvent, BackgroundEvent
 }
 
 sealed interface SendMoneyOptionsAction {

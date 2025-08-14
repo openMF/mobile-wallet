@@ -91,6 +91,7 @@ import template.core.base.designsystem.theme.KptTheme
 fun SendMoneyScreen(
     onBackClick: () -> Unit,
     navigateToTransferScreen: (String) -> Unit,
+    navigateToPayeeDetails: (String) -> Unit,
     navigateToScanQrScreen: () -> Unit,
     showTopBar: Boolean = true,
     modifier: Modifier = Modifier,
@@ -105,6 +106,10 @@ fun SendMoneyScreen(
 
             is SendMoneyEvent.NavigateToTransferScreen -> {
                 navigateToTransferScreen(event.data)
+            }
+
+            is SendMoneyEvent.NavigateToPayeeDetails -> {
+                navigateToPayeeDetails(event.qrCodeData)
             }
 
             is SendMoneyEvent.NavigateToScanQrScreen -> navigateToScanQrScreen.invoke()

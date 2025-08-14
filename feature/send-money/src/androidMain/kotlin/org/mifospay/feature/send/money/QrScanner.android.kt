@@ -39,11 +39,12 @@ class QrScannerImp(
     override fun startScanning(): Flow<String?> {
         return callbackFlow {
             scanner.startScan()
-                .addOnSuccessListener {
+                .addOnSuccessListener { barcode ->
                     launch {
-                        send(it.rawValue)
+                        val rawValue = barcode.rawValue
+                        send(rawValue)
                     }
-                }.addOnFailureListener {
+                }.addOnFailureListener { exception ->
                     launch {
                         send(null)
                     }

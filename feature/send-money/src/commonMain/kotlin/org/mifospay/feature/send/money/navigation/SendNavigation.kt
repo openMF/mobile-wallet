@@ -16,6 +16,8 @@ import androidx.navigation.NavType
 import androidx.navigation.navArgument
 import androidx.navigation.navOptions
 import org.mifospay.core.ui.composableWithSlideTransitions
+import org.mifospay.feature.send.money.PayeeDetailsScreen
+import org.mifospay.feature.send.money.PayeeDetailsState
 import org.mifospay.feature.send.money.SendMoneyOptionsScreen
 import org.mifospay.feature.send.money.SendMoneyScreen
 
@@ -25,6 +27,10 @@ const val SEND_MONEY_ARG = "requestData"
 const val SEND_MONEY_BASE_ROUTE = "$SEND_MONEY_ROUTE?$SEND_MONEY_ARG={$SEND_MONEY_ARG}"
 
 const val SEND_MONEY_OPTIONS_ROUTE = "send_money_options_route"
+const val PAYEE_DETAILS_ROUTE = "payee_details_route"
+const val PAYEE_DETAILS_ARG = "qrCodeData"
+
+const val PAYEE_DETAILS_BASE_ROUTE = "$PAYEE_DETAILS_ROUTE?$PAYEE_DETAILS_ARG={$PAYEE_DETAILS_ARG}"
 
 fun NavController.navigateToSendMoneyScreen(
     navOptions: NavOptions? = null,
@@ -34,9 +40,21 @@ fun NavController.navigateToSendMoneyOptionsScreen(
     navOptions: NavOptions? = null,
 ) = navigate(SEND_MONEY_OPTIONS_ROUTE, navOptions)
 
+fun NavController.navigateToPayeeDetailsScreen(
+    qrCodeData: String,
+    navOptions: NavOptions? = null,
+) {
+    val route = "$PAYEE_DETAILS_ROUTE?$PAYEE_DETAILS_ARG=$qrCodeData"
+    val options = navOptions ?: navOptions {
+        popUpTo(SEND_MONEY_OPTIONS_ROUTE) { inclusive = false }
+    }
+    navigate(route, options)
+}
+
 fun NavGraphBuilder.sendMoneyScreen(
     onBackClick: () -> Unit,
     navigateToTransferScreen: (String) -> Unit,
+    navigateToPayeeDetailsScreen: (String) -> Unit,
     navigateToScanQrScreen: () -> Unit,
 ) {
     composableWithSlideTransitions(
@@ -53,6 +71,7 @@ fun NavGraphBuilder.sendMoneyScreen(
             onBackClick = onBackClick,
             navigateToTransferScreen = navigateToTransferScreen,
             navigateToScanQrScreen = navigateToScanQrScreen,
+            navigateToPayeeDetails = navigateToPayeeDetailsScreen,
         )
     }
 }
@@ -64,6 +83,7 @@ fun NavGraphBuilder.sendMoneyOptionsScreen(
     onBankTransferClick: () -> Unit,
     onFineractPaymentsClick: () -> Unit,
     onQrCodeScanned: (String) -> Unit,
+    onNavigateToPayeeDetails: (String) -> Unit,
 ) {
     composableWithSlideTransitions(
         route = SEND_MONEY_OPTIONS_ROUTE,
@@ -75,6 +95,29 @@ fun NavGraphBuilder.sendMoneyOptionsScreen(
             onBankTransferClick = onBankTransferClick,
             onFineractPaymentsClick = onFineractPaymentsClick,
             onQrCodeScanned = onQrCodeScanned,
+            onNavigateToPayeeDetails = onNavigateToPayeeDetails,
+        )
+    }
+}
+
+fun NavGraphBuilder.payeeDetailsScreen(
+    onBackClick: () -> Unit,
+    onNavigateToUpiPayment: (PayeeDetailsState) -> Unit,
+    onNavigateToFineractPayment: (PayeeDetailsState) -> Unit,
+) {
+    composableWithSlideTransitions(
+        route = PAYEE_DETAILS_BASE_ROUTE,
+        arguments = listOf(
+            navArgument(PAYEE_DETAILS_ARG) {
+                type = NavType.StringType
+                nullable = false
+            },
+        ),
+    ) {
+        PayeeDetailsScreen(
+            onBackClick = onBackClick,
+            onNavigateToUpiPayment = onNavigateToUpiPayment,
+            onNavigateToFineractPayment = onNavigateToFineractPayment,
         )
     }
 }

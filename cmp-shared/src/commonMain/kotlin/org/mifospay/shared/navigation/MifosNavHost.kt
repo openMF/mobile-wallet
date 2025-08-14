@@ -74,8 +74,10 @@ import org.mifospay.feature.savedcards.details.navigateToCardDetails
 import org.mifospay.feature.send.money.SendMoneyScreen
 import org.mifospay.feature.send.money.navigation.SEND_MONEY_BASE_ROUTE
 import org.mifospay.feature.send.money.navigation.SEND_MONEY_OPTIONS_ROUTE
+import org.mifospay.feature.send.money.navigation.navigateToPayeeDetailsScreen
 import org.mifospay.feature.send.money.navigation.navigateToSendMoneyOptionsScreen
 import org.mifospay.feature.send.money.navigation.navigateToSendMoneyScreen
+import org.mifospay.feature.send.money.navigation.payeeDetailsScreen
 import org.mifospay.feature.send.money.navigation.sendMoneyOptionsScreen
 import org.mifospay.feature.send.money.navigation.sendMoneyScreen
 import org.mifospay.feature.settings.navigation.settingsScreen
@@ -101,6 +103,7 @@ internal fun MifosNavHost(
                 onBackClick = navController::navigateUp,
                 navigateToTransferScreen = navController::navigateToTransferScreen,
                 navigateToScanQrScreen = navController::navigateToScanQr,
+                navigateToPayeeDetails = navController::navigateToPayeeDetailsScreen,
                 showTopBar = false,
             )
         },
@@ -310,12 +313,26 @@ internal fun MifosNavHost(
                     },
                 )
             },
+            onNavigateToPayeeDetails = { qrCodeData ->
+                navController.navigateToPayeeDetailsScreen(qrCodeData)
+            },
         )
 
         sendMoneyScreen(
             onBackClick = navController::popBackStack,
             navigateToTransferScreen = navController::navigateToTransferScreen,
+            navigateToPayeeDetailsScreen = navController::navigateToPayeeDetailsScreen,
             navigateToScanQrScreen = navController::navigateToScanQr,
+        )
+
+        payeeDetailsScreen(
+            onBackClick = navController::popBackStack,
+            onNavigateToUpiPayment = { state ->
+                // TODO: Handle UPI payment navigation
+            },
+            onNavigateToFineractPayment = { state ->
+                // TODO: Handle Fineract payment navigation
+            },
         )
 
         transferScreen(
@@ -348,6 +365,16 @@ internal fun MifosNavHost(
             navigateToSendScreen = {
                 navController.navigateToSendMoneyScreen(
                     requestData = it,
+                    navOptions = navOptions {
+                        popUpTo(SCAN_QR_ROUTE) {
+                            inclusive = true
+                        }
+                    },
+                )
+            },
+            navigateToPayeeDetailsScreen = {
+                navController.navigateToPayeeDetailsScreen(
+                    qrCodeData = it,
                     navOptions = navOptions {
                         popUpTo(SCAN_QR_ROUTE) {
                             inclusive = true

@@ -44,6 +44,7 @@ import org.mifospay.core.data.util.UpiQrCodeProcessor
 import org.mifospay.core.model.search.AccountResult
 import org.mifospay.core.model.utils.PaymentQrData
 import org.mifospay.core.model.utils.toAccount
+import org.mifospay.core.ui.utils.BackgroundEvent
 import org.mifospay.core.ui.utils.BaseViewModel
 import org.mifospay.feature.send.money.SendMoneyAction.HandleRequestData
 import org.mifospay.feature.send.money.SendMoneyState.DialogState.Error
@@ -122,7 +123,11 @@ class SendMoneyViewModel(
             SendMoneyAction.OnClickScan -> {
                 scanner.startScanning().onEach { data ->
                     data?.let { result ->
-                        sendAction(HandleRequestData(result))
+                        if (StandardUpiQrCodeProcessor.isValidUpiQrCode(result)) {
+                            sendEvent(SendMoneyEvent.NavigateToPayeeDetails(result))
+                        } else {
+                            sendAction(HandleRequestData(result))
+                        }
                     }
                 }.launchIn(viewModelScope)
                 // Using Play Service Code Scanner until Qr Scan module is stable
@@ -277,6 +282,8 @@ sealed interface SendMoneyEvent {
     data object OnNavigateBack : SendMoneyEvent
     data class NavigateToTransferScreen(val data: String) : SendMoneyEvent
     data object NavigateToScanQrScreen : SendMoneyEvent
+
+    data class NavigateToPayeeDetails(val qrCodeData: String) : SendMoneyEvent, BackgroundEvent
     data class ShowToast(val message: StringResource) : SendMoneyEvent
 }
 
