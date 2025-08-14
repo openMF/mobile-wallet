@@ -490,7 +490,8 @@ platform :ios do
 
       latest_build_number = latest_testflight_build_number(
         app_identifier: options[:app_identifier] || ios_config[:app_identifier],
-        api_key: Actions.lane_context[SharedValues::APP_STORE_CONNECT_API_KEY]
+        api_key: Actions.lane_context[SharedValues::APP_STORE_CONNECT_API_KEY],
+        version: ios_config[:version_number]
       )
 
       increment_build_number(
@@ -526,9 +527,10 @@ platform :ios do
         version_number: ios_config[:version_number]
       )
 
-      latest_build_number = latest_testflight_build_number(
+      latest_build_number = app_store_build_number(
         app_identifier: options[:app_identifier] || ios_config[:app_identifier],
-        api_key: Actions.lane_context[SharedValues::APP_STORE_CONNECT_API_KEY]
+        api_key: Actions.lane_context[SharedValues::APP_STORE_CONNECT_API_KEY],
+        version: ios_config[:version_number]
       )
 
       increment_build_number(
