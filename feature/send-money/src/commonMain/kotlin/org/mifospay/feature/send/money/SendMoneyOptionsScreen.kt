@@ -37,6 +37,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import mobile_wallet.feature.send_money.generated.resources.Res
@@ -447,7 +448,8 @@ private fun PersonItem(
                 fontWeight = FontWeight.Medium,
                 textAlign = TextAlign.Center,
                 color = KptTheme.colorScheme.onSurface,
-                maxLines = 2,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
             )
         }
     }
