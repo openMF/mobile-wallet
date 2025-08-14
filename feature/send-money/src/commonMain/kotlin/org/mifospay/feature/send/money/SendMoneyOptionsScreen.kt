@@ -67,6 +67,7 @@ fun SendMoneyOptionsScreen(
     onBankTransferClick: () -> Unit,
     onFineractPaymentsClick: () -> Unit,
     onQrCodeScanned: (String) -> Unit,
+    onNavigateToPayeeDetails: (String) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: SendMoneyOptionsViewModel = koinViewModel(),
 ) {
@@ -74,11 +75,24 @@ fun SendMoneyOptionsScreen(
 
     EventsEffect(viewModel) { event ->
         when (event) {
-            SendMoneyOptionsEvent.NavigateBack -> onBackClick.invoke()
-            SendMoneyOptionsEvent.NavigateToPayAnyone -> onPayAnyoneClick.invoke()
-            SendMoneyOptionsEvent.NavigateToBankTransfer -> onBankTransferClick.invoke()
-            SendMoneyOptionsEvent.NavigateToFineractPayments -> onFineractPaymentsClick.invoke()
-            is SendMoneyOptionsEvent.QrCodeScanned -> onQrCodeScanned.invoke(event.data)
+            SendMoneyOptionsEvent.NavigateBack -> {
+                onBackClick.invoke()
+            }
+            SendMoneyOptionsEvent.NavigateToPayAnyone -> {
+                onPayAnyoneClick.invoke()
+            }
+            SendMoneyOptionsEvent.NavigateToBankTransfer -> {
+                onBankTransferClick.invoke()
+            }
+            SendMoneyOptionsEvent.NavigateToFineractPayments -> {
+                onFineractPaymentsClick.invoke()
+            }
+            is SendMoneyOptionsEvent.QrCodeScanned -> {
+                onQrCodeScanned.invoke(event.data)
+            }
+            is SendMoneyOptionsEvent.NavigateToPayeeDetails -> {
+                onNavigateToPayeeDetails.invoke(event.qrCodeData)
+            }
         }
     }
     MifosGradientBackground {

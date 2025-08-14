@@ -30,6 +30,7 @@ import org.mifospay.core.designsystem.component.MifosScaffold
 internal fun ScanQrCodeScreen(
     navigateBack: () -> Unit,
     navigateToSendScreen: (String) -> Unit,
+    navigateToPayeeDetailsScreen: (String) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: ScanQrViewModel = koinViewModel(),
 ) {
@@ -42,6 +43,10 @@ internal fun ScanQrCodeScreen(
         when (eventFlow) {
             is ScanQrEvent.OnNavigateToSendScreen -> {
                 navigateToSendScreen.invoke((eventFlow as ScanQrEvent.OnNavigateToSendScreen).data)
+            }
+
+            is ScanQrEvent.OnNavigateToPayeeDetails -> {
+                navigateToPayeeDetailsScreen.invoke((eventFlow as ScanQrEvent.OnNavigateToPayeeDetails).data)
             }
 
             is ScanQrEvent.ShowToast -> {

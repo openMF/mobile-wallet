@@ -23,18 +23,24 @@ class ScanQrViewModel : ViewModel() {
 
     fun onScanned(data: String): Boolean {
         return try {
-            try {
+            val isUpiQr = try {
                 UpiQrCodeProcessor.decodeUpiString(data)
+                true
             } catch (e: Exception) {
                 if (StandardUpiQrCodeProcessor.isValidUpiQrCode(data)) {
                     StandardUpiQrCodeProcessor.parseUpiQrCode(data)
+                    true
                 } else {
-                    throw e
+                    false
                 }
             }
 
             _eventFlow.update {
-                ScanQrEvent.OnNavigateToSendScreen(data)
+                if (isUpiQr) {
+                    ScanQrEvent.OnNavigateToPayeeDetails(data)
+                } else {
+                    ScanQrEvent.OnNavigateToSendScreen(data)
+                }
             }
 
             true
@@ -49,5 +55,6 @@ class ScanQrViewModel : ViewModel() {
 
 sealed interface ScanQrEvent {
     data class OnNavigateToSendScreen(val data: String) : ScanQrEvent
+    data class OnNavigateToPayeeDetails(val data: String) : ScanQrEvent
     data class ShowToast(val message: String) : ScanQrEvent
 }
