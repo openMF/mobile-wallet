@@ -375,8 +375,8 @@ platform :ios do
         targets: [ios_config[:target]],
         team_id: ios_config[:team_id],
         code_sign_identity: ios_config[:code_sign_identity],
-        profile_name: ios_config[:provisioning_profile_name],
-        bundle_identifier: ios_config[:app_identifier]
+        profile_name: provisioning_profile_name,
+        bundle_identifier: app_identifier
       )
 
       build_ios_app(
