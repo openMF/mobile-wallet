@@ -14,20 +14,10 @@ plugins {
     alias(libs.plugins.kotlinCocoapods)
 }
 
-val deviceOnlyIos: Boolean = providers
-    .gradleProperty("kmp.ios.deviceOnly")
-    .orElse("false")
-    .map { it.equals("true", ignoreCase = true)}
-    .get()
-
 kotlin {
-    if (deviceOnlyIos) {
-        iosArm64()   // device only
-    } else {
-        iosArm64()
-        iosSimulatorArm64()
-        iosX64()
-    }
+    iosArm64()
+    iosSimulatorArm64()
+    iosX64()
 
     sourceSets {
         commonMain.dependencies {
