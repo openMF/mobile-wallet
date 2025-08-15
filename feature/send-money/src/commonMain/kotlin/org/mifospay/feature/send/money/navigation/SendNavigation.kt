@@ -44,13 +44,14 @@ fun NavController.navigateToPayeeDetailsScreen(
     qrCodeData: String,
     navOptions: NavOptions? = null,
 ) {
-    val route = "$PAYEE_DETAILS_ROUTE?$PAYEE_DETAILS_ARG=$qrCodeData"
+    // URL encode the QR code data to handle special characters like &, =, etc.
+    val encodedQrCodeData = qrCodeData.urlEncode()
+    val route = "$PAYEE_DETAILS_ROUTE?$PAYEE_DETAILS_ARG=$encodedQrCodeData"
     val options = navOptions ?: navOptions {
         popUpTo(SEND_MONEY_OPTIONS_ROUTE) { inclusive = false }
     }
     navigate(route, options)
 }
-
 fun NavGraphBuilder.sendMoneyScreen(
     onBackClick: () -> Unit,
     navigateToTransferScreen: (String) -> Unit,
@@ -134,4 +135,42 @@ fun NavController.navigateToSendMoneyScreen(
     }
 
     navigate(route, options)
+}
+
+/**
+ * URL encodes a string to handle special characters in navigation
+ *
+ * Optimized for UPI QR codes with future-proofing for common special characters.
+ *
+ * Essential UPI characters (12):
+ * - URL structure: ?, &, =, %
+ * - VPA format: @
+ * - Common text: space, ", ', comma
+ * - URLs: /, :, #, +
+ *
+ * Future-proofing characters (5):
+ * - Currency symbols: $
+ * - URL parameters: ;
+ * - JSON/structured data: [, ], {, }
+ */
+private fun String.urlEncode(): String {
+    return this.replace("%", "%25")
+        .replace(" ", "%20")
+        .replace("&", "%26")
+        .replace("=", "%3D")
+        .replace("?", "%3F")
+        .replace("@", "%40")
+        .replace("+", "%2B")
+        .replace("/", "%2F")
+        .replace(":", "%3A")
+        .replace("#", "%23")
+        .replace("\"", "%22")
+        .replace("'", "%27")
+        .replace(",", "%2C")
+        .replace("$", "%24")
+        .replace(";", "%3B")
+        .replace("[", "%5B")
+        .replace("]", "%5D")
+        .replace("{", "%7B")
+        .replace("}", "%7D")
 }

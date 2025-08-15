@@ -24,12 +24,13 @@ class PayeeDetailsViewModel(
         val safeQrCodeDataString = savedStateHandle.get<String>("qrCodeData") ?: ""
 
         if (safeQrCodeDataString.isNotEmpty()) {
-            // Restore & characters that were replaced for safe navigation
-            val qrCodeDataString = safeQrCodeDataString.replace("___AMP___", "&")
-            val qrCodeData = if (StandardUpiQrCodeProcessor.isValidUpiQrCode(qrCodeDataString)) {
+            // URL decode the QR code data to restore special characters
+            val qrCodeDataString = safeQrCodeDataString.urlDecode()
+            val isUpiCode = StandardUpiQrCodeProcessor.isValidUpiQrCode(qrCodeDataString)
+
+            val qrCodeData = if (isUpiCode) {
                 StandardUpiQrCodeProcessor.parseUpiQrCode(qrCodeDataString)
             } else {
-                // For non-UPI QR codes, create a basic StandardUpiQrData
                 StandardUpiQrCodeProcessor.parseUpiQrCode("upi://pay?pa=$qrCodeDataString&pn=Unknown")
             }
 
@@ -53,7 +54,18 @@ class PayeeDetailsViewModel(
                 sendEvent(PayeeDetailsEvent.NavigateBack)
             }
             is PayeeDetailsAction.UpdateAmount -> {
-                mutableStateFlow.value = stateFlow.value.copy(amount = action.amount)
+                val cleanAmount = action.amount.replace(",", "")
+                val isValidAmount = cleanAmount.isEmpty() || cleanAmount.toDoubleOrNull() != null
+
+                if (isValidAmount) {
+                    val amountValue = cleanAmount.toDoubleOrNull() ?: 0.0
+                    val showMessage = amountValue > 500000
+
+                    mutableStateFlow.value = stateFlow.value.copy(
+                        amount = cleanAmount,
+                        showMaxAmountMessage = showMessage,
+                    )
+                }
             }
             is PayeeDetailsAction.UpdateNote -> {
                 mutableStateFlow.value = stateFlow.value.copy(note = action.note)
@@ -79,7 +91,39 @@ data class PayeeDetailsState(
     val isAmountEditable: Boolean = true,
     val isUpiCode: Boolean = false,
     val isLoading: Boolean = false,
-)
+    val showMaxAmountMessage: Boolean = false,
+) {
+    val formattedAmount: String
+        get() = if (amount.isEmpty()) "0" else formatAmountWithCommas(amount)
+
+    val isAmountExceedingMax: Boolean
+        get() = amount.toDoubleOrNull()?.let { it > 500000 } ?: false
+
+    private fun formatAmountWithCommas(amountStr: String): String {
+        val cleanAmount = amountStr.replace(",", "")
+        return try {
+            val amount = cleanAmount.toDouble()
+            if (amount == 0.0) return "0"
+
+            val parts = amount.toString().split(".")
+            val integerPart = parts[0]
+            val decimalPart = if (parts.size > 1) parts[1] else ""
+
+            val formattedInteger = integerPart.reversed()
+                .chunked(3)
+                .joinToString(",")
+                .reversed()
+
+            if (decimalPart.isNotEmpty()) {
+                "$formattedInteger.$decimalPart"
+            } else {
+                formattedInteger
+            }
+        } catch (e: NumberFormatException) {
+            amountStr
+        }
+    }
+}
 
 sealed interface PayeeDetailsEvent {
     data object NavigateBack : PayeeDetailsEvent
@@ -92,4 +136,44 @@ sealed interface PayeeDetailsAction {
     data class UpdateAmount(val amount: String) : PayeeDetailsAction
     data class UpdateNote(val note: String) : PayeeDetailsAction
     data object ProceedToPayment : PayeeDetailsAction
+}
+
+/**
+ * URL decodes a string to restore special characters from navigation
+ *
+ * Optimized for UPI QR codes with future-proofing for common special characters.
+ *
+ * Essential UPI characters (12):
+ * - URL structure: ?, &, =, %
+ * - VPA format: @
+ * - Common text: space, ", ', comma
+ * - URLs: /, :, #, +
+ *
+ * Future-proofing characters (5):
+ * - Currency symbols: $
+ * - URL parameters: ;
+ * - JSON/structured data: [, ], {, }
+ *
+ * Note: %25 (percent) must be decoded last to avoid double decoding.
+ */
+private fun String.urlDecode(): String {
+    return this.replace("%20", " ")
+        .replace("%26", "&")
+        .replace("%3D", "=")
+        .replace("%3F", "?")
+        .replace("%40", "@")
+        .replace("%2B", "+")
+        .replace("%2F", "/")
+        .replace("%3A", ":")
+        .replace("%23", "#")
+        .replace("%22", "\"")
+        .replace("%27", "'")
+        .replace("%2C", ",")
+        .replace("%24", "$")
+        .replace("%3B", ";")
+        .replace("%5B", "[")
+        .replace("%5D", "]")
+        .replace("%7B", "{")
+        .replace("%7D", "}")
+        .replace("%25", "%")
 }

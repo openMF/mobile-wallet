@@ -9,18 +9,28 @@
  */
 package org.mifospay.feature.send.money
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.repeatable
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
@@ -29,16 +39,23 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.compose.ui.unit.times
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.koin.compose.viewmodel.koinViewModel
 import org.mifospay.core.designsystem.component.MifosGradientBackground
@@ -90,7 +107,7 @@ fun PayeeDetailsScreen(
 
                 PayeeProfileSection(state)
 
-                Spacer(modifier = Modifier.height(KptTheme.spacing.lg))
+                Spacer(modifier = Modifier.height(KptTheme.spacing.xl))
 
                 PaymentDetailsSection(
                     state = state,
@@ -146,17 +163,48 @@ private fun PayeeProfileSection(
                     ),
                 contentAlignment = Alignment.Center,
             ) {
-                Icon(
-                    imageVector = MifosIcons.Person,
-                    contentDescription = "Payee Profile",
-                    modifier = Modifier.size(40.dp),
-                    tint = KptTheme.colorScheme.onPrimaryContainer,
-                )
+                if (state.payeeName.isNotEmpty() && state.payeeName != "UNKNOWN") {
+                    val firstLetter = state.payeeName
+                        .replace("%20", " ")
+                        .trim()
+                        .firstOrNull()
+                        ?.uppercase()
+
+                    if (firstLetter != null) {
+                        Text(
+                            text = firstLetter,
+                            style = KptTheme.typography.headlineLarge.copy(
+                                fontSize = 32.sp,
+                                fontWeight = FontWeight.Bold,
+                            ),
+                            color = KptTheme.colorScheme.onPrimaryContainer,
+                            textAlign = TextAlign.Center,
+                        )
+                    } else {
+                        Icon(
+                            imageVector = MifosIcons.Person,
+                            contentDescription = "Payee Profile",
+                            modifier = Modifier.size(40.dp),
+                            tint = KptTheme.colorScheme.onPrimaryContainer,
+                        )
+                    }
+                } else {
+                    Icon(
+                        imageVector = MifosIcons.Person,
+                        contentDescription = "Payee Profile",
+                        modifier = Modifier.size(40.dp),
+                        tint = KptTheme.colorScheme.onPrimaryContainer,
+                    )
+                }
             }
 
-            if (state.payeeName.isNotEmpty()) {
+            if (state.payeeName.isNotEmpty() && state.payeeName != "UNKNOWN") {
+                val decodedName = state.payeeName
+                    .replace("%20", " ")
+                    .trim()
+
                 Text(
-                    text = state.payeeName,
+                    text = "Paying ${decodedName.uppercase()}",
                     style = KptTheme.typography.headlineSmall,
                     fontWeight = FontWeight.SemiBold,
                     color = KptTheme.colorScheme.onSurface,
@@ -165,7 +213,7 @@ private fun PayeeProfileSection(
             }
 
             val contactInfo = if (state.isUpiCode) {
-                state.upiId
+                "UPI ID: ${state.upiId}"
             } else {
                 state.phoneNumber
             }
@@ -190,54 +238,191 @@ private fun PaymentDetailsSection(
     onNoteChange: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Card(
+    Column(
         modifier = modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(
-            containerColor = KptTheme.colorScheme.surface,
-        ),
-        shape = RoundedCornerShape(KptTheme.spacing.md),
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.lg),
     ) {
-        Column(
+        ExpandableAmountInput(
+            value = state.formattedAmount,
+            onValueChange = onAmountChange,
+            enabled = state.isAmountEditable,
+            modifier = Modifier.wrapContentWidth(),
+        )
+
+        AnimatedVisibility(
+            visible = state.showMaxAmountMessage,
+            enter = fadeIn(animationSpec = tween(300)),
+            exit = fadeOut(animationSpec = tween(300)),
+        ) {
+            val vibrationOffset by animateFloatAsState(
+                targetValue = if (state.showMaxAmountMessage) 1f else 0f,
+                animationSpec = repeatable(
+                    iterations = 3,
+                    animation = tween(100, delayMillis = 0),
+                ),
+                label = "vibration",
+            )
+
+            Text(
+                text = "Amount cannot be more than ₹ 5,00,000",
+                style = KptTheme.typography.bodySmall,
+                color = KptTheme.colorScheme.error,
+                modifier = Modifier
+                    .padding(top = KptTheme.spacing.xs)
+                    .graphicsLayer {
+                        translationX = if (state.showMaxAmountMessage) {
+                            (vibrationOffset * 10f * (if (vibrationOffset % 2 == 0f) 1f else -1f))
+                        } else {
+                            0f
+                        }
+                    },
+            )
+        }
+
+        ExpandableNoteInput(
+            value = state.note,
+            onValueChange = onNoteChange,
+            modifier = Modifier.wrapContentWidth(),
+        )
+    }
+}
+
+@Composable
+private fun ExpandableAmountInput(
+    value: String,
+    onValueChange: (String) -> Unit,
+    enabled: Boolean,
+    modifier: Modifier = Modifier,
+) {
+    val focusRequester = remember { FocusRequester() }
+    val displayValue = value.ifEmpty { "0" }
+
+    Column(modifier = modifier) {
+        Row(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(KptTheme.spacing.lg),
-            verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.lg),
+                .wrapContentWidth()
+                .clip(RoundedCornerShape(KptTheme.spacing.sm))
+                .background(
+                    color = KptTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f),
+                    shape = RoundedCornerShape(KptTheme.spacing.sm),
+                )
+                .padding(
+                    horizontal = KptTheme.spacing.md,
+                    vertical = KptTheme.spacing.sm,
+                ),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center,
         ) {
             Text(
-                text = "Payment Details",
-                style = KptTheme.typography.titleLarge,
-                fontWeight = FontWeight.SemiBold,
-                color = KptTheme.colorScheme.onSurface,
+                text = "₹",
+                style = TextStyle(
+                    fontSize = 24.sp,
+                    fontWeight = FontWeight.Medium,
+                    color = KptTheme.colorScheme.onSurface,
+                ),
             )
 
-            OutlinedTextField(
-                value = state.amount,
-                onValueChange = onAmountChange,
-                label = { Text("Amount") },
-                enabled = state.isAmountEditable,
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                modifier = Modifier.fillMaxWidth(),
-                leadingIcon = {
-                    Icon(
-                        imageVector = MifosIcons.Currency,
-                        contentDescription = "Amount",
-                        tint = KptTheme.colorScheme.onSurfaceVariant,
-                    )
-                },
-            )
+            Spacer(modifier = Modifier.width(KptTheme.spacing.sm))
 
-            OutlinedTextField(
-                value = state.note,
+            BasicTextField(
+                value = displayValue,
                 onValueChange = { newValue ->
-                    if (newValue.length <= 50) {
-                        onNoteChange(newValue)
+                    val cleanValue = newValue.replace(",", "").replace(".", "")
+                    if (cleanValue.isEmpty() || cleanValue.toLongOrNull() != null) {
+                        val amount = cleanValue.toLongOrNull() ?: 0L
+                        if (amount <= 500000) {
+                            onValueChange(cleanValue)
+                        }
                     }
                 },
-                placeholder = { Text("Add note") },
-                modifier = Modifier.fillMaxWidth(),
-                maxLines = 2,
-                singleLine = false,
+                enabled = enabled,
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                textStyle = TextStyle(
+                    fontSize = 24.sp,
+                    fontWeight = FontWeight.Medium,
+                    color = KptTheme.colorScheme.onSurface,
+                    textAlign = TextAlign.Center,
+                ),
+                modifier = Modifier
+                    .width(
+                        when {
+                            displayValue.length <= 1 -> 24.dp
+                            displayValue.length <= 3 -> displayValue.length * 16.dp
+                            displayValue.length <= 6 -> displayValue.length * 14.dp
+                            else -> displayValue.length * 12.dp
+                        },
+                    )
+                    .focusRequester(focusRequester),
+                singleLine = true,
+            )
+        }
+    }
+}
+
+@Composable
+private fun ExpandableNoteInput(
+    value: String,
+    onValueChange: (String) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    val focusRequester = remember { FocusRequester() }
+
+    Column(modifier = modifier) {
+        Row(
+            modifier = Modifier
+                .wrapContentWidth()
+                .clip(RoundedCornerShape(KptTheme.spacing.sm))
+                .background(
+                    color = KptTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f),
+                    shape = RoundedCornerShape(KptTheme.spacing.sm),
+                )
+                .padding(
+                    horizontal = KptTheme.spacing.md,
+                    vertical = KptTheme.spacing.sm,
+                ),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            BasicTextField(
+                value = value,
+                onValueChange = { newValue ->
+                    if (newValue.length <= 50) {
+                        onValueChange(newValue)
+                    }
+                },
+                enabled = true,
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+                textStyle = TextStyle(
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Normal,
+                    color = if (value.isEmpty()) KptTheme.colorScheme.onSurfaceVariant else KptTheme.colorScheme.onSurface,
+                    textAlign = TextAlign.Center,
+                ),
+                modifier = Modifier
+                    .width(
+                        when {
+                            value.length <= 7 -> 7 * 12.dp
+                            value.length <= 28 -> (value.length + 1) * 12.dp
+                            else -> 28 * 12.dp
+                        },
+                    )
+                    .focusRequester(focusRequester),
+                singleLine = value.length <= 28,
+                maxLines = if (value.length > 28) 2 else 1,
+                decorationBox = { innerTextField ->
+                    if (value.isEmpty()) {
+                        Text(
+                            text = "Add note",
+                            style = TextStyle(
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight.Normal,
+                                color = KptTheme.colorScheme.onSurfaceVariant,
+                                textAlign = TextAlign.Center,
+                            ),
+                        )
+                    }
+                    innerTextField()
+                },
             )
         }
     }
@@ -249,7 +434,10 @@ private fun ProceedButton(
     onProceedClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val isAmountValid = state.amount.isNotEmpty() && state.amount.toDoubleOrNull() != null
+    val isAmountValid = state.amount.isNotEmpty() &&
+        state.amount.toLongOrNull() != null &&
+        state.amount.toLong() > 0 &&
+        !state.isAmountExceedingMax
     val isContactValid = state.upiId.isNotEmpty() || state.phoneNumber.isNotEmpty()
 
     Button(

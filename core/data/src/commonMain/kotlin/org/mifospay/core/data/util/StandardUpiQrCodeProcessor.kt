@@ -39,11 +39,12 @@ object StandardUpiQrCodeProcessor {
         }
 
         val paramsString = qrData.substringAfter("upi://").substringAfter("UPI://")
-
         val parts = paramsString.split("?", limit = 2)
         val params = if (parts.size > 1) parseParams(parts[1]) else emptyMap()
 
-        val payeeVpa = params["pa"] ?: throw IllegalArgumentException("Missing payee VPA (pa) in UPI QR code")
+        val payeeVpa = params["pa"] ?: run {
+            throw IllegalArgumentException("Missing payee VPA (pa) in UPI QR code")
+        }
         val payeeName = params["pn"] ?: "Unknown"
 
         val vpaParts = payeeVpa.split("@", limit = 2)
