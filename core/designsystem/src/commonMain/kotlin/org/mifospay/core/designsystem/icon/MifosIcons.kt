@@ -11,6 +11,7 @@ package org.mifospay.core.designsystem.icon
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.filled.ArrowOutward
 import androidx.compose.material.icons.filled.AttachMoney
@@ -130,5 +131,8 @@ object MifosIcons {
     val Scan = Icons.Outlined.QrCodeScanner
     val RadioButtonUnchecked = Icons.Default.RadioButtonUnchecked
     val RadioButtonChecked = Icons.Filled.RadioButtonChecked
-    val Currency = Icons.Filled.CurrencyRupee
+
+    val ArrowForward = Icons.AutoMirrored.Filled.ArrowForward
+
+    val CurrencyRupee = Icons.Filled.CurrencyRupee
 }
