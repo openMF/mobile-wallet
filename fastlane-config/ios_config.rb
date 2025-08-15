@@ -29,7 +29,7 @@ module FastlaneConfig
       issuer_id: "7ab9e231-9603-4c3e-a147-be3b0f123456",
       key_filepath: "./secrets/Auth_key.p8",
       version_number: "1.0.0",
-      metadata_path: "./fastlane/ios/metadata",
+      metadata_path: "./fastlane/metadata/ios",
       app_rating_config_path: "./fastlane/age_rating.json"
     }
   end

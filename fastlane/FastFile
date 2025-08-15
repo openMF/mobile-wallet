@@ -539,7 +539,7 @@ platform :ios do
         version_number: ios_config[:version_number]
       )
 
-      latest_build_number = app_store_build_number(
+      latest_build_number = latest_testflight_build_number(
         app_identifier: options[:app_identifier] || ios_config[:app_identifier],
         api_key: Actions.lane_context[SharedValues::APP_STORE_CONNECT_API_KEY],
         version: ios_config[:version_number]
@@ -561,9 +561,9 @@ platform :ios do
       deliver(
         metadata_path: options[:metadata_path] || ios_config[:metadata_path],
         submit_for_review: false, # Set to true if you want to auto-submit for review
-        automatic_release: ture, # Set to true if you want to auto-release once it approved
+        automatic_release: true, # Set to true if you want to auto-release once it approved
         api_key: Actions.lane_context[SharedValues::APP_STORE_CONNECT_API_KEY],
-        skip_app_version_update: true,
+        skip_app_version_update: false,
         force: true, # Skips HTML report verification
         precheck_include_in_app_purchases: false,
         overwrite_screenshots: true,
