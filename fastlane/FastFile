@@ -368,17 +368,6 @@ platform :ios do
         repo_update: true
       )
 
-      # Manual signing for your main app target
-      update_code_signing_settings(
-        use_automatic_signing: false,
-        path: ios_config[:project_path],
-        targets: [ios_config[:target]],
-        team_id: ios_config[:team_id],
-        code_sign_identity: ios_config[:code_sign_identity],
-        profile_name: provisioning_profile_name,
-        bundle_identifier: app_identifier
-      )
-
       build_ios_app(
         scheme: ios_config[:scheme],
         workspace: ios_config[:workspace_path],
@@ -497,6 +486,13 @@ platform :ios do
       increment_build_number(
         xcodeproj: ios_config[:project_path],
         build_number: latest_build_number + 1
+      )
+
+      update_plist(
+        plist_path: ios_config[:plist_path],
+        block: proc do |plist|
+            plist["NSCameraUsageDescription"] = "We use the camera to scan QR codes to send and receive payments."
+        end
       )
 
       build_ios_project(

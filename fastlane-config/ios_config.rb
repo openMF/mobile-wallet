@@ -28,7 +28,7 @@ module FastlaneConfig
           key_id: "7V3ABCDEFG",
           issuer_id: "7ab9e231-9603-4c3e-a147-be3b0f123456",
           key_filepath: "./secrets/Auth_key.p8",
-          version_number: "1.0",
+          version_number: "1.0.0",
           metadata_path: "./fastlane/metadata",
           app_rating_config_path: "./fastlane/age_rating.json"
         }
