@@ -10,7 +10,10 @@
 package org.mifospay.feature.send.money
 
 import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import org.mifospay.core.data.util.StandardUpiQrCodeProcessor
 import org.mifospay.core.ui.utils.BaseViewModel
 
@@ -24,7 +27,6 @@ class PayeeDetailsViewModel(
         val safeQrCodeDataString = savedStateHandle.get<String>("qrCodeData") ?: ""
 
         if (safeQrCodeDataString.isNotEmpty()) {
-            // URL decode the QR code data to restore special characters
             val qrCodeDataString = safeQrCodeDataString.urlDecode()
             val isUpiCode = StandardUpiQrCodeProcessor.isValidUpiQrCode(qrCodeDataString)
 
@@ -65,10 +67,22 @@ class PayeeDetailsViewModel(
                         amount = cleanAmount,
                         showMaxAmountMessage = showMessage,
                     )
+
+                    if (showMessage) {
+                        viewModelScope.launch {
+                            delay(2000)
+                            mutableStateFlow.value = stateFlow.value.copy(
+                                showMaxAmountMessage = false,
+                            )
+                        }
+                    }
                 }
             }
             is PayeeDetailsAction.UpdateNote -> {
                 mutableStateFlow.value = stateFlow.value.copy(note = action.note)
+            }
+            is PayeeDetailsAction.NoteFieldFocused -> {
+                mutableStateFlow.value = stateFlow.value.copy(hasNoteFieldBeenFocused = true)
             }
             is PayeeDetailsAction.ProceedToPayment -> {
                 val currentState = stateFlow.value
@@ -92,6 +106,7 @@ data class PayeeDetailsState(
     val isUpiCode: Boolean = false,
     val isLoading: Boolean = false,
     val showMaxAmountMessage: Boolean = false,
+    val hasNoteFieldBeenFocused: Boolean = false,
 ) {
     val formattedAmount: String
         get() = if (amount.isEmpty()) "0" else formatAmountWithCommas(amount)
@@ -103,7 +118,7 @@ data class PayeeDetailsState(
         val cleanAmount = amountStr.replace(",", "")
         return try {
             val amount = cleanAmount.toDouble()
-            if (amount == 0.0) return "0"
+            if (amount == 0.0) return if (isUpiCode) "0.00" else "0"
 
             val parts = amount.toString().split(".")
             val integerPart = parts[0]
@@ -114,10 +129,15 @@ data class PayeeDetailsState(
                 .joinToString(",")
                 .reversed()
 
-            if (decimalPart.isNotEmpty()) {
-                "$formattedInteger.$decimalPart"
+            if (isUpiCode) {
+                val paddedDecimalPart = decimalPart.padEnd(2, '0').take(2)
+                "$formattedInteger.$paddedDecimalPart"
             } else {
-                formattedInteger
+                if (decimalPart.isNotEmpty()) {
+                    "$formattedInteger.$decimalPart"
+                } else {
+                    formattedInteger
+                }
             }
         } catch (e: NumberFormatException) {
             amountStr
@@ -135,6 +155,7 @@ sealed interface PayeeDetailsAction {
     data object NavigateBack : PayeeDetailsAction
     data class UpdateAmount(val amount: String) : PayeeDetailsAction
     data class UpdateNote(val note: String) : PayeeDetailsAction
+    data object NoteFieldFocused : PayeeDetailsAction
     data object ProceedToPayment : PayeeDetailsAction
 }
 

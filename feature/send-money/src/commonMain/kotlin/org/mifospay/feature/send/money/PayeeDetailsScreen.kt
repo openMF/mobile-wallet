@@ -19,8 +19,10 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -41,13 +43,17 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -95,40 +101,52 @@ fun PayeeDetailsScreen(
                 )
             },
         ) { paddingValues ->
-            Column(
+            Box(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(paddingValues)
-                    .padding(horizontal = KptTheme.spacing.lg)
-                    .verticalScroll(rememberScrollState()),
-                verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.lg),
+                    .fillMaxSize()
+                    .padding(paddingValues),
             ) {
-                Spacer(modifier = Modifier.height(KptTheme.spacing.md))
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = KptTheme.spacing.lg)
+                        .verticalScroll(rememberScrollState()),
+                    verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.lg),
+                ) {
+                    Spacer(modifier = Modifier.height(KptTheme.spacing.md))
 
-                PayeeProfileSection(state)
+                    PayeeProfileSection(state)
 
-                Spacer(modifier = Modifier.height(KptTheme.spacing.xl))
+                    Spacer(modifier = Modifier.height(KptTheme.spacing.xs))
 
-                PaymentDetailsSection(
-                    state = state,
-                    onAmountChange = { amount ->
-                        viewModel.trySendAction(PayeeDetailsAction.UpdateAmount(amount))
-                    },
-                    onNoteChange = { note ->
-                        viewModel.trySendAction(PayeeDetailsAction.UpdateNote(note))
-                    },
-                )
+                    PaymentDetailsSection(
+                        state = state,
+                        onAmountChange = { amount ->
+                            viewModel.trySendAction(PayeeDetailsAction.UpdateAmount(amount))
+                        },
+                        onNoteChange = { note ->
+                            viewModel.trySendAction(PayeeDetailsAction.UpdateNote(note))
+                        },
+                        onNoteFieldFocused = {
+                            viewModel.trySendAction(PayeeDetailsAction.NoteFieldFocused)
+                        },
+                    )
 
-                Spacer(modifier = Modifier.height(KptTheme.spacing.xl))
+                    Spacer(modifier = Modifier.height(KptTheme.spacing.xl))
+                }
 
                 ProceedButton(
                     state = state,
                     onProceedClick = {
                         viewModel.trySendAction(PayeeDetailsAction.ProceedToPayment)
                     },
+                    modifier = Modifier
+                        .align(Alignment.BottomEnd)
+                        .padding(
+                            end = KptTheme.spacing.lg,
+                            bottom = KptTheme.spacing.lg,
+                        ),
                 )
-
-                Spacer(modifier = Modifier.height(KptTheme.spacing.lg))
             }
         }
     }
@@ -236,6 +254,7 @@ private fun PaymentDetailsSection(
     state: PayeeDetailsState,
     onAmountChange: (String) -> Unit,
     onNoteChange: (String) -> Unit,
+    onNoteFieldFocused: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -283,11 +302,13 @@ private fun PaymentDetailsSection(
         ExpandableNoteInput(
             value = state.note,
             onValueChange = onNoteChange,
+            onFieldFocused = onNoteFieldFocused,
             modifier = Modifier.wrapContentWidth(),
         )
     }
 }
 
+// TODO improve amount validation and UI/UX
 @Composable
 private fun ExpandableAmountInput(
     value: String,
@@ -297,6 +318,31 @@ private fun ExpandableAmountInput(
 ) {
     val focusRequester = remember { FocusRequester() }
     val displayValue = value.ifEmpty { "0" }
+
+    /**
+     * Calculate width based on the display value
+     * When showing "0" (single digit), use minimal width
+     * When user enters decimal or additional digits, expand dynamically
+     * Maximum amount is ₹5,00,000 (6 digits + decimal + up to 2 decimal places = max 9 characters)
+     */
+    val textFieldWidth = when {
+        displayValue == "0" -> 24.dp
+        displayValue.length == 2 -> 32.dp
+        displayValue.length == 3 -> 48.dp
+        displayValue.length == 4 -> 64.dp
+        displayValue.length == 5 -> 80.dp
+        displayValue.length == 6 -> 96.dp
+        displayValue.length == 7 -> 112.dp
+        displayValue.length == 8 -> 128.dp
+        displayValue.length == 9 -> 144.dp
+        else -> 144.dp // Maximum width for ₹5,00,000.00
+    }
+
+    LaunchedEffect(enabled) {
+        if (enabled) {
+            focusRequester.requestFocus()
+        }
+    }
 
     Column(modifier = modifier) {
         Row(
@@ -314,13 +360,10 @@ private fun ExpandableAmountInput(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center,
         ) {
-            Text(
-                text = "₹",
-                style = TextStyle(
-                    fontSize = 24.sp,
-                    fontWeight = FontWeight.Medium,
-                    color = KptTheme.colorScheme.onSurface,
-                ),
+            Icon(
+                imageVector = MifosIcons.CurrencyRupee,
+                contentDescription = "Rupee Icon",
+                tint = KptTheme.colorScheme.onSurface,
             )
 
             Spacer(modifier = Modifier.width(KptTheme.spacing.sm))
@@ -328,16 +371,19 @@ private fun ExpandableAmountInput(
             BasicTextField(
                 value = displayValue,
                 onValueChange = { newValue ->
-                    val cleanValue = newValue.replace(",", "").replace(".", "")
-                    if (cleanValue.isEmpty() || cleanValue.toLongOrNull() != null) {
-                        val amount = cleanValue.toLongOrNull() ?: 0L
-                        if (amount <= 500000) {
-                            onValueChange(cleanValue)
-                        }
+                    val cleanValue = newValue.replace(",", "")
+                    if (cleanValue.isEmpty() || cleanValue.toDoubleOrNull() != null) {
+                        val amount = cleanValue.toDoubleOrNull() ?: 0.0
+
+                        /**
+                         * Allow the input to be processed by ViewModel for error handling
+                         * The ViewModel will show error message briefly for invalid amounts
+                         */
+                        onValueChange(cleanValue)
                     }
                 },
                 enabled = enabled,
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
                 textStyle = TextStyle(
                     fontSize = 24.sp,
                     fontWeight = FontWeight.Medium,
@@ -345,14 +391,7 @@ private fun ExpandableAmountInput(
                     textAlign = TextAlign.Center,
                 ),
                 modifier = Modifier
-                    .width(
-                        when {
-                            displayValue.length <= 1 -> 24.dp
-                            displayValue.length <= 3 -> displayValue.length * 16.dp
-                            displayValue.length <= 6 -> displayValue.length * 14.dp
-                            else -> displayValue.length * 12.dp
-                        },
-                    )
+                    .width(textFieldWidth)
                     .focusRequester(focusRequester),
                 singleLine = true,
             )
@@ -360,13 +399,16 @@ private fun ExpandableAmountInput(
     }
 }
 
+// TODO improve add note UI/UX
 @Composable
 private fun ExpandableNoteInput(
     value: String,
     onValueChange: (String) -> Unit,
+    onFieldFocused: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val focusRequester = remember { FocusRequester() }
+    var isFocused by remember { mutableStateOf(false) }
 
     Column(modifier = modifier) {
         Row(
@@ -406,7 +448,13 @@ private fun ExpandableNoteInput(
                             else -> 28 * 12.dp
                         },
                     )
-                    .focusRequester(focusRequester),
+                    .focusRequester(focusRequester)
+                    .onFocusChanged { focusState ->
+                        if (focusState.isFocused && !isFocused) {
+                            isFocused = true
+                            onFieldFocused()
+                        }
+                    },
                 singleLine = value.length <= 28,
                 maxLines = if (value.length > 28) 2 else 1,
                 decorationBox = { innerTextField ->
@@ -428,33 +476,51 @@ private fun ExpandableNoteInput(
     }
 }
 
+// TODO improve UI/UX of proceed button
 @Composable
 private fun ProceedButton(
     state: PayeeDetailsState,
     onProceedClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val isAmountValid = state.amount.isNotEmpty() &&
-        state.amount.toLongOrNull() != null &&
-        state.amount.toLong() > 0 &&
-        !state.isAmountExceedingMax
+    val isAmountValid = if (state.isUpiCode) {
+        state.amount.isNotEmpty() &&
+            state.amount.toDoubleOrNull() != null &&
+            state.amount.toDouble() >= 0 &&
+            !state.isAmountExceedingMax
+    } else {
+        state.amount.isNotEmpty() &&
+            state.amount.toDoubleOrNull() != null &&
+            state.amount.toDouble() > 0 &&
+            !state.isAmountExceedingMax
+    }
     val isContactValid = state.upiId.isNotEmpty() || state.phoneNumber.isNotEmpty()
+    val isAmountPrefilled = !state.isAmountEditable
+    val showCheckMark = isAmountValid && isContactValid && (isAmountPrefilled || state.hasNoteFieldBeenFocused)
 
     Button(
         onClick = onProceedClick,
         enabled = isAmountValid && isContactValid,
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier.size(56.dp),
         colors = ButtonDefaults.buttonColors(
-            containerColor = KptTheme.colorScheme.primary,
-            contentColor = KptTheme.colorScheme.onPrimary,
+            containerColor = if (isAmountValid && isContactValid) {
+                KptTheme.colorScheme.primary
+            } else {
+                KptTheme.colorScheme.surfaceVariant
+            },
+            contentColor = if (isAmountValid && isContactValid) {
+                KptTheme.colorScheme.onPrimary
+            } else {
+                KptTheme.colorScheme.onSurfaceVariant
+            },
         ),
         shape = RoundedCornerShape(KptTheme.spacing.sm),
+        contentPadding = PaddingValues(0.dp),
     ) {
-        Text(
-            text = if (state.isUpiCode) "Proceed to UPI Payment" else "Proceed to Payment",
-            style = KptTheme.typography.titleMedium,
-            fontWeight = FontWeight.SemiBold,
-            modifier = Modifier.padding(vertical = KptTheme.spacing.sm),
+        Icon(
+            imageVector = if (showCheckMark) MifosIcons.Check else MifosIcons.ArrowForward,
+            contentDescription = if (showCheckMark) "Proceed" else "Next",
+            modifier = Modifier.size(32.dp),
         )
     }
 }
