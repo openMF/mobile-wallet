@@ -116,7 +116,7 @@ jobs:
       match_type: 'adhoc'
       provisioning_profile_name: 'match AdHoc org.mifospay'
       firebase_app_id: '1:728434912738:ios:86a7badfaed88b841a1dbb'
-      metadata_path: './fastlane/metadata'
+      metadata_path: './fastlane/metadata/ios'
       use_cocoapods: true         # <-- Set to true if using CocoaPods integration for KMP
       shared_module: ':cmp-shared' # <-- Gradle path to your shared KMP module (e.g., :shared)
       distribute_ios_firebase: ${{ inputs.distribute_ios_firebase }}
