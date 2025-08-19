@@ -17,11 +17,15 @@
 	<key>CFBundlePackageType</key>
 	<string>$(PRODUCT_BUNDLE_PACKAGE_TYPE)</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.0</string>
+	<string>1.0.0</string>
 	<key>CFBundleVersion</key>
-	<string>1</string>
+	<string>8</string>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>We use the camera to scan QR codes to send and receive payments.</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>Allow access to add photos to your library so you can save artworks directly to your device and view them offline.</string>
 	<key>UIApplicationSceneManifest</key>

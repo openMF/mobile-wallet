@@ -1,0 +1,16 @@
+Mifos Pay is a simple, secure way to send, request, and track money. Create a wallet account, add a card, share a QR to get paid, set standing instructions for recurring transfers, and manage invoices—all from one clean, modern app.
+
+WHAT YOU CAN DO
+• Sign up as a customer or merchant and complete a guided registration
+• Create a wallet savings account (subject to approval) and see your balance at a glance
+• Send money using a Virtual Payment Address (VPA), mobile number, or account number
+• Request money with your personal QR code; optionally set the amount and currency before sharing
+• Add and manage cards; view masked details and remove or edit when needed
+• Track everything in Payments: filter History by debits or credits, view statements, and see real-time notifications
+• Set SI (Standing Instructions) for automatic transfers on a fixed schedule (weeks, months, years)
+• Create and review invoices; see invoice status, items, and transaction IDs
+• Keep profile details up to date—name, address, phone, VPA—and link a bank account
+• Upload documents for KYC or support directly in the app
+• Get help fast with built-in FAQs
+
+
