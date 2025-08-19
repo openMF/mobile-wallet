@@ -19,7 +19,6 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
 import mobile_wallet.feature.make_transfer.generated.resources.Res
 import mobile_wallet.feature.make_transfer.generated.resources.feature_make_transfer_error_empty_amount
@@ -32,6 +31,7 @@ import mobile_wallet.feature.make_transfer.generated.resources.feature_make_tran
 import org.jetbrains.compose.resources.StringResource
 import org.mifospay.core.common.DataState
 import org.mifospay.core.common.DateHelper
+import org.mifospay.core.common.StringResourceSerializer
 import org.mifospay.core.common.getSerialized
 import org.mifospay.core.common.setSerialized
 import org.mifospay.core.common.utils.capitalizeWords
@@ -179,7 +179,7 @@ internal class MakeTransferViewModel(
 
             is DataState.Error -> {
                 mutableStateFlow.update {
-                    it.copy(dialogState = Error.MakeTransferStringMessage(action.result.message))
+                    it.copy(dialogState = Error.StringMessage(action.result.message))
                 }
             }
 
@@ -195,7 +195,7 @@ internal class MakeTransferViewModel(
 
     private fun updateErrorState(message: StringResource) {
         mutableStateFlow.update {
-            it.copy(dialogState = Error.MakeTransferResourceMessage(message))
+            it.copy(dialogState = Error.ResourceMessage(message))
         }
     }
 }
@@ -241,10 +241,13 @@ internal data class MakeTransferState(
         @Serializable
         sealed class Error : DialogState {
             @Serializable
-            data class MakeTransferStringMessage(val message: String) : Error()
+            data class StringMessage(val message: String) : Error()
 
             @Serializable
-            data class MakeTransferResourceMessage(@Contextual val message: StringResource) : Error()
+            data class ResourceMessage(
+                @Serializable(with = StringResourceSerializer::class)
+                val message: StringResource,
+            ) : Error()
         }
     }
 }

@@ -19,7 +19,6 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 import mobile_wallet.feature.profile.generated.resources.Res
@@ -33,6 +32,7 @@ import mobile_wallet.feature.profile.generated.resources.feature_profile_profile
 import mobile_wallet.feature.profile.generated.resources.feature_profile_profile_updated_successfully
 import org.jetbrains.compose.resources.StringResource
 import org.mifospay.core.common.DataState
+import org.mifospay.core.common.StringResourceSerializer
 import org.mifospay.core.common.getSerialized
 import org.mifospay.core.common.setSerialized
 import org.mifospay.core.common.utils.isValidEmail
@@ -143,7 +143,7 @@ internal class EditProfileViewModel(
 
             is DataState.Error -> {
                 mutableStateFlow.update {
-                    it.copy(dialogState = Error.EditProfileStringMessage(action.result.exception.message ?: ""))
+                    it.copy(dialogState = Error.StringMessage(action.result.exception.message ?: ""))
                 }
             }
 
@@ -175,37 +175,37 @@ internal class EditProfileViewModel(
     private fun handleUpdateProfile() = when {
         state.firstNameInput.isEmpty() -> {
             mutableStateFlow.update {
-                it.copy(dialogState = Error.EditProfileResourceMessage(Res.string.feature_profile_error_empty_firstname))
+                it.copy(dialogState = Error.ResourceMessage(Res.string.feature_profile_error_empty_firstname))
             }
         }
 
         state.lastNameInput.isEmpty() -> {
             mutableStateFlow.update {
-                it.copy(dialogState = Error.EditProfileResourceMessage(Res.string.feature_profile_error_empty_lastname))
+                it.copy(dialogState = Error.ResourceMessage(Res.string.feature_profile_error_empty_lastname))
             }
         }
 
         state.emailInput.isEmpty() -> {
             mutableStateFlow.update {
-                it.copy(dialogState = Error.EditProfileResourceMessage(Res.string.feature_profile_error_empty_email))
+                it.copy(dialogState = Error.ResourceMessage(Res.string.feature_profile_error_empty_email))
             }
         }
 
         !state.emailInput.isValidEmail() -> {
             mutableStateFlow.update {
-                it.copy(dialogState = Error.EditProfileResourceMessage(Res.string.feature_profile_error_invalid_email))
+                it.copy(dialogState = Error.ResourceMessage(Res.string.feature_profile_error_invalid_email))
             }
         }
 
         state.phoneNumberInput.isEmpty() -> {
             mutableStateFlow.update {
-                it.copy(dialogState = Error.EditProfileResourceMessage(Res.string.feature_profile_error_empty_phone))
+                it.copy(dialogState = Error.ResourceMessage(Res.string.feature_profile_error_empty_phone))
             }
         }
 
         state.phoneNumberInput.length < 10 -> {
             mutableStateFlow.update {
-                it.copy(dialogState = Error.EditProfileResourceMessage(Res.string.feature_profile_error_invalid_phone_length))
+                it.copy(dialogState = Error.ResourceMessage(Res.string.feature_profile_error_invalid_phone_length))
             }
         }
 
@@ -224,7 +224,7 @@ internal class EditProfileViewModel(
         when (action.result) {
             is DataState.Error -> {
                 mutableStateFlow.update {
-                    it.copy(dialogState = Error.EditProfileStringMessage(action.result.exception.message ?: ""))
+                    it.copy(dialogState = Error.StringMessage(action.result.exception.message ?: ""))
                 }
             }
 
@@ -263,7 +263,7 @@ internal class EditProfileViewModel(
         when (action.result) {
             is DataState.Error -> {
                 mutableStateFlow.update {
-                    it.copy(dialogState = Error.EditProfileStringMessage(action.result.exception.message ?: ""))
+                    it.copy(dialogState = Error.StringMessage(action.result.exception.message ?: ""))
                 }
             }
 
@@ -308,10 +308,13 @@ internal data class EditProfileState(
         @Serializable
         sealed class Error : DialogState {
             @Serializable
-            data class EditProfileStringMessage(val message: String) : Error()
+            data class StringMessage(val message: String) : Error()
 
             @Serializable
-            data class EditProfileResourceMessage(@Contextual val message: StringResource) : Error()
+            data class ResourceMessage(
+                @Serializable(with = StringResourceSerializer::class)
+                val message: StringResource,
+            ) : Error()
         }
     }
 

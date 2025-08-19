@@ -506,14 +506,14 @@ private fun SendMoneyDialogs(
     onDismissRequest: () -> Unit,
 ) {
     when (dialogState) {
-        is SendMoneyState.DialogState.Error.SendMoneyResourceMessage -> MifosBasicDialog(
+        is SendMoneyState.DialogState.Error.ResourceMessage -> MifosBasicDialog(
             visibilityState = Shown(
                 message = stringResource(dialogState.message),
             ),
             onDismissRequest = onDismissRequest,
         )
 
-        is SendMoneyState.DialogState.Error.SendMoneyGenericResourceMessage -> MifosBasicDialog(
+        is SendMoneyState.DialogState.Error.GenericResourceMessage -> MifosBasicDialog(
             visibilityState = Shown(
                 message = stringResource(
                     dialogState.message,
