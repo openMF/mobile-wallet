@@ -73,9 +73,11 @@ import org.mifospay.feature.savedcards.details.navigateToCardDetails
 import org.mifospay.feature.send.money.SendMoneyScreen
 import org.mifospay.feature.send.money.navigation.SEND_MONEY_BASE_ROUTE
 import org.mifospay.feature.send.money.navigation.SEND_MONEY_OPTIONS_ROUTE
+import org.mifospay.feature.send.money.navigation.navigateToPayAnyoneScreen
 import org.mifospay.feature.send.money.navigation.navigateToPayeeDetailsScreen
 import org.mifospay.feature.send.money.navigation.navigateToSendMoneyOptionsScreen
 import org.mifospay.feature.send.money.navigation.navigateToSendMoneyScreen
+import org.mifospay.feature.send.money.navigation.payAnyoneScreen
 import org.mifospay.feature.send.money.navigation.payeeDetailsScreen
 import org.mifospay.feature.send.money.navigation.sendMoneyOptionsScreen
 import org.mifospay.feature.send.money.navigation.sendMoneyScreen
@@ -291,7 +293,7 @@ internal fun MifosNavHost(
                 // This is now handled by the ViewModel using ML Kit scanner
             },
             onPayAnyoneClick = {
-                // TODO: Navigate to Pay Anyone screen
+                navController.navigateToPayAnyoneScreen()
             },
             onBankTransferClick = {
                 // TODO: Navigate to Bank Transfer screen
@@ -319,6 +321,10 @@ internal fun MifosNavHost(
             navigateToTransferScreen = navController::navigateToTransferScreen,
             navigateToPayeeDetailsScreen = navController::navigateToPayeeDetailsScreen,
             navigateToScanQrScreen = navController::navigateToScanQr,
+        )
+
+        payAnyoneScreen(
+            onBackClick = navController::popBackStack,
         )
 
         payeeDetailsScreen(

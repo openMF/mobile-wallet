@@ -16,6 +16,7 @@ import androidx.navigation.NavType
 import androidx.navigation.navArgument
 import androidx.navigation.navOptions
 import org.mifospay.core.ui.composableWithSlideTransitions
+import org.mifospay.feature.send.money.PayAnyoneScreen
 import org.mifospay.feature.send.money.PayeeDetailsScreen
 import org.mifospay.feature.send.money.PayeeDetailsState
 import org.mifospay.feature.send.money.SendMoneyOptionsScreen
@@ -31,6 +32,12 @@ const val PAYEE_DETAILS_ROUTE = "payee_details_route"
 const val PAYEE_DETAILS_ARG = "qrCodeData"
 
 const val PAYEE_DETAILS_BASE_ROUTE = "$PAYEE_DETAILS_ROUTE?$PAYEE_DETAILS_ARG={$PAYEE_DETAILS_ARG}"
+
+const val PAY_ANYONE_ROUTE = "pay_anyone_route"
+
+fun NavController.navigateToPayAnyoneScreen(
+    navOptions: NavOptions? = null,
+) = navigate(PAY_ANYONE_ROUTE, navOptions)
 
 fun NavController.navigateToSendMoneyScreen(
     navOptions: NavOptions? = null,
@@ -97,6 +104,18 @@ fun NavGraphBuilder.sendMoneyOptionsScreen(
             onFineractPaymentsClick = onFineractPaymentsClick,
             onQrCodeScanned = onQrCodeScanned,
             onNavigateToPayeeDetails = onNavigateToPayeeDetails,
+        )
+    }
+}
+
+fun NavGraphBuilder.payAnyoneScreen(
+    onBackClick: () -> Unit,
+) {
+    composableWithSlideTransitions(
+        route = PAY_ANYONE_ROUTE,
+    ) {
+        PayAnyoneScreen(
+            onBackClick = onBackClick,
         )
     }
 }
