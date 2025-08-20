@@ -27,6 +27,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
@@ -58,6 +60,8 @@ import mobile_wallet.feature.send_money.generated.resources.feature_send_money_i
 import mobile_wallet.feature.send_money.generated.resources.feature_send_money_receivers_bank_details
 import mobile_wallet.feature.send_money.generated.resources.feature_send_money_recent_transfers
 import mobile_wallet.feature.send_money.generated.resources.feature_send_money_search_ifsc
+import mobile_wallet.feature.send_money.generated.resources.feature_send_money_select_different_accounts
+import mobile_wallet.feature.send_money.generated.resources.feature_send_money_self_transfer
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.mifospay.core.designsystem.component.MifosButton
@@ -65,6 +69,7 @@ import org.mifospay.core.designsystem.component.MifosGradientBackground
 import org.mifospay.core.designsystem.component.MifosScaffold
 import org.mifospay.core.designsystem.component.MifosTextField
 import org.mifospay.core.designsystem.component.MifosTopBar
+import org.mifospay.core.designsystem.icon.MifosIcons
 import org.mifospay.core.ui.utils.EventsEffect
 import template.core.base.designsystem.theme.KptTheme
 
@@ -88,6 +93,9 @@ fun BankTransferScreen(
             }
             BankTransferEvent.NavigateToNext -> {
                 // TODO: Navigate to next screen
+            }
+            BankTransferEvent.AddBankAccount -> {
+                // TODO: Navigate to add bank account screen
             }
         }
     }
@@ -153,7 +161,7 @@ fun BankTransferScreen(
                             viewModel.trySendAction(BankTransferAction.Continue)
                         },
                     )
-                    1 -> BankTransferToSelfContent()
+                    1 -> BankTransferToSelfContent(viewModel = viewModel)
                 }
             }
         }
@@ -334,16 +342,343 @@ private fun RecentTransferItem(
 
 @Composable
 private fun BankTransferToSelfContent(
+    viewModel: BankTransferViewModel,
     modifier: Modifier = Modifier,
 ) {
-    Box(
-        modifier = modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center,
+    val state by viewModel.stateFlow.collectAsStateWithLifecycle()
+    val scrollState = rememberScrollState()
+
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .padding(KptTheme.spacing.lg)
+            .verticalScroll(scrollState),
+        verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.sm),
     ) {
         Text(
-            text = "Bank Transfer To Self - Coming Soon",
-            style = KptTheme.typography.bodyLarge,
+            text = stringResource(Res.string.feature_send_money_self_transfer),
+            style = KptTheme.typography.titleLarge,
+            fontWeight = FontWeight.SemiBold,
             color = KptTheme.colorScheme.onSurface,
         )
+
+        Spacer(modifier = Modifier.height(KptTheme.spacing.md))
+
+        BankAccountSelectionSection(
+            viewModel = viewModel,
+            isFromAccount = true,
+        )
+
+        HorizontalDivider(
+            Modifier.padding(vertical = KptTheme.spacing.md),
+            thickness = 1.dp,
+            color = KptTheme.colorScheme.onSurface.copy(alpha = 0.3f),
+        )
+
+        BankAccountSelectionSection(
+            viewModel = viewModel,
+            isFromAccount = false,
+        )
+
+        Spacer(modifier = Modifier.height(KptTheme.spacing.lg))
+
+        if (!state.isSelfTransferValid && (state.selectedFromBankAccount != null || state.selectedToBankAccount != null)) {
+            Text(
+                text = stringResource(Res.string.feature_send_money_select_different_accounts),
+                style = KptTheme.typography.bodyMedium,
+                color = KptTheme.colorScheme.error,
+                textAlign = TextAlign.Center,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = KptTheme.spacing.sm),
+            )
+        }
+
+        MifosButton(
+            text = { Text(stringResource(Res.string.feature_send_money_continue)) },
+            onClick = {
+                viewModel.trySendAction(BankTransferAction.ContinueSelfTransfer)
+            },
+            enabled = state.isSelfTransferValid,
+            modifier = Modifier.fillMaxWidth(),
+        )
+    }
+}
+
+@Composable
+private fun BankAccountSelectionSection(
+    viewModel: BankTransferViewModel,
+    isFromAccount: Boolean,
+    modifier: Modifier = Modifier,
+) {
+    val state by viewModel.stateFlow.collectAsStateWithLifecycle()
+
+    Column(
+        modifier = modifier.fillMaxWidth(),
+        verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.md),
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable {
+                    if (isFromAccount) {
+                        viewModel.trySendAction(BankTransferAction.ToggleFromBankAccountDropdown(!state.isFromBankAccountDropdownExpanded))
+                    } else {
+                        viewModel.trySendAction(BankTransferAction.ToggleToBankAccountDropdown(!state.isToBankAccountDropdownExpanded))
+                    }
+                },
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Text(
+                text = if (isFromAccount) "Select bank account to transfer from" else "Select bank account to transfer to",
+                style = KptTheme.typography.titleSmall,
+                color = KptTheme.colorScheme.onSurface,
+            )
+
+            Icon(
+                imageVector = MifosIcons.KeyboardArrowDown,
+                contentDescription = "Expand",
+                tint = KptTheme.colorScheme.onSurface.copy(alpha = 0.6f),
+                modifier = Modifier.size(20.dp),
+            )
+        }
+
+        if ((isFromAccount && state.isFromBankAccountDropdownExpanded) || (!isFromAccount && state.isToBankAccountDropdownExpanded)) {
+            BankAccountSelectionList(
+                bankAccounts = state.bankAccounts,
+                selectedBankAccount = if (isFromAccount) state.selectedFromBankAccount else state.selectedToBankAccount,
+                onBankAccountSelect = { bankAccount ->
+                    if (isFromAccount) {
+                        viewModel.trySendAction(BankTransferAction.SelectFromBankAccount(bankAccount))
+                    } else {
+                        viewModel.trySendAction(BankTransferAction.SelectToBankAccount(bankAccount))
+                    }
+                },
+                onAddBankAccount = {
+                    viewModel.trySendAction(BankTransferAction.AddBankAccount)
+                },
+            )
+        } else {
+            BankAccountSelectionButton(
+                selectedBankAccount = if (isFromAccount) state.selectedFromBankAccount else state.selectedToBankAccount,
+                onClick = {
+                    if (isFromAccount) {
+                        viewModel.trySendAction(BankTransferAction.ToggleFromBankAccountDropdown(true))
+                    } else {
+                        viewModel.trySendAction(BankTransferAction.ToggleToBankAccountDropdown(true))
+                    }
+                },
+            )
+        }
+    }
+}
+
+@Composable
+private fun BankAccountSelectionButton(
+    selectedBankAccount: BankAccount?,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Surface(
+        modifier = modifier
+            .fillMaxWidth()
+            .clickable { onClick() },
+        shape = RoundedCornerShape(KptTheme.spacing.sm),
+        color = KptTheme.colorScheme.surface,
+        tonalElevation = 1.dp,
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(KptTheme.spacing.md),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween,
+        ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(KptTheme.spacing.md),
+            ) {
+                Box(
+                    modifier = Modifier
+                        .size(40.dp)
+                        .background(
+                            color = KptTheme.colorScheme.primaryContainer,
+                            shape = CircleShape,
+                        ),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    Icon(
+                        imageVector = MifosIcons.Bank,
+                        contentDescription = "Bank Logo",
+                        tint = KptTheme.colorScheme.onPrimaryContainer,
+                        modifier = Modifier.size(24.dp),
+                    )
+                }
+
+                Column(
+                    modifier = Modifier.weight(1f),
+                ) {
+                    Text(
+                        text = selectedBankAccount?.bankName ?: "Select a bank account",
+                        style = KptTheme.typography.bodyMedium,
+                        fontWeight = FontWeight.Medium,
+                        color = KptTheme.colorScheme.onSurface,
+                    )
+
+                    if (selectedBankAccount != null) {
+                        Text(
+                            text = selectedBankAccount.maskedAccountNumber,
+                            style = KptTheme.typography.bodySmall,
+                            color = KptTheme.colorScheme.onSurface.copy(alpha = 0.7f),
+                        )
+                    }
+                }
+            }
+
+            if (selectedBankAccount != null) {
+                Icon(
+                    imageVector = MifosIcons.Check,
+                    contentDescription = "Selected",
+                    tint = KptTheme.colorScheme.primary,
+                    modifier = Modifier.size(20.dp),
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun BankAccountSelectionList(
+    bankAccounts: List<BankAccount>,
+    selectedBankAccount: BankAccount?,
+    onBankAccountSelect: (BankAccount) -> Unit,
+    onAddBankAccount: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Column(
+        modifier = modifier.fillMaxWidth(),
+        verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.sm),
+    ) {
+        bankAccounts.forEach { bankAccount ->
+            BankAccountSelectionItem(
+                bankAccount = bankAccount,
+                isSelected = selectedBankAccount?.id == bankAccount.id,
+                onClick = { onBankAccountSelect(bankAccount) },
+            )
+        }
+
+        BankAccountAddItem(
+            onClick = onAddBankAccount,
+        )
+    }
+}
+
+@Composable
+private fun BankAccountSelectionItem(
+    bankAccount: BankAccount,
+    isSelected: Boolean,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Surface(
+        modifier = modifier
+            .fillMaxWidth()
+            .clickable { onClick() },
+        shape = RoundedCornerShape(KptTheme.spacing.sm),
+        color = if (isSelected) KptTheme.colorScheme.primaryContainer else KptTheme.colorScheme.surface,
+        tonalElevation = if (isSelected) 0.dp else 1.dp,
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(KptTheme.spacing.md),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(KptTheme.spacing.md),
+        ) {
+            Box(
+                modifier = Modifier
+                    .size(40.dp)
+                    .background(
+                        color = if (isSelected) KptTheme.colorScheme.primary else KptTheme.colorScheme.primaryContainer,
+                        shape = CircleShape,
+                    ),
+                contentAlignment = Alignment.Center,
+            ) {
+                Icon(
+                    imageVector = MifosIcons.Bank,
+                    contentDescription = "Bank Logo",
+                    tint = if (isSelected) KptTheme.colorScheme.onPrimary else KptTheme.colorScheme.onPrimaryContainer,
+                    modifier = Modifier.size(24.dp),
+                )
+            }
+
+            Column(
+                modifier = Modifier.weight(1f),
+                verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.xs),
+            ) {
+                Text(
+                    text = bankAccount.bankName,
+                    style = KptTheme.typography.bodyMedium,
+                    fontWeight = FontWeight.Medium,
+                    color = if (isSelected) KptTheme.colorScheme.onPrimaryContainer else KptTheme.colorScheme.onSurface,
+                )
+
+                Text(
+                    text = bankAccount.maskedAccountNumber,
+                    style = KptTheme.typography.bodySmall,
+                    color = if (isSelected) KptTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.8f) else KptTheme.colorScheme.onSurface.copy(alpha = 0.7f),
+                )
+
+                Text(
+                    text = bankAccount.accountType,
+                    style = KptTheme.typography.bodySmall,
+                    color = if (isSelected) KptTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.7f) else KptTheme.colorScheme.onSurface.copy(alpha = 0.6f),
+                )
+            }
+
+            Icon(
+                imageVector = if (isSelected) MifosIcons.Check else MifosIcons.RadioButtonUnchecked,
+                contentDescription = if (isSelected) "Selected" else "Not selected",
+                tint = if (isSelected) KptTheme.colorScheme.primary else KptTheme.colorScheme.onSurface.copy(alpha = 0.6f),
+                modifier = Modifier.size(20.dp),
+            )
+        }
+    }
+}
+
+@Composable
+private fun BankAccountAddItem(
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Surface(
+        modifier = modifier
+            .fillMaxWidth()
+            .clickable { onClick() },
+        shape = RoundedCornerShape(KptTheme.spacing.sm),
+        color = KptTheme.colorScheme.surface,
+        tonalElevation = 1.dp,
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(KptTheme.spacing.md),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(KptTheme.spacing.md),
+        ) {
+            Icon(
+                imageVector = MifosIcons.Bank,
+                contentDescription = "Add Bank Account",
+                tint = KptTheme.colorScheme.primary,
+                modifier = Modifier.size(20.dp),
+            )
+
+            Text(
+                text = "Add bank account",
+                style = KptTheme.typography.bodyMedium,
+                color = KptTheme.colorScheme.primary,
+            )
+        }
     }
 }
