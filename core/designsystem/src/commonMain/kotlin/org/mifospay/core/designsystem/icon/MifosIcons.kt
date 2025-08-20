@@ -29,6 +29,7 @@ import androidx.compose.material.icons.filled.Description
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.FlashOff
 import androidx.compose.material.icons.filled.FlashOn
+import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.Person
@@ -135,4 +136,5 @@ object MifosIcons {
     val ArrowForward = Icons.AutoMirrored.Filled.ArrowForward
 
     val CurrencyRupee = Icons.Filled.CurrencyRupee
+    val History = Icons.Filled.History
 }

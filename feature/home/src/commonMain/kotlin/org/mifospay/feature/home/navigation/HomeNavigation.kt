@@ -23,6 +23,7 @@ fun NavGraphBuilder.homeScreen(
     onNavigateBack: () -> Unit,
     onRequest: (String) -> Unit,
     onPay: () -> Unit,
+    onAutoPay: () -> Unit,
     navigateToTransactionDetail: (Long, Long) -> Unit,
     navigateToAccountDetail: (Long) -> Unit,
 ) {
@@ -30,6 +31,7 @@ fun NavGraphBuilder.homeScreen(
         HomeScreen(
             onRequest = onRequest,
             onPay = onPay,
+            onAutoPay = onAutoPay,
             onNavigateBack = onNavigateBack,
             navigateToTransactionDetail = navigateToTransactionDetail,
             navigateToAccountDetail = navigateToAccountDetail,

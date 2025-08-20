@@ -12,6 +12,7 @@
 :core:ui
 :feature:accounts
 :feature:auth
+:feature:autopay
 :feature:editpassword
 :feature:faq
 :feature:finance

@@ -22,6 +22,13 @@ import org.mifospay.feature.accounts.savingsaccount.addEditSavingAccountScreen
 import org.mifospay.feature.accounts.savingsaccount.details.navigateToSavingAccountDetails
 import org.mifospay.feature.accounts.savingsaccount.details.savingAccountDetailRoute
 import org.mifospay.feature.accounts.savingsaccount.navigateToSavingAccountAddEdit
+import org.mifospay.feature.autopay.AutoPayScreen
+import org.mifospay.feature.autopay.autoPayGraph
+import org.mifospay.feature.autopay.navigateToAutoPay
+import org.mifospay.feature.autopay.navigateToAutoPayHistory
+import org.mifospay.feature.autopay.navigateToAutoPayPreferences
+import org.mifospay.feature.autopay.navigateToAutoPayRules
+import org.mifospay.feature.autopay.navigateToAutoPaySetup
 import org.mifospay.feature.editpassword.navigation.editPasswordScreen
 import org.mifospay.feature.editpassword.navigation.navigateToEditPassword
 import org.mifospay.feature.faq.navigation.faqScreen
@@ -127,6 +134,22 @@ internal fun MifosNavHost(
                 navigateToInvoiceDetailScreen = navController::navigateToInvoiceDetail,
             )
         },
+        TabContent(PaymentsScreenContents.AUTOPAY.name) {
+            AutoPayScreen(
+                onNavigateToSetup = {
+                    navController.navigateToAutoPaySetup()
+                },
+                onNavigateToRules = {
+                    navController.navigateToAutoPayRules()
+                },
+                onNavigateToPreferences = {
+                    navController.navigateToAutoPayPreferences()
+                },
+                onNavigateToHistory = {
+                    navController.navigateToAutoPayHistory()
+                },
+            )
+        },
     )
 
     val tabContents = listOf(
@@ -167,6 +190,9 @@ internal fun MifosNavHost(
                 navController.navigateToShowQrScreen()
             },
             onPay = navController::navigateToSendMoneyOptionsScreen,
+            onAutoPay = {
+                navController.navigateToAutoPay()
+            },
             navigateToTransactionDetail = navController::navigateToSpecificTransaction,
             navigateToAccountDetail = navController::navigateToSavingAccountDetails,
         )
@@ -387,6 +413,11 @@ internal fun MifosNavHost(
 
         setupUpiPinScreen(
             navigateBack = navController::navigateUp,
+        )
+
+        autoPayGraph(
+            navController = navController,
+            onNavigateBack = navController::navigateUp,
         )
     }
 }

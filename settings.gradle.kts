@@ -83,5 +83,6 @@ include(":feature:payments")
 include(":feature:request-money")
 include(":feature:upi-setup")
 include(":feature:qr")
+include(":feature:autopay")
 
 include(":libs:mifos-passcode")
