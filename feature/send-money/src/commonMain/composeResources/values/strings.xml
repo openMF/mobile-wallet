@@ -44,8 +44,20 @@
     <string name="feature_send_money_scan_qr_code">Scan any QR code</string>
     <string name="feature_send_money_pay_anyone">Pay anyone</string>
     <string name="feature_send_money_bank_transfer">Bank Transfer</string>
+    <string name="feature_send_money_bank_transfer_to_others">To Others</string>
+    <string name="feature_send_money_bank_transfer_to_self">To Self</string>
     <string name="feature_send_money_fineract_payments">Fineract Payments</string>
     <string name="feature_send_money_people">People</string>
     <string name="feature_send_money_merchants">Merchants</string>
     <string name="feature_send_money_more">More</string>
+    
+    <!-- Receiver's Bank Details -->
+    <string name="feature_send_money_receivers_bank_details">Receiver's Bank Details</string>
+    <string name="feature_send_money_account_number">Bank account number</string>
+    <string name="feature_send_money_account_number_error">Input not valid</string>
+    <string name="feature_send_money_ifsc_code">IFSC Code</string>
+    <string name="feature_send_money_search_ifsc">Search for IFSC</string>
+    <string name="feature_send_money_continue">Continue</string>
+    <string name="feature_send_money_bank_details_note">This information will be securely saved as per Mifos Initiative Terms of Service and Privacy Policy</string>
+    <string name="feature_send_money_recent_transfers">Recent Transfers</string>
 </resources>

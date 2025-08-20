@@ -73,6 +73,8 @@ import org.mifospay.feature.savedcards.details.navigateToCardDetails
 import org.mifospay.feature.send.money.SendMoneyScreen
 import org.mifospay.feature.send.money.navigation.SEND_MONEY_BASE_ROUTE
 import org.mifospay.feature.send.money.navigation.SEND_MONEY_OPTIONS_ROUTE
+import org.mifospay.feature.send.money.navigation.bankTransferScreen
+import org.mifospay.feature.send.money.navigation.navigateToBankTransferScreen
 import org.mifospay.feature.send.money.navigation.navigateToPayeeDetailsScreen
 import org.mifospay.feature.send.money.navigation.navigateToSendMoneyOptionsScreen
 import org.mifospay.feature.send.money.navigation.navigateToSendMoneyScreen
@@ -294,7 +296,7 @@ internal fun MifosNavHost(
                 // TODO: Navigate to Pay Anyone screen
             },
             onBankTransferClick = {
-                // TODO: Navigate to Bank Transfer screen
+                navController.navigateToBankTransferScreen()
             },
             onFineractPaymentsClick = {
                 navController.navigateToSendMoneyScreen()
@@ -319,6 +321,10 @@ internal fun MifosNavHost(
             navigateToTransferScreen = navController::navigateToTransferScreen,
             navigateToPayeeDetailsScreen = navController::navigateToPayeeDetailsScreen,
             navigateToScanQrScreen = navController::navigateToScanQr,
+        )
+
+        bankTransferScreen(
+            onBackClick = navController::popBackStack,
         )
 
         payeeDetailsScreen(
