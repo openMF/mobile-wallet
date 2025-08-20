@@ -41,6 +41,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.delay
+import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.mifospay.core.designsystem.component.MifosGradientBackground
 import org.mifospay.core.designsystem.component.MifosOutlinedTextField
 import org.mifospay.core.designsystem.component.MifosScaffold
@@ -51,6 +52,8 @@ import template.core.base.designsystem.theme.KptTheme
 @Composable
 fun PayAnyoneScreen(
     onBackClick: () -> Unit,
+    onContactPickerClick: () -> Unit,
+    onContactSelected: (Contact) -> Unit = {},
     modifier: Modifier = Modifier,
 ) {
     var inputValue by remember { mutableStateOf("") }
@@ -78,6 +81,9 @@ fun PayAnyoneScreen(
             delay(3000)
             currentPlaceholderIndex = (currentPlaceholderIndex + 1) % placeholderMessages.size
         }
+    }
+
+    LaunchedEffect(onContactSelected) {
     }
 
     MifosGradientBackground {
@@ -114,8 +120,7 @@ fun PayAnyoneScreen(
                         showClearIcon = it.isNotEmpty()
                     },
                     label = "",
-                    placeholder = null,
-                    leadingIcon = {
+                    placeholder = {
                         AnimatedContent(
                             targetState = currentPlaceholder,
                             transitionSpec = {
@@ -133,7 +138,6 @@ fun PayAnyoneScreen(
                                 text = placeholder,
                                 style = KptTheme.typography.bodyMedium,
                                 color = KptTheme.colorScheme.onSurface.copy(alpha = 0.6f),
-                                modifier = Modifier.padding(start = KptTheme.spacing.sm),
                             )
                         }
                     },
@@ -185,9 +189,7 @@ fun PayAnyoneScreen(
                                         Spacer(modifier = Modifier.width(KptTheme.spacing.xs))
 
                                         IconButton(
-                                            onClick = {
-                                                // TODO: Implement contact picker functionality
-                                            },
+                                            onClick = onContactPickerClick,
                                             colors = IconButtonDefaults.iconButtonColors(
                                                 contentColor = KptTheme.colorScheme.primary,
                                             ),
@@ -207,4 +209,14 @@ fun PayAnyoneScreen(
             }
         }
     }
+}
+
+@Preview
+@Composable
+fun PayAnyoneScreenPreview() {
+    PayAnyoneScreen(
+        onBackClick = {},
+        onContactPickerClick = {},
+        onContactSelected = {},
+    )
 }

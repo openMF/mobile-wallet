@@ -16,6 +16,8 @@ import androidx.navigation.NavType
 import androidx.navigation.navArgument
 import androidx.navigation.navOptions
 import org.mifospay.core.ui.composableWithSlideTransitions
+import org.mifospay.feature.send.money.Contact
+import org.mifospay.feature.send.money.ContactsPickerScreen
 import org.mifospay.feature.send.money.PayAnyoneScreen
 import org.mifospay.feature.send.money.PayeeDetailsScreen
 import org.mifospay.feature.send.money.PayeeDetailsState
@@ -34,10 +36,15 @@ const val PAYEE_DETAILS_ARG = "qrCodeData"
 const val PAYEE_DETAILS_BASE_ROUTE = "$PAYEE_DETAILS_ROUTE?$PAYEE_DETAILS_ARG={$PAYEE_DETAILS_ARG}"
 
 const val PAY_ANYONE_ROUTE = "pay_anyone_route"
+const val CONTACTS_PICKER_ROUTE = "contacts_picker_route"
 
 fun NavController.navigateToPayAnyoneScreen(
     navOptions: NavOptions? = null,
 ) = navigate(PAY_ANYONE_ROUTE, navOptions)
+
+fun NavController.navigateToContactsPickerScreen(
+    navOptions: NavOptions? = null,
+) = navigate(CONTACTS_PICKER_ROUTE, navOptions)
 
 fun NavController.navigateToSendMoneyScreen(
     navOptions: NavOptions? = null,
@@ -110,12 +117,30 @@ fun NavGraphBuilder.sendMoneyOptionsScreen(
 
 fun NavGraphBuilder.payAnyoneScreen(
     onBackClick: () -> Unit,
+    onContactPickerClick: () -> Unit,
+    onContactSelected: (Contact) -> Unit = {},
 ) {
     composableWithSlideTransitions(
         route = PAY_ANYONE_ROUTE,
     ) {
         PayAnyoneScreen(
             onBackClick = onBackClick,
+            onContactPickerClick = onContactPickerClick,
+            onContactSelected = onContactSelected,
+        )
+    }
+}
+
+fun NavGraphBuilder.contactsPickerScreen(
+    onBackClick: () -> Unit,
+    onContactSelected: (Contact) -> Unit,
+) {
+    composableWithSlideTransitions(
+        route = CONTACTS_PICKER_ROUTE,
+    ) {
+        ContactsPickerScreen(
+            onBackClick = onBackClick,
+            onContactSelected = onContactSelected,
         )
     }
 }

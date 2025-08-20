@@ -73,6 +73,8 @@ import org.mifospay.feature.savedcards.details.navigateToCardDetails
 import org.mifospay.feature.send.money.SendMoneyScreen
 import org.mifospay.feature.send.money.navigation.SEND_MONEY_BASE_ROUTE
 import org.mifospay.feature.send.money.navigation.SEND_MONEY_OPTIONS_ROUTE
+import org.mifospay.feature.send.money.navigation.contactsPickerScreen
+import org.mifospay.feature.send.money.navigation.navigateToContactsPickerScreen
 import org.mifospay.feature.send.money.navigation.navigateToPayAnyoneScreen
 import org.mifospay.feature.send.money.navigation.navigateToPayeeDetailsScreen
 import org.mifospay.feature.send.money.navigation.navigateToSendMoneyOptionsScreen
@@ -325,6 +327,22 @@ internal fun MifosNavHost(
 
         payAnyoneScreen(
             onBackClick = navController::popBackStack,
+            onContactPickerClick = {
+                navController.navigateToContactsPickerScreen()
+            },
+            onContactSelected = { contact ->
+                // Handle contact selection - this would typically update the input field
+                // For now, we'll just navigate back
+                navController.popBackStack()
+            },
+        )
+
+        contactsPickerScreen(
+            onBackClick = navController::popBackStack,
+            onContactSelected = { contact ->
+                // Navigate back to Pay Anyone screen with selected contact
+                navController.popBackStack()
+            },
         )
 
         payeeDetailsScreen(
