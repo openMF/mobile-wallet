@@ -59,6 +59,8 @@ import androidx.compose.material.icons.outlined.Wallet
 import androidx.compose.material.icons.rounded.AccountBalance
 import androidx.compose.material.icons.rounded.AccountCircle
 import androidx.compose.material.icons.rounded.Add
+import androidx.compose.material.icons.rounded.Check
+import androidx.compose.material.icons.rounded.CheckCircle
 import androidx.compose.material.icons.rounded.Contacts
 import androidx.compose.material.icons.rounded.Home
 import androidx.compose.material.icons.rounded.Info
@@ -135,4 +137,6 @@ object MifosIcons {
     val ArrowForward = Icons.AutoMirrored.Filled.ArrowForward
 
     val CurrencyRupee = Icons.Filled.CurrencyRupee
+    val CheckCircle = Icons.Rounded.CheckCircle
+    val CheckRounded = Icons.Rounded.Check
 }

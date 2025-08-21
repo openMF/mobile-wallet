@@ -66,4 +66,6 @@
     <string name="feature_send_money_add_bank_account">Add bank account</string>
     <string name="feature_send_money_add_bank_account_desc">Add Bank Account</string>
     <string name="feature_send_money_continue">Continue</string>
+    <string name="feature_send_money_paying_securely">Paying securely %1$s to</string>
+    <string name="feature_send_money_paid_to">Paid to</string>
 </resources>

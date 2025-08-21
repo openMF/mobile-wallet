@@ -97,8 +97,7 @@ import template.core.base.designsystem.theme.KptTheme
 @Composable
 fun PayeeDetailsScreen(
     onBackClick: () -> Unit,
-    onNavigateToUpiPayment: (PayeeDetailsState) -> Unit,
-    onNavigateToFineractPayment: (PayeeDetailsState) -> Unit,
+    onNavigateToPaymentProcessing: (PayeeDetailsState) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: PayeeDetailsViewModel = koinViewModel(),
 ) {
@@ -107,8 +106,7 @@ fun PayeeDetailsScreen(
     EventsEffect(viewModel) { event ->
         when (event) {
             PayeeDetailsEvent.NavigateBack -> onBackClick.invoke()
-            is PayeeDetailsEvent.NavigateToUpiPayment -> onNavigateToUpiPayment.invoke(event.state)
-            is PayeeDetailsEvent.NavigateToFineractPayment -> onNavigateToFineractPayment.invoke(event.state)
+            is PayeeDetailsEvent.NavigateToPaymentProcessing -> onNavigateToPaymentProcessing.invoke(event.state)
         }
     }
 
@@ -626,7 +624,7 @@ private fun ProceedButton(
         } else {
             Icon(
                 imageVector = when {
-                    showCheckMark -> MifosIcons.Check
+                    showCheckMark -> MifosIcons.CheckRounded
                     else -> MifosIcons.ArrowForward
                 },
                 contentDescription = when {
@@ -814,7 +812,7 @@ private fun AccountItem(
 
             if (isSelected) {
                 Icon(
-                    imageVector = MifosIcons.Check,
+                    imageVector = MifosIcons.CheckCircle,
                     contentDescription = stringResource(Res.string.feature_send_money_selected),
                     modifier = Modifier.size(24.dp),
                     tint = KptTheme.colorScheme.primary,
@@ -938,8 +936,7 @@ private fun AddBankAccountItem(
 fun PayeeDetailsScreenPreview() {
     PayeeDetailsScreen(
         onBackClick = {},
-        onNavigateToUpiPayment = {},
-        onNavigateToFineractPayment = {},
+        onNavigateToPaymentProcessing = {},
         modifier = Modifier,
         // TODO: Figure out how to instantiate 'PayeeDetailsViewModel'
         // viewModel = koinViewModel(),

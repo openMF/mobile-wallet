@@ -18,6 +18,7 @@ import androidx.navigation.navOptions
 import org.mifospay.core.ui.composableWithSlideTransitions
 import org.mifospay.feature.send.money.PayeeDetailsScreen
 import org.mifospay.feature.send.money.PayeeDetailsState
+import org.mifospay.feature.send.money.PaymentProcessingScreen
 import org.mifospay.feature.send.money.SendMoneyOptionsScreen
 import org.mifospay.feature.send.money.SendMoneyScreen
 
@@ -31,6 +32,13 @@ const val PAYEE_DETAILS_ROUTE = "payee_details_route"
 const val PAYEE_DETAILS_ARG = "qrCodeData"
 
 const val PAYEE_DETAILS_BASE_ROUTE = "$PAYEE_DETAILS_ROUTE?$PAYEE_DETAILS_ARG={$PAYEE_DETAILS_ARG}"
+
+const val PAYMENT_PROCESSING_ROUTE = "payment_processing_route"
+const val PAYMENT_PROCESSING_PAYEE_NAME_ARG = "payeeName"
+const val PAYMENT_PROCESSING_AMOUNT_ARG = "amount"
+const val PAYMENT_PROCESSING_IS_UPI_ARG = "isUpiCode"
+
+const val PAYMENT_PROCESSING_BASE_ROUTE = "$PAYMENT_PROCESSING_ROUTE?$PAYMENT_PROCESSING_PAYEE_NAME_ARG={$PAYMENT_PROCESSING_PAYEE_NAME_ARG}&$PAYMENT_PROCESSING_AMOUNT_ARG={$PAYMENT_PROCESSING_AMOUNT_ARG}&$PAYMENT_PROCESSING_IS_UPI_ARG={$PAYMENT_PROCESSING_IS_UPI_ARG}"
 
 fun NavController.navigateToSendMoneyScreen(
     navOptions: NavOptions? = null,
@@ -49,6 +57,21 @@ fun NavController.navigateToPayeeDetailsScreen(
     val route = "$PAYEE_DETAILS_ROUTE?$PAYEE_DETAILS_ARG=$encodedQrCodeData"
     val options = navOptions ?: navOptions {
         popUpTo(SEND_MONEY_OPTIONS_ROUTE) { inclusive = false }
+    }
+    navigate(route, options)
+}
+
+fun NavController.navigateToPaymentProcessingScreen(
+    payeeName: String,
+    amount: String,
+    isUpiCode: Boolean,
+    navOptions: NavOptions? = null,
+) {
+    val encodedPayeeName = payeeName.urlEncode()
+    val encodedAmount = amount.urlEncode()
+    val route = "$PAYMENT_PROCESSING_ROUTE?$PAYMENT_PROCESSING_PAYEE_NAME_ARG=$encodedPayeeName&$PAYMENT_PROCESSING_AMOUNT_ARG=$encodedAmount&$PAYMENT_PROCESSING_IS_UPI_ARG=$isUpiCode"
+    val options = navOptions ?: navOptions {
+        popUpTo(PAYEE_DETAILS_ROUTE) { inclusive = true }
     }
     navigate(route, options)
 }
@@ -103,8 +126,7 @@ fun NavGraphBuilder.sendMoneyOptionsScreen(
 
 fun NavGraphBuilder.payeeDetailsScreen(
     onBackClick: () -> Unit,
-    onNavigateToUpiPayment: (PayeeDetailsState) -> Unit,
-    onNavigateToFineractPayment: (PayeeDetailsState) -> Unit,
+    onNavigateToPaymentProcessing: (PayeeDetailsState) -> Unit,
 ) {
     composableWithSlideTransitions(
         route = PAYEE_DETAILS_BASE_ROUTE,
@@ -117,8 +139,35 @@ fun NavGraphBuilder.payeeDetailsScreen(
     ) {
         PayeeDetailsScreen(
             onBackClick = onBackClick,
-            onNavigateToUpiPayment = onNavigateToUpiPayment,
-            onNavigateToFineractPayment = onNavigateToFineractPayment,
+            onNavigateToPaymentProcessing = onNavigateToPaymentProcessing,
+        )
+    }
+}
+
+fun NavGraphBuilder.paymentProcessingScreen(
+    onPaymentComplete: () -> Unit,
+    onPaymentFailed: (String) -> Unit,
+) {
+    composableWithSlideTransitions(
+        route = PAYMENT_PROCESSING_BASE_ROUTE,
+        arguments = listOf(
+            navArgument(PAYMENT_PROCESSING_PAYEE_NAME_ARG) {
+                type = NavType.StringType
+                nullable = false
+            },
+            navArgument(PAYMENT_PROCESSING_AMOUNT_ARG) {
+                type = NavType.StringType
+                nullable = false
+            },
+            navArgument(PAYMENT_PROCESSING_IS_UPI_ARG) {
+                type = NavType.BoolType
+                nullable = false
+            },
+        ),
+    ) {
+        PaymentProcessingScreen(
+            onPaymentComplete = onPaymentComplete,
+            onPaymentFailed = onPaymentFailed,
         )
     }
 }

@@ -75,9 +75,11 @@ import org.mifospay.feature.send.money.SendMoneyScreen
 import org.mifospay.feature.send.money.navigation.SEND_MONEY_BASE_ROUTE
 import org.mifospay.feature.send.money.navigation.SEND_MONEY_OPTIONS_ROUTE
 import org.mifospay.feature.send.money.navigation.navigateToPayeeDetailsScreen
+import org.mifospay.feature.send.money.navigation.navigateToPaymentProcessingScreen
 import org.mifospay.feature.send.money.navigation.navigateToSendMoneyOptionsScreen
 import org.mifospay.feature.send.money.navigation.navigateToSendMoneyScreen
 import org.mifospay.feature.send.money.navigation.payeeDetailsScreen
+import org.mifospay.feature.send.money.navigation.paymentProcessingScreen
 import org.mifospay.feature.send.money.navigation.sendMoneyOptionsScreen
 import org.mifospay.feature.send.money.navigation.sendMoneyScreen
 import org.mifospay.feature.settings.navigation.settingsScreen
@@ -327,11 +329,26 @@ internal fun MifosNavHost(
 
         payeeDetailsScreen(
             onBackClick = navController::popBackStack,
-            onNavigateToUpiPayment = { state ->
-                // TODO: Handle UPI payment navigation
+            onNavigateToPaymentProcessing = { state ->
+                navController.navigateToPaymentProcessingScreen(
+                    payeeName = state.payeeName,
+                    amount = state.amount,
+                    isUpiCode = state.isUpiCode,
+                )
             },
-            onNavigateToFineractPayment = { state ->
-                // TODO: Handle Fineract payment navigation
+        )
+
+        paymentProcessingScreen(
+            onPaymentComplete = {
+                navController.navigate(HOME_ROUTE) {
+                    popUpTo(HOME_ROUTE) {
+                        inclusive = false
+                    }
+                    launchSingleTop = true
+                }
+            },
+            onPaymentFailed = { errorMessage ->
+                navController.popBackStack()
             },
         )
 

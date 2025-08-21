@@ -146,11 +146,7 @@ class PayeeDetailsViewModel(
             }
             is PayeeDetailsAction.ConfirmPayment -> {
                 val currentState = stateFlow.value
-                if (currentState.isUpiCode) {
-                    sendEvent(PayeeDetailsEvent.NavigateToUpiPayment(currentState))
-                } else {
-                    sendEvent(PayeeDetailsEvent.NavigateToFineractPayment(currentState))
-                }
+                sendEvent(PayeeDetailsEvent.NavigateToPaymentProcessing(currentState))
             }
         }
     }
@@ -220,8 +216,7 @@ data class BankAccount(
 
 sealed interface PayeeDetailsEvent {
     data object NavigateBack : PayeeDetailsEvent
-    data class NavigateToUpiPayment(val state: PayeeDetailsState) : PayeeDetailsEvent
-    data class NavigateToFineractPayment(val state: PayeeDetailsState) : PayeeDetailsEvent
+    data class NavigateToPaymentProcessing(val state: PayeeDetailsState) : PayeeDetailsEvent
 }
 
 sealed interface PayeeDetailsAction {
