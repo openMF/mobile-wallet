@@ -61,14 +61,21 @@ class PayeeDetailsViewModel(
 
                 if (isValidAmount) {
                     val amountValue = cleanAmount.toDoubleOrNull() ?: 0.0
-                    val showMessage = amountValue > 500000
+                    val showMaxMessage = amountValue > 500000
+                    val showMinMessage = amountValue > 0 && amountValue < 1
+
+                    // Clear selected account when amount changes
+                    val currentAmount = stateFlow.value.amount
+                    val shouldClearAccount = cleanAmount != currentAmount
 
                     mutableStateFlow.value = stateFlow.value.copy(
                         amount = cleanAmount,
-                        showMaxAmountMessage = showMessage,
+                        showMaxAmountMessage = showMaxMessage,
+                        showMinAmountMessage = showMinMessage,
+                        selectedAccount = if (shouldClearAccount) null else stateFlow.value.selectedAccount,
                     )
 
-                    if (showMessage) {
+                    if (showMaxMessage) {
                         viewModelScope.launch {
                             delay(2000)
                             mutableStateFlow.value = stateFlow.value.copy(
@@ -76,15 +83,68 @@ class PayeeDetailsViewModel(
                             )
                         }
                     }
+
+                    if (showMinMessage) {
+                        viewModelScope.launch {
+                            delay(2000)
+                            mutableStateFlow.value = stateFlow.value.copy(
+                                showMinAmountMessage = false,
+                            )
+                        }
+                    }
                 }
             }
             is PayeeDetailsAction.UpdateNote -> {
-                mutableStateFlow.value = stateFlow.value.copy(note = action.note)
+                // Clear selected account when note changes
+                val currentNote = stateFlow.value.note
+                val shouldClearAccount = action.note != currentNote
+
+                mutableStateFlow.value = stateFlow.value.copy(
+                    note = action.note,
+                    selectedAccount = if (shouldClearAccount) null else stateFlow.value.selectedAccount,
+                )
             }
             is PayeeDetailsAction.NoteFieldFocused -> {
-                mutableStateFlow.value = stateFlow.value.copy(hasNoteFieldBeenFocused = true)
+                // Clear selected account when note field is focused
+                mutableStateFlow.value = stateFlow.value.copy(
+                    hasNoteFieldBeenFocused = true,
+                    selectedAccount = null,
+                )
+            }
+            is PayeeDetailsAction.AmountFieldFocused -> {
+                // Clear selected account when amount field is focused
+                mutableStateFlow.value = stateFlow.value.copy(selectedAccount = null)
             }
             is PayeeDetailsAction.ProceedToPayment -> {
+                // Auto-select default account if no account is currently selected
+                if (stateFlow.value.selectedAccount == null) {
+                    val defaultAccount = BankAccount(
+                        id = "1",
+                        bankName = "State Bank of India",
+                        accountNumber = "****1234",
+                        isDefault = true,
+                    )
+                    mutableStateFlow.value = stateFlow.value.copy(
+                        selectedAccount = defaultAccount,
+                    )
+                } else {
+                    // Open bottom sheet when dropdown is clicked
+                    mutableStateFlow.value = stateFlow.value.copy(showAccountSelectionSheet = true)
+                }
+            }
+            is PayeeDetailsAction.SelectAccount -> {
+                mutableStateFlow.value = stateFlow.value.copy(
+                    selectedAccount = action.account,
+                    showAccountSelectionSheet = false,
+                )
+            }
+            is PayeeDetailsAction.DismissAccountSelection -> {
+                mutableStateFlow.value = stateFlow.value.copy(showAccountSelectionSheet = false)
+            }
+            is PayeeDetailsAction.ContinueFromBottomSheet -> {
+                mutableStateFlow.value = stateFlow.value.copy(showAccountSelectionSheet = false)
+            }
+            is PayeeDetailsAction.ConfirmPayment -> {
                 val currentState = stateFlow.value
                 if (currentState.isUpiCode) {
                     sendEvent(PayeeDetailsEvent.NavigateToUpiPayment(currentState))
@@ -106,13 +166,19 @@ data class PayeeDetailsState(
     val isUpiCode: Boolean = false,
     val isLoading: Boolean = false,
     val showMaxAmountMessage: Boolean = false,
+    val showMinAmountMessage: Boolean = false,
     val hasNoteFieldBeenFocused: Boolean = false,
+    val showAccountSelectionSheet: Boolean = false,
+    val selectedAccount: BankAccount? = null,
 ) {
     val formattedAmount: String
         get() = if (amount.isEmpty()) "0" else formatAmountWithCommas(amount)
 
     val isAmountExceedingMax: Boolean
         get() = amount.toDoubleOrNull()?.let { it > 500000 } ?: false
+
+    val isAmountBelowMin: Boolean
+        get() = amount.toDoubleOrNull()?.let { it < 1 } ?: false
 
     private fun formatAmountWithCommas(amountStr: String): String {
         val cleanAmount = amountStr.replace(",", "")
@@ -145,6 +211,13 @@ data class PayeeDetailsState(
     }
 }
 
+data class BankAccount(
+    val id: String,
+    val bankName: String,
+    val accountNumber: String,
+    val isDefault: Boolean = false,
+)
+
 sealed interface PayeeDetailsEvent {
     data object NavigateBack : PayeeDetailsEvent
     data class NavigateToUpiPayment(val state: PayeeDetailsState) : PayeeDetailsEvent
@@ -156,7 +229,12 @@ sealed interface PayeeDetailsAction {
     data class UpdateAmount(val amount: String) : PayeeDetailsAction
     data class UpdateNote(val note: String) : PayeeDetailsAction
     data object NoteFieldFocused : PayeeDetailsAction
+    data object AmountFieldFocused : PayeeDetailsAction
     data object ProceedToPayment : PayeeDetailsAction
+    data class SelectAccount(val account: BankAccount) : PayeeDetailsAction
+    data object DismissAccountSelection : PayeeDetailsAction
+    data object ContinueFromBottomSheet : PayeeDetailsAction
+    data object ConfirmPayment : PayeeDetailsAction
 }
 
 /**

@@ -48,4 +48,22 @@
     <string name="feature_send_money_people">People</string>
     <string name="feature_send_money_merchants">Merchants</string>
     <string name="feature_send_money_more">More</string>
+
+    <string name="feature_send_money_payee_details_title">Payee Details</string>
+    <string name="feature_send_money_payee_profile">Payee Profile</string>
+    <string name="feature_send_money_paying">Paying %1$s</string>
+    <string name="feature_send_money_upi_id">UPI ID: %1$s</string>
+    <string name="feature_send_money_amount_exceeds_limit">Amount cannot be more than ₹ 5,00,000</string>
+    <string name="feature_send_money_amount_below_minimum">Amount must be at least ₹ 1</string>
+    <string name="feature_send_money_rupee_icon">Rupee Icon</string>
+    <string name="feature_send_money_add_note">Add note</string>
+    <string name="feature_send_money_pay_amount">Pay ₹%1$s</string>
+    <string name="feature_send_money_choose_account">Choose account to pay with</string>
+    <string name="feature_send_money_bank_icon">Bank Icon</string>
+    <string name="feature_send_money_balance">Balance:</string>
+    <string name="feature_send_money_check_now">Check now</string>
+    <string name="feature_send_money_change_account">Change Account</string>
+    <string name="feature_send_money_add_bank_account">Add bank account</string>
+    <string name="feature_send_money_add_bank_account_desc">Add Bank Account</string>
+    <string name="feature_send_money_continue">Continue</string>
 </resources>
