@@ -40,7 +40,7 @@ import template.core.base.designsystem.theme.KptTheme
 
 @Composable
 fun PaymentProcessingScreen(
-    onPaymentComplete: () -> Unit,
+    onPaymentComplete: (String, String, String, String) -> Unit,
     onPaymentFailed: (String) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: PaymentProcessingViewModel = koinViewModel(),
@@ -49,7 +49,12 @@ fun PaymentProcessingScreen(
 
     EventsEffect(viewModel) { event ->
         when (event) {
-            is PaymentProcessingEvent.PaymentComplete -> onPaymentComplete.invoke()
+            is PaymentProcessingEvent.PaymentComplete -> onPaymentComplete.invoke(
+                event.payeeName,
+                event.amount,
+                event.upiName,
+                event.transactionTimestamp,
+            )
             is PaymentProcessingEvent.PaymentFailed -> onPaymentFailed.invoke(event.errorMessage)
         }
     }
@@ -130,7 +135,7 @@ private fun PaymentProcessingContent(
 @Composable
 fun PaymentProcessingScreenPreview() {
     PaymentProcessingScreen(
-        onPaymentComplete = {},
+        onPaymentComplete = { _, _, _, _ -> },
         onPaymentFailed = {},
         modifier = Modifier,
     )

@@ -14,6 +14,7 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.datetime.Clock
 import org.mifospay.core.ui.utils.BaseViewModel
 
 class PaymentProcessingViewModel(
@@ -43,13 +44,20 @@ class PaymentProcessingViewModel(
             try {
                 mutableStateFlow.update { it.copy(isProcessing = true) }
 
-                delay(3000) // Simulate payment processing time
+                delay(3000)
 
                 mutableStateFlow.update { it.copy(isProcessing = false) }
 
-                delay(1000) // Show completion state briefly
+                delay(1000)
 
-                sendEvent(PaymentProcessingEvent.PaymentComplete)
+                sendEvent(
+                    PaymentProcessingEvent.PaymentComplete(
+                        payeeName = state.payeeName,
+                        amount = state.amount,
+                        upiName = state.payeeName.uppercase(),
+                        transactionTimestamp = getCurrentUnixTimestamp(),
+                    ),
+                )
             } catch (e: Exception) {
                 sendEvent(PaymentProcessingEvent.PaymentFailed(e.message ?: "Payment failed"))
             }
@@ -62,6 +70,14 @@ class PaymentProcessingViewModel(
                 startPaymentProcessing()
             }
         }
+    }
+
+    /**
+     * Gets the current Unix timestamp from the mobile device
+     * This is used as a fallback when PSP timestamp is not available
+     */
+    private fun getCurrentUnixTimestamp(): String {
+        return Clock.System.now().epochSeconds.toString()
     }
 }
 
@@ -76,7 +92,12 @@ data class PaymentProcessingState(
 }
 
 sealed interface PaymentProcessingEvent {
-    data object PaymentComplete : PaymentProcessingEvent
+    data class PaymentComplete(
+        val payeeName: String,
+        val amount: String,
+        val upiName: String,
+        val transactionTimestamp: String,
+    ) : PaymentProcessingEvent
     data class PaymentFailed(val errorMessage: String) : PaymentProcessingEvent
 }
 

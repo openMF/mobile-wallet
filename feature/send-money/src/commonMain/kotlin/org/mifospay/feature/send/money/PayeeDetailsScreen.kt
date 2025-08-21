@@ -580,7 +580,7 @@ private fun ProceedButton(
     val isButtonEnabled = if (hasSelectedAccount) {
         isAmountValid && isContactValid
     } else {
-        isAmountValid && isContactValid && (isAmountPrefilled || state.hasNoteFieldBeenFocused)
+        isAmountValid && isContactValid && state.amount.isNotEmpty()
     }
 
     Button(

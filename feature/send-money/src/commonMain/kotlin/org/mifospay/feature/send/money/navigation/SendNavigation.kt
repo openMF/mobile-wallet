@@ -19,6 +19,7 @@ import org.mifospay.core.ui.composableWithSlideTransitions
 import org.mifospay.feature.send.money.PayeeDetailsScreen
 import org.mifospay.feature.send.money.PayeeDetailsState
 import org.mifospay.feature.send.money.PaymentProcessingScreen
+import org.mifospay.feature.send.money.PaymentSuccessScreen
 import org.mifospay.feature.send.money.SendMoneyOptionsScreen
 import org.mifospay.feature.send.money.SendMoneyScreen
 
@@ -39,6 +40,14 @@ const val PAYMENT_PROCESSING_AMOUNT_ARG = "amount"
 const val PAYMENT_PROCESSING_IS_UPI_ARG = "isUpiCode"
 
 const val PAYMENT_PROCESSING_BASE_ROUTE = "$PAYMENT_PROCESSING_ROUTE?$PAYMENT_PROCESSING_PAYEE_NAME_ARG={$PAYMENT_PROCESSING_PAYEE_NAME_ARG}&$PAYMENT_PROCESSING_AMOUNT_ARG={$PAYMENT_PROCESSING_AMOUNT_ARG}&$PAYMENT_PROCESSING_IS_UPI_ARG={$PAYMENT_PROCESSING_IS_UPI_ARG}"
+
+const val PAYMENT_SUCCESS_ROUTE = "payment_success_route"
+const val PAYMENT_SUCCESS_PAYEE_NAME_ARG = "payeeName"
+const val PAYMENT_SUCCESS_AMOUNT_ARG = "amount"
+const val PAYMENT_SUCCESS_UPI_NAME_ARG = "upiName"
+const val PAYMENT_SUCCESS_TRANSACTION_TIMESTAMP_ARG = "transactionTimestamp"
+
+const val PAYMENT_SUCCESS_BASE_ROUTE = "$PAYMENT_SUCCESS_ROUTE?$PAYMENT_SUCCESS_PAYEE_NAME_ARG={$PAYMENT_SUCCESS_PAYEE_NAME_ARG}&$PAYMENT_SUCCESS_AMOUNT_ARG={$PAYMENT_SUCCESS_AMOUNT_ARG}&$PAYMENT_SUCCESS_UPI_NAME_ARG={$PAYMENT_SUCCESS_UPI_NAME_ARG}&$PAYMENT_SUCCESS_TRANSACTION_TIMESTAMP_ARG={$PAYMENT_SUCCESS_TRANSACTION_TIMESTAMP_ARG}"
 
 fun NavController.navigateToSendMoneyScreen(
     navOptions: NavOptions? = null,
@@ -72,6 +81,24 @@ fun NavController.navigateToPaymentProcessingScreen(
     val route = "$PAYMENT_PROCESSING_ROUTE?$PAYMENT_PROCESSING_PAYEE_NAME_ARG=$encodedPayeeName&$PAYMENT_PROCESSING_AMOUNT_ARG=$encodedAmount&$PAYMENT_PROCESSING_IS_UPI_ARG=$isUpiCode"
     val options = navOptions ?: navOptions {
         popUpTo(PAYEE_DETAILS_ROUTE) { inclusive = true }
+    }
+    navigate(route, options)
+}
+
+fun NavController.navigateToPaymentSuccessScreen(
+    payeeName: String,
+    amount: String,
+    upiName: String,
+    transactionTimestamp: String,
+    navOptions: NavOptions? = null,
+) {
+    val encodedPayeeName = payeeName.urlEncode()
+    val encodedAmount = amount.urlEncode()
+    val encodedUpiName = upiName.urlEncode()
+    val encodedTransactionTimestamp = transactionTimestamp.urlEncode()
+    val route = "$PAYMENT_SUCCESS_ROUTE?$PAYMENT_SUCCESS_PAYEE_NAME_ARG=$encodedPayeeName&$PAYMENT_SUCCESS_AMOUNT_ARG=$encodedAmount&$PAYMENT_SUCCESS_UPI_NAME_ARG=$encodedUpiName&$PAYMENT_SUCCESS_TRANSACTION_TIMESTAMP_ARG=$encodedTransactionTimestamp"
+    val options = navOptions ?: navOptions {
+        popUpTo(PAYMENT_PROCESSING_ROUTE) { inclusive = true }
     }
     navigate(route, options)
 }
@@ -145,7 +172,7 @@ fun NavGraphBuilder.payeeDetailsScreen(
 }
 
 fun NavGraphBuilder.paymentProcessingScreen(
-    onPaymentComplete: () -> Unit,
+    onPaymentComplete: (String, String, String, String) -> Unit,
     onPaymentFailed: (String) -> Unit,
 ) {
     composableWithSlideTransitions(
@@ -168,6 +195,38 @@ fun NavGraphBuilder.paymentProcessingScreen(
         PaymentProcessingScreen(
             onPaymentComplete = onPaymentComplete,
             onPaymentFailed = onPaymentFailed,
+        )
+    }
+}
+
+fun NavGraphBuilder.paymentSuccessScreen(
+    onShareScreenshot: () -> Unit,
+    onDone: () -> Unit,
+) {
+    composableWithSlideTransitions(
+        route = PAYMENT_SUCCESS_BASE_ROUTE,
+        arguments = listOf(
+            navArgument(PAYMENT_SUCCESS_PAYEE_NAME_ARG) {
+                type = NavType.StringType
+                nullable = false
+            },
+            navArgument(PAYMENT_SUCCESS_AMOUNT_ARG) {
+                type = NavType.StringType
+                nullable = false
+            },
+            navArgument(PAYMENT_SUCCESS_UPI_NAME_ARG) {
+                type = NavType.StringType
+                nullable = false
+            },
+            navArgument(PAYMENT_SUCCESS_TRANSACTION_TIMESTAMP_ARG) {
+                type = NavType.StringType
+                nullable = true
+            },
+        ),
+    ) {
+        PaymentSuccessScreen(
+            onShareScreenshot = onShareScreenshot,
+            onDone = onDone,
         )
     }
 }

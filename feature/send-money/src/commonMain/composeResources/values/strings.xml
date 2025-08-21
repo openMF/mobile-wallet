@@ -68,4 +68,12 @@
     <string name="feature_send_money_continue">Continue</string>
     <string name="feature_send_money_paying_securely">Paying securely %1$s to</string>
     <string name="feature_send_money_paid_to">Paid to</string>
+
+    <!-- Payment Success Screen -->
+    <string name="feature_send_money_payment_success">Payment Successful</string>
+    <string name="feature_send_money_banking_name">Banking name: %1$s</string>
+    <string name="feature_send_money_powered_by_upi">Powered by UPI</string>
+    <string name="feature_send_money_share_screenshot">Share screenshot</string>
+    <string name="feature_send_money_done">Done</string>
+    <string name="feature_send_money_payment_success_description">Payment completed successfully</string>
 </resources>

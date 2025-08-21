@@ -76,10 +76,12 @@ import org.mifospay.feature.send.money.navigation.SEND_MONEY_BASE_ROUTE
 import org.mifospay.feature.send.money.navigation.SEND_MONEY_OPTIONS_ROUTE
 import org.mifospay.feature.send.money.navigation.navigateToPayeeDetailsScreen
 import org.mifospay.feature.send.money.navigation.navigateToPaymentProcessingScreen
+import org.mifospay.feature.send.money.navigation.navigateToPaymentSuccessScreen
 import org.mifospay.feature.send.money.navigation.navigateToSendMoneyOptionsScreen
 import org.mifospay.feature.send.money.navigation.navigateToSendMoneyScreen
 import org.mifospay.feature.send.money.navigation.payeeDetailsScreen
 import org.mifospay.feature.send.money.navigation.paymentProcessingScreen
+import org.mifospay.feature.send.money.navigation.paymentSuccessScreen
 import org.mifospay.feature.send.money.navigation.sendMoneyOptionsScreen
 import org.mifospay.feature.send.money.navigation.sendMoneyScreen
 import org.mifospay.feature.settings.navigation.settingsScreen
@@ -339,16 +341,30 @@ internal fun MifosNavHost(
         )
 
         paymentProcessingScreen(
-            onPaymentComplete = {
+            onPaymentComplete = { payeeName, amount, upiName, transactionTimestamp ->
+                navController.navigateToPaymentSuccessScreen(
+                    payeeName = payeeName,
+                    amount = amount,
+                    upiName = upiName,
+                    transactionTimestamp = transactionTimestamp,
+                )
+            },
+            onPaymentFailed = { errorMessage ->
+                navController.popBackStack()
+            },
+        )
+
+        paymentSuccessScreen(
+            onShareScreenshot = {
+                // TODO: Implement screenshot sharing functionality
+            },
+            onDone = {
                 navController.navigate(HOME_ROUTE) {
                     popUpTo(HOME_ROUTE) {
                         inclusive = false
                     }
                     launchSingleTop = true
                 }
-            },
-            onPaymentFailed = { errorMessage ->
-                navController.popBackStack()
             },
         )
 
