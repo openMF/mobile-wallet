@@ -15,11 +15,11 @@ import androidx.compose.runtime.Composable
 actual fun rememberContactRepository(): ContactRepository {
     return object : ContactRepository {
         override suspend fun getContacts(): List<Contact> {
-            return emptyList()
+            return PhoneNumberUtils.filterAndFormatContacts(emptyList())
         }
 
         override suspend fun searchContacts(query: String): List<Contact> {
-            return emptyList()
+            return PhoneNumberUtils.filterAndFormatContacts(emptyList())
         }
     }
 }

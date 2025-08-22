@@ -41,6 +41,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import kotlinx.serialization.Serializable
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.mifospay.core.designsystem.component.MifosGradientBackground
 import org.mifospay.core.designsystem.component.MifosOutlinedTextField
@@ -53,6 +54,7 @@ import template.core.base.designsystem.theme.KptTheme
 @Composable
 expect fun ContactPermissionHandler()
 
+@Serializable
 data class Contact(
     val id: String,
     val name: String,
@@ -151,7 +153,7 @@ fun ContactsPickerScreen(
                 Spacer(modifier = Modifier.height(KptTheme.spacing.md))
 
                 Text(
-                    text = "All Contacts",
+                    text = "Mobile Contacts",
                     style = KptTheme.typography.labelLarge,
                     color = KptTheme.colorScheme.onSurface.copy(alpha = 0.8f),
                     textAlign = TextAlign.Left,
@@ -177,7 +179,7 @@ fun ContactsPickerScreen(
                         contentAlignment = Alignment.Center,
                     ) {
                         Text(
-                            text = if (searchQuery.isEmpty()) "No contacts found" else "No contacts match your search",
+                            text = if (searchQuery.isEmpty()) "No mobile contacts found" else "No mobile contacts match your search",
                             style = KptTheme.typography.bodyMedium,
                             color = KptTheme.colorScheme.onSurface.copy(alpha = 0.7f),
                         )
@@ -189,11 +191,12 @@ fun ContactsPickerScreen(
                     ) {
                         items(
                             items = contacts,
-                            key = { it.id },
+                            key = { contact -> "${contact.id}_${contact.phoneNumber}" },
                         ) { contact ->
                             ContactItem(
                                 contact = contact,
                                 onClick = {
+                                    println("ContactsPickerScreen: Contact clicked - ${contact.phoneNumber}")
                                     onContactSelected(contact)
                                 },
                             )

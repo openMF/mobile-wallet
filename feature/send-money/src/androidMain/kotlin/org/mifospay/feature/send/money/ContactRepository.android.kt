@@ -26,13 +26,15 @@ class AndroidContactRepository(
 ) : ContactRepository {
 
     override suspend fun getContacts(): List<Contact> {
-        return queryContacts(null)
+        val rawContacts = queryContacts(null)
+        return PhoneNumberUtils.filterAndFormatContacts(rawContacts)
     }
 
     override suspend fun searchContacts(query: String): List<Contact> {
         val selection = "${ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME} LIKE ? OR ${ContactsContract.CommonDataKinds.Phone.NUMBER} LIKE ?"
         val selectionArgs = arrayOf("%$query%", "%$query%")
-        return queryContacts(selection, selectionArgs)
+        val rawContacts = queryContacts(selection, selectionArgs)
+        return PhoneNumberUtils.filterAndFormatContacts(rawContacts)
     }
 
     private fun queryContacts(selection: String? = null, selectionArgs: Array<String>? = null): List<Contact> {

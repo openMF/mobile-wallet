@@ -31,6 +31,7 @@ import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -40,6 +41,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.SavedStateHandle
 import kotlinx.coroutines.delay
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.mifospay.core.designsystem.component.MifosGradientBackground
@@ -54,11 +56,12 @@ fun PayAnyoneScreen(
     onBackClick: () -> Unit,
     onContactPickerClick: () -> Unit,
     onContactSelected: (Contact) -> Unit = {},
+    selectedContact: Contact? = null,
     modifier: Modifier = Modifier,
 ) {
-    var inputValue by remember { mutableStateOf("") }
-    var isKeyboardNumeric by remember { mutableStateOf(false) }
-    var showClearIcon by remember { mutableStateOf(false) }
+    val viewModel: PayAnyoneViewModel = remember { PayAnyoneViewModel(SavedStateHandle()) }
+    val state by viewModel.stateFlow.collectAsState()
+
     var currentPlaceholderIndex by remember { mutableStateOf(0) }
 
     val placeholderMessages = listOf(
@@ -68,13 +71,13 @@ fun PayAnyoneScreen(
 
     val currentPlaceholder = placeholderMessages[currentPlaceholderIndex]
 
-    val keyboardType = if (isKeyboardNumeric) {
+    val keyboardType = if (state.isKeyboardNumeric) {
         KeyboardType.Number
     } else {
         KeyboardType.Text
     }
 
-    val keyboardToggleText = if (isKeyboardNumeric) "ABC" else "123"
+    val keyboardToggleText = if (state.isKeyboardNumeric) "ABC" else "123"
 
     LaunchedEffect(Unit) {
         while (true) {
@@ -83,7 +86,11 @@ fun PayAnyoneScreen(
         }
     }
 
-    LaunchedEffect(onContactSelected) {
+    LaunchedEffect(selectedContact) {
+        selectedContact?.let { contact ->
+            println("PayAnyoneScreen: Selected contact received - ${contact.phoneNumber}")
+            viewModel.trySendAction(PayAnyoneAction.ContactSelected(contact))
+        }
     }
 
     MifosGradientBackground {
@@ -114,10 +121,9 @@ fun PayAnyoneScreen(
                 Spacer(modifier = Modifier.height(KptTheme.spacing.lg))
 
                 MifosOutlinedTextField(
-                    value = inputValue,
+                    value = state.inputValue,
                     onValueChange = {
-                        inputValue = it
-                        showClearIcon = it.isNotEmpty()
+                        viewModel.trySendAction(PayAnyoneAction.InputValueChanged(it))
                     },
                     label = "",
                     placeholder = {
@@ -147,7 +153,7 @@ fun PayAnyoneScreen(
                             verticalAlignment = Alignment.CenterVertically,
                         ) {
                             AnimatedContent(
-                                targetState = showClearIcon,
+                                targetState = state.showClearIcon,
                                 transitionSpec = {
                                     fadeIn(animationSpec = tween(200)) togetherWith
                                         fadeOut(animationSpec = tween(200))
@@ -156,8 +162,7 @@ fun PayAnyoneScreen(
                                 if (showClear) {
                                     IconButton(
                                         onClick = {
-                                            inputValue = ""
-                                            showClearIcon = false
+                                            viewModel.trySendAction(PayAnyoneAction.ClearInput)
                                         },
                                         colors = IconButtonDefaults.iconButtonColors(
                                             contentColor = KptTheme.colorScheme.onSurface.copy(alpha = 0.6f),
@@ -173,7 +178,7 @@ fun PayAnyoneScreen(
                                     Row {
                                         IconButton(
                                             onClick = {
-                                                isKeyboardNumeric = !isKeyboardNumeric
+                                                viewModel.trySendAction(PayAnyoneAction.ToggleKeyboardType)
                                             },
                                             colors = IconButtonDefaults.iconButtonColors(
                                                 contentColor = KptTheme.colorScheme.primary,
@@ -218,5 +223,6 @@ fun PayAnyoneScreenPreview() {
         onBackClick = {},
         onContactPickerClick = {},
         onContactSelected = {},
+        selectedContact = null,
     )
 }

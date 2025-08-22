@@ -36,11 +36,21 @@ const val PAYEE_DETAILS_ARG = "qrCodeData"
 const val PAYEE_DETAILS_BASE_ROUTE = "$PAYEE_DETAILS_ROUTE?$PAYEE_DETAILS_ARG={$PAYEE_DETAILS_ARG}"
 
 const val PAY_ANYONE_ROUTE = "pay_anyone_route"
+const val PAY_ANYONE_SELECTED_CONTACT_ARG = "selectedContact"
+const val PAY_ANYONE_BASE_ROUTE = "$PAY_ANYONE_ROUTE?$PAY_ANYONE_SELECTED_CONTACT_ARG={$PAY_ANYONE_SELECTED_CONTACT_ARG}"
 const val CONTACTS_PICKER_ROUTE = "contacts_picker_route"
 
 fun NavController.navigateToPayAnyoneScreen(
+    selectedContact: Contact? = null,
     navOptions: NavOptions? = null,
-) = navigate(PAY_ANYONE_ROUTE, navOptions)
+) {
+    val route = if (selectedContact != null) {
+        "$PAY_ANYONE_ROUTE?$PAY_ANYONE_SELECTED_CONTACT_ARG=${selectedContact.phoneNumber}"
+    } else {
+        PAY_ANYONE_ROUTE
+    }
+    navigate(route, navOptions)
+}
 
 fun NavController.navigateToContactsPickerScreen(
     navOptions: NavOptions? = null,
@@ -121,12 +131,29 @@ fun NavGraphBuilder.payAnyoneScreen(
     onContactSelected: (Contact) -> Unit = {},
 ) {
     composableWithSlideTransitions(
-        route = PAY_ANYONE_ROUTE,
-    ) {
+        route = PAY_ANYONE_BASE_ROUTE,
+        arguments = listOf(
+            navArgument(PAY_ANYONE_SELECTED_CONTACT_ARG) {
+                type = NavType.StringType
+                nullable = true
+                defaultValue = null
+            },
+        ),
+    ) { backStackEntry ->
+        val selectedContactPhone = backStackEntry.arguments?.getString(PAY_ANYONE_SELECTED_CONTACT_ARG)
+        val selectedContact = selectedContactPhone?.let { phone ->
+            Contact(
+                id = "",
+                name = "",
+                phoneNumber = phone,
+            )
+        }
+
         PayAnyoneScreen(
             onBackClick = onBackClick,
             onContactPickerClick = onContactPickerClick,
             onContactSelected = onContactSelected,
+            selectedContact = selectedContact,
         )
     }
 }

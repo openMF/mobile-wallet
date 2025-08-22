@@ -13,5 +13,13 @@ import androidx.compose.runtime.Composable
 
 @Composable
 actual fun rememberContactRepository(): ContactRepository {
-    TODO("Not yet implemented")
+    return object : ContactRepository {
+        override suspend fun getContacts(): List<Contact> {
+            return PhoneNumberUtils.filterAndFormatContacts(emptyList())
+        }
+
+        override suspend fun searchContacts(query: String): List<Contact> {
+            return PhoneNumberUtils.filterAndFormatContacts(emptyList())
+        }
+    }
 }
