@@ -71,7 +71,7 @@ import org.mifospay.feature.savedcards.createOrUpdate.navigateToCardAddEdit
 import org.mifospay.feature.savedcards.details.cardDetailRoute
 import org.mifospay.feature.savedcards.details.navigateToCardDetails
 import org.mifospay.feature.send.money.SendMoneyScreen
-import org.mifospay.feature.send.money.navigation.CONTACTS_PICKER_ROUTE
+import org.mifospay.feature.send.money.navigation.PAY_ANYONE_ROUTE
 import org.mifospay.feature.send.money.navigation.SEND_MONEY_BASE_ROUTE
 import org.mifospay.feature.send.money.navigation.SEND_MONEY_OPTIONS_ROUTE
 import org.mifospay.feature.send.money.navigation.contactsPickerScreen
@@ -331,7 +331,7 @@ internal fun MifosNavHost(
             onContactPickerClick = {
                 navController.navigateToContactsPickerScreen()
             },
-            onContactSelected = { contact ->
+            onContactSelected = { phoneNumber ->
                 // Handle contact selection - this would typically update the input field
                 // For now, we'll just navigate back
                 navController.popBackStack()
@@ -340,12 +340,12 @@ internal fun MifosNavHost(
 
         contactsPickerScreen(
             onBackClick = navController::popBackStack,
-            onContactSelected = { contact ->
-                // Navigate back to Pay Anyone screen with selected contact
+            onContactSelected = { phoneNumber ->
+                // Navigate back to Pay Anyone screen with selected phone number
                 navController.navigateToPayAnyoneScreen(
-                    selectedContact = contact,
+                    selectedContactPhone = phoneNumber,
                     navOptions = navOptions {
-                        popUpTo(CONTACTS_PICKER_ROUTE) { inclusive = true }
+                        popUpTo(PAY_ANYONE_ROUTE) { inclusive = true }
                     },
                 )
             },

@@ -46,12 +46,10 @@ class PayAnyoneViewModel(
                 }
             }
 
-            is PayAnyoneAction.ContactSelected -> {
-                println("PayAnyoneViewModel: Contact selected - ${action.contact.phoneNumber}")
+            is PayAnyoneAction.PhoneNumberSelected -> {
                 mutableStateFlow.update {
                     it.copy(
-                        selectedContact = action.contact,
-                        inputValue = action.contact.phoneNumber,
+                        inputValue = action.phoneNumber,
                         showClearIcon = true,
                     )
                 }
@@ -82,7 +80,86 @@ data class PayAnyoneState(
     val inputValue: String = "",
     val isKeyboardNumeric: Boolean = false,
     val showClearIcon: Boolean = false,
-    val selectedContact: Contact? = null,
+    val recentContacts: List<Contact> = sampleRecentContacts,
+    val allContacts: List<Contact> = sampleAllContacts,
+)
+
+private val sampleRecentContacts = listOf(
+    Contact(
+        id = "1",
+        name = "John Doe",
+        phoneNumber = "+91 98765 43210",
+        upiId = "john.doe@upi",
+    ),
+    Contact(
+        id = "2",
+        name = "Jane Smith",
+        phoneNumber = "+91 98765 43211",
+        upiId = "jane.smith@okicici",
+    ),
+    Contact(
+        id = "3",
+        name = "Mike Johnson",
+        phoneNumber = "+91 98765 43212",
+        upiId = "mike.johnson@paytm",
+    ),
+    Contact(
+        id = "4",
+        name = "Sarah Wilson",
+        phoneNumber = "+91 98765 43213",
+        upiId = "sarah.wilson@phonepe",
+    ),
+)
+
+private val sampleAllContacts = listOf(
+    Contact(
+        id = "5",
+        name = "Alice Brown",
+        phoneNumber = "+91 98765 43214",
+        upiId = "alice.brown@upi",
+    ),
+    Contact(
+        id = "6",
+        name = "Bob Davis",
+        phoneNumber = "+91 98765 43215",
+        upiId = "bob.davis@okicici",
+    ),
+    Contact(
+        id = "7",
+        name = "Carol Miller",
+        phoneNumber = "+91 98765 43216",
+        upiId = "carol.miller@paytm",
+    ),
+    Contact(
+        id = "8",
+        name = "David Garcia",
+        phoneNumber = "+91 98765 43217",
+        upiId = "david.garcia@phonepe",
+    ),
+    Contact(
+        id = "9",
+        name = "Emma Rodriguez",
+        phoneNumber = "+91 98765 43218",
+        upiId = "emma.rodriguez@upi",
+    ),
+    Contact(
+        id = "10",
+        name = "Frank Martinez",
+        phoneNumber = "+91 98765 43219",
+        upiId = "frank.martinez@okicici",
+    ),
+    Contact(
+        id = "11",
+        name = "Grace Lee",
+        phoneNumber = "+91 98765 43220",
+        upiId = "grace.lee@paytm",
+    ),
+    Contact(
+        id = "12",
+        name = "Henry Taylor",
+        phoneNumber = "+91 98765 43221",
+        upiId = "henry.taylor@phonepe",
+    ),
 )
 
 sealed interface PayAnyoneEvent {
@@ -92,7 +169,7 @@ sealed interface PayAnyoneEvent {
 
 sealed interface PayAnyoneAction {
     data class InputValueChanged(val value: String) : PayAnyoneAction
-    data class ContactSelected(val contact: Contact) : PayAnyoneAction
+    data class PhoneNumberSelected(val phoneNumber: String) : PayAnyoneAction
     data object ClearInput : PayAnyoneAction
     data object ToggleKeyboardType : PayAnyoneAction
 }

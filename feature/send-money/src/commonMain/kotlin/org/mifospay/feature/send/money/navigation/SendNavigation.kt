@@ -16,7 +16,6 @@ import androidx.navigation.NavType
 import androidx.navigation.navArgument
 import androidx.navigation.navOptions
 import org.mifospay.core.ui.composableWithSlideTransitions
-import org.mifospay.feature.send.money.Contact
 import org.mifospay.feature.send.money.ContactsPickerScreen
 import org.mifospay.feature.send.money.PayAnyoneScreen
 import org.mifospay.feature.send.money.PayeeDetailsScreen
@@ -41,11 +40,11 @@ const val PAY_ANYONE_BASE_ROUTE = "$PAY_ANYONE_ROUTE?$PAY_ANYONE_SELECTED_CONTAC
 const val CONTACTS_PICKER_ROUTE = "contacts_picker_route"
 
 fun NavController.navigateToPayAnyoneScreen(
-    selectedContact: Contact? = null,
+    selectedContactPhone: String? = null,
     navOptions: NavOptions? = null,
 ) {
-    val route = if (selectedContact != null) {
-        "$PAY_ANYONE_ROUTE?$PAY_ANYONE_SELECTED_CONTACT_ARG=${selectedContact.phoneNumber}"
+    val route = if (selectedContactPhone != null) {
+        "$PAY_ANYONE_ROUTE?$PAY_ANYONE_SELECTED_CONTACT_ARG=$selectedContactPhone"
     } else {
         PAY_ANYONE_ROUTE
     }
@@ -128,7 +127,7 @@ fun NavGraphBuilder.sendMoneyOptionsScreen(
 fun NavGraphBuilder.payAnyoneScreen(
     onBackClick: () -> Unit,
     onContactPickerClick: () -> Unit,
-    onContactSelected: (Contact) -> Unit = {},
+    onContactSelected: (String) -> Unit = {},
 ) {
     composableWithSlideTransitions(
         route = PAY_ANYONE_BASE_ROUTE,
@@ -141,26 +140,19 @@ fun NavGraphBuilder.payAnyoneScreen(
         ),
     ) { backStackEntry ->
         val selectedContactPhone = backStackEntry.arguments?.getString(PAY_ANYONE_SELECTED_CONTACT_ARG)
-        val selectedContact = selectedContactPhone?.let { phone ->
-            Contact(
-                id = "",
-                name = "",
-                phoneNumber = phone,
-            )
-        }
 
         PayAnyoneScreen(
             onBackClick = onBackClick,
             onContactPickerClick = onContactPickerClick,
             onContactSelected = onContactSelected,
-            selectedContact = selectedContact,
+            selectedContactPhone = selectedContactPhone,
         )
     }
 }
 
 fun NavGraphBuilder.contactsPickerScreen(
     onBackClick: () -> Unit,
-    onContactSelected: (Contact) -> Unit,
+    onContactSelected: (String) -> Unit,
 ) {
     composableWithSlideTransitions(
         route = CONTACTS_PICKER_ROUTE,

@@ -65,7 +65,7 @@ data class Contact(
 @Composable
 fun ContactsPickerScreen(
     onBackClick: () -> Unit,
-    onContactSelected: (Contact) -> Unit,
+    onContactSelected: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     var searchQuery by remember { mutableStateOf("") }
@@ -153,7 +153,7 @@ fun ContactsPickerScreen(
                 Spacer(modifier = Modifier.height(KptTheme.spacing.md))
 
                 Text(
-                    text = "Mobile Contacts",
+                    text = "All Contacts",
                     style = KptTheme.typography.labelLarge,
                     color = KptTheme.colorScheme.onSurface.copy(alpha = 0.8f),
                     textAlign = TextAlign.Left,
@@ -197,7 +197,7 @@ fun ContactsPickerScreen(
                                 contact = contact,
                                 onClick = {
                                     println("ContactsPickerScreen: Contact clicked - ${contact.phoneNumber}")
-                                    onContactSelected(contact)
+                                    onContactSelected(contact.phoneNumber)
                                 },
                             )
 
