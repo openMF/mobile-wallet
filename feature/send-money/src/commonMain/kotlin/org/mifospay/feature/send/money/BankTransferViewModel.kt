@@ -80,6 +80,10 @@ class BankTransferViewModel : BaseViewModel<BankTransferState, BankTransferEvent
             is BankTransferAction.AddBankAccount -> {
                 sendEvent(BankTransferEvent.AddBankAccount)
             }
+            is BankTransferAction.SelectIfscCode -> {
+                mutableStateFlow.update { it.copy(ifscCode = action.ifscCode.code) }
+                sendEvent(BankTransferEvent.IfscCodeSelected(action.ifscCode))
+            }
         }
     }
 }
@@ -140,6 +144,7 @@ sealed interface BankTransferEvent {
     data object ShowIfscSearch : BankTransferEvent
     data object NavigateToNext : BankTransferEvent
     data object AddBankAccount : BankTransferEvent
+    data class IfscCodeSelected(val ifscCode: IfscCode) : BankTransferEvent
 }
 
 sealed interface BankTransferAction {
@@ -154,4 +159,5 @@ sealed interface BankTransferAction {
     data class SelectFromBankAccount(val bankAccount: BankAccount) : BankTransferAction
     data class SelectToBankAccount(val bankAccount: BankAccount) : BankTransferAction
     data object AddBankAccount : BankTransferAction
+    data class SelectIfscCode(val ifscCode: IfscCode) : BankTransferAction
 }

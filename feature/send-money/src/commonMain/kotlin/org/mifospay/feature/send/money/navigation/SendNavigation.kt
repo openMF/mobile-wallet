@@ -19,6 +19,7 @@ import org.mifospay.core.ui.composableWithSlideTransitions
 import org.mifospay.feature.send.money.BankTransferScreen
 import org.mifospay.feature.send.money.PayeeDetailsScreen
 import org.mifospay.feature.send.money.PayeeDetailsState
+import org.mifospay.feature.send.money.SearchIfscScreen
 import org.mifospay.feature.send.money.SendMoneyOptionsScreen
 import org.mifospay.feature.send.money.SendMoneyScreen
 
@@ -29,6 +30,7 @@ const val SEND_MONEY_BASE_ROUTE = "$SEND_MONEY_ROUTE?$SEND_MONEY_ARG={$SEND_MONE
 
 const val SEND_MONEY_OPTIONS_ROUTE = "send_money_options_route"
 const val BANK_TRANSFER_ROUTE = "bank_transfer_route"
+const val SEARCH_IFSC_ROUTE = "search_ifsc_route"
 const val PAYEE_DETAILS_ROUTE = "payee_details_route"
 const val PAYEE_DETAILS_ARG = "qrCodeData"
 
@@ -45,6 +47,10 @@ fun NavController.navigateToSendMoneyOptionsScreen(
 fun NavController.navigateToBankTransferScreen(
     navOptions: NavOptions? = null,
 ) = navigate(BANK_TRANSFER_ROUTE, navOptions)
+
+fun NavController.navigateToSearchIfscScreen(
+    navOptions: NavOptions? = null,
+) = navigate(SEARCH_IFSC_ROUTE, navOptions)
 
 fun NavController.navigateToPayeeDetailsScreen(
     qrCodeData: String,
@@ -109,12 +115,28 @@ fun NavGraphBuilder.sendMoneyOptionsScreen(
 
 fun NavGraphBuilder.bankTransferScreen(
     onBackClick: () -> Unit,
+    onSearchIfscClick: () -> Unit,
 ) {
     composableWithSlideTransitions(
         route = BANK_TRANSFER_ROUTE,
     ) {
         BankTransferScreen(
             onBackClick = onBackClick,
+            onSearchIfscClick = onSearchIfscClick,
+        )
+    }
+}
+
+fun NavGraphBuilder.searchIfscScreen(
+    onBackClick: () -> Unit,
+    onIfscSelected: (org.mifospay.feature.send.money.IfscCode) -> Unit,
+) {
+    composableWithSlideTransitions(
+        route = SEARCH_IFSC_ROUTE,
+    ) {
+        SearchIfscScreen(
+            onBackClick = onBackClick,
+            onIfscSelected = onIfscSelected,
         )
     }
 }

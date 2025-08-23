@@ -77,6 +77,7 @@ import template.core.base.designsystem.theme.KptTheme
 @Composable
 fun BankTransferScreen(
     onBackClick: () -> Unit,
+    onSearchIfscClick: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: BankTransferViewModel = koinViewModel(),
 ) {
@@ -89,13 +90,16 @@ fun BankTransferScreen(
                 onBackClick.invoke()
             }
             BankTransferEvent.ShowIfscSearch -> {
-                // TODO: Implement IFSC search dialog/screen
+                onSearchIfscClick.invoke()
             }
             BankTransferEvent.NavigateToNext -> {
                 // TODO: Navigate to next screen
             }
             BankTransferEvent.AddBankAccount -> {
                 // TODO: Navigate to add bank account screen
+            }
+            is BankTransferEvent.IfscCodeSelected -> {
+                // IFSC code has been selected and updated in the state
             }
         }
     }

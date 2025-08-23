@@ -62,4 +62,11 @@
     <string name="feature_send_money_recent_transfers">Recent Transfers</string>
     <string name="feature_send_money_self_transfer">Self Transfer</string>
     <string name="feature_send_money_select_different_accounts">Select different accounts for self transfer</string>
+    <string name="feature_send_money_search_ifsc_placeholder">Search IFSC code or bank name</string>
+    <string name="feature_send_money_searching">Searching...</string>
+    <string name="feature_send_money_no_ifsc_found">No IFSC codes found</string>
+    <string name="feature_send_money_search_ifsc_instructions">Search for IFSC codes by bank name or code</string>
+    <string name="feature_send_money_bank_name">Bank name</string>
+    <string name="feature_send_money_bank_branch">Bank branch</string>
+    <string name="feature_send_money_cancel">Cancel</string>
 </resources>

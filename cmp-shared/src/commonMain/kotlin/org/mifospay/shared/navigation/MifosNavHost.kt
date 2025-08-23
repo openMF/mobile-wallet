@@ -76,9 +76,11 @@ import org.mifospay.feature.send.money.navigation.SEND_MONEY_OPTIONS_ROUTE
 import org.mifospay.feature.send.money.navigation.bankTransferScreen
 import org.mifospay.feature.send.money.navigation.navigateToBankTransferScreen
 import org.mifospay.feature.send.money.navigation.navigateToPayeeDetailsScreen
+import org.mifospay.feature.send.money.navigation.navigateToSearchIfscScreen
 import org.mifospay.feature.send.money.navigation.navigateToSendMoneyOptionsScreen
 import org.mifospay.feature.send.money.navigation.navigateToSendMoneyScreen
 import org.mifospay.feature.send.money.navigation.payeeDetailsScreen
+import org.mifospay.feature.send.money.navigation.searchIfscScreen
 import org.mifospay.feature.send.money.navigation.sendMoneyOptionsScreen
 import org.mifospay.feature.send.money.navigation.sendMoneyScreen
 import org.mifospay.feature.settings.navigation.settingsScreen
@@ -325,6 +327,17 @@ internal fun MifosNavHost(
 
         bankTransferScreen(
             onBackClick = navController::popBackStack,
+            onSearchIfscClick = {
+                navController.navigateToSearchIfscScreen()
+            },
+        )
+
+        searchIfscScreen(
+            onBackClick = navController::popBackStack,
+            onIfscSelected = { ifscCode ->
+                // The IFSC code will be handled by the BankTransferViewModel
+                // when the user returns to the Bank Transfer screen
+            },
         )
 
         payeeDetailsScreen(

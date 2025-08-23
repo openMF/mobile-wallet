@@ -14,6 +14,7 @@ import org.koin.dsl.module
 import org.mifospay.feature.send.money.BankTransferViewModel
 import org.mifospay.feature.send.money.PayeeDetailsViewModel
 import org.mifospay.feature.send.money.ScannerModule
+import org.mifospay.feature.send.money.SearchIfscViewModel
 import org.mifospay.feature.send.money.SendMoneyOptionsViewModel
 import org.mifospay.feature.send.money.SendMoneyViewModel
 
@@ -23,4 +24,5 @@ val SendMoneyModule = module {
     viewModelOf(::SendMoneyOptionsViewModel)
     viewModelOf(::PayeeDetailsViewModel)
     viewModelOf(::BankTransferViewModel)
+    viewModelOf(::SearchIfscViewModel)
 }
