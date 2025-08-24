@@ -51,6 +51,9 @@ class SendMoneyOptionsViewModel(
             is SendMoneyOptionsAction.FineractPaymentsClicked -> {
                 sendEvent(SendMoneyOptionsEvent.NavigateToFineractPayments)
             }
+            is SendMoneyOptionsAction.AutoPayClicked -> {
+                sendEvent(SendMoneyOptionsEvent.NavigateToAutoPay)
+            }
         }
     }
 }
@@ -64,6 +67,7 @@ sealed interface SendMoneyOptionsEvent {
     data object NavigateToPayAnyone : SendMoneyOptionsEvent
     data object NavigateToBankTransfer : SendMoneyOptionsEvent
     data object NavigateToFineractPayments : SendMoneyOptionsEvent
+    data object NavigateToAutoPay : SendMoneyOptionsEvent
     data class QrCodeScanned(val data: String) : SendMoneyOptionsEvent, BackgroundEvent
     data class NavigateToPayeeDetails(val qrCodeData: String) : SendMoneyOptionsEvent, BackgroundEvent
 }
@@ -74,4 +78,5 @@ sealed interface SendMoneyOptionsAction {
     data object PayAnyoneClicked : SendMoneyOptionsAction
     data object BankTransferClicked : SendMoneyOptionsAction
     data object FineractPaymentsClicked : SendMoneyOptionsAction
+    data object AutoPayClicked : SendMoneyOptionsAction
 }

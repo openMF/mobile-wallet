@@ -325,6 +325,9 @@ internal fun MifosNavHost(
             onFineractPaymentsClick = {
                 navController.navigateToSendMoneyScreen()
             },
+            onAutoPayClick = {
+                navController.navigateToAutoPay()
+            },
             onQrCodeScanned = { qrData ->
                 navController.navigateToSendMoneyScreen(
                     requestData = qrData,

@@ -41,6 +41,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import mobile_wallet.feature.send_money.generated.resources.Res
+import mobile_wallet.feature.send_money.generated.resources.feature_send_money_autopay
 import mobile_wallet.feature.send_money.generated.resources.feature_send_money_bank_transfer
 import mobile_wallet.feature.send_money.generated.resources.feature_send_money_choose_method
 import mobile_wallet.feature.send_money.generated.resources.feature_send_money_fineract_payments
@@ -66,6 +67,7 @@ fun SendMoneyOptionsScreen(
     onPayAnyoneClick: () -> Unit,
     onBankTransferClick: () -> Unit,
     onFineractPaymentsClick: () -> Unit,
+    onAutoPayClick: () -> Unit,
     onQrCodeScanned: (String) -> Unit,
     onNavigateToPayeeDetails: (String) -> Unit,
     modifier: Modifier = Modifier,
@@ -86,6 +88,9 @@ fun SendMoneyOptionsScreen(
             }
             SendMoneyOptionsEvent.NavigateToFineractPayments -> {
                 onFineractPaymentsClick.invoke()
+            }
+            SendMoneyOptionsEvent.NavigateToAutoPay -> {
+                onAutoPayClick.invoke()
             }
             is SendMoneyOptionsEvent.QrCodeScanned -> {
                 onQrCodeScanned.invoke(event.data)
@@ -131,6 +136,9 @@ fun SendMoneyOptionsScreen(
                     },
                     onFineractPaymentsClick = {
                         viewModel.trySendAction(SendMoneyOptionsAction.FineractPaymentsClicked)
+                    },
+                    onAutoPayClick = {
+                        viewModel.trySendAction(SendMoneyOptionsAction.AutoPayClicked)
                     },
                 )
 
@@ -182,6 +190,7 @@ private fun SendMoneyOptionsRow(
     onPayAnyoneClick: () -> Unit,
     onBankTransferClick: () -> Unit,
     onFineractPaymentsClick: () -> Unit,
+    onAutoPayClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -219,6 +228,21 @@ private fun SendMoneyOptionsRow(
                 onClick = onFineractPaymentsClick,
                 modifier = Modifier.weight(1f),
             )
+        }
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(KptTheme.spacing.md),
+        ) {
+            SendMoneyOptionButton(
+                icon = MifosIcons.CalenderMonth,
+                label = stringResource(Res.string.feature_send_money_autopay),
+                onClick = onAutoPayClick,
+                modifier = Modifier.weight(1f),
+            )
+
+            // Empty space for future icons (UPI Lite, Tap & Pay, etc.)
+            Spacer(modifier = Modifier.weight(3f))
         }
     }
 }

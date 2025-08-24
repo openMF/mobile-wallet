@@ -83,6 +83,7 @@ fun NavGraphBuilder.sendMoneyOptionsScreen(
     onPayAnyoneClick: () -> Unit,
     onBankTransferClick: () -> Unit,
     onFineractPaymentsClick: () -> Unit,
+    onAutoPayClick: () -> Unit,
     onQrCodeScanned: (String) -> Unit,
     onNavigateToPayeeDetails: (String) -> Unit,
 ) {
@@ -95,6 +96,7 @@ fun NavGraphBuilder.sendMoneyOptionsScreen(
             onPayAnyoneClick = onPayAnyoneClick,
             onBankTransferClick = onBankTransferClick,
             onFineractPaymentsClick = onFineractPaymentsClick,
+            onAutoPayClick = onAutoPayClick,
             onQrCodeScanned = onQrCodeScanned,
             onNavigateToPayeeDetails = onNavigateToPayeeDetails,
         )

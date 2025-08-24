@@ -48,4 +48,5 @@
     <string name="feature_send_money_people">People</string>
     <string name="feature_send_money_merchants">Merchants</string>
     <string name="feature_send_money_more">More</string>
+    <string name="feature_send_money_autopay">AutoPay</string>
 </resources>
