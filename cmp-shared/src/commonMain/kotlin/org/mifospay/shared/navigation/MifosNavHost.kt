@@ -28,6 +28,7 @@ import org.mifospay.feature.autopay.navigateToAutoPay
 import org.mifospay.feature.autopay.navigateToAutoPayHistory
 import org.mifospay.feature.autopay.navigateToAutoPayPreferences
 import org.mifospay.feature.autopay.navigateToAutoPayRules
+import org.mifospay.feature.autopay.navigateToAutoPayScheduleDetails
 import org.mifospay.feature.autopay.navigateToAutoPaySetup
 import org.mifospay.feature.editpassword.navigation.editPasswordScreen
 import org.mifospay.feature.editpassword.navigation.navigateToEditPassword
@@ -147,6 +148,9 @@ internal fun MifosNavHost(
                 },
                 onNavigateToHistory = {
                     navController.navigateToAutoPayHistory()
+                },
+                onNavigateToScheduleDetails = { scheduleId ->
+                    navController.navigateToAutoPayScheduleDetails(scheduleId)
                 },
             )
         },
