@@ -12,6 +12,7 @@ package org.mifospay.core.network
 import de.jensklingenberg.ktorfit.Ktorfit
 import org.mifospay.core.network.services.createAccountTransfersService
 import org.mifospay.core.network.services.createAuthenticationService
+import org.mifospay.core.network.services.createAutoPayService
 import org.mifospay.core.network.services.createBeneficiaryService
 import org.mifospay.core.network.services.createClientService
 import org.mifospay.core.network.services.createDocumentService
@@ -62,6 +63,8 @@ class KtorfitClient(
     internal val savingsAccountsApi by lazy { ktorfit.createSavingsAccountsService() }
 
     internal val standingInstructionApi by lazy { ktorfit.createStandingInstructionService() }
+
+    internal val autoPayApi by lazy { ktorfit.createAutoPayService() }
 
     internal val beneficiaryApi by lazy { ktorfit.createBeneficiaryService() }
 }

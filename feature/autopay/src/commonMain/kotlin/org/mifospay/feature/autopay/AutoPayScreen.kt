@@ -51,6 +51,8 @@ fun AutoPayScreen(
     onNavigateToPreferences: () -> Unit,
     onNavigateToHistory: () -> Unit,
     onNavigateToScheduleDetails: (String) -> Unit,
+    onNavigateBack: () -> Unit = {},
+    showTopBar: Boolean = true,
     modifier: Modifier = Modifier,
     viewModel: AutoPayViewModel = koinViewModel(),
 ) {
@@ -64,8 +66,8 @@ fun AutoPayScreen(
 
     MifosScaffold(
         modifier = modifier,
-        topBarTitle = "AutoPay Dashboard",
-        backPress = { /* Handle back navigation */ },
+        topBarTitle = if (showTopBar) "AutoPay Dashboard" else null,
+        backPress = onNavigateBack,
         pullToRefreshState = pullRefreshState,
     ) { paddingValues ->
         if (state.isLoading && state.activeSchedules.isEmpty()) {
@@ -145,7 +147,7 @@ private fun AutoPayDashboardContent(
             Text(
                 text = "Active Schedules",
                 style = MaterialTheme.typography.titleLarge,
-                fontWeight = FontWeight.Bold,
+                fontWeight = FontWeight.Medium,
             )
         }
 
@@ -171,7 +173,7 @@ private fun AutoPayDashboardContent(
             Text(
                 text = "Upcoming Payments",
                 style = MaterialTheme.typography.titleLarge,
-                fontWeight = FontWeight.Bold,
+                fontWeight = FontWeight.Medium,
             )
         }
 
@@ -210,15 +212,6 @@ private fun DashboardHeader(
             modifier = Modifier.padding(20.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            Text(
-                text = "AutoPay Dashboard",
-                style = MaterialTheme.typography.headlineMedium,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onPrimaryContainer,
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
-
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceEvenly,
@@ -262,7 +255,7 @@ private fun DashboardStat(
         Text(
             text = value,
             style = MaterialTheme.typography.headlineMedium,
-            fontWeight = FontWeight.Bold,
+            fontWeight = FontWeight.Medium,
             color = MaterialTheme.colorScheme.onPrimaryContainer,
         )
 
@@ -293,7 +286,7 @@ private fun QuickActionsSection(
             Text(
                 text = "Quick Actions",
                 style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Bold,
+                fontWeight = FontWeight.Medium,
             )
 
             Spacer(modifier = Modifier.height(12.dp))
@@ -379,7 +372,7 @@ private fun ActiveScheduleCard(
                         Text(
                             text = schedule.name,
                             style = MaterialTheme.typography.titleMedium,
-                            fontWeight = FontWeight.Bold,
+                            fontWeight = FontWeight.Medium,
                         )
 
                         Text(
@@ -407,7 +400,7 @@ private fun ActiveScheduleCard(
                         Text(
                             text = CurrencyFormatter.format(schedule.amount, schedule.currency, 2),
                             style = MaterialTheme.typography.bodyLarge,
-                            fontWeight = FontWeight.Bold,
+                            fontWeight = FontWeight.Medium,
                         )
                     }
 
@@ -465,7 +458,7 @@ private fun UpcomingPaymentCard(
                     Text(
                         text = payment.scheduleName,
                         style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Bold,
+                        fontWeight = FontWeight.Medium,
                     )
 
                     Text(
@@ -493,7 +486,7 @@ private fun UpcomingPaymentCard(
                     Text(
                         text = CurrencyFormatter.format(payment.amount, payment.currency, 2),
                         style = MaterialTheme.typography.bodyLarge,
-                        fontWeight = FontWeight.Bold,
+                        fontWeight = FontWeight.Medium,
                     )
                 }
 
@@ -597,7 +590,7 @@ private fun EmptyStateCard(
             Text(
                 text = title,
                 style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Bold,
+                fontWeight = FontWeight.Medium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
 

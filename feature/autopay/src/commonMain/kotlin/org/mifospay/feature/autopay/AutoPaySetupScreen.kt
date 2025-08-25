@@ -60,7 +60,7 @@ fun AutoPaySetupScreen(
             Text(
                 text = "AutoPay Setup",
                 style = MaterialTheme.typography.headlineMedium,
-                fontWeight = FontWeight.Bold,
+                fontWeight = FontWeight.Medium,
             )
 
             Text(
@@ -85,7 +85,7 @@ fun AutoPaySetupScreen(
                     Text(
                         text = "Setup Options",
                         style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Bold,
+                        fontWeight = FontWeight.Medium,
                     )
 
                     Text(

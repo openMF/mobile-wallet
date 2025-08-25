@@ -13,6 +13,9 @@ import com.russhwolf.settings.Settings
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import org.mifospay.core.common.MifosDispatchers
+import org.mifospay.core.datastore.AutoPayPreferencesDataSource
+import org.mifospay.core.datastore.AutoPayPreferencesRepository
+import org.mifospay.core.datastore.AutoPayPreferencesRepositoryImpl
 import org.mifospay.core.datastore.UserPreferencesDataSource
 import org.mifospay.core.datastore.UserPreferencesRepository
 import org.mifospay.core.datastore.UserPreferencesRepositoryImpl
@@ -21,10 +24,19 @@ val PreferencesModule = module {
     factory<Settings> { Settings() }
     // Use the IO dispatcher name - MifosDispatchers.IO.name
     factory { UserPreferencesDataSource(get(), get(named(MifosDispatchers.IO.name))) }
+    factory { AutoPayPreferencesDataSource(get(), get(named(MifosDispatchers.IO.name))) }
 
     single<UserPreferencesRepository> {
         UserPreferencesRepositoryImpl(
             preferenceManager = get(),
+            ioDispatcher = get(named(MifosDispatchers.IO.name)),
+            unconfinedDispatcher = get(named(MifosDispatchers.Unconfined.name)),
+        )
+    }
+
+    single<AutoPayPreferencesRepository> {
+        AutoPayPreferencesRepositoryImpl(
+            autoPayPreferencesDataSource = get(),
             ioDispatcher = get(named(MifosDispatchers.IO.name)),
             unconfinedDispatcher = get(named(MifosDispatchers.Unconfined.name)),
         )

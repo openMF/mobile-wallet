@@ -71,7 +71,7 @@ fun AutoPayPreferencesScreen(
                 Text(
                     text = "AutoPay Preferences",
                     style = MaterialTheme.typography.headlineMedium,
-                    fontWeight = FontWeight.Bold,
+                    fontWeight = FontWeight.Medium,
                 )
 
                 Text(
@@ -159,7 +159,7 @@ private fun PreferencesSection(
             Text(
                 text = title,
                 style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Bold,
+                fontWeight = FontWeight.Medium,
             )
 
             Column(

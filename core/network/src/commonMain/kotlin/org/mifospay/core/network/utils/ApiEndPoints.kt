@@ -27,4 +27,7 @@ object ApiEndPoints {
     const val RUN_REPORT = "runreports"
     const val USER = "users"
     const val STANDING_INSTRUCTION = "standinginstructions"
+
+    // TODO: Verify with backend team and update according to finalized API contract
+    const val AUTO_PAY = "autopay"
 }

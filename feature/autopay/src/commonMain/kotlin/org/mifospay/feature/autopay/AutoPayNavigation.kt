@@ -13,17 +13,18 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.NavType
-import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import androidx.navigation.navOptions
+import org.mifospay.core.ui.composableWithSlideTransitions
 
 object AutoPayNavigation {
-    const val AUTO_PAY_ROUTE = "autopay"
-    const val AUTO_PAY_SETUP_ROUTE = "autopay/setup"
-    const val AUTO_PAY_RULES_ROUTE = "autopay/rules"
-    const val AUTO_PAY_PREFERENCES_ROUTE = "autopay/preferences"
-    const val AUTO_PAY_HISTORY_ROUTE = "autopay/history"
-    const val AUTO_PAY_SCHEDULE_DETAILS_ROUTE = "autopay/schedule/{scheduleId}"
+    const val AUTO_PAY_ROUTE = "autopay_route"
+    const val AUTO_PAY_SETUP_ROUTE = "autopay_setup_route"
+    const val AUTO_PAY_RULES_ROUTE = "autopay_rules_route"
+    const val AUTO_PAY_PREFERENCES_ROUTE = "autopay_preferences_route"
+    const val AUTO_PAY_HISTORY_ROUTE = "autopay_history_route"
+    const val AUTO_PAY_SCHEDULE_DETAILS_ROUTE = "autopay_schedule_details_route"
+    const val SCHEDULE_ID_ARG = "scheduleId"
 }
 
 fun NavController.navigateToAutoPay(navOptions: NavOptions? = null) {
@@ -47,14 +48,15 @@ fun NavController.navigateToAutoPayHistory(navOptions: NavOptions? = null) {
 }
 
 fun NavController.navigateToAutoPayScheduleDetails(scheduleId: String, navOptions: NavOptions? = null) {
-    navigate(AutoPayNavigation.AUTO_PAY_SCHEDULE_DETAILS_ROUTE.replace("{scheduleId}", scheduleId), navOptions)
+    val route = "${AutoPayNavigation.AUTO_PAY_SCHEDULE_DETAILS_ROUTE}?${AutoPayNavigation.SCHEDULE_ID_ARG}=$scheduleId"
+    navigate(route, navOptions)
 }
 
 fun NavGraphBuilder.autoPayGraph(
     navController: NavController,
     onNavigateBack: () -> Unit = { navController.navigateUp() },
 ) {
-    composable(AutoPayNavigation.AUTO_PAY_ROUTE) {
+    composableWithSlideTransitions(AutoPayNavigation.AUTO_PAY_ROUTE) {
         AutoPayScreen(
             onNavigateToSetup = {
                 navController.navigateToAutoPaySetup()
@@ -71,37 +73,39 @@ fun NavGraphBuilder.autoPayGraph(
             onNavigateToScheduleDetails = { scheduleId ->
                 navController.navigateToAutoPayScheduleDetails(scheduleId)
             },
+            onNavigateBack = onNavigateBack,
+            showTopBar = true,
         )
     }
 
-    composable(AutoPayNavigation.AUTO_PAY_SETUP_ROUTE) {
+    composableWithSlideTransitions(AutoPayNavigation.AUTO_PAY_SETUP_ROUTE) {
         AutoPaySetupScreen(
             onNavigateBack = onNavigateBack,
         )
     }
 
-    composable(AutoPayNavigation.AUTO_PAY_RULES_ROUTE) {
+    composableWithSlideTransitions(AutoPayNavigation.AUTO_PAY_RULES_ROUTE) {
         AutoPayRulesScreen(
             onNavigateBack = onNavigateBack,
         )
     }
 
-    composable(AutoPayNavigation.AUTO_PAY_PREFERENCES_ROUTE) {
+    composableWithSlideTransitions(AutoPayNavigation.AUTO_PAY_PREFERENCES_ROUTE) {
         AutoPayPreferencesScreen(
             onNavigateBack = onNavigateBack,
         )
     }
 
-    composable(AutoPayNavigation.AUTO_PAY_HISTORY_ROUTE) {
+    composableWithSlideTransitions(AutoPayNavigation.AUTO_PAY_HISTORY_ROUTE) {
         AutoPayHistoryScreen(
             onNavigateBack = onNavigateBack,
         )
     }
 
-    composable(
-        route = AutoPayNavigation.AUTO_PAY_SCHEDULE_DETAILS_ROUTE,
+    composableWithSlideTransitions(
+        route = "${AutoPayNavigation.AUTO_PAY_SCHEDULE_DETAILS_ROUTE}?${AutoPayNavigation.SCHEDULE_ID_ARG}={${AutoPayNavigation.SCHEDULE_ID_ARG}}",
         arguments = listOf(
-            navArgument("scheduleId") {
+            navArgument(AutoPayNavigation.SCHEDULE_ID_ARG) {
                 type = NavType.StringType
                 nullable = false
             },

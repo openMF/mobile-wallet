@@ -85,7 +85,7 @@ fun AutoPayScheduleDetailsScreen(
                 Text(
                     text = "Schedule Not Found",
                     style = MaterialTheme.typography.headlineSmall,
-                    fontWeight = FontWeight.Bold,
+                    fontWeight = FontWeight.Medium,
                 )
 
                 Spacer(modifier = Modifier.height(8.dp))
@@ -173,7 +173,7 @@ private fun ScheduleHeaderCard(
             Text(
                 text = schedule.name,
                 style = MaterialTheme.typography.headlineMedium,
-                fontWeight = FontWeight.Bold,
+                fontWeight = FontWeight.Medium,
                 color = MaterialTheme.colorScheme.onPrimaryContainer,
             )
 
@@ -186,7 +186,7 @@ private fun ScheduleHeaderCard(
             Text(
                 text = CurrencyFormatter.format(schedule.amount, schedule.currency, 2),
                 style = MaterialTheme.typography.headlineLarge,
-                fontWeight = FontWeight.Bold,
+                fontWeight = FontWeight.Medium,
                 color = MaterialTheme.colorScheme.onPrimaryContainer,
             )
 
@@ -217,7 +217,7 @@ private fun ScheduleInfoCard(
             Text(
                 text = "Schedule Information",
                 style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Bold,
+                fontWeight = FontWeight.Medium,
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -267,7 +267,7 @@ private fun PaymentDetailsCard(
             Text(
                 text = "Payment Details",
                 style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Bold,
+                fontWeight = FontWeight.Medium,
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -308,7 +308,7 @@ private fun ScheduleActionsCard(
             Text(
                 text = "Actions",
                 style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Bold,
+                fontWeight = FontWeight.Medium,
             )
 
             Spacer(modifier = Modifier.height(16.dp))

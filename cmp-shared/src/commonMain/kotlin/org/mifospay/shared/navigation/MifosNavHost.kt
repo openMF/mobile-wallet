@@ -152,6 +152,7 @@ internal fun MifosNavHost(
                 onNavigateToScheduleDetails = { scheduleId ->
                     navController.navigateToAutoPayScheduleDetails(scheduleId)
                 },
+                showTopBar = false,
             )
         },
     )

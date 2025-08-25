@@ -65,7 +65,7 @@ fun AutoPayRulesScreen(
                 Text(
                     text = "AutoPay Rules & Policies",
                     style = MaterialTheme.typography.headlineMedium,
-                    fontWeight = FontWeight.Bold,
+                    fontWeight = FontWeight.Medium,
                 )
 
                 Text(
@@ -141,7 +141,7 @@ private fun RulesSection(
             Text(
                 text = title,
                 style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Bold,
+                fontWeight = FontWeight.Medium,
             )
 
             Column(
@@ -167,7 +167,7 @@ private fun RuleItem(
         Text(
             text = "•",
             style = MaterialTheme.typography.bodyMedium,
-            fontWeight = FontWeight.Bold,
+            fontWeight = FontWeight.Medium,
             modifier = Modifier.padding(end = 8.dp),
         )
 

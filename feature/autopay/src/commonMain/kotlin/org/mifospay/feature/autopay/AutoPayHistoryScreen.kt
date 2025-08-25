@@ -68,7 +68,7 @@ fun AutoPayHistoryScreen(
                 Text(
                     text = "AutoPay History",
                     style = MaterialTheme.typography.headlineMedium,
-                    fontWeight = FontWeight.Bold,
+                    fontWeight = FontWeight.Medium,
                 )
 
                 Text(
@@ -139,7 +139,7 @@ private fun HistoryItemCard(
                     Text(
                         text = historyItem.amount,
                         style = MaterialTheme.typography.bodyMedium,
-                        fontWeight = FontWeight.Bold,
+                        fontWeight = FontWeight.Medium,
                     )
 
                     Text(
