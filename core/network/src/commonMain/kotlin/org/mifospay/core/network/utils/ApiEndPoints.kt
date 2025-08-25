@@ -30,4 +30,7 @@ object ApiEndPoints {
 
     // TODO: Verify with backend team and update according to finalized API contract
     const val AUTO_PAY = "autopay"
+
+    // TODO: Update endpoint path when backend APIs are finalized
+    const val BILLERS = "billers"
 }

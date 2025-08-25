@@ -51,6 +51,7 @@ fun AutoPayScreen(
     onNavigateToPreferences: () -> Unit,
     onNavigateToHistory: () -> Unit,
     onNavigateToScheduleDetails: (String) -> Unit,
+    onNavigateToAddBiller: () -> Unit,
     onNavigateBack: () -> Unit = {},
     showTopBar: Boolean = true,
     modifier: Modifier = Modifier,
@@ -85,6 +86,7 @@ fun AutoPayScreen(
                 onRefresh = { viewModel.trySendAction(AutoPayAction.RefreshDashboard) },
                 onAddNewSchedule = { viewModel.trySendAction(AutoPayAction.AddNewSchedule) },
                 onManageSchedules = { viewModel.trySendAction(AutoPayAction.ManageExistingSchedules) },
+                onAddNewBiller = { viewModel.trySendAction(AutoPayAction.AddNewBiller) },
                 onViewScheduleDetails = { scheduleId ->
                     viewModel.trySendAction(AutoPayAction.ViewScheduleDetails(scheduleId))
                 },
@@ -104,6 +106,7 @@ fun AutoPayScreen(
             is AutoPayEvent.NavigateToRules -> onNavigateToRules()
             is AutoPayEvent.NavigateToPreferences -> onNavigateToPreferences()
             is AutoPayEvent.NavigateToHistory -> onNavigateToHistory()
+            is AutoPayEvent.NavigateToAddBiller -> onNavigateToAddBiller()
             is AutoPayEvent.NavigateToScheduleDetails -> onNavigateToScheduleDetails(event.scheduleId)
         }
     }
@@ -115,6 +118,7 @@ private fun AutoPayDashboardContent(
     onRefresh: () -> Unit,
     onAddNewSchedule: () -> Unit,
     onManageSchedules: () -> Unit,
+    onAddNewBiller: () -> Unit,
     onViewScheduleDetails: (String) -> Unit,
     onNavigateToSetup: () -> Unit,
     onNavigateToRules: () -> Unit,
@@ -140,6 +144,7 @@ private fun AutoPayDashboardContent(
             QuickActionsSection(
                 onAddNewSchedule = onAddNewSchedule,
                 onManageSchedules = onManageSchedules,
+                onAddNewBiller = onAddNewBiller,
             )
         }
 
@@ -271,6 +276,7 @@ private fun DashboardStat(
 private fun QuickActionsSection(
     onAddNewSchedule: () -> Unit,
     onManageSchedules: () -> Unit,
+    onAddNewBiller: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Card(
@@ -309,6 +315,15 @@ private fun QuickActionsSection(
                     modifier = Modifier.weight(1f),
                 )
             }
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            QuickActionButton(
+                text = "Add Biller",
+                icon = MifosIcons.PersonAdd,
+                onClick = onAddNewBiller,
+                modifier = Modifier.fillMaxWidth(),
+            )
         }
     }
 }

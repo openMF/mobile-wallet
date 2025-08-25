@@ -18,6 +18,7 @@ import org.mifospay.core.data.repository.AssetRepository
 import org.mifospay.core.data.repository.AuthenticationRepository
 import org.mifospay.core.data.repository.AutoPayRepository
 import org.mifospay.core.data.repository.BeneficiaryRepository
+import org.mifospay.core.data.repository.BillerRepository
 import org.mifospay.core.data.repository.ClientRepository
 import org.mifospay.core.data.repository.DocumentRepository
 import org.mifospay.core.data.repository.InvoiceRepository
@@ -39,6 +40,7 @@ import org.mifospay.core.data.repositoryImpl.AssetRepositoryImpl
 import org.mifospay.core.data.repositoryImpl.AuthenticationRepositoryImpl
 import org.mifospay.core.data.repositoryImpl.AutoPayRepositoryImpl
 import org.mifospay.core.data.repositoryImpl.BeneficiaryRepositoryImpl
+import org.mifospay.core.data.repositoryImpl.BillerRepositoryImpl
 import org.mifospay.core.data.repositoryImpl.ClientRepositoryImpl
 import org.mifospay.core.data.repositoryImpl.DocumentRepositoryImpl
 import org.mifospay.core.data.repositoryImpl.InvoiceRepositoryImpl
@@ -96,6 +98,13 @@ val RepositoryModule = module {
     single<TwoFactorAuthRepository> { TwoFactorAuthRepositoryImpl(get(), get(ioDispatcher)) }
     single<UserRepository> { UserRepositoryImpl(get(), get(ioDispatcher)) }
     single<AutoPayRepository> { AutoPayRepositoryImpl(get(), get(ioDispatcher)) }
+
+    // TODO: Switch to network-based implementation when APIs are finalized
+    // or use hybrid approach syncing local and remote data
+    // single<BillerRepository> { BillerRepositoryImpl(get(), get(ioDispatcher)) }
+
+    // Current local storage implementation
+    single<BillerRepository> { BillerRepositoryImpl(get(), get(ioDispatcher)) }
 
     includes(platformModule)
     single<PlatformDependentDataModule> { getPlatformDataModule }

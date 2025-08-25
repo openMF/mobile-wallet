@@ -24,6 +24,7 @@ import org.mifospay.feature.accounts.savingsaccount.details.savingAccountDetailR
 import org.mifospay.feature.accounts.savingsaccount.navigateToSavingAccountAddEdit
 import org.mifospay.feature.autopay.AutoPayScreen
 import org.mifospay.feature.autopay.autoPayGraph
+import org.mifospay.feature.autopay.navigateToAddBiller
 import org.mifospay.feature.autopay.navigateToAutoPay
 import org.mifospay.feature.autopay.navigateToAutoPayHistory
 import org.mifospay.feature.autopay.navigateToAutoPayPreferences
@@ -151,6 +152,9 @@ internal fun MifosNavHost(
                 },
                 onNavigateToScheduleDetails = { scheduleId ->
                     navController.navigateToAutoPayScheduleDetails(scheduleId)
+                },
+                onNavigateToAddBiller = {
+                    navController.navigateToAddBiller()
                 },
                 showTopBar = false,
             )

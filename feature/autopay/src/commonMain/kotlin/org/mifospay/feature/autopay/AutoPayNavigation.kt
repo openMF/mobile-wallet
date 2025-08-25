@@ -24,6 +24,7 @@ object AutoPayNavigation {
     const val AUTO_PAY_PREFERENCES_ROUTE = "autopay_preferences_route"
     const val AUTO_PAY_HISTORY_ROUTE = "autopay_history_route"
     const val AUTO_PAY_SCHEDULE_DETAILS_ROUTE = "autopay_schedule_details_route"
+    const val AUTO_PAY_ADD_BILLER_ROUTE = "autopay_add_biller_route"
     const val SCHEDULE_ID_ARG = "scheduleId"
 }
 
@@ -52,6 +53,10 @@ fun NavController.navigateToAutoPayScheduleDetails(scheduleId: String, navOption
     navigate(route, navOptions)
 }
 
+fun NavController.navigateToAddBiller(navOptions: NavOptions? = null) {
+    navigate(AutoPayNavigation.AUTO_PAY_ADD_BILLER_ROUTE, navOptions)
+}
+
 fun NavGraphBuilder.autoPayGraph(
     navController: NavController,
     onNavigateBack: () -> Unit = { navController.navigateUp() },
@@ -72,6 +77,9 @@ fun NavGraphBuilder.autoPayGraph(
             },
             onNavigateToScheduleDetails = { scheduleId ->
                 navController.navigateToAutoPayScheduleDetails(scheduleId)
+            },
+            onNavigateToAddBiller = {
+                navController.navigateToAddBiller()
             },
             onNavigateBack = onNavigateBack,
             showTopBar = true,
@@ -112,6 +120,12 @@ fun NavGraphBuilder.autoPayGraph(
         ),
     ) {
         AutoPayScheduleDetailsScreen(
+            onNavigateBack = onNavigateBack,
+        )
+    }
+
+    composableWithSlideTransitions(AutoPayNavigation.AUTO_PAY_ADD_BILLER_ROUTE) {
+        AddBillerScreen(
             onNavigateBack = onNavigateBack,
         )
     }

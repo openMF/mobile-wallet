@@ -37,6 +37,7 @@ import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.PersonAdd
 import androidx.compose.material.icons.filled.Photo
 import androidx.compose.material.icons.filled.PhotoLibrary
 import androidx.compose.material.icons.filled.Power
@@ -136,6 +137,7 @@ object MifosIcons {
     val CalenderMonth = Icons.Filled.CalendarMonth
     val OutlinedDoneAll = Icons.Outlined.DoneAll
     val Person = Icons.Filled.Person
+    val PersonAdd = Icons.Filled.PersonAdd
     val Badge = Icons.Filled.Badge
     val DataInfo = Icons.Filled.Description
     val Scan = Icons.Outlined.QrCodeScanner

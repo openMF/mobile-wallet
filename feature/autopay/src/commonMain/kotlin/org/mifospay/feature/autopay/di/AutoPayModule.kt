@@ -11,10 +11,12 @@ package org.mifospay.feature.autopay.di
 
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
+import org.mifospay.feature.autopay.AddBillerViewModel
 import org.mifospay.feature.autopay.AutoPayScheduleDetailsViewModel
 import org.mifospay.feature.autopay.AutoPayViewModel
 
 val AutoPayModule = module {
     viewModelOf(::AutoPayViewModel)
     viewModelOf(::AutoPayScheduleDetailsViewModel)
+    viewModelOf(::AddBillerViewModel)
 }
