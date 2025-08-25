@@ -45,7 +45,6 @@ import androidx.compose.material.icons.filled.QrCode
 import androidx.compose.material.icons.filled.QrCode2
 import androidx.compose.material.icons.filled.RadioButtonChecked
 import androidx.compose.material.icons.filled.RadioButtonUnchecked
-import androidx.compose.material.icons.filled.Rule
 import androidx.compose.material.icons.filled.Schedule
 import androidx.compose.material.icons.filled.Security
 import androidx.compose.material.icons.filled.Share

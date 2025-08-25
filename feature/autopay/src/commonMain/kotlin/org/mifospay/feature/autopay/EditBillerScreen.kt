@@ -47,21 +47,19 @@ import org.mifospay.core.ui.DropdownBox
 import org.mifospay.core.ui.DropdownBoxItem
 import org.mifospay.core.ui.utils.EventsEffect
 
-// TODO currec
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddBillerScreen(
+fun EditBillerScreen(
     onNavigateBack: () -> Unit,
-    onNavigateToBillerList: () -> Unit,
-    viewModel: AddBillerViewModel = koinViewModel(),
+    viewModel: EditBillerViewModel = koinViewModel(),
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     var showCategoryDropdown by remember { mutableStateOf(false) }
 
     EventsEffect(viewModel) { event ->
         when (event) {
-            is AddBillerEvent.BillerSaved -> {
-                onNavigateToBillerList()
+            is EditBillerEvent.BillerUpdated -> {
+                onNavigateBack()
             }
         }
     }
@@ -69,7 +67,7 @@ fun AddBillerScreen(
     MifosScaffold(
         topBar = {
             MifosTopBar(
-                topBarTitle = "Add New Biller",
+                topBarTitle = "Edit Biller",
                 backPress = onNavigateBack,
             )
         },
@@ -83,14 +81,14 @@ fun AddBillerScreen(
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
             Text(
-                text = "Enter biller details to set up automatic payments",
+                text = "Update biller details",
                 modifier = Modifier.padding(bottom = 8.dp),
             )
 
             MifosOutlinedTextField(
                 label = "Biller Name *",
                 value = state.formData.name,
-                onValueChange = { viewModel.trySendAction(AddBillerAction.UpdateBillerName(it)) },
+                onValueChange = { viewModel.trySendAction(EditBillerAction.UpdateBillerName(it)) },
                 isError = state.validationResult.nameError != null,
                 errorMessage = state.validationResult.nameError,
                 singleLine = true,
@@ -102,7 +100,7 @@ fun AddBillerScreen(
             MifosOutlinedTextField(
                 label = "Account Number *",
                 value = state.formData.accountNumber,
-                onValueChange = { viewModel.trySendAction(AddBillerAction.UpdateAccountNumber(it)) },
+                onValueChange = { viewModel.trySendAction(EditBillerAction.UpdateAccountNumber(it)) },
                 isError = state.validationResult.accountNumberError != null,
                 errorMessage = state.validationResult.accountNumberError,
                 singleLine = true,
@@ -115,7 +113,7 @@ fun AddBillerScreen(
             MifosOutlinedTextField(
                 label = "Contact Number *",
                 value = state.formData.contactNumber,
-                onValueChange = { viewModel.trySendAction(AddBillerAction.UpdateContactNumber(it)) },
+                onValueChange = { viewModel.trySendAction(EditBillerAction.UpdateContactNumber(it)) },
                 isError = state.validationResult.contactNumberError != null,
                 errorMessage = state.validationResult.contactNumberError,
                 singleLine = true,
@@ -128,9 +126,7 @@ fun AddBillerScreen(
             MifosOutlinedTextField(
                 label = "Email (Optional)",
                 value = state.formData.email,
-                onValueChange = { viewModel.trySendAction(AddBillerAction.UpdateEmail(it)) },
-                isError = state.validationResult.emailError != null,
-                errorMessage = state.validationResult.emailError,
+                onValueChange = { viewModel.trySendAction(EditBillerAction.UpdateEmail(it)) },
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Email,
@@ -150,7 +146,7 @@ fun AddBillerScreen(
                     DropdownBoxItem(
                         text = category.displayName,
                         onClick = {
-                            viewModel.trySendAction(AddBillerAction.UpdateCategory(category))
+                            viewModel.trySendAction(EditBillerAction.UpdateCategory(category))
                             showCategoryDropdown = false
                         },
                     )
@@ -160,7 +156,7 @@ fun AddBillerScreen(
             MifosOutlinedTextField(
                 label = "Address (Optional)",
                 value = state.formData.address,
-                onValueChange = { viewModel.trySendAction(AddBillerAction.UpdateAddress(it)) },
+                onValueChange = { viewModel.trySendAction(EditBillerAction.UpdateAddress(it)) },
                 singleLine = false,
                 keyboardOptions = KeyboardOptions(
                     imeAction = ImeAction.Done,
@@ -179,8 +175,8 @@ fun AddBillerScreen(
                     modifier = Modifier.weight(1f),
                 )
                 MifosButton(
-                    text = { Text("Save Biller") },
-                    onClick = { viewModel.trySendAction(AddBillerAction.SaveBiller) },
+                    text = { Text("Update Biller") },
+                    onClick = { viewModel.trySendAction(EditBillerAction.UpdateBiller) },
                     modifier = Modifier.weight(1f),
                     enabled = !state.isLoading,
                 )
@@ -200,7 +196,7 @@ fun AddBillerScreen(
                 title = "Error",
                 message = error,
             ),
-            onDismissRequest = { viewModel.trySendAction(AddBillerAction.ClearError) },
+            onDismissRequest = { viewModel.trySendAction(EditBillerAction.ClearError) },
         )
     }
 }

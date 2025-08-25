@@ -11,15 +11,11 @@ package org.mifospay.feature.autopay
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.datetime.Clock
 import kotlinx.serialization.Serializable
 import org.mifospay.core.common.DataState
 import org.mifospay.core.common.getSerialized
-import org.mifospay.core.common.setSerialized
 import org.mifospay.core.data.util.BillerValidator
 import org.mifospay.core.datastore.BillerRepository
 import org.mifospay.core.model.autopay.Biller
@@ -27,56 +23,92 @@ import org.mifospay.core.model.autopay.BillerCategory
 import org.mifospay.core.model.autopay.BillerFormData
 import org.mifospay.core.model.autopay.BillerValidationResult
 import org.mifospay.core.ui.utils.BaseViewModel
-import kotlin.random.Random
 
-class AddBillerViewModel(
+class EditBillerViewModel(
     savedStateHandle: SavedStateHandle,
     private val billerRepository: BillerRepository,
-) : BaseViewModel<AddBillerState, AddBillerEvent, AddBillerAction>(
-    initialState = savedStateHandle.getSerialized(KEY_STATE) ?: AddBillerState(),
+) : BaseViewModel<EditBillerState, EditBillerEvent, EditBillerAction>(
+    initialState = savedStateHandle.getSerialized(KEY_STATE) ?: EditBillerState(),
 ) {
 
-    companion object {
-        private const val KEY_STATE = "add_biller_state"
-    }
+    private val billerId: String = savedStateHandle["billerId"] ?: ""
 
     init {
-        stateFlow
-            .onEach { savedStateHandle.setSerialized(key = KEY_STATE, value = it) }
-            .launchIn(viewModelScope)
+        loadBiller()
     }
 
-    override fun handleAction(action: AddBillerAction) {
+    override fun handleAction(action: EditBillerAction) {
         when (action) {
-            is AddBillerAction.UpdateBillerName -> {
+            is EditBillerAction.UpdateBillerName -> {
                 updateBillerName(action.name)
             }
-            is AddBillerAction.UpdateAccountNumber -> {
+            is EditBillerAction.UpdateAccountNumber -> {
                 updateAccountNumber(action.accountNumber)
             }
-            is AddBillerAction.UpdateContactNumber -> {
+            is EditBillerAction.UpdateContactNumber -> {
                 updateContactNumber(action.contactNumber)
             }
-            is AddBillerAction.UpdateEmail -> {
+            is EditBillerAction.UpdateEmail -> {
                 updateEmail(action.email)
             }
-            is AddBillerAction.UpdateCategory -> {
+            is EditBillerAction.UpdateCategory -> {
                 updateCategory(action.category)
             }
-            is AddBillerAction.UpdateAddress -> {
+            is EditBillerAction.UpdateAddress -> {
                 updateAddress(action.address)
             }
-            is AddBillerAction.SaveBiller -> {
-                saveBiller()
+            is EditBillerAction.UpdateBiller -> {
+                updateBiller()
             }
-            is AddBillerAction.ValidateForm -> {
+            is EditBillerAction.ValidateForm -> {
                 validateForm()
             }
-            is AddBillerAction.ClearError -> {
+            is EditBillerAction.ClearError -> {
                 clearError()
             }
-            is AddBillerAction.ClearValidationErrors -> {
+            is EditBillerAction.ClearValidationErrors -> {
                 clearValidationErrors()
+            }
+        }
+    }
+
+    private fun loadBiller() {
+        viewModelScope.launch {
+            mutableStateFlow.update { it.copy(isLoading = true) }
+
+            try {
+                val biller = billerRepository.getBillerById(billerId)
+                if (biller != null) {
+                    val formData = BillerFormData(
+                        name = biller.name,
+                        accountNumber = biller.accountNumber,
+                        contactNumber = biller.contactNumber,
+                        email = biller.email ?: "",
+                        category = biller.category,
+                        address = biller.address ?: "",
+                    )
+                    mutableStateFlow.update {
+                        it.copy(
+                            formData = formData,
+                            isLoading = false,
+                            error = null,
+                        )
+                    }
+                } else {
+                    mutableStateFlow.update {
+                        it.copy(
+                            isLoading = false,
+                            error = "Biller not found",
+                        )
+                    }
+                }
+            } catch (e: Exception) {
+                mutableStateFlow.update {
+                    it.copy(
+                        isLoading = false,
+                        error = "Failed to load biller: ${e.message}",
+                    )
+                }
             }
         }
     }
@@ -132,79 +164,66 @@ class AddBillerViewModel(
 
     private fun updateAddress(address: String) {
         mutableStateFlow.update {
-            it.copy(formData = it.formData.copy(address = address))
+            it.copy(
+                formData = it.formData.copy(address = address),
+            )
         }
     }
 
     private fun validateForm(): BillerValidationResult {
-        val currentState = stateFlow.value
-        val formData = currentState.formData
+        val formData = mutableStateFlow.value.formData
 
         val validationResult = BillerValidator.validateBillerForm(formData)
 
-        mutableStateFlow.update { it.copy(validationResult = validationResult) }
+        mutableStateFlow.update {
+            it.copy(validationResult = validationResult)
+        }
+
         return validationResult
     }
 
-    private fun generateUniqueId(): String {
-        val timestamp = Clock.System.now().toEpochMilliseconds()
-        val random = Random.nextInt(100000, 999999)
-        return "$timestamp-$random"
-    }
-
-    private fun saveBiller() {
+    private fun updateBiller() {
         val validationResult = validateForm()
-
         if (!validationResult.isValid) {
             return
         }
 
-        mutableStateFlow.update { it.copy(isLoading = true) }
-
         viewModelScope.launch {
-            try {
-                val currentState = stateFlow.value
-                val formData = currentState.formData
+            mutableStateFlow.update { it.copy(isLoading = true) }
 
+            try {
+                val formData = mutableStateFlow.value.formData
                 val biller = Biller(
-                    id = generateUniqueId(),
-                    name = formData.name.trim(),
-                    accountNumber = formData.accountNumber.trim(),
-                    contactNumber = formData.contactNumber.trim(),
+                    id = billerId,
+                    name = formData.name,
+                    accountNumber = formData.accountNumber,
+                    contactNumber = formData.contactNumber,
                     email = formData.email.takeIf { it.isNotBlank() },
                     category = formData.category!!,
                     address = formData.address.takeIf { it.isNotBlank() },
                 )
 
-                val result = billerRepository.saveBiller(biller)
-
-                when (result) {
-                    is DataState.Loading -> {
-                        // Loading state is already handled by setting isLoading = true above
-                    }
+                when (val result = billerRepository.updateBiller(biller)) {
                     is DataState.Success -> {
-                        mutableStateFlow.update {
-                            it.copy(
-                                isLoading = false,
-                                isSuccess = true,
-                            )
-                        }
-                        sendEvent(AddBillerEvent.BillerSaved(result.data))
+                        sendEvent(EditBillerEvent.BillerUpdated(result.data))
                     }
                     is DataState.Error -> {
                         mutableStateFlow.update {
                             it.copy(
                                 isLoading = false,
-                                error = result.message,
+                                error = "Failed to update biller: ${result.exception.message}",
                             )
                         }
                     }
+                    is DataState.Loading -> {
+                        // Loading state is already handled by setting isLoading = true above
+                    }
                 }
-            } catch (exception: Exception) {
+            } catch (e: Exception) {
                 mutableStateFlow.update {
                     it.copy(
                         isLoading = false,
-                        error = "Failed to save biller: ${exception.message}",
+                        error = "Failed to update biller: ${e.message}",
                     )
                 }
             }
@@ -222,30 +241,33 @@ class AddBillerViewModel(
             )
         }
     }
+
+    companion object {
+        private const val KEY_STATE = "edit_biller_state"
+    }
 }
 
 @Serializable
-data class AddBillerState(
+data class EditBillerState(
     val formData: BillerFormData = BillerFormData(),
     val validationResult: BillerValidationResult = BillerValidationResult(isValid = false),
     val isLoading: Boolean = false,
-    val isSuccess: Boolean = false,
     val error: String? = null,
 )
 
-sealed interface AddBillerEvent {
-    data class BillerSaved(val biller: Biller) : AddBillerEvent
+sealed interface EditBillerEvent {
+    data class BillerUpdated(val biller: Biller) : EditBillerEvent
 }
 
-sealed interface AddBillerAction {
-    data class UpdateBillerName(val name: String) : AddBillerAction
-    data class UpdateAccountNumber(val accountNumber: String) : AddBillerAction
-    data class UpdateContactNumber(val contactNumber: String) : AddBillerAction
-    data class UpdateEmail(val email: String) : AddBillerAction
-    data class UpdateCategory(val category: BillerCategory) : AddBillerAction
-    data class UpdateAddress(val address: String) : AddBillerAction
-    data object SaveBiller : AddBillerAction
-    data object ValidateForm : AddBillerAction
-    data object ClearError : AddBillerAction
-    data object ClearValidationErrors : AddBillerAction
+sealed interface EditBillerAction {
+    data class UpdateBillerName(val name: String) : EditBillerAction
+    data class UpdateAccountNumber(val accountNumber: String) : EditBillerAction
+    data class UpdateContactNumber(val contactNumber: String) : EditBillerAction
+    data class UpdateEmail(val email: String) : EditBillerAction
+    data class UpdateCategory(val category: BillerCategory) : EditBillerAction
+    data class UpdateAddress(val address: String) : EditBillerAction
+    data object UpdateBiller : EditBillerAction
+    data object ValidateForm : EditBillerAction
+    data object ClearError : EditBillerAction
+    data object ClearValidationErrors : EditBillerAction
 }

@@ -31,6 +31,7 @@ import org.mifospay.feature.autopay.navigateToAutoPayPreferences
 import org.mifospay.feature.autopay.navigateToAutoPayRules
 import org.mifospay.feature.autopay.navigateToAutoPayScheduleDetails
 import org.mifospay.feature.autopay.navigateToAutoPaySetup
+import org.mifospay.feature.autopay.navigateToBillerList
 import org.mifospay.feature.editpassword.navigation.editPasswordScreen
 import org.mifospay.feature.editpassword.navigation.navigateToEditPassword
 import org.mifospay.feature.faq.navigation.faqScreen
@@ -155,6 +156,9 @@ internal fun MifosNavHost(
                 },
                 onNavigateToAddBiller = {
                     navController.navigateToAddBiller()
+                },
+                onNavigateToBillerList = {
+                    navController.navigateToBillerList()
                 },
                 showTopBar = false,
             )
