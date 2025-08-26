@@ -33,6 +33,17 @@ class PayAnyoneViewModel(
         stateFlow
             .onEach { savedStateHandle.setSerialized(key = KEY_STATE, value = it) }
             .launchIn(viewModelScope)
+
+        // Handle selected contact phone from navigation arguments
+        val selectedContactPhone = savedStateHandle.get<String>("selectedContact")
+        if (selectedContactPhone != null) {
+            mutableStateFlow.update {
+                it.copy(
+                    inputValue = selectedContactPhone,
+                    showClearIcon = true,
+                )
+            }
+        }
     }
 
     override fun handleAction(action: PayAnyoneAction) {

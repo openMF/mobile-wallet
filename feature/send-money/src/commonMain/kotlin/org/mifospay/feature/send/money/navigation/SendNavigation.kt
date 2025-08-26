@@ -138,14 +138,11 @@ fun NavGraphBuilder.payAnyoneScreen(
                 defaultValue = null
             },
         ),
-    ) { backStackEntry ->
-        val selectedContactPhone = backStackEntry.arguments?.getString(PAY_ANYONE_SELECTED_CONTACT_ARG)
-
+    ) {
         PayAnyoneScreen(
             onBackClick = onBackClick,
             onContactPickerClick = onContactPickerClick,
             onContactSelected = onContactSelected,
-            selectedContactPhone = selectedContactPhone,
         )
     }
 }

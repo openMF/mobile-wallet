@@ -52,9 +52,9 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.SavedStateHandle
 import kotlinx.coroutines.delay
 import org.jetbrains.compose.ui.tooling.preview.Preview
+import org.koin.compose.viewmodel.koinViewModel
 import org.mifospay.core.designsystem.component.MifosGradientBackground
 import org.mifospay.core.designsystem.component.MifosOutlinedTextField
 import org.mifospay.core.designsystem.component.MifosScaffold
@@ -68,10 +68,9 @@ fun PayAnyoneScreen(
     onBackClick: () -> Unit,
     onContactPickerClick: () -> Unit,
     onContactSelected: (String) -> Unit = {},
-    selectedContactPhone: String? = null,
     modifier: Modifier = Modifier,
 ) {
-    val viewModel: PayAnyoneViewModel = remember { PayAnyoneViewModel(SavedStateHandle()) }
+    val viewModel: PayAnyoneViewModel = koinViewModel()
     val state by viewModel.stateFlow.collectAsState()
 
     var currentPlaceholderIndex by remember { mutableStateOf(0) }
@@ -95,12 +94,6 @@ fun PayAnyoneScreen(
         while (true) {
             delay(3000)
             currentPlaceholderIndex = (currentPlaceholderIndex + 1) % placeholderMessages.size
-        }
-    }
-
-    LaunchedEffect(selectedContactPhone) {
-        selectedContactPhone?.let { phoneNumber ->
-            viewModel.trySendAction(PayAnyoneAction.PhoneNumberSelected(phoneNumber))
         }
     }
 
@@ -422,6 +415,5 @@ fun PayAnyoneScreenPreview() {
         onBackClick = {},
         onContactPickerClick = {},
         onContactSelected = {},
-        selectedContactPhone = null,
     )
 }
