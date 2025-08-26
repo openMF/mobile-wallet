@@ -78,94 +78,99 @@ fun AddBillerScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .padding(16.dp)
-                .verticalScroll(rememberScrollState()),
-            verticalArrangement = Arrangement.spacedBy(16.dp),
+                .padding(16.dp),
         ) {
-            Text(
-                text = "Enter biller details to set up automatic payments",
-                modifier = Modifier.padding(bottom = 8.dp),
-            )
-
-            MifosOutlinedTextField(
-                label = "Biller Name *",
-                value = state.formData.name,
-                onValueChange = { viewModel.trySendAction(AddBillerAction.UpdateBillerName(it)) },
-                isError = state.validationResult.nameError != null,
-                errorMessage = state.validationResult.nameError,
-                singleLine = true,
-                keyboardOptions = KeyboardOptions(
-                    imeAction = ImeAction.Next,
-                ),
-            )
-
-            MifosOutlinedTextField(
-                label = "Account Number *",
-                value = state.formData.accountNumber,
-                onValueChange = { viewModel.trySendAction(AddBillerAction.UpdateAccountNumber(it)) },
-                isError = state.validationResult.accountNumberError != null,
-                errorMessage = state.validationResult.accountNumberError,
-                singleLine = true,
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Number,
-                    imeAction = ImeAction.Next,
-                ),
-            )
-
-            MifosOutlinedTextField(
-                label = "Contact Number *",
-                value = state.formData.contactNumber,
-                onValueChange = { viewModel.trySendAction(AddBillerAction.UpdateContactNumber(it)) },
-                isError = state.validationResult.contactNumberError != null,
-                errorMessage = state.validationResult.contactNumberError,
-                singleLine = true,
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Phone,
-                    imeAction = ImeAction.Next,
-                ),
-            )
-
-            MifosOutlinedTextField(
-                label = "Email (Optional)",
-                value = state.formData.email,
-                onValueChange = { viewModel.trySendAction(AddBillerAction.UpdateEmail(it)) },
-                isError = state.validationResult.emailError != null,
-                errorMessage = state.validationResult.emailError,
-                singleLine = true,
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Email,
-                    imeAction = ImeAction.Next,
-                ),
-            )
-
-            DropdownBox(
-                expanded = showCategoryDropdown,
-                label = "Biller Category *",
-                value = state.formData.category?.displayName ?: "",
-                isError = state.validationResult.categoryError != null,
-                errorText = state.validationResult.categoryError,
-                onExpandChange = { showCategoryDropdown = it },
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+                    .verticalScroll(rememberScrollState()),
+                verticalArrangement = Arrangement.spacedBy(16.dp),
             ) {
-                BillerCategory.entries.forEach { category ->
-                    DropdownBoxItem(
-                        text = category.displayName,
-                        onClick = {
-                            viewModel.trySendAction(AddBillerAction.UpdateCategory(category))
-                            showCategoryDropdown = false
-                        },
-                    )
-                }
-            }
+                Text(
+                    text = "Enter biller details to set up automatic payments",
+                    modifier = Modifier.padding(bottom = 8.dp),
+                )
 
-            MifosOutlinedTextField(
-                label = "Address (Optional)",
-                value = state.formData.address,
-                onValueChange = { viewModel.trySendAction(AddBillerAction.UpdateAddress(it)) },
-                singleLine = false,
-                keyboardOptions = KeyboardOptions(
-                    imeAction = ImeAction.Done,
-                ),
-            )
+                MifosOutlinedTextField(
+                    label = "Biller Name *",
+                    value = state.formData.name,
+                    onValueChange = { viewModel.trySendAction(AddBillerAction.UpdateBillerName(it)) },
+                    isError = state.validationResult.nameError != null,
+                    errorMessage = state.validationResult.nameError,
+                    singleLine = true,
+                    keyboardOptions = KeyboardOptions(
+                        imeAction = ImeAction.Next,
+                    ),
+                )
+
+                MifosOutlinedTextField(
+                    label = "Account Number *",
+                    value = state.formData.accountNumber,
+                    onValueChange = { viewModel.trySendAction(AddBillerAction.UpdateAccountNumber(it)) },
+                    isError = state.validationResult.accountNumberError != null,
+                    errorMessage = state.validationResult.accountNumberError,
+                    singleLine = true,
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Number,
+                        imeAction = ImeAction.Next,
+                    ),
+                )
+
+                MifosOutlinedTextField(
+                    label = "Contact Number *",
+                    value = state.formData.contactNumber,
+                    onValueChange = { viewModel.trySendAction(AddBillerAction.UpdateContactNumber(it)) },
+                    isError = state.validationResult.contactNumberError != null,
+                    errorMessage = state.validationResult.contactNumberError,
+                    singleLine = true,
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Phone,
+                        imeAction = ImeAction.Next,
+                    ),
+                )
+
+                MifosOutlinedTextField(
+                    label = "Email (Optional)",
+                    value = state.formData.email,
+                    onValueChange = { viewModel.trySendAction(AddBillerAction.UpdateEmail(it)) },
+                    isError = state.validationResult.emailError != null,
+                    errorMessage = state.validationResult.emailError,
+                    singleLine = true,
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Email,
+                        imeAction = ImeAction.Next,
+                    ),
+                )
+
+                DropdownBox(
+                    expanded = showCategoryDropdown,
+                    label = "Biller Category *",
+                    value = state.formData.category?.displayName ?: "",
+                    isError = state.validationResult.categoryError != null,
+                    errorText = state.validationResult.categoryError,
+                    onExpandChange = { showCategoryDropdown = it },
+                ) {
+                    BillerCategory.entries.forEach { category ->
+                        DropdownBoxItem(
+                            text = category.displayName,
+                            onClick = {
+                                viewModel.trySendAction(AddBillerAction.UpdateCategory(category))
+                                showCategoryDropdown = false
+                            },
+                        )
+                    }
+                }
+
+                MifosOutlinedTextField(
+                    label = "Address (Optional)",
+                    value = state.formData.address,
+                    onValueChange = { viewModel.trySendAction(AddBillerAction.UpdateAddress(it)) },
+                    singleLine = false,
+                    keyboardOptions = KeyboardOptions(
+                        imeAction = ImeAction.Done,
+                    ),
+                )
+            }
 
             Spacer(modifier = Modifier.height(24.dp))
 

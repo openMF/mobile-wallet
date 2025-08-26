@@ -9,13 +9,19 @@
  */
 package org.mifospay.feature.autopay
 
+import androidx.compose.animation.AnimatedContentScope
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.runtime.Composable
+import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.NavType
+import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import androidx.navigation.navOptions
-import org.mifospay.core.ui.composableWithSlideTransitions
 
 object AutoPayNavigation {
     const val AUTO_PAY_ROUTE = "autopay_route"
@@ -29,6 +35,36 @@ object AutoPayNavigation {
     const val AUTO_PAY_EDIT_BILLER_ROUTE = "autopay_edit_biller_route"
     const val SCHEDULE_ID_ARG = "scheduleId"
     const val BILLER_ID_ARG = "billerId"
+}
+
+/**
+ * Custom composable function that uses fade transitions to prevent the state issue
+ * where both screens are visible momentarily during navigation.
+ */
+fun NavGraphBuilder.composableWithFadeTransitions(
+    route: String,
+    arguments: List<androidx.navigation.NamedNavArgument> = emptyList(),
+    deepLinks: List<androidx.navigation.NavDeepLink> = emptyList(),
+    content: @Composable AnimatedContentScope.(NavBackStackEntry) -> Unit,
+) {
+    this.composable(
+        route = route,
+        arguments = arguments,
+        deepLinks = deepLinks,
+        enterTransition = {
+            fadeIn(animationSpec = tween(300))
+        },
+        exitTransition = {
+            fadeOut(animationSpec = tween(300))
+        },
+        popEnterTransition = {
+            fadeIn(animationSpec = tween(300))
+        },
+        popExitTransition = {
+            fadeOut(animationSpec = tween(300))
+        },
+        content = content,
+    )
 }
 
 fun NavController.navigateToAutoPay(navOptions: NavOptions? = null) {
@@ -73,7 +109,7 @@ fun NavGraphBuilder.autoPayGraph(
     navController: NavController,
     onNavigateBack: () -> Unit = { navController.navigateUp() },
 ) {
-    composableWithSlideTransitions(AutoPayNavigation.AUTO_PAY_ROUTE) {
+    composableWithFadeTransitions(AutoPayNavigation.AUTO_PAY_ROUTE) {
         AutoPayScreen(
             onNavigateToSetup = {
                 navController.navigateToAutoPaySetup()
@@ -101,31 +137,31 @@ fun NavGraphBuilder.autoPayGraph(
         )
     }
 
-    composableWithSlideTransitions(AutoPayNavigation.AUTO_PAY_SETUP_ROUTE) {
+    composableWithFadeTransitions(AutoPayNavigation.AUTO_PAY_SETUP_ROUTE) {
         AutoPaySetupScreen(
             onNavigateBack = onNavigateBack,
         )
     }
 
-    composableWithSlideTransitions(AutoPayNavigation.AUTO_PAY_RULES_ROUTE) {
+    composableWithFadeTransitions(AutoPayNavigation.AUTO_PAY_RULES_ROUTE) {
         AutoPayRulesScreen(
             onNavigateBack = onNavigateBack,
         )
     }
 
-    composableWithSlideTransitions(AutoPayNavigation.AUTO_PAY_PREFERENCES_ROUTE) {
+    composableWithFadeTransitions(AutoPayNavigation.AUTO_PAY_PREFERENCES_ROUTE) {
         AutoPayPreferencesScreen(
             onNavigateBack = onNavigateBack,
         )
     }
 
-    composableWithSlideTransitions(AutoPayNavigation.AUTO_PAY_HISTORY_ROUTE) {
+    composableWithFadeTransitions(AutoPayNavigation.AUTO_PAY_HISTORY_ROUTE) {
         AutoPayHistoryScreen(
             onNavigateBack = onNavigateBack,
         )
     }
 
-    composableWithSlideTransitions(
+    composableWithFadeTransitions(
         route = "${AutoPayNavigation.AUTO_PAY_SCHEDULE_DETAILS_ROUTE}?${AutoPayNavigation.SCHEDULE_ID_ARG}={${AutoPayNavigation.SCHEDULE_ID_ARG}}",
         arguments = listOf(
             navArgument(AutoPayNavigation.SCHEDULE_ID_ARG) {
@@ -139,7 +175,7 @@ fun NavGraphBuilder.autoPayGraph(
         )
     }
 
-    composableWithSlideTransitions(AutoPayNavigation.AUTO_PAY_ADD_BILLER_ROUTE) {
+    composableWithFadeTransitions(AutoPayNavigation.AUTO_PAY_ADD_BILLER_ROUTE) {
         AddBillerScreen(
             onNavigateBack = onNavigateBack,
             onNavigateToBillerList = {
@@ -154,7 +190,7 @@ fun NavGraphBuilder.autoPayGraph(
         )
     }
 
-    composableWithSlideTransitions(AutoPayNavigation.AUTO_PAY_BILLER_LIST_ROUTE) {
+    composableWithFadeTransitions(AutoPayNavigation.AUTO_PAY_BILLER_LIST_ROUTE) {
         BillerListScreen(
             onNavigateBack = onNavigateBack,
             onNavigateToAddBiller = {
@@ -166,7 +202,7 @@ fun NavGraphBuilder.autoPayGraph(
         )
     }
 
-    composableWithSlideTransitions(
+    composableWithFadeTransitions(
         route = "${AutoPayNavigation.AUTO_PAY_EDIT_BILLER_ROUTE}?${AutoPayNavigation.BILLER_ID_ARG}={${AutoPayNavigation.BILLER_ID_ARG}}",
         arguments = listOf(
             navArgument(AutoPayNavigation.BILLER_ID_ARG) {
