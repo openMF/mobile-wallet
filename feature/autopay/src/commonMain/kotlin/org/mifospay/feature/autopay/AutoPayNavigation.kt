@@ -33,8 +33,13 @@ object AutoPayNavigation {
     const val AUTO_PAY_ADD_BILLER_ROUTE = "autopay_add_biller_route"
     const val AUTO_PAY_BILLER_LIST_ROUTE = "autopay_biller_list_route"
     const val AUTO_PAY_EDIT_BILLER_ROUTE = "autopay_edit_biller_route"
+    const val AUTO_PAY_ADD_BILL_ROUTE = "autopay_add_bill_route"
+    const val AUTO_PAY_BILL_LIST_ROUTE = "autopay_bill_list_route"
+    const val AUTO_PAY_EDIT_BILL_ROUTE = "autopay_edit_bill_route"
     const val SCHEDULE_ID_ARG = "scheduleId"
     const val BILLER_ID_ARG = "billerId"
+    const val BILL_ID_ARG = "billId"
+    const val SOURCE_ARG = "source"
 }
 
 /**
@@ -92,8 +97,9 @@ fun NavController.navigateToAutoPayScheduleDetails(scheduleId: String, navOption
     navigate(route, navOptions)
 }
 
-fun NavController.navigateToAddBiller(navOptions: NavOptions? = null) {
-    navigate(AutoPayNavigation.AUTO_PAY_ADD_BILLER_ROUTE, navOptions)
+fun NavController.navigateToAddBiller(source: String = "direct", navOptions: NavOptions? = null) {
+    val route = "${AutoPayNavigation.AUTO_PAY_ADD_BILLER_ROUTE}?${AutoPayNavigation.SOURCE_ARG}=$source"
+    navigate(route, navOptions)
 }
 
 fun NavController.navigateToBillerList(navOptions: NavOptions? = null) {
@@ -102,6 +108,19 @@ fun NavController.navigateToBillerList(navOptions: NavOptions? = null) {
 
 fun NavController.navigateToEditBiller(billerId: String, navOptions: NavOptions? = null) {
     val route = "${AutoPayNavigation.AUTO_PAY_EDIT_BILLER_ROUTE}?${AutoPayNavigation.BILLER_ID_ARG}=$billerId"
+    navigate(route, navOptions)
+}
+
+fun NavController.navigateToAddBill(navOptions: NavOptions? = null) {
+    navigate(AutoPayNavigation.AUTO_PAY_ADD_BILL_ROUTE, navOptions)
+}
+
+fun NavController.navigateToBillList(navOptions: NavOptions? = null) {
+    navigate(AutoPayNavigation.AUTO_PAY_BILL_LIST_ROUTE, navOptions)
+}
+
+fun NavController.navigateToEditBill(billId: String, navOptions: NavOptions? = null) {
+    val route = "${AutoPayNavigation.AUTO_PAY_EDIT_BILL_ROUTE}?${AutoPayNavigation.BILL_ID_ARG}=$billId"
     navigate(route, navOptions)
 }
 
@@ -131,6 +150,12 @@ fun NavGraphBuilder.autoPayGraph(
             },
             onNavigateToBillerList = {
                 navController.navigateToBillerList()
+            },
+            onNavigateToAddBill = {
+                navController.navigateToAddBill()
+            },
+            onNavigateToBillList = {
+                navController.navigateToBillList()
             },
             onNavigateBack = onNavigateBack,
             showTopBar = true,
@@ -175,26 +200,31 @@ fun NavGraphBuilder.autoPayGraph(
         )
     }
 
-    composableWithFadeTransitions(AutoPayNavigation.AUTO_PAY_ADD_BILLER_ROUTE) {
+    composableWithFadeTransitions(
+        route = "${AutoPayNavigation.AUTO_PAY_ADD_BILLER_ROUTE}?${AutoPayNavigation.SOURCE_ARG}={${AutoPayNavigation.SOURCE_ARG}}",
+        arguments = listOf(
+            navArgument(AutoPayNavigation.SOURCE_ARG) {
+                type = NavType.StringType
+                nullable = false
+                defaultValue = "direct"
+            },
+        ),
+    ) {
         AddBillerScreen(
             onNavigateBack = onNavigateBack,
             onNavigateToBillerList = {
-                navController.navigateToBillerList(
-                    navOptions = navOptions {
-                        popUpTo(AutoPayNavigation.AUTO_PAY_ADD_BILLER_ROUTE) {
-                            inclusive = true
-                        }
-                    },
-                )
+                navController.navigateToBillerList()
             },
         )
     }
 
     composableWithFadeTransitions(AutoPayNavigation.AUTO_PAY_BILLER_LIST_ROUTE) {
         BillerListScreen(
-            onNavigateBack = onNavigateBack,
+            onNavigateBack = {
+                navController.popBackStack(AutoPayNavigation.AUTO_PAY_ROUTE, false)
+            },
             onNavigateToAddBiller = {
-                navController.navigateToAddBiller()
+                navController.navigateToAddBiller(source = "direct")
             },
             onNavigateToEditBiller = { billerId ->
                 navController.navigateToEditBiller(billerId)
@@ -213,6 +243,56 @@ fun NavGraphBuilder.autoPayGraph(
     ) {
         EditBillerScreen(
             onNavigateBack = onNavigateBack,
+        )
+    }
+
+    composableWithFadeTransitions(AutoPayNavigation.AUTO_PAY_ADD_BILL_ROUTE) {
+        AddBillScreen(
+            onNavigateBack = onNavigateBack,
+            onNavigateToBillList = {
+                navController.navigateToBillList(
+                    navOptions = navOptions {
+                        popUpTo(AutoPayNavigation.AUTO_PAY_ROUTE) {
+                            inclusive = false
+                        }
+                    },
+                )
+            },
+            onNavigateToAddBiller = {
+                navController.navigateToAddBiller(source = "bill_creation")
+            },
+        )
+    }
+
+    composableWithFadeTransitions(AutoPayNavigation.AUTO_PAY_BILL_LIST_ROUTE) {
+        BillListScreen(
+            onNavigateBack = onNavigateBack,
+            onNavigateToAddBill = {
+                navController.navigateToAddBill()
+            },
+            onNavigateToEditBill = { billId ->
+                navController.navigateToEditBill(billId)
+            },
+            onNavigateToAutopay = {
+                navController.popBackStack(AutoPayNavigation.AUTO_PAY_ROUTE, false)
+            },
+        )
+    }
+
+    composableWithFadeTransitions(
+        route = "${AutoPayNavigation.AUTO_PAY_EDIT_BILL_ROUTE}?${AutoPayNavigation.BILL_ID_ARG}={${AutoPayNavigation.BILL_ID_ARG}}",
+        arguments = listOf(
+            navArgument(AutoPayNavigation.BILL_ID_ARG) {
+                type = NavType.StringType
+                nullable = false
+            },
+        ),
+    ) {
+        EditBillScreen(
+            onNavigateBack = onNavigateBack,
+            onNavigateToAddBiller = {
+                navController.navigateToAddBiller(source = "bill_creation")
+            },
         )
     }
 }

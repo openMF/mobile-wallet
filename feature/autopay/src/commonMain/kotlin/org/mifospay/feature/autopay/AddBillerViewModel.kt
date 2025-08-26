@@ -38,7 +38,12 @@ class AddBillerViewModel(
 
     companion object {
         private const val KEY_STATE = "add_biller_state"
+        private const val SOURCE_ARG = "source"
     }
+
+    private val source: String = savedStateHandle.get<String>(SOURCE_ARG) ?: "direct"
+
+    fun getSource(): String = source
 
     init {
         stateFlow

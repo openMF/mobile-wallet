@@ -74,6 +74,12 @@ class AutoPayViewModel(
             is AutoPayAction.ViewBillerList -> {
                 viewBillerList()
             }
+            is AutoPayAction.AddNewBill -> {
+                addNewBill()
+            }
+            is AutoPayAction.ViewBillList -> {
+                viewBillList()
+            }
         }
     }
 
@@ -198,6 +204,14 @@ class AutoPayViewModel(
     private fun viewBillerList() {
         sendEvent(AutoPayEvent.NavigateToBillerList)
     }
+
+    private fun addNewBill() {
+        sendEvent(AutoPayEvent.NavigateToAddBill)
+    }
+
+    private fun viewBillList() {
+        sendEvent(AutoPayEvent.NavigateToBillList)
+    }
 }
 
 @Serializable
@@ -258,6 +272,8 @@ sealed interface AutoPayEvent {
     data object NavigateToHistory : AutoPayEvent
     data object NavigateToAddBiller : AutoPayEvent
     data object NavigateToBillerList : AutoPayEvent
+    data object NavigateToAddBill : AutoPayEvent
+    data object NavigateToBillList : AutoPayEvent
     data class NavigateToScheduleDetails(val scheduleId: String) : AutoPayEvent
 }
 
@@ -272,5 +288,7 @@ sealed interface AutoPayAction {
     data object ManageExistingSchedules : AutoPayAction
     data object AddNewBiller : AutoPayAction
     data object ViewBillerList : AutoPayAction
+    data object AddNewBill : AutoPayAction
+    data object ViewBillList : AutoPayAction
     data class ViewScheduleDetails(val scheduleId: String) : AutoPayAction
 }

@@ -61,7 +61,13 @@ fun AddBillerScreen(
     EventsEffect(viewModel) { event ->
         when (event) {
             is AddBillerEvent.BillerSaved -> {
-                onNavigateToBillerList()
+                // Check if we should go back or to biller list based on source
+                val source = viewModel.getSource()
+                if (source == "bill_creation") {
+                    onNavigateBack()
+                } else {
+                    onNavigateToBillerList()
+                }
             }
         }
     }
