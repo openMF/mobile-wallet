@@ -11,6 +11,8 @@ package org.mifospay.feature.send.money
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.debounce
@@ -84,6 +86,7 @@ class PayAnyoneViewModel(
         setupSearchFlow()
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
     private fun setupSearchFlow() {
         stateFlow
             .map { it.inputValue }
@@ -117,6 +120,9 @@ class PayAnyoneViewModel(
                 )
             }
 
+            // Note: Phone numbers not found on UPI will now appear in the "Others" section
+            // instead of triggering the contact not found dialog
+
             emit(searchResult)
         }
     }
@@ -131,9 +137,24 @@ class PayAnyoneViewModel(
                 (contact.upiId?.lowercase()?.contains(normalizedQuery) == true)
         }
 
-        val people = filteredContacts.filter { it.upiId != null && it.type == ContactType.PERSON }
-        val others = filteredContacts.filter { it.upiId == null && it.type == ContactType.PERSON }
-        val businesses = filteredContacts.filter { it.type == ContactType.BUSINESS }
+        // If no contacts found but query looks like a phone number, create a contact for "Others" section
+        val contactsToShow = if (filteredContacts.isEmpty() && isFullPhoneNumber(query)) {
+            listOf(
+                Contact(
+                    id = "not_found_${query.hashCode()}",
+                    name = "Unknown Contact",
+                    phoneNumber = query,
+                    upiId = null,
+                    type = ContactType.PERSON,
+                ),
+            )
+        } else {
+            filteredContacts
+        }
+
+        val people = contactsToShow.filter { it.upiId != null && it.type == ContactType.PERSON }
+        val others = contactsToShow.filter { it.upiId == null && it.type == ContactType.PERSON }
+        val businesses = contactsToShow.filter { it.type == ContactType.BUSINESS }
 
         return ContactSearchResult(
             people = people,
@@ -145,6 +166,69 @@ class PayAnyoneViewModel(
     private fun isPartialPhoneNumber(query: String): Boolean {
         val cleanQuery = query.replace(" ", "").replace("+", "").replace("-", "")
         return cleanQuery.length in 1..9 && cleanQuery.all { it.isDigit() }
+    }
+
+    private fun isFullPhoneNumber(query: String): Boolean {
+        val cleanQuery = query.replace(" ", "").replace("+", "").replace("-", "")
+        return cleanQuery.length >= 10 && cleanQuery.all { it.isDigit() }
+    }
+
+    private fun shareInviteMessage(sharingOption: SharingOption, phoneNumber: String) {
+        val inviteMessage = createInviteMessage(phoneNumber)
+
+        // Use the platform-specific sharing helper
+        val sharingHelper = getSharingHelper()
+        sharingHelper.shareInviteMessage(sharingOption, phoneNumber, inviteMessage)
+    }
+
+    private fun createInviteMessage(phoneNumber: String): String {
+        return buildString {
+            appendLine("Hi! I'm trying to send you money via UPI, but I couldn't find you on any UPI app.")
+            appendLine()
+            appendLine("Please download Mifos Pay to receive payments instantly:")
+            appendLine("https://play.google.com/store/apps/details?id=org.mifospay&hl=en_IN")
+            appendLine()
+            appendLine("Once you install the app, I'll be able to send you money directly!")
+            appendLine()
+            appendLine("Thanks!")
+        }
+    }
+
+    private fun showContactNotFoundFlow(phoneNumber: String) {
+        viewModelScope.launch {
+            // Show loading state
+            mutableStateFlow.update {
+                it.copy(
+                    showContactNotFoundLoading = true,
+                    showContactNotFoundMessage = false,
+                    showContactNotFoundDialog = false,
+                    inputValue = phoneNumber,
+                )
+            }
+
+            // Simulate delay
+            delay(2000)
+
+            // Show message
+            mutableStateFlow.update {
+                it.copy(
+                    showContactNotFoundLoading = false,
+                    showContactNotFoundMessage = true,
+                    showContactNotFoundDialog = false,
+                )
+            }
+
+            // Show dialog after another delay
+            delay(1500)
+
+            mutableStateFlow.update {
+                it.copy(
+                    showContactNotFoundLoading = false,
+                    showContactNotFoundMessage = false,
+                    showContactNotFoundDialog = true,
+                )
+            }
+        }
     }
 
     /**
@@ -251,6 +335,71 @@ class PayAnyoneViewModel(
                     )
                 }
             }
+
+            PayAnyoneAction.ShowContactNotFoundDialog -> {
+                mutableStateFlow.update {
+                    it.copy(
+                        showContactNotFoundDialog = true,
+                        showContactNotFoundMessage = true,
+                    )
+                }
+            }
+
+            PayAnyoneAction.HideContactNotFoundDialog -> {
+                mutableStateFlow.update {
+                    it.copy(
+                        showContactNotFoundDialog = false,
+                    )
+                }
+            }
+
+            is PayAnyoneAction.SharingOptionSelected -> {
+                mutableStateFlow.update {
+                    it.copy(
+                        selectedSharingOption = action.option,
+                    )
+                }
+            }
+
+            PayAnyoneAction.SetAsDefaultSharingOption -> {
+                // Save the selected sharing option as default
+                val selectedOption = stateFlow.value.selectedSharingOption
+                shareInviteMessage(selectedOption, stateFlow.value.inputValue)
+                mutableStateFlow.update {
+                    it.copy(
+                        showContactNotFoundDialog = false,
+                        defaultSharingOption = selectedOption,
+                    )
+                }
+            }
+
+            PayAnyoneAction.NotNowSharingOption -> {
+                // Share the invite message without setting as default
+                shareInviteMessage(stateFlow.value.selectedSharingOption, stateFlow.value.inputValue)
+                mutableStateFlow.update {
+                    it.copy(
+                        showContactNotFoundDialog = false,
+                    )
+                }
+            }
+
+            PayAnyoneAction.ShareInviteMessage -> {
+                shareInviteMessage(stateFlow.value.selectedSharingOption, stateFlow.value.inputValue)
+            }
+
+            is PayAnyoneAction.ContactSelected -> {
+                val contact = action.contact
+
+                if (contact.upiId == null) {
+                    val defaultOption = stateFlow.value.defaultSharingOption
+
+                    if (defaultOption != null) {
+                        shareInviteMessage(defaultOption, contact.phoneNumber)
+                    } else {
+                        showContactNotFoundFlow(contact.phoneNumber)
+                    }
+                }
+            }
         }
     }
 }
@@ -266,7 +415,19 @@ data class PayAnyoneState(
     val recentContacts: List<Contact> = sampleRecentContacts,
     val allContacts: List<Contact> = sampleAllContacts,
     val searchResults: ContactSearchResult = ContactSearchResult(),
+    val showContactNotFoundDialog: Boolean = false,
+    val showContactNotFoundMessage: Boolean = false,
+    val showContactNotFoundLoading: Boolean = false,
+    val selectedSharingOption: SharingOption = SharingOption.WHATSAPP,
+    val defaultSharingOption: SharingOption? = null,
+    val inviteMessage: String = "",
 )
+
+@Serializable
+enum class SharingOption {
+    WHATSAPP,
+    SMS,
+}
 
 @Serializable
 data class ContactSearchResult(
@@ -447,4 +608,11 @@ sealed interface PayAnyoneAction {
     data object ClearInput : PayAnyoneAction
     data object ToggleKeyboardType : PayAnyoneAction
     data class UpiHandleSelected(val handle: String) : PayAnyoneAction
+    data object ShowContactNotFoundDialog : PayAnyoneAction
+    data object HideContactNotFoundDialog : PayAnyoneAction
+    data class SharingOptionSelected(val option: SharingOption) : PayAnyoneAction
+    data object SetAsDefaultSharingOption : PayAnyoneAction
+    data object NotNowSharingOption : PayAnyoneAction
+    data object ShareInviteMessage : PayAnyoneAction
+    data class ContactSelected(val contact: Contact) : PayAnyoneAction
 }

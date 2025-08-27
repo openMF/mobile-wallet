@@ -262,11 +262,21 @@ fun PayAnyoneScreen(
                     Spacer(modifier = Modifier.height(KptTheme.spacing.lg))
                 }
 
+                if (state.showContactNotFoundLoading) {
+                    ContactNotFoundLoading()
+                    Spacer(modifier = Modifier.height(KptTheme.spacing.lg))
+                }
+
+                if (state.showContactNotFoundMessage) {
+                    ContactNotFoundMessage()
+                    Spacer(modifier = Modifier.height(KptTheme.spacing.lg))
+                }
+
                 if (state.inputValue.isNotEmpty()) {
                     SearchResultsContent(
                         searchResults = state.searchResults,
                         onContactSelected = { contact ->
-                            viewModel.trySendAction(PayAnyoneAction.PhoneNumberSelected(contact.phoneNumber))
+                            viewModel.trySendAction(PayAnyoneAction.ContactSelected(contact))
                             onContactSelected(contact.phoneNumber)
                         },
                     )
@@ -275,7 +285,7 @@ fun PayAnyoneScreen(
                         recentContacts = state.recentContacts,
                         allContacts = state.allContacts,
                         onContactSelected = { contact ->
-                            viewModel.trySendAction(PayAnyoneAction.PhoneNumberSelected(contact.phoneNumber))
+                            viewModel.trySendAction(PayAnyoneAction.ContactSelected(contact))
                             onContactSelected(contact.phoneNumber)
                         },
                     )
@@ -283,6 +293,24 @@ fun PayAnyoneScreen(
             }
         }
     }
+
+    // Contact Not Found Dialog
+    ContactNotFoundDialog(
+        showDialog = state.showContactNotFoundDialog,
+        selectedOption = state.selectedSharingOption,
+        onOptionSelected = { option ->
+            viewModel.trySendAction(PayAnyoneAction.SharingOptionSelected(option))
+        },
+        onNotNowClick = {
+            viewModel.trySendAction(PayAnyoneAction.NotNowSharingOption)
+        },
+        onSetAsDefaultClick = {
+            viewModel.trySendAction(PayAnyoneAction.SetAsDefaultSharingOption)
+        },
+        onDismiss = {
+            viewModel.trySendAction(PayAnyoneAction.HideContactNotFoundDialog)
+        },
+    )
 }
 
 @Composable
@@ -720,6 +748,44 @@ private fun PartialNumberNote(
 
             Text(
                 text = "To find more people on any UPI app, enter full number",
+                style = KptTheme.typography.bodySmall,
+                color = KptTheme.colorScheme.onSurface.copy(alpha = 0.8f),
+            )
+        }
+    }
+}
+
+@Composable
+private fun ContactNotFoundMessage(
+    modifier: Modifier = Modifier,
+) {
+    Card(
+        modifier = modifier.fillMaxWidth(),
+        shape = KptTheme.shapes.small,
+        colors = CardDefaults.cardColors(
+            containerColor = KptTheme.colorScheme.errorContainer.copy(alpha = 0.1f),
+        ),
+        elevation = CardDefaults.cardElevation(
+            defaultElevation = 0.dp,
+        ),
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(KptTheme.spacing.sm),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Icon(
+                imageVector = MifosIcons.Info,
+                contentDescription = "Information",
+                modifier = Modifier.size(16.dp),
+                tint = KptTheme.colorScheme.error,
+            )
+
+            Spacer(modifier = Modifier.width(KptTheme.spacing.sm))
+
+            Text(
+                text = "Could not find user. Redirecting you to invite them on Google Play",
                 style = KptTheme.typography.bodySmall,
                 color = KptTheme.colorScheme.onSurface.copy(alpha = 0.8f),
             )
