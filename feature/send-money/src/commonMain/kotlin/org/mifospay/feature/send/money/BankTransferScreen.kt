@@ -26,6 +26,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -42,7 +43,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -51,14 +56,20 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import mobile_wallet.feature.send_money.generated.resources.Res
 import mobile_wallet.feature.send_money.generated.resources.feature_send_money_account_number
 import mobile_wallet.feature.send_money.generated.resources.feature_send_money_account_number_error
+import mobile_wallet.feature.send_money.generated.resources.feature_send_money_account_number_mismatch
 import mobile_wallet.feature.send_money.generated.resources.feature_send_money_bank_details_note
 import mobile_wallet.feature.send_money.generated.resources.feature_send_money_bank_transfer
 import mobile_wallet.feature.send_money.generated.resources.feature_send_money_bank_transfer_to_others
 import mobile_wallet.feature.send_money.generated.resources.feature_send_money_bank_transfer_to_self
+import mobile_wallet.feature.send_money.generated.resources.feature_send_money_confirm
 import mobile_wallet.feature.send_money.generated.resources.feature_send_money_continue
 import mobile_wallet.feature.send_money.generated.resources.feature_send_money_ifsc_code
+import mobile_wallet.feature.send_money.generated.resources.feature_send_money_ifsc_validation_error
 import mobile_wallet.feature.send_money.generated.resources.feature_send_money_receivers_bank_details
+import mobile_wallet.feature.send_money.generated.resources.feature_send_money_receivers_name
+import mobile_wallet.feature.send_money.generated.resources.feature_send_money_receivers_name_required
 import mobile_wallet.feature.send_money.generated.resources.feature_send_money_recent_transfers
+import mobile_wallet.feature.send_money.generated.resources.feature_send_money_reenter_account_number
 import mobile_wallet.feature.send_money.generated.resources.feature_send_money_search_ifsc
 import mobile_wallet.feature.send_money.generated.resources.feature_send_money_select_different_accounts
 import mobile_wallet.feature.send_money.generated.resources.feature_send_money_self_transfer
@@ -164,6 +175,33 @@ fun BankTransferScreen(
                         onContinueClick = {
                             viewModel.trySendAction(BankTransferAction.Continue)
                         },
+                        onReenterAccountNumberChange = { accountNumber ->
+                            viewModel.trySendAction(BankTransferAction.UpdateReenterAccountNumber(accountNumber))
+                        },
+                        onReceiversNameChange = { name ->
+                            viewModel.trySendAction(BankTransferAction.UpdateReceiversName(name))
+                        },
+                        onProceedWithTransferClick = {
+                            viewModel.trySendAction(BankTransferAction.ProceedWithTransfer)
+                        },
+                        onToggleAccountNumberMask = {
+                            viewModel.trySendAction(BankTransferAction.ToggleAccountNumberMask)
+                        },
+                        onToggleReenterAccountNumberMask = {
+                            viewModel.trySendAction(BankTransferAction.ToggleReenterAccountNumberMask)
+                        },
+                        onSetIfscFocus = { focused ->
+                            viewModel.trySendAction(BankTransferAction.SetIfscFocus(focused))
+                        },
+                        onSetAccountNumberFocus = { focused ->
+                            viewModel.trySendAction(BankTransferAction.SetAccountNumberFocus(focused))
+                        },
+                        onSetReenterAccountNumberFocus = { focused ->
+                            viewModel.trySendAction(BankTransferAction.SetReenterAccountNumberFocus(focused))
+                        },
+                        onSetReceiversNameFocus = { focused ->
+                            viewModel.trySendAction(BankTransferAction.SetReceiversNameFocus(focused))
+                        },
                     )
                     1 -> BankTransferToSelfContent(viewModel = viewModel)
                 }
@@ -179,9 +217,20 @@ private fun BankTransferToOthersContent(
     onIfscCodeChange: (String) -> Unit,
     onSearchIfscClick: () -> Unit,
     onContinueClick: () -> Unit,
+    onReenterAccountNumberChange: (String) -> Unit,
+    onReceiversNameChange: (String) -> Unit,
+    onProceedWithTransferClick: () -> Unit,
+    onToggleAccountNumberMask: () -> Unit,
+    onToggleReenterAccountNumberMask: () -> Unit,
+    onSetIfscFocus: (Boolean) -> Unit,
+    onSetAccountNumberFocus: (Boolean) -> Unit,
+    onSetReenterAccountNumberFocus: (Boolean) -> Unit,
+    onSetReceiversNameFocus: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val scrollState = rememberScrollState()
+    val accountNumberFocusRequester = remember { FocusRequester() }
+    val reenterAccountNumberFocusRequester = remember { FocusRequester() }
 
     Column(
         modifier = modifier
@@ -197,24 +246,60 @@ private fun BankTransferToOthersContent(
             color = KptTheme.colorScheme.onSurface,
         )
 
-        MifosTextField(
-            value = state.accountNumber,
-            onValueChange = onAccountNumberChange,
-            label = stringResource(Res.string.feature_send_money_account_number),
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-            isError = state.accountNumber.isNotEmpty() && !state.isAccountNumberValid,
-            errorText = if (state.accountNumber.isNotEmpty() && !state.isAccountNumberValid) {
-                stringResource(Res.string.feature_send_money_account_number_error)
-            } else {
-                null
-            },
-        )
+        Box(
+            modifier = Modifier.fillMaxWidth(),
+        ) {
+            MifosTextField(
+                value = state.getDisplayAccountNumber(state.accountNumber, state.isAccountNumberMasked),
+                onValueChange = { newValue ->
+                    if (!state.isAccountNumberMasked) {
+                        onAccountNumberChange(newValue)
+                    }
+                },
+                label = stringResource(Res.string.feature_send_money_account_number),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+                isError = state.accountNumber.isNotEmpty() && !state.isAccountNumberValid,
+                errorText = if (state.accountNumber.isNotEmpty() && !state.isAccountNumberValid) {
+                    stringResource(Res.string.feature_send_money_account_number_error)
+                } else {
+                    null
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .focusRequester(accountNumberFocusRequester)
+                    .onFocusChanged { focusState ->
+                        onSetAccountNumberFocus(focusState.isFocused)
+                    },
+            )
+
+            if (state.accountNumber.isNotEmpty() && state.isAccountNumberMasked) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(56.dp)
+                        .clickable {
+                            onToggleAccountNumberMask()
+                            // Focus the field after unmasking
+                            accountNumberFocusRequester.requestFocus()
+                        },
+                )
+            }
+        }
 
         MifosTextField(
             value = state.ifscCode,
             onValueChange = onIfscCodeChange,
             label = stringResource(Res.string.feature_send_money_ifsc_code),
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Text,
+                capitalization = KeyboardCapitalization.Characters,
+            ),
+            isError = state.isIfscFocused && state.ifscCode.isNotEmpty() && !state.isIfscCodeValid,
+            errorText = if (state.isIfscFocused && state.ifscCode.isNotEmpty() && !state.isIfscCodeValid) {
+                stringResource(Res.string.feature_send_money_ifsc_validation_error)
+            } else {
+                null
+            },
             trailingIcon = {
                 TextButton(
                     onClick = onSearchIfscClick,
@@ -226,14 +311,95 @@ private fun BankTransferToOthersContent(
                     )
                 }
             },
+            modifier = Modifier.onFocusChanged { focusState ->
+                onSetIfscFocus(focusState.isFocused)
+            },
         )
 
-        MifosButton(
-            text = { Text(stringResource(Res.string.feature_send_money_continue)) },
-            onClick = onContinueClick,
-            enabled = state.isFormValid,
-            modifier = Modifier.fillMaxWidth(),
-        )
+        if (!state.showAdditionalFields) {
+            if (state.isLoading) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(48.dp),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    CircularProgressIndicator(
+                        color = KptTheme.colorScheme.primary,
+                    )
+                }
+            } else {
+                MifosButton(
+                    text = { Text(stringResource(Res.string.feature_send_money_continue)) },
+                    onClick = onContinueClick,
+                    enabled = state.isFormValid,
+                    modifier = Modifier.fillMaxWidth(),
+                )
+            }
+        } else {
+            Box(
+                modifier = Modifier.fillMaxWidth(),
+            ) {
+                MifosTextField(
+                    value = state.getDisplayAccountNumber(state.reenterAccountNumber, state.isReenterAccountNumberMasked),
+                    onValueChange = { newValue ->
+                        if (!state.isReenterAccountNumberMasked) {
+                            onReenterAccountNumberChange(newValue)
+                        }
+                    },
+                    label = stringResource(Res.string.feature_send_money_reenter_account_number),
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+                    isError = state.reenterAccountNumber.isNotEmpty() && !state.isAccountNumberMatching,
+                    errorText = if (state.reenterAccountNumber.isNotEmpty() && !state.isAccountNumberMatching) {
+                        stringResource(Res.string.feature_send_money_account_number_mismatch)
+                    } else {
+                        null
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .focusRequester(reenterAccountNumberFocusRequester)
+                        .onFocusChanged { focusState ->
+                            onSetReenterAccountNumberFocus(focusState.isFocused)
+                        },
+                )
+
+                if (state.reenterAccountNumber.isNotEmpty() && state.isReenterAccountNumberMasked) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(56.dp)
+                            .clickable {
+                                onToggleReenterAccountNumberMask()
+                                // Focus the field after unmasking
+                                reenterAccountNumberFocusRequester.requestFocus()
+                            },
+                    )
+                }
+            }
+
+            MifosTextField(
+                value = state.receiversName,
+                onValueChange = onReceiversNameChange,
+                label = stringResource(Res.string.feature_send_money_receivers_name),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+                isError = state.receiversName.isNotEmpty() && !state.isReceiversNameValid,
+                errorText = if (state.receiversName.isNotEmpty() && !state.isReceiversNameValid) {
+                    stringResource(Res.string.feature_send_money_receivers_name_required)
+                } else {
+                    null
+                },
+                modifier = Modifier.onFocusChanged { focusState ->
+                    onSetReceiversNameFocus(focusState.isFocused)
+                },
+            )
+
+            MifosButton(
+                text = { Text(stringResource(Res.string.feature_send_money_confirm)) },
+                onClick = onProceedWithTransferClick,
+                enabled = state.isAdditionalFieldsValid,
+                modifier = Modifier.fillMaxWidth(),
+            )
+        }
 
         Text(
             text = stringResource(Res.string.feature_send_money_bank_details_note),

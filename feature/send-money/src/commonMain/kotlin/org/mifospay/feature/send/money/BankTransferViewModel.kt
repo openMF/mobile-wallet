@@ -9,7 +9,10 @@
  */
 package org.mifospay.feature.send.money
 
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import org.mifospay.core.ui.utils.BaseViewModel
 
 class BankTransferViewModel : BaseViewModel<BankTransferState, BankTransferEvent, BankTransferAction>(
@@ -36,7 +39,12 @@ class BankTransferViewModel : BaseViewModel<BankTransferState, BankTransferEvent
             }
             is BankTransferAction.Continue -> {
                 if (state.isFormValid) {
-                    sendEvent(BankTransferEvent.NavigateToNext)
+                    mutableStateFlow.update { it.copy(isLoading = true) }
+                    // Simulate network call with delay
+                    viewModelScope.launch {
+                        delay(1500)
+                        mutableStateFlow.update { it.copy(isLoading = false, showAdditionalFields = true) }
+                    }
                 }
             }
             is BankTransferAction.ContinueSelfTransfer -> {
@@ -84,6 +92,45 @@ class BankTransferViewModel : BaseViewModel<BankTransferState, BankTransferEvent
                 mutableStateFlow.update { it.copy(ifscCode = action.ifscCode.code) }
                 sendEvent(BankTransferEvent.IfscCodeSelected(action.ifscCode))
             }
+            is BankTransferAction.UpdateReenterAccountNumber -> {
+                mutableStateFlow.update { it.copy(reenterAccountNumber = action.accountNumber) }
+            }
+            is BankTransferAction.UpdateReceiversName -> {
+                mutableStateFlow.update { it.copy(receiversName = action.name) }
+            }
+            is BankTransferAction.ProceedWithTransfer -> {
+                if (state.isAdditionalFieldsValid) {
+                    sendEvent(BankTransferEvent.NavigateToNext)
+                }
+            }
+            is BankTransferAction.ToggleAccountNumberMask -> {
+                mutableStateFlow.update { it.copy(isAccountNumberMasked = !it.isAccountNumberMasked) }
+                if (!state.isAccountNumberMasked) {
+                    // When unmasking, we need to focus the field
+                    // This will be handled by the UI layer
+                }
+            }
+            is BankTransferAction.ToggleReenterAccountNumberMask -> {
+                mutableStateFlow.update { it.copy(isReenterAccountNumberMasked = !it.isReenterAccountNumberMasked) }
+            }
+            is BankTransferAction.SetIfscFocus -> {
+                mutableStateFlow.update { it.copy(isIfscFocused = action.focused) }
+                if (action.focused && state.accountNumber.isNotEmpty()) {
+                    mutableStateFlow.update { it.copy(isAccountNumberMasked = true) }
+                }
+            }
+            is BankTransferAction.SetAccountNumberFocus -> {
+                mutableStateFlow.update { it.copy(isAccountNumberFocused = action.focused) }
+            }
+            is BankTransferAction.SetReenterAccountNumberFocus -> {
+                mutableStateFlow.update { it.copy(isReenterAccountNumberFocused = action.focused) }
+            }
+            is BankTransferAction.SetReceiversNameFocus -> {
+                mutableStateFlow.update { it.copy(isReceiversNameFocused = action.focused) }
+                if (action.focused && state.reenterAccountNumber.isNotEmpty()) {
+                    mutableStateFlow.update { it.copy(isReenterAccountNumberMasked = true) }
+                }
+            }
         }
     }
 }
@@ -103,19 +150,40 @@ data class BankTransferState(
     val isLoading: Boolean = false,
     val accountNumber: String = "",
     val ifscCode: String = "",
+    val reenterAccountNumber: String = "",
+    val receiversName: String = "",
+    val showAdditionalFields: Boolean = false,
+    val isAccountNumberMasked: Boolean = false,
+    val isReenterAccountNumberMasked: Boolean = false,
+    val isIfscFocused: Boolean = false,
+    val isAccountNumberFocused: Boolean = false,
+    val isReenterAccountNumberFocused: Boolean = false,
+    val isReceiversNameFocused: Boolean = false,
     val selectedFromBankAccount: BankAccount? = null,
     val selectedToBankAccount: BankAccount? = null,
     val isFromBankAccountDropdownExpanded: Boolean = false,
     val isToBankAccountDropdownExpanded: Boolean = false,
 ) {
     val isAccountNumberValid: Boolean
-        get() = accountNumber.isNotEmpty() && accountNumber.all { it.isDigit() }
+        get() = accountNumber.isNotEmpty() && accountNumber.all { it.isLetterOrDigit() }
 
     val isIfscCodeValid: Boolean
-        get() = ifscCode.isNotEmpty()
+        get() = ifscCode.isNotEmpty() && ifscCode.matches(Regex("^[A-Z]{4}[A-Z0-9]{7}$"))
+
+    val isReenterAccountNumberValid: Boolean
+        get() = reenterAccountNumber.isNotEmpty() && reenterAccountNumber.all { it.isLetterOrDigit() }
+
+    val isReceiversNameValid: Boolean
+        get() = receiversName.isNotEmpty() && receiversName.trim().length >= 2
+
+    val isAccountNumberMatching: Boolean
+        get() = accountNumber == reenterAccountNumber
 
     val isFormValid: Boolean
         get() = isAccountNumberValid && isIfscCodeValid
+
+    val isAdditionalFieldsValid: Boolean
+        get() = isReenterAccountNumberValid && isReceiversNameValid && isAccountNumberMatching
 
     val isSelfTransferValid: Boolean
         get() = selectedFromBankAccount != null &&
@@ -137,6 +205,22 @@ data class BankTransferState(
             accountType = "Current Account",
         ),
     )
+
+    fun getMaskedAccountNumber(accountNumber: String): String {
+        return if (accountNumber.isNotEmpty()) {
+            "*".repeat(accountNumber.length)
+        } else {
+            accountNumber
+        }
+    }
+
+    fun getDisplayAccountNumber(accountNumber: String, isMasked: Boolean): String {
+        return if (isMasked && accountNumber.isNotEmpty()) {
+            getMaskedAccountNumber(accountNumber)
+        } else {
+            accountNumber
+        }
+    }
 }
 
 sealed interface BankTransferEvent {
@@ -160,4 +244,13 @@ sealed interface BankTransferAction {
     data class SelectToBankAccount(val bankAccount: BankAccount) : BankTransferAction
     data object AddBankAccount : BankTransferAction
     data class SelectIfscCode(val ifscCode: IfscCode) : BankTransferAction
+    data class UpdateReenterAccountNumber(val accountNumber: String) : BankTransferAction
+    data class UpdateReceiversName(val name: String) : BankTransferAction
+    data object ProceedWithTransfer : BankTransferAction
+    data object ToggleAccountNumberMask : BankTransferAction
+    data object ToggleReenterAccountNumberMask : BankTransferAction
+    data class SetIfscFocus(val focused: Boolean) : BankTransferAction
+    data class SetAccountNumberFocus(val focused: Boolean) : BankTransferAction
+    data class SetReenterAccountNumberFocus(val focused: Boolean) : BankTransferAction
+    data class SetReceiversNameFocus(val focused: Boolean) : BankTransferAction
 }

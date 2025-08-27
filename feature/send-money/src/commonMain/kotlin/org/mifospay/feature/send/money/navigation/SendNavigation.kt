@@ -17,6 +17,7 @@ import androidx.navigation.navArgument
 import androidx.navigation.navOptions
 import org.mifospay.core.ui.composableWithSlideTransitions
 import org.mifospay.feature.send.money.BankTransferScreen
+import org.mifospay.feature.send.money.IfscCode
 import org.mifospay.feature.send.money.PayeeDetailsScreen
 import org.mifospay.feature.send.money.PayeeDetailsState
 import org.mifospay.feature.send.money.SearchIfscScreen
@@ -129,7 +130,7 @@ fun NavGraphBuilder.bankTransferScreen(
 
 fun NavGraphBuilder.searchIfscScreen(
     onBackClick: () -> Unit,
-    onIfscSelected: (org.mifospay.feature.send.money.IfscCode) -> Unit,
+    onIfscSelected: (IfscCode) -> Unit,
 ) {
     composableWithSlideTransitions(
         route = SEARCH_IFSC_ROUTE,

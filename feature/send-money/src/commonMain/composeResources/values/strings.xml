@@ -51,7 +51,7 @@
     <string name="feature_send_money_merchants">Merchants</string>
     <string name="feature_send_money_more">More</string>
     
-    <!-- Receiver's Bank Details -->
+   
     <string name="feature_send_money_receivers_bank_details">Receiver's Bank Details</string>
     <string name="feature_send_money_account_number">Bank account number</string>
     <string name="feature_send_money_account_number_error">Input not valid</string>
@@ -69,4 +69,11 @@
     <string name="feature_send_money_bank_name">Bank name</string>
     <string name="feature_send_money_bank_branch">Bank branch</string>
     <string name="feature_send_money_cancel">Cancel</string>
+    
+    <string name="feature_send_money_reenter_account_number">Re-enter Bank Account Number</string>
+    <string name="feature_send_money_receivers_name">Receiver's Name</string>
+    <string name="feature_send_money_account_number_mismatch">Account numbers do not match</string>
+    <string name="feature_send_money_receivers_name_required">Receiver's name is required</string>
+    <string name="feature_send_money_ifsc_validation_error">IFSC should be 4 letters, followed by 7 letters or digits</string>
+    <string name="feature_send_money_confirm">Confirm</string>
 </resources>
