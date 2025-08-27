@@ -31,8 +31,10 @@ class AndroidContactRepository(
     }
 
     override suspend fun searchContacts(query: String): List<Contact> {
+        val normalizedQuery = PhoneNumberUtils.normalizeSearchQuery(query)
+        // Search by name (contains) and phone number (starts with normalized query)
         val selection = "${ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME} LIKE ? OR ${ContactsContract.CommonDataKinds.Phone.NUMBER} LIKE ?"
-        val selectionArgs = arrayOf("%$query%", "%$query%")
+        val selectionArgs = arrayOf("%$query%", "$normalizedQuery%")
         val rawContacts = queryContacts(selection, selectionArgs)
         return PhoneNumberUtils.filterAndFormatContacts(rawContacts)
     }

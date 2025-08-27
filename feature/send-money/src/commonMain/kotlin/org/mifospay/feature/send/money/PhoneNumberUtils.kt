@@ -159,4 +159,32 @@ object PhoneNumberUtils {
             }
             .distinctBy { contact -> contact.phoneNumber }
     }
+
+    /**
+     * Normalizes a phone number for search purposes by removing country code and spaces
+     * This allows searching with or without +91 prefix
+     */
+    fun normalizePhoneNumberForSearch(phoneNumber: String): String {
+        return phoneNumber
+            .replace("+91", "")
+            .replace(" ", "")
+            .replace("-", "")
+            .replace("(", "")
+            .replace(")", "")
+            .trim()
+    }
+
+    /**
+     * Normalizes a search query for phone number matching
+     * Removes +91 prefix and spaces to match against normalized phone numbers
+     */
+    fun normalizeSearchQuery(query: String): String {
+        return query
+            .replace("+91", "")
+            .replace(" ", "")
+            .replace("-", "")
+            .replace("(", "")
+            .replace(")", "")
+            .trim()
+    }
 }
