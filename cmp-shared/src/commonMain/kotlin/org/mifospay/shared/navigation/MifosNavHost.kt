@@ -332,9 +332,8 @@ internal fun MifosNavHost(
                 navController.navigateToContactsPickerScreen()
             },
             onContactSelected = { phoneNumber ->
-                // Handle contact selection - this would typically update the input field
-                // For now, we'll just navigate back
-                navController.popBackStack()
+                // Contact selection updates the input field via ViewModel
+                // No navigation needed - user stays on Pay Anyone screen
             },
         )
 
