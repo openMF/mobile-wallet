@@ -19,10 +19,13 @@ const val HISTORY_ROUTE = "history_route"
 
 fun NavGraphBuilder.historyNavigation(
     viewTransactionDetail: (Long) -> Unit,
+    onBackClick: () -> Unit,
 ) {
     composable(HISTORY_ROUTE) {
         HistoryScreen(
             viewTransferDetail = viewTransactionDetail,
+            showTopBar = true,
+            onBackClick = onBackClick,
         )
     }
 }

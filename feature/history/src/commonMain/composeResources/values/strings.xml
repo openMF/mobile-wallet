@@ -9,6 +9,7 @@
     See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
 -->
 <resources>
+    <string name="feature_history_title">History</string>
     <string name="feature_history_transaction_id">Transaction ID : </string>
     <string name="feature_history_transaction_date">Transaction Date : </string>
     <string name="feature_history_other">Other</string>

@@ -109,6 +109,7 @@ internal fun MifosNavHost(
         TabContent(PaymentsScreenContents.HISTORY.name) {
             HistoryScreen(
                 viewTransferDetail = navController::navigateToTransactionDetail,
+                showTopBar = false,
             )
         },
         TabContent(PaymentsScreenContents.SI.name) {
@@ -195,6 +196,7 @@ internal fun MifosNavHost(
 
         historyNavigation(
             viewTransactionDetail = navController::navigateToTransactionDetail,
+            onBackClick = navController::navigateUp,
         )
 
         paymentsScreen(tabContents = paymentsTabContents)

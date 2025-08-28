@@ -25,9 +25,11 @@ import mobile_wallet.feature.history.generated.resources.feature_history_empty
 import mobile_wallet.feature.history.generated.resources.feature_history_error
 import mobile_wallet.feature.history.generated.resources.feature_history_error_oops
 import mobile_wallet.feature.history.generated.resources.feature_history_loading
+import mobile_wallet.feature.history.generated.resources.feature_history_title
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.mifospay.core.designsystem.component.MifosLoadingWheel
+import org.mifospay.core.designsystem.component.MifosTopBar
 import org.mifospay.core.model.savingsaccount.TransactionType
 import org.mifospay.core.ui.EmptyContentScreen
 import org.mifospay.core.ui.utils.EventsEffect
@@ -40,6 +42,8 @@ fun HistoryScreen(
     viewTransferDetail: (Long) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: HistoryViewModel = koinViewModel(),
+    showTopBar: Boolean = true,
+    onBackClick: (() -> Unit)? = null,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
 
@@ -57,6 +61,8 @@ fun HistoryScreen(
         onAction = remember(viewModel) {
             { action -> viewModel.trySendAction(action) }
         },
+        showTopBar = showTopBar,
+        onBackClick = onBackClick,
     )
 }
 
@@ -65,42 +71,57 @@ internal fun HistoryScreenContent(
     state: HistoryState,
     modifier: Modifier = Modifier,
     onAction: (HistoryAction) -> Unit,
+    showTopBar: Boolean = true,
+    onBackClick: (() -> Unit)? = null,
 ) {
-    Box(
+    Column(
         modifier = modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center,
     ) {
-        when (state.viewState) {
-            is HistoryState.ViewState.Loading -> {
-                MifosLoadingWheel(
-                    modifier = Modifier.align(Alignment.Center),
-                    contentDesc = stringResource(Res.string.feature_history_loading),
-                )
-            }
+        if (showTopBar && onBackClick != null) {
+            MifosTopBar(
+                topBarTitle = stringResource(Res.string.feature_history_title),
+                backPress = onBackClick,
+            )
+        }
 
-            is HistoryState.ViewState.Error -> {
-                EmptyContentScreen(
-                    title = stringResource(Res.string.feature_history_error_oops),
-                    subTitle = stringResource(Res.string.feature_history_error),
-                    modifier = Modifier.align(Alignment.Center),
-                    iconTint = KptTheme.colorScheme.error,
-                )
-            }
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .weight(1f),
+            contentAlignment = Alignment.Center,
+        ) {
+            when (state.viewState) {
+                is HistoryState.ViewState.Loading -> {
+                    MifosLoadingWheel(
+                        modifier = Modifier.align(Alignment.Center),
+                        contentDesc = stringResource(Res.string.feature_history_loading),
+                    )
+                }
 
-            is HistoryState.ViewState.Empty -> {
-                EmptyContentScreen(
-                    title = stringResource(Res.string.feature_history_error_oops),
-                    subTitle = stringResource(Res.string.feature_history_empty),
-                    modifier = Modifier.fillMaxSize().align(Alignment.Center),
-                )
-            }
+                is HistoryState.ViewState.Error -> {
+                    EmptyContentScreen(
+                        title = stringResource(Res.string.feature_history_error_oops),
+                        subTitle = stringResource(Res.string.feature_history_error),
+                        modifier = Modifier.align(Alignment.Center),
+                        iconTint = KptTheme.colorScheme.error,
+                    )
+                }
 
-            is HistoryState.ViewState.Content -> {
-                HistoryScreenContent(
-                    state = state.viewState,
-                    selectedTransactionType = state.transactionType,
-                    onAction = onAction,
-                )
+                is HistoryState.ViewState.Empty -> {
+                    EmptyContentScreen(
+                        title = stringResource(Res.string.feature_history_error_oops),
+                        subTitle = stringResource(Res.string.feature_history_empty),
+                        modifier = Modifier.fillMaxSize().align(Alignment.Center),
+                    )
+                }
+
+                is HistoryState.ViewState.Content -> {
+                    HistoryScreenContent(
+                        state = state.viewState,
+                        selectedTransactionType = state.transactionType,
+                        onAction = onAction,
+                    )
+                }
             }
         }
     }
