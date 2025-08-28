@@ -169,21 +169,18 @@ class SelfServiceRepositoryImpl(
     ): Flow<DataState<List<Transaction>>> {
         return apiManager.clientsApi
             .getAccounts(clientId, Constants.SAVINGS)
-            .onStart { DataState.Loading }
-            .catch { DataState.Error(it, null) }
             .map { it.toAccount() }
             .map { list -> list.filter { it.status.active } }
             .map { list -> list.map { it.id } }
             .flatMapLatest { accountIds ->
                 if (accountIds.isEmpty()) {
-                    flowOf(DataState.Success(emptyList()))
+                    flowOf(emptyList())
                 } else {
                     getTransactions(accountId = accountIds, null)
                         .filter { transactions -> transactions.isNotEmpty() }
-                        .map { transactions -> DataState.Success(transactions) }
-                        .onStart { DataState.Loading }
                 }
             }
+            .asDataStateFlow()
             .flowOn(dispatcher)
     }
 
