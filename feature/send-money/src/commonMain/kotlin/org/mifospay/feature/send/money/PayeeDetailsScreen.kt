@@ -106,6 +106,7 @@ fun PayeeDetailsScreen(
     EventsEffect(viewModel) { event ->
         when (event) {
             PayeeDetailsEvent.NavigateBack -> onBackClick.invoke()
+            is PayeeDetailsEvent.NavigateToUpiPin -> onNavigateToPaymentProcessing.invoke(event.state)
             is PayeeDetailsEvent.NavigateToPaymentProcessing -> onNavigateToPaymentProcessing.invoke(event.state)
         }
     }
@@ -143,7 +144,7 @@ fun PayeeDetailsScreen(
                     PaymentDetailsSection(
                         state = state,
                         onAmountChange = { amount ->
-                            viewModel.trySendAction(PayeeDetailsAction.UpdateAmount(amount))
+                            viewModel.trySendAction(PayeeDetailsAction.UpdateInputAmount(amount))
                         },
                         onNoteChange = { note ->
                             viewModel.trySendAction(PayeeDetailsAction.UpdateNote(note))
@@ -331,7 +332,7 @@ private fun PaymentDetailsSection(
         verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.lg),
     ) {
         ExpandableAmountInput(
-            value = state.formattedAmount,
+            value = state.displayAmount,
             onValueChange = onAmountChange,
             enabled = state.isAmountEditable,
             modifier = Modifier.wrapContentWidth(),
@@ -382,7 +383,6 @@ private fun PaymentDetailsSection(
     }
 }
 
-// TODO improve amount validation and UI/UX
 @Composable
 private fun ExpandableAmountInput(
     value: String,
@@ -392,25 +392,26 @@ private fun ExpandableAmountInput(
     onFieldFocused: () -> Unit,
 ) {
     val focusRequester = remember { FocusRequester() }
-    val displayValue = value.ifEmpty { "0" }
+    val displayValue = value.ifEmpty { "" }
 
     /**
      * Calculate width based on the display value
-     * When showing "0" (single digit), use minimal width
-     * When user enters decimal or additional digits, expand dynamically
+     * When empty, use minimal width
+     * When user enters digits, expand dynamically
      * Maximum amount is ₹5,00,000 (6 digits + decimal + up to 2 decimal places = max 9 characters)
      */
     val textFieldWidth = when {
-        displayValue == "0" -> 24.dp
-        displayValue.length == 2 -> 32.dp
-        displayValue.length == 3 -> 48.dp
-        displayValue.length == 4 -> 64.dp
-        displayValue.length == 5 -> 80.dp
-        displayValue.length == 6 -> 96.dp
-        displayValue.length == 7 -> 112.dp
-        displayValue.length == 8 -> 128.dp
-        displayValue.length == 9 -> 144.dp
-        else -> 144.dp
+        displayValue.isEmpty() -> 24.dp
+        displayValue.length == 1 -> 32.dp
+        displayValue.length == 2 -> 48.dp
+        displayValue.length == 3 -> 64.dp
+        displayValue.length == 4 -> 80.dp
+        displayValue.length == 5 -> 96.dp
+        displayValue.length == 6 -> 112.dp
+        displayValue.length == 7 -> 128.dp
+        displayValue.length == 8 -> 144.dp
+        displayValue.length == 9 -> 160.dp
+        else -> 160.dp
     }
 
     LaunchedEffect(enabled) {
@@ -446,12 +447,7 @@ private fun ExpandableAmountInput(
             BasicTextField(
                 value = displayValue,
                 onValueChange = { newValue ->
-                    val cleanValue = newValue.replace(",", "")
-                    if (cleanValue.isEmpty() || cleanValue.toDoubleOrNull() != null) {
-                        val amount = cleanValue.toDoubleOrNull() ?: 0.0
-
-                        onValueChange(cleanValue)
-                    }
+                    onValueChange(newValue)
                 },
                 enabled = enabled,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
@@ -562,14 +558,14 @@ private fun ProceedButton(
     val focusManager = LocalFocusManager.current
     val isAmountValid = if (state.isUpiCode) {
         state.amount.isNotEmpty() &&
-            state.amount.toDoubleOrNull() != null &&
-            state.amount.toDouble() >= 0 &&
+            AmountUtils.isValidPaise(state.amount) &&
+            AmountUtils.paiseToRupees(state.amount).toDoubleOrNull()?.let { it >= 0 } == true &&
             !state.isAmountExceedingMax &&
             !state.isAmountBelowMin
     } else {
         state.amount.isNotEmpty() &&
-            state.amount.toDoubleOrNull() != null &&
-            state.amount.toDouble() >= 1 &&
+            AmountUtils.isValidPaise(state.amount) &&
+            AmountUtils.paiseToRupees(state.amount).toDoubleOrNull()?.let { it >= 1 } == true &&
             !state.isAmountExceedingMax
     }
     val isContactValid = state.upiId.isNotEmpty() || state.phoneNumber.isNotEmpty()
@@ -617,7 +613,7 @@ private fun ProceedButton(
     ) {
         if (hasSelectedAccount) {
             Text(
-                text = stringResource(Res.string.feature_send_money_pay_amount, state.formattedAmount),
+                text = stringResource(Res.string.feature_send_money_pay_amount, AmountUtils.formatPaiseForUI(state.amount)),
                 style = KptTheme.typography.bodyLarge,
                 fontWeight = FontWeight.Medium,
             )
@@ -735,7 +731,7 @@ private fun AccountSelectionBottomSheet(
                     contentPadding = PaddingValues(horizontal = KptTheme.spacing.lg),
                 ) {
                     Text(
-                        text = stringResource(Res.string.feature_send_money_pay_amount, state.formattedAmount),
+                        text = stringResource(Res.string.feature_send_money_pay_amount, AmountUtils.formatPaiseForUI(state.amount)),
                         style = KptTheme.typography.bodyLarge,
                         fontWeight = FontWeight.Medium,
                     )

@@ -71,7 +71,9 @@ import org.mifospay.feature.savedcards.createOrUpdate.addEditCardScreen
 import org.mifospay.feature.savedcards.createOrUpdate.navigateToCardAddEdit
 import org.mifospay.feature.savedcards.details.cardDetailRoute
 import org.mifospay.feature.savedcards.details.navigateToCardDetails
+import org.mifospay.feature.send.money.AmountUtils
 import org.mifospay.feature.send.money.SendMoneyScreen
+import org.mifospay.feature.send.money.navigation.PAYMENT_SUCCESS_ROUTE
 import org.mifospay.feature.send.money.navigation.SEND_MONEY_BASE_ROUTE
 import org.mifospay.feature.send.money.navigation.SEND_MONEY_OPTIONS_ROUTE
 import org.mifospay.feature.send.money.navigation.navigateToPayeeDetailsScreen
@@ -79,11 +81,13 @@ import org.mifospay.feature.send.money.navigation.navigateToPaymentProcessingScr
 import org.mifospay.feature.send.money.navigation.navigateToPaymentSuccessScreen
 import org.mifospay.feature.send.money.navigation.navigateToSendMoneyOptionsScreen
 import org.mifospay.feature.send.money.navigation.navigateToSendMoneyScreen
+import org.mifospay.feature.send.money.navigation.navigateToUpiPinScreen
 import org.mifospay.feature.send.money.navigation.payeeDetailsScreen
 import org.mifospay.feature.send.money.navigation.paymentProcessingScreen
 import org.mifospay.feature.send.money.navigation.paymentSuccessScreen
 import org.mifospay.feature.send.money.navigation.sendMoneyOptionsScreen
 import org.mifospay.feature.send.money.navigation.sendMoneyScreen
+import org.mifospay.feature.send.money.navigation.upiPinScreen
 import org.mifospay.feature.settings.navigation.settingsScreen
 import org.mifospay.feature.standing.instruction.StandingInstructionsScreen
 import org.mifospay.feature.standing.instruction.createOrUpdate.addEditSIScreen
@@ -328,18 +332,34 @@ internal fun MifosNavHost(
             navigateToPayeeDetailsScreen = navController::navigateToPayeeDetailsScreen,
             navigateToScanQrScreen = navController::navigateToScanQr,
         )
-
+        // Already in paise from PayeeDetailsState
         payeeDetailsScreen(
             onBackClick = navController::popBackStack,
-            onNavigateToPaymentProcessing = { state ->
-                navController.navigateToPaymentProcessingScreen(
+            onNavigateToUpiPin = { state ->
+                navController.navigateToUpiPinScreen(
                     payeeName = state.payeeName,
                     amount = state.amount,
                     isUpiCode = state.isUpiCode,
+                    bankName = state.selectedAccount?.bankName ?: "Bank",
+                    accountNo = state.selectedAccount?.accountNumber ?: "1234567890123456",
+                    refId = state.refId,
                 )
             },
         )
 
+        upiPinScreen(
+            onBackClick = navController::popBackStack,
+            onNavigateToPaymentProcessing = { payeeName, amount, isUpiCode ->
+                // Convert rupees to paise for navigation
+                val amountInPaise = AmountUtils.rupeesToPaise(amount)
+                navController.navigateToPaymentProcessingScreen(
+                    payeeName = payeeName,
+                    amount = amountInPaise,
+                    isUpiCode = isUpiCode,
+                )
+            },
+        )
+        // Already in paise from PaymentProcessingViewModel
         paymentProcessingScreen(
             onPaymentComplete = { payeeName, amount, upiName, transactionTimestamp ->
                 navController.navigateToPaymentSuccessScreen(
@@ -365,6 +385,16 @@ internal fun MifosNavHost(
                     }
                     launchSingleTop = true
                 }
+            },
+            onNavigateToSendMoneyOptions = {
+                navController.navigateToSendMoneyOptionsScreen(
+                    navOptions {
+                        popUpTo(PAYMENT_SUCCESS_ROUTE) {
+                            inclusive = true
+                        }
+                        launchSingleTop = true
+                    },
+                )
             },
         )
 

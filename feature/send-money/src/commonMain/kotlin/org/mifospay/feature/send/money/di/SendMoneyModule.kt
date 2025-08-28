@@ -17,6 +17,7 @@ import org.mifospay.feature.send.money.PaymentSuccessViewModel
 import org.mifospay.feature.send.money.ScannerModule
 import org.mifospay.feature.send.money.SendMoneyOptionsViewModel
 import org.mifospay.feature.send.money.SendMoneyViewModel
+import org.mifospay.feature.send.money.UpiPinViewModel
 
 val SendMoneyModule = module {
     includes(ScannerModule)
@@ -25,4 +26,5 @@ val SendMoneyModule = module {
     viewModelOf(::PayeeDetailsViewModel)
     viewModelOf(::PaymentProcessingViewModel)
     viewModelOf(::PaymentSuccessViewModel)
+    viewModelOf(::UpiPinViewModel)
 }

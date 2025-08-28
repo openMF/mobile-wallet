@@ -25,7 +25,7 @@ class PaymentSuccessViewModel(
 
     init {
         val payeeName = savedStateHandle.get<String>("payeeName") ?: ""
-        val amount = savedStateHandle.get<String>("amount") ?: ""
+        val amountInPaise = savedStateHandle.get<String>("amount") ?: ""
         val upiName = savedStateHandle.get<String>("upiName") ?: payeeName
         val transactionTimestamp = savedStateHandle.get<String>("transactionTimestamp") // Unix timestamp from PSP or mobile device
         val timestamp = if (transactionTimestamp != null) {
@@ -37,7 +37,7 @@ class PaymentSuccessViewModel(
         mutableStateFlow.update {
             it.copy(
                 payeeName = payeeName,
-                amount = amount,
+                amount = amountInPaise,
                 upiName = upiName,
                 timestamp = timestamp,
             )
@@ -50,7 +50,7 @@ class PaymentSuccessViewModel(
                 sendEvent(PaymentSuccessEvent.ShareScreenshot)
             }
             PaymentSuccessAction.Done -> {
-                sendEvent(PaymentSuccessEvent.NavigateToHome)
+                sendEvent(PaymentSuccessEvent.NavigateToSendMoneyOptions)
             }
         }
     }
@@ -92,6 +92,7 @@ class PaymentSuccessViewModel(
     }
 }
 
+// amount stored in paise
 data class PaymentSuccessState(
     val payeeName: String = "",
     val amount: String = "",
@@ -99,20 +100,13 @@ data class PaymentSuccessState(
     val timestamp: String = "",
 ) {
     val formattedAmount: String
-        get() = if (amount.isEmpty()) {
-            "₹0.00"
-        } else {
-            if (amount.contains(".") && amount.split(".")[1].length == 2) {
-                "₹$amount"
-            } else {
-                "₹$amount.00"
-            }
-        }
+        get() = AmountUtils.formatPaiseForUI(amount)
 }
 
 sealed interface PaymentSuccessEvent {
     data object ShareScreenshot : PaymentSuccessEvent
     data object NavigateToHome : PaymentSuccessEvent
+    data object NavigateToSendMoneyOptions : PaymentSuccessEvent
 }
 
 sealed interface PaymentSuccessAction {

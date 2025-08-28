@@ -22,6 +22,7 @@ import org.mifospay.feature.send.money.PaymentProcessingScreen
 import org.mifospay.feature.send.money.PaymentSuccessScreen
 import org.mifospay.feature.send.money.SendMoneyOptionsScreen
 import org.mifospay.feature.send.money.SendMoneyScreen
+import org.mifospay.feature.send.money.UpiPinScreen
 
 const val SEND_MONEY_ROUTE = "send_money_route"
 const val SEND_MONEY_ARG = "requestData"
@@ -33,6 +34,16 @@ const val PAYEE_DETAILS_ROUTE = "payee_details_route"
 const val PAYEE_DETAILS_ARG = "qrCodeData"
 
 const val PAYEE_DETAILS_BASE_ROUTE = "$PAYEE_DETAILS_ROUTE?$PAYEE_DETAILS_ARG={$PAYEE_DETAILS_ARG}"
+
+const val UPI_PIN_ROUTE = "upi_pin_route"
+const val UPI_PIN_PAYEE_NAME_ARG = "payeeName"
+const val UPI_PIN_AMOUNT_ARG = "amount"
+const val UPI_PIN_IS_UPI_ARG = "isUpiCode"
+const val UPI_PIN_BANK_NAME_ARG = "bankName"
+const val UPI_PIN_ACCOUNT_NO_ARG = "accountNo"
+const val UPI_PIN_REF_ID_ARG = "refId"
+
+const val UPI_PIN_BASE_ROUTE = "$UPI_PIN_ROUTE?$UPI_PIN_PAYEE_NAME_ARG={$UPI_PIN_PAYEE_NAME_ARG}&$UPI_PIN_AMOUNT_ARG={$UPI_PIN_AMOUNT_ARG}&$UPI_PIN_REF_ID_ARG={$UPI_PIN_REF_ID_ARG}&$UPI_PIN_IS_UPI_ARG={$UPI_PIN_IS_UPI_ARG}&$UPI_PIN_BANK_NAME_ARG={$UPI_PIN_BANK_NAME_ARG}&$UPI_PIN_ACCOUNT_NO_ARG={$UPI_PIN_ACCOUNT_NO_ARG}"
 
 const val PAYMENT_PROCESSING_ROUTE = "payment_processing_route"
 const val PAYMENT_PROCESSING_PAYEE_NAME_ARG = "payeeName"
@@ -70,6 +81,29 @@ fun NavController.navigateToPayeeDetailsScreen(
     navigate(route, options)
 }
 
+// Expected to be in paise
+fun NavController.navigateToUpiPinScreen(
+    payeeName: String,
+    amount: String,
+    refId: String,
+    isUpiCode: Boolean,
+    bankName: String,
+    accountNo: String,
+    navOptions: NavOptions? = null,
+) {
+    val encodedPayeeName = payeeName.urlEncode()
+    val encodedAmount = amount.urlEncode()
+    val encodedRefId = refId.urlEncode()
+    val encodedBankName = bankName.urlEncode()
+    val encodedAccountNo = accountNo.urlEncode()
+    val route = "$UPI_PIN_ROUTE?$UPI_PIN_PAYEE_NAME_ARG=$encodedPayeeName&$UPI_PIN_AMOUNT_ARG=$encodedAmount&$UPI_PIN_REF_ID_ARG=$encodedRefId&$UPI_PIN_IS_UPI_ARG=$isUpiCode&$UPI_PIN_BANK_NAME_ARG=$encodedBankName&$UPI_PIN_ACCOUNT_NO_ARG=$encodedAccountNo"
+    val options = navOptions ?: navOptions {
+        popUpTo(PAYEE_DETAILS_ROUTE) { inclusive = false }
+    }
+    navigate(route, options)
+}
+
+// amount in paise
 fun NavController.navigateToPaymentProcessingScreen(
     payeeName: String,
     amount: String,
@@ -80,11 +114,12 @@ fun NavController.navigateToPaymentProcessingScreen(
     val encodedAmount = amount.urlEncode()
     val route = "$PAYMENT_PROCESSING_ROUTE?$PAYMENT_PROCESSING_PAYEE_NAME_ARG=$encodedPayeeName&$PAYMENT_PROCESSING_AMOUNT_ARG=$encodedAmount&$PAYMENT_PROCESSING_IS_UPI_ARG=$isUpiCode"
     val options = navOptions ?: navOptions {
-        popUpTo(PAYEE_DETAILS_ROUTE) { inclusive = true }
+        popUpTo(UPI_PIN_ROUTE) { inclusive = true }
     }
     navigate(route, options)
 }
 
+// Expected to be in paise
 fun NavController.navigateToPaymentSuccessScreen(
     payeeName: String,
     amount: String,
@@ -153,7 +188,7 @@ fun NavGraphBuilder.sendMoneyOptionsScreen(
 
 fun NavGraphBuilder.payeeDetailsScreen(
     onBackClick: () -> Unit,
-    onNavigateToPaymentProcessing: (PayeeDetailsState) -> Unit,
+    onNavigateToUpiPin: (PayeeDetailsState) -> Unit,
 ) {
     composableWithSlideTransitions(
         route = PAYEE_DETAILS_BASE_ROUTE,
@@ -166,7 +201,49 @@ fun NavGraphBuilder.payeeDetailsScreen(
     ) {
         PayeeDetailsScreen(
             onBackClick = onBackClick,
-            onNavigateToPaymentProcessing = onNavigateToPaymentProcessing,
+            onNavigateToPaymentProcessing = onNavigateToUpiPin,
+        )
+    }
+}
+
+fun NavGraphBuilder.upiPinScreen(
+    onBackClick: () -> Unit,
+    onNavigateToPaymentProcessing: (String, String, Boolean) -> Unit,
+) {
+    composableWithSlideTransitions(
+        route = UPI_PIN_BASE_ROUTE,
+        arguments = listOf(
+            navArgument(UPI_PIN_PAYEE_NAME_ARG) {
+                type = NavType.StringType
+                nullable = false
+            },
+            navArgument(UPI_PIN_AMOUNT_ARG) {
+                type = NavType.StringType
+                nullable = false
+            },
+            navArgument(UPI_PIN_REF_ID_ARG) {
+                type = NavType.StringType
+                nullable = false
+            },
+            navArgument(UPI_PIN_IS_UPI_ARG) {
+                type = NavType.BoolType
+                nullable = false
+            },
+            navArgument(UPI_PIN_BANK_NAME_ARG) {
+                type = NavType.StringType
+                nullable = false
+            },
+            navArgument(UPI_PIN_ACCOUNT_NO_ARG) {
+                type = NavType.StringType
+                nullable = false
+            },
+        ),
+    ) {
+        UpiPinScreen(
+            onBackClick = onBackClick,
+            onUpiPinEntered = { payeeName, amount, pin, isUpiCode ->
+                onNavigateToPaymentProcessing(payeeName, amount, isUpiCode)
+            },
         )
     }
 }
@@ -202,6 +279,7 @@ fun NavGraphBuilder.paymentProcessingScreen(
 fun NavGraphBuilder.paymentSuccessScreen(
     onShareScreenshot: () -> Unit,
     onDone: () -> Unit,
+    onNavigateToSendMoneyOptions: () -> Unit,
 ) {
     composableWithSlideTransitions(
         route = PAYMENT_SUCCESS_BASE_ROUTE,
@@ -227,6 +305,7 @@ fun NavGraphBuilder.paymentSuccessScreen(
         PaymentSuccessScreen(
             onShareScreenshot = onShareScreenshot,
             onDone = onDone,
+            onNavigateToSendMoneyOptions = onNavigateToSendMoneyOptions,
         )
     }
 }

@@ -57,7 +57,7 @@
     <string name="feature_send_money_amount_below_minimum">Amount must be at least ₹ 1</string>
     <string name="feature_send_money_rupee_icon">Rupee Icon</string>
     <string name="feature_send_money_add_note">Add note</string>
-    <string name="feature_send_money_pay_amount">Pay ₹%1$s</string>
+    <string name="feature_send_money_pay_amount">Pay %1$s</string>
     <string name="feature_send_money_choose_account">Choose account to pay with</string>
     <string name="feature_send_money_bank_icon">Bank Icon</string>
     <string name="feature_send_money_balance">Balance:</string>
@@ -69,7 +69,6 @@
     <string name="feature_send_money_paying_securely">Paying securely %1$s to</string>
     <string name="feature_send_money_paid_to">Paid to</string>
 
-    <!-- Payment Success Screen -->
     <string name="feature_send_money_payment_success">Payment Successful</string>
     <string name="feature_send_money_banking_name">Banking name: %1$s</string>
     <string name="feature_send_money_powered_by_upi">Powered by UPI</string>

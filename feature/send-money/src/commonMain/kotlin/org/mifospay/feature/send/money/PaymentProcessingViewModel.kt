@@ -25,13 +25,13 @@ class PaymentProcessingViewModel(
 
     init {
         val payeeName = savedStateHandle.get<String>("payeeName") ?: ""
-        val amount = savedStateHandle.get<String>("amount") ?: ""
+        val amountInPaise = savedStateHandle.get<String>("amount") ?: ""
         val isUpiCode = savedStateHandle.get<Boolean>("isUpiCode") ?: false
 
         mutableStateFlow.update {
             it.copy(
                 payeeName = payeeName,
-                amount = amount,
+                amount = amountInPaise,
                 isUpiCode = isUpiCode,
             )
         }
@@ -88,7 +88,7 @@ data class PaymentProcessingState(
     val isProcessing: Boolean = true,
 ) {
     val formattedAmount: String
-        get() = if (amount.isEmpty()) "₹0" else "₹$amount"
+        get() = AmountUtils.formatPaiseForUI(amount)
 }
 
 sealed interface PaymentProcessingEvent {

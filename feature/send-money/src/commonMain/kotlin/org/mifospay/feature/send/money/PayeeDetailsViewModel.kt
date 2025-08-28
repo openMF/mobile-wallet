@@ -36,12 +36,18 @@ class PayeeDetailsViewModel(
                 StandardUpiQrCodeProcessor.parseUpiQrCode("upi://pay?pa=$qrCodeDataString&pn=Unknown")
             }
 
+            val amountInPaise = if (qrCodeData.amount.isNotEmpty()) {
+                AmountUtils.rupeesToPaise(qrCodeData.amount)
+            } else {
+                ""
+            }
+
             mutableStateFlow.update {
                 it.copy(
                     payeeName = qrCodeData.payeeName,
                     upiId = qrCodeData.payeeVpa,
                     phoneNumber = "",
-                    amount = qrCodeData.amount,
+                    amount = amountInPaise,
                     note = qrCodeData.transactionNote,
                     isAmountEditable = qrCodeData.amount.isEmpty(),
                     isUpiCode = true,
@@ -55,21 +61,28 @@ class PayeeDetailsViewModel(
             is PayeeDetailsAction.NavigateBack -> {
                 sendEvent(PayeeDetailsEvent.NavigateBack)
             }
-            is PayeeDetailsAction.UpdateAmount -> {
-                val cleanAmount = action.amount.replace(",", "")
-                val isValidAmount = cleanAmount.isEmpty() || cleanAmount.toDoubleOrNull() != null
+
+            is PayeeDetailsAction.UpdateInputAmount -> {
+                val validatedAmount = AmountUtils.validateAndFormatAmountInput(action.inputAmount)
+                val isValidAmount = AmountUtils.isValidAmountInput(validatedAmount)
 
                 if (isValidAmount) {
-                    val amountValue = cleanAmount.toDoubleOrNull() ?: 0.0
+                    val amountInPaise = if (validatedAmount.isNotEmpty()) {
+                        AmountUtils.rupeesToPaise(validatedAmount)
+                    } else {
+                        ""
+                    }
+
+                    val amountValue = validatedAmount.toDoubleOrNull() ?: 0.0
                     val showMaxMessage = amountValue > 500000
                     val showMinMessage = amountValue > 0 && amountValue < 1
 
-                    // Clear selected account when amount changes
                     val currentAmount = stateFlow.value.amount
-                    val shouldClearAccount = cleanAmount != currentAmount
+                    val shouldClearAccount = amountInPaise != currentAmount
 
                     mutableStateFlow.value = stateFlow.value.copy(
-                        amount = cleanAmount,
+                        amount = amountInPaise,
+                        inputAmount = validatedAmount,
                         showMaxAmountMessage = showMaxMessage,
                         showMinAmountMessage = showMinMessage,
                         selectedAccount = if (shouldClearAccount) null else stateFlow.value.selectedAccount,
@@ -95,7 +108,6 @@ class PayeeDetailsViewModel(
                 }
             }
             is PayeeDetailsAction.UpdateNote -> {
-                // Clear selected account when note changes
                 val currentNote = stateFlow.value.note
                 val shouldClearAccount = action.note != currentNote
 
@@ -105,18 +117,15 @@ class PayeeDetailsViewModel(
                 )
             }
             is PayeeDetailsAction.NoteFieldFocused -> {
-                // Clear selected account when note field is focused
                 mutableStateFlow.value = stateFlow.value.copy(
                     hasNoteFieldBeenFocused = true,
                     selectedAccount = null,
                 )
             }
             is PayeeDetailsAction.AmountFieldFocused -> {
-                // Clear selected account when amount field is focused
                 mutableStateFlow.value = stateFlow.value.copy(selectedAccount = null)
             }
             is PayeeDetailsAction.ProceedToPayment -> {
-                // Auto-select default account if no account is currently selected
                 if (stateFlow.value.selectedAccount == null) {
                     val defaultAccount = BankAccount(
                         id = "1",
@@ -128,7 +137,6 @@ class PayeeDetailsViewModel(
                         selectedAccount = defaultAccount,
                     )
                 } else {
-                    // Open bottom sheet when dropdown is clicked
                     mutableStateFlow.value = stateFlow.value.copy(showAccountSelectionSheet = true)
                 }
             }
@@ -146,7 +154,7 @@ class PayeeDetailsViewModel(
             }
             is PayeeDetailsAction.ConfirmPayment -> {
                 val currentState = stateFlow.value
-                sendEvent(PayeeDetailsEvent.NavigateToPaymentProcessing(currentState))
+                sendEvent(PayeeDetailsEvent.NavigateToUpiPin(currentState))
             }
         }
     }
@@ -157,6 +165,7 @@ data class PayeeDetailsState(
     val upiId: String = "",
     val phoneNumber: String = "",
     val amount: String = "",
+    val inputAmount: String = "",
     val note: String = "",
     val isAmountEditable: Boolean = true,
     val isUpiCode: Boolean = false,
@@ -166,15 +175,36 @@ data class PayeeDetailsState(
     val hasNoteFieldBeenFocused: Boolean = false,
     val showAccountSelectionSheet: Boolean = false,
     val selectedAccount: BankAccount? = null,
+    val refId: String = "",
 ) {
     val formattedAmount: String
-        get() = if (amount.isEmpty()) "0" else formatAmountWithCommas(amount)
+        get() = if (amount.isEmpty()) {
+            "0"
+        } else {
+            val rupees = AmountUtils.paiseToRupees(amount)
+            formatAmountWithCommas(rupees)
+        }
+
+    val displayAmount: String
+        get() = if (inputAmount.isNotEmpty()) {
+            inputAmount
+        } else if (amount.isNotEmpty()) {
+            AmountUtils.formatAmountForInput(AmountUtils.paiseToRupees(amount))
+        } else {
+            ""
+        }
 
     val isAmountExceedingMax: Boolean
-        get() = amount.toDoubleOrNull()?.let { it > 500000 } ?: false
+        get() {
+            val rupees = if (amount.isNotEmpty()) AmountUtils.paiseToRupees(amount) else "0.00"
+            return rupees.toDoubleOrNull()?.let { it > 500000 } ?: false
+        }
 
     val isAmountBelowMin: Boolean
-        get() = amount.toDoubleOrNull()?.let { it < 1 } ?: false
+        get() {
+            val rupees = if (amount.isNotEmpty()) AmountUtils.paiseToRupees(amount) else "0.00"
+            return rupees.toDoubleOrNull()?.let { it < 1 } ?: false
+        }
 
     private fun formatAmountWithCommas(amountStr: String): String {
         val cleanAmount = amountStr.replace(",", "")
@@ -216,12 +246,13 @@ data class BankAccount(
 
 sealed interface PayeeDetailsEvent {
     data object NavigateBack : PayeeDetailsEvent
+    data class NavigateToUpiPin(val state: PayeeDetailsState) : PayeeDetailsEvent
     data class NavigateToPaymentProcessing(val state: PayeeDetailsState) : PayeeDetailsEvent
 }
 
 sealed interface PayeeDetailsAction {
     data object NavigateBack : PayeeDetailsAction
-    data class UpdateAmount(val amount: String) : PayeeDetailsAction
+    data class UpdateInputAmount(val inputAmount: String) : PayeeDetailsAction
     data class UpdateNote(val note: String) : PayeeDetailsAction
     data object NoteFieldFocused : PayeeDetailsAction
     data object AmountFieldFocused : PayeeDetailsAction

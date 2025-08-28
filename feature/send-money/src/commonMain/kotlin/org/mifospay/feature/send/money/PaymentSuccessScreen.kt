@@ -20,14 +20,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -49,7 +45,9 @@ import mobile_wallet.feature.send_money.generated.resources.feature_send_money_s
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
+import org.mifospay.core.designsystem.component.MifosButton
 import org.mifospay.core.designsystem.component.MifosGradientBackground
+import org.mifospay.core.designsystem.component.MifosOutlinedButton
 import org.mifospay.core.designsystem.component.MifosScaffold
 import org.mifospay.core.designsystem.icon.MifosIcons
 import org.mifospay.core.ui.utils.EventsEffect
@@ -59,6 +57,7 @@ import template.core.base.designsystem.theme.KptTheme
 fun PaymentSuccessScreen(
     onShareScreenshot: () -> Unit,
     onDone: () -> Unit,
+    onNavigateToSendMoneyOptions: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: PaymentSuccessViewModel = koinViewModel(),
 ) {
@@ -68,6 +67,7 @@ fun PaymentSuccessScreen(
         when (event) {
             PaymentSuccessEvent.ShareScreenshot -> onShareScreenshot.invoke()
             PaymentSuccessEvent.NavigateToHome -> onDone.invoke()
+            PaymentSuccessEvent.NavigateToSendMoneyOptions -> onNavigateToSendMoneyOptions.invoke()
         }
     }
 
@@ -263,46 +263,38 @@ private fun ActionButtons(
             .padding(horizontal = KptTheme.spacing.lg),
         horizontalArrangement = Arrangement.spacedBy(KptTheme.spacing.md),
     ) {
-        OutlinedButton(
+        MifosOutlinedButton(
             onClick = onShareScreenshot,
             modifier = Modifier
-                .weight(2f)
-                .height(56.dp),
-            colors = ButtonDefaults.outlinedButtonColors(
-                contentColor = KptTheme.colorScheme.primary,
-            ),
-            shape = RoundedCornerShape(KptTheme.spacing.sm),
-        ) {
-            Icon(
-                imageVector = MifosIcons.Share,
-                contentDescription = null,
-                modifier = Modifier.size(20.dp),
-            )
-            Spacer(modifier = Modifier.width(KptTheme.spacing.sm))
-            Text(
-                text = stringResource(Res.string.feature_send_money_share_screenshot),
-                style = KptTheme.typography.bodyMedium,
-                fontWeight = FontWeight.Medium,
-            )
-        }
+                .weight(2f),
+            text = {
+                Text(
+                    text = stringResource(Res.string.feature_send_money_share_screenshot),
+                    style = KptTheme.typography.bodyMedium,
+                    fontWeight = FontWeight.Medium,
+                )
+            },
+            leadingIcon = {
+                Icon(
+                    imageVector = MifosIcons.Share,
+                    contentDescription = null,
+                    modifier = Modifier.size(20.dp),
+                )
+            },
+        )
 
-        Button(
+        MifosButton(
             onClick = onDone,
             modifier = Modifier
-                .weight(1f)
-                .height(56.dp),
-            colors = ButtonDefaults.buttonColors(
-                containerColor = KptTheme.colorScheme.primary,
-                contentColor = KptTheme.colorScheme.onPrimary,
-            ),
-            shape = RoundedCornerShape(KptTheme.spacing.sm),
-        ) {
-            Text(
-                text = stringResource(Res.string.feature_send_money_done),
-                style = KptTheme.typography.bodyLarge,
-                fontWeight = FontWeight.Medium,
-            )
-        }
+                .weight(1f),
+            text = {
+                Text(
+                    text = stringResource(Res.string.feature_send_money_done),
+                    style = KptTheme.typography.bodyLarge,
+                    fontWeight = FontWeight.Medium,
+                )
+            },
+        )
     }
 }
 
@@ -312,6 +304,7 @@ fun PaymentSuccessScreenPreview() {
     PaymentSuccessScreen(
         onShareScreenshot = {},
         onDone = {},
+        onNavigateToSendMoneyOptions = {},
         modifier = Modifier,
     )
 }
