@@ -126,6 +126,7 @@ internal fun HomeScreen(
     onPay: () -> Unit,
     navigateToTransactionDetail: (Long, Long) -> Unit,
     navigateToAccountDetail: (Long) -> Unit,
+    navigateToHistory: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: HomeViewModel = koinViewModel(),
 ) {
@@ -146,7 +147,7 @@ internal fun HomeScreen(
                 navigateToTransactionDetail(event.accountId, event.transactionId)
             }
 
-            is HomeEvent.NavigateToTransactionScreen -> {}
+            is HomeEvent.NavigateToTransactionScreen -> navigateToHistory.invoke()
             is HomeEvent.ShowToast -> {
                 scope.launch {
                     snackbarState.showSnackbar(getString(event.message))

@@ -15,8 +15,10 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flatMapMerge
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
@@ -172,10 +174,15 @@ class SelfServiceRepositoryImpl(
             .map { it.toAccount() }
             .map { list -> list.filter { it.status.active } }
             .map { list -> list.map { it.id } }
-            .flatMapLatest {
-                getTransactions(accountId = it, null)
-            }.map {
-                DataState.Success(it)
+            .flatMapLatest { accountIds ->
+                if (accountIds.isEmpty()) {
+                    flowOf(DataState.Success(emptyList()))
+                } else {
+                    getTransactions(accountId = accountIds, null)
+                        .filter { transactions -> transactions.isNotEmpty() }
+                        .map { transactions -> DataState.Success(transactions) }
+                        .onStart { DataState.Loading }
+                }
             }
             .flowOn(dispatcher)
     }

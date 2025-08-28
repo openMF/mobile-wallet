@@ -25,6 +25,7 @@ fun NavGraphBuilder.homeScreen(
     onPay: () -> Unit,
     navigateToTransactionDetail: (Long, Long) -> Unit,
     navigateToAccountDetail: (Long) -> Unit,
+    navigateToHistory: () -> Unit,
 ) {
     composable(route = HOME_ROUTE) {
         HomeScreen(
@@ -33,6 +34,7 @@ fun NavGraphBuilder.homeScreen(
             onNavigateBack = onNavigateBack,
             navigateToTransactionDetail = navigateToTransactionDetail,
             navigateToAccountDetail = navigateToAccountDetail,
+            navigateToHistory = navigateToHistory,
         )
     }
 }

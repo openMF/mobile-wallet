@@ -14,6 +14,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
+import androidx.navigation.navOptions
 import org.mifospay.core.ui.composableWithSlideTransitions
 import org.mifospay.feature.send.money.SendMoneyScreen
 
@@ -54,9 +55,11 @@ fun NavController.navigateToSendMoneyScreen(
     navOptions: NavOptions? = null,
 ) {
     val route = "$SEND_MONEY_ROUTE?$SEND_MONEY_ARG=$requestData"
-    val options = navOptions ?: NavOptions.Builder()
-        .setPopUpTo(SEND_MONEY_ROUTE, inclusive = true)
-        .build()
+    val options = navOptions ?: navOptions {
+        popUpTo(SEND_MONEY_ROUTE) {
+            inclusive = true
+        }
+    }
 
     navigate(route, options)
 }
