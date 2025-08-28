@@ -8,6 +8,7 @@
  * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
  */
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
+import org.gradle.internal.os.OperatingSystem
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
@@ -19,7 +20,7 @@ plugins {
 kotlin {
     jvm("desktop")
 
-    jvmToolchain(17)
+    jvmToolchain(21)
 
     sourceSets {
         val desktopMain by getting {
@@ -48,6 +49,10 @@ val appPackageVersion: String = libs.versions.packageVersion.get()
 compose.desktop {
     application {
         mainClass = "MainKt"
+        val buildNumber: String = (project.findProperty("buildNumber") as String?) ?: "1"
+        val isAppStoreRelease: Boolean =
+            (project.findProperty("macOsAppStoreRelease") as String?)?.toBoolean() ?: false
+
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Exe, TargetFormat.Deb)
             packageName = appPackageName
@@ -57,16 +62,41 @@ compose.desktop {
             vendor = "Mifos Initiative"
             licenseFile.set(project.file("../LICENSE"))
             includeAllModules = true
+            outputBaseDir.set(project.layout.buildDirectory.dir("release"))
 
             macOS {
                 bundleID = appPackageNameSpace
                 dockName = appPackageName
                 iconFile.set(project.file("icons/ic_launcher.icns"))
-                notarization {
-                    val providers = project.providers
-                    appleID.set(providers.environmentVariable("NOTARIZATION_APPLE_ID"))
-                    password.set(providers.environmentVariable("NOTARIZATION_PASSWORD"))
-                    teamID.set(providers.environmentVariable("NOTARIZATION_TEAM_ID"))
+                minimumSystemVersion = "12.0"
+                appStore = isAppStoreRelease
+
+                infoPlist {
+                    packageBuildVersion = buildNumber
+                    extraKeysRawXml = """
+                        <key>ITSAppUsesNonExemptEncryption</key>
+                        <false/>
+                    """.trimIndent()
+                }
+
+                if (isAppStoreRelease) {
+                    signing {
+                        sign.set(true)
+                        identity.set("The Mifos Initiative")
+                    }
+
+                    provisioningProfile.set(project.file("embedded.provisionprofile"))
+                    runtimeProvisioningProfile.set(project.file("runtime.provisionprofile"))
+
+                    entitlementsFile.set(project.file("entitlements.plist"))
+                    runtimeEntitlementsFile.set(project.file("runtime-entitlements.plist"))
+                } else {
+                    notarization {
+                        val providers = project.providers
+                        appleID.set(providers.environmentVariable("NOTARIZATION_APPLE_ID"))
+                        password.set(providers.environmentVariable("NOTARIZATION_PASSWORD"))
+                        teamID.set(providers.environmentVariable("NOTARIZATION_TEAM_ID"))
+                    }
                 }
             }
 
@@ -84,9 +114,50 @@ compose.desktop {
             }
         }
         buildTypes.release.proguard {
-            configurationFiles.from(file("compose-desktop.pro"))
-            obfuscate.set(true)
-            optimize.set(true)
+            isEnabled = false
+//            configurationFiles.from(file("compose-desktop.pro"))
+//            obfuscate.set(true)
+//            optimize.set(true)
         }
     }
 }
+
+/**
+ * Removes the `com.apple.quarantine` extended attribute from the built `.app`.
+ *
+ * Why:
+ * macOS Gatekeeper marks files that originated from the Internet with the
+ * `com.apple.quarantine` xattr. During a Compose Desktop / jpackage build the
+ * JBR/JRE, native libs, and other resources are copied into the `.app`. If any
+ * of those files are quarantined, Appstore will not allow it..
+ *
+ * What this does:
+ * Runs `xattr -dr com.apple.quarantine <App.app>` **recursively** on the
+ * distributable after it has been assembled but before signing/packaging.
+ * We depend on `createReleaseDistributable` so the `.app` exists, and we guard
+ * execution to only run on macOS hosts.
+ */
+val unquarantineApp = tasks.register<Exec>("unquarantineMacApp") {
+    group = "macOS"
+    description = "Remove com.apple.quarantine from the built .app before signing"
+    onlyIf { OperatingSystem.current().isMacOsX }
+
+    // Ensure the .app bundle exists first
+    dependsOn("createReleaseDistributable")
+
+    // build/release/main-release/app/<YourApp>.app
+    val appName = "$appPackageName.app"
+    val appPath = layout.buildDirectory
+        .dir("release/main-release/app/$appName")
+        .map { it.asFile.absolutePath }
+
+    commandLine("xattr", "-dr", "com.apple.quarantine", appPath.get())
+}
+
+/**
+ * Ensure un-quarantining always happens before we create the signed PKG.
+ */
+tasks.matching { it.name == "packageReleasePkg" }.configureEach {
+    dependsOn(unquarantineApp)
+}
+
