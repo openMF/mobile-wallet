@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -134,6 +135,16 @@ private fun HistoryScreenContent(
     modifier: Modifier = Modifier,
     onAction: (HistoryAction) -> Unit,
 ) {
+    val allTransactionsListState = rememberLazyListState()
+    val debitTransactionsListState = rememberLazyListState()
+    val creditTransactionsListState = rememberLazyListState()
+
+    val currentListState = when (selectedTransactionType) {
+        TransactionType.OTHER -> allTransactionsListState
+        TransactionType.DEBIT -> debitTransactionsListState
+        TransactionType.CREDIT -> creditTransactionsListState
+    }
+
     Column(
         modifier = modifier
             .fillMaxSize(),
@@ -148,6 +159,7 @@ private fun HistoryScreenContent(
         TransactionList(
             transactions = state.list,
             onAction = onAction,
+            lazyListState = currentListState,
         )
     }
 }
