@@ -76,3 +76,5 @@ secrets/
 
 # Sync Log File
 *.log
+
+*.provisionprofile
