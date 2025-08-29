@@ -25,7 +25,6 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
 import mobile_wallet.feature.send_money.generated.resources.Res
 import mobile_wallet.feature.send_money.generated.resources.feature_send_money_error_account_cannot_be_empty
@@ -35,6 +34,7 @@ import mobile_wallet.feature.send_money.generated.resources.feature_send_money_e
 import mobile_wallet.feature.send_money.generated.resources.feature_send_money_error_requesting_payment_qr_data_missing
 import org.jetbrains.compose.resources.StringResource
 import org.mifospay.core.common.DataState
+import org.mifospay.core.common.StringResourceSerializer
 import org.mifospay.core.common.getSerialized
 import org.mifospay.core.common.setSerialized
 import org.mifospay.core.data.repository.AccountRepository
@@ -235,15 +235,19 @@ data class SendMoneyState(
         data object Loading : DialogState
 
         @Serializable
-        sealed interface Error : DialogState {
+        sealed class Error : DialogState {
             @Serializable
-            data class ResourceMessage(@Contextual val message: StringResource) : Error
+            data class ResourceMessage(
+                @Serializable(with = StringResourceSerializer::class)
+                val message: StringResource,
+            ) : Error()
 
             @Serializable
             data class GenericResourceMessage(
-                @Contextual val message: StringResource,
+                @Serializable(with = StringResourceSerializer::class)
+                val message: StringResource,
                 val args: List<String>,
-            ) : Error
+            ) : Error()
         }
     }
 }
