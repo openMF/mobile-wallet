@@ -46,7 +46,7 @@ import mobile_wallet.feature.faq.generated.resources.feature_faq
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
-import org.mifospay.core.designsystem.component.MifosTopBar
+import org.mifospay.core.designsystem.component.MifosScaffold
 import org.mifospay.core.designsystem.icon.MifosIcons
 import org.mifospay.core.ui.utils.EventsEffect
 import template.core.base.designsystem.theme.KptTheme
@@ -80,39 +80,43 @@ private fun FaqScreen(
     onAction: (FaqAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Column(
-        modifier = modifier
-            .fillMaxSize(),
-    ) {
-        MifosTopBar(
-            topBarTitle = stringResource(Res.string.feature_faq),
-            backPress = {
-                onAction(FaqAction.NavigateBack)
-            },
-        )
-        LazyColumn(
+    MifosScaffold(
+        modifier = modifier,
+        topBarTitle = stringResource(Res.string.feature_faq),
+        backPress = {
+            onAction(FaqAction.NavigateBack)
+        },
+        containerColor = KptTheme.colorScheme.background,
+    ) { contentPadding ->
+        Column(
             modifier = Modifier
-                .weight(1f)
-                .fillMaxWidth(),
+                .fillMaxSize()
+                .padding(contentPadding),
         ) {
-            itemsIndexed(
-                items = state.faqList,
-                key = { _, item -> item.faqId },
-            ) { i, faqItem ->
-                FaqItemScreen(
-                    faq = faqItem,
-                    onExpand = { faqId ->
-                        onAction(FaqAction.ExpandFaq(faqId))
-                    },
-                    isExpanded = state.expandedFaq == faqItem.faqId,
-                )
-
-                if (i != state.faqList.lastIndex) {
-                    HorizontalDivider(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = KptTheme.spacing.lg),
+            LazyColumn(
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxWidth(),
+            ) {
+                itemsIndexed(
+                    items = state.faqList,
+                    key = { _, item -> item.faqId },
+                ) { i, faqItem ->
+                    FaqItemScreen(
+                        faq = faqItem,
+                        onExpand = { faqId ->
+                            onAction(FaqAction.ExpandFaq(faqId))
+                        },
+                        isExpanded = state.expandedFaq == faqItem.faqId,
                     )
+
+                    if (i != state.faqList.lastIndex) {
+                        HorizontalDivider(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = KptTheme.spacing.lg),
+                        )
+                    }
                 }
             }
         }
