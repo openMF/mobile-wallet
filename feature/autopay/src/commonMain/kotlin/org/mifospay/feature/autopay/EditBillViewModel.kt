@@ -126,7 +126,9 @@ class EditBillViewModel(
     }
 
     private fun updateBillName(name: String) {
-        val nameError = BillValidator.validateNameField(name)
+        val nameError = BillValidator.validateBillFormData(
+            BillFormData(name = name),
+        ).nameError
         mutableStateFlow.update {
             it.copy(
                 formData = it.formData.copy(name = name),
@@ -136,7 +138,9 @@ class EditBillViewModel(
     }
 
     private fun updateAmount(amount: String) {
-        val amountError = BillValidator.validateAmountField(amount)
+        val amountError = BillValidator.validateBillFormData(
+            BillFormData(amount = amount),
+        ).amountError
         mutableStateFlow.update {
             it.copy(
                 formData = it.formData.copy(amount = amount),
@@ -146,7 +150,9 @@ class EditBillViewModel(
     }
 
     private fun updateDueDate(dueDate: Long) {
-        val dueDateError = BillValidator.validateDueDateField(dueDate)
+        val dueDateError = BillValidator.validateBillFormData(
+            BillFormData(dueDate = dueDate),
+        ).dueDateError
         mutableStateFlow.update {
             it.copy(
                 formData = it.formData.copy(dueDate = dueDate),
@@ -157,7 +163,9 @@ class EditBillViewModel(
     }
 
     private fun updateRecurrencePattern(recurrencePattern: RecurrencePattern) {
-        val recurrencePatternError = BillValidator.validateRecurrencePatternField(recurrencePattern)
+        val recurrencePatternError = BillValidator.validateBillFormData(
+            BillFormData(recurrencePattern = recurrencePattern),
+        ).recurrencePatternError
         mutableStateFlow.update {
             it.copy(
                 formData = it.formData.copy(recurrencePattern = recurrencePattern),
@@ -177,7 +185,7 @@ class EditBillViewModel(
         val currentState = stateFlow.value
         val formData = currentState.formData
 
-        val validationResult = BillValidator.validateBillForm(formData)
+        val validationResult = BillValidator.validateBillFormData(formData)
 
         mutableStateFlow.update { it.copy(validationResult = validationResult) }
         return validationResult
@@ -288,7 +296,9 @@ class EditBillViewModel(
     }
 
     private fun selectBiller(biller: Biller) {
-        val billerError = BillValidator.validateBillerField(biller.id, biller.name)
+        val billerError = BillValidator.validateBillFormData(
+            BillFormData(billerId = biller.id, billerName = biller.name),
+        ).billerError
         mutableStateFlow.update {
             it.copy(
                 formData = it.formData.copy(

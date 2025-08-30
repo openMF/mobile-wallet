@@ -48,4 +48,6 @@ class FineractApiManager(
     val autoPayApi by lazy { ktorfitClient.autoPayApi }
 
     val billerApi by lazy { ktorfitClient.billerApi }
+
+    val billApi by lazy { ktorfitClient.billApi }
 }
