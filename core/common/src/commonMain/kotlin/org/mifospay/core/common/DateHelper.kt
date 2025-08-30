@@ -15,12 +15,11 @@ import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.Month
 import kotlinx.datetime.TimeZone
+import kotlinx.datetime.atStartOfDayIn
 import kotlinx.datetime.format
-import kotlinx.datetime.format.FormatStringsInDatetimeFormats
 import kotlinx.datetime.format.byUnicodePattern
 import kotlinx.datetime.toLocalDateTime
 
-@OptIn(FormatStringsInDatetimeFormats::class)
 object DateHelper {
     /*
      * This is the full month format for the date picker.
@@ -370,4 +369,44 @@ object DateHelper {
      * "dd-MM-yyyy" is the format of the date picker.
      */
     val formattedShortDate = currentDate.format(shortMonthFormat)
+
+    /**
+     * Parses a date string in "dd MMM yyyy" format and converts it to milliseconds.
+     * This is useful for sorting transactions by date.
+     *
+     * @param dateString The date string in format like "14 Apr 2016"
+     * @return The date in milliseconds since epoch, or null if parsing fails
+     */
+    fun parseDateToMillis(dateString: String): Long? {
+        return try {
+            val parts = dateString.split(" ")
+            if (parts.size != 3) return null
+
+            val day = parts[0].toInt()
+            val monthName = parts[1]
+            val year = parts[2].toInt()
+
+            val month = when (monthName) {
+                "Jan" -> 1
+                "Feb" -> 2
+                "Mar" -> 3
+                "Apr" -> 4
+                "May" -> 5
+                "Jun" -> 6
+                "Jul" -> 7
+                "Aug" -> 8
+                "Sep" -> 9
+                "Oct" -> 10
+                "Nov" -> 11
+                "Dec" -> 12
+                else -> return null
+            }
+
+            val localDate = LocalDate(year, Month(month), day)
+            val instant = localDate.atStartOfDayIn(TimeZone.currentSystemDefault())
+            instant.toEpochMilliseconds()
+        } catch (e: Exception) {
+            null
+        }
+    }
 }

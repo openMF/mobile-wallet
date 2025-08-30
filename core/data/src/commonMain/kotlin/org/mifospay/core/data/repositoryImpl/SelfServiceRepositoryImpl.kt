@@ -26,6 +26,7 @@ import kotlinx.coroutines.flow.scan
 import kotlinx.coroutines.flow.zip
 import kotlinx.coroutines.withContext
 import org.mifospay.core.common.DataState
+import org.mifospay.core.common.DateHelper
 import org.mifospay.core.common.asDataStateFlow
 import org.mifospay.core.common.combineResultsWith
 import org.mifospay.core.data.mapper.toAccount
@@ -158,7 +159,9 @@ class SelfServiceRepositoryImpl(
         return accountId.asFlow().flatMapMerge { clientId ->
             getSelfAccountTransactions(clientId)
         }.scan(emptyList()) { acc, transactions ->
-            acc + transactions.sortedByDescending { it.date }.let { sortedList ->
+            (acc + transactions).sortedByDescending { transaction ->
+                DateHelper.parseDateToMillis(transaction.date) ?: 0L
+            }.let { sortedList ->
                 limit?.let { sortedList.take(it) } ?: sortedList
             }
         }
