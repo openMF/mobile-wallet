@@ -24,6 +24,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.HorizontalDivider
@@ -88,35 +89,31 @@ private fun FaqScreen(
         },
         containerColor = KptTheme.colorScheme.background,
     ) { contentPadding ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(contentPadding),
-        ) {
-            LazyColumn(
-                modifier = Modifier
-                    .weight(1f)
-                    .fillMaxWidth(),
-            ) {
-                itemsIndexed(
-                    items = state.faqList,
-                    key = { _, item -> item.faqId },
-                ) { i, faqItem ->
-                    FaqItemScreen(
-                        faq = faqItem,
-                        onExpand = { faqId ->
-                            onAction(FaqAction.ExpandFaq(faqId))
-                        },
-                        isExpanded = state.expandedFaq == faqItem.faqId,
-                    )
+        val listState = rememberLazyListState()
 
-                    if (i != state.faqList.lastIndex) {
-                        HorizontalDivider(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = KptTheme.spacing.lg),
-                        )
-                    }
+        LazyColumn(
+            state = listState,
+            modifier = Modifier.fillMaxSize(),
+            contentPadding = contentPadding,
+        ) {
+            itemsIndexed(
+                items = state.faqList,
+                key = { _, item -> item.faqId },
+            ) { i, faqItem ->
+                FaqItemScreen(
+                    faq = faqItem,
+                    onExpand = { faqId ->
+                        onAction(FaqAction.ExpandFaq(faqId))
+                    },
+                    isExpanded = state.expandedFaq == faqItem.faqId,
+                )
+
+                if (i != state.faqList.lastIndex) {
+                    HorizontalDivider(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = KptTheme.spacing.lg),
+                    )
                 }
             }
         }
