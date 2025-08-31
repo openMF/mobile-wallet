@@ -47,7 +47,6 @@ import org.mifospay.core.ui.DropdownBox
 import org.mifospay.core.ui.DropdownBoxItem
 import org.mifospay.core.ui.utils.EventsEffect
 
-// TODO currec
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddBillerScreen(

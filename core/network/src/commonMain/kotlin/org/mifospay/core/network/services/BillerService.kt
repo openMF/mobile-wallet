@@ -21,7 +21,8 @@ import org.mifospay.core.model.autopay.Biller
 import org.mifospay.core.model.autopay.BillerCategory
 
 /**
- * TODO: Update endpoint paths when backend APIs are finalized
+ * TODO: Update endpoint paths when backend APIs are finalized, also use
+ * Flow only in get operations where List<T> is returned, do not use Flow for one-shot operations
  */
 interface BillerService {
     @GET("billers")

@@ -22,7 +22,8 @@ import org.mifospay.core.model.autopay.BillStatus
 import org.mifospay.core.model.autopay.RecurrencePattern
 
 /**
- * TODO: Update endpoint paths when backend APIs are finalized
+ * TODO: Update endpoint paths when backend APIs are finalized, also use
+ * Flow only in get operations where List<T> is returned, do not use Flow for one-shot operations
  */
 interface BillService {
     @GET("bills")
