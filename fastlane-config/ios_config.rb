@@ -30,7 +30,9 @@ module FastlaneConfig
       key_filepath: "./secrets/Auth_key.p8",
       version_number: "1.0.0",
       metadata_path: "./fastlane/metadata/ios",
-      app_rating_config_path: "./fastlane/age_rating.json"
+      app_rating_config_path: "./fastlane/age_rating.json",
+      screenshots_ios_path: "./fastlane/screenshots_ios",
+      screenshots_macos_path: "./fastlane/screenshots_macos",
     }
   end
 end

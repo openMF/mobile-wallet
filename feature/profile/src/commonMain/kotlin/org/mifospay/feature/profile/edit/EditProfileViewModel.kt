@@ -32,6 +32,7 @@ import mobile_wallet.feature.profile.generated.resources.feature_profile_profile
 import mobile_wallet.feature.profile.generated.resources.feature_profile_profile_updated_successfully
 import org.jetbrains.compose.resources.StringResource
 import org.mifospay.core.common.DataState
+import org.mifospay.core.common.StringResourceSerializer
 import org.mifospay.core.common.getSerialized
 import org.mifospay.core.common.setSerialized
 import org.mifospay.core.common.utils.isValidEmail
@@ -301,11 +302,19 @@ internal data class EditProfileState(
 
     @Serializable
     sealed interface DialogState {
+        @Serializable
         data object Loading : DialogState
 
-        sealed interface Error : DialogState {
-            data class StringMessage(val message: String) : Error
-            data class ResourceMessage(val message: StringResource) : Error
+        @Serializable
+        sealed class Error : DialogState {
+            @Serializable
+            data class StringMessage(val message: String) : Error()
+
+            @Serializable
+            data class ResourceMessage(
+                @Serializable(with = StringResourceSerializer::class)
+                val message: StringResource,
+            ) : Error()
         }
     }
 
