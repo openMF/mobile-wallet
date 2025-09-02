@@ -18,6 +18,7 @@ import androidx.navigation.navOptions
 import org.mifospay.core.ui.composableWithSlideTransitions
 import org.mifospay.feature.send.money.PayeeDetailsScreen
 import org.mifospay.feature.send.money.PayeeDetailsState
+import org.mifospay.feature.send.money.PaymentChatHistoryScreen
 import org.mifospay.feature.send.money.PaymentProcessingScreen
 import org.mifospay.feature.send.money.PaymentSuccessScreen
 import org.mifospay.feature.send.money.SendMoneyOptionsScreen
@@ -59,6 +60,8 @@ const val PAYMENT_SUCCESS_UPI_NAME_ARG = "upiName"
 const val PAYMENT_SUCCESS_TRANSACTION_TIMESTAMP_ARG = "transactionTimestamp"
 
 const val PAYMENT_SUCCESS_BASE_ROUTE = "$PAYMENT_SUCCESS_ROUTE?$PAYMENT_SUCCESS_PAYEE_NAME_ARG={$PAYMENT_SUCCESS_PAYEE_NAME_ARG}&$PAYMENT_SUCCESS_AMOUNT_ARG={$PAYMENT_SUCCESS_AMOUNT_ARG}&$PAYMENT_SUCCESS_UPI_NAME_ARG={$PAYMENT_SUCCESS_UPI_NAME_ARG}&$PAYMENT_SUCCESS_TRANSACTION_TIMESTAMP_ARG={$PAYMENT_SUCCESS_TRANSACTION_TIMESTAMP_ARG}"
+
+const val PAYMENT_CHAT_HISTORY_ROUTE = "payment_chat_history_route"
 
 fun NavController.navigateToSendMoneyScreen(
     navOptions: NavOptions? = null,
@@ -137,6 +140,11 @@ fun NavController.navigateToPaymentSuccessScreen(
     }
     navigate(route, options)
 }
+
+fun NavController.navigateToPaymentChatHistoryScreen(
+    navOptions: NavOptions? = null,
+) = navigate(PAYMENT_CHAT_HISTORY_ROUTE, navOptions)
+
 fun NavGraphBuilder.sendMoneyScreen(
     onBackClick: () -> Unit,
     navigateToTransferScreen: (String) -> Unit,
@@ -170,6 +178,7 @@ fun NavGraphBuilder.sendMoneyOptionsScreen(
     onFineractPaymentsClick: () -> Unit,
     onQrCodeScanned: (String) -> Unit,
     onNavigateToPayeeDetails: (String) -> Unit,
+    onPaymentHistoryClick: () -> Unit,
 ) {
     composableWithSlideTransitions(
         route = SEND_MONEY_OPTIONS_ROUTE,
@@ -182,6 +191,7 @@ fun NavGraphBuilder.sendMoneyOptionsScreen(
             onFineractPaymentsClick = onFineractPaymentsClick,
             onQrCodeScanned = onQrCodeScanned,
             onNavigateToPayeeDetails = onNavigateToPayeeDetails,
+            onPaymentHistoryClick = onPaymentHistoryClick,
         )
     }
 }
@@ -306,6 +316,22 @@ fun NavGraphBuilder.paymentSuccessScreen(
             onShareScreenshot = onShareScreenshot,
             onDone = onDone,
             onNavigateToSendMoneyOptions = onNavigateToSendMoneyOptions,
+        )
+    }
+}
+
+fun NavGraphBuilder.paymentChatHistoryScreen(
+    onBackClick: () -> Unit,
+    onPaymentClick: () -> Unit,
+    onTransactionClick: (String) -> Unit,
+) {
+    composableWithSlideTransitions(
+        route = PAYMENT_CHAT_HISTORY_ROUTE,
+    ) {
+        PaymentChatHistoryScreen(
+            onBackClick = onBackClick,
+            onPaymentClick = onPaymentClick,
+            onTransactionClick = onTransactionClick,
         )
     }
 }

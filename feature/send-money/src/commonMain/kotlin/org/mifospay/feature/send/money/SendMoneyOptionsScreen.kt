@@ -68,6 +68,7 @@ fun SendMoneyOptionsScreen(
     onFineractPaymentsClick: () -> Unit,
     onQrCodeScanned: (String) -> Unit,
     onNavigateToPayeeDetails: (String) -> Unit,
+    onPaymentHistoryClick: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: SendMoneyOptionsViewModel = koinViewModel(),
 ) {
@@ -136,7 +137,9 @@ fun SendMoneyOptionsScreen(
 
                 Spacer(modifier = Modifier.height(KptTheme.spacing.md))
 
-                PeopleSection()
+                PeopleSection(
+                    onPaymentHistoryClick = onPaymentHistoryClick,
+                )
 
                 Spacer(modifier = Modifier.height(KptTheme.spacing.md))
 
@@ -274,6 +277,7 @@ private fun SendMoneyOptionButton(
 
 @Composable
 private fun PeopleSection(
+    onPaymentHistoryClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     // TODO: This is a placeholder section. People functionality is not implemented yet.
@@ -301,6 +305,7 @@ private fun PeopleSection(
                 )
                 PersonItem(
                     name = "Jane Smith",
+                    onClick = onPaymentHistoryClick,
                     modifier = Modifier.weight(1f),
                 )
                 PersonItem(
@@ -410,11 +415,12 @@ private fun MerchantsSection(
 private fun PersonItem(
     name: String,
     isMoreButton: Boolean = false,
+    onClick: (() -> Unit)? = null,
     modifier: Modifier = Modifier,
 ) {
     Surface(
         modifier = modifier
-            .clickable { /* TODO: Handle click */ }
+            .clickable(enabled = onClick != null) { onClick?.invoke() }
             .clip(RoundedCornerShape(KptTheme.spacing.sm)),
         color = KptTheme.colorScheme.surface,
         tonalElevation = 1.dp,
