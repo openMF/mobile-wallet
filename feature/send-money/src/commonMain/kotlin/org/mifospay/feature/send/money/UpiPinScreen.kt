@@ -337,20 +337,30 @@ private fun UpiPinContent(
                     imeAction = ImeAction.Done,
                 ),
                 decorationBox = {
-                    Row(horizontalArrangement = Arrangement.Center) {
+                    Row(
+                        horizontalArrangement = Arrangement.SpaceEvenly,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
                         repeat(pinLength) { index ->
                             UpiPinCharView(
                                 index = index,
                                 text = upiPin.value,
                                 showPin = showPin.value,
                             )
-                            Spacer(modifier = Modifier.width(KptTheme.spacing.sm))
                         }
                     }
                 },
                 modifier = Modifier
                     .fillMaxWidth()
                     .focusRequester(focusRequester),
+            )
+
+            Text(
+                text = "UPI PIN will keep your account secure from unauthorized access. Do not share this PIN with anyone",
+                style = KptTheme.typography.bodySmall,
+                color = androidx.compose.ui.graphics.Color.Gray,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.fillMaxWidth(),
             )
         }
     }
