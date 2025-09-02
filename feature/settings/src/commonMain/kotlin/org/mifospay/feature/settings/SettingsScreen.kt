@@ -102,6 +102,7 @@ private fun SettingsScreenContent(
         backPress = {
             onAction(SettingsAction.NavigateBack)
         },
+        containerColor = KptTheme.colorScheme.background,
     ) { contentPadding ->
         Column(
             modifier = Modifier

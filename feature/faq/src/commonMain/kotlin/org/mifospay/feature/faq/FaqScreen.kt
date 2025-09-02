@@ -24,6 +24,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.HorizontalDivider
@@ -46,7 +47,7 @@ import mobile_wallet.feature.faq.generated.resources.feature_faq
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
-import org.mifospay.core.designsystem.component.MifosTopBar
+import org.mifospay.core.designsystem.component.MifosScaffold
 import org.mifospay.core.designsystem.icon.MifosIcons
 import org.mifospay.core.ui.utils.EventsEffect
 import template.core.base.designsystem.theme.KptTheme
@@ -80,20 +81,20 @@ private fun FaqScreen(
     onAction: (FaqAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Column(
-        modifier = modifier
-            .fillMaxSize(),
-    ) {
-        MifosTopBar(
-            topBarTitle = stringResource(Res.string.feature_faq),
-            backPress = {
-                onAction(FaqAction.NavigateBack)
-            },
-        )
+    MifosScaffold(
+        modifier = modifier,
+        topBarTitle = stringResource(Res.string.feature_faq),
+        backPress = {
+            onAction(FaqAction.NavigateBack)
+        },
+        containerColor = KptTheme.colorScheme.background,
+    ) { contentPadding ->
+        val listState = rememberLazyListState()
+
         LazyColumn(
-            modifier = Modifier
-                .weight(1f)
-                .fillMaxWidth(),
+            state = listState,
+            modifier = Modifier.fillMaxSize(),
+            contentPadding = contentPadding,
         ) {
             itemsIndexed(
                 items = state.faqList,
