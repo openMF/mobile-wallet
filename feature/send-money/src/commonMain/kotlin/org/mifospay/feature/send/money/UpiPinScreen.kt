@@ -339,7 +339,7 @@ private fun UpiPinContent(
                 decorationBox = {
                     Row(
                         horizontalArrangement = Arrangement.SpaceEvenly,
-                        modifier = Modifier.fillMaxWidth()
+                        modifier = Modifier.fillMaxWidth(),
                     ) {
                         repeat(pinLength) { index ->
                             UpiPinCharView(
