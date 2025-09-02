@@ -30,6 +30,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -46,7 +47,6 @@ import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
 import org.mifospay.core.designsystem.component.MifosButton
-import org.mifospay.core.designsystem.component.MifosGradientBackground
 import org.mifospay.core.designsystem.component.MifosOutlinedButton
 import org.mifospay.core.designsystem.component.MifosScaffold
 import org.mifospay.core.designsystem.icon.MifosIcons
@@ -54,7 +54,16 @@ import org.mifospay.core.ui.utils.EventsEffect
 import template.core.base.designsystem.theme.KptTheme
 
 @Composable
-fun PaymentSuccessScreen(
+expect fun PaymentSuccessScreen(
+    onShareScreenshot: () -> Unit,
+    onDone: () -> Unit,
+    onNavigateToSendMoneyOptions: () -> Unit,
+    modifier: Modifier = Modifier,
+    viewModel: PaymentSuccessViewModel = koinViewModel(),
+)
+
+@Composable
+internal fun PaymentSuccessScreenDefault(
     onShareScreenshot: () -> Unit,
     onDone: () -> Unit,
     onNavigateToSendMoneyOptions: () -> Unit,
@@ -71,53 +80,65 @@ fun PaymentSuccessScreen(
         }
     }
 
-    MifosGradientBackground {
-        MifosScaffold(
-            modifier = modifier,
-        ) { paddingValues ->
+    MifosScaffold(
+        modifier = modifier,
+        containerColor = KptTheme.colorScheme.background,
+    ) { paddingValues ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.SpaceBetween,
+        ) {
+            Spacer(modifier = Modifier.height(KptTheme.spacing.xxl))
+
             Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(paddingValues),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.SpaceBetween,
+                verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.sm),
             ) {
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.sm),
+                Spacer(modifier = Modifier.height(KptTheme.spacing.xl))
+
+                Box(
+                    modifier = Modifier.testTag("payment-success-content"),
                 ) {
-                    Spacer(modifier = Modifier.height(KptTheme.spacing.md))
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.sm),
+                    ) {
+                        PaymentSuccessHeader(state)
 
-                    PaymentSuccessHeader(state)
+                        Spacer(modifier = Modifier.height(KptTheme.spacing.sm))
 
-                    Spacer(modifier = Modifier.height(KptTheme.spacing.sm))
-
-                    PaymentDetailsCard(state)
-
-                    Spacer(modifier = Modifier.height(KptTheme.spacing.sm))
-
-                    PlaceholderBanner()
-
-                    Spacer(modifier = Modifier.height(KptTheme.spacing.xs))
-
-                    Upilogo()
+                        PaymentDetailsCard(state)
+                    }
                 }
 
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.sm),
-                ) {
-                    ActionButtons(
-                        onShareScreenshot = {
-                            viewModel.trySendAction(PaymentSuccessAction.ShareScreenshot)
-                        },
-                        onDone = {
-                            viewModel.trySendAction(PaymentSuccessAction.Done)
-                        },
-                    )
+                Spacer(modifier = Modifier.height(KptTheme.spacing.xxl))
 
-                    Spacer(modifier = Modifier.height(KptTheme.spacing.lg))
-                }
+                PlaceholderBanner()
+
+                Spacer(modifier = Modifier.height(KptTheme.spacing.xl))
+
+                Upilogo()
+
+                Spacer(modifier = Modifier.height(KptTheme.spacing.xs))
+            }
+
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.sm),
+            ) {
+                ActionButtons(
+                    onShareScreenshot = {
+                        viewModel.trySendAction(PaymentSuccessAction.ShareScreenshot)
+                    },
+                    onDone = {
+                        viewModel.trySendAction(PaymentSuccessAction.Done)
+                    },
+                )
+
+                Spacer(modifier = Modifier.height(KptTheme.spacing.lg))
             }
         }
     }

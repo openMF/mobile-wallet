@@ -332,7 +332,7 @@ internal fun MifosNavHost(
             navigateToPayeeDetailsScreen = navController::navigateToPayeeDetailsScreen,
             navigateToScanQrScreen = navController::navigateToScanQr,
         )
-        // Already in paise from PayeeDetailsState
+
         payeeDetailsScreen(
             onBackClick = navController::popBackStack,
             onNavigateToUpiPin = { state ->
@@ -350,7 +350,6 @@ internal fun MifosNavHost(
         upiPinScreen(
             onBackClick = navController::popBackStack,
             onNavigateToPaymentProcessing = { payeeName, amount, isUpiCode ->
-                // Convert rupees to paise for navigation
                 val amountInPaise = AmountUtils.rupeesToPaise(amount)
                 navController.navigateToPaymentProcessingScreen(
                     payeeName = payeeName,
@@ -359,7 +358,7 @@ internal fun MifosNavHost(
                 )
             },
         )
-        // Already in paise from PaymentProcessingViewModel
+
         paymentProcessingScreen(
             onPaymentComplete = { payeeName, amount, upiName, transactionTimestamp ->
                 navController.navigateToPaymentSuccessScreen(
@@ -376,7 +375,9 @@ internal fun MifosNavHost(
 
         paymentSuccessScreen(
             onShareScreenshot = {
-                // TODO: Implement screenshot sharing functionality
+                // Screenshot functionality is handled by the Android-specific PaymentSuccessScreen implementation
+                // The actual screenshot and sharing is done within the screen itself
+                // This callback is used by the Android-specific implementation to trigger the screenshot
             },
             onDone = {
                 navController.navigate(HOME_ROUTE) {
