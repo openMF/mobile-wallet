@@ -378,35 +378,32 @@ object DateHelper {
      * @return The date in milliseconds since epoch, or null if parsing fails
      */
     fun parseDateToMillis(dateString: String): Long? {
-        return try {
-            val parts = dateString.split(" ")
-            if (parts.size != 3) return null
+        val parts = dateString.split(" ")
+        if (parts.size != 3) return null
 
-            val day = parts[0].toInt()
-            val monthName = parts[1]
-            val year = parts[2].toInt()
+        val (dayStr, monthName, yearStr) = parts
 
-            val month = when (monthName) {
-                "Jan" -> 1
-                "Feb" -> 2
-                "Mar" -> 3
-                "Apr" -> 4
-                "May" -> 5
-                "Jun" -> 6
-                "Jul" -> 7
-                "Aug" -> 8
-                "Sep" -> 9
-                "Oct" -> 10
-                "Nov" -> 11
-                "Dec" -> 12
-                else -> return null
-            }
-
-            val localDate = LocalDate(year, Month(month), day)
-            val instant = localDate.atStartOfDayIn(TimeZone.currentSystemDefault())
-            instant.toEpochMilliseconds()
-        } catch (e: Exception) {
-            null
+        val month = when (monthName) {
+            "Jan" -> 1
+            "Feb" -> 2
+            "Mar" -> 3
+            "Apr" -> 4
+            "May" -> 5
+            "Jun" -> 6
+            "Jul" -> 7
+            "Aug" -> 8
+            "Sep" -> 9
+            "Oct" -> 10
+            "Nov" -> 11
+            "Dec" -> 12
+            else -> throw IllegalArgumentException("Invalid month: $monthName")
         }
+
+        return runCatching {
+            val day = dayStr.toInt()
+            val year = yearStr.toInt()
+            val localDate = LocalDate(year, Month(month), day)
+            localDate.atStartOfDayIn(TimeZone.currentSystemDefault()).toEpochMilliseconds()
+        }.getOrNull()
     }
 }

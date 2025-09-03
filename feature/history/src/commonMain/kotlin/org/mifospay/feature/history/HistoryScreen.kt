@@ -30,6 +30,7 @@ import mobile_wallet.feature.history.generated.resources.feature_history_title
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.mifospay.core.designsystem.component.MifosLoadingWheel
+import org.mifospay.core.designsystem.component.MifosScaffold
 import org.mifospay.core.designsystem.component.MifosTopBar
 import org.mifospay.core.model.savingsaccount.TransactionType
 import org.mifospay.core.ui.EmptyContentScreen
@@ -75,54 +76,61 @@ internal fun HistoryScreenContent(
     showTopBar: Boolean = true,
     onBackClick: (() -> Unit)? = null,
 ) {
-    Column(
+    MifosScaffold(
         modifier = modifier.fillMaxSize(),
-    ) {
-        if (showTopBar && onBackClick != null) {
-            MifosTopBar(
-                topBarTitle = stringResource(Res.string.feature_history_title),
-                backPress = onBackClick,
-            )
-        }
-
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .weight(1f),
-            contentAlignment = Alignment.Center,
-        ) {
-            when (state.viewState) {
-                is HistoryState.ViewState.Loading -> {
+        topBar = if (showTopBar && onBackClick != null) {
+            {
+                MifosTopBar(
+                    topBarTitle = stringResource(Res.string.feature_history_title),
+                    backPress = onBackClick,
+                )
+            }
+        } else {
+            {}
+        },
+    ) { paddingValues ->
+        when (state.viewState) {
+            is HistoryState.ViewState.Loading -> {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(paddingValues),
+                    contentAlignment = Alignment.Center,
+                ) {
                     MifosLoadingWheel(
-                        modifier = Modifier.align(Alignment.Center),
                         contentDesc = stringResource(Res.string.feature_history_loading),
                     )
                 }
+            }
 
-                is HistoryState.ViewState.Error -> {
-                    EmptyContentScreen(
-                        title = stringResource(Res.string.feature_history_error_oops),
-                        subTitle = stringResource(Res.string.feature_history_error),
-                        modifier = Modifier.align(Alignment.Center),
-                        iconTint = KptTheme.colorScheme.error,
-                    )
-                }
+            is HistoryState.ViewState.Error -> {
+                EmptyContentScreen(
+                    title = stringResource(Res.string.feature_history_error_oops),
+                    subTitle = stringResource(Res.string.feature_history_error),
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(paddingValues),
+                    iconTint = KptTheme.colorScheme.error,
+                )
+            }
 
-                is HistoryState.ViewState.Empty -> {
-                    EmptyContentScreen(
-                        title = stringResource(Res.string.feature_history_error_oops),
-                        subTitle = stringResource(Res.string.feature_history_empty),
-                        modifier = Modifier.fillMaxSize().align(Alignment.Center),
-                    )
-                }
+            is HistoryState.ViewState.Empty -> {
+                EmptyContentScreen(
+                    title = stringResource(Res.string.feature_history_error_oops),
+                    subTitle = stringResource(Res.string.feature_history_empty),
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(paddingValues),
+                )
+            }
 
-                is HistoryState.ViewState.Content -> {
-                    HistoryScreenContent(
-                        state = state.viewState,
-                        selectedTransactionType = state.transactionType,
-                        onAction = onAction,
-                    )
-                }
+            is HistoryState.ViewState.Content -> {
+                HistoryScreenContent(
+                    state = state.viewState,
+                    selectedTransactionType = state.transactionType,
+                    onAction = onAction,
+                    modifier = Modifier.padding(paddingValues),
+                )
             }
         }
     }

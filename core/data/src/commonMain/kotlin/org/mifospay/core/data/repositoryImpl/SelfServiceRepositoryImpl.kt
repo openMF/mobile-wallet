@@ -160,7 +160,7 @@ class SelfServiceRepositoryImpl(
             getSelfAccountTransactions(clientId)
         }.scan(emptyList()) { acc, transactions ->
             (acc + transactions).sortedByDescending { transaction ->
-                DateHelper.parseDateToMillis(transaction.date) ?: 0L
+                DateHelper.parseDateToMillis(transaction.date) ?: Long.MIN_VALUE
             }.let { sortedList ->
                 limit?.let { sortedList.take(it) } ?: sortedList
             }
@@ -184,7 +184,6 @@ class SelfServiceRepositoryImpl(
                 }
             }
             .asDataStateFlow()
-            .flowOn(dispatcher)
     }
 
     override fun getBeneficiaryList(): Flow<DataState<List<Beneficiary>>> {
