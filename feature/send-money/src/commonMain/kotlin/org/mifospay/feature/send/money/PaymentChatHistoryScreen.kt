@@ -314,7 +314,7 @@ private fun PaymentCard(
                 }
 
                 Icon(
-                    imageVector = MifosIcons.ArrowForward,
+                    imageVector = MifosIcons.ChevronRight,
                     contentDescription = "View Details",
                     tint = KptTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.size(20.dp),

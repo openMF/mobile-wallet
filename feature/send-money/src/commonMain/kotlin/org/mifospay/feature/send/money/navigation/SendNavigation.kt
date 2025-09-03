@@ -19,6 +19,7 @@ import org.mifospay.core.ui.composableWithSlideTransitions
 import org.mifospay.feature.send.money.PayeeDetailsScreen
 import org.mifospay.feature.send.money.PayeeDetailsState
 import org.mifospay.feature.send.money.PaymentChatHistoryScreen
+import org.mifospay.feature.send.money.PaymentDetailsScreen
 import org.mifospay.feature.send.money.PaymentProcessingScreen
 import org.mifospay.feature.send.money.PaymentSuccessScreen
 import org.mifospay.feature.send.money.SendMoneyOptionsScreen
@@ -62,6 +63,20 @@ const val PAYMENT_SUCCESS_TRANSACTION_TIMESTAMP_ARG = "transactionTimestamp"
 const val PAYMENT_SUCCESS_BASE_ROUTE = "$PAYMENT_SUCCESS_ROUTE?$PAYMENT_SUCCESS_PAYEE_NAME_ARG={$PAYMENT_SUCCESS_PAYEE_NAME_ARG}&$PAYMENT_SUCCESS_AMOUNT_ARG={$PAYMENT_SUCCESS_AMOUNT_ARG}&$PAYMENT_SUCCESS_UPI_NAME_ARG={$PAYMENT_SUCCESS_UPI_NAME_ARG}&$PAYMENT_SUCCESS_TRANSACTION_TIMESTAMP_ARG={$PAYMENT_SUCCESS_TRANSACTION_TIMESTAMP_ARG}"
 
 const val PAYMENT_CHAT_HISTORY_ROUTE = "payment_chat_history_route"
+const val PAYMENT_DETAILS_ROUTE = "payment_details_route"
+const val PAYMENT_DETAILS_TRANSACTION_ID_ARG = "transactionId"
+const val PAYMENT_DETAILS_BASE_ROUTE = "$PAYMENT_DETAILS_ROUTE/{$PAYMENT_DETAILS_TRANSACTION_ID_ARG}"
+
+fun NavController.navigateToPaymentDetailsScreen(
+    transactionId: String,
+    navOptions: NavOptions? = null,
+) {
+    val route = "$PAYMENT_DETAILS_ROUTE/$transactionId"
+    val options = navOptions ?: navOptions {
+        popUpTo(PAYMENT_CHAT_HISTORY_ROUTE) { inclusive = false }
+    }
+    navigate(route, options)
+}
 
 fun NavController.navigateToSendMoneyScreen(
     navOptions: NavOptions? = null,
@@ -332,6 +347,30 @@ fun NavGraphBuilder.paymentChatHistoryScreen(
             onBackClick = onBackClick,
             onPaymentClick = onPaymentClick,
             onTransactionClick = onTransactionClick,
+        )
+    }
+}
+
+fun NavGraphBuilder.paymentDetailsScreen(
+    onBackClick: () -> Unit,
+    onPayAgainClick: () -> Unit,
+    onRetryClick: () -> Unit,
+) {
+    composableWithSlideTransitions(
+        route = PAYMENT_DETAILS_BASE_ROUTE,
+        arguments = listOf(
+            navArgument(PAYMENT_DETAILS_TRANSACTION_ID_ARG) {
+                type = NavType.StringType
+                nullable = false
+            },
+        ),
+    ) { backStackEntry ->
+        val transactionId = backStackEntry.savedStateHandle.get<String>(PAYMENT_DETAILS_TRANSACTION_ID_ARG) ?: ""
+        PaymentDetailsScreen(
+            onBackClick = onBackClick,
+            onPayAgainClick = onPayAgainClick,
+            onRetryClick = onRetryClick,
+            transactionId = transactionId,
         )
     }
 }

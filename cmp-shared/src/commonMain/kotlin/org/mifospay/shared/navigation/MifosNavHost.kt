@@ -78,6 +78,7 @@ import org.mifospay.feature.send.money.navigation.SEND_MONEY_BASE_ROUTE
 import org.mifospay.feature.send.money.navigation.SEND_MONEY_OPTIONS_ROUTE
 import org.mifospay.feature.send.money.navigation.navigateToPayeeDetailsScreen
 import org.mifospay.feature.send.money.navigation.navigateToPaymentChatHistoryScreen
+import org.mifospay.feature.send.money.navigation.navigateToPaymentDetailsScreen
 import org.mifospay.feature.send.money.navigation.navigateToPaymentProcessingScreen
 import org.mifospay.feature.send.money.navigation.navigateToPaymentSuccessScreen
 import org.mifospay.feature.send.money.navigation.navigateToSendMoneyOptionsScreen
@@ -85,6 +86,7 @@ import org.mifospay.feature.send.money.navigation.navigateToSendMoneyScreen
 import org.mifospay.feature.send.money.navigation.navigateToUpiPinScreen
 import org.mifospay.feature.send.money.navigation.payeeDetailsScreen
 import org.mifospay.feature.send.money.navigation.paymentChatHistoryScreen
+import org.mifospay.feature.send.money.navigation.paymentDetailsScreen
 import org.mifospay.feature.send.money.navigation.paymentProcessingScreen
 import org.mifospay.feature.send.money.navigation.paymentSuccessScreen
 import org.mifospay.feature.send.money.navigation.sendMoneyOptionsScreen
@@ -344,8 +346,17 @@ internal fun MifosNavHost(
                 navController.navigateToSendMoneyOptionsScreen()
             },
             onTransactionClick = { transactionId ->
-                // TODO: Navigate to transaction details screen
-                println("Transaction clicked: $transactionId")
+                navController.navigateToPaymentDetailsScreen(transactionId)
+            },
+        )
+
+        paymentDetailsScreen(
+            onBackClick = navController::popBackStack,
+            onPayAgainClick = {
+                navController.navigateToSendMoneyOptionsScreen()
+            },
+            onRetryClick = {
+                navController.popBackStack()
             },
         )
 

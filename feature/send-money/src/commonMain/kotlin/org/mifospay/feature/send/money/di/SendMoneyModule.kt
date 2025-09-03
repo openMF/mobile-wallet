@@ -13,6 +13,7 @@ import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
 import org.mifospay.feature.send.money.PayeeDetailsViewModel
 import org.mifospay.feature.send.money.PaymentChatHistoryViewModel
+import org.mifospay.feature.send.money.PaymentDetailsViewModel
 import org.mifospay.feature.send.money.PaymentProcessingViewModel
 import org.mifospay.feature.send.money.PaymentSuccessViewModel
 import org.mifospay.feature.send.money.ScannerModule
@@ -29,4 +30,5 @@ val SendMoneyModule = module {
     viewModelOf(::PaymentSuccessViewModel)
     viewModelOf(::UpiPinViewModel)
     viewModelOf(::PaymentChatHistoryViewModel)
+    viewModelOf(::PaymentDetailsViewModel)
 }
