@@ -358,6 +358,11 @@ internal fun MifosNavHost(
             onRetryClick = {
                 navController.popBackStack()
             },
+            onShareScreenshot = {
+                // Screenshot functionality is handled by the Android-specific PaymentDetailsScreen implementation
+                // The actual screenshot and sharing is done within the screen itself
+                // This callback is used by the Android-specific implementation to trigger the screenshot
+            },
         )
 
         payeeDetailsScreen(

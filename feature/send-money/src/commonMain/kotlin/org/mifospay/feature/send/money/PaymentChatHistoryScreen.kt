@@ -297,16 +297,12 @@ private fun PaymentCard(
                 ) {
                     Icon(
                         imageVector = MifosIcons.CheckCircle,
-                        contentDescription = if (transaction.isSent) "Sent" else "Received",
-                        tint = if (transaction.isSent) {
-                            Color(0xFF4CAF50)
-                        } else {
-                            KptTheme.colorScheme.primary
-                        },
+                        contentDescription = "Paid",
+                        tint = Color(0xFF4CAF50),
                         modifier = Modifier.size(16.dp),
                     )
                     Text(
-                        text = "${if (transaction.isSent) "Sent" else "Received"} - ${formatPaymentDate(transaction.paymentDate)}",
+                        text = "Paid - ${formatPaymentDate(transaction.paymentDate)}",
                         style = KptTheme.typography.bodyMedium,
                         fontWeight = FontWeight.SemiBold,
                         color = KptTheme.colorScheme.onSurfaceVariant,

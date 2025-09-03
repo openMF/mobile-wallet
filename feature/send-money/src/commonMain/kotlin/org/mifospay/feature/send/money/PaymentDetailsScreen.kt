@@ -48,6 +48,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -61,10 +62,22 @@ import org.mifospay.core.ui.AvatarBox
 import template.core.base.designsystem.theme.KptTheme
 
 @Composable
-fun PaymentDetailsScreen(
+expect fun PaymentDetailsScreen(
     onBackClick: () -> Unit,
     onPayAgainClick: () -> Unit,
     onRetryClick: () -> Unit,
+    onShareScreenshot: () -> Unit,
+    modifier: Modifier = Modifier,
+    viewModel: PaymentDetailsViewModel = koinViewModel(),
+    transactionId: String,
+)
+
+@Composable
+internal fun PaymentDetailsScreenDefault(
+    onBackClick: () -> Unit,
+    onPayAgainClick: () -> Unit,
+    onRetryClick: () -> Unit,
+    onShareScreenshot: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: PaymentDetailsViewModel = koinViewModel(),
     transactionId: String,
@@ -97,7 +110,8 @@ fun PaymentDetailsScreen(
                     .fillMaxSize()
                     .padding(paddingValues)
                     .verticalScroll(scrollState)
-                    .padding(bottom = 80.dp),
+                    .padding(bottom = 80.dp)
+                    .testTag("payment-details-content"),
             ) {
                 ProfileAndRecipientSection(
                     state = state,
@@ -189,7 +203,7 @@ fun PaymentDetailsScreen(
                             .padding(vertical = KptTheme.spacing.lg),
                     ) {
                         Button(
-                            onClick = { },
+                            onClick = onShareScreenshot,
                             colors = ButtonDefaults.buttonColors(
                                 containerColor = KptTheme.colorScheme.primary,
                             ),
@@ -440,6 +454,7 @@ private fun TransactionMetadataSection(
                     Text(
                         text = state.payerAccountLast4Digits,
                         style = KptTheme.typography.titleLarge,
+                        fontWeight = FontWeight.Normal,
                         color = KptTheme.colorScheme.onSurfaceVariant,
                     )
                 }
@@ -644,7 +659,7 @@ private fun InfoRow(
         Text(
             text = label,
             style = KptTheme.typography.labelLarge,
-            fontWeight = FontWeight.Normal,
+            fontWeight = FontWeight.SemiBold,
             color = KptTheme.colorScheme.onSurfaceVariant,
         )
         Text(
@@ -676,8 +691,6 @@ private fun BrandingSection(
             style = KptTheme.typography.labelLarge,
             color = KptTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
         )
-
-        Spacer(modifier = Modifier.height(KptTheme.spacing.md))
     }
 }
 
@@ -688,6 +701,7 @@ fun PaymentDetailsScreenPreview() {
         onBackClick = {},
         onPayAgainClick = {},
         onRetryClick = {},
+        onShareScreenshot = {},
         transactionId = "",
     )
 }

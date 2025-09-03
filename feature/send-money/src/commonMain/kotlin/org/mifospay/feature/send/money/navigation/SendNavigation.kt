@@ -355,6 +355,7 @@ fun NavGraphBuilder.paymentDetailsScreen(
     onBackClick: () -> Unit,
     onPayAgainClick: () -> Unit,
     onRetryClick: () -> Unit,
+    onShareScreenshot: () -> Unit,
 ) {
     composableWithSlideTransitions(
         route = PAYMENT_DETAILS_BASE_ROUTE,
@@ -370,6 +371,7 @@ fun NavGraphBuilder.paymentDetailsScreen(
             onBackClick = onBackClick,
             onPayAgainClick = onPayAgainClick,
             onRetryClick = onRetryClick,
+            onShareScreenshot = onShareScreenshot,
             transactionId = transactionId,
         )
     }
