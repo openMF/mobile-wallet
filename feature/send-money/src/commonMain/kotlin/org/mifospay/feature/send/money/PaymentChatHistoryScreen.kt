@@ -53,12 +53,12 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.koin.compose.viewmodel.koinViewModel
 import org.mifospay.core.common.CurrencyFormatter
-import org.mifospay.core.common.DateHelper
 import org.mifospay.core.designsystem.component.MifosScaffold
 import org.mifospay.core.designsystem.icon.MifosIcons
 import org.mifospay.core.ui.AvatarBox
 import template.core.base.designsystem.theme.KptTheme
 
+// TODO make the topbar back button consistent with other screens
 @Composable
 fun PaymentChatHistoryScreen(
     onBackClick: () -> Unit,
@@ -143,7 +143,7 @@ private fun UserProfileTopBar(
             Text(
                 text = if (userType == UserType.BUSINESS) businessName else bankingName,
                 style = KptTheme.typography.titleMedium,
-                fontWeight = FontWeight.SemiBold,
+                fontWeight = FontWeight.Medium,
                 color = KptTheme.colorScheme.onSurface,
             )
 
@@ -226,7 +226,7 @@ private fun PaymentHistoryGroup(
             }
 
             if (transaction != group.transactions.last()) {
-                Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(16.dp))
             }
         }
     }
@@ -258,13 +258,9 @@ private fun PaymentCard(
                 .padding(16.dp),
         ) {
             Text(
-                text = if (transaction.isSent) {
-                    "Payment to ${getFirstName(transaction.recipientName)}"
-                } else {
-                    "Payment from ${getFirstName(transaction.recipientName)}"
-                },
+                text = "Payment to ${getFirstName(transaction.recipientName)}",
                 style = KptTheme.typography.titleMedium,
-                fontWeight = FontWeight.SemiBold,
+                fontWeight = FontWeight.Medium,
                 color = KptTheme.colorScheme.onSurface,
             )
 
@@ -281,7 +277,7 @@ private fun PaymentCard(
             Text(
                 text = formatAmount(transaction.amount),
                 style = KptTheme.typography.headlineSmall,
-                fontWeight = FontWeight.SemiBold,
+                fontWeight = FontWeight.Medium,
                 color = KptTheme.colorScheme.onSurface,
             )
 
@@ -304,7 +300,7 @@ private fun PaymentCard(
                     Text(
                         text = "Paid - ${formatPaymentDate(transaction.paymentDate)}",
                         style = KptTheme.typography.bodyMedium,
-                        fontWeight = FontWeight.SemiBold,
+                        fontWeight = FontWeight.Medium,
                         color = KptTheme.colorScheme.onSurfaceVariant,
                     )
                 }
@@ -350,7 +346,7 @@ private fun PaymentActionBar(
                 Text(
                     text = "Pay",
                     style = KptTheme.typography.titleMedium,
-                    fontWeight = FontWeight.SemiBold,
+                    fontWeight = FontWeight.Medium,
                 )
             }
 
@@ -432,18 +428,6 @@ private fun MessageInput(
                 modifier = Modifier.size(20.dp),
             )
         }
-    }
-}
-
-private fun formatGroupDate(dateString: String): String {
-    return try {
-        // Parse the date string (e.g., "27 Aug 2025") and add current time
-        val currentDate = DateHelper.currentDate
-        val time = "${currentDate.hour.toString().padStart(2, '0')}:${currentDate.minute.toString().padStart(2, '0')}"
-        val amPm = if (currentDate.hour < 12) "am" else "pm"
-        "$dateString, $time $amPm"
-    } catch (e: Exception) {
-        dateString
     }
 }
 

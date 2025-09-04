@@ -64,7 +64,7 @@ class PaymentChatHistoryViewModel : ViewModel() {
                 transactions = listOf(
                     PaymentTransaction(
                         transactionId = "txn_005",
-                        recipientName = "Lisa Chen",
+                        recipientName = "Jane Smith",
                         amount = "3,200.00",
                         note = "Shopping payment",
                         paymentDate = "25 Sep 2025",
@@ -78,7 +78,7 @@ class PaymentChatHistoryViewModel : ViewModel() {
                 transactions = listOf(
                     PaymentTransaction(
                         transactionId = "txn_003",
-                        recipientName = "Emma Davis",
+                        recipientName = "Jane Smith",
                         amount = "2,000.00",
                         note = "Dinner payment",
                         paymentDate = "26 Sep 2025",
@@ -87,7 +87,7 @@ class PaymentChatHistoryViewModel : ViewModel() {
                     ),
                     PaymentTransaction(
                         transactionId = "txn_004",
-                        recipientName = "Alex Brown",
+                        recipientName = "You",
                         amount = "750.00",
                         note = "Movie tickets",
                         paymentDate = "26 Sep 2025",
@@ -101,7 +101,7 @@ class PaymentChatHistoryViewModel : ViewModel() {
                 transactions = listOf(
                     PaymentTransaction(
                         transactionId = "txn_001",
-                        recipientName = "Sarah Wilson",
+                        recipientName = "Jane Smith",
                         amount = "1,500.00",
                         note = "Lunch payment",
                         paymentDate = "27 Sep 2025",
@@ -110,7 +110,7 @@ class PaymentChatHistoryViewModel : ViewModel() {
                     ),
                     PaymentTransaction(
                         transactionId = "txn_002",
-                        recipientName = "Mike Johnson",
+                        recipientName = "Jane Smith",
                         amount = "500.00",
                         note = "Coffee and snacks",
                         paymentDate = "27 Sep 2025",
