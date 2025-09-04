@@ -74,6 +74,7 @@ internal fun NotificationScreen(
         topBarTitle = stringResource(Res.string.feature_notification_notifications),
         backPress = navigateBack,
         modifier = modifier,
+        containerColor = KptTheme.colorScheme.background,
     ) {
         Box(
             modifier = Modifier

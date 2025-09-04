@@ -31,6 +31,7 @@ import mobile_wallet.feature.make_transfer.generated.resources.feature_make_tran
 import org.jetbrains.compose.resources.StringResource
 import org.mifospay.core.common.DataState
 import org.mifospay.core.common.DateHelper
+import org.mifospay.core.common.StringResourceSerializer
 import org.mifospay.core.common.getSerialized
 import org.mifospay.core.common.setSerialized
 import org.mifospay.core.common.utils.capitalizeWords
@@ -238,9 +239,15 @@ internal data class MakeTransferState(
         data object Loading : DialogState
 
         @Serializable
-        sealed interface Error : DialogState {
-            data class StringMessage(val message: String) : Error
-            data class ResourceMessage(val message: StringResource) : Error
+        sealed class Error : DialogState {
+            @Serializable
+            data class StringMessage(val message: String) : Error()
+
+            @Serializable
+            data class ResourceMessage(
+                @Serializable(with = StringResourceSerializer::class)
+                val message: StringResource,
+            ) : Error()
         }
     }
 }

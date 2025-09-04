@@ -19,7 +19,7 @@ fun main() {
     application {
         initKoin()
         // Initialize FileKit
-        FileKit.init(appId = "org.mifospay.desktop")
+        FileKit.init(appId = "org.mifospay")
         val windowState = rememberWindowState()
         Window(
             onCloseRequest = ::exitApplication,
