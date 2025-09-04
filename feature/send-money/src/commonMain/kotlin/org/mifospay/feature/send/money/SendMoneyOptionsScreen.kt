@@ -70,6 +70,7 @@ fun SendMoneyOptionsScreen(
     onQrCodeScanned: (String) -> Unit,
     onNavigateToPayeeDetails: (String) -> Unit,
     onPaymentHistoryClick: () -> Unit,
+    onUpiTransactionHistoryClick: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: SendMoneyOptionsViewModel = koinViewModel(),
 ) {
@@ -149,9 +150,7 @@ fun SendMoneyOptionsScreen(
                 Spacer(modifier = Modifier.height(KptTheme.spacing.md))
 
                 TransactionHistorySection(
-                    onSeeAllClick = {
-                        // TODO: Navigate to full transaction history
-                    },
+                    onSeeAllClick = onUpiTransactionHistoryClick,
                 )
 
                 Spacer(modifier = Modifier.height(KptTheme.spacing.md))

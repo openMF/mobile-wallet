@@ -25,6 +25,7 @@ import org.mifospay.feature.send.money.PaymentSuccessScreen
 import org.mifospay.feature.send.money.SendMoneyOptionsScreen
 import org.mifospay.feature.send.money.SendMoneyScreen
 import org.mifospay.feature.send.money.UpiPinScreen
+import org.mifospay.feature.send.money.UpiTransactionHistoryScreen
 
 const val SEND_MONEY_ROUTE = "send_money_route"
 const val SEND_MONEY_ARG = "requestData"
@@ -63,6 +64,7 @@ const val PAYMENT_SUCCESS_TRANSACTION_TIMESTAMP_ARG = "transactionTimestamp"
 const val PAYMENT_SUCCESS_BASE_ROUTE = "$PAYMENT_SUCCESS_ROUTE?$PAYMENT_SUCCESS_PAYEE_NAME_ARG={$PAYMENT_SUCCESS_PAYEE_NAME_ARG}&$PAYMENT_SUCCESS_AMOUNT_ARG={$PAYMENT_SUCCESS_AMOUNT_ARG}&$PAYMENT_SUCCESS_UPI_NAME_ARG={$PAYMENT_SUCCESS_UPI_NAME_ARG}&$PAYMENT_SUCCESS_TRANSACTION_TIMESTAMP_ARG={$PAYMENT_SUCCESS_TRANSACTION_TIMESTAMP_ARG}"
 
 const val PAYMENT_CHAT_HISTORY_ROUTE = "payment_chat_history_route"
+const val UPI_TRANSACTION_HISTORY_ROUTE = "upi_transaction_history_route"
 const val PAYMENT_DETAILS_ROUTE = "payment_details_route"
 const val PAYMENT_DETAILS_TRANSACTION_ID_ARG = "transactionId"
 const val PAYMENT_DETAILS_BASE_ROUTE = "$PAYMENT_DETAILS_ROUTE/{$PAYMENT_DETAILS_TRANSACTION_ID_ARG}"
@@ -160,6 +162,10 @@ fun NavController.navigateToPaymentChatHistoryScreen(
     navOptions: NavOptions? = null,
 ) = navigate(PAYMENT_CHAT_HISTORY_ROUTE, navOptions)
 
+fun NavController.navigateToUpiTransactionHistoryScreen(
+    navOptions: NavOptions? = null,
+) = navigate(UPI_TRANSACTION_HISTORY_ROUTE, navOptions)
+
 fun NavGraphBuilder.sendMoneyScreen(
     onBackClick: () -> Unit,
     navigateToTransferScreen: (String) -> Unit,
@@ -194,6 +200,7 @@ fun NavGraphBuilder.sendMoneyOptionsScreen(
     onQrCodeScanned: (String) -> Unit,
     onNavigateToPayeeDetails: (String) -> Unit,
     onPaymentHistoryClick: () -> Unit,
+    onUpiTransactionHistoryClick: () -> Unit,
 ) {
     composableWithSlideTransitions(
         route = SEND_MONEY_OPTIONS_ROUTE,
@@ -207,6 +214,7 @@ fun NavGraphBuilder.sendMoneyOptionsScreen(
             onQrCodeScanned = onQrCodeScanned,
             onNavigateToPayeeDetails = onNavigateToPayeeDetails,
             onPaymentHistoryClick = onPaymentHistoryClick,
+            onUpiTransactionHistoryClick = onUpiTransactionHistoryClick,
         )
     }
 }
@@ -347,6 +355,18 @@ fun NavGraphBuilder.paymentChatHistoryScreen(
             onBackClick = onBackClick,
             onPaymentClick = onPaymentClick,
             onTransactionClick = onTransactionClick,
+        )
+    }
+}
+
+fun NavGraphBuilder.upiTransactionHistoryScreen(
+    onBackClick: () -> Unit,
+) {
+    composableWithSlideTransitions(
+        route = UPI_TRANSACTION_HISTORY_ROUTE,
+    ) {
+        UpiTransactionHistoryScreen(
+            onBackClick = onBackClick,
         )
     }
 }

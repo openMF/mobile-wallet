@@ -84,6 +84,7 @@ import org.mifospay.feature.send.money.navigation.navigateToPaymentSuccessScreen
 import org.mifospay.feature.send.money.navigation.navigateToSendMoneyOptionsScreen
 import org.mifospay.feature.send.money.navigation.navigateToSendMoneyScreen
 import org.mifospay.feature.send.money.navigation.navigateToUpiPinScreen
+import org.mifospay.feature.send.money.navigation.navigateToUpiTransactionHistoryScreen
 import org.mifospay.feature.send.money.navigation.payeeDetailsScreen
 import org.mifospay.feature.send.money.navigation.paymentChatHistoryScreen
 import org.mifospay.feature.send.money.navigation.paymentDetailsScreen
@@ -92,6 +93,7 @@ import org.mifospay.feature.send.money.navigation.paymentSuccessScreen
 import org.mifospay.feature.send.money.navigation.sendMoneyOptionsScreen
 import org.mifospay.feature.send.money.navigation.sendMoneyScreen
 import org.mifospay.feature.send.money.navigation.upiPinScreen
+import org.mifospay.feature.send.money.navigation.upiTransactionHistoryScreen
 import org.mifospay.feature.settings.navigation.settingsScreen
 import org.mifospay.feature.standing.instruction.StandingInstructionsScreen
 import org.mifospay.feature.standing.instruction.createOrUpdate.addEditSIScreen
@@ -331,6 +333,9 @@ internal fun MifosNavHost(
             onPaymentHistoryClick = {
                 navController.navigateToPaymentChatHistoryScreen()
             },
+            onUpiTransactionHistoryClick = {
+                navController.navigateToUpiTransactionHistoryScreen()
+            },
         )
 
         sendMoneyScreen(
@@ -348,6 +353,10 @@ internal fun MifosNavHost(
             onTransactionClick = { transactionId ->
                 navController.navigateToPaymentDetailsScreen(transactionId)
             },
+        )
+
+        upiTransactionHistoryScreen(
+            onBackClick = navController::popBackStack,
         )
 
         paymentDetailsScreen(

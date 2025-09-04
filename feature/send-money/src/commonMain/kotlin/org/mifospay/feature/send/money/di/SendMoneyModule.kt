@@ -20,6 +20,7 @@ import org.mifospay.feature.send.money.ScannerModule
 import org.mifospay.feature.send.money.SendMoneyOptionsViewModel
 import org.mifospay.feature.send.money.SendMoneyViewModel
 import org.mifospay.feature.send.money.UpiPinViewModel
+import org.mifospay.feature.send.money.UpiTransactionHistoryViewModel
 
 val SendMoneyModule = module {
     includes(ScannerModule)
@@ -31,4 +32,5 @@ val SendMoneyModule = module {
     viewModelOf(::UpiPinViewModel)
     viewModelOf(::PaymentChatHistoryViewModel)
     viewModelOf(::PaymentDetailsViewModel)
+    viewModelOf(::UpiTransactionHistoryViewModel)
 }
