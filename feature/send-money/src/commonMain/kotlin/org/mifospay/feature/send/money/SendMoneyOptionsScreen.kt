@@ -52,6 +52,7 @@ import mobile_wallet.feature.send_money.generated.resources.feature_send_money_s
 import mobile_wallet.feature.send_money.generated.resources.feature_send_money_send
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
+import org.mifospay.core.common.CurrencyFormatter
 import org.mifospay.core.designsystem.component.MifosGradientBackground
 import org.mifospay.core.designsystem.component.MifosScaffold
 import org.mifospay.core.designsystem.component.MifosTopBar
@@ -144,6 +145,14 @@ fun SendMoneyOptionsScreen(
                 Spacer(modifier = Modifier.height(KptTheme.spacing.md))
 
                 MerchantsSection()
+
+                Spacer(modifier = Modifier.height(KptTheme.spacing.md))
+
+                TransactionHistorySection(
+                    onSeeAllClick = {
+                        // TODO: Navigate to full transaction history
+                    },
+                )
 
                 Spacer(modifier = Modifier.height(KptTheme.spacing.md))
             }
@@ -410,6 +419,164 @@ private fun MerchantsSection(
         }
     }
 }
+
+@Composable
+private fun TransactionHistorySection(
+    onSeeAllClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    val dummyTransactions = listOf(
+        TransactionItem(
+            payeeName = "Rahul Sharma",
+            amount = 2500.0,
+            date = "15 August",
+            profileImageUrl = null,
+        ),
+        TransactionItem(
+            payeeName = "Priya Patel",
+            amount = 1800.0,
+            date = "14 August",
+            profileImageUrl = null,
+        ),
+        TransactionItem(
+            payeeName = "Amit Kumar",
+            amount = 3200.0,
+            date = "13 August",
+            profileImageUrl = null,
+        ),
+        TransactionItem(
+            payeeName = "Neha Singh",
+            amount = 950.0,
+            date = "12 August",
+            profileImageUrl = null,
+        ),
+        TransactionItem(
+            payeeName = "Vikram Mehta",
+            amount = 4100.0,
+            date = "11 August",
+            profileImageUrl = null,
+        ),
+    )
+
+    Column(
+        modifier = modifier.fillMaxWidth(),
+        verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.md),
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Text(
+                text = "UPI Transaction History",
+                style = KptTheme.typography.titleMedium,
+                fontWeight = FontWeight.SemiBold,
+                color = KptTheme.colorScheme.onSurface,
+            )
+
+            Row(
+                modifier = Modifier.clickable { onSeeAllClick() },
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(KptTheme.spacing.xs),
+            ) {
+                Text(
+                    text = "See All",
+                    style = KptTheme.typography.bodyMedium,
+                    fontWeight = FontWeight.Medium,
+                    color = KptTheme.colorScheme.primary,
+                )
+                Icon(
+                    imageVector = MifosIcons.ChevronRight,
+                    contentDescription = "See All",
+                    modifier = Modifier.size(16.dp),
+                    tint = KptTheme.colorScheme.primary,
+                )
+            }
+        }
+
+        Column(
+            verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.md),
+        ) {
+            dummyTransactions.forEach { transaction ->
+                TransactionItemRow(transaction = transaction)
+            }
+        }
+    }
+}
+
+@Composable
+private fun TransactionItemRow(
+    transaction: TransactionItem,
+    modifier: Modifier = Modifier,
+) {
+    Row(
+        modifier = modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(KptTheme.spacing.md),
+    ) {
+        Box(
+            modifier = Modifier
+                .size(40.dp)
+                .background(
+                    color = KptTheme.colorScheme.primaryContainer,
+                    shape = CircleShape,
+                ),
+            contentAlignment = Alignment.Center,
+        ) {
+            if (transaction.profileImageUrl != null) {
+                Text(
+                    text = transaction.payeeName.take(1).uppercase(),
+                    style = KptTheme.typography.bodyMedium,
+                    fontWeight = FontWeight.Bold,
+                    color = KptTheme.colorScheme.onPrimaryContainer,
+                )
+            } else {
+                Text(
+                    text = transaction.payeeName.take(1).uppercase(),
+                    style = KptTheme.typography.bodyMedium,
+                    fontWeight = FontWeight.Bold,
+                    color = KptTheme.colorScheme.onPrimaryContainer,
+                )
+            }
+        }
+
+        Column(
+            modifier = Modifier.weight(1f),
+            verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.xs),
+        ) {
+            Text(
+                text = transaction.payeeName.uppercase(),
+                style = KptTheme.typography.bodyMedium,
+                fontWeight = FontWeight.SemiBold,
+                color = KptTheme.colorScheme.onSurface,
+            )
+            Text(
+                text = transaction.date,
+                style = KptTheme.typography.bodySmall,
+                fontWeight = FontWeight.Normal,
+                color = KptTheme.colorScheme.onSurfaceVariant,
+            )
+        }
+
+        Text(
+            text = CurrencyFormatter.format(
+                balance = transaction.amount,
+                currencyCode = "INR",
+                maximumFractionDigits = 2,
+            ),
+            style = KptTheme.typography.bodyMedium,
+            fontWeight = FontWeight.SemiBold,
+            color = KptTheme.colorScheme.onSurface,
+        )
+    }
+}
+
+data class TransactionItem(
+    val payeeName: String,
+    val amount: Double,
+    val date: String,
+    val profileImageUrl: String?,
+)
 
 @Composable
 private fun PersonItem(
