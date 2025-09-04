@@ -12,102 +12,43 @@ on:
 
 jobs:
   build_and_ship:
-    name: Build & Ship to → ${{ inputs.distribution }}
     runs-on: macos-latest
-
-    env:
-      KEYCHAIN_NAME: signing-${{ github.run_id }}.keychain-db
-      KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
-      APP_IDENTIFIER: org.mifospay
-      APPSTORE_KEY_ID: ${{ secrets.APPSTORE_KEY_ID }}
-      APPSTORE_ISSUER_ID: ${{ secrets.APPSTORE_ISSUER_ID }}
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: ☕ Set up Java 21 (Temurin)
-        uses: actions/setup-java@v4
-        with:
-          distribution: temurin
-          java-version: "21"
-
-      - name: Set up Ruby & bundle
-        uses: ruby/setup-ruby@v1
-        with:
-          bundler-cache: true
-
-      - name: Install Fastlane dependencies
-        shell: bash
-        run: |
-          gem install bundler
-          bundler install --jobs 4 --retry 3 
-
-      - name: Create & unlock temporary keychain
-        run: |
-          security create-keychain -p "${KEYCHAIN_PASSWORD}" "${KEYCHAIN_NAME}"
-          security set-keychain-settings -lut 21600 "${KEYCHAIN_NAME}"
-          security unlock-keychain -p "${KEYCHAIN_PASSWORD}" "${KEYCHAIN_NAME}"
-          security list-keychains -d user -s "${KEYCHAIN_NAME}" $(security list-keychains -d user | sed 's/[ "]//g')
-
-      - name: Import Mac App Distribution certificate
-        env:
-          MAC_APP_DISTRIBUTION_CERTIFICATE_B64: ${{ secrets.MAC_APP_DISTRIBUTION_CERTIFICATE_B64 }}
-          CERTIFICATES_PASSWORD: ${{ secrets.CERTIFICATES_PASSWORD }}
-        run: |
-          CERT="${RUNNER_TEMP}/mac_app_distribution.p12"
-          printf '%s' "$MAC_APP_DISTRIBUTION_CERTIFICATE_B64" | base64 -D > "$CERT"
-          security import "$CERT" -P "$CERTIFICATES_PASSWORD" -A -t cert -f pkcs12 -k "${KEYCHAIN_NAME}"
-          security set-key-partition-list -S apple-tool:,apple: -k "${KEYCHAIN_PASSWORD}" "${KEYCHAIN_NAME}"
-          echo "APP_CERTIFICATE_PATH=$CERT" >> "$GITHUB_ENV"
-
-      - name: Import Mac Installer Distribution certificate
-        env:
-          MAC_INSTALLER_DISTRIBUTION_CERTIFICATE_B64: ${{ secrets.MAC_INSTALLER_DISTRIBUTION_CERTIFICATE_B64 }}
-          CERTIFICATES_PASSWORD: ${{ secrets.CERTIFICATES_PASSWORD }}
-        run: |
-          CERT="${RUNNER_TEMP}/mac_installer_distribution.p12"
-          printf '%s' "$MAC_INSTALLER_DISTRIBUTION_CERTIFICATE_B64" | base64 -D > "$CERT"
-          security import "$CERT" -P "$CERTIFICATES_PASSWORD" -A -t cert -f pkcs12 -k "${KEYCHAIN_NAME}"
-          security set-key-partition-list -S apple-tool:,apple: -k "${KEYCHAIN_PASSWORD}" "${KEYCHAIN_NAME}"
-          echo "INSTALLER_CERTIFICATE_PATH=$CERT" >> "$GITHUB_ENV"
-
-      - name: Write Embedded provisioning profile
-        env:
-          MAC_EMBEDDED_PROVISION_B64: ${{ secrets.MAC_EMBEDDED_PROVISION_B64 }}
-        run: |
-          mkdir -p cmp-desktop
-          echo "$MAC_EMBEDDED_PROVISION_B64" > cmp-desktop/embedded.provisionprofile.b64
-          base64 -d -i cmp-desktop/embedded.provisionprofile.b64 > cmp-desktop/embedded.provisionprofile
-
-      - name: Write Runtime provisioning profile
-        env:
-          MAC_RUNTIME_PROVISION_B64: ${{ secrets.MAC_RUNTIME_PROVISION_B64 }}
-        run: |
-          echo "$MAC_RUNTIME_PROVISION_B64" > cmp-desktop/runtime.provisionprofile.b64
-          base64 -d -i cmp-desktop/runtime.provisionprofile.b64 > cmp-desktop/runtime.provisionprofile
-
-      - name: Write App Store Connect API key (.p8)
-        env:
-          APPSTORE_CONNECT_API_KEY_B64: ${{ secrets.APPSTORE_AUTH_KEY }}
-        run: |
-          mkdir -p secrets
-          echo "$APPSTORE_CONNECT_API_KEY_B64" | base64 --decode > secrets/Auth_key.p8
-
       - name: Upload to TestFlight
         if: ${{ inputs.distribution == 'testflight' }}
-        run: |
-          bundle exec fastlane mac desktop_testflight \
-            app_identifier:"$APP_IDENTIFIER" \
-            appstore_key_id:"$APPSTORE_KEY_ID" \
-            appstore_issuer_id:"$APPSTORE_ISSUER_ID" \
-            key_file_path:secrets/Auth_key.p8
+        uses: openMF/mifos-x-actionhub-publish-macos-on-appstore-testflight-kmp@v1.0.0
+        with:
+          app_identifier: 'org.mifospay'
+          cmp_desktop_dir: 'cmp-desktop'
+          keychain_name: signing.keychain-db           # optional
+          java_version: '21'                           # optional (min 18)
+          keychain_password: ${{ secrets.KEYCHAIN_PASSWORD }}
+          certificates_password: ${{ secrets.CERTIFICATES_PASSWORD }}
+          mac_app_distribution_certificate_b64: ${{ secrets.MAC_APP_DISTRIBUTION_CERTIFICATE_B64 }}
+          mac_installer_distribution_certificate_b64: ${{ secrets.MAC_INSTALLER_DISTRIBUTION_CERTIFICATE_B64 }}
+          mac_embedded_provision_b64: ${{ secrets.MAC_EMBEDDED_PROVISION_B64 }}
+          mac_runtime_provision_b64: ${{ secrets.MAC_RUNTIME_PROVISION_B64 }}
+          appstore_key_id: ${{ secrets.APPSTORE_KEY_ID }}
+          appstore_issuer_id: ${{ secrets.APPSTORE_ISSUER_ID }}
+          appstore_auth_key_b64: ${{ secrets.APPSTORE_AUTH_KEY }}
 
       - name: Submit to App Store (Production)
         if: ${{ inputs.distribution == 'appstore' }}
-        run: |
-          bundle exec fastlane mac desktop_release \
-            app_identifier:"$APP_IDENTIFIER" \
-            appstore_key_id:"$APPSTORE_KEY_ID" \
-            appstore_issuer_id:"$APPSTORE_ISSUER_ID" \
-            key_file_path:secrets/Auth_key.p8
+        uses: openMF/mifos-x-actionhub-publish-macos-on-appstore-kmp@v1.0.0
+        with:
+          app_identifier: 'org.mifospay'
+          cmp_desktop_dir: 'cmp-desktop'
+          keychain_name: signing.keychain-db           # optional
+          java_version: '21'                           # optional (min 18)
+          keychain_password: ${{ secrets.KEYCHAIN_PASSWORD }}
+          certificates_password: ${{ secrets.CERTIFICATES_PASSWORD }}
+          mac_app_distribution_certificate_b64: ${{ secrets.MAC_APP_DISTRIBUTION_CERTIFICATE_B64 }}
+          mac_installer_distribution_certificate_b64: ${{ secrets.MAC_INSTALLER_DISTRIBUTION_CERTIFICATE_B64 }}
+          mac_embedded_provision_b64: ${{ secrets.MAC_EMBEDDED_PROVISION_B64 }}
+          mac_runtime_provision_b64: ${{ secrets.MAC_RUNTIME_PROVISION_B64 }}
+          appstore_key_id: ${{ secrets.APPSTORE_KEY_ID }}
+          appstore_issuer_id: ${{ secrets.APPSTORE_ISSUER_ID }}
+          appstore_auth_key_b64: ${{ secrets.APPSTORE_AUTH_KEY }}
