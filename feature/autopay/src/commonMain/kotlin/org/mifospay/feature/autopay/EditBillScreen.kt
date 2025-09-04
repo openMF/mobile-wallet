@@ -45,7 +45,6 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.datetime.Clock
 import org.koin.compose.viewmodel.koinViewModel
-import org.mifospay.core.common.DateHelper
 import org.mifospay.core.designsystem.component.BasicDialogState
 import org.mifospay.core.designsystem.component.LoadingDialogState
 import org.mifospay.core.designsystem.component.MifosBasicDialog
@@ -331,8 +330,4 @@ fun EditBillScreen(
             onDismissRequest = { viewModel.trySendAction(EditBillAction.ClearError) },
         )
     }
-}
-
-private fun formatDateForDisplay(timestamp: Long): String {
-    return DateHelper.getDateAsStringFromLong(timestamp)
 }

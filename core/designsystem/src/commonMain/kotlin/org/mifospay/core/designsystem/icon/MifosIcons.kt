@@ -48,6 +48,8 @@ import androidx.compose.material.icons.filled.QrCode2
 import androidx.compose.material.icons.filled.RadioButtonChecked
 import androidx.compose.material.icons.filled.RadioButtonUnchecked
 import androidx.compose.material.icons.filled.Receipt
+import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material.icons.filled.Repeat
 import androidx.compose.material.icons.filled.Schedule
 import androidx.compose.material.icons.filled.Security
 import androidx.compose.material.icons.filled.Share
@@ -59,6 +61,7 @@ import androidx.compose.material.icons.outlined.Cancel
 import androidx.compose.material.icons.outlined.DeleteOutline
 import androidx.compose.material.icons.outlined.DoneAll
 import androidx.compose.material.icons.outlined.Edit
+import androidx.compose.material.icons.outlined.Email
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.Lock
@@ -162,4 +165,10 @@ object MifosIcons {
     val Rule = Icons.AutoMirrored.Filled.Rule
     val Receipt = Icons.Filled.Receipt
     val List = Icons.AutoMirrored.Filled.List
+
+    val Email = Icons.Outlined.Email
+
+    val Repeat = Icons.Filled.Repeat
+
+    val Refresh = Icons.Filled.Refresh
 }

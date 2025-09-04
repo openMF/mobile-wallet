@@ -29,6 +29,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -142,14 +143,35 @@ fun BillerListScreen(
                 }
             }
 
-            MifosButton(
-                text = { Text("Back to AutoPay") },
-                onClick = onNavigateBack,
+            Column(
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
-                    .padding(16.dp)
-                    .fillMaxWidth(),
-            )
+                    .padding(16.dp),
+            ) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.Bottom,
+                ) {
+                    Spacer(modifier = Modifier.weight(1f))
+
+                    FloatingActionButton(
+                        onClick = { viewModel.trySendAction(BillerListAction.AddNewBiller) },
+                        modifier = Modifier.padding(bottom = 16.dp),
+                    ) {
+                        Icon(
+                            imageVector = MifosIcons.Add,
+                            contentDescription = "Add biller",
+                        )
+                    }
+                }
+
+                MifosButton(
+                    text = { Text("Back to AutoPay") },
+                    onClick = onNavigateBack,
+                    modifier = Modifier.fillMaxWidth(),
+                )
+            }
         }
     }
 }
@@ -227,7 +249,7 @@ private fun BillerList(
     LazyColumn(
         modifier = modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(12.dp),
-        contentPadding = PaddingValues(bottom = 80.dp),
+        contentPadding = PaddingValues(bottom = 100.dp),
     ) {
         items(
             items = billers,

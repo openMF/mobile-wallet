@@ -16,9 +16,13 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.datetime.Clock
 import kotlinx.serialization.Serializable
 import org.mifospay.core.common.getSerialized
 import org.mifospay.core.common.setSerialized
+import org.mifospay.core.model.autopay.Bill
+import org.mifospay.core.model.autopay.BillStatus
+import org.mifospay.core.model.autopay.RecurrencePattern
 import org.mifospay.core.ui.utils.BaseViewModel
 
 class AutoPayViewModel(
@@ -86,77 +90,101 @@ class AutoPayViewModel(
     private fun loadDashboardData() {
         mutableStateFlow.update { it.copy(isLoading = true) }
 
-        // Simulate API call delay
         viewModelScope.launch {
-            delay(1000)
+            try {
+                delay(1000)
 
-            val dummySchedules = listOf(
-                AutoPaySchedule(
-                    id = "1",
-                    name = "Monthly Rent Payment",
-                    amount = 1200.0,
-                    currency = "USD",
-                    frequency = "Monthly",
-                    nextPaymentDate = "2024-02-15",
-                    status = AutoPayStatus.ACTIVE,
-                    recipientName = "Landlord Corp",
-                    accountNumber = "****1234",
-                ),
-                AutoPaySchedule(
-                    id = "2",
-                    name = "Internet Bill",
-                    amount = 89.99,
-                    currency = "USD",
-                    frequency = "Monthly",
-                    nextPaymentDate = "2024-02-20",
-                    status = AutoPayStatus.ACTIVE,
-                    recipientName = "NetConnect",
-                    accountNumber = "****5678",
-                ),
-                AutoPaySchedule(
-                    id = "3",
-                    name = "Gym Membership",
-                    amount = 45.0,
-                    currency = "USD",
-                    frequency = "Monthly",
-                    nextPaymentDate = "2024-02-25",
-                    status = AutoPayStatus.PAUSED,
-                    recipientName = "FitLife Gym",
-                    accountNumber = "****9012",
-                ),
-            )
+                // Get bills with AutoPay enabled (this would come from a repository in real implementation)
+                val billsWithAutoPay = getBillsWithAutoPay()
 
-            val dummyUpcomingPayments = listOf(
-                UpcomingPayment(
-                    id = "1",
-                    scheduleName = "Monthly Rent Payment",
-                    amount = 1200.0,
-                    currency = "USD",
-                    dueDate = "2024-02-15",
-                    status = PaymentStatus.UPCOMING,
-                    recipientName = "Landlord Corp",
-                ),
-                UpcomingPayment(
-                    id = "2",
-                    scheduleName = "Internet Bill",
-                    amount = 89.99,
-                    currency = "USD",
-                    dueDate = "2024-02-20",
-                    status = PaymentStatus.UPCOMING,
-                    recipientName = "NetConnect",
-                ),
-            )
+                val activeSchedules = billsWithAutoPay
+                    .filter { it.status == BillStatus.ACTIVE }
+                    .map { it.toAutoPaySchedule() }
 
-            mutableStateFlow.update {
-                it.copy(
-                    isLoading = false,
-                    activeSchedules = dummySchedules,
-                    upcomingPayments = dummyUpcomingPayments,
-                    totalActiveSchedules = dummySchedules.size,
-                    totalUpcomingPayments = dummyUpcomingPayments.size,
-                )
+                // Calculate upcoming payments
+                val upcomingPayments = billsWithAutoPay
+                    .getActiveBillsWithAutoPay()
+                    .calculateUpcomingPayments()
+
+                mutableStateFlow.update {
+                    it.copy(
+                        isLoading = false,
+                        activeSchedules = activeSchedules,
+                        upcomingPayments = upcomingPayments,
+                        totalActiveSchedules = activeSchedules.size,
+                        totalUpcomingPayments = upcomingPayments.size,
+                        error = null,
+                    )
+                }
+            } catch (e: Exception) {
+                mutableStateFlow.update {
+                    it.copy(
+                        isLoading = false,
+                        error = e.message ?: "Failed to load dashboard data",
+                    )
+                }
             }
         }
+    }
+
+    /**
+     * Gets bills with AutoPay enabled
+     * In a real implementation, this would come from a repository
+     */
+    private fun getBillsWithAutoPay(): List<Bill> {
+        return listOf(
+            Bill(
+                id = "1",
+                name = "Monthly Rent Payment",
+                amount = 1200.0,
+                currency = "USD",
+                dueDate = Clock.System.now().toEpochMilliseconds() + (15 * 24 * 60 * 60 * 1000L),
+                recurrencePattern = RecurrencePattern.MONTHLY,
+                billerId = "biller1",
+                billerName = "Landlord Corp",
+                description = "Monthly rent payment",
+                isActive = true,
+                status = BillStatus.ACTIVE,
+                autoPayEnabled = true,
+                autoPayPaymentMethod = "Bank Account",
+                autoPaySourceAccount = "****1234",
+                autoPayMaxAmount = 1500.0,
+            ),
+            Bill(
+                id = "2",
+                name = "Internet Bill",
+                amount = 89.99,
+                currency = "USD",
+                dueDate = Clock.System.now().toEpochMilliseconds() + (20 * 24 * 60 * 60 * 1000L),
+                recurrencePattern = RecurrencePattern.MONTHLY,
+                billerId = "biller2",
+                billerName = "NetConnect",
+                description = "Monthly internet service",
+                isActive = true,
+                status = BillStatus.ACTIVE,
+                autoPayEnabled = true,
+                autoPayPaymentMethod = "Credit Card",
+                autoPaySourceAccount = "****5678",
+                autoPayMaxAmount = 100.0,
+            ),
+            Bill(
+                id = "3",
+                name = "Gym Membership",
+                amount = 45.0,
+                currency = "USD",
+                dueDate = Clock.System.now().toEpochMilliseconds() + (25 * 24 * 60 * 60 * 1000L),
+                recurrencePattern = RecurrencePattern.MONTHLY,
+                billerId = "biller3",
+                billerName = "FitLife Gym",
+                description = "Monthly gym membership",
+                isActive = true,
+                status = BillStatus.PAUSED,
+                autoPayEnabled = true,
+                autoPayPaymentMethod = "Bank Account",
+                autoPaySourceAccount = "****9012",
+                autoPayMaxAmount = 50.0,
+            ),
+        )
     }
 
     private fun refreshDashboard() {
@@ -168,7 +196,7 @@ class AutoPayViewModel(
     }
 
     private fun manageExistingSchedules() {
-        sendEvent(AutoPayEvent.NavigateToRules)
+        sendEvent(AutoPayEvent.NavigateToSetup)
     }
 
     private fun viewScheduleDetails(scheduleId: String) {
@@ -263,6 +291,8 @@ enum class PaymentStatus {
     PROCESSING,
     COMPLETED,
     FAILED,
+
+    CANCELLED,
 }
 
 sealed interface AutoPayEvent {

@@ -13,6 +13,7 @@ import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
 import org.mifospay.feature.autopay.AddBillViewModel
 import org.mifospay.feature.autopay.AddBillerViewModel
+import org.mifospay.feature.autopay.AutoPayPreferencesViewModel
 import org.mifospay.feature.autopay.AutoPayScheduleDetailsViewModel
 import org.mifospay.feature.autopay.AutoPaySetupViewModel
 import org.mifospay.feature.autopay.AutoPayViewModel
@@ -31,4 +32,5 @@ val AutoPayModule = module {
     viewModelOf(::EditBillViewModel)
     viewModelOf(::BillListViewModel)
     viewModelOf(::AutoPaySetupViewModel)
+    viewModelOf(::AutoPayPreferencesViewModel)
 }

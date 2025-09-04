@@ -25,7 +25,7 @@ import androidx.navigation.navOptions
 
 object AutoPayNavigation {
     const val AUTO_PAY_ROUTE = "autopay_route"
-    const val AUTO_PAY_SETUP_ROUTE = "autopay_setup_route"
+    const val AUTO_PAY_SETUP_ROUTE = "autopay_schedule_management_route" // Updated to reflect new purpose
     const val AUTO_PAY_SUCCESS_ROUTE = "autopay_success_route"
     const val AUTO_PAY_RULES_ROUTE = "autopay_rules_route"
     const val AUTO_PAY_PREFERENCES_ROUTE = "autopay_preferences_route"
@@ -168,16 +168,16 @@ fun NavGraphBuilder.autoPayGraph(
     }
 
     composableWithFadeTransitions(AutoPayNavigation.AUTO_PAY_SETUP_ROUTE) {
-        AutoPaySetupScreen(
+        AutoPayScheduleManagementScreen(
             onNavigateBack = onNavigateBack,
-            onNavigateToSuccess = {
-                navController.navigateToAutoPaySuccess(
-                    navOptions = navOptions {
-                        popUpTo(AutoPayNavigation.AUTO_PAY_SETUP_ROUTE) {
-                            inclusive = true
-                        }
-                    },
-                )
+            onNavigateToAddBill = {
+                navController.navigateToAddBill()
+            },
+            onNavigateToEditBill = { billId ->
+                navController.navigateToEditBill(billId)
+            },
+            onNavigateToBillList = {
+                navController.navigateToBillList()
             },
         )
     }

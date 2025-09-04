@@ -10,6 +10,7 @@
 package org.mifospay.feature.autopay
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -22,131 +23,323 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import org.koin.compose.viewmodel.koinViewModel
+import org.mifospay.core.designsystem.component.MifosButton
 import org.mifospay.core.designsystem.component.MifosScaffold
 import org.mifospay.core.designsystem.icon.MifosIcons
+import org.mifospay.core.ui.utils.EventsEffect
 
 @Composable
 fun AutoPayPreferencesScreen(
     onNavigateBack: () -> Unit,
     modifier: Modifier = Modifier,
+    viewModel: AutoPayPreferencesViewModel = koinViewModel(),
 ) {
+    val state by viewModel.stateFlow.collectAsStateWithLifecycle()
+
+    EventsEffect(viewModel) { event ->
+        when (event) {
+            is AutoPayPreferencesEvent.SettingsSaved -> {
+                onNavigateBack()
+            }
+            is AutoPayPreferencesEvent.ShowError -> {
+                // Handle error display
+            }
+        }
+    }
+
     MifosScaffold(
         modifier = modifier,
-        topBarTitle = "AutoPay Preferences",
+        topBarTitle = "AutoPay Settings",
         backPress = onNavigateBack,
     ) { paddingValues ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues)
-                .padding(16.dp)
-                .verticalScroll(rememberScrollState()),
-            verticalArrangement = Arrangement.spacedBy(16.dp),
-        ) {
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
+        if (state.isLoading) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues),
+                contentAlignment = Alignment.Center,
             ) {
-                Icon(
-                    imageVector = MifosIcons.Settings,
-                    contentDescription = null,
-                    modifier = Modifier.size(64.dp),
-                    tint = MaterialTheme.colorScheme.primary,
-                )
+                CircularProgressIndicator()
+            }
+        } else {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues)
+                    .padding(16.dp)
+                    .verticalScroll(rememberScrollState()),
+                verticalArrangement = Arrangement.spacedBy(16.dp),
+            ) {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                ) {
+                    Icon(
+                        imageVector = MifosIcons.Settings,
+                        contentDescription = null,
+                        modifier = Modifier.size(64.dp),
+                        tint = MaterialTheme.colorScheme.primary,
+                    )
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    Text(
+                        text = "AutoPay Settings",
+                        style = MaterialTheme.typography.headlineMedium,
+                        fontWeight = FontWeight.Medium,
+                    )
+
+                    Text(
+                        text = "Configure global AutoPay settings and preferences.",
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                }
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                Text(
-                    text = "AutoPay Preferences",
-                    style = MaterialTheme.typography.headlineMedium,
-                    fontWeight = FontWeight.Medium,
+                // General Settings
+                GeneralSettingsSection(
+                    settings = state.globalSettings,
+                    onToggleAutoPay = { enabled ->
+                        viewModel.trySendAction(AutoPayPreferencesAction.ToggleAutoPayEnabled(enabled))
+                    },
                 )
 
-                Text(
-                    text = "Customize your AutoPay experience and notification settings.",
-                    style = MaterialTheme.typography.bodyLarge,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                // Notification Settings
+                NotificationSettingsSection(
+                    settings = state.globalSettings.notificationSettings,
+                    onSettingsChanged = { notificationSettings ->
+                        viewModel.trySendAction(AutoPayPreferencesAction.UpdateNotificationSettings(notificationSettings))
+                    },
                 )
+
+                // Security Settings
+                SecuritySettingsSection(
+                    settings = state.globalSettings.securitySettings,
+                    onSettingsChanged = { securitySettings ->
+                        viewModel.trySendAction(AutoPayPreferencesAction.UpdateSecuritySettings(securitySettings))
+                    },
+                )
+
+                // AutoPay Rules
+                AutoPayRulesSection(
+                    rules = state.globalSettings.globalAutoPayRules,
+                    onRulesChanged = { rules ->
+                        viewModel.trySendAction(AutoPayPreferencesAction.UpdateAutoPayRules(rules))
+                    },
+                )
+
+                // Save Button
+                if (state.hasUnsavedChanges) {
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    MifosButton(
+                        onClick = { viewModel.trySendAction(AutoPayPreferencesAction.SaveSettings) },
+                        enabled = !state.isSaving,
+                        modifier = Modifier.fillMaxWidth(),
+                    ) {
+                        if (state.isSaving) {
+                            CircularProgressIndicator(
+                                modifier = Modifier.size(16.dp),
+                                strokeWidth = 2.dp,
+                            )
+                        } else {
+                            Text("Save Settings")
+                        }
+                    }
+                }
             }
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            PreferencesSection(
-                title = "Notifications",
-                preferences = listOf(
-                    PreferenceItem(
-                        title = "Payment Confirmations",
-                        description = "Receive notifications when payments are processed",
-                        icon = MifosIcons.OutlinedNotifications,
-                    ),
-                    PreferenceItem(
-                        title = "Failed Payment Alerts",
-                        description = "Get notified when payments fail",
-                        icon = MifosIcons.Warning,
-                    ),
-                    PreferenceItem(
-                        title = "Schedule Reminders",
-                        description = "Receive reminders before scheduled payments",
-                        icon = MifosIcons.Schedule,
-                    ),
-                ),
-            )
-
-            PreferencesSection(
-                title = "Security",
-                preferences = listOf(
-                    PreferenceItem(
-                        title = "Two-Factor Authentication",
-                        description = "Require 2FA for AutoPay changes",
-                        icon = MifosIcons.Security,
-                    ),
-                    PreferenceItem(
-                        title = "Payment Limits",
-                        description = "Set maximum payment amounts",
-                        icon = MifosIcons.AttachMoney,
-                    ),
-                ),
-            )
-
-            PreferencesSection(
-                title = "General",
-                preferences = listOf(
-                    PreferenceItem(
-                        title = "AutoPay Enabled",
-                        description = "Enable or disable AutoPay functionality",
-                        icon = MifosIcons.Power,
-                    ),
-                    PreferenceItem(
-                        title = "Default Payment Method",
-                        description = "Set your preferred payment method",
-                        icon = MifosIcons.CreditCard,
-                    ),
-                ),
-            )
         }
     }
 }
 
 @Composable
-private fun PreferencesSection(
-    title: String,
-    preferences: List<PreferenceItem>,
+private fun GeneralSettingsSection(
+    settings: org.mifospay.core.model.autopay.AutoPayGlobalSettings,
+    onToggleAutoPay: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    SettingsCard(
+        title = "General",
+        modifier = modifier,
+    ) {
+        SettingRow(
+            title = "AutoPay Enabled",
+            description = "Enable or disable AutoPay functionality globally",
+            icon = MifosIcons.Power,
+            checked = settings.isAutoPayEnabled,
+            onCheckedChange = onToggleAutoPay,
+        )
+    }
+}
+
+@Composable
+private fun NotificationSettingsSection(
+    settings: org.mifospay.core.model.autopay.NotificationSettings,
+    onSettingsChanged: (org.mifospay.core.model.autopay.NotificationSettings) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    SettingsCard(
+        title = "Notifications",
+        modifier = modifier,
+    ) {
+        SettingRow(
+            title = "Payment Confirmations",
+            description = "Receive notifications when payments are processed",
+            icon = MifosIcons.OutlinedNotifications,
+            checked = settings.paymentConfirmations,
+            onCheckedChange = { enabled ->
+                onSettingsChanged(settings.copy(paymentConfirmations = enabled))
+            },
+        )
+
+        SettingRow(
+            title = "Failed Payment Alerts",
+            description = "Get notified when payments fail",
+            icon = MifosIcons.Warning,
+            checked = settings.failedPaymentAlerts,
+            onCheckedChange = { enabled ->
+                onSettingsChanged(settings.copy(failedPaymentAlerts = enabled))
+            },
+        )
+
+        SettingRow(
+            title = "Schedule Reminders",
+            description = "Receive reminders before scheduled payments",
+            icon = MifosIcons.Schedule,
+            checked = settings.scheduleReminders,
+            onCheckedChange = { enabled ->
+                onSettingsChanged(settings.copy(scheduleReminders = enabled))
+            },
+        )
+
+        SettingRow(
+            title = "Email Notifications",
+            description = "Receive notifications via email",
+            icon = MifosIcons.Email,
+            checked = settings.emailNotifications,
+            onCheckedChange = { enabled ->
+                onSettingsChanged(settings.copy(emailNotifications = enabled))
+            },
+        )
+
+        SettingRow(
+            title = "Push Notifications",
+            description = "Receive push notifications on your device",
+            icon = MifosIcons.OutlinedNotifications,
+            checked = settings.pushNotifications,
+            onCheckedChange = { enabled ->
+                onSettingsChanged(settings.copy(pushNotifications = enabled))
+            },
+        )
+    }
+}
+
+@Composable
+private fun SecuritySettingsSection(
+    settings: org.mifospay.core.model.autopay.SecuritySettings,
+    onSettingsChanged: (org.mifospay.core.model.autopay.SecuritySettings) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    SettingsCard(
+        title = "Security",
+        modifier = modifier,
+    ) {
+        SettingRow(
+            title = "Two-Factor Authentication",
+            description = "Require 2FA for AutoPay changes",
+            icon = MifosIcons.Security,
+            checked = settings.requireTwoFactorAuth,
+            onCheckedChange = { enabled ->
+                onSettingsChanged(settings.copy(requireTwoFactorAuth = enabled))
+            },
+        )
+
+        SettingRow(
+            title = "Large Payment Confirmation",
+            description = "Require confirmation for payments above threshold",
+            icon = MifosIcons.AttachMoney,
+            checked = settings.requireConfirmationForLargePayments,
+            onCheckedChange = { enabled ->
+                onSettingsChanged(settings.copy(requireConfirmationForLargePayments = enabled))
+            },
+        )
+
+        SettingRow(
+            title = "Multiple Payments Per Day",
+            description = "Allow multiple AutoPay transactions per day",
+            icon = MifosIcons.Repeat,
+            checked = settings.allowMultiplePaymentsPerDay,
+            onCheckedChange = { enabled ->
+                onSettingsChanged(settings.copy(allowMultiplePaymentsPerDay = enabled))
+            },
+        )
+    }
+}
+
+@Composable
+private fun AutoPayRulesSection(
+    rules: org.mifospay.core.model.autopay.AutoPayRules,
+    onRulesChanged: (org.mifospay.core.model.autopay.AutoPayRules) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    SettingsCard(
+        title = "AutoPay Rules",
+        modifier = modifier,
+    ) {
+        SettingRow(
+            title = "Auto-Approve Payments",
+            description = "Automatically approve payments without manual confirmation",
+            icon = MifosIcons.CheckCircle,
+            checked = rules.autoApprovePayments,
+            onCheckedChange = { enabled ->
+                onRulesChanged(rules.copy(autoApprovePayments = enabled))
+            },
+        )
+
+        SettingRow(
+            title = "Skip Payments on Holidays",
+            description = "Skip AutoPay on bank holidays",
+            icon = MifosIcons.CalenderMonth,
+            checked = rules.skipPaymentsOnHolidays,
+            onCheckedChange = { enabled ->
+                onRulesChanged(rules.copy(skipPaymentsOnHolidays = enabled))
+            },
+        )
+
+        SettingRow(
+            title = "Retry Failed Payments",
+            description = "Automatically retry failed payment attempts",
+            icon = MifosIcons.Refresh,
+            checked = rules.retryFailedPayments,
+            onCheckedChange = { enabled ->
+                onRulesChanged(rules.copy(retryFailedPayments = enabled))
+            },
+        )
+    }
+}
+
+@Composable
+private fun SettingsCard(
+    title: String,
+    modifier: Modifier = Modifier,
+    content: @Composable () -> Unit,
+) {
     Card(
-        modifier = modifier.fillMaxSize(),
+        modifier = modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surface,
         ),
@@ -165,21 +358,21 @@ private fun PreferencesSection(
             Column(
                 verticalArrangement = Arrangement.spacedBy(12.dp),
             ) {
-                preferences.forEach { preference ->
-                    PreferenceRow(preference = preference)
-                }
+                content()
             }
         }
     }
 }
 
 @Composable
-private fun PreferenceRow(
-    preference: PreferenceItem,
+private fun SettingRow(
+    title: String,
+    description: String,
+    icon: androidx.compose.ui.graphics.vector.ImageVector,
+    checked: Boolean,
+    onCheckedChange: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    var isEnabled by remember { mutableStateOf(true) }
-
     Row(
         modifier = modifier
             .fillMaxWidth()
@@ -187,7 +380,7 @@ private fun PreferenceRow(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Icon(
-            imageVector = preference.icon,
+            imageVector = icon,
             contentDescription = null,
             modifier = Modifier.size(24.dp),
             tint = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -199,27 +392,21 @@ private fun PreferenceRow(
             modifier = Modifier.weight(1f),
         ) {
             Text(
-                text = preference.title,
+                text = title,
                 style = MaterialTheme.typography.bodyMedium,
                 fontWeight = FontWeight.Medium,
             )
 
             Text(
-                text = preference.description,
+                text = description,
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
         }
 
         Switch(
-            checked = isEnabled,
-            onCheckedChange = { isEnabled = it },
+            checked = checked,
+            onCheckedChange = onCheckedChange,
         )
     }
 }
-
-private data class PreferenceItem(
-    val title: String,
-    val description: String,
-    val icon: androidx.compose.ui.graphics.vector.ImageVector,
-)

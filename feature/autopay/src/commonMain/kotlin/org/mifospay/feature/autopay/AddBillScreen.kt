@@ -52,7 +52,6 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.datetime.Clock
 import org.koin.compose.viewmodel.koinViewModel
-import org.mifospay.core.common.DateHelper
 import org.mifospay.core.designsystem.component.BasicDialogState
 import org.mifospay.core.designsystem.component.LoadingDialogState
 import org.mifospay.core.designsystem.component.MifosBasicDialog
@@ -368,10 +367,6 @@ fun AddBillScreen(
     }
 }
 
-private fun formatDateForDisplay(timestamp: Long): String {
-    return DateHelper.getDateAsStringFromLong(timestamp)
-}
-
 @Composable
 private fun AutoPaySection(
     enableAutoPay: Boolean,
@@ -423,7 +418,6 @@ private fun AutoPaySection(
             if (enableAutoPay) {
                 HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)
 
-                // Payment method selection
                 var showPaymentMethodDropdown by remember { mutableStateOf(false) }
                 DropdownBox(
                     expanded = showPaymentMethodDropdown,
@@ -445,7 +439,6 @@ private fun AutoPaySection(
                     }
                 }
 
-                // Source account selection
                 MifosOutlinedTextField(
                     label = "Source Account *",
                     value = sourceAccount,
@@ -458,7 +451,6 @@ private fun AutoPaySection(
                     ),
                 )
 
-                // Maximum amount limit
                 MifosOutlinedTextField(
                     label = "Maximum Amount Limit (Optional)",
                     value = maxAmount,

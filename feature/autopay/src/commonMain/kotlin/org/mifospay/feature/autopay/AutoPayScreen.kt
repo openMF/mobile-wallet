@@ -88,10 +88,6 @@ fun AutoPayScreen(
                 state = state,
                 viewModel = viewModel,
                 onRefresh = { viewModel.trySendAction(AutoPayAction.RefreshDashboard) },
-                onAddNewSchedule = { viewModel.trySendAction(AutoPayAction.AddNewSchedule) },
-                onManageSchedules = { viewModel.trySendAction(AutoPayAction.ManageExistingSchedules) },
-                onAddNewBiller = { viewModel.trySendAction(AutoPayAction.AddNewBiller) },
-                onViewBillerList = { viewModel.trySendAction(AutoPayAction.ViewBillerList) },
                 onViewScheduleDetails = { scheduleId ->
                     viewModel.trySendAction(AutoPayAction.ViewScheduleDetails(scheduleId))
                 },
@@ -125,10 +121,6 @@ private fun AutoPayDashboardContent(
     state: AutoPayState,
     viewModel: AutoPayViewModel,
     onRefresh: () -> Unit,
-    onAddNewSchedule: () -> Unit,
-    onManageSchedules: () -> Unit,
-    onAddNewBiller: () -> Unit,
-    onViewBillerList: () -> Unit,
     onViewScheduleDetails: (String) -> Unit,
     onNavigateToSetup: () -> Unit,
     onNavigateToRules: () -> Unit,
@@ -152,12 +144,10 @@ private fun AutoPayDashboardContent(
 
         item {
             QuickActionsSection(
-                onAddNewSchedule = onAddNewSchedule,
-                onManageSchedules = onManageSchedules,
-                onAddNewBiller = onAddNewBiller,
-                onViewBillerList = onViewBillerList,
-                onAddNewBill = { viewModel.trySendAction(AutoPayAction.AddNewBill) },
-                onViewBillList = { viewModel.trySendAction(AutoPayAction.ViewBillList) },
+                onAddBill = { viewModel.trySendAction(AutoPayAction.AddNewBill) },
+                onManageBills = { viewModel.trySendAction(AutoPayAction.ViewBillList) },
+                onManageBillers = { viewModel.trySendAction(AutoPayAction.ViewBillerList) },
+                onAutoPaySettings = { viewModel.trySendAction(AutoPayAction.ManagePaymentPreferences) },
             )
         }
 
@@ -287,12 +277,10 @@ private fun DashboardStat(
 
 @Composable
 private fun QuickActionsSection(
-    onAddNewSchedule: () -> Unit,
-    onManageSchedules: () -> Unit,
-    onAddNewBiller: () -> Unit,
-    onViewBillerList: () -> Unit,
-    onAddNewBill: () -> Unit,
-    onViewBillList: () -> Unit,
+    onAddBill: () -> Unit,
+    onManageBills: () -> Unit,
+    onManageBillers: () -> Unit,
+    onAutoPaySettings: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Card(
@@ -313,48 +301,7 @@ private fun QuickActionsSection(
 
             Spacer(modifier = Modifier.height(12.dp))
 
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(12.dp),
-            ) {
-                QuickActionButton(
-                    text = "Add New",
-                    icon = MifosIcons.Add,
-                    onClick = onAddNewSchedule,
-                    modifier = Modifier.weight(1f),
-                )
-
-                QuickActionButton(
-                    text = "Manage",
-                    icon = MifosIcons.Settings,
-                    onClick = onManageSchedules,
-                    modifier = Modifier.weight(1f),
-                )
-            }
-
-            Spacer(modifier = Modifier.height(12.dp))
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(12.dp),
-            ) {
-                QuickActionButton(
-                    text = "Add Biller",
-                    icon = MifosIcons.PersonAdd,
-                    onClick = onAddNewBiller,
-                    modifier = Modifier.weight(1f),
-                )
-
-                QuickActionButton(
-                    text = "View Billers",
-                    icon = MifosIcons.Person,
-                    onClick = onViewBillerList,
-                    modifier = Modifier.weight(1f),
-                )
-            }
-
-            Spacer(modifier = Modifier.height(12.dp))
-
+            // Primary actions - Bill management
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(12.dp),
@@ -362,14 +309,36 @@ private fun QuickActionsSection(
                 QuickActionButton(
                     text = "Add Bill",
                     icon = MifosIcons.Receipt,
-                    onClick = onAddNewBill,
+                    onClick = onAddBill,
                     modifier = Modifier.weight(1f),
                 )
 
                 QuickActionButton(
-                    text = "View Bills",
+                    text = "Manage Bills",
                     icon = MifosIcons.List,
-                    onClick = onViewBillList,
+                    onClick = onManageBills,
+                    modifier = Modifier.weight(1f),
+                )
+            }
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            // Secondary actions - Biller management and settings
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(12.dp),
+            ) {
+                QuickActionButton(
+                    text = "Manage Billers",
+                    icon = MifosIcons.Person,
+                    onClick = onManageBillers,
+                    modifier = Modifier.weight(1f),
+                )
+
+                QuickActionButton(
+                    text = "AutoPay Settings",
+                    icon = MifosIcons.Settings,
+                    onClick = onAutoPaySettings,
                     modifier = Modifier.weight(1f),
                 )
             }
@@ -606,6 +575,7 @@ private fun StatusChip(
         PaymentStatus.PROCESSING -> MaterialTheme.colorScheme.tertiary to MaterialTheme.colorScheme.onTertiary
         PaymentStatus.COMPLETED -> MaterialTheme.colorScheme.secondary to MaterialTheme.colorScheme.onSecondary
         PaymentStatus.FAILED -> MaterialTheme.colorScheme.error to MaterialTheme.colorScheme.onError
+        PaymentStatus.CANCELLED -> MaterialTheme.colorScheme.error to MaterialTheme.colorScheme.onError
     }
 
     Card(
