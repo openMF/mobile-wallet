@@ -45,11 +45,8 @@ class AutoPayViewModel(
 
     override fun handleAction(action: AutoPayAction) {
         when (action) {
-            is AutoPayAction.SetupRecurringPayment -> {
+            is AutoPayAction.ManageRecurringPayment -> {
                 setupRecurringPayment()
-            }
-            is AutoPayAction.ConfigurePaymentRules -> {
-                configurePaymentRules()
             }
             is AutoPayAction.ManagePaymentPreferences -> {
                 managePaymentPreferences()
@@ -94,14 +91,12 @@ class AutoPayViewModel(
             try {
                 delay(1000)
 
-                // Get bills with AutoPay enabled (this would come from a repository in real implementation)
                 val billsWithAutoPay = getBillsWithAutoPay()
 
                 val activeSchedules = billsWithAutoPay
                     .filter { it.status == BillStatus.ACTIVE }
                     .map { it.toAutoPaySchedule() }
 
-                // Calculate upcoming payments
                 val upcomingPayments = billsWithAutoPay
                     .getActiveBillsWithAutoPay()
                     .calculateUpcomingPayments()
@@ -192,11 +187,11 @@ class AutoPayViewModel(
     }
 
     private fun addNewSchedule() {
-        sendEvent(AutoPayEvent.NavigateToSetup)
+        sendEvent(AutoPayEvent.NavigateToScheduleManagement)
     }
 
     private fun manageExistingSchedules() {
-        sendEvent(AutoPayEvent.NavigateToSetup)
+        sendEvent(AutoPayEvent.NavigateToScheduleManagement)
     }
 
     private fun viewScheduleDetails(scheduleId: String) {
@@ -204,11 +199,7 @@ class AutoPayViewModel(
     }
 
     private fun setupRecurringPayment() {
-        sendEvent(AutoPayEvent.NavigateToSetup)
-    }
-
-    private fun configurePaymentRules() {
-        sendEvent(AutoPayEvent.NavigateToRules)
+        sendEvent(AutoPayEvent.NavigateToScheduleManagement)
     }
 
     private fun managePaymentPreferences() {
@@ -296,8 +287,7 @@ enum class PaymentStatus {
 }
 
 sealed interface AutoPayEvent {
-    data object NavigateToSetup : AutoPayEvent
-    data object NavigateToRules : AutoPayEvent
+    data object NavigateToScheduleManagement : AutoPayEvent
     data object NavigateToPreferences : AutoPayEvent
     data object NavigateToHistory : AutoPayEvent
     data object NavigateToAddBiller : AutoPayEvent
@@ -308,8 +298,7 @@ sealed interface AutoPayEvent {
 }
 
 sealed interface AutoPayAction {
-    data object SetupRecurringPayment : AutoPayAction
-    data object ConfigurePaymentRules : AutoPayAction
+    data object ManageRecurringPayment : AutoPayAction
     data object ManagePaymentPreferences : AutoPayAction
     data object GetPaymentHistory : AutoPayAction
     data class ToggleAutoPay(val enabled: Boolean) : AutoPayAction

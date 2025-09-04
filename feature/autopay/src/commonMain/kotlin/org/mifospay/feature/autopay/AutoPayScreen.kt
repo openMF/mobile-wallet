@@ -9,6 +9,8 @@
  */
 package org.mifospay.feature.autopay
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,10 +21,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -35,6 +38,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.koin.compose.viewmodel.koinViewModel
@@ -46,8 +50,7 @@ import org.mifospay.core.ui.utils.EventsEffect
 
 @Composable
 fun AutoPayScreen(
-    onNavigateToSetup: () -> Unit,
-    onNavigateToRules: () -> Unit,
+    onNavigateToScheduleManagement: () -> Unit,
     onNavigateToPreferences: () -> Unit,
     onNavigateToHistory: () -> Unit,
     onNavigateToScheduleDetails: (String) -> Unit,
@@ -91,8 +94,7 @@ fun AutoPayScreen(
                 onViewScheduleDetails = { scheduleId ->
                     viewModel.trySendAction(AutoPayAction.ViewScheduleDetails(scheduleId))
                 },
-                onNavigateToSetup = onNavigateToSetup,
-                onNavigateToRules = onNavigateToRules,
+                onNavigateToScheduleManagement = onNavigateToScheduleManagement,
                 onNavigateToPreferences = onNavigateToPreferences,
                 onNavigateToHistory = onNavigateToHistory,
                 onNavigateToScheduleDetails = onNavigateToScheduleDetails,
@@ -103,8 +105,7 @@ fun AutoPayScreen(
 
     EventsEffect(viewModel) { event ->
         when (event) {
-            is AutoPayEvent.NavigateToSetup -> onNavigateToSetup()
-            is AutoPayEvent.NavigateToRules -> onNavigateToRules()
+            is AutoPayEvent.NavigateToScheduleManagement -> onNavigateToScheduleManagement()
             is AutoPayEvent.NavigateToPreferences -> onNavigateToPreferences()
             is AutoPayEvent.NavigateToHistory -> onNavigateToHistory()
             is AutoPayEvent.NavigateToAddBiller -> onNavigateToAddBiller()
@@ -122,8 +123,7 @@ private fun AutoPayDashboardContent(
     viewModel: AutoPayViewModel,
     onRefresh: () -> Unit,
     onViewScheduleDetails: (String) -> Unit,
-    onNavigateToSetup: () -> Unit,
-    onNavigateToRules: () -> Unit,
+    onNavigateToScheduleManagement: () -> Unit,
     onNavigateToPreferences: () -> Unit,
     onNavigateToHistory: () -> Unit,
     onNavigateToScheduleDetails: (String) -> Unit,
@@ -146,8 +146,11 @@ private fun AutoPayDashboardContent(
             QuickActionsSection(
                 onAddBill = { viewModel.trySendAction(AutoPayAction.AddNewBill) },
                 onManageBills = { viewModel.trySendAction(AutoPayAction.ViewBillList) },
+                onAddBiller = { viewModel.trySendAction(AutoPayAction.AddNewBiller) },
                 onManageBillers = { viewModel.trySendAction(AutoPayAction.ViewBillerList) },
                 onAutoPaySettings = { viewModel.trySendAction(AutoPayAction.ManagePaymentPreferences) },
+                onScheduleManagement = onNavigateToScheduleManagement,
+                onViewHistory = { viewModel.trySendAction(AutoPayAction.GetPaymentHistory) },
             )
         }
 
@@ -279,8 +282,11 @@ private fun DashboardStat(
 private fun QuickActionsSection(
     onAddBill: () -> Unit,
     onManageBills: () -> Unit,
+    onAddBiller: () -> Unit,
     onManageBillers: () -> Unit,
     onAutoPaySettings: () -> Unit,
+    onScheduleManagement: () -> Unit,
+    onViewHistory: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Card(
@@ -299,73 +305,120 @@ private fun QuickActionsSection(
                 fontWeight = FontWeight.Medium,
             )
 
-            Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = Modifier.height(16.dp))
 
-            // Primary actions - Bill management
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(12.dp),
             ) {
-                QuickActionButton(
+                SquareActionButton(
                     text = "Add Bill",
                     icon = MifosIcons.Receipt,
                     onClick = onAddBill,
                     modifier = Modifier.weight(1f),
                 )
 
-                QuickActionButton(
+                SquareActionButton(
                     text = "Manage Bills",
                     icon = MifosIcons.List,
                     onClick = onManageBills,
+                    modifier = Modifier.weight(1f),
+                )
+
+                SquareActionButton(
+                    text = "Add Biller",
+                    icon = MifosIcons.PersonAdd,
+                    onClick = onAddBiller,
+                    modifier = Modifier.weight(1f),
+                )
+
+                SquareActionButton(
+                    text = "Manage Billers",
+                    icon = MifosIcons.Person,
+                    onClick = onManageBillers,
                     modifier = Modifier.weight(1f),
                 )
             }
 
             Spacer(modifier = Modifier.height(12.dp))
 
-            // Secondary actions - Biller management and settings
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(12.dp),
             ) {
-                QuickActionButton(
-                    text = "Manage Billers",
-                    icon = MifosIcons.Person,
-                    onClick = onManageBillers,
-                    modifier = Modifier.weight(1f),
-                )
-
-                QuickActionButton(
+                SquareActionButton(
                     text = "AutoPay Settings",
                     icon = MifosIcons.Settings,
                     onClick = onAutoPaySettings,
                     modifier = Modifier.weight(1f),
                 )
+
+                SquareActionButton(
+                    text = "Manage Schedules",
+                    icon = MifosIcons.Schedule,
+                    onClick = onScheduleManagement,
+                    modifier = Modifier.weight(1f),
+                )
+
+                SquareActionButton(
+                    text = "View History",
+                    icon = MifosIcons.History,
+                    onClick = onViewHistory,
+                    modifier = Modifier.weight(1f),
+                )
+
+                Spacer(modifier = Modifier.weight(1f))
             }
         }
     }
 }
 
 @Composable
-private fun QuickActionButton(
+private fun SquareActionButton(
     text: String,
     icon: ImageVector,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Button(
-        onClick = onClick,
-        modifier = modifier,
+    androidx.compose.material3.Surface(
+        modifier = modifier
+            .clickable { onClick() },
+        color = MaterialTheme.colorScheme.surface,
+        tonalElevation = 2.dp,
     ) {
-        Icon(
-            imageVector = icon,
-            contentDescription = null,
-            modifier = Modifier.size(20.dp),
-        )
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 4.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(12.dp),
+        ) {
+            Box(
+                modifier = Modifier
+                    .size(56.dp)
+                    .background(
+                        color = MaterialTheme.colorScheme.primaryContainer,
+                        shape = RoundedCornerShape(8.dp),
+                    ),
+                contentAlignment = Alignment.Center,
+            ) {
+                Icon(
+                    imageVector = icon,
+                    contentDescription = text,
+                    modifier = Modifier.size(28.dp),
+                    tint = MaterialTheme.colorScheme.onPrimaryContainer,
+                )
+            }
 
-        Spacer(modifier = Modifier.width(8.dp))
-
-        Text(text = text)
+            Text(
+                text = text,
+                style = MaterialTheme.typography.bodyMedium,
+                fontWeight = FontWeight.SemiBold,
+                textAlign = TextAlign.Center,
+                color = MaterialTheme.colorScheme.onSurface,
+                maxLines = 2,
+            )
+        }
     }
 }
 
@@ -385,7 +438,7 @@ private fun ActiveScheduleCard(
         Button(
             onClick = onClick,
             modifier = Modifier.fillMaxWidth(),
-            colors = androidx.compose.material3.ButtonDefaults.buttonColors(
+            colors = ButtonDefaults.buttonColors(
                 containerColor = MaterialTheme.colorScheme.surface,
                 contentColor = MaterialTheme.colorScheme.onSurface,
             ),
@@ -634,7 +687,7 @@ private fun EmptyStateCard(
                 text = description,
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
-                textAlign = androidx.compose.ui.text.style.TextAlign.Center,
+                textAlign = TextAlign.Center,
             )
         }
     }

@@ -29,11 +29,10 @@ import org.mifospay.feature.autopay.navigateToAddBiller
 import org.mifospay.feature.autopay.navigateToAutoPay
 import org.mifospay.feature.autopay.navigateToAutoPayHistory
 import org.mifospay.feature.autopay.navigateToAutoPayPreferences
-import org.mifospay.feature.autopay.navigateToAutoPayRules
 import org.mifospay.feature.autopay.navigateToAutoPayScheduleDetails
-import org.mifospay.feature.autopay.navigateToAutoPaySetup
 import org.mifospay.feature.autopay.navigateToBillList
 import org.mifospay.feature.autopay.navigateToBillerList
+import org.mifospay.feature.autopay.navigateToScheduleManagement
 import org.mifospay.feature.editpassword.navigation.editPasswordScreen
 import org.mifospay.feature.editpassword.navigation.navigateToEditPassword
 import org.mifospay.feature.faq.navigation.faqScreen
@@ -141,11 +140,8 @@ internal fun MifosNavHost(
         },
         TabContent(PaymentsScreenContents.AUTOPAY.name) {
             AutoPayScreen(
-                onNavigateToSetup = {
-                    navController.navigateToAutoPaySetup()
-                },
-                onNavigateToRules = {
-                    navController.navigateToAutoPayRules()
+                onNavigateToScheduleManagement = {
+                    navController.navigateToScheduleManagement()
                 },
                 onNavigateToPreferences = {
                     navController.navigateToAutoPayPreferences()

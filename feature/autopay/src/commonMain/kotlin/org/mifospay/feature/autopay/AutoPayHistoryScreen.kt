@@ -22,7 +22,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Divider
+import androidx.compose.material3.DividerDefaults
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -94,6 +95,17 @@ private fun HistoryItemCard(
     historyItem: AutoPayHistoryItem,
     modifier: Modifier = Modifier,
 ) {
+    val statusColor = when (historyItem.status) {
+        "Completed" -> Color(0xFF4CAF50) // Green color for success
+        "Failed" -> MaterialTheme.colorScheme.error
+        null -> when (historyItem.title) {
+            "Schedule Created" -> MaterialTheme.colorScheme.primary
+            "Schedule Cancelled" -> MaterialTheme.colorScheme.tertiary
+            else -> MaterialTheme.colorScheme.primary
+        }
+        else -> MaterialTheme.colorScheme.primary
+    }
+
     Card(
         modifier = modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(
@@ -112,7 +124,7 @@ private fun HistoryItemCard(
                     imageVector = historyItem.icon,
                     contentDescription = null,
                     modifier = Modifier.size(24.dp),
-                    tint = historyItem.statusColor,
+                    tint = statusColor,
                 )
 
                 Spacer(modifier = Modifier.size(12.dp))
@@ -153,14 +165,14 @@ private fun HistoryItemCard(
             if (historyItem.status != null) {
                 Spacer(modifier = Modifier.height(8.dp))
 
-                Divider()
+                HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)
 
                 Spacer(modifier = Modifier.height(8.dp))
 
                 Text(
                     text = "Status: ${historyItem.status}",
                     style = MaterialTheme.typography.bodySmall,
-                    color = historyItem.statusColor,
+                    color = statusColor,
                     fontWeight = FontWeight.Medium,
                 )
             }
@@ -187,7 +199,7 @@ private fun getDummyHistoryItems(): List<AutoPayHistoryItem> {
             date = "Jan 15, 2024",
             status = "Completed",
             icon = MifosIcons.CheckCircle,
-            statusColor = Color.Green,
+            statusColor = Color.Unspecified,
         ),
         AutoPayHistoryItem(
             title = "Internet Bill",
@@ -196,7 +208,7 @@ private fun getDummyHistoryItems(): List<AutoPayHistoryItem> {
             date = "Jan 10, 2024",
             status = "Completed",
             icon = MifosIcons.CheckCircle,
-            statusColor = Color.Green,
+            statusColor = Color.Unspecified,
         ),
         AutoPayHistoryItem(
             title = "Electricity Bill",
@@ -205,7 +217,7 @@ private fun getDummyHistoryItems(): List<AutoPayHistoryItem> {
             date = "Jan 5, 2024",
             status = "Failed",
             icon = MifosIcons.Error,
-            statusColor = Color.Red,
+            statusColor = Color.Unspecified,
         ),
         AutoPayHistoryItem(
             title = "Phone Bill",
@@ -214,7 +226,7 @@ private fun getDummyHistoryItems(): List<AutoPayHistoryItem> {
             date = "Dec 28, 2023",
             status = "Completed",
             icon = MifosIcons.CheckCircle,
-            statusColor = Color.Green,
+            statusColor = Color.Unspecified,
         ),
         AutoPayHistoryItem(
             title = "Gym Membership",
@@ -223,7 +235,7 @@ private fun getDummyHistoryItems(): List<AutoPayHistoryItem> {
             date = "Dec 20, 2023",
             status = "Completed",
             icon = MifosIcons.CheckCircle,
-            statusColor = Color.Green,
+            statusColor = Color.Unspecified,
         ),
         AutoPayHistoryItem(
             title = "Schedule Created",
@@ -232,7 +244,7 @@ private fun getDummyHistoryItems(): List<AutoPayHistoryItem> {
             date = "Dec 15, 2023",
             status = null,
             icon = MifosIcons.Add,
-            statusColor = Color.Blue,
+            statusColor = Color.Unspecified,
         ),
         AutoPayHistoryItem(
             title = "Schedule Cancelled",
@@ -241,7 +253,7 @@ private fun getDummyHistoryItems(): List<AutoPayHistoryItem> {
             date = "Dec 10, 2023",
             status = null,
             icon = MifosIcons.Cancel,
-            statusColor = Color.Yellow,
+            statusColor = Color.Unspecified,
         ),
     )
 }

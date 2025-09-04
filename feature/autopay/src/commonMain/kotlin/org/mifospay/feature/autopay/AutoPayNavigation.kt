@@ -25,9 +25,7 @@ import androidx.navigation.navOptions
 
 object AutoPayNavigation {
     const val AUTO_PAY_ROUTE = "autopay_route"
-    const val AUTO_PAY_SETUP_ROUTE = "autopay_schedule_management_route" // Updated to reflect new purpose
-    const val AUTO_PAY_SUCCESS_ROUTE = "autopay_success_route"
-    const val AUTO_PAY_RULES_ROUTE = "autopay_rules_route"
+    const val AUTO_PAY_SCHEDULE_MANAGEMENT_ROUTE = "autopay_schedule_management_route"
     const val AUTO_PAY_PREFERENCES_ROUTE = "autopay_preferences_route"
     const val AUTO_PAY_HISTORY_ROUTE = "autopay_history_route"
     const val AUTO_PAY_SCHEDULE_DETAILS_ROUTE = "autopay_schedule_details_route"
@@ -77,16 +75,8 @@ fun NavController.navigateToAutoPay(navOptions: NavOptions? = null) {
     navigate(AutoPayNavigation.AUTO_PAY_ROUTE, navOptions)
 }
 
-fun NavController.navigateToAutoPaySetup(navOptions: NavOptions? = null) {
-    navigate(AutoPayNavigation.AUTO_PAY_SETUP_ROUTE, navOptions)
-}
-
-fun NavController.navigateToAutoPaySuccess(navOptions: NavOptions? = null) {
-    navigate(AutoPayNavigation.AUTO_PAY_SUCCESS_ROUTE, navOptions)
-}
-
-fun NavController.navigateToAutoPayRules(navOptions: NavOptions? = null) {
-    navigate(AutoPayNavigation.AUTO_PAY_RULES_ROUTE, navOptions)
+fun NavController.navigateToScheduleManagement(navOptions: NavOptions? = null) {
+    navigate(AutoPayNavigation.AUTO_PAY_SCHEDULE_MANAGEMENT_ROUTE, navOptions)
 }
 
 fun NavController.navigateToAutoPayPreferences(navOptions: NavOptions? = null) {
@@ -135,11 +125,8 @@ fun NavGraphBuilder.autoPayGraph(
 ) {
     composableWithFadeTransitions(AutoPayNavigation.AUTO_PAY_ROUTE) {
         AutoPayScreen(
-            onNavigateToSetup = {
-                navController.navigateToAutoPaySetup()
-            },
-            onNavigateToRules = {
-                navController.navigateToAutoPayRules()
+            onNavigateToScheduleManagement = {
+                navController.navigateToScheduleManagement()
             },
             onNavigateToPreferences = {
                 navController.navigateToAutoPayPreferences()
@@ -167,7 +154,7 @@ fun NavGraphBuilder.autoPayGraph(
         )
     }
 
-    composableWithFadeTransitions(AutoPayNavigation.AUTO_PAY_SETUP_ROUTE) {
+    composableWithFadeTransitions(AutoPayNavigation.AUTO_PAY_SCHEDULE_MANAGEMENT_ROUTE) {
         AutoPayScheduleManagementScreen(
             onNavigateBack = onNavigateBack,
             onNavigateToAddBill = {
@@ -179,21 +166,6 @@ fun NavGraphBuilder.autoPayGraph(
             onNavigateToBillList = {
                 navController.navigateToBillList()
             },
-        )
-    }
-
-    composableWithFadeTransitions(AutoPayNavigation.AUTO_PAY_SUCCESS_ROUTE) {
-        AutoPaySuccessScreen(
-            onNavigateBack = onNavigateBack,
-            onNavigateToHome = {
-                navController.popBackStack(AutoPayNavigation.AUTO_PAY_ROUTE, false)
-            },
-        )
-    }
-
-    composableWithFadeTransitions(AutoPayNavigation.AUTO_PAY_RULES_ROUTE) {
-        AutoPayRulesScreen(
-            onNavigateBack = onNavigateBack,
         )
     }
 

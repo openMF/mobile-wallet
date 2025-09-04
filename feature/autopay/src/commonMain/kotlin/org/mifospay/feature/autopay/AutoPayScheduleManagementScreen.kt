@@ -40,6 +40,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -137,7 +138,6 @@ fun AutoPayScheduleManagementScreen(
             }
         }
 
-        // Floating Action Buttons
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -178,29 +178,22 @@ private fun ScheduleManagementHeader(
         ),
     ) {
         Column(
-            modifier = Modifier.padding(16.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            Text(
-                text = "AutoPay Schedules",
-                style = MaterialTheme.typography.headlineSmall,
-                fontWeight = FontWeight.Medium,
-                color = MaterialTheme.colorScheme.onPrimaryContainer,
-            )
-
-            Spacer(modifier = Modifier.height(8.dp))
-
             Row(
-                horizontalArrangement = Arrangement.spacedBy(24.dp),
+                horizontalArrangement = Arrangement.spacedBy(48.dp),
             ) {
                 ScheduleStatItem(
-                    label = "Total",
+                    label = "Total Schedules",
                     value = totalSchedules.toString(),
                     icon = MifosIcons.List,
                 )
 
                 ScheduleStatItem(
-                    label = "Active",
+                    label = "Active Schedules",
                     value = activeSchedules.toString(),
                     icon = MifosIcons.CheckCircle,
                 )
@@ -213,7 +206,7 @@ private fun ScheduleManagementHeader(
 private fun ScheduleStatItem(
     label: String,
     value: String,
-    icon: androidx.compose.ui.graphics.vector.ImageVector,
+    icon: ImageVector,
     modifier: Modifier = Modifier,
 ) {
     Column(
