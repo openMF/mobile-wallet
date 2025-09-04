@@ -56,11 +56,19 @@ object BillValidator {
         val recurrencePatternError = validateRecurrencePattern(formData.recurrencePattern)
         val billerError = validateBiller(formData.billerId, formData.billerName)
 
+        // AutoPay validation
+        val autoPayPaymentMethodError = validateAutoPayPaymentMethod(formData.enableAutoPay, formData.autoPayPaymentMethod)
+        val autoPaySourceAccountError = validateAutoPaySourceAccount(formData.enableAutoPay, formData.autoPaySourceAccount)
+        val autoPayMaxAmountError = validateAutoPayMaxAmount(formData.autoPayMaxAmount)
+
         val isValid = nameError == null &&
             amountError == null &&
             dueDateError == null &&
             recurrencePatternError == null &&
-            billerError == null
+            billerError == null &&
+            autoPayPaymentMethodError == null &&
+            autoPaySourceAccountError == null &&
+            autoPayMaxAmountError == null
 
         return BillValidationResult(
             isValid = isValid,
@@ -69,6 +77,9 @@ object BillValidator {
             dueDateError = dueDateError,
             recurrencePatternError = recurrencePatternError,
             billerError = billerError,
+            autoPayPaymentMethodError = autoPayPaymentMethodError,
+            autoPaySourceAccountError = autoPaySourceAccountError,
+            autoPayMaxAmountError = autoPayMaxAmountError,
         )
     }
 
@@ -117,6 +128,7 @@ object BillValidator {
     private fun validateRecurrencePattern(pattern: RecurrencePattern): String? {
         return when (pattern) {
             RecurrencePattern.NONE -> null
+            RecurrencePattern.DAILY -> null
             RecurrencePattern.WEEKLY -> null
             RecurrencePattern.BIWEEKLY -> null
             RecurrencePattern.MONTHLY -> null
@@ -135,6 +147,43 @@ object BillValidator {
         }
     }
 
+    private fun validateAutoPayPaymentMethod(enableAutoPay: Boolean, paymentMethod: String): String? {
+        return when {
+            !enableAutoPay -> null
+            paymentMethod.isBlank() -> "Payment method is required when AutoPay is enabled"
+            !listOf("Bank Account", "Credit Card", "UPI").contains(paymentMethod) -> "Invalid payment method"
+            else -> null
+        }
+    }
+
+    private fun validateAutoPaySourceAccount(enableAutoPay: Boolean, sourceAccount: String): String? {
+        return when {
+            !enableAutoPay -> null
+            sourceAccount.isBlank() -> "Source account is required when AutoPay is enabled"
+            sourceAccount.length < 8 -> "Source account must be at least 8 characters"
+            sourceAccount.length > 20 -> "Source account must be less than 20 characters"
+            else -> null
+        }
+    }
+
+    private fun validateAutoPayMaxAmount(maxAmount: String): String? {
+        return when {
+            maxAmount.isBlank() -> null
+            else -> {
+                try {
+                    val amount = maxAmount.toDouble()
+                    when {
+                        amount <= 0 -> "Maximum amount must be greater than 0"
+                        amount > 999999.99 -> "Maximum amount cannot exceed 999,999.99"
+                        else -> null
+                    }
+                } catch (e: NumberFormatException) {
+                    "Invalid maximum amount format"
+                }
+            }
+        }
+    }
+
     /**
      * Validates if a bill is overdue
      */
@@ -150,6 +199,7 @@ object BillValidator {
         val currentTime = Clock.System.now().toEpochMilliseconds()
         return when (bill.recurrencePattern) {
             RecurrencePattern.NONE -> bill.dueDate
+            RecurrencePattern.DAILY -> bill.dueDate + (1 * 24 * 60 * 60 * 1000L)
             RecurrencePattern.WEEKLY -> bill.dueDate + (7 * 24 * 60 * 60 * 1000L)
             RecurrencePattern.BIWEEKLY -> bill.dueDate + (14 * 24 * 60 * 60 * 1000L)
             RecurrencePattern.MONTHLY -> bill.dueDate + (30 * 24 * 60 * 60 * 1000L)

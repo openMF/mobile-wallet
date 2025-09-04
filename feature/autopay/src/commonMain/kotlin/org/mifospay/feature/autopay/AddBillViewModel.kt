@@ -91,6 +91,18 @@ class AddBillViewModel(
             is AddBillAction.RefreshBillers -> {
                 loadAvailableBillers()
             }
+            is AddBillAction.UpdateAutoPayEnabled -> {
+                updateAutoPayEnabled(action.enabled)
+            }
+            is AddBillAction.UpdateAutoPayPaymentMethod -> {
+                updateAutoPayPaymentMethod(action.paymentMethod)
+            }
+            is AddBillAction.UpdateAutoPaySourceAccount -> {
+                updateAutoPaySourceAccount(action.sourceAccount)
+            }
+            is AddBillAction.UpdateAutoPayMaxAmount -> {
+                updateAutoPayMaxAmount(action.maxAmount)
+            }
         }
     }
 
@@ -222,6 +234,11 @@ class AddBillViewModel(
                     billerId = formData.billerId,
                     billerName = formData.billerName,
                     description = formData.description.takeIf { it.isNotBlank() },
+                    // AutoPay configuration
+                    autoPayEnabled = formData.enableAutoPay,
+                    autoPayPaymentMethod = formData.autoPayPaymentMethod.takeIf { it.isNotBlank() },
+                    autoPaySourceAccount = formData.autoPaySourceAccount.takeIf { it.isNotBlank() },
+                    autoPayMaxAmount = formData.autoPayMaxAmount.toDoubleOrNull(),
                 )
 
                 val result = billRepository.saveBill(bill)
@@ -286,6 +303,66 @@ class AddBillViewModel(
         }
     }
 
+    private fun updateAutoPayEnabled(enabled: Boolean) {
+        mutableStateFlow.update {
+            it.copy(
+                formData = it.formData.copy(enableAutoPay = enabled),
+            )
+        }
+    }
+
+    private fun updateAutoPayPaymentMethod(paymentMethod: String) {
+        val paymentMethodError = if (stateFlow.value.formData.enableAutoPay && paymentMethod.isBlank()) {
+            "Payment method is required when AutoPay is enabled"
+        } else {
+            null
+        }
+
+        mutableStateFlow.update {
+            it.copy(
+                formData = it.formData.copy(autoPayPaymentMethod = paymentMethod),
+                validationResult = it.validationResult.copy(autoPayPaymentMethodError = paymentMethodError),
+            )
+        }
+    }
+
+    private fun updateAutoPaySourceAccount(sourceAccount: String) {
+        val sourceAccountError = if (stateFlow.value.formData.enableAutoPay && sourceAccount.isBlank()) {
+            "Source account is required when AutoPay is enabled"
+        } else {
+            null
+        }
+
+        mutableStateFlow.update {
+            it.copy(
+                formData = it.formData.copy(autoPaySourceAccount = sourceAccount),
+                validationResult = it.validationResult.copy(autoPaySourceAccountError = sourceAccountError),
+            )
+        }
+    }
+
+    private fun updateAutoPayMaxAmount(maxAmount: String) {
+        val maxAmountError = if (maxAmount.isNotBlank()) {
+            val amount = maxAmount.toDoubleOrNull()
+            if (amount == null) {
+                "Invalid amount format"
+            } else if (amount <= 0) {
+                "Maximum amount must be greater than 0"
+            } else {
+                null
+            }
+        } else {
+            null
+        }
+
+        mutableStateFlow.update {
+            it.copy(
+                formData = it.formData.copy(autoPayMaxAmount = maxAmount),
+                validationResult = it.validationResult.copy(autoPayMaxAmountError = maxAmountError),
+            )
+        }
+    }
+
     private fun clearError() {
         mutableStateFlow.update { it.copy(error = null) }
     }
@@ -327,4 +404,10 @@ sealed interface AddBillAction {
     data object CalculateNextPaymentDates : AddBillAction
     data class SelectBiller(val biller: Biller) : AddBillAction
     data object RefreshBillers : AddBillAction
+
+    // AutoPay actions
+    data class UpdateAutoPayEnabled(val enabled: Boolean) : AddBillAction
+    data class UpdateAutoPayPaymentMethod(val paymentMethod: String) : AddBillAction
+    data class UpdateAutoPaySourceAccount(val sourceAccount: String) : AddBillAction
+    data class UpdateAutoPayMaxAmount(val maxAmount: String) : AddBillAction
 }

@@ -118,6 +118,7 @@ object BillMapper {
      */
     private fun calculateNextDueDate(bill: Bill): Long {
         val daysToAdd = when (bill.recurrencePattern) {
+            RecurrencePattern.DAILY -> 1
             RecurrencePattern.WEEKLY -> 7
             RecurrencePattern.BIWEEKLY -> 14
             RecurrencePattern.MONTHLY -> 30
@@ -153,6 +154,7 @@ object BillMapper {
     fun getRecurrenceDisplayName(pattern: RecurrencePattern): String {
         return when (pattern) {
             RecurrencePattern.NONE -> "No Recurrence"
+            RecurrencePattern.DAILY -> "Daily"
             RecurrencePattern.WEEKLY -> "Weekly"
             RecurrencePattern.BIWEEKLY -> "Bi-weekly"
             RecurrencePattern.MONTHLY -> "Monthly"
