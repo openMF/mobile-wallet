@@ -78,15 +78,13 @@ internal fun HistoryScreenContent(
 ) {
     MifosScaffold(
         modifier = modifier.fillMaxSize(),
-        topBar = if (showTopBar && onBackClick != null) {
-            {
+        topBar = {
+            if (showTopBar && onBackClick != null) {
                 MifosTopBar(
                     topBarTitle = stringResource(Res.string.feature_history_title),
                     backPress = onBackClick,
                 )
             }
-        } else {
-            {}
         },
     ) { paddingValues ->
         when (state.viewState) {
