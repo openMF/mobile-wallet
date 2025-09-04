@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -25,9 +26,12 @@ import mobile_wallet.feature.history.generated.resources.feature_history_empty
 import mobile_wallet.feature.history.generated.resources.feature_history_error
 import mobile_wallet.feature.history.generated.resources.feature_history_error_oops
 import mobile_wallet.feature.history.generated.resources.feature_history_loading
+import mobile_wallet.feature.history.generated.resources.feature_history_title
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.mifospay.core.designsystem.component.MifosLoadingWheel
+import org.mifospay.core.designsystem.component.MifosScaffold
+import org.mifospay.core.designsystem.component.MifosTopBar
 import org.mifospay.core.model.savingsaccount.TransactionType
 import org.mifospay.core.ui.EmptyContentScreen
 import org.mifospay.core.ui.utils.EventsEffect
@@ -40,6 +44,8 @@ fun HistoryScreen(
     viewTransferDetail: (Long) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: HistoryViewModel = koinViewModel(),
+    showTopBar: Boolean = true,
+    onBackClick: (() -> Unit)? = null,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
 
@@ -57,6 +63,8 @@ fun HistoryScreen(
         onAction = remember(viewModel) {
             { action -> viewModel.trySendAction(action) }
         },
+        showTopBar = showTopBar,
+        onBackClick = onBackClick,
     )
 }
 
@@ -65,24 +73,41 @@ internal fun HistoryScreenContent(
     state: HistoryState,
     modifier: Modifier = Modifier,
     onAction: (HistoryAction) -> Unit,
+    showTopBar: Boolean = true,
+    onBackClick: (() -> Unit)? = null,
 ) {
-    Box(
+    MifosScaffold(
         modifier = modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center,
-    ) {
+        topBar = {
+            if (showTopBar && onBackClick != null) {
+                MifosTopBar(
+                    topBarTitle = stringResource(Res.string.feature_history_title),
+                    backPress = onBackClick,
+                )
+            }
+        },
+    ) { paddingValues ->
         when (state.viewState) {
             is HistoryState.ViewState.Loading -> {
-                MifosLoadingWheel(
-                    modifier = Modifier.align(Alignment.Center),
-                    contentDesc = stringResource(Res.string.feature_history_loading),
-                )
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(paddingValues),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    MifosLoadingWheel(
+                        contentDesc = stringResource(Res.string.feature_history_loading),
+                    )
+                }
             }
 
             is HistoryState.ViewState.Error -> {
                 EmptyContentScreen(
                     title = stringResource(Res.string.feature_history_error_oops),
                     subTitle = stringResource(Res.string.feature_history_error),
-                    modifier = Modifier.align(Alignment.Center),
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(paddingValues),
                     iconTint = KptTheme.colorScheme.error,
                 )
             }
@@ -91,7 +116,9 @@ internal fun HistoryScreenContent(
                 EmptyContentScreen(
                     title = stringResource(Res.string.feature_history_error_oops),
                     subTitle = stringResource(Res.string.feature_history_empty),
-                    modifier = Modifier.fillMaxSize().align(Alignment.Center),
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(paddingValues),
                 )
             }
 
@@ -100,6 +127,7 @@ internal fun HistoryScreenContent(
                     state = state.viewState,
                     selectedTransactionType = state.transactionType,
                     onAction = onAction,
+                    modifier = Modifier.padding(paddingValues),
                 )
             }
         }
@@ -113,6 +141,16 @@ private fun HistoryScreenContent(
     modifier: Modifier = Modifier,
     onAction: (HistoryAction) -> Unit,
 ) {
+    val allTransactionsListState = rememberLazyListState()
+    val debitTransactionsListState = rememberLazyListState()
+    val creditTransactionsListState = rememberLazyListState()
+
+    val currentListState = when (selectedTransactionType) {
+        TransactionType.OTHER -> allTransactionsListState
+        TransactionType.DEBIT -> debitTransactionsListState
+        TransactionType.CREDIT -> creditTransactionsListState
+    }
+
     Column(
         modifier = modifier
             .fillMaxSize(),
@@ -127,6 +165,7 @@ private fun HistoryScreenContent(
         TransactionList(
             transactions = state.list,
             onAction = onAction,
+            lazyListState = currentListState,
         )
     }
 }

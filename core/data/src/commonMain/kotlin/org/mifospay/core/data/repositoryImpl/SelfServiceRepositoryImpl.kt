@@ -15,8 +15,10 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flatMapMerge
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
@@ -24,6 +26,7 @@ import kotlinx.coroutines.flow.scan
 import kotlinx.coroutines.flow.zip
 import kotlinx.coroutines.withContext
 import org.mifospay.core.common.DataState
+import org.mifospay.core.common.DateHelper
 import org.mifospay.core.common.asDataStateFlow
 import org.mifospay.core.common.combineResultsWith
 import org.mifospay.core.data.mapper.toAccount
@@ -156,7 +159,9 @@ class SelfServiceRepositoryImpl(
         return accountId.asFlow().flatMapMerge { clientId ->
             getSelfAccountTransactions(clientId)
         }.scan(emptyList()) { acc, transactions ->
-            acc + transactions.sortedByDescending { it.date }.let { sortedList ->
+            (acc + transactions).sortedByDescending { transaction ->
+                DateHelper.parseDateToMillis(transaction.date) ?: Long.MIN_VALUE
+            }.let { sortedList ->
                 limit?.let { sortedList.take(it) } ?: sortedList
             }
         }
@@ -167,17 +172,18 @@ class SelfServiceRepositoryImpl(
     ): Flow<DataState<List<Transaction>>> {
         return apiManager.clientsApi
             .getAccounts(clientId, Constants.SAVINGS)
-            .onStart { DataState.Loading }
-            .catch { DataState.Error(it, null) }
             .map { it.toAccount() }
             .map { list -> list.filter { it.status.active } }
             .map { list -> list.map { it.id } }
-            .flatMapLatest {
-                getTransactions(accountId = it, null)
-            }.map {
-                DataState.Success(it)
+            .flatMapLatest { accountIds ->
+                if (accountIds.isEmpty()) {
+                    flowOf(emptyList())
+                } else {
+                    getTransactions(accountId = accountIds, null)
+                        .filter { transactions -> transactions.isNotEmpty() }
+                }
             }
-            .flowOn(dispatcher)
+            .asDataStateFlow()
     }
 
     override fun getBeneficiaryList(): Flow<DataState<List<Beneficiary>>> {

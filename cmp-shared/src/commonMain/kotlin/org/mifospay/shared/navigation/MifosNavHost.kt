@@ -31,6 +31,7 @@ import org.mifospay.feature.finance.navigation.FINANCE_ROUTE
 import org.mifospay.feature.finance.navigation.financeScreen
 import org.mifospay.feature.history.HistoryScreen
 import org.mifospay.feature.history.navigation.historyNavigation
+import org.mifospay.feature.history.navigation.navigateToHistory
 import org.mifospay.feature.history.navigation.navigateToSpecificTransaction
 import org.mifospay.feature.history.navigation.navigateToTransactionDetail
 import org.mifospay.feature.history.navigation.specificTransactionsScreen
@@ -108,6 +109,7 @@ internal fun MifosNavHost(
         TabContent(PaymentsScreenContents.HISTORY.name) {
             HistoryScreen(
                 viewTransferDetail = navController::navigateToTransactionDetail,
+                showTopBar = false,
             )
         },
         TabContent(PaymentsScreenContents.SI.name) {
@@ -163,6 +165,7 @@ internal fun MifosNavHost(
             onPay = navController::navigateToSendMoneyScreen,
             navigateToTransactionDetail = navController::navigateToSpecificTransaction,
             navigateToAccountDetail = navController::navigateToSavingAccountDetails,
+            navigateToHistory = navController::navigateToHistory,
         )
 
         settingsScreen(
@@ -193,6 +196,7 @@ internal fun MifosNavHost(
 
         historyNavigation(
             viewTransactionDetail = navController::navigateToTransactionDetail,
+            onBackClick = navController::navigateUp,
         )
 
         paymentsScreen(tabContents = paymentsTabContents)
