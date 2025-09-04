@@ -30,10 +30,10 @@ jobs:
           fetch-depth: 0
 
       - name: ☁️ Deploy Android App on Firebase
-        uses: openMF/kmp-android-firebase-publish-action@v1.0.0
+        uses: openMF/mifos-x-actionhub-android-firebase-publish@v1.0.0
         with:
           release_type: 'demo'
-          android_package_name: 'mifospay-android'
+          android_package_name: 'cmp-android'
           keystore_file: ${{ secrets.ORIGINAL_KEYSTORE_FILE }}
           keystore_password: ${{ secrets.ORIGINAL_KEYSTORE_FILE_PASSWORD }}
           keystore_alias: ${{ secrets.ORIGINAL_KEYSTORE_ALIAS }}
