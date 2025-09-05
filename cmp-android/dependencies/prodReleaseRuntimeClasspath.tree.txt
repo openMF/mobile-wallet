@@ -1404,8 +1404,8 @@
 |    |    |    |         \--- org.jetbrains.kotlin:kotlin-stdlib:2.0.21 -> 2.1.21 (*)
 |    |    |    +--- com.squareup.okio:okio:3.15.0 (*)
 |    |    |    +--- org.jetbrains.kotlin:kotlin-stdlib:2.1.20 -> 2.1.21 (*)
-|    |    |    +--- org.jetbrains.kotlinx:kotlinx-datetime:0.6.1
-|    |    |    |    \--- org.jetbrains.kotlinx:kotlinx-datetime-jvm:0.6.1
+|    |    |    +--- org.jetbrains.kotlinx:kotlinx-datetime:0.6.2
+|    |    |    |    \--- org.jetbrains.kotlinx:kotlinx-datetime-jvm:0.6.2
 |    |    |    |         \--- org.jetbrains.kotlin:kotlin-stdlib:1.9.21 -> 2.1.21 (*)
 |    |    |    +--- io.insert-koin:koin-bom:4.1.0 (*)
 |    |    |    +--- io.insert-koin:koin-core:4.1.0 (*)
