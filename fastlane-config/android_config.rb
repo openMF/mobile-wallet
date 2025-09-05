@@ -15,9 +15,9 @@ module FastlaneConfig
     }
 
     BUILD_PATHS = {
-      prod_apk_path: "cmp-android/build/outputs/apk/prod/release/mifospay-android-prod-release.apk",
-      demo_apk_path: "cmp-android/build/outputs/apk/demo/release/mifospay-android-demo-release.apk",
-      prod_aab_path: "cmp-android/build/outputs/bundle/prodRelease/mifospay-android-prod-release.aab"
+      prod_apk_path: "cmp-android/build/outputs/apk/prod/release/cmp-android-prod-release.apk",
+      demo_apk_path: "cmp-android/build/outputs/apk/demo/release/cmp-android-demo-release.apk",
+      prod_aab_path: "cmp-android/build/outputs/bundle/prodRelease/cmp-android-prod-release.aab"
     }
   end
 end
