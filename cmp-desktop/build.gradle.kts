@@ -54,7 +54,13 @@ compose.desktop {
             (project.findProperty("macOsAppStoreRelease") as String?)?.toBoolean() ?: false
 
         nativeDistributions {
-            targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Exe, TargetFormat.Deb)
+            targetFormats(
+                TargetFormat.Pkg,
+                TargetFormat.Dmg,
+                TargetFormat.Msi,
+                TargetFormat.Exe,
+                TargetFormat.Deb
+            )
             packageName = appPackageName
             packageVersion = appPackageVersion
             description = "Mifos Wallet Desktop Application"

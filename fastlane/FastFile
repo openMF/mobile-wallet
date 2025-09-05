@@ -559,6 +559,7 @@ platform :ios do
       )
 
       deliver(
+        screenshots_path: ios_config[:screenshots_ios_path],
         metadata_path: options[:metadata_path] || ios_config[:metadata_path],
         submit_for_review: false, # Set to true if you want to auto-submit for review
         automatic_release: true, # Set to true if you want to auto-release once it approved
