@@ -47,44 +47,15 @@ fun AutoPayHistoryScreen(
         topBarTitle = "AutoPay History",
         backPress = onNavigateBack,
     ) { paddingValues ->
-        Column(
+        LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
                 .padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.padding(bottom = 16.dp),
-            ) {
-                Icon(
-                    imageVector = MifosIcons.History,
-                    contentDescription = null,
-                    modifier = Modifier.size(64.dp),
-                    tint = MaterialTheme.colorScheme.primary,
-                )
-
-                Spacer(modifier = Modifier.height(16.dp))
-
-                Text(
-                    text = "AutoPay History",
-                    style = MaterialTheme.typography.headlineMedium,
-                    fontWeight = FontWeight.Medium,
-                )
-
-                Text(
-                    text = "View your AutoPay transaction history and activities.",
-                    style = MaterialTheme.typography.bodyLarge,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                )
-            }
-
-            LazyColumn(
-                verticalArrangement = Arrangement.spacedBy(12.dp),
-            ) {
-                items(getDummyHistoryItems()) { historyItem ->
-                    HistoryItemCard(historyItem = historyItem)
-                }
+            items(getDummyHistoryItems()) { historyItem ->
+                HistoryItemCard(historyItem = historyItem)
             }
         }
     }

@@ -78,6 +78,18 @@ class EditBillViewModel(
             is EditBillAction.SelectBiller -> {
                 selectBiller(action.biller)
             }
+            is EditBillAction.UpdateAutoPayEnabled -> {
+                updateAutoPayEnabled(action.enabled)
+            }
+            is EditBillAction.UpdateAutoPayPaymentMethod -> {
+                updateAutoPayPaymentMethod(action.paymentMethod)
+            }
+            is EditBillAction.UpdateAutoPaySourceAccount -> {
+                updateAutoPaySourceAccount(action.sourceAccount)
+            }
+            is EditBillAction.UpdateAutoPayMaxAmount -> {
+                updateAutoPayMaxAmount(action.maxAmount)
+            }
         }
     }
 
@@ -97,6 +109,10 @@ class EditBillViewModel(
                         billerId = bill.billerId,
                         billerName = bill.billerName,
                         description = bill.description ?: "",
+                        enableAutoPay = bill.autoPayEnabled,
+                        autoPayPaymentMethod = bill.autoPayPaymentMethod ?: "",
+                        autoPaySourceAccount = bill.autoPaySourceAccount ?: "",
+                        autoPayMaxAmount = bill.autoPayMaxAmount?.toString() ?: "",
                     )
                     mutableStateFlow.update {
                         it.copy(
@@ -246,6 +262,11 @@ class EditBillViewModel(
                     billerId = formData.billerId,
                     billerName = formData.billerName,
                     description = formData.description.takeIf { it.isNotBlank() },
+                    // AutoPay configuration
+                    autoPayEnabled = formData.enableAutoPay,
+                    autoPayPaymentMethod = formData.autoPayPaymentMethod.takeIf { it.isNotBlank() },
+                    autoPaySourceAccount = formData.autoPaySourceAccount.takeIf { it.isNotBlank() },
+                    autoPayMaxAmount = formData.autoPayMaxAmount.toDoubleOrNull(),
                 )
 
                 val result = billRepository.updateBill(bill)
@@ -322,6 +343,66 @@ class EditBillViewModel(
         }
     }
 
+    private fun updateAutoPayEnabled(enabled: Boolean) {
+        mutableStateFlow.update {
+            it.copy(
+                formData = it.formData.copy(enableAutoPay = enabled),
+            )
+        }
+    }
+
+    private fun updateAutoPayPaymentMethod(paymentMethod: String) {
+        val paymentMethodError = if (stateFlow.value.formData.enableAutoPay && paymentMethod.isBlank()) {
+            "Payment method is required when AutoPay is enabled"
+        } else {
+            null
+        }
+
+        mutableStateFlow.update {
+            it.copy(
+                formData = it.formData.copy(autoPayPaymentMethod = paymentMethod),
+                validationResult = it.validationResult.copy(autoPayPaymentMethodError = paymentMethodError),
+            )
+        }
+    }
+
+    private fun updateAutoPaySourceAccount(sourceAccount: String) {
+        val sourceAccountError = if (stateFlow.value.formData.enableAutoPay && sourceAccount.isBlank()) {
+            "Source account is required when AutoPay is enabled"
+        } else {
+            null
+        }
+
+        mutableStateFlow.update {
+            it.copy(
+                formData = it.formData.copy(autoPaySourceAccount = sourceAccount),
+                validationResult = it.validationResult.copy(autoPaySourceAccountError = sourceAccountError),
+            )
+        }
+    }
+
+    private fun updateAutoPayMaxAmount(maxAmount: String) {
+        val maxAmountError = if (maxAmount.isNotBlank()) {
+            val amount = maxAmount.toDoubleOrNull()
+            if (amount == null) {
+                "Invalid amount format"
+            } else if (amount <= 0) {
+                "Maximum amount must be greater than 0"
+            } else {
+                null
+            }
+        } else {
+            null
+        }
+
+        mutableStateFlow.update {
+            it.copy(
+                formData = it.formData.copy(autoPayMaxAmount = maxAmount),
+                validationResult = it.validationResult.copy(autoPayMaxAmountError = maxAmountError),
+            )
+        }
+    }
+
     companion object {
         private const val KEY_STATE = "edit_bill_state"
     }
@@ -354,4 +435,10 @@ sealed interface EditBillAction {
     data object ClearValidationErrors : EditBillAction
     data object CalculateNextPaymentDates : EditBillAction
     data class SelectBiller(val biller: Biller) : EditBillAction
+
+    // AutoPay actions
+    data class UpdateAutoPayEnabled(val enabled: Boolean) : EditBillAction
+    data class UpdateAutoPayPaymentMethod(val paymentMethod: String) : EditBillAction
+    data class UpdateAutoPaySourceAccount(val sourceAccount: String) : EditBillAction
+    data class UpdateAutoPayMaxAmount(val maxAmount: String) : EditBillAction
 }

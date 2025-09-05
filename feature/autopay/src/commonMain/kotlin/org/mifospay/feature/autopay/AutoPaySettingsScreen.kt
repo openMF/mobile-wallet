@@ -83,34 +83,6 @@ fun AutoPayPreferencesScreen(
                     .verticalScroll(rememberScrollState()),
                 verticalArrangement = Arrangement.spacedBy(16.dp),
             ) {
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                ) {
-                    Icon(
-                        imageVector = MifosIcons.Settings,
-                        contentDescription = null,
-                        modifier = Modifier.size(64.dp),
-                        tint = MaterialTheme.colorScheme.primary,
-                    )
-
-                    Spacer(modifier = Modifier.height(16.dp))
-
-                    Text(
-                        text = "AutoPay Settings",
-                        style = MaterialTheme.typography.headlineMedium,
-                        fontWeight = FontWeight.Medium,
-                    )
-
-                    Text(
-                        text = "Configure global AutoPay settings and preferences.",
-                        style = MaterialTheme.typography.bodyLarge,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    )
-                }
-
-                Spacer(modifier = Modifier.height(16.dp))
-
-                // General Settings
                 GeneralSettingsSection(
                     settings = state.globalSettings,
                     onToggleAutoPay = { enabled ->
@@ -118,7 +90,6 @@ fun AutoPayPreferencesScreen(
                     },
                 )
 
-                // Notification Settings
                 NotificationSettingsSection(
                     settings = state.globalSettings.notificationSettings,
                     onSettingsChanged = { notificationSettings ->
@@ -126,7 +97,6 @@ fun AutoPayPreferencesScreen(
                     },
                 )
 
-                // Security Settings
                 SecuritySettingsSection(
                     settings = state.globalSettings.securitySettings,
                     onSettingsChanged = { securitySettings ->
@@ -134,7 +104,6 @@ fun AutoPayPreferencesScreen(
                     },
                 )
 
-                // AutoPay Rules
                 AutoPayRulesSection(
                     rules = state.globalSettings.globalAutoPayRules,
                     onRulesChanged = { rules ->
@@ -142,7 +111,6 @@ fun AutoPayPreferencesScreen(
                     },
                 )
 
-                // Save Button
                 if (state.hasUnsavedChanges) {
                     Spacer(modifier = Modifier.height(16.dp))
 
