@@ -99,6 +99,7 @@ enum class AutoPayStatus {
 enum class PaymentStatus {
     UPCOMING,
     PROCESSING,
+    PENDING,
     COMPLETED,
     FAILED,
     CANCELLED,

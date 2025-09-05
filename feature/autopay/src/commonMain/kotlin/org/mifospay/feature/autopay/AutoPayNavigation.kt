@@ -39,6 +39,7 @@ object AutoPayNavigation {
     const val BILLER_ID_ARG = "billerId"
     const val BILL_ID_ARG = "billId"
     const val SOURCE_ARG = "source"
+    const val AUTO_PAY_ID_ARG = "autoPayId"
 }
 
 /**
@@ -83,8 +84,9 @@ fun NavController.navigateToAutoPayPreferences(navOptions: NavOptions? = null) {
     navigate(AutoPayNavigation.AUTO_PAY_PREFERENCES_ROUTE, navOptions)
 }
 
-fun NavController.navigateToAutoPayHistory(navOptions: NavOptions? = null) {
-    navigate(AutoPayNavigation.AUTO_PAY_HISTORY_ROUTE, navOptions)
+fun NavController.navigateToAutoPayHistory(autoPayId: Long = 0L, navOptions: NavOptions? = null) {
+    val route = "${AutoPayNavigation.AUTO_PAY_HISTORY_ROUTE}?${AutoPayNavigation.AUTO_PAY_ID_ARG}=$autoPayId"
+    navigate(route, navOptions)
 }
 
 fun NavController.navigateToAutoPayScheduleDetails(scheduleId: String, navOptions: NavOptions? = null) {
@@ -132,7 +134,7 @@ fun NavGraphBuilder.autoPayGraph(
                 navController.navigateToAutoPayPreferences()
             },
             onNavigateToHistory = {
-                navController.navigateToAutoPayHistory()
+                navController.navigateToAutoPayHistory(autoPayId = 0L)
             },
             onNavigateToScheduleDetails = { scheduleId ->
                 navController.navigateToAutoPayScheduleDetails(scheduleId)
@@ -175,7 +177,16 @@ fun NavGraphBuilder.autoPayGraph(
         )
     }
 
-    composableWithFadeTransitions(AutoPayNavigation.AUTO_PAY_HISTORY_ROUTE) {
+    composableWithFadeTransitions(
+        route = "${AutoPayNavigation.AUTO_PAY_HISTORY_ROUTE}?${AutoPayNavigation.AUTO_PAY_ID_ARG}={${AutoPayNavigation.AUTO_PAY_ID_ARG}}",
+        arguments = listOf(
+            navArgument(AutoPayNavigation.AUTO_PAY_ID_ARG) {
+                type = NavType.LongType
+                nullable = false
+                defaultValue = 0L
+            },
+        ),
+    ) { backStackEntry ->
         AutoPayHistoryScreen(
             onNavigateBack = onNavigateBack,
         )
