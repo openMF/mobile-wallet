@@ -33,13 +33,13 @@ Following recommended architecture and design patterns, the application is devel
 ### Run the Project
 ![Screenshot (154)](https://github.com/user-attachments/assets/761063ed-83f8-4443-b58f-2b68a4c74c5d)
 
-- **Android App**: Select the `mifospay-android` run configuration and click **Run**.
-- **Desktop App**: Select the `mifospay-desktop` run configuration and click **Run**.
-- **Web App (JavaScript)**: Select the `mifospasy-web-js` run configuration and click **Run**.
-- **iOS App**: Select the `mifospay-ios` run configuration and click **Run**.
+- **Android App**: Select the `cmp-android` run configuration and click **Run**.
+- **Desktop App**: Select the `cmp-desktop` run configuration and click **Run**.
+- **Web App (JavaScript)**: Select the `cmp-web-js` run configuration and click **Run**.
+- **iOS App**: Select the `cmp-ios` run configuration and click **Run**.
 
 > \[!Important]
-> To run the iOS app, you must have a macOS device with Xcode installed. Currently, the `mifospay-web-wasm` app is not working as expected. We are working on it and it will be available soon.
+> To run the iOS app, you must have a macOS device with Xcode installed. Currently, the `cmp-web-wasm` app is not working as expected. We are working on it and it will be available soon.
 
 ### Demo Credentials
 - **Fineract Instance**: `venus.mifos.community`

@@ -12,10 +12,10 @@ graph LR
     :core:data["data"]
     :core:ui["ui"]
   end
-  :mifospay-android --> :mifospay-shared
-  :mifospay-android --> :core:data
-  :mifospay-android --> :core:ui
+  :cmp-android --> :mifospay-shared
+  :cmp-android --> :core:data
+  :cmp-android --> :core:ui
 ```
-# :mifospay-android module
+# :cmp-android module
 ## Dependency graph
 ![Dependency graph](../docs/images/graphs-kmp/dep_graph_mifospay_android.svg)
