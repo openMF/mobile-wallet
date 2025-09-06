@@ -16,11 +16,13 @@ sealed class CardAddEditType {
 
     abstract val savedCardId: Long?
 
+    @Serializable
     data object AddItem : CardAddEditType() {
         override val savedCardId: Long?
             get() = null
     }
 
+    @Serializable
     data class EditItem(
         override val savedCardId: Long,
     ) : CardAddEditType()
