@@ -194,6 +194,7 @@ fun HomeScreenContent(
     MifosScaffold(
         modifier = modifier,
         snackbarHostState = snackbarHostState,
+        containerColor = KptTheme.colorScheme.background,
     ) {
         PullToRefreshBox(
             isRefreshing = isRefreshing,
