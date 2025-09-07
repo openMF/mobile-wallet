@@ -266,7 +266,6 @@ private fun AccountList(
             }
         }
     }
-
 }
 
 @Composable

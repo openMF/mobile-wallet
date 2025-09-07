@@ -11,7 +11,6 @@ package org.mifospay.feature.make.transfer
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
-import co.touchlab.kermit.Logger
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.launchIn
@@ -82,7 +81,7 @@ internal class MakeTransferViewModel(
                     } else {
                         val account = result.data.first { it.id == state.defaultAccountId }
                         sendAction(MakeTransferAction.SelectAccount(account))
-                        val activeAccounts=result.data.filter {
+                        val activeAccounts = result.data.filter {
                             it.status.active
                         }
                         ViewState.Content(activeAccounts)
