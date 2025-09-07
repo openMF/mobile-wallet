@@ -81,7 +81,10 @@ internal class MakeTransferViewModel(
                     } else {
                         val account = result.data.first { it.id == state.defaultAccountId }
                         sendAction(MakeTransferAction.SelectAccount(account))
-                        ViewState.Content(result.data)
+                        val activeAccounts = result.data.filter {
+                            it.status.active
+                        }
+                        ViewState.Content(activeAccounts)
                     }
                 }
             }
