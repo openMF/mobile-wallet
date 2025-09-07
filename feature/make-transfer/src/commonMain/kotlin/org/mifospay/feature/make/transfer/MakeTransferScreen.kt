@@ -243,26 +243,30 @@ private fun AccountList(
     modifier: Modifier = Modifier,
     onClick: (Account) -> Unit,
 ) {
-    LazyColumn(
+    Column(
         modifier = modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.md),
     ) {
-        item {
-            Text(
-                text = stringResource(Res.string.feature_make_transfer_from_account),
-                style = KptTheme.typography.labelLarge,
-            )
-        }
-        items(items = accounts, key = { account -> account.id }) { account ->
-            AccountItem(
-                account = account,
-                selected = selected(account),
-                onClick = remember(account) {
-                    { onClick(account) }
-                },
-            )
+        Text(
+            text = stringResource(Res.string.feature_make_transfer_from_account),
+            style = KptTheme.typography.labelLarge,
+        )
+        LazyColumn(
+            modifier = modifier.fillMaxWidth(),
+            verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.md),
+        ) {
+            items(items = accounts, key = { account -> account.id }) { account ->
+                AccountItem(
+                    account = account,
+                    selected = selected(account),
+                    onClick = remember(account) {
+                        { onClick(account) }
+                    },
+                )
+            }
         }
     }
+
 }
 
 @Composable
