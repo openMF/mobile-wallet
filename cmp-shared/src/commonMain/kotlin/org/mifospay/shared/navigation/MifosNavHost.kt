@@ -106,25 +106,26 @@ internal fun MifosNavHost(
                 showQr = navController::navigateToShowQrScreen,
             )
         },
-        TabContent(PaymentsScreenContents.HISTORY.name) {
-            HistoryScreen(
-                viewTransferDetail = navController::navigateToTransactionDetail,
-                showTopBar = false,
-            )
-        },
-        TabContent(PaymentsScreenContents.SI.name) {
-            StandingInstructionsScreen(
-                onAddEditSI = navController::navigateToSIAddEdit,
-                onShowSIDetails = navController::navigateSIDetails,
-            )
-        },
-        TabContent(PaymentsScreenContents.INVOICES.name) {
-            InvoiceScreen(
-                navigateToInvoiceDetailScreen = navController::navigateToInvoiceDetail,
-            )
-        },
+//        TabContent(PaymentsScreenContents.HISTORY.name) {
+//            HistoryScreen(
+//                viewTransferDetail = navController::navigateToTransactionDetail,
+//                showTopBar = false,
+//            )
+//        },
+//        TabContent(PaymentsScreenContents.SI.name) {
+//            StandingInstructionsScreen(
+//                onAddEditSI = navController::navigateToSIAddEdit,
+//                onShowSIDetails = navController::navigateSIDetails,
+//            )
+//        },
+//        TabContent(PaymentsScreenContents.INVOICES.name) {
+//            InvoiceScreen(
+//                navigateToInvoiceDetailScreen = navController::navigateToInvoiceDetail,
+//            )
+//        },
     )
 
+//    TODO Cards and Merchants are not using self api
     val tabContents = listOf(
         TabContent(FinanceScreenContents.ACCOUNTS.name) {
             AccountsScreen(
@@ -133,22 +134,22 @@ internal fun MifosNavHost(
                 onAddOrEditBeneficiary = navController::navigateToBeneficiaryAddEdit,
             )
         },
-        TabContent(FinanceScreenContents.CARDS.name) {
-            CardsScreen(
-                navigateToViewDetail = navController::navigateToCardDetails,
-                navigateToAddEdit = navController::navigateToCardAddEdit,
-            )
-        },
-        TabContent(FinanceScreenContents.MERCHANTS.name) {
-            MerchantScreen()
-        },
-        TabContent(FinanceScreenContents.KYC.name) {
-            KYCScreen(
-                onLevel1Clicked = navController::navigateToKYCLevel1,
-                onLevel2Clicked = navController::navigateToKYCLevel2,
-                onLevel3Clicked = navController::navigateToKYCLevel3,
-            )
-        },
+//        TabContent(FinanceScreenContents.CARDS.name) {
+//            CardsScreen(
+//                navigateToViewDetail = navController::navigateToCardDetails,
+//                navigateToAddEdit = navController::navigateToCardAddEdit,
+//            )
+//        },
+//        TabContent(FinanceScreenContents.MERCHANTS.name) {
+//            MerchantScreen()
+//        },
+//        TabContent(FinanceScreenContents.KYC.name) {
+//            KYCScreen(
+//                onLevel1Clicked = navController::navigateToKYCLevel1,
+//                onLevel2Clicked = navController::navigateToKYCLevel2,
+//                onLevel3Clicked = navController::navigateToKYCLevel3,
+//            )
+//        },
     )
 
     NavHost(

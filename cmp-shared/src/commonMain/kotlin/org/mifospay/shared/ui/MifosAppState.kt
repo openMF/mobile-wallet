@@ -84,7 +84,7 @@ internal class MifosAppState(
             HOME_ROUTE -> TopLevelDestination.HOME
             PAYMENTS_ROUTE -> TopLevelDestination.PAYMENTS
             FINANCE_ROUTE -> TopLevelDestination.FINANCE
-            PROFILE_ROUTE -> TopLevelDestination.PROFILE
+//            PROFILE_ROUTE -> TopLevelDestination.PROFILE
             else -> null
         }
 
@@ -131,7 +131,7 @@ internal class MifosAppState(
                 TopLevelDestination.HOME -> navController.navigateToHome(topLevelNavOptions)
                 TopLevelDestination.PAYMENTS -> navController.navigateToPayments(topLevelNavOptions)
                 TopLevelDestination.FINANCE -> navController.navigateToFinance(topLevelNavOptions)
-                TopLevelDestination.PROFILE -> navController.navigateToProfile(topLevelNavOptions)
+//                TopLevelDestination.PROFILE -> navController.navigateToProfile(topLevelNavOptions)
             }
         }
     }

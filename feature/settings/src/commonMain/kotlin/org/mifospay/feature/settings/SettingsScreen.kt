@@ -111,13 +111,13 @@ private fun SettingsScreenContent(
                 .verticalScroll(rememberScrollState()),
             verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.sm),
         ) {
-            SettingsCardItem(
-                title = stringResource(Res.string.feature_settings_notification_settings),
-                icon = MifosIcons.OutlinedNotifications,
-                onClick = {
-                    onAction(SettingsAction.NavigateToNotificationSettings)
-                },
-            )
+//            SettingsCardItem(
+//                title = stringResource(Res.string.feature_settings_notification_settings),
+//                icon = MifosIcons.OutlinedNotifications,
+//                onClick = {
+//                    onAction(SettingsAction.NavigateToNotificationSettings)
+//                },
+//            )
 
             SettingsCardItem(
                 title = stringResource(Res.string.feature_settings_faq),
