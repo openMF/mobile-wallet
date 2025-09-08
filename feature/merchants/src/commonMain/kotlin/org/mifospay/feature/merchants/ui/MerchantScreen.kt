@@ -57,6 +57,7 @@ import org.mifospay.core.model.savingsaccount.SubStatus
 import org.mifospay.core.model.savingsaccount.Summary
 import org.mifospay.core.model.savingsaccount.Timeline
 import org.mifospay.core.ui.EmptyContentScreen
+import org.mifospay.core.ui.MifosSearchBar
 import org.mifospay.feature.merchants.MerchantUiState
 import org.mifospay.feature.merchants.MerchantViewModel
 import org.mifospay.feature.merchants.navigation.navigateToMerchantTransferScreen
@@ -210,48 +211,13 @@ private fun SearchBarScreen(
     onClearQuery: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    SearchBar(
-        inputField = {
-            SearchBarDefaults.InputField(
-                query = query,
-                onQueryChange = onQueryChange,
-                onSearch = onSearch,
-                expanded = false,
-                onExpandedChange = {},
-                enabled = true,
-                placeholder = {
-                    Text(text = stringResource(Res.string.feature_merchants_search))
-                },
-                leadingIcon = {
-                    Icon(
-                        imageVector = MifosIcons.Search,
-                        contentDescription = stringResource(Res.string.feature_merchants_search),
-                    )
-                },
-                trailingIcon = {
-                    IconButton(
-                        onClick = onClearQuery,
-                    ) {
-                        Icon(
-                            imageVector = MifosIcons.Close,
-                            contentDescription = stringResource(Res.string.feature_merchants_close),
-                        )
-                    }
-                },
-                interactionSource = null,
-            )
-        },
-        expanded = false,
-        onExpandedChange = {},
+    MifosSearchBar(
+        query = query,
+        placeHolder = stringResource(Res.string.feature_merchants_search),
+        onQueryChange = onQueryChange,
+        onSearch = onSearch,
+        onClearQuery = onClearQuery,
         modifier = modifier
-            .fillMaxWidth()
-            .padding(vertical = KptTheme.spacing.md, horizontal = KptTheme.spacing.md),
-        shape = SearchBarDefaults.inputFieldShape,
-        colors = SearchBarDefaults.colors(),
-        tonalElevation = SearchBarDefaults.TonalElevation,
-        shadowElevation = SearchBarDefaults.ShadowElevation,
-        windowInsets = SearchBarDefaults.windowInsets,
-        content = {},
     )
 }
 

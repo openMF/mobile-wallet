@@ -206,7 +206,7 @@ private fun SendMoneyScreen(
 }
 
 @Composable
-private fun SendMoneyBottomBar(
+fun SendMoneyBottomBar(
     showDetails: Boolean,
     selectedAccount: AccountResult?,
     modifier: Modifier = Modifier,
@@ -460,7 +460,7 @@ private fun LazyListScope.accountListContent(
 }
 
 @Composable
-private fun AccountCard(
+ fun AccountCard(
     account: AccountResult,
     selected: (AccountResult) -> Boolean,
     modifier: Modifier = Modifier,

@@ -38,4 +38,23 @@
     <string name="feature_send_money_error_account_cannot_be_empty">Account cannot be empty</string>
     <string name="feature_send_money_error_requesting_payment_qr_but_found">Requesting payment QR but found - %1$s</string>
     <string name="feature_send_money_error_requesting_payment_qr_data_missing">Failed to request payment QR: required data is missing</string>
+
+    <string name="feature_send_money_select_payment">Select Payment</string>
+    <string name="feature_send_money_scan_qr">Scan QR</string>
+
+    <!-- Search -->
+    <string name="feature_send_money_select_account_placeholder">Select Account Number To Pay</string>
+
+    <!-- Bottom Bar -->
+    <string name="feature_send_money_send">Send</string>
+
+    <!-- Loading -->
+    <string name="feature_send_money_loading">Loading...</string>
+
+    <!-- Error -->
+    <string name="feature_send_money_oops">Oops!</string>
+    <string name="feature_send_money_something_went_wrong">Something went wrong. Please try again.</string>
+
+    <!-- Empty State -->
+    <string name="feature_send_money_no_accounts_found">No accounts found.</string>
 </resources>

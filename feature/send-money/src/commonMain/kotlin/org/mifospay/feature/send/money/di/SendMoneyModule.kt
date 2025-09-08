@@ -13,8 +13,12 @@ import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
 import org.mifospay.feature.send.money.ScannerModule
 import org.mifospay.feature.send.money.SendMoneyViewModel
+import org.mifospay.feature.send.money.selectScreen.SelectScreenViewModel
+import v2.SendMoneyV2ViewModel
 
 val SendMoneyModule = module {
     includes(ScannerModule)
     viewModelOf(::SendMoneyViewModel)
+    viewModelOf(::SelectScreenViewModel)
+    viewModelOf(::SendMoneyV2ViewModel)
 }
