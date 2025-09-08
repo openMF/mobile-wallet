@@ -62,7 +62,6 @@ import org.mifospay.feature.request.money.navigation.navigateToShowQrScreen
 import org.mifospay.feature.request.money.navigation.showQrScreen
 import org.mifospay.feature.savedcards.createOrUpdate.addEditCardScreen
 import org.mifospay.feature.savedcards.details.cardDetailRoute
-import org.mifospay.feature.send.money.SendMoneyScreen
 import org.mifospay.feature.send.money.navigation.SEND_MONEY_BASE_ROUTE
 import org.mifospay.feature.send.money.navigation.navigateToSendMoneyScreen
 import org.mifospay.feature.send.money.navigation.sendMoneyScreen
@@ -81,14 +80,14 @@ internal fun MifosNavHost(
     val navController = appState.navController
 
     val paymentsTabContents = listOf(
-        TabContent(PaymentsScreenContents.SEND.name) {
-            SendMoneyScreen(
-                onBackClick = navController::navigateUp,
-                navigateToTransferScreen = navController::navigateToTransferScreen,
-                navigateToScanQrScreen = navController::navigateToScanQr,
-                showTopBar = false,
-            )
-        },
+//        TabContent(PaymentsScreenContents.SEND.name) {
+//            SendMoneyScreen(
+//                onBackClick = navController::navigateUp,
+//                navigateToTransferScreen = navController::navigateToTransferScreen,
+//                navigateToScanQrScreen = navController::navigateToScanQr,
+//                showTopBar = false,
+//            )
+//        },
         TabContent(PaymentsScreenContents.REQUEST.name) {
             RequestScreen(
                 showQr = navController::navigateToShowQrScreen,
