@@ -21,8 +21,6 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 import mobile_wallet.feature.make_transfer.generated.resources.Res
-import mobile_wallet.feature.make_transfer.generated.resources.feature_make_transfer_error_empty_amount
-import mobile_wallet.feature.make_transfer.generated.resources.feature_make_transfer_error_empty_description
 import mobile_wallet.feature.make_transfer.generated.resources.feature_make_transfer_error_inactive_account
 import mobile_wallet.feature.make_transfer.generated.resources.feature_make_transfer_error_insufficient_balance
 import mobile_wallet.feature.make_transfer.generated.resources.feature_make_transfer_error_invalid_amount
@@ -105,13 +103,19 @@ internal class MakeTransferViewModel(
 
             is MakeTransferAction.AmountChanged -> {
                 mutableStateFlow.update {
-                    it.copy(amount = action.amount)
+                    it.copy(
+                        amount = action.amount,
+                        isContinueButtonEnabled = action.amount.isNotBlank() && state.description.isNotBlank(),
+                    )
                 }
             }
 
             is MakeTransferAction.DescriptionChanged -> {
                 mutableStateFlow.update {
-                    it.copy(description = action.desc)
+                    it.copy(
+                        description = action.desc,
+                        isContinueButtonEnabled = state.amount.isNotBlank() && action.desc.isNotBlank(),
+                    )
                 }
             }
 
@@ -134,11 +138,7 @@ internal class MakeTransferViewModel(
     }
 
     private fun validateTransfer() = when {
-        state.amount.isBlank() -> updateErrorState(Res.string.feature_make_transfer_error_empty_amount)
-
         state.amount.toDoubleOrNull() == null -> updateErrorState(Res.string.feature_make_transfer_error_invalid_amount)
-
-        state.description.isBlank() -> updateErrorState(Res.string.feature_make_transfer_error_empty_description)
 
         state.selectedAccount == null -> updateErrorState(Res.string.feature_make_transfer_error_select_account)
 
@@ -208,6 +208,7 @@ internal data class MakeTransferState(
     val amount: String = toClientData.amount,
     val description: String = "",
     val selectedAccount: Account? = null,
+    val isContinueButtonEnabled: Boolean = false,
     val dialogState: DialogState? = null,
 ) {
     val amountIsValid: Boolean
