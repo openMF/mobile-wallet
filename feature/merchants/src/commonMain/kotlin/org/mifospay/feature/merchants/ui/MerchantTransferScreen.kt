@@ -49,7 +49,6 @@ import mobile_wallet.feature.merchants.generated.resources.feature_merchants_amo
 import mobile_wallet.feature.merchants.generated.resources.feature_merchants_credits
 import mobile_wallet.feature.merchants.generated.resources.feature_merchants_debits
 import mobile_wallet.feature.merchants.generated.resources.feature_merchants_error_oops
-import mobile_wallet.feature.merchants.generated.resources.feature_merchants_loading
 import mobile_wallet.feature.merchants.generated.resources.feature_merchants_merchant_transaction
 import mobile_wallet.feature.merchants.generated.resources.feature_merchants_no_transactions_found
 import mobile_wallet.feature.merchants.generated.resources.feature_merchants_other
@@ -63,7 +62,6 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.jetbrains.compose.ui.tooling.preview.PreviewParameter
 import org.jetbrains.compose.ui.tooling.preview.PreviewParameterProvider
 import org.koin.compose.viewmodel.koinViewModel
-import org.mifospay.core.designsystem.component.MfLoadingWheel
 import org.mifospay.core.designsystem.component.MifosBottomSheet
 import org.mifospay.core.designsystem.component.MifosButton
 import org.mifospay.core.designsystem.component.MifosOutlinedTextField
@@ -74,6 +72,7 @@ import org.mifospay.core.model.savingsaccount.Currency
 import org.mifospay.core.model.savingsaccount.Transaction
 import org.mifospay.core.model.savingsaccount.TransactionType
 import org.mifospay.core.ui.EmptyContentScreen
+import org.mifospay.core.ui.MifosProgressIndicator
 import org.mifospay.feature.merchants.MerchantTransferUiState
 import org.mifospay.feature.merchants.MerchantTransferViewModel
 import template.core.base.designsystem.theme.KptTheme
@@ -122,12 +121,7 @@ internal fun MerchantTransferScreen(
                 contentAlignment = Alignment.Center,
             ) {
                 when (uiState) {
-                    is MerchantTransferUiState.Loading -> {
-                        MfLoadingWheel(
-                            contentDesc = stringResource(Res.string.feature_merchants_loading),
-                            backgroundColor = KptTheme.colorScheme.surface,
-                        )
-                    }
+                    is MerchantTransferUiState.Loading -> MifosProgressIndicator()
 
                     is MerchantTransferUiState.Error -> {
                         EmptyContentScreen(

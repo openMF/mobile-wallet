@@ -266,6 +266,7 @@ internal data class KycLevel1State(
     val submitButtonText: String
         get() = if (doesExist) "Update" else "Submit"
 
+    @Transient
     val initialDate = Clock.System.now().toEpochMilliseconds()
 
     @Transient

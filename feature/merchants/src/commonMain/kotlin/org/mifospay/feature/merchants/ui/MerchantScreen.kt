@@ -37,13 +37,11 @@ import mobile_wallet.feature.merchants.generated.resources.feature_merchants_clo
 import mobile_wallet.feature.merchants.generated.resources.feature_merchants_empty_no_merchants_subtitle
 import mobile_wallet.feature.merchants.generated.resources.feature_merchants_empty_no_merchants_title
 import mobile_wallet.feature.merchants.generated.resources.feature_merchants_error_oops
-import mobile_wallet.feature.merchants.generated.resources.feature_merchants_loading
 import mobile_wallet.feature.merchants.generated.resources.feature_merchants_search
 import mobile_wallet.feature.merchants.generated.resources.feature_merchants_unexpected_error_subtitle
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
-import org.mifospay.core.designsystem.component.MfLoadingWheel
 import org.mifospay.core.designsystem.component.MifosScaffold
 import org.mifospay.core.designsystem.component.rememberMifosPullToRefreshState
 import org.mifospay.core.designsystem.icon.MifosIcons
@@ -57,6 +55,7 @@ import org.mifospay.core.model.savingsaccount.SubStatus
 import org.mifospay.core.model.savingsaccount.Summary
 import org.mifospay.core.model.savingsaccount.Timeline
 import org.mifospay.core.ui.EmptyContentScreen
+import org.mifospay.core.ui.MifosProgressIndicator
 import org.mifospay.feature.merchants.MerchantUiState
 import org.mifospay.feature.merchants.MerchantViewModel
 import org.mifospay.feature.merchants.navigation.navigateToMerchantTransferScreen
@@ -124,12 +123,7 @@ internal fun MerchantScreen(
                     )
                 }
 
-                MerchantUiState.Loading -> {
-                    MfLoadingWheel(
-                        contentDesc = stringResource(Res.string.feature_merchants_loading),
-                        backgroundColor = KptTheme.colorScheme.surface,
-                    )
-                }
+                MerchantUiState.Loading -> MifosProgressIndicator()
 
                 is MerchantUiState.ShowMerchants -> {
                     MerchantScreenContent(

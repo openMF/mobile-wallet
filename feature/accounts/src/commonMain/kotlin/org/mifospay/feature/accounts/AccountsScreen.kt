@@ -62,7 +62,6 @@ import mobile_wallet.feature.accounts.generated.resources.feature_accounts_edit
 import mobile_wallet.feature.accounts.generated.resources.feature_accounts_edit_beneficiary
 import mobile_wallet.feature.accounts.generated.resources.feature_accounts_error_oops
 import mobile_wallet.feature.accounts.generated.resources.feature_accounts_info
-import mobile_wallet.feature.accounts.generated.resources.feature_accounts_loading
 import mobile_wallet.feature.accounts.generated.resources.feature_accounts_savings_account
 import mobile_wallet.feature.accounts.generated.resources.feature_accounts_status_active
 import mobile_wallet.feature.accounts.generated.resources.feature_accounts_status_approved
@@ -82,7 +81,6 @@ import org.jetbrains.compose.resources.vectorResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.mifospay.core.designsystem.component.BasicDialogState
 import org.mifospay.core.designsystem.component.LoadingDialogState
-import org.mifospay.core.designsystem.component.MfLoadingWheel
 import org.mifospay.core.designsystem.component.MifosBasicDialog
 import org.mifospay.core.designsystem.component.MifosButton
 import org.mifospay.core.designsystem.component.MifosLoadingDialog
@@ -93,6 +91,7 @@ import org.mifospay.core.model.beneficiary.Beneficiary
 import org.mifospay.core.model.savingsaccount.Status
 import org.mifospay.core.ui.AvatarBox
 import org.mifospay.core.ui.EmptyContentScreen
+import org.mifospay.core.ui.MifosProgressIndicator
 import org.mifospay.core.ui.MifosSmallChip
 import org.mifospay.core.ui.RevealDirection
 import org.mifospay.core.ui.RevealSwipe
@@ -192,11 +191,7 @@ internal fun AccountsScreenContent(
             contentAlignment = Alignment.Center,
         ) {
             when (state) {
-                is AccountState.ViewState.Loading -> {
-                    MfLoadingWheel(
-                        contentDesc = stringResource(Res.string.feature_accounts_loading),
-                    )
-                }
+                is AccountState.ViewState.Loading -> MifosProgressIndicator()
 
                 is AccountState.ViewState.Error -> {
                     EmptyContentScreen(

@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
@@ -28,14 +27,13 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import mobile_wallet.feature.invoices.generated.resources.Res
 import mobile_wallet.feature.invoices.generated.resources.feature_invoices_error_no_invoices_found
 import mobile_wallet.feature.invoices.generated.resources.feature_invoices_error_oops
-import mobile_wallet.feature.invoices.generated.resources.feature_invoices_loading
 import mobile_wallet.feature.invoices.generated.resources.feature_invoices_unexpected_error_subtitle
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
-import org.mifospay.core.designsystem.component.MifosLoadingWheel
 import org.mifospay.core.designsystem.component.MifosScaffold
 import org.mifospay.core.model.datatables.invoice.Invoice
 import org.mifospay.core.ui.EmptyContentScreen
+import org.mifospay.core.ui.MifosProgressIndicator
 import org.mifospay.core.ui.utils.EventsEffect
 import template.core.base.designsystem.theme.KptTheme
 
@@ -81,12 +79,7 @@ private fun InvoiceScreen(
             contentAlignment = Alignment.Center,
         ) {
             when (invoiceUiState) {
-                is InvoicesUiState.Loading -> {
-                    MifosLoadingWheel(
-                        modifier = Modifier.fillMaxWidth(),
-                        contentDesc = stringResource(Res.string.feature_invoices_loading),
-                    )
-                }
+                is InvoicesUiState.Loading -> MifosProgressIndicator()
 
                 is InvoicesUiState.Empty -> {
                     EmptyContentScreen(

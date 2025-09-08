@@ -80,7 +80,9 @@ class HomeViewModel(
                     ViewState.Error(Res.string.feature_home_no_account)
                 }
 
-                is DataState.Loading -> ViewState.Loading
+                is DataState.Loading -> {
+                    ViewState.Loading
+                }
 
                 is DataState.Success -> {
                     mutableStateFlow.update {
@@ -88,8 +90,9 @@ class HomeViewModel(
                     }
 
                     if (state.defaultAccountId == null && result.data.accounts.isNotEmpty()) {
-                        val accountId = result.data.accounts.first().id
-                        val accountNo = result.data.accounts.first().number
+                        val account = result.data.accounts.first()
+                        val accountId = account.id
+                        val accountNo = account.number
 
                         sendAction(HomeAction.MarkAsDefault(accountId, accountNo))
                     }
@@ -173,12 +176,16 @@ class HomeViewModel(
                 }
             }
 
-            is HomeAction.OnRetryClicked -> mutableStateFlow.update {
-                it.copy(reloadTrigger = !it.reloadTrigger)
+            is HomeAction.OnRetryClicked -> {
+                mutableStateFlow.update {
+                    it.copy(reloadTrigger = !it.reloadTrigger)
+                }
             }
 
-            is HomeAction.OnPullToRefresh -> mutableStateFlow.update {
-                it.copy(isRefreshing = true, reloadTrigger = !it.reloadTrigger)
+            is HomeAction.OnPullToRefresh -> {
+                mutableStateFlow.update {
+                    it.copy(isRefreshing = true, reloadTrigger = !it.reloadTrigger)
+                }
             }
         }
     }

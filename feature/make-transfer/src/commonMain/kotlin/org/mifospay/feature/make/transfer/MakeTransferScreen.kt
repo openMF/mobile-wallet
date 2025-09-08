@@ -46,7 +46,6 @@ import mobile_wallet.feature.make_transfer.generated.resources.feature_make_tran
 import mobile_wallet.feature.make_transfer.generated.resources.feature_make_transfer_continue_button
 import mobile_wallet.feature.make_transfer.generated.resources.feature_make_transfer_description_label
 import mobile_wallet.feature.make_transfer.generated.resources.feature_make_transfer_from_account
-import mobile_wallet.feature.make_transfer.generated.resources.feature_make_transfer_loading
 import mobile_wallet.feature.make_transfer.generated.resources.feature_make_transfer_no_accounts_found
 import mobile_wallet.feature.make_transfer.generated.resources.feature_make_transfer_oops_title
 import mobile_wallet.feature.make_transfer.generated.resources.feature_make_transfer_review_title
@@ -60,7 +59,6 @@ import org.mifospay.core.designsystem.component.MifosBasicDialog
 import org.mifospay.core.designsystem.component.MifosBottomSheetScaffold
 import org.mifospay.core.designsystem.component.MifosButton
 import org.mifospay.core.designsystem.component.MifosLoadingDialog
-import org.mifospay.core.designsystem.component.MifosLoadingWheel
 import org.mifospay.core.designsystem.component.MifosTextField
 import org.mifospay.core.designsystem.component.MifosTopBar
 import org.mifospay.core.designsystem.icon.MifosIcons
@@ -68,6 +66,7 @@ import org.mifospay.core.model.account.Account
 import org.mifospay.core.model.utils.PaymentQrData
 import org.mifospay.core.ui.AvatarBox
 import org.mifospay.core.ui.EmptyContentScreen
+import org.mifospay.core.ui.MifosProgressIndicator
 import org.mifospay.core.ui.utils.EventsEffect
 import template.core.base.designsystem.theme.KptTheme
 
@@ -197,16 +196,7 @@ private fun AccountListState(
         contentAlignment = Alignment.Center,
     ) {
         when (state) {
-            is ViewState.Loading -> {
-                Box(modifier = Modifier.fillMaxWidth()) {
-                    MifosLoadingWheel(
-                        contentDesc = stringResource(Res.string.feature_make_transfer_loading),
-                        modifier = Modifier
-                            .align(Alignment.Center)
-                            .padding(KptTheme.spacing.md),
-                    )
-                }
-            }
+            is ViewState.Loading -> MifosProgressIndicator()
 
             is ViewState.Empty -> {
                 EmptyContentScreen(

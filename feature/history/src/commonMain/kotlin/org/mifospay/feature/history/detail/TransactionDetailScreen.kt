@@ -23,15 +23,14 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import mobile_wallet.feature.history.generated.resources.Res
 import mobile_wallet.feature.history.generated.resources.feature_history_error
 import mobile_wallet.feature.history.generated.resources.feature_history_error_oops
-import mobile_wallet.feature.history.generated.resources.feature_history_loading
 import mobile_wallet.feature.history.generated.resources.feature_history_share
 import mobile_wallet.feature.history.generated.resources.feature_history_transaction_details
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
-import org.mifospay.core.designsystem.component.MifosLoadingWheel
 import org.mifospay.core.designsystem.component.MifosScaffold
 import org.mifospay.core.designsystem.icon.MifosIcons
 import org.mifospay.core.ui.EmptyContentScreen
+import org.mifospay.core.ui.MifosProgressIndicator
 import org.mifospay.core.ui.utils.EventsEffect
 import org.mifospay.feature.history.components.TransactionDetail
 import template.core.base.designsystem.theme.KptTheme
@@ -91,12 +90,7 @@ internal fun TransactionDetailScreenContent(
             contentAlignment = Alignment.Center,
         ) {
             when (state) {
-                is TransactionDetailState.ViewState.Loading -> {
-                    MifosLoadingWheel(
-                        modifier = Modifier.align(Alignment.Center),
-                        contentDesc = stringResource(Res.string.feature_history_loading),
-                    )
-                }
+                is TransactionDetailState.ViewState.Loading -> MifosProgressIndicator()
 
                 is TransactionDetailState.ViewState.Error -> {
                     EmptyContentScreen(

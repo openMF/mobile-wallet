@@ -65,6 +65,8 @@ credentialsVersion = "1.5.0"
 review = "2.0.2"
 appUpdate = "2.1.0"
 integrity = "1.4.0"
+lottie = "6.6.7"
+compottie = "2.0.0-rc05"
 
 # Static Analysis & Code Formatting
 ktlint = "12.1.1"
@@ -347,6 +349,12 @@ filekit-dialogs-compose = { module = "io.github.vinceglb:filekit-dialogs-compose
 filekit-coil = { module = "io.github.vinceglb:filekit-coil", version.ref = "fileKit" }
 filekit-compose = { group = "io.github.vinceglb", name = "filekit-compose", version.ref = "fileKitCompose" }
 qrose = { group = "io.github.alexzhirkevich", name="qrose", version.ref = "qroseVersion" }
+lottie-compose = { group = "com.airbnb.android", name = "lottie-compose", version.ref = "lottie" }
+compottie = { module = "io.github.alexzhirkevich:compottie", version.ref = "compottie" }
+compottie-lite = { module = "io.github.alexzhirkevich:compottie-lite", version.ref = "compottie" }
+compottie-dot = { module = "io.github.alexzhirkevich:compottie-dot", version.ref = "compottie" }
+compottie-network = { module = "io.github.alexzhirkevich:compottie-network", version.ref = "compottie" }
+compottie-resources = { module = "io.github.alexzhirkevich:compottie-resources", version.ref = "compottie" }
 
 kermit-logging = { group = "co.touchlab", name = "kermit", version.ref = "kermit" }
 kermit-simple = { group = "co.touchlab", name = "kermit-simple", version.ref = "kermit" }

@@ -37,14 +37,13 @@ import mobile_wallet.feature.kyc.generated.resources.Res
 import mobile_wallet.feature.kyc.generated.resources.feature_kyc_check
 import mobile_wallet.feature.kyc.generated.resources.feature_kyc_complete_kyc
 import mobile_wallet.feature.kyc.generated.resources.feature_kyc_error_oops
-import mobile_wallet.feature.kyc.generated.resources.feature_kyc_loading
 import mobile_wallet.feature.kyc.generated.resources.feature_kyc_unexpected_error_subtitle
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
-import org.mifospay.core.designsystem.component.MifosOverlayLoadingWheel
 import org.mifospay.core.designsystem.icon.MifosIcons
 import org.mifospay.core.ui.AvatarBox
 import org.mifospay.core.ui.EmptyContentScreen
+import org.mifospay.core.ui.MifosProgressIndicatorOverlay
 import org.mifospay.core.ui.utils.EventsEffect
 import template.core.base.designsystem.theme.KptTheme
 
@@ -86,9 +85,7 @@ private fun KYCDescriptionScreen(
         contentAlignment = Alignment.Center,
     ) {
         when (kUiState) {
-            KYCDescriptionUiState.Loading -> {
-                MifosOverlayLoadingWheel(contentDesc = stringResource(Res.string.feature_kyc_loading))
-            }
+            KYCDescriptionUiState.Loading -> MifosProgressIndicatorOverlay()
 
             is KYCDescriptionUiState.Error -> {
                 EmptyContentScreen(

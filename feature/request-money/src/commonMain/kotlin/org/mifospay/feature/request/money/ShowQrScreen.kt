@@ -39,9 +39,9 @@ import org.koin.compose.viewmodel.koinViewModel
 import org.mifospay.core.designsystem.component.LoadingDialogState
 import org.mifospay.core.designsystem.component.MifosButton
 import org.mifospay.core.designsystem.component.MifosLoadingDialog
-import org.mifospay.core.designsystem.component.MifosLoadingWheel
 import org.mifospay.core.designsystem.component.MifosOutlinedButton
 import org.mifospay.core.designsystem.component.MifosScaffold
+import org.mifospay.core.ui.MifosProgressIndicator
 import org.mifospay.core.ui.utils.EventsEffect
 import template.core.base.designsystem.theme.KptTheme
 
@@ -117,9 +117,7 @@ internal fun ShowQrScreen(
             contentAlignment = Alignment.Center,
         ) {
             when (state.viewState) {
-                is ShowQrState.ViewState.Loading -> {
-                    MifosLoadingWheel(contentDesc = "Loading")
-                }
+                is ShowQrState.ViewState.Loading -> MifosProgressIndicator()
 
                 is ShowQrState.ViewState.Content -> {
                     ShowQrScreenContent(
