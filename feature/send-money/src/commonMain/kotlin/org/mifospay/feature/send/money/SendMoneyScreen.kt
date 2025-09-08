@@ -48,6 +48,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -140,6 +142,8 @@ private fun SendMoneyScreen(
     lazyListState: LazyListState = rememberLazyListState(),
     onAction: (SendMoneyAction) -> Unit,
 ) {
+    val keyboardController = LocalSoftwareKeyboardController.current
+
     MifosGradientBackground {
         MifosScaffold(
             modifier = modifier,
@@ -197,7 +201,10 @@ private fun SendMoneyScreen(
 
                 accountListContent(
                     state = accountState,
-                    onAction = onAction,
+                    selectAccount = {
+                        keyboardController?.hide()
+                        onAction(SendMoneyAction.SelectAccount(it))
+                    },
                     selected = { state.selectedAccount == it },
                 )
             }
@@ -381,6 +388,7 @@ private fun SendMoneyCard(
                 isError = !state.amountIsValid,
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Number,
+                    imeAction = ImeAction.Next,
                 ),
                 onValueChange = remember(onAction) {
                     { onAction(SendMoneyAction.AmountChanged(it)) }
@@ -393,6 +401,9 @@ private fun SendMoneyCard(
                 onValueChange = remember(onAction) {
                     { onAction(SendMoneyAction.AccountNumberChanged(it)) }
                 },
+                keyboardOptions = KeyboardOptions.Default.copy(
+                    imeAction = ImeAction.Done,
+                ),
             )
         }
     }
@@ -401,7 +412,7 @@ private fun SendMoneyCard(
 private fun LazyListScope.accountListContent(
     state: ViewState,
     selected: (AccountResult) -> Boolean,
-    onAction: (SendMoneyAction.SelectAccount) -> Unit,
+    selectAccount: (AccountResult) -> Unit,
 ) {
     when (state) {
         is ViewState.Loading -> {
@@ -444,9 +455,7 @@ private fun LazyListScope.accountListContent(
                 AccountCard(
                     account = account,
                     selected = selected,
-                    onClick = remember(account) {
-                        { onAction(SendMoneyAction.SelectAccount(it)) }
-                    },
+                    onClick = selectAccount,
                 )
 
                 if (i < state.data.lastIndex) {
