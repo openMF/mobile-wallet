@@ -172,7 +172,7 @@ fun MfOverlayLoadingWheel(
 fun MfLoadingWheel(
     modifier: Modifier = Modifier,
     contentDesc: String = "Loading",
-    backgroundColor: Color = KptTheme.colorScheme.onSurface.copy(alpha = 0.6f),
+    backgroundColor: Color = Color.Transparent,
 ) {
     Box(
         modifier = modifier

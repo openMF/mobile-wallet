@@ -63,7 +63,15 @@ class AccountViewModel(
                 is DataState.Loading -> AccountState.ViewState.Loading
                 is DataState.Error -> AccountState.ViewState.Error(it.exception.message.toString())
                 is DataState.Success -> {
-                    AccountState.ViewState.Content(it.data.accounts, it.data.beneficiaries)
+                    val sortedAccounts = it.data.accounts.sortedWith(
+                        compareByDescending<Account> { account -> account.status.active }
+                            .thenBy { account -> account.number },
+                    )
+
+                    AccountState.ViewState.Content(
+                        accounts = sortedAccounts,
+                        beneficiaries = it.data.beneficiaries,
+                    )
                 }
             }
         }
