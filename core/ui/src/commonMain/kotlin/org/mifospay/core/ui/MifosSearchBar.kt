@@ -1,3 +1,12 @@
+/*
+ * Copyright 2025 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay.core.ui
 
 import androidx.compose.foundation.clickable
@@ -25,14 +34,14 @@ fun MifosSearchBar(
     onSearch: (String) -> Unit,
     onClearQuery: () -> Unit = {},
     onClick: () -> Unit = {},
-    enabled:Boolean=true,
-    modifier: Modifier = Modifier
+    enabled: Boolean = true,
+    modifier: Modifier = Modifier,
 ) {
     Box(
         modifier = modifier
             .fillMaxWidth()
             .padding(horizontal = KptTheme.spacing.md)
-            .clickable(onClick = onClick)
+            .clickable(onClick = onClick),
     ) {
         SearchBar(
             inputField = {
@@ -47,7 +56,7 @@ fun MifosSearchBar(
                     leadingIcon = {
                         Icon(
                             imageVector = MifosIcons.Search,
-                            contentDescription = null
+                            contentDescription = null,
                         )
                     },
                     trailingIcon = {
@@ -55,12 +64,12 @@ fun MifosSearchBar(
                             IconButton(onClick = onClearQuery) {
                                 Icon(
                                     imageVector = MifosIcons.Close,
-                                    contentDescription = null
+                                    contentDescription = null,
                                 )
                             }
                         }
                     },
-                    interactionSource = null
+                    interactionSource = null,
                 )
             },
             expanded = false,
@@ -71,7 +80,7 @@ fun MifosSearchBar(
             tonalElevation = SearchBarDefaults.TonalElevation,
             shadowElevation = SearchBarDefaults.ShadowElevation,
             windowInsets = SearchBarDefaults.windowInsets,
-            content = {}
+            content = {},
         )
     }
 }

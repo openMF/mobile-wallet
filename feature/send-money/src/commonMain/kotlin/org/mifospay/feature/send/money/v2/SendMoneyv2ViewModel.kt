@@ -1,26 +1,21 @@
+/*
+ * Copyright 2025 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package v2
 
 import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.debounce
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.mapLatest
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.serialization.Serializable
 import org.jetbrains.compose.resources.StringResource
-import org.mifospay.core.common.DataState
 import org.mifospay.core.common.StringResourceSerializer
 import org.mifospay.core.data.repository.AccountRepository
 import org.mifospay.core.model.search.AccountResult
 import org.mifospay.core.ui.utils.BaseViewModel
-import org.mifospay.feature.send.money.QrScanner
-
 
 class SendMoneyV2ViewModel(
     repository: AccountRepository,
@@ -29,11 +24,8 @@ class SendMoneyV2ViewModel(
     initialState = SendMoneyV2State(),
 ) {
 
-
-
-    
     override fun handleAction(action: SendMoneyV2Action) {
-        when(action){
+        when (action) {
             SendMoneyV2Action.NavigateBack -> {
                 sendEvent(SendMoneyV2Event.NavigateBack)
             }
@@ -43,9 +35,7 @@ class SendMoneyV2ViewModel(
             }
         }
     }
-
 }
-
 
 @Serializable
 data class SendMoneyV2State(
@@ -87,13 +77,12 @@ sealed interface ViewState {
 }
 
 sealed interface SendMoneyV2Event {
-    data object NavigateToSearchAccountSelection: SendMoneyV2Event
-    data object NavigateBack:SendMoneyV2Event
+    data object NavigateToSearchAccountSelection : SendMoneyV2Event
+    data object NavigateBack : SendMoneyV2Event
 }
 
 sealed interface SendMoneyV2Action {
     data object NavigateBack : SendMoneyV2Action
 
     data object OnSearchBarClicked : SendMoneyV2Action
-
 }

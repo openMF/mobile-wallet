@@ -1,3 +1,12 @@
+/*
+ * Copyright 2025 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay.feature.send.money.v2
 
 import androidx.navigation.NavController
@@ -15,7 +24,7 @@ fun NavController.navigateToSendMoneyV2Screen(navOptions: NavOptions? = null) {
 
 fun NavGraphBuilder.sendMoneyScreenDestination(
     navigateToSelectAccountScreen: () -> Unit,
-    navigateBack:()->Unit,
+    navigateBack: () -> Unit,
 ) {
     composable<SendMoneyRoute> {
         SendMoneyv2Screen(

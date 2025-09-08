@@ -1,19 +1,22 @@
+/*
+ * Copyright 2025 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package selectScreen
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -24,8 +27,6 @@ import mobile_wallet.feature.send_money.generated.resources.Res
 import mobile_wallet.feature.send_money.generated.resources.feature_send_money_loading
 import mobile_wallet.feature.send_money.generated.resources.feature_send_money_no_accounts_found
 import mobile_wallet.feature.send_money.generated.resources.feature_send_money_oops
-import mobile_wallet.feature.send_money.generated.resources.feature_send_money_scan_qr
-import mobile_wallet.feature.send_money.generated.resources.feature_send_money_send
 import mobile_wallet.feature.send_money.generated.resources.feature_send_money_something_went_wrong
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
@@ -37,14 +38,12 @@ import org.mifospay.core.designsystem.component.MifosLoadingDialog
 import org.mifospay.core.designsystem.component.MifosLoadingWheel
 import org.mifospay.core.designsystem.component.MifosScaffold
 import org.mifospay.core.designsystem.component.MifosTopBar
-import org.mifospay.core.designsystem.icon.MifosIcons
 import org.mifospay.core.model.search.AccountResult
 import org.mifospay.core.ui.EmptyContentScreen
 import org.mifospay.core.ui.MifosDivider
 import org.mifospay.core.ui.MifosSearchBar
 import org.mifospay.core.ui.utils.EventsEffect
 import org.mifospay.feature.send.money.AccountCard
-import org.mifospay.feature.send.money.SendMoneyAction
 import org.mifospay.feature.send.money.SendMoneyBottomBar
 import org.mifospay.feature.send.money.selectScreen.SelectScreenAction
 import org.mifospay.feature.send.money.selectScreen.SelectScreenEvent
@@ -52,7 +51,6 @@ import org.mifospay.feature.send.money.selectScreen.SelectScreenState
 import org.mifospay.feature.send.money.selectScreen.SelectScreenViewModel
 import template.core.base.designsystem.theme.KptTheme
 import v2.ViewState
-
 
 @Composable
 fun SelectPayeeScreen(
@@ -63,8 +61,8 @@ fun SelectPayeeScreen(
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val accountState by viewModel.accountListState.collectAsStateWithLifecycle()
 
-    EventsEffect(viewModel){ event->
-        when(event){
+    EventsEffect(viewModel) { event ->
+        when (event) {
             is SelectScreenEvent.NavigateToTransferScreen -> {
                 navigateToMakeTransferV2Screen(
                     state.selectedAccount?.parentId ?: 0,
@@ -87,15 +85,13 @@ fun SelectPayeeScreen(
 
     SelectAccountScreen(
         state = state,
-        accountState=accountState,
+        accountState = accountState,
         modifier = modifier,
         onAction = remember(viewModel) {
             { viewModel.trySendAction(it) }
         },
     )
-
 }
-
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -110,12 +106,12 @@ private fun SelectAccountScreen(
         MifosScaffold(
             modifier = modifier,
             topBar = {
-                    MifosTopBar(
-                        topBarTitle = "Select Payment",
-                        backPress = {
-                            onAction(SelectScreenAction.NavigateBack)
-                        },
-                    )
+                MifosTopBar(
+                    topBarTitle = "Select Payment",
+                    backPress = {
+                        onAction(SelectScreenAction.NavigateBack)
+                    },
+                )
             },
             bottomBar = {
                 SendMoneyBottomBar(
@@ -132,7 +128,7 @@ private fun SelectAccountScreen(
         ) { paddingValues ->
             LazyColumn(
                 state = lazyListState,
-                modifier=Modifier.padding(paddingValues)
+                modifier = Modifier.padding(paddingValues),
             ) {
                 stickyHeader {
                     MifosSearchBar(
@@ -155,8 +151,6 @@ private fun SelectAccountScreen(
         }
     }
 }
-
-
 
 @Composable
 private fun SelectPayeeDialogs(

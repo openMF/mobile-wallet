@@ -17,7 +17,7 @@
     <string name="feature_make_transfer_transaction_unable_to_process">Unable to process transfer</string>
 
     <string name="feature_make_transfer_review_title">Review Transfer</string>
-    <string name="feature_make_transfer_description_label">Description</string>
+    <string name="feature_make_transfer_description_label">Add a Message</string>
     <string name="feature_make_transfer_to_account">To Account</string>
     <string name="feature_make_transfer_from_account">From Account</string>
     <string name="feature_make_transfer_continue_button">Continue</string>

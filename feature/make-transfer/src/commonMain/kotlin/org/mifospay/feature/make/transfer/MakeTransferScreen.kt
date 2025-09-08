@@ -378,7 +378,7 @@ fun ClientCard(
 }
 
 @Composable
-private fun AccountBadge(
+fun AccountBadge(
     text: String,
     modifier: Modifier = Modifier,
     borderColor: Color = KptTheme.colorScheme.primary,

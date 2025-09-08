@@ -460,7 +460,7 @@ private fun LazyListScope.accountListContent(
 }
 
 @Composable
- fun AccountCard(
+fun AccountCard(
     account: AccountResult,
     selected: (AccountResult) -> Boolean,
     modifier: Modifier = Modifier,

@@ -1,3 +1,12 @@
+/*
+ * Copyright 2025 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay.feature.send.money.v2
 
 import androidx.compose.animation.AnimatedVisibility
@@ -6,26 +15,20 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import co.touchlab.kermit.Logger
 import mobile_wallet.feature.send_money.generated.resources.Res
-import mobile_wallet.feature.send_money.generated.resources.feature_send_money_scan_qr
 import mobile_wallet.feature.send_money.generated.resources.feature_send_money_send
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.mifospay.core.designsystem.component.MifosGradientBackground
 import org.mifospay.core.designsystem.component.MifosScaffold
 import org.mifospay.core.designsystem.component.MifosTopBar
-import org.mifospay.core.designsystem.icon.MifosIcons
 import org.mifospay.core.ui.MifosSearchBar
 import org.mifospay.core.ui.utils.EventsEffect
-import org.mifospay.feature.send.money.SendMoneyAction
 import v2.SendMoneyV2Action
 import v2.SendMoneyV2Event
 import v2.SendMoneyV2ViewModel
@@ -33,14 +36,14 @@ import v2.SendMoneyV2ViewModel
 @Composable
 fun SendMoneyv2Screen(
     navigateToSelectAccountScreen: () -> Unit,
-    navigateBack:()->Unit,
+    navigateBack: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: SendMoneyV2ViewModel = koinViewModel(),
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
 
     EventsEffect(viewModel) { event ->
-        when(event){
+        when (event) {
             SendMoneyV2Event.NavigateToSearchAccountSelection -> navigateToSelectAccountScreen()
 
             SendMoneyV2Event.NavigateBack -> navigateBack()
@@ -55,7 +58,6 @@ fun SendMoneyv2Screen(
         },
     )
 }
-
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -83,7 +85,7 @@ private fun SendMoneyScreen(
             bottomBar = {},
         ) { paddingValues ->
             Column(
-                Modifier.padding(paddingValues)
+                Modifier.padding(paddingValues),
             ) {
                 MifosSearchBar(
                     query = "",
@@ -93,7 +95,7 @@ private fun SendMoneyScreen(
                     onClick = {
                         onAction(SendMoneyV2Action.OnSearchBarClicked)
                     },
-                    enabled = false
+                    enabled = false,
                 )
             }
         }

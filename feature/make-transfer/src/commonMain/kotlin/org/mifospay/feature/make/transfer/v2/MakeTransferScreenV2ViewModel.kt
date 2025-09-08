@@ -1,3 +1,12 @@
+/*
+ * Copyright 2025 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay.feature.make.transfer.v2
 
 import androidx.lifecycle.SavedStateHandle
@@ -24,18 +33,14 @@ import org.jetbrains.compose.resources.StringResource
 import org.mifospay.core.common.DataState
 import org.mifospay.core.common.DateHelper
 import org.mifospay.core.common.StringResourceSerializer
-import org.mifospay.core.common.getSerialized
 import org.mifospay.core.common.setSerialized
 import org.mifospay.core.common.utils.capitalizeWords
 import org.mifospay.core.data.repository.AccountRepository
-import org.mifospay.core.data.util.UpiQrCodeProcessor
 import org.mifospay.core.datastore.UserPreferencesRepository
 import org.mifospay.core.model.account.Account
 import org.mifospay.core.model.account.AccountTransferPayload
 import org.mifospay.core.model.utils.PaymentQrData
 import org.mifospay.core.ui.utils.BaseViewModel
-import org.mifospay.feature.make.transfer.navigation.TRANSFER_ARG
-
 
 internal class MakeTransferV2ScreenV2ViewModel(
     private val accountRepository: AccountRepository,
@@ -43,10 +48,10 @@ internal class MakeTransferV2ScreenV2ViewModel(
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<MakeTransferV2State, MakeTransferV2Event, MakeTransferV2Action>(
     initialState = run {
-        val route=savedStateHandle.toRoute<MakeTransferScreenV2Route>()
+        val route = savedStateHandle.toRoute<MakeTransferScreenV2Route>()
         val fromClientId = requireNotNull(repository.clientId.value)
         val defaultAccountId = requireNotNull(repository.defaultAccountId.value)
-        val clientData=PaymentQrData(
+        val clientData = PaymentQrData(
             clientId = route.clientId,
             clientName = route.clientName,
             accountNo = route.accountNo,
@@ -58,7 +63,7 @@ internal class MakeTransferV2ScreenV2ViewModel(
             defaultAccountId = defaultAccountId,
             toClientData = clientData,
         )
-    }
+    },
 ) {
 
     companion object {
@@ -116,7 +121,10 @@ internal class MakeTransferV2ScreenV2ViewModel(
 
             is MakeTransferV2Action.SelectAccount -> {
                 mutableStateFlow.update {
-                    it.copy(selectedAccount = action.account)
+                    it.copy(
+                        selectedAccount = action.account,
+                        showBottomSheet = false,
+                    )
                 }
             }
 
@@ -129,6 +137,18 @@ internal class MakeTransferV2ScreenV2ViewModel(
             is MakeTransferV2Action.InitiateTransfer -> validateTransfer()
 
             is MakeTransferV2Action.Internal.HandleTransferResult -> handleTransferResult(action)
+
+            MakeTransferV2Action.CloseBottomSheet -> {
+                mutableStateFlow.update {
+                    it.copy(showBottomSheet = false)
+                }
+            }
+
+            MakeTransferV2Action.OpenBottomSheet -> {
+                mutableStateFlow.update {
+                    it.copy(showBottomSheet = true)
+                }
+            }
         }
     }
 
@@ -203,6 +223,7 @@ internal class MakeTransferV2ScreenV2ViewModel(
 internal data class MakeTransferV2State(
     val fromClientId: Long,
     val toClientData: PaymentQrData,
+    val showBottomSheet: Boolean = false,
     val defaultAccountId: Long,
     val amount: String = toClientData.amount,
     val description: String = "",
@@ -279,4 +300,7 @@ internal sealed interface MakeTransferV2Action {
     sealed interface Internal : MakeTransferV2Action {
         data class HandleTransferResult(val result: DataState<String>) : Internal
     }
+
+    data object OpenBottomSheet : MakeTransferV2Action
+    data object CloseBottomSheet : MakeTransferV2Action
 }

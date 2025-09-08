@@ -313,7 +313,6 @@ internal fun MifosNavHost(
             },
         )
 
-
         sendMoneyScreenDestination(
             navigateToSelectAccountScreen = {
                 navController.navigateToSelectAccountScreen()

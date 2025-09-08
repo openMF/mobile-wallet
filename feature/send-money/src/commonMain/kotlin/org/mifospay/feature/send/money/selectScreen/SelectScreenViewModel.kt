@@ -1,3 +1,12 @@
+/*
+ * Copyright 2025 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay.feature.send.money.selectScreen
 
 import androidx.lifecycle.SavedStateHandle
@@ -17,14 +26,10 @@ import kotlinx.serialization.Serializable
 import org.jetbrains.compose.resources.StringResource
 import org.mifospay.core.common.DataState
 import org.mifospay.core.common.StringResourceSerializer
-import org.mifospay.core.common.getSerialized
 import org.mifospay.core.data.repository.AccountRepository
 import org.mifospay.core.model.search.AccountResult
-import org.mifospay.core.model.utils.PaymentQrData
 import org.mifospay.core.ui.utils.BaseViewModel
 import org.mifospay.feature.send.money.QrScanner
-import org.mifospay.feature.send.money.SendMoneyAction
-
 
 class SelectScreenViewModel(
     private val scanner: QrScanner,
@@ -60,7 +65,7 @@ class SelectScreenViewModel(
         )
 
     override fun handleAction(action: SelectScreenAction) {
-        when(action){
+        when (action) {
             is SelectScreenAction.AccountNumberChanged -> {
                 mutableStateFlow.update {
                     it.copy(accountNumber = action.accountNumber)
@@ -93,7 +98,6 @@ class SelectScreenViewModel(
         }
     }
 }
-
 
 @Serializable
 data class SelectScreenState(
@@ -128,7 +132,6 @@ data class SelectScreenState(
         }
     }
 }
-
 
 sealed interface SelectScreenEvent {
     data object NavigateToTransferScreen : SelectScreenEvent
