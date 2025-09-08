@@ -42,10 +42,12 @@ import org.mifospay.core.model.search.AccountResult
 import org.mifospay.core.ui.EmptyContentScreen
 import org.mifospay.core.ui.MifosDivider
 import org.mifospay.core.ui.MifosSearchBar
+import org.mifospay.core.ui.utils.EventsEffect
 import org.mifospay.feature.send.money.AccountCard
 import org.mifospay.feature.send.money.SendMoneyAction
 import org.mifospay.feature.send.money.SendMoneyBottomBar
 import org.mifospay.feature.send.money.selectScreen.SelectScreenAction
+import org.mifospay.feature.send.money.selectScreen.SelectScreenEvent
 import org.mifospay.feature.send.money.selectScreen.SelectScreenState
 import org.mifospay.feature.send.money.selectScreen.SelectScreenViewModel
 import template.core.base.designsystem.theme.KptTheme
@@ -55,11 +57,25 @@ import v2.ViewState
 @Composable
 fun SelectPayeeScreen(
     modifier: Modifier = Modifier,
+    navigateToMakeTransferV2Screen: (clientId: Long, clientName: String, accountNo: String, amount: Int, accountId: Long) -> Unit,
     viewModel: SelectScreenViewModel = koinViewModel(),
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val accountState by viewModel.accountListState.collectAsStateWithLifecycle()
 
+    EventsEffect(viewModel){ event->
+        when(event){
+            is SelectScreenEvent.NavigateToTransferScreen -> {
+                navigateToMakeTransferV2Screen(
+                    state.selectedAccount?.parentId ?: 0,
+                    state.selectedAccount?.parentName ?: "",
+                    state.selectedAccount?.entityAccountNo ?: "",
+                    0,
+                    state.selectedAccount?.entityId ?: 0,
+                )
+            }
+        }
+    }
     SelectPayeeDialogs(
         dialogState = state.dialogState,
         onDismissRequest = remember(viewModel) {

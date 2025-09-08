@@ -15,8 +15,12 @@ fun NavController.navigateToSelectAccountScreen(navOptions: NavOptions? = null) 
     this.navigate(SelectAccountRoute, navOptions)
 }
 
-fun NavGraphBuilder.selectAccountScreenDestination() {
+fun NavGraphBuilder.selectAccountScreenDestination(
+    navigateToMakeTransferV2Screen: (clientId: Long, clientName: String, accountNo: String, amount: Int, accountId: Long) -> Unit,
+) {
     composable<SelectAccountRoute> {
-        SelectPayeeScreen()
+        SelectPayeeScreen(
+            navigateToMakeTransferV2Screen = navigateToMakeTransferV2Screen,
+        )
     }
 }

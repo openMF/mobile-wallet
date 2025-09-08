@@ -2,6 +2,7 @@ package org.mifospay.feature.make.transfer.v2
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.toRoute
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.launchIn
@@ -41,16 +42,23 @@ internal class MakeTransferV2ScreenV2ViewModel(
     repository: UserPreferencesRepository,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<MakeTransferV2State, MakeTransferV2Event, MakeTransferV2Action>(
-    initialState = savedStateHandle.getSerialized(KEY_STATE) ?: run {
+    initialState = run {
+        val route=savedStateHandle.toRoute<MakeTransferScreenV2Route>()
         val fromClientId = requireNotNull(repository.clientId.value)
         val defaultAccountId = requireNotNull(repository.defaultAccountId.value)
-
+        val clientData=PaymentQrData(
+            clientId = route.clientId,
+            clientName = route.clientName,
+            accountNo = route.accountNo,
+            amount = route.amount.toString(),
+            accountId = route.accountId,
+        )
         MakeTransferV2State(
             fromClientId = fromClientId,
             defaultAccountId = defaultAccountId,
             toClientData = clientData,
         )
-    },
+    }
 ) {
 
     companion object {

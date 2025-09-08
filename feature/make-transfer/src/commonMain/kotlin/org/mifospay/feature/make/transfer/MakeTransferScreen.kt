@@ -237,7 +237,7 @@ private fun AccountListState(
 }
 
 @Composable
-private fun AccountList(
+fun AccountList(
     accounts: List<Account>,
     selected: (Account) -> Boolean,
     modifier: Modifier = Modifier,
@@ -322,7 +322,7 @@ private fun AccountItem(
 }
 
 @Composable
-private fun ClientCard(
+fun ClientCard(
     client: PaymentQrData,
     modifier: Modifier = Modifier,
 ) {

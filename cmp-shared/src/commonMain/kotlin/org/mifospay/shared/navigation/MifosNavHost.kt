@@ -52,6 +52,8 @@ import org.mifospay.feature.make.transfer.navigation.navigateToTransferScreen
 import org.mifospay.feature.make.transfer.navigation.transferScreen
 import org.mifospay.feature.make.transfer.success.navigateTransferSuccess
 import org.mifospay.feature.make.transfer.success.transferSuccessScreen
+import org.mifospay.feature.make.transfer.v2.makeTransferScreenV2
+import org.mifospay.feature.make.transfer.v2.navigateToMakeTransferScreenV2
 import org.mifospay.feature.merchants.navigation.merchantTransferScreen
 import org.mifospay.feature.merchants.ui.MerchantScreen
 import org.mifospay.feature.notification.navigateToNotification
@@ -294,8 +296,23 @@ internal fun MifosNavHost(
         )
 
         selectAccountScreenDestination(
-
+            navigateToMakeTransferV2Screen = navController::navigateToMakeTransferScreenV2,
         )
+
+        makeTransferScreenV2(
+            navigateBack = navController::popBackStack,
+            onTransferSuccess = {
+                navController.navigateTransferSuccess(
+                    navOptions {
+                        popUpTo(SEND_MONEY_BASE_ROUTE) {
+                            inclusive = true
+                        }
+                        launchSingleTop = true
+                    },
+                )
+            },
+        )
+
 
         sendMoneyScreenDestination(
             navigateToSelectAccountScreen = {

@@ -72,8 +72,9 @@ class SelectScreenViewModel(
                 }
             }
             SelectScreenAction.NavigateBack -> {
-
+                sendEvent(SelectScreenEvent.NavigateToTransferScreen)
             }
+
             is SelectScreenAction.SelectAccount -> {
                 mutableStateFlow.update {
                     it.copy(selectedAccount = action.account)
@@ -87,7 +88,7 @@ class SelectScreenViewModel(
             }
 
             SelectScreenAction.OnProceedClicked -> {
-
+                sendEvent(SelectScreenEvent.NavigateToTransferScreen)
             }
         }
     }
@@ -130,7 +131,7 @@ data class SelectScreenState(
 
 
 sealed interface SelectScreenEvent {
-    data class NavigateToTransferScreen(val data: String) : SelectScreenEvent
+    data object NavigateToTransferScreen : SelectScreenEvent
 }
 
 sealed interface SelectScreenAction {
