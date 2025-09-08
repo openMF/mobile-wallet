@@ -37,8 +37,6 @@ import org.mifospay.feature.home.navigation.HOME_ROUTE
 import org.mifospay.feature.home.navigation.navigateToHome
 import org.mifospay.feature.payments.PAYMENTS_ROUTE
 import org.mifospay.feature.payments.navigateToPayments
-import org.mifospay.feature.profile.navigation.PROFILE_ROUTE
-import org.mifospay.feature.profile.navigation.navigateToProfile
 import org.mifospay.shared.utils.TopLevelDestination
 
 @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)

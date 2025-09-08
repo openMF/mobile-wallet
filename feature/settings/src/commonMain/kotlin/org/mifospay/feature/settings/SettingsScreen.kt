@@ -34,7 +34,6 @@ import mobile_wallet.feature.settings.generated.resources.feature_settings_chang
 import mobile_wallet.feature.settings.generated.resources.feature_settings_disable_account
 import mobile_wallet.feature.settings.generated.resources.feature_settings_faq
 import mobile_wallet.feature.settings.generated.resources.feature_settings_log_out
-import mobile_wallet.feature.settings.generated.resources.feature_settings_notification_settings
 import mobile_wallet.feature.settings.generated.resources.feature_settings_settings
 import mobile_wallet.feature.settings.generated.resources.outline_logout
 import mobile_wallet.feature.settings.generated.resources.outline_password
