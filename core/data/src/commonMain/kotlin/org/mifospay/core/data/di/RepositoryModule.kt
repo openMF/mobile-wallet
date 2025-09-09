@@ -63,7 +63,7 @@ val RepositoryModule = module {
     single<Json> { Json { ignoreUnknownKeys = true } }
 
     single<AssetRepository> { AssetRepositoryImpl() }
-    single<AccountRepository> { AccountRepositoryImpl(get(), get(ioDispatcher)) }
+    single<AccountRepository> { AccountRepositoryImpl(get(), get(), get(ioDispatcher)) }
     single<AuthenticationRepository> {
         AuthenticationRepositoryImpl(get(), get(ioDispatcher))
     }

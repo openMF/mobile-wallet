@@ -29,7 +29,6 @@ import org.mifospay.feature.faq.navigation.navigateToFAQ
 import org.mifospay.feature.finance.FinanceScreenContents
 import org.mifospay.feature.finance.navigation.FINANCE_ROUTE
 import org.mifospay.feature.finance.navigation.financeScreen
-import org.mifospay.feature.history.HistoryScreen
 import org.mifospay.feature.history.navigation.historyNavigation
 import org.mifospay.feature.history.navigation.navigateToHistory
 import org.mifospay.feature.history.navigation.navigateToSpecificTransaction
@@ -38,14 +37,10 @@ import org.mifospay.feature.history.navigation.specificTransactionsScreen
 import org.mifospay.feature.history.navigation.transactionDetailNavigation
 import org.mifospay.feature.home.navigation.HOME_ROUTE
 import org.mifospay.feature.home.navigation.homeScreen
-import org.mifospay.feature.invoices.InvoiceScreen
 import org.mifospay.feature.invoices.navigation.invoiceDetailScreen
-import org.mifospay.feature.invoices.navigation.navigateToInvoiceDetail
-import org.mifospay.feature.kyc.KYCScreen
 import org.mifospay.feature.kyc.navigation.kycLevel1Screen
 import org.mifospay.feature.kyc.navigation.kycLevel2Screen
 import org.mifospay.feature.kyc.navigation.kycLevel3Screen
-import org.mifospay.feature.kyc.navigation.navigateToKYCLevel1
 import org.mifospay.feature.kyc.navigation.navigateToKYCLevel2
 import org.mifospay.feature.kyc.navigation.navigateToKYCLevel3
 import org.mifospay.feature.make.transfer.navigation.navigateToTransferScreen
@@ -55,7 +50,6 @@ import org.mifospay.feature.make.transfer.success.transferSuccessScreen
 import org.mifospay.feature.make.transfer.v2.makeTransferScreenV2
 import org.mifospay.feature.make.transfer.v2.navigateToMakeTransferScreenV2
 import org.mifospay.feature.merchants.navigation.merchantTransferScreen
-import org.mifospay.feature.merchants.ui.MerchantScreen
 import org.mifospay.feature.notification.navigateToNotification
 import org.mifospay.feature.notification.notificationScreen
 import org.mifospay.feature.payments.PaymentsScreenContents
@@ -68,12 +62,8 @@ import org.mifospay.feature.qr.navigation.scanQrScreen
 import org.mifospay.feature.receipt.navigation.receiptScreen
 import org.mifospay.feature.request.money.navigation.navigateToShowQrScreen
 import org.mifospay.feature.request.money.navigation.showQrScreen
-import org.mifospay.feature.savedcards.CardsScreen
 import org.mifospay.feature.savedcards.createOrUpdate.addEditCardScreen
-import org.mifospay.feature.savedcards.createOrUpdate.navigateToCardAddEdit
 import org.mifospay.feature.savedcards.details.cardDetailRoute
-import org.mifospay.feature.savedcards.details.navigateToCardDetails
-import org.mifospay.feature.send.money.SendMoneyScreen
 import org.mifospay.feature.send.money.navigation.SEND_MONEY_BASE_ROUTE
 import org.mifospay.feature.send.money.navigation.navigateToSendMoneyScreen
 import org.mifospay.feature.send.money.navigation.sendMoneyScreen
@@ -82,10 +72,7 @@ import org.mifospay.feature.send.money.selectScreen.selectAccountScreenDestinati
 import org.mifospay.feature.send.money.v2.navigateToSendMoneyV2Screen
 import org.mifospay.feature.send.money.v2.sendMoneyScreenDestination
 import org.mifospay.feature.settings.navigation.settingsScreen
-import org.mifospay.feature.standing.instruction.StandingInstructionsScreen
 import org.mifospay.feature.standing.instruction.createOrUpdate.addEditSIScreen
-import org.mifospay.feature.standing.instruction.createOrUpdate.navigateToSIAddEdit
-import org.mifospay.feature.standing.instruction.details.navigateSIDetails
 import org.mifospay.feature.standing.instruction.details.siDetailsScreen
 import org.mifospay.feature.upi.setup.navigation.setupUpiPinScreen
 import org.mifospay.shared.ui.MifosAppState
@@ -99,38 +86,39 @@ internal fun MifosNavHost(
     val navController = appState.navController
 
     val paymentsTabContents = listOf(
-        TabContent(PaymentsScreenContents.SEND.name) {
-            SendMoneyScreen(
-                onBackClick = navController::navigateUp,
-                navigateToTransferScreen = navController::navigateToTransferScreen,
-                navigateToScanQrScreen = navController::navigateToScanQr,
-                showTopBar = false,
-            )
-        },
+//        TabContent(PaymentsScreenContents.SEND.name) {
+//            SendMoneyScreen(
+//                onBackClick = navController::navigateUp,
+//                navigateToTransferScreen = navController::navigateToTransferScreen,
+//                navigateToScanQrScreen = navController::navigateToScanQr,
+//                showTopBar = false,
+//            )
+//        },
         TabContent(PaymentsScreenContents.REQUEST.name) {
             RequestScreen(
                 showQr = navController::navigateToShowQrScreen,
             )
         },
-        TabContent(PaymentsScreenContents.HISTORY.name) {
-            HistoryScreen(
-                viewTransferDetail = navController::navigateToTransactionDetail,
-                showTopBar = false,
-            )
-        },
-        TabContent(PaymentsScreenContents.SI.name) {
-            StandingInstructionsScreen(
-                onAddEditSI = navController::navigateToSIAddEdit,
-                onShowSIDetails = navController::navigateSIDetails,
-            )
-        },
-        TabContent(PaymentsScreenContents.INVOICES.name) {
-            InvoiceScreen(
-                navigateToInvoiceDetailScreen = navController::navigateToInvoiceDetail,
-            )
-        },
+//        TabContent(PaymentsScreenContents.HISTORY.name) {
+//            HistoryScreen(
+//                viewTransferDetail = navController::navigateToTransactionDetail,
+//                showTopBar = false,
+//            )
+//        },
+//        TabContent(PaymentsScreenContents.SI.name) {
+//            StandingInstructionsScreen(
+//                onAddEditSI = navController::navigateToSIAddEdit,
+//                onShowSIDetails = navController::navigateSIDetails,
+//            )
+//        },
+//        TabContent(PaymentsScreenContents.INVOICES.name) {
+//            InvoiceScreen(
+//                navigateToInvoiceDetailScreen = navController::navigateToInvoiceDetail,
+//            )
+//        },
     )
 
+//    TODO Cards and Merchants are not using self api
     val tabContents = listOf(
         TabContent(FinanceScreenContents.ACCOUNTS.name) {
             AccountsScreen(
@@ -139,22 +127,22 @@ internal fun MifosNavHost(
                 onAddOrEditBeneficiary = navController::navigateToBeneficiaryAddEdit,
             )
         },
-        TabContent(FinanceScreenContents.CARDS.name) {
-            CardsScreen(
-                navigateToViewDetail = navController::navigateToCardDetails,
-                navigateToAddEdit = navController::navigateToCardAddEdit,
-            )
-        },
-        TabContent(FinanceScreenContents.MERCHANTS.name) {
-            MerchantScreen()
-        },
-        TabContent(FinanceScreenContents.KYC.name) {
-            KYCScreen(
-                onLevel1Clicked = navController::navigateToKYCLevel1,
-                onLevel2Clicked = navController::navigateToKYCLevel2,
-                onLevel3Clicked = navController::navigateToKYCLevel3,
-            )
-        },
+//        TabContent(FinanceScreenContents.CARDS.name) {
+//            CardsScreen(
+//                navigateToViewDetail = navController::navigateToCardDetails,
+//                navigateToAddEdit = navController::navigateToCardAddEdit,
+//            )
+//        },
+//        TabContent(FinanceScreenContents.MERCHANTS.name) {
+//            MerchantScreen()
+//        },
+//        TabContent(FinanceScreenContents.KYC.name) {
+//            KYCScreen(
+//                onLevel1Clicked = navController::navigateToKYCLevel1,
+//                onLevel2Clicked = navController::navigateToKYCLevel2,
+//                onLevel3Clicked = navController::navigateToKYCLevel3,
+//            )
+//        },
     )
 
     NavHost(

@@ -33,7 +33,7 @@ val NetworkModule = module {
                     client = httpClient(
                         config = setupDefaultHttpClient(
                             baseUrl = BaseURL.selfServiceUrl,
-                            loggableHosts = listOf("venus.mifos.community"),
+                            loggableHosts = listOf("tt.mifos.community"),
                         ),
                     ).config {
                         install(KtorInterceptor) {
@@ -60,11 +60,11 @@ val NetworkModule = module {
                                 )
                             },
                             defaultHeaders = mapOf(
-                                "Fineract-Platform-TenantId" to "venus",
+                                "Fineract-Platform-TenantId" to "default",
                                 "Content-Type" to "application/json",
                                 "Accept" to "application/json",
                             ),
-                            loggableHosts = listOf("venus.mifos.community"),
+                            loggableHosts = listOf("tt.mifos.community"),
                         ),
                     ),
                 )

@@ -24,6 +24,7 @@ import org.mifospay.core.designsystem.icon.MifosIcons
  * can contain one or more screens (based on the window size). Navigation from one screen to the
  * next within a single destination will be handled directly in composables.
  */
+// TODO Profile is not using self api
 internal enum class TopLevelDestination(
     val selectedIcon: ImageVector,
     val unselectedIcon: ImageVector,
