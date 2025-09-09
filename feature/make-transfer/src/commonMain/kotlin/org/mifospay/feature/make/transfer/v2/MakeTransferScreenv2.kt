@@ -20,6 +20,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
@@ -164,7 +165,7 @@ internal fun MakeTransferScreenV2(
                 )
             }
         },
-        modifier = modifier,
+        modifier = modifier.imePadding(),
     ) { paddingValues ->
         when (state.state) {
             is MakeTransferV2State.State.Error -> {
