@@ -25,7 +25,7 @@ class KtorInterceptor(
     companion object Plugin : HttpClientPlugin<Config, KtorInterceptor> {
         private const val HEADER_TENANT = "Fineract-Platform-TenantId"
         private const val HEADER_AUTH = "Authorization"
-        private const val DEFAULT = "venus"
+        private const val DEFAULT = "default"
 
         override val key: AttributeKey<KtorInterceptor> = AttributeKey("KtorInterceptor")
 
