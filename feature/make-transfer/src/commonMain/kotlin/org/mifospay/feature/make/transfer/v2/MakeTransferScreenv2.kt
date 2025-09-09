@@ -9,6 +9,7 @@
  */
 package org.mifospay.feature.make.transfer.v2
 
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -22,6 +23,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.CardDefaults
@@ -51,12 +53,10 @@ import mobile_wallet.feature.make_transfer.generated.resources.feature_make_tran
 import mobile_wallet.feature.make_transfer.generated.resources.feature_make_transfer_continue_button
 import mobile_wallet.feature.make_transfer.generated.resources.feature_make_transfer_description_label
 import mobile_wallet.feature.make_transfer.generated.resources.feature_make_transfer_from_account
-import mobile_wallet.feature.make_transfer.generated.resources.feature_make_transfer_hide_balance
 import mobile_wallet.feature.make_transfer.generated.resources.feature_make_transfer_loading
 import mobile_wallet.feature.make_transfer.generated.resources.feature_make_transfer_no_accounts_found
 import mobile_wallet.feature.make_transfer.generated.resources.feature_make_transfer_oops_title
 import mobile_wallet.feature.make_transfer.generated.resources.feature_make_transfer_review_title
-import mobile_wallet.feature.make_transfer.generated.resources.feature_make_transfer_show_balance
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.mifospay.core.designsystem.component.BasicDialogState
@@ -69,12 +69,10 @@ import org.mifospay.core.designsystem.component.MifosLoadingWheel
 import org.mifospay.core.designsystem.component.MifosTextField
 import org.mifospay.core.designsystem.component.MifosTopBar
 import org.mifospay.core.designsystem.icon.MifosIcons
-import org.mifospay.core.model.account.Account
+import org.mifospay.core.network.model.entity.templates.account.AccountOption
 import org.mifospay.core.ui.AvatarBox
 import org.mifospay.core.ui.EmptyContentScreen
 import org.mifospay.core.ui.utils.EventsEffect
-import org.mifospay.feature.make.transfer.AccountList
-import org.mifospay.feature.make.transfer.ClientCard
 import template.core.base.designsystem.theme.KptTheme
 
 @Composable
@@ -85,7 +83,6 @@ internal fun MakeTransferScreenV2(
     viewModel: MakeTransferV2ScreenV2ViewModel = koinViewModel(),
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
-    val accountState by viewModel.accountsState.collectAsStateWithLifecycle()
 
     EventsEffect(viewModel) { event ->
         when (event) {
@@ -103,7 +100,6 @@ internal fun MakeTransferScreenV2(
 
     MakeTransferScreenV2(
         state = state,
-        accountState = accountState,
         modifier = modifier,
         onAction = remember(viewModel) {
             { viewModel.trySendAction(it) }
@@ -140,7 +136,6 @@ private fun MakeTransferDialogsV2(
 @Composable
 internal fun MakeTransferScreenV2(
     state: MakeTransferV2State,
-    accountState: ViewState,
     modifier: Modifier = Modifier,
     lazyListState: LazyListState = rememberLazyListState(),
     onAction: (MakeTransferV2Action) -> Unit,
@@ -156,22 +151,30 @@ internal fun MakeTransferScreenV2(
         },
         sheetPeekHeight = if (state.showBottomSheet) 200.dp else 0.dp,
         sheetContent = {
-            if (state.showBottomSheet && accountState is ViewState.Content) {
+            if (state.showBottomSheet) {
                 AccountList(
-                    accounts = accountState.data,
+                    accounts = state.fromAccountOptions ?: emptyList(),
                     selected = remember(state) {
                         { state.selectedAccount == it }
                     },
                     onClick = {
                         onAction(MakeTransferV2Action.SelectAccount(it))
                     },
+                    balanceMap = state.balanceMap,
                 )
             }
         },
         modifier = modifier,
     ) { paddingValues ->
-        when (accountState) {
-            is ViewState.Loading -> {
+        when (state.state) {
+            is MakeTransferV2State.State.Error -> {
+                EmptyContentScreen(
+                    title = stringResource(Res.string.feature_make_transfer_oops_title),
+                    subTitle = stringResource(Res.string.feature_make_transfer_no_accounts_found),
+                    iconTint = KptTheme.colorScheme.error,
+                )
+            }
+            MakeTransferV2State.State.Loading -> {
                 Box(modifier = Modifier.fillMaxSize()) {
                     MifosLoadingWheel(
                         contentDesc = stringResource(Res.string.feature_make_transfer_loading),
@@ -181,23 +184,13 @@ internal fun MakeTransferScreenV2(
                     )
                 }
             }
-
-            is ViewState.Empty -> {
+            MakeTransferV2State.State.NoAccounts -> {
                 EmptyContentScreen(
                     title = stringResource(Res.string.feature_make_transfer_oops_title),
                     subTitle = stringResource(Res.string.feature_make_transfer_no_accounts_found),
                 )
             }
-
-            is ViewState.Error -> {
-                EmptyContentScreen(
-                    title = stringResource(Res.string.feature_make_transfer_oops_title),
-                    subTitle = stringResource(Res.string.feature_make_transfer_no_accounts_found),
-                    iconTint = KptTheme.colorScheme.error,
-                )
-            }
-
-            is ViewState.Content -> {
+            MakeTransferV2State.State.Success -> {
                 LazyColumn(
                     modifier = Modifier
                         .fillMaxSize()
@@ -206,13 +199,6 @@ internal fun MakeTransferScreenV2(
                     contentPadding = PaddingValues(KptTheme.spacing.md),
                     verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.md),
                 ) {
-                    item {
-                        ClientCard(
-                            client = state.toClientData,
-                            modifier = Modifier,
-                        )
-                    }
-
                     if (state.selectedAccount != null) {
                         item {
                             FromAccountCard(
@@ -220,6 +206,7 @@ internal fun MakeTransferScreenV2(
                                 modifier = Modifier,
                                 onAction = onAction,
                                 isOpened = state.showBottomSheet,
+                                balance = state.selectedAccountBalance.toString(),
                             )
                         }
                     }
@@ -259,13 +246,12 @@ internal fun MakeTransferScreenV2(
 
 @Composable
 private fun FromAccountCard(
-    account: Account,
+    account: AccountOption,
+    balance: String,
     isOpened: Boolean,
     onAction: (MakeTransferV2Action) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    var revealBalance by remember { mutableStateOf(false) }
-
     Column(
         modifier = modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.md),
@@ -290,28 +276,14 @@ private fun FromAccountCard(
         ) {
             ListItem(
                 headlineContent = {
-                    Text(text = account.name)
+                    Text(text = account.clientName ?: "")
                 },
                 supportingContent = {
                     Column(
                         verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.xs),
                     ) {
-                        Text(text = account.number)
-
-                        if (revealBalance) {
-                            Text(text = stringResource(Res.string.feature_make_transfer_available_balance, account.balance))
-                            Text(
-                                text = stringResource(Res.string.feature_make_transfer_hide_balance),
-                                color = KptTheme.colorScheme.primary,
-                                modifier = Modifier.clickable { revealBalance = false },
-                            )
-                        } else {
-                            Text(
-                                text = stringResource(Res.string.feature_make_transfer_show_balance),
-                                color = KptTheme.colorScheme.primary,
-                                modifier = Modifier.clickable { revealBalance = true },
-                            )
-                        }
+                        Text(text = account.accountNo ?: "")
+                        Text(text = stringResource(Res.string.feature_make_transfer_available_balance, balance))
                     }
                 },
                 leadingContent = {
@@ -394,7 +366,7 @@ private fun EnterAmountCard(
                 ),
             )
 
-            if ((state.amount.toDoubleOrNull() ?: 0.0) > (state.selectedAccount?.balance ?: 0.0)) {
+            if ((state.amount.toDoubleOrNull() ?: 0.0) > state.selectedAccountBalance) {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(KptTheme.spacing.xs),
@@ -412,5 +384,113 @@ private fun EnterAmountCard(
                 }
             }
         }
+    }
+}
+
+@Composable
+private fun AccountList(
+    accounts: List<AccountOption?>,
+    balanceMap: Map<String, Double>,
+    selected: (AccountOption?) -> Boolean,
+    modifier: Modifier = Modifier,
+    onClick: (AccountOption?) -> Unit,
+) {
+    Column(
+        modifier = modifier.fillMaxWidth().padding(KptTheme.spacing.md),
+        verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.md),
+    ) {
+        Text(
+            text = stringResource(Res.string.feature_make_transfer_from_account),
+            style = KptTheme.typography.labelLarge,
+        )
+        LazyColumn(
+            modifier = modifier.fillMaxWidth(),
+            verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.md),
+        ) {
+            items(items = accounts, key = { account -> account?.accountId ?: account?.accountNo ?: -1 }) { account ->
+                AccountItem(
+                    account = account,
+                    selected = selected(account),
+                    onClick = remember(account) {
+                        { onClick(account) }
+                    },
+                    balance = balanceMap[account?.accountNo ?: ""].toString(),
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun AccountItem(
+    account: AccountOption?,
+    balance: String,
+    selected: Boolean,
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit,
+) {
+    var revealBalance by remember { mutableStateOf(false) }
+
+    OutlinedCard(
+        modifier = modifier.fillMaxWidth(),
+        colors = CardDefaults.outlinedCardColors(
+            containerColor = Color.Transparent,
+        ),
+        onClick = onClick,
+    ) {
+        ListItem(
+            headlineContent = {
+                Text(text = account?.clientName ?: "")
+            },
+            supportingContent = {
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(4.dp),
+                ) {
+                    Text(text = account?.accountNo ?: "")
+
+                    if (revealBalance) {
+                        Text(text = "Available Balance: $balance")
+                    } else {
+                        Text(
+                            text = "Show Balance",
+                            color = KptTheme.colorScheme.primary,
+                            style = KptTheme.typography.bodySmall,
+                            modifier = Modifier.clickable { revealBalance = true },
+                        )
+                    }
+                }
+            },
+            leadingContent = {
+                AvatarBox(
+                    icon = MifosIcons.Bank,
+                    backgroundColor = KptTheme.colorScheme.surfaceContainerHigh,
+                )
+            },
+            trailingContent = {
+                AnimatedContent(
+                    targetState = selected,
+                    label = "radioAnim",
+                ) { isSelected ->
+                    Icon(
+                        imageVector = if (isSelected) {
+                            MifosIcons.RadioButtonChecked
+                        } else {
+                            MifosIcons.RadioButtonUnchecked
+                        },
+                        contentDescription = stringResource(
+                            Res.string.feature_make_transfer_check_icon_description,
+                        ),
+                        tint = if (isSelected) {
+                            KptTheme.colorScheme.primary
+                        } else {
+                            KptTheme.colorScheme.outlineVariant
+                        },
+                    )
+                }
+            },
+            colors = ListItemDefaults.colors(
+                containerColor = Color.Transparent,
+            ),
+        )
     }
 }

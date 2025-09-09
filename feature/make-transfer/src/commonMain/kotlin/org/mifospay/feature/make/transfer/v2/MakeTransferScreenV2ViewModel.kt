@@ -12,18 +12,13 @@ package org.mifospay.feature.make.transfer.v2
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.mapLatest
-import kotlinx.coroutines.flow.stateIn
+import io.ktor.client.request.invoke
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 import mobile_wallet.feature.make_transfer.generated.resources.Res
 import mobile_wallet.feature.make_transfer.generated.resources.feature_make_transfer_error_empty_amount
 import mobile_wallet.feature.make_transfer.generated.resources.feature_make_transfer_error_empty_description
-import mobile_wallet.feature.make_transfer.generated.resources.feature_make_transfer_error_inactive_account
-import mobile_wallet.feature.make_transfer.generated.resources.feature_make_transfer_error_insufficient_balance
 import mobile_wallet.feature.make_transfer.generated.resources.feature_make_transfer_error_invalid_amount
 import mobile_wallet.feature.make_transfer.generated.resources.feature_make_transfer_error_same_account
 import mobile_wallet.feature.make_transfer.generated.resources.feature_make_transfer_error_select_account
@@ -32,62 +27,35 @@ import org.mifospay.core.common.DataState
 import org.mifospay.core.common.DateHelper
 import org.mifospay.core.common.StringResourceSerializer
 import org.mifospay.core.common.utils.capitalizeWords
-import org.mifospay.core.data.repository.AccountRepository
-import org.mifospay.core.datastore.UserPreferencesRepository
-import org.mifospay.core.model.account.Account
-import org.mifospay.core.model.account.AccountTransferPayload
-import org.mifospay.core.model.utils.PaymentQrData
+import org.mifospay.core.data.repository.ClientRepository
+import org.mifospay.core.data.repository.ThirdPartyTransferRepository
+import org.mifospay.core.network.model.entity.TPTResponse
+import org.mifospay.core.network.model.entity.payload.TransferPayload
+import org.mifospay.core.network.model.entity.templates.account.AccountOption
 import org.mifospay.core.ui.utils.BaseViewModel
+import kotlin.Int
 
 internal class MakeTransferV2ScreenV2ViewModel(
-    private val accountRepository: AccountRepository,
-    repository: UserPreferencesRepository,
+    private val repository: ThirdPartyTransferRepository,
+    private val clientRepo: ClientRepository,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<MakeTransferV2State, MakeTransferV2Event, MakeTransferV2Action>(
     initialState = run {
         val route = savedStateHandle.toRoute<MakeTransferScreenV2Route>()
-        val fromClientId = requireNotNull(repository.clientId.value)
-        val defaultAccountId = requireNotNull(repository.defaultAccountId.value)
-        val clientData = PaymentQrData(
-            clientId = route.clientId,
-            clientName = route.clientName,
-            accountNo = route.accountNo,
-            amount = route.amount.toString(),
-            accountId = route.accountId,
-        )
         MakeTransferV2State(
-            fromClientId = fromClientId,
-            defaultAccountId = defaultAccountId,
-            toClientData = clientData,
+            toOfficeId = route.toOfficeId,
+            toClientId = route.toClientId,
+            toAccountType = route.toAccountTypeId,
+            toAccountId = route.accountId.toInt(),
         )
     },
 ) {
 
-    @OptIn(ExperimentalCoroutinesApi::class)
-    val accountsState = accountRepository.getSelfAccounts(state.fromClientId)
-        .mapLatest { result ->
-            when (result) {
-                is DataState.Loading -> ViewState.Loading
-                is DataState.Error -> ViewState.Error(result.message)
-                is DataState.Success -> {
-                    if (result.data.isEmpty()) {
-                        ViewState.Empty
-                    } else {
-                        val account = result.data.first { it.id == state.defaultAccountId }
-                        sendAction(MakeTransferV2Action.SelectAccount(account))
-                        val activeAccounts = result.data.filter {
-                            it.status.active
-                        }
-                        ViewState.Content(activeAccounts)
-                    }
-                }
-            }
-        }.stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5_000),
-            initialValue = ViewState.Loading,
-        )
-
+    init {
+        viewModelScope.launch {
+            getFromAccounts()
+        }
+    }
     override fun handleAction(action: MakeTransferV2Action) {
         when (action) {
             MakeTransferV2Action.NavigateBack -> {
@@ -110,6 +78,9 @@ internal class MakeTransferV2ScreenV2ViewModel(
                 mutableStateFlow.update {
                     it.copy(
                         selectedAccount = action.account,
+                        selectedAccountBalance = state.balanceMap.getOrElse(
+                            action.account?.accountNo ?: "",
+                        ) { 0.0 },
                         showBottomSheet = false,
                     )
                 }
@@ -139,6 +110,65 @@ internal class MakeTransferV2ScreenV2ViewModel(
         }
     }
 
+    private suspend fun getFromAccounts() {
+        try {
+            val res = repository.getTransferTemplate()
+            if (res.fromAccountOptions.isNullOrEmpty()) {
+                mutableStateFlow.update {
+                    it.copy(
+                        state = MakeTransferV2State.State.NoAccounts,
+                    )
+                }
+            } else {
+                mutableStateFlow.update {
+                    it.copy(
+                        fromAccountOptions = res.fromAccountOptions,
+                    )
+                }
+                getBalanceOfAccounts()
+            }
+        } catch (e: Exception) {
+            mutableStateFlow.update {
+                it.copy(
+                    state = MakeTransferV2State.State.Error(e.message ?: ""),
+                )
+            }
+        }
+    }
+
+    private suspend fun getBalanceOfAccounts() {
+        try {
+            val clientId = state.fromAccountOptions?.first()?.clientId ?: -1
+            val result = clientRepo.getClientAccounts(clientId)
+            val balanceMap: Map<String, Double> =
+                result.savingsAccounts.associate { account ->
+                    account.accountNo to account.accountBalance
+                }
+            mutableStateFlow.update {
+                it.copy(
+                    state = MakeTransferV2State.State.Success,
+                    balanceMap = balanceMap,
+                )
+            }
+            val firstAccount = state.fromAccountOptions?.first()
+            mutableStateFlow.update {
+                it.copy(
+                    selectedAccount = firstAccount,
+                    selectedAccountBalance = balanceMap.getOrElse(
+                        firstAccount?.accountNo ?: "",
+                        { 0.0 },
+                    ),
+                )
+            }
+        } catch (e: Exception) {
+            mutableStateFlow.update {
+                it.copy(
+                    state = MakeTransferV2State.State.Error(e.message ?: ""),
+                )
+            }
+        }
+    }
+
     private fun validateTransfer() = when {
         state.amount.isBlank() -> updateErrorState(Res.string.feature_make_transfer_error_empty_amount)
 
@@ -148,17 +178,13 @@ internal class MakeTransferV2ScreenV2ViewModel(
 
         state.selectedAccount == null -> updateErrorState(Res.string.feature_make_transfer_error_select_account)
 
-        state.selectedAccount?.status?.active == false -> {
-            updateErrorState(Res.string.feature_make_transfer_error_inactive_account)
-        }
-
-        state.selectedAccount?.id == state.toClientData.accountId -> {
+        state.selectedAccount?.accountId == state.toAccountId -> {
             updateErrorState(Res.string.feature_make_transfer_error_same_account)
         }
 
-        state.amount.toDouble() > state.selectedAccount?.balance!! -> {
-            updateErrorState(Res.string.feature_make_transfer_error_insufficient_balance)
-        }
+//        state.amount.toDouble() > state.selectedAccount?.balance!! -> {
+//            updateErrorState(Res.string.feature_make_transfer_error_insufficient_balance)
+//        }
 
         else -> initiateTransfer()
     }
@@ -169,9 +195,9 @@ internal class MakeTransferV2ScreenV2ViewModel(
         }
 
         viewModelScope.launch {
-            val result = accountRepository.makeTransfer(state.transferPayload)
+            val result = repository.makeTransfer(state.transferPayload)
 
-            sendAction(MakeTransferV2Action.Internal.HandleTransferResult(result))
+//            sendAction(MakeTransferV2Action.Internal.HandleTransferResult(result))
         }
     }
 
@@ -208,14 +234,20 @@ internal class MakeTransferV2ScreenV2ViewModel(
 
 @Serializable
 internal data class MakeTransferV2State(
-    val fromClientId: Long,
-    val toClientData: PaymentQrData,
+    val toOfficeId: Int? = null,
+    val toClientId: Long? = null,
+    val toAccountType: Int? = null,
+    val toAccountId: Int? = null,
+    val amount: String = "",
+
     val showBottomSheet: Boolean = false,
-    val defaultAccountId: Long,
-    val amount: String = toClientData.amount,
+    val state: State = State.Loading,
     val description: String = "",
-    val selectedAccount: Account? = null,
+    val selectedAccount: AccountOption? = null,
+    val selectedAccountBalance: Double = 0.0,
     val dialogState: DialogState? = null,
+    val fromAccountOptions: List<AccountOption>? = emptyList(),
+    val balanceMap: Map<String, Double> = emptyMap(),
 ) {
     val amountIsValid: Boolean
         get() = amount.isNotEmpty() && amount.toDoubleOrNull() != null
@@ -223,21 +255,21 @@ internal data class MakeTransferV2State(
     val descriptionIsValid: Boolean
         get() = description.isNotEmpty()
 
-    val transferPayload: AccountTransferPayload
-        get() = AccountTransferPayload(
-            fromOfficeId = toClientData.officeId,
-            fromClientId = fromClientId,
-            fromAccountType = toClientData.accountTypeId,
-            fromAccountId = selectedAccount?.id ?: defaultAccountId,
-            toOfficeId = toClientData.officeId,
-            toClientId = toClientData.clientId,
-            toAccountType = toClientData.accountTypeId,
-            toAccountId = toClientData.accountId,
-            transferAmount = amount,
+    val transferPayload: TransferPayload
+        get() = TransferPayload(
+            fromOfficeId = selectedAccount?.officeId,
+            fromClientId = selectedAccount?.clientId,
+            fromAccountType = selectedAccount?.accountType?.id,
+            fromAccountId = selectedAccount?.accountId,
+            toOfficeId = toOfficeId,
+            toClientId = toClientId,
+            toAccountType = toAccountType,
+            toAccountId = toAccountId,
+            transferDate = DateHelper.formattedShortDate,
+            transferAmount = amount.toDoubleOrNull() ?: 0.0,
             transferDescription = description.capitalizeWords(),
             locale = "en_IN",
             dateFormat = DateHelper.SHORT_MONTH,
-            transferDate = DateHelper.formattedShortDate,
         )
 
     @Serializable
@@ -257,13 +289,13 @@ internal data class MakeTransferV2State(
             ) : Error()
         }
     }
-}
 
-internal sealed interface ViewState {
-    data object Loading : ViewState
-    data object Empty : ViewState
-    data class Error(val message: String) : ViewState
-    data class Content(val data: List<Account>) : ViewState
+    sealed interface State {
+        data object Loading : State
+        data object NoAccounts : State
+        data object Success : State
+        data class Error(val message: String) : State
+    }
 }
 
 internal sealed interface MakeTransferV2Event {
@@ -282,10 +314,10 @@ internal sealed interface MakeTransferV2Action {
 
     data class DescriptionChanged(val desc: String) : MakeTransferV2Action
 
-    data class SelectAccount(val account: Account) : MakeTransferV2Action
+    data class SelectAccount(val account: AccountOption?) : MakeTransferV2Action
 
     sealed interface Internal : MakeTransferV2Action {
-        data class HandleTransferResult(val result: DataState<String>) : Internal
+        data class HandleTransferResult(val result: DataState<TPTResponse>) : Internal
     }
 
     data object OpenBottomSheet : MakeTransferV2Action

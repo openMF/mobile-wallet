@@ -241,7 +241,7 @@ private fun AccountListState(
 }
 
 @Composable
-fun AccountList(
+private fun AccountList(
     accounts: List<Account>,
     selected: (Account) -> Boolean,
     modifier: Modifier = Modifier,

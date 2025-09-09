@@ -17,22 +17,32 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class MakeTransferScreenV2Route(
-    val clientId: Long,
-    val clientName: String,
-    val accountNo: String,
     val amount: Int,
     val accountId: Long,
+    val toOfficeId: Int? = null,
+    val toClientId: Long? = null,
+    val toAccountTypeId: Int? = null,
 )
 
 fun NavController.navigateToMakeTransferScreenV2(
-    clientId: Long,
-    clientName: String,
-    accountNo: String,
-    amount: Int = 0,
-    accountId: Long,
+    toOfficeId: Int?,
+    toClientId: Long?,
+    toAccountTypeId: Int?,
+    toAccountId: Int,
+    amount: Int,
     navOptions: NavOptions? = null,
 ) {
-    this.navigate(MakeTransferScreenV2Route(clientId, clientName, accountNo, amount, accountId), navOptions)
+    this.navigate(
+        MakeTransferScreenV2Route(
+            toOfficeId = toOfficeId,
+            toClientId = toClientId,
+            toAccountTypeId = toAccountTypeId,
+
+            accountId = toAccountId.toLong(),
+            amount = amount,
+        ),
+        navOptions,
+    )
 }
 
 fun NavGraphBuilder.makeTransferScreenV2(

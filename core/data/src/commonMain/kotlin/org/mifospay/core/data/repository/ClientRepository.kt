@@ -32,7 +32,7 @@ interface ClientRepository {
 
     suspend fun updateClientImage(clientId: Long, image: String): DataState<String>
 
-    suspend fun getClientAccounts(clientId: Long): Flow<DataState<ClientAccountsEntity>>
+    suspend fun getClientAccounts(clientId: Long): ClientAccountsEntity
 
     suspend fun getAccounts(clientId: Long, accountType: String): Flow<DataState<List<Account>>>
 

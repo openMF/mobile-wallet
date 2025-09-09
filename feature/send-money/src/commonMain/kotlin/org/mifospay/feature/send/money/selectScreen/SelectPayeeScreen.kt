@@ -78,7 +78,13 @@ import template.core.base.designsystem.theme.KptTheme
 fun SelectPayeeScreen(
     modifier: Modifier = Modifier,
     navigateBack: () -> Unit,
-    navigateToMakeTransferV2Screen: (clientId: Long, clientName: String, accountNo: String, amount: Int, accountId: Long) -> Unit,
+    navigateToMakeTransferV2Screen: (
+        toOfficeId: Int?,
+        toClientId: Long?,
+        toAccountTypeId: Int?,
+        toAccountId: Int,
+        amount: Int,
+    ) -> Unit,
     viewModel: SelectScreenViewModel = koinViewModel(),
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
@@ -86,13 +92,13 @@ fun SelectPayeeScreen(
     EventsEffect(viewModel) { event ->
         when (event) {
             is SelectScreenEvent.NavigateToTransferScreen -> {
-//                navigateToMakeTransferV2Screen(
-//                    state.selectedAccount?.parentId ?: 0,
-//                    state.selectedAccount?.parentName ?: "",
-//                    state.selectedAccount?.entityAccountNo ?: "",
-//                    0,
-//                    state.selectedAccount?.entityId ?: 0,
-//                )
+                navigateToMakeTransferV2Screen(
+                    state.selectedAccount?.officeId,
+                    state.selectedAccount?.clientId,
+                    state.selectedAccount?.accountType?.id ?: 0,
+                    state.selectedAccount?.accountId ?: 0,
+                    state.amount.toIntOrNull() ?: 0,
+                )
             }
 
             SelectScreenEvent.NavigateBack -> navigateBack()
