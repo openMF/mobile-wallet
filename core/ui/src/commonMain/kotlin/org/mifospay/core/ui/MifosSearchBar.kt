@@ -40,7 +40,6 @@ fun MifosSearchBar(
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = KptTheme.spacing.md)
             .clickable(onClick = onClick),
     ) {
         SearchBar(

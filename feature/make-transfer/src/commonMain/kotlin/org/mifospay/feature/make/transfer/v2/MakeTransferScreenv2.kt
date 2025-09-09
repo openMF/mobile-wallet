@@ -34,7 +34,9 @@ import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -239,6 +241,7 @@ internal fun MakeTransferScreenV2(
                         MifosButton(
                             onClick = { onAction(MakeTransferV2Action.InitiateTransfer) },
                             modifier = Modifier.fillMaxWidth(),
+                            enabled = state.amountIsValid && state.descriptionIsValid,
                         ) {
                             Text(text = stringResource(Res.string.feature_make_transfer_continue_button))
                         }
@@ -256,6 +259,8 @@ private fun FromAccountCard(
     onAction: (MakeTransferV2Action) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    var revealBalance by remember { mutableStateOf(false) }
+
     Column(
         modifier = modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.md),
@@ -288,7 +293,20 @@ private fun FromAccountCard(
                     ) {
                         Text(text = account.number)
 
-                        Text(text = "Available Balance: " + account.balance)
+                        if (revealBalance) {
+                            Text(text = "Available Balance: ${account.balance}")
+                            Text(
+                                text = "Hide Balance",
+                                color = KptTheme.colorScheme.primary,
+                                modifier = Modifier.clickable { revealBalance = false },
+                            )
+                        } else {
+                            Text(
+                                text = "Show Balance",
+                                color = KptTheme.colorScheme.primary,
+                                modifier = Modifier.clickable { revealBalance = true },
+                            )
+                        }
                     }
                 },
                 leadingContent = {
@@ -358,8 +376,8 @@ private fun EnterAmountCard(
                 },
                 modifier = Modifier.fillMaxWidth(),
                 keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Decimal
-                )
+                    keyboardType = KeyboardType.Decimal,
+                ),
             )
 
             if ((state.amount.toDoubleOrNull() ?: 0.0) > (state.selectedAccount?.balance ?: 0.0)) {
