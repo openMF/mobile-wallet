@@ -109,7 +109,7 @@ private fun SendMoneyScreen(
         sheetContent = {
             // TODO : If we can get recent payment details in self with toAccount number and  amount
             // show those list with pay button here and on click it should navigate to that id and price
-            RecentBottomSheet()
+//            RecentBottomSheet()
         },
         sheetPeekHeight = 200.dp,
     ) { paddingValues ->
