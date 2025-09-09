@@ -9,7 +9,6 @@
  */
 package org.mifospay.feature.make.transfer.v2
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -46,13 +45,18 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import mobile_wallet.feature.make_transfer.generated.resources.Res
 import mobile_wallet.feature.make_transfer.generated.resources.feature_make_transfer_amount
+import mobile_wallet.feature.make_transfer.generated.resources.feature_make_transfer_amount_error
+import mobile_wallet.feature.make_transfer.generated.resources.feature_make_transfer_available_balance
 import mobile_wallet.feature.make_transfer.generated.resources.feature_make_transfer_check_icon_description
 import mobile_wallet.feature.make_transfer.generated.resources.feature_make_transfer_continue_button
 import mobile_wallet.feature.make_transfer.generated.resources.feature_make_transfer_description_label
+import mobile_wallet.feature.make_transfer.generated.resources.feature_make_transfer_from_account
+import mobile_wallet.feature.make_transfer.generated.resources.feature_make_transfer_hide_balance
 import mobile_wallet.feature.make_transfer.generated.resources.feature_make_transfer_loading
 import mobile_wallet.feature.make_transfer.generated.resources.feature_make_transfer_no_accounts_found
 import mobile_wallet.feature.make_transfer.generated.resources.feature_make_transfer_oops_title
 import mobile_wallet.feature.make_transfer.generated.resources.feature_make_transfer_review_title
+import mobile_wallet.feature.make_transfer.generated.resources.feature_make_transfer_show_balance
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.mifospay.core.designsystem.component.BasicDialogState
@@ -267,7 +271,7 @@ private fun FromAccountCard(
         verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.md),
     ) {
         Text(
-            text = "From Account",
+            text = stringResource(Res.string.feature_make_transfer_from_account),
             style = KptTheme.typography.labelLarge,
         )
 
@@ -295,15 +299,15 @@ private fun FromAccountCard(
                         Text(text = account.number)
 
                         if (revealBalance) {
-                            Text(text = "Available Balance: ${account.balance}")
+                            Text(text = stringResource(Res.string.feature_make_transfer_available_balance, account.balance))
                             Text(
-                                text = "Hide Balance",
+                                text = stringResource(Res.string.feature_make_transfer_hide_balance),
                                 color = KptTheme.colorScheme.primary,
                                 modifier = Modifier.clickable { revealBalance = false },
                             )
                         } else {
                             Text(
-                                text = "Show Balance",
+                                text = stringResource(Res.string.feature_make_transfer_show_balance),
                                 color = KptTheme.colorScheme.primary,
                                 modifier = Modifier.clickable { revealBalance = true },
                             )
@@ -357,11 +361,11 @@ private fun EnterAmountCard(
                 Modifier.border(
                     width = 1.dp,
                     color = MaterialTheme.colorScheme.error,
-                    shape = MaterialTheme.shapes.medium
+                    shape = MaterialTheme.shapes.medium,
                 )
             } else {
                 Modifier
-            }
+            },
         ),
         colors = CardDefaults.outlinedCardColors(
             containerColor = Color.Transparent,
@@ -401,7 +405,7 @@ private fun EnterAmountCard(
                         tint = MaterialTheme.colorScheme.error,
                     )
                     Text(
-                        text = "Amount should be less than the balance you have",
+                        text = stringResource(Res.string.feature_make_transfer_amount_error),
                         color = MaterialTheme.colorScheme.error,
                         style = KptTheme.typography.bodyMedium,
                     )

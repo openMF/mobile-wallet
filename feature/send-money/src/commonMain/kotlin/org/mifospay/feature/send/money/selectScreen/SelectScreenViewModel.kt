@@ -9,7 +9,6 @@
  */
 package org.mifospay.feature.send.money.selectScreen
 
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
@@ -29,12 +28,9 @@ import org.mifospay.core.common.StringResourceSerializer
 import org.mifospay.core.data.repository.AccountRepository
 import org.mifospay.core.model.search.AccountResult
 import org.mifospay.core.ui.utils.BaseViewModel
-import org.mifospay.feature.send.money.QrScanner
 
 class SelectScreenViewModel(
-    private val scanner: QrScanner,
     repository: AccountRepository,
-    savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<SelectScreenState, SelectScreenEvent, SelectScreenAction>(
     initialState = SelectScreenState(),
 ) {
@@ -77,7 +73,7 @@ class SelectScreenViewModel(
                 }
             }
             SelectScreenAction.NavigateBack -> {
-                sendEvent(SelectScreenEvent.NavigateToTransferScreen)
+                sendEvent(SelectScreenEvent.NavigateBack)
             }
 
             is SelectScreenAction.SelectAccount -> {
@@ -135,6 +131,8 @@ data class SelectScreenState(
 
 sealed interface SelectScreenEvent {
     data object NavigateToTransferScreen : SelectScreenEvent
+
+    data object NavigateBack : SelectScreenEvent
 }
 
 sealed interface SelectScreenAction {

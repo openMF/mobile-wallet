@@ -10,36 +10,26 @@
 package org.mifospay.feature.send.money.v2
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.History
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -48,18 +38,19 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import mobile_wallet.feature.send_money.generated.resources.Res
+import mobile_wallet.feature.send_money.generated.resources.feature_send_money_add_icon_desc
+import mobile_wallet.feature.send_money.generated.resources.feature_send_money_add_payee_subtitle
+import mobile_wallet.feature.send_money.generated.resources.feature_send_money_add_payee_title
+import mobile_wallet.feature.send_money.generated.resources.feature_send_money_pay_button
+import mobile_wallet.feature.send_money.generated.resources.feature_send_money_recents_title
 import mobile_wallet.feature.send_money.generated.resources.feature_send_money_send
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.mifospay.core.designsystem.component.MifosBottomSheetScaffold
-import org.mifospay.core.designsystem.component.MifosGradientBackground
 import org.mifospay.core.designsystem.component.MifosOutlinedButton
-import org.mifospay.core.designsystem.component.MifosScaffold
 import org.mifospay.core.designsystem.component.MifosTextUserImage
 import org.mifospay.core.designsystem.component.MifosTopBar
 import org.mifospay.core.designsystem.icon.MifosIcons
@@ -77,8 +68,6 @@ fun SendMoneyv2Screen(
     modifier: Modifier = Modifier,
     viewModel: SendMoneyV2ViewModel = koinViewModel(),
 ) {
-    val state by viewModel.stateFlow.collectAsStateWithLifecycle()
-
     EventsEffect(viewModel) { event ->
         when (event) {
             SendMoneyV2Event.NavigateToSearchAccountSelection -> navigateToSelectAccountScreen()
@@ -89,7 +78,7 @@ fun SendMoneyv2Screen(
 
     SendMoneyScreen(
         showTopBar = true,
-        modifier = Modifier,
+        modifier = modifier,
         onAction = remember(viewModel) {
             { viewModel.trySendAction(it) }
         },
@@ -101,57 +90,54 @@ fun SendMoneyv2Screen(
 private fun SendMoneyScreen(
     showTopBar: Boolean,
     modifier: Modifier = Modifier,
-    lazyListState: LazyListState = rememberLazyListState(),
     onAction: (SendMoneyV2Action) -> Unit,
 ) {
-
-        MifosBottomSheetScaffold(
-            modifier = modifier,
-            topBar = {
-                AnimatedVisibility(
-                    visible = showTopBar,
-                ) {
-                    MifosTopBar(
-                        topBarTitle = stringResource(Res.string.feature_send_money_send),
-                        backPress = {
-                            onAction(SendMoneyV2Action.NavigateBack)
-                        },
-                    )
-                }
-            },
-            sheetContent = {
-                //TODO : If we can get recent payment details in self with toAccount number and  amount
-                // show those list with pay button here and on click it should navigate to that id and price
-                RecentBottomSheet()
-            },
-            sheetPeekHeight = 200.dp,
-        ) { paddingValues ->
-            Column(
-                Modifier.fillMaxSize().padding(paddingValues).padding(horizontal = KptTheme.spacing.md),
+    MifosBottomSheetScaffold(
+        modifier = modifier,
+        topBar = {
+            AnimatedVisibility(
+                visible = showTopBar,
             ) {
-                MifosSearchBar(
-                    query = "",
-                    placeHolder = "",
-                    onQueryChange = {},
-                    onSearch = {},
-                    onClick = {
-                        onAction(SendMoneyV2Action.OnSearchBarClicked)
+                MifosTopBar(
+                    topBarTitle = stringResource(Res.string.feature_send_money_send),
+                    backPress = {
+                        onAction(SendMoneyV2Action.NavigateBack)
                     },
-                    enabled = false,
-                )
-                Spacer(Modifier.height(KptTheme.spacing.md))
-                AddPayeeCard(
-                    onClick = {}
                 )
             }
+        },
+        sheetContent = {
+            // TODO : If we can get recent payment details in self with toAccount number and  amount
+            // show those list with pay button here and on click it should navigate to that id and price
+            RecentBottomSheet()
+        },
+        sheetPeekHeight = 200.dp,
+    ) { paddingValues ->
+        Column(
+            Modifier.fillMaxSize().padding(paddingValues).padding(horizontal = KptTheme.spacing.md),
+        ) {
+            MifosSearchBar(
+                query = "",
+                placeHolder = "",
+                onQueryChange = {},
+                onSearch = {},
+                onClick = {
+                    onAction(SendMoneyV2Action.OnSearchBarClicked)
+                },
+                enabled = false,
+            )
+            Spacer(Modifier.height(KptTheme.spacing.md))
+            AddPayeeCard(
+                onClick = {},
+            )
         }
-
+    }
 }
 
 @Composable
 fun AddPayeeCard(
-    title: String = "Add Payee",
-    subtitle: String = "Add Payee to transfer money quickly",
+    title: String = stringResource(Res.string.feature_send_money_add_payee_title),
+    subtitle: String = stringResource(Res.string.feature_send_money_add_payee_subtitle),
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -165,43 +151,41 @@ fun AddPayeeCard(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(KptTheme.spacing.md),
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
-            // Circle Add Icon
             Box(
                 modifier = Modifier
                     .size(40.dp)
                     .background(
                         color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
-                        shape = CircleShape
+                        shape = CircleShape,
                     ),
-                contentAlignment = Alignment.Center
+                contentAlignment = Alignment.Center,
             ) {
                 Icon(
                     imageVector = MifosIcons.Add,
-                    contentDescription = "Add",
-                    tint = MaterialTheme.colorScheme.onSurface
+                    contentDescription = stringResource(Res.string.feature_send_money_add_icon_desc),
+                    tint = MaterialTheme.colorScheme.onSurface,
                 )
             }
 
             Spacer(modifier = Modifier.width(KptTheme.spacing.md))
 
-            // Texts
             Column {
                 Text(
                     text = title,
-                    style = MaterialTheme.typography.bodyLarge
+                    style = MaterialTheme.typography.bodyLarge,
                 )
                 Text(
                     text = subtitle,
-                    style = MaterialTheme.typography.bodyMedium
+                    style = MaterialTheme.typography.bodyMedium,
                 )
             }
         }
     }
 }
 
-//TODO: remove it once we get data from self api
+// TODO: remove it once we get data from self api
 data class RecentTransaction(
     val name: String,
     val toAccount: String,
@@ -210,7 +194,7 @@ data class RecentTransaction(
 
 @Composable
 private fun RecentBottomSheet() {
-    //TODO : when we get api pass data from api.
+    // TODO : when we get api pass data from api.
     val recents = listOf(
         RecentTransaction("Alex Doe", "**** **** 1234", "₹1500"),
         RecentTransaction("Jane Smith", "**** **** 5678", "₹2200"),
@@ -220,21 +204,20 @@ private fun RecentBottomSheet() {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(KptTheme.spacing.md)
+            .padding(KptTheme.spacing.md),
     ) {
-
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(KptTheme.spacing.sm)
+            horizontalArrangement = Arrangement.spacedBy(KptTheme.spacing.sm),
         ) {
             Icon(
                 imageVector = MifosIcons.History,
-                contentDescription = "Recents",
-                tint = KptTheme.colorScheme.primary
+                contentDescription = stringResource(Res.string.feature_send_money_recents_title),
+                tint = KptTheme.colorScheme.primary,
             )
             Text(
-                text = "Recents",
-                style = KptTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold)
+                text = stringResource(Res.string.feature_send_money_recents_title),
+                style = KptTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
             )
         }
 
@@ -255,40 +238,38 @@ private fun RecentTransactionItem(transaction: RecentTransaction) {
             .clip(KptTheme.shapes.medium)
             .padding(horizontal = KptTheme.spacing.md, vertical = KptTheme.spacing.sm),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween
+        horizontalArrangement = Arrangement.SpaceBetween,
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(KptTheme.spacing.sm)
+            horizontalArrangement = Arrangement.spacedBy(KptTheme.spacing.sm),
         ) {
-
             MifosTextUserImage(
                 text = transaction.name.first().toString(),
-                size = 40.dp
+                size = 40.dp,
             )
 
             Column {
                 Text(
                     text = transaction.name,
-                    style = KptTheme.typography.bodyLarge
+                    style = KptTheme.typography.bodyLarge,
                 )
                 Text(
                     text = transaction.toAccount,
-                    style = KptTheme.typography.bodyMedium
+                    style = KptTheme.typography.bodyMedium,
                 )
             }
         }
 
-
         MifosOutlinedButton(
             onClick = {
-                //TODO pass the id and amount from here
+                // TODO pass the id and amount from here
             },
             colors = ButtonDefaults.outlinedButtonColors(
-                contentColor = KptTheme.colorScheme.primary
+                contentColor = KptTheme.colorScheme.primary,
             ),
-        ){
-            Text("Pay")
+        ) {
+            Text(stringResource(Res.string.feature_send_money_pay_button))
         }
     }
 }

@@ -9,19 +9,12 @@
  */
 package v2
 
-import androidx.lifecycle.SavedStateHandle
 import kotlinx.serialization.Serializable
-import org.jetbrains.compose.resources.StringResource
-import org.mifospay.core.common.StringResourceSerializer
-import org.mifospay.core.data.repository.AccountRepository
 import org.mifospay.core.model.search.AccountResult
 import org.mifospay.core.ui.utils.BaseViewModel
 
-class SendMoneyV2ViewModel(
-    repository: AccountRepository,
-    savedStateHandle: SavedStateHandle,
-) : BaseViewModel<SendMoneyV2State, SendMoneyV2Event, SendMoneyV2Action>(
-    initialState = SendMoneyV2State(),
+class SendMoneyV2ViewModel() : BaseViewModel<SendMoneyV2State, SendMoneyV2Event, SendMoneyV2Action>(
+    initialState = SendMoneyV2State,
 ) {
 
     override fun handleAction(action: SendMoneyV2Action) {
@@ -38,35 +31,7 @@ class SendMoneyV2ViewModel(
 }
 
 @Serializable
-data class SendMoneyV2State(
-    val amount: String = "",
-    val accountNumber: String = "",
-    val selectedAccount: AccountResult? = null,
-    val dialogState: DialogState? = null,
-) {
-
-    @Serializable
-    sealed interface DialogState {
-        @Serializable
-        data object Loading : DialogState
-
-        @Serializable
-        sealed class Error : DialogState {
-            @Serializable
-            data class ResourceMessage(
-                @Serializable(with = StringResourceSerializer::class)
-                val message: StringResource,
-            ) : Error()
-
-            @Serializable
-            data class GenericResourceMessage(
-                @Serializable(with = StringResourceSerializer::class)
-                val message: StringResource,
-                val args: List<String>,
-            ) : Error()
-        }
-    }
-}
+data object SendMoneyV2State
 
 sealed interface ViewState {
     data object Loading : ViewState

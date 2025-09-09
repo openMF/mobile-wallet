@@ -43,4 +43,10 @@
     <string name="feature_make_transfer_error_same_account">Cannot transfer to the same account</string>
     <string name="feature_make_transfer_error_insufficient_balance">Insufficient balance</string>
 
+    <string name="feature_make_transfer_available_balance">Available Balance: %1$s</string>
+    <string name="feature_make_transfer_show_balance">Show Balance</string>
+    <string name="feature_make_transfer_hide_balance">Hide Balance</string>
+    <string name="feature_make_transfer_amount_error">Amount should be less than the balance you have</string>
+
+
 </resources>

@@ -24,6 +24,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import mobile_wallet.feature.send_money.generated.resources.Res
+import mobile_wallet.feature.send_money.generated.resources.feature_select_account_placeholder
+import mobile_wallet.feature.send_money.generated.resources.feature_select_payment_title
 import mobile_wallet.feature.send_money.generated.resources.feature_send_money_loading
 import mobile_wallet.feature.send_money.generated.resources.feature_send_money_no_accounts_found
 import mobile_wallet.feature.send_money.generated.resources.feature_send_money_oops
@@ -55,6 +57,7 @@ import v2.ViewState
 @Composable
 fun SelectPayeeScreen(
     modifier: Modifier = Modifier,
+    navigateBack: () -> Unit,
     navigateToMakeTransferV2Screen: (clientId: Long, clientName: String, accountNo: String, amount: Int, accountId: Long) -> Unit,
     viewModel: SelectScreenViewModel = koinViewModel(),
 ) {
@@ -72,6 +75,8 @@ fun SelectPayeeScreen(
                     state.selectedAccount?.entityId ?: 0,
                 )
             }
+
+            SelectScreenEvent.NavigateBack -> navigateBack()
         }
     }
     SelectPayeeDialogs(
@@ -107,7 +112,7 @@ private fun SelectAccountScreen(
             modifier = modifier,
             topBar = {
                 MifosTopBar(
-                    topBarTitle = "Select Payment",
+                    topBarTitle = stringResource(Res.string.feature_select_payment_title),
                     backPress = {
                         onAction(SelectScreenAction.NavigateBack)
                     },
@@ -133,7 +138,7 @@ private fun SelectAccountScreen(
                 stickyHeader {
                     MifosSearchBar(
                         query = state.accountNumber,
-                        placeHolder = "Select Account Number To Pay",
+                        placeHolder = stringResource(Res.string.feature_select_account_placeholder),
                         onQueryChange = {
                             onAction(SelectScreenAction.AccountNumberChanged(it))
                         },

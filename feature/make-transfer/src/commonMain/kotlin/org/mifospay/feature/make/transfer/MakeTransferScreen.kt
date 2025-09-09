@@ -270,6 +270,7 @@ fun AccountList(
         }
     }
 }
+
 @Composable
 private fun AccountItem(
     account: Account,
@@ -292,7 +293,7 @@ private fun AccountItem(
             },
             supportingContent = {
                 Column(
-                    verticalArrangement = Arrangement.spacedBy(4.dp)
+                    verticalArrangement = Arrangement.spacedBy(4.dp),
                 ) {
                     Text(text = account.number)
 
@@ -302,14 +303,14 @@ private fun AccountItem(
                             text = "Hide Balance",
                             color = KptTheme.colorScheme.primary,
                             style = KptTheme.typography.bodySmall,
-                            modifier = Modifier.clickable { revealBalance = false }
+                            modifier = Modifier.clickable { revealBalance = false },
                         )
                     } else {
                         Text(
                             text = "Show Balance",
                             color = KptTheme.colorScheme.primary,
                             style = KptTheme.typography.bodySmall,
-                            modifier = Modifier.clickable { revealBalance = true }
+                            modifier = Modifier.clickable { revealBalance = true },
                         )
                     }
                 }
@@ -323,7 +324,7 @@ private fun AccountItem(
             trailingContent = {
                 AnimatedContent(
                     targetState = selected,
-                    label = "radioAnim"
+                    label = "radioAnim",
                 ) { isSelected ->
                     Icon(
                         imageVector = if (isSelected) {
@@ -332,7 +333,7 @@ private fun AccountItem(
                             MifosIcons.RadioButtonUnchecked
                         },
                         contentDescription = stringResource(
-                            Res.string.feature_make_transfer_check_icon_description
+                            Res.string.feature_make_transfer_check_icon_description,
                         ),
                         tint = if (isSelected) {
                             KptTheme.colorScheme.primary
@@ -348,7 +349,6 @@ private fun AccountItem(
         )
     }
 }
-
 
 @Composable
 fun ClientCard(

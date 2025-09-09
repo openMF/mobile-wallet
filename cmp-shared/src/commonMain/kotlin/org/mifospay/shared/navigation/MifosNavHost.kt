@@ -297,6 +297,7 @@ internal fun MifosNavHost(
 
         selectAccountScreenDestination(
             navigateToMakeTransferV2Screen = navController::navigateToMakeTransferScreenV2,
+            navigateBack = navController::popBackStack,
         )
 
         makeTransferScreenV2(
