@@ -58,7 +58,6 @@ import org.mifospay.core.designsystem.component.MifosNavigationRail
 import org.mifospay.core.designsystem.component.MifosNavigationRailItem
 import org.mifospay.core.designsystem.icon.MifosIcons
 import org.mifospay.core.designsystem.theme.LocalGradientColors
-import org.mifospay.feature.notification.navigateToNotification
 import org.mifospay.feature.profile.navigation.navigateToEditProfile
 import org.mifospay.feature.settings.navigation.navigateToSettings
 import org.mifospay.shared.navigation.MifosNavHost
@@ -149,9 +148,9 @@ internal fun MifosApp(
                             onNavigateToEditProfile = {
                                 appState.navController.navigateToEditProfile()
                             },
-                            onNavigateToNotification = {
-                                appState.navController.navigateToNotification()
-                            },
+//                            onNavigateToNotification = {
+//                                appState.navController.navigateToNotification()
+//                            },
                             destination = destination,
                         )
                     }
@@ -166,6 +165,8 @@ internal fun MifosApp(
     }
 }
 
+// TODO Notification feature is not using self api
+//  https://venus.mifos.community/fineract-provider/api/v1/notifications/?isRead=true
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun MifosAppBar(
@@ -174,7 +175,7 @@ private fun MifosAppBar(
     onNavigateToFaq: () -> Unit,
     onNavigateToSettings: () -> Unit,
     onNavigateToEditProfile: () -> Unit,
-    onNavigateToNotification: () -> Unit,
+//    onNavigateToNotification: () -> Unit,
     destination: TopLevelDestination?,
     modifier: Modifier = Modifier,
 ) {
@@ -187,10 +188,10 @@ private fun MifosAppBar(
                         Row(
                             horizontalArrangement = Arrangement.spacedBy(KptTheme.spacing.xs),
                         ) {
-                            IconBox(
-                                icon = MifosIcons.OutlinedNotifications,
-                                onClick = onNavigateToNotification,
-                            )
+//                            IconBox(
+//                                icon = MifosIcons.OutlinedNotifications,
+//                                onClick = onNavigateToNotification,
+//                            )
 
                             IconBox(
                                 icon = MifosIcons.SettingsOutlined,
@@ -199,12 +200,12 @@ private fun MifosAppBar(
                         }
                     }
 
-                    TopLevelDestination.PROFILE -> {
-                        IconBox(
-                            icon = MifosIcons.Edit2,
-                            onClick = onNavigateToEditProfile,
-                        )
-                    }
+//                    TopLevelDestination.PROFILE -> {
+//                        IconBox(
+//                            icon = MifosIcons.Edit2,
+//                            onClick = onNavigateToEditProfile,
+//                        )
+//                    }
 
                     else -> {}
                 }

@@ -34,7 +34,6 @@ import mobile_wallet.feature.settings.generated.resources.feature_settings_chang
 import mobile_wallet.feature.settings.generated.resources.feature_settings_disable_account
 import mobile_wallet.feature.settings.generated.resources.feature_settings_faq
 import mobile_wallet.feature.settings.generated.resources.feature_settings_log_out
-import mobile_wallet.feature.settings.generated.resources.feature_settings_notification_settings
 import mobile_wallet.feature.settings.generated.resources.feature_settings_settings
 import mobile_wallet.feature.settings.generated.resources.outline_logout
 import mobile_wallet.feature.settings.generated.resources.outline_password
@@ -111,13 +110,13 @@ private fun SettingsScreenContent(
                 .verticalScroll(rememberScrollState()),
             verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.sm),
         ) {
-            SettingsCardItem(
-                title = stringResource(Res.string.feature_settings_notification_settings),
-                icon = MifosIcons.OutlinedNotifications,
-                onClick = {
-                    onAction(SettingsAction.NavigateToNotificationSettings)
-                },
-            )
+//            SettingsCardItem(
+//                title = stringResource(Res.string.feature_settings_notification_settings),
+//                icon = MifosIcons.OutlinedNotifications,
+//                onClick = {
+//                    onAction(SettingsAction.NavigateToNotificationSettings)
+//                },
+//            )
 
             SettingsCardItem(
                 title = stringResource(Res.string.feature_settings_faq),

@@ -56,12 +56,16 @@ private fun PaymentScreenContent(
     }
 }
 
+// TODO History, SI, Invoices are not using self api
+//  https://venus.mifos.community/fineract-provider/api/v1/standinginstructions?clientId=2
+//  https://venus.mifos.community/fineract-provider/api/v1/datatables/invoice/2
+//
 enum class PaymentsScreenContents {
-    SEND,
+//    SEND,
     REQUEST,
-    HISTORY,
-    SI,
-    INVOICES,
+//    HISTORY,
+//    SI,
+//    INVOICES,
 }
 
 @Preview

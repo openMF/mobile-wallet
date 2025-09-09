@@ -173,6 +173,7 @@ internal fun MakeTransferScreen(
 
             item {
                 MifosButton(
+                    enabled = state.isContinueButtonEnabled,
                     onClick = { onAction(MakeTransferAction.InitiateTransfer) },
                     modifier = Modifier.fillMaxWidth(),
                 ) {

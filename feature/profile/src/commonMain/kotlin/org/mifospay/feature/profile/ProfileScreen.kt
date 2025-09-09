@@ -29,7 +29,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import mobile_wallet.feature.profile.generated.resources.Res
-import mobile_wallet.feature.profile.generated.resources.feature_profile_link_bank_account
+import mobile_wallet.feature.profile.generated.resources.feature_profile_loading
 import mobile_wallet.feature.profile.generated.resources.feature_profile_personal_qr_code
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
@@ -92,7 +92,6 @@ internal fun ProfileScreenContent(
 ) {
     MifosScaffold(
         modifier = modifier,
-        containerColor = KptTheme.colorScheme.background,
     ) {
         Box(
             modifier = Modifier.fillMaxSize(),
@@ -163,22 +162,23 @@ private fun ProfileScreenContent(
             },
         )
 
-        MifosButton(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(55.dp),
-            text = {
-                Text(
-                    text = stringResource(Res.string.feature_profile_link_bank_account),
-                )
-            },
-            onClick = {
-                onAction(ProfileAction.NavigateToLinkBankAccount)
-            },
-            leadingIcon = {
-                Icon(imageVector = MifosIcons.AttachMoney, contentDescription = "")
-            },
-        )
+//        TODO uncomment this after migrating to self api to link savings account
+//        MifosButton(
+//            modifier = Modifier
+//                .fillMaxWidth()
+//                .height(55.dp),
+//            text = {
+//                Text(
+//                    text = stringResource(Res.string.feature_profile_link_bank_account),
+//                )
+//            },
+//            onClick = {
+//                onAction(ProfileAction.NavigateToLinkBankAccount)
+//            },
+//            leadingIcon = {
+//                Icon(imageVector = MifosIcons.AttachMoney, contentDescription = "")
+//            },
+//        )
 
         Spacer(modifier = Modifier.height(1.dp))
     }
