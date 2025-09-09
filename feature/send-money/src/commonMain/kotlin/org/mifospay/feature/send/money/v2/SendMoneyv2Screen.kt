@@ -21,6 +21,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -126,7 +127,7 @@ private fun SendMoneyScreen(
             sheetPeekHeight = 200.dp,
         ) { paddingValues ->
             Column(
-                Modifier.padding(paddingValues).padding(horizontal = KptTheme.spacing.md),
+                Modifier.fillMaxSize().padding(paddingValues).padding(horizontal = KptTheme.spacing.md),
             ) {
                 MifosSearchBar(
                     query = "",
@@ -171,7 +172,7 @@ fun AddPayeeCard(
                 modifier = Modifier
                     .size(40.dp)
                     .background(
-                        color = MaterialTheme.colorScheme.surface.copy(alpha = 0.5f),
+                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
                         shape = CircleShape
                     ),
                 contentAlignment = Alignment.Center
@@ -179,7 +180,7 @@ fun AddPayeeCard(
                 Icon(
                     imageVector = MifosIcons.Add,
                     contentDescription = "Add",
-                    tint = MaterialTheme.colorScheme.surface
+                    tint = MaterialTheme.colorScheme.onSurface
                 )
             }
 

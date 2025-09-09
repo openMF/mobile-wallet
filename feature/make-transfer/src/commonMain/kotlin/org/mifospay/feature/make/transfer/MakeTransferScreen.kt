@@ -11,6 +11,7 @@ package org.mifospay.feature.make.transfer
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -32,7 +33,9 @@ import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -244,7 +247,7 @@ fun AccountList(
     onClick: (Account) -> Unit,
 ) {
     Column(
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier.fillMaxWidth().padding(KptTheme.spacing.md),
         verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.md),
     ) {
         Text(
@@ -267,7 +270,6 @@ fun AccountList(
         }
     }
 }
-
 @Composable
 private fun AccountItem(
     account: Account,
@@ -275,6 +277,8 @@ private fun AccountItem(
     modifier: Modifier = Modifier,
     onClick: () -> Unit,
 ) {
+    var revealBalance by remember { mutableStateOf(false) }
+
     OutlinedCard(
         modifier = modifier.fillMaxWidth(),
         colors = CardDefaults.outlinedCardColors(
@@ -287,7 +291,28 @@ private fun AccountItem(
                 Text(text = account.name)
             },
             supportingContent = {
-                Text(text = account.number)
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(4.dp)
+                ) {
+                    Text(text = account.number)
+
+                    if (revealBalance) {
+                        Text(text = "Available Balance: ${account.balance}")
+                        Text(
+                            text = "Hide Balance",
+                            color = KptTheme.colorScheme.primary,
+                            style = KptTheme.typography.bodySmall,
+                            modifier = Modifier.clickable { revealBalance = false }
+                        )
+                    } else {
+                        Text(
+                            text = "Show Balance",
+                            color = KptTheme.colorScheme.primary,
+                            style = KptTheme.typography.bodySmall,
+                            modifier = Modifier.clickable { revealBalance = true }
+                        )
+                    }
+                }
             },
             leadingContent = {
                 AvatarBox(
@@ -298,15 +323,18 @@ private fun AccountItem(
             trailingContent = {
                 AnimatedContent(
                     targetState = selected,
-                ) {
+                    label = "radioAnim"
+                ) { isSelected ->
                     Icon(
-                        imageVector = if (it) {
+                        imageVector = if (isSelected) {
                             MifosIcons.RadioButtonChecked
                         } else {
                             MifosIcons.RadioButtonUnchecked
                         },
-                        contentDescription = stringResource(Res.string.feature_make_transfer_check_icon_description),
-                        tint = if (it) {
+                        contentDescription = stringResource(
+                            Res.string.feature_make_transfer_check_icon_description
+                        ),
+                        tint = if (isSelected) {
                             KptTheme.colorScheme.primary
                         } else {
                             KptTheme.colorScheme.outlineVariant
@@ -320,6 +348,7 @@ private fun AccountItem(
         )
     }
 }
+
 
 @Composable
 fun ClientCard(

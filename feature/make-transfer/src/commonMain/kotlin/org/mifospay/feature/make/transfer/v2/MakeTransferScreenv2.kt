@@ -10,6 +10,7 @@
 package org.mifospay.feature.make.transfer.v2
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -351,11 +352,20 @@ private fun EnterAmountCard(
     modifier: Modifier = Modifier,
 ) {
     OutlinedCard(
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier.fillMaxWidth().then(
+            if (!state.amountIsValid) {
+                Modifier.border(
+                    width = 1.dp,
+                    color = MaterialTheme.colorScheme.error,
+                    shape = MaterialTheme.shapes.medium
+                )
+            } else {
+                Modifier
+            }
+        ),
         colors = CardDefaults.outlinedCardColors(
             containerColor = Color.Transparent,
         ),
-        border = BorderStroke(1.dp, if (!state.amountIsValid) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary),
     ) {
         Column(
             modifier = Modifier
@@ -388,11 +398,11 @@ private fun EnterAmountCard(
                     Icon(
                         imageVector = MifosIcons.Close,
                         contentDescription = null,
-                        tint = Color.Red,
+                        tint = MaterialTheme.colorScheme.error,
                     )
                     Text(
                         text = "Amount should be less than the balance you have",
-                        color = Color.Red,
+                        color = MaterialTheme.colorScheme.error,
                         style = KptTheme.typography.bodyMedium,
                     )
                 }
