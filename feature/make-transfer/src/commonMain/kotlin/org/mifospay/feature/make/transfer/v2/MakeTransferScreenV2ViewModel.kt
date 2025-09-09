@@ -14,9 +14,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.mapLatest
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -33,7 +31,6 @@ import org.jetbrains.compose.resources.StringResource
 import org.mifospay.core.common.DataState
 import org.mifospay.core.common.DateHelper
 import org.mifospay.core.common.StringResourceSerializer
-import org.mifospay.core.common.setSerialized
 import org.mifospay.core.common.utils.capitalizeWords
 import org.mifospay.core.data.repository.AccountRepository
 import org.mifospay.core.datastore.UserPreferencesRepository
@@ -66,10 +63,6 @@ internal class MakeTransferV2ScreenV2ViewModel(
     },
 ) {
 
-    companion object {
-        private const val KEY_STATE = "make_transfer_state"
-    }
-
     @OptIn(ExperimentalCoroutinesApi::class)
     val accountsState = accountRepository.getSelfAccounts(state.fromClientId)
         .mapLatest { result ->
@@ -94,12 +87,6 @@ internal class MakeTransferV2ScreenV2ViewModel(
             started = SharingStarted.WhileSubscribed(5_000),
             initialValue = ViewState.Loading,
         )
-
-    init {
-        stateFlow
-            .onEach { savedStateHandle.setSerialized(key = KEY_STATE, value = it) }
-            .launchIn(viewModelScope)
-    }
 
     override fun handleAction(action: MakeTransferV2Action) {
         when (action) {
