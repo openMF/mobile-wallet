@@ -27,9 +27,12 @@ import org.mifospay.core.model.savingsaccount.Transaction
 import org.mifospay.core.model.savingsaccount.TransferDetail
 import org.mifospay.core.model.search.AccountResult
 import org.mifospay.core.network.FineractApiManager
+import org.mifospay.core.network.SelfServiceApiManager
 
+// TODO use self api for account operations later
 class AccountRepositoryImpl(
     private val apiManager: FineractApiManager,
+    private val selfManager: SelfServiceApiManager,
     private val ioDispatcher: CoroutineDispatcher,
 ) : AccountRepository {
 
@@ -37,27 +40,27 @@ class AccountRepositoryImpl(
         accountId: Long,
         transactionId: Long,
     ): Flow<DataState<Transaction>> {
-        return apiManager.accountTransfersApi
+        return selfManager.accountTransfersApi
             .getTransaction(accountId, transactionId)
             .map { it.toModel() }
             .asDataStateFlow().flowOn(ioDispatcher)
     }
 
     override fun getAccountTransfer(transferId: Long): Flow<DataState<TransferDetail>> {
-        return apiManager.accountTransfersApi
+        return selfManager.accountTransfersApi
             .getAccountTransfer(transferId.toInt())
             .asDataStateFlow().flowOn(ioDispatcher)
     }
 
     override fun searchAccounts(query: String): Flow<DataState<List<AccountResult>>> {
-        return apiManager.accountTransfersApi
+        return selfManager.accountTransfersApi
             .searchAccounts(query, "savings")
             .catch { DataState.Error(it, null) }
             .asDataStateFlow().flowOn(ioDispatcher)
     }
 
     override fun getSelfAccounts(clientId: Long): Flow<DataState<List<Account>>> {
-        return apiManager.clientsApi
+        return selfManager.clientsApi
             .getAccounts(clientId, Constants.SAVINGS)
             .map { it.toAccount() }
             .asDataStateFlow().flowOn(ioDispatcher)
@@ -66,7 +69,7 @@ class AccountRepositoryImpl(
     override suspend fun makeTransfer(payload: AccountTransferPayload): DataState<String> {
         return try {
             withContext(ioDispatcher) {
-                apiManager.accountTransfersApi.makeTransfer(payload)
+                selfManager.accountTransfersApi.makeTransfer(payload)
             }
 
             DataState.Success("Transaction Successful")
