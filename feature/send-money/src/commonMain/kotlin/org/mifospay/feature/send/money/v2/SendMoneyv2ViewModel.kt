@@ -7,10 +7,9 @@
  *
  * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
  */
-package v2
+package org.mifospay.feature.send.money.v2
 
 import kotlinx.serialization.Serializable
-import org.mifospay.core.model.search.AccountResult
 import org.mifospay.core.ui.utils.BaseViewModel
 
 class SendMoneyV2ViewModel() : BaseViewModel<SendMoneyV2State, SendMoneyV2Event, SendMoneyV2Action>(
@@ -32,14 +31,6 @@ class SendMoneyV2ViewModel() : BaseViewModel<SendMoneyV2State, SendMoneyV2Event,
 
 @Serializable
 data object SendMoneyV2State
-
-sealed interface ViewState {
-    data object Loading : ViewState
-    data class Error(val message: String) : ViewState
-    data object Empty : ViewState
-    data object InitialEmpty : ViewState
-    data class Content(val data: List<AccountResult>) : ViewState
-}
 
 sealed interface SendMoneyV2Event {
     data object NavigateToSearchAccountSelection : SendMoneyV2Event

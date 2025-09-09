@@ -14,7 +14,7 @@ import org.koin.dsl.module
 import org.mifospay.feature.send.money.ScannerModule
 import org.mifospay.feature.send.money.SendMoneyViewModel
 import org.mifospay.feature.send.money.selectScreen.SelectScreenViewModel
-import v2.SendMoneyV2ViewModel
+import org.mifospay.feature.send.money.v2.SendMoneyV2ViewModel
 
 val SendMoneyModule = module {
     includes(ScannerModule)

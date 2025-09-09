@@ -10,68 +10,40 @@
 package org.mifospay.feature.send.money.selectScreen
 
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.debounce
-import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.mapLatest
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
-import org.jetbrains.compose.resources.StringResource
-import org.mifospay.core.common.DataState
-import org.mifospay.core.common.StringResourceSerializer
-import org.mifospay.core.data.repository.AccountRepository
-import org.mifospay.core.model.search.AccountResult
+import org.mifospay.core.data.repository.ThirdPartyTransferRepository
+import org.mifospay.core.network.model.entity.templates.account.AccountOption
 import org.mifospay.core.ui.utils.BaseViewModel
 
 class SelectScreenViewModel(
-    repository: AccountRepository,
+    private val repository: ThirdPartyTransferRepository,
 ) : BaseViewModel<SelectScreenState, SelectScreenEvent, SelectScreenAction>(
     initialState = SelectScreenState(),
 ) {
 
-    @OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
-    val accountListState = stateFlow.map { it.accountNumber }
-        .distinctUntilChanged()
-        .debounce(300)
-        .filter { it.length >= 4 }
-        .flatMapLatest {
-            repository.searchAccounts(it)
-        }.mapLatest { result ->
-            when (result) {
-                is DataState.Loading -> v2.ViewState.Loading
-                is DataState.Error -> v2.ViewState.Error(result.message)
-                is DataState.Success -> {
-                    if (result.data.isEmpty()) {
-                        v2.ViewState.Empty
-                    } else {
-                        v2.ViewState.Content(result.data)
-                    }
-                }
-            }
-        }.stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5_000),
-            initialValue = v2.ViewState.InitialEmpty,
-        )
+    init {
+        viewModelScope.launch {
+            getToAccounts()
+        }
+    }
 
     override fun handleAction(action: SelectScreenAction) {
         when (action) {
             is SelectScreenAction.AccountNumberChanged -> {
+                val filteredAccounts = state.toAccountOptions?.filter { account ->
+                    account.accountNo?.contains(action.accountNumber) == true
+                }
                 mutableStateFlow.update {
-                    it.copy(accountNumber = action.accountNumber)
+                    it.copy(
+                        accountNumber = action.accountNumber,
+                        filteredToAccounts = filteredAccounts,
+                    )
                 }
             }
-            SelectScreenAction.DismissDialog -> {
-                mutableStateFlow.update {
-                    it.copy(dialogState = null)
-                }
-            }
+
             SelectScreenAction.NavigateBack -> {
                 sendEvent(SelectScreenEvent.NavigateBack)
             }
@@ -93,39 +65,53 @@ class SelectScreenViewModel(
             }
         }
     }
+
+    private suspend fun getToAccounts() {
+        try {
+            val res = repository.getTransferTemplate()
+            if (res.toAccountOptions.isNullOrEmpty()) {
+                mutableStateFlow.update {
+                    it.copy(
+                        state = SelectScreenState.State.NoAccounts,
+                    )
+                }
+            } else {
+                mutableStateFlow.update {
+                    it.copy(
+                        state = SelectScreenState.State.Success,
+                        toAccountOptions = res.toAccountOptions,
+                        filteredToAccounts = res.toAccountOptions,
+                    )
+                }
+            }
+        } catch (e: Exception) {
+            mutableStateFlow.update {
+                it.copy(
+                    state = SelectScreenState.State.Error(e.message ?: ""),
+                )
+            }
+        }
+    }
 }
 
 @Serializable
 data class SelectScreenState(
     val amount: String = "",
     val accountNumber: String = "",
-    val selectedAccount: AccountResult? = null,
-    val dialogState: DialogState? = null,
+    val selectedAccount: AccountOption? = null,
+    val state: State = State.Loading,
+    val toAccountOptions: List<AccountOption>? = emptyList(),
+    val filteredToAccounts: List<AccountOption>? = emptyList(),
 ) {
 
     val isProceedEnabled: Boolean
         get() = selectedAccount != null
 
-    @Serializable
-    sealed interface DialogState {
-        @Serializable
-        data object Loading : DialogState
-
-        @Serializable
-        sealed class Error : DialogState {
-            @Serializable
-            data class ResourceMessage(
-                @Serializable(with = StringResourceSerializer::class)
-                val message: StringResource,
-            ) : Error()
-
-            @Serializable
-            data class GenericResourceMessage(
-                @Serializable(with = StringResourceSerializer::class)
-                val message: StringResource,
-                val args: List<String>,
-            ) : Error()
-        }
+    sealed interface State {
+        data object Loading : State
+        data object NoAccounts : State
+        data object Success : State
+        data class Error(val message: String) : State
     }
 }
 
@@ -140,9 +126,7 @@ sealed interface SelectScreenAction {
 
     data class AccountNumberChanged(val accountNumber: String) : SelectScreenAction
 
-    data class SelectAccount(val account: AccountResult) : SelectScreenAction
-
-    data object DismissDialog : SelectScreenAction
+    data class SelectAccount(val account: AccountOption?) : SelectScreenAction
 
     data object DeselectAccount : SelectScreenAction
 

@@ -206,7 +206,7 @@ private fun SendMoneyScreen(
 }
 
 @Composable
-fun SendMoneyBottomBar(
+private fun SendMoneyBottomBar(
     showDetails: Boolean,
     selectedAccount: AccountResult?,
     modifier: Modifier = Modifier,
@@ -332,7 +332,7 @@ private fun SelectedAccountCard(
 }
 
 @Composable
-private fun AccountBadge(
+fun AccountBadge(
     text: String,
     modifier: Modifier = Modifier,
     borderColor: Color = KptTheme.colorScheme.primary,
@@ -460,7 +460,7 @@ private fun LazyListScope.accountListContent(
 }
 
 @Composable
-fun AccountCard(
+private fun AccountCard(
     account: AccountResult,
     selected: (AccountResult) -> Boolean,
     modifier: Modifier = Modifier,

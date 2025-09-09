@@ -10,16 +10,22 @@
 package org.mifospay.core.ui
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SearchBar
 import androidx.compose.material3.SearchBarDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
 import org.mifospay.core.designsystem.icon.MifosIcons
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -35,49 +41,93 @@ fun MifosSearchBar(
     enabled: Boolean = true,
     modifier: Modifier = Modifier,
 ) {
-    Box(
+    SearchBar(
+        modifier = modifier.fillMaxWidth(),
+        inputField = {
+            SearchBarDefaults.InputField(
+                query = query,
+                onQueryChange = onQueryChange,
+                onSearch = onSearch,
+                expanded = false,
+                onExpandedChange = {},
+                enabled = enabled,
+                placeholder = { Text(text = placeHolder) },
+                leadingIcon = {
+                    Icon(
+                        imageVector = MifosIcons.Search,
+                        contentDescription = null,
+                    )
+                },
+                trailingIcon = {
+                    if (showClearButton && query.isNotEmpty()) {
+                        IconButton(onClick = onClearQuery) {
+                            Icon(
+                                imageVector = MifosIcons.Close,
+                                contentDescription = null,
+                            )
+                        }
+                    }
+                },
+                interactionSource = null,
+            )
+        },
+        expanded = false,
+        onExpandedChange = {},
+        shape = SearchBarDefaults.inputFieldShape,
+        colors = SearchBarDefaults.colors(),
+        tonalElevation = SearchBarDefaults.TonalElevation,
+        shadowElevation = SearchBarDefaults.ShadowElevation,
+        windowInsets = SearchBarDefaults.windowInsets,
+        content = {},
+    )
+}
+
+@Composable
+fun SimpleSearchBar(
+    query: String,
+    placeHolder: String,
+    onQueryChange: (String) -> Unit,
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit = {},
+    enabled: Boolean = true,
+    onClearQuery: () -> Unit = {},
+) {
+    TextField(
+        value = query,
+        onValueChange = onQueryChange,
         modifier = modifier
             .fillMaxWidth()
-            .clickable(onClick = onClick),
-    ) {
-        SearchBar(
-            inputField = {
-                SearchBarDefaults.InputField(
-                    query = query,
-                    onQueryChange = onQueryChange,
-                    onSearch = onSearch,
-                    expanded = false,
-                    onExpandedChange = {},
-                    enabled = enabled,
-                    placeholder = { Text(text = placeHolder) },
-                    leadingIcon = {
-                        Icon(
-                            imageVector = MifosIcons.Search,
-                            contentDescription = null,
-                        )
-                    },
-                    trailingIcon = {
-                        if (showClearButton && query.isNotEmpty()) {
-                            IconButton(onClick = onClearQuery) {
-                                Icon(
-                                    imageVector = MifosIcons.Close,
-                                    contentDescription = null,
-                                )
-                            }
-                        }
-                    },
-                    interactionSource = null,
-                )
+            .height(56.dp).clickable {
+                onClick()
             },
-            expanded = false,
-            onExpandedChange = {},
-            modifier = Modifier.fillMaxWidth(),
-            shape = SearchBarDefaults.inputFieldShape,
-            colors = SearchBarDefaults.colors(),
-            tonalElevation = SearchBarDefaults.TonalElevation,
-            shadowElevation = SearchBarDefaults.ShadowElevation,
-            windowInsets = SearchBarDefaults.windowInsets,
-            content = {},
-        )
-    }
+        placeholder = { Text(text = placeHolder) },
+        singleLine = true,
+        leadingIcon = {
+            Icon(
+                imageVector = MifosIcons.Search,
+                contentDescription = "Search",
+            )
+        },
+        trailingIcon = {
+            if (query.isNotEmpty()) {
+                IconButton(onClick = onClearQuery) {
+                    Icon(
+                        imageVector = MifosIcons.Close,
+                        contentDescription = "Clear",
+                    )
+                }
+            }
+        },
+        shape = RoundedCornerShape(8.dp),
+        colors = TextFieldDefaults.colors(
+            disabledContainerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f),
+            focusedContainerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f),
+            focusedIndicatorColor = Color.Transparent,
+            unfocusedIndicatorColor = Color.Transparent,
+            disabledIndicatorColor = Color.Transparent,
+            errorIndicatorColor = Color.Transparent,
+            unfocusedContainerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f),
+        ),
+        enabled = enabled,
+    )
 }

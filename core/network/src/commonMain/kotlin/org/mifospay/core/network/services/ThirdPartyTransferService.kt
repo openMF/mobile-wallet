@@ -20,7 +20,7 @@ import org.mifospay.core.network.utils.ApiEndPoints
 
 interface ThirdPartyTransferService {
     @GET(ApiEndPoints.ACCOUNT_TRANSFER + "/template?type=tpt")
-    suspend fun accountTransferTemplate(): Flow<AccountOptionsTemplate>
+    suspend fun accountTransferTemplate(): AccountOptionsTemplate
 
     @POST(ApiEndPoints.ACCOUNT_TRANSFER + "?type=tpt")
     suspend fun makeTransfer(@Body transferPayload: TransferPayload): Flow<TPTResponse>

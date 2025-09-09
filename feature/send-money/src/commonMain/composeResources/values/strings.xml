@@ -40,7 +40,7 @@
     <string name="feature_send_money_error_requesting_payment_qr_data_missing">Failed to request payment QR: required data is missing</string>
 
     <string name="feature_select_payment_title">Select Payment</string>
-    <string name="feature_select_account_placeholder">Select Account Number To Pay</string>
+    <string name="feature_select_account_placeholder">Search VPA/Mobile/Account Number</string>
     <string name="feature_send_money_add_payee_title">Add Payee</string>
     <string name="feature_send_money_add_payee_subtitle">Add Payee to transfer money quickly</string>
     <string name="feature_send_money_add_icon_desc">Add</string>

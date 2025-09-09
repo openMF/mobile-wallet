@@ -25,15 +25,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.filled.History
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -54,12 +53,9 @@ import org.mifospay.core.designsystem.component.MifosOutlinedButton
 import org.mifospay.core.designsystem.component.MifosTextUserImage
 import org.mifospay.core.designsystem.component.MifosTopBar
 import org.mifospay.core.designsystem.icon.MifosIcons
-import org.mifospay.core.ui.MifosSearchBar
+import org.mifospay.core.ui.SimpleSearchBar
 import org.mifospay.core.ui.utils.EventsEffect
 import template.core.base.designsystem.theme.KptTheme
-import v2.SendMoneyV2Action
-import v2.SendMoneyV2Event
-import v2.SendMoneyV2ViewModel
 
 @Composable
 fun SendMoneyv2Screen(
@@ -111,16 +107,15 @@ private fun SendMoneyScreen(
             // show those list with pay button here and on click it should navigate to that id and price
 //            RecentBottomSheet()
         },
-        sheetPeekHeight = 200.dp,
+        sheetPeekHeight = 0.dp, //TODO: make it 200.dp if bottom sheet is uncommented
     ) { paddingValues ->
         Column(
             Modifier.fillMaxSize().padding(paddingValues).padding(horizontal = KptTheme.spacing.md),
         ) {
-            MifosSearchBar(
+            SimpleSearchBar(
                 query = "",
                 placeHolder = "",
                 onQueryChange = {},
-                onSearch = {},
                 onClick = {
                     onAction(SendMoneyV2Action.OnSearchBarClicked)
                 },
@@ -141,11 +136,14 @@ fun AddPayeeCard(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    OutlinedCard(
+    Card(
         modifier = modifier
             .fillMaxWidth()
             .clickable { onClick() },
         shape = KptTheme.shapes.medium,
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.primary.copy(0.1f),
+        )
     ) {
         Row(
             modifier = Modifier
@@ -155,9 +153,9 @@ fun AddPayeeCard(
         ) {
             Box(
                 modifier = Modifier
-                    .size(40.dp)
+                    .size(32.dp)
                     .background(
-                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
+                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.2f),
                         shape = CircleShape,
                     ),
                 contentAlignment = Alignment.Center,
@@ -174,11 +172,11 @@ fun AddPayeeCard(
             Column {
                 Text(
                     text = title,
-                    style = MaterialTheme.typography.bodyLarge,
+                    style = KptTheme.typography.titleSmall,
                 )
                 Text(
                     text = subtitle,
-                    style = MaterialTheme.typography.bodyMedium,
+                    style = KptTheme.typography.bodySmall,
                 )
             }
         }
