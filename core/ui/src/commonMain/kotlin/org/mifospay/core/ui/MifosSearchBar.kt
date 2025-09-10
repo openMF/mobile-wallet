@@ -12,7 +12,6 @@ package org.mifospay.core.ui
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -27,7 +26,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import org.mifospay.core.designsystem.icon.MifosIcons
-import template.core.base.designsystem.KptTheme
+import template.core.base.designsystem.theme.KptTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -38,7 +37,6 @@ fun MifosSearchBar(
     onQueryChange: (String) -> Unit,
     onSearch: (String) -> Unit,
     onClearQuery: () -> Unit = {},
-    onClick: () -> Unit = {},
     enabled: Boolean = true,
     modifier: Modifier = Modifier,
 ) {
@@ -98,10 +96,15 @@ fun SimpleSearchBar(
         onValueChange = onQueryChange,
         modifier = modifier
             .fillMaxWidth()
-            .height(56.dp).clickable {
+            .height(48.dp).clickable {
                 onClick()
             },
-        placeholder = { Text(text = placeHolder) },
+        placeholder = {
+            Text(
+                text = placeHolder,
+                style = MaterialTheme.typography.bodyMedium,
+            )
+        },
         singleLine = true,
         leadingIcon = {
             Icon(
@@ -119,7 +122,7 @@ fun SimpleSearchBar(
                 }
             }
         },
-        shape = RoundedCornerShape(8.dp),
+        shape = KptTheme.shapes.small,
         colors = TextFieldDefaults.colors(
             disabledContainerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f),
             focusedContainerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f),
@@ -130,6 +133,6 @@ fun SimpleSearchBar(
             unfocusedContainerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f),
         ),
         enabled = enabled,
-        textStyle = MaterialTheme.typography.bodySmall,
+        textStyle = MaterialTheme.typography.bodyMedium,
     )
 }

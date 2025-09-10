@@ -47,5 +47,6 @@
     <string name="feature_send_money_recents_title">Recents</string>
     <string name="feature_send_money_recents_icon_desc">Recents</string>
     <string name="feature_send_money_pay_button">Pay</string>
+    <string name="feature_send_money_no_accounts_found_for_search">No accounts found for searched query</string>
 
 </resources>

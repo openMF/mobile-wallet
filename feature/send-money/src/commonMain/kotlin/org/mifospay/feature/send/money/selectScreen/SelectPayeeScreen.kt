@@ -43,6 +43,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -53,6 +54,7 @@ import mobile_wallet.feature.send_money.generated.resources.feature_send_money_b
 import mobile_wallet.feature.send_money.generated.resources.feature_send_money_close
 import mobile_wallet.feature.send_money.generated.resources.feature_send_money_loading
 import mobile_wallet.feature.send_money.generated.resources.feature_send_money_no_accounts_found
+import mobile_wallet.feature.send_money.generated.resources.feature_send_money_no_accounts_found_for_search
 import mobile_wallet.feature.send_money.generated.resources.feature_send_money_oops
 import mobile_wallet.feature.send_money.generated.resources.feature_send_money_proceed
 import mobile_wallet.feature.send_money.generated.resources.feature_send_money_selected
@@ -164,6 +166,7 @@ private fun SelectAccountContent(
     onAction: (SelectScreenAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val keyboardController = LocalSoftwareKeyboardController.current
     when (state.state) {
         is SelectScreenState.State.Error -> {
             EmptyContentScreen(
@@ -206,14 +209,17 @@ private fun SelectAccountContent(
                 }
                 accountListContent(
                     state = state,
-                    onAction = onAction,
+                    onAction = {
+                        onAction(it)
+                        keyboardController?.hide()
+                    },
                     selected = { state.selectedAccount == it },
                 )
                 if (state.filteredToAccounts?.isEmpty() == true) {
                     item {
                         EmptyContentScreen(
                             title = stringResource(Res.string.feature_send_money_oops),
-                            subTitle = "No Accounts Found for searched query",
+                            subTitle = stringResource(Res.string.feature_send_money_no_accounts_found_for_search),
                             modifier = Modifier.fillMaxSize(),
                         )
                     }
@@ -233,7 +239,9 @@ private fun LazyListScope.accountListContent(
             account = state.filteredToAccounts?.get(it),
             selected = selected,
             onClick = remember(state.filteredToAccounts?.get(it)) {
-                { onAction(SelectScreenAction.SelectAccount(it)) }
+                {
+                    onAction(SelectScreenAction.SelectAccount(it))
+                }
             },
         )
     }

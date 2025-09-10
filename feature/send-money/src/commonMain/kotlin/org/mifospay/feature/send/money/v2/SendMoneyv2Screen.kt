@@ -9,7 +9,6 @@
  */
 package org.mifospay.feature.send.money.v2
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -74,7 +73,6 @@ fun SendMoneyv2Screen(
     }
 
     SendMoneyScreen(
-        showTopBar = true,
         modifier = modifier,
         onAction = remember(viewModel) {
             { viewModel.trySendAction(it) }
@@ -85,30 +83,25 @@ fun SendMoneyv2Screen(
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Composable
 private fun SendMoneyScreen(
-    showTopBar: Boolean,
     modifier: Modifier = Modifier,
     onAction: (SendMoneyV2Action) -> Unit,
 ) {
     MifosBottomSheetScaffold(
         modifier = modifier,
         topBar = {
-            AnimatedVisibility(
-                visible = showTopBar,
-            ) {
-                MifosTopBar(
-                    topBarTitle = stringResource(Res.string.feature_send_money_send),
-                    backPress = {
-                        onAction(SendMoneyV2Action.NavigateBack)
-                    },
-                )
-            }
+            MifosTopBar(
+                topBarTitle = stringResource(Res.string.feature_send_money_send),
+                backPress = {
+                    onAction(SendMoneyV2Action.NavigateBack)
+                },
+            )
         },
         sheetContent = {
             // TODO : If we can get recent payment details in self with toAccount number and  amount
             // show those list with pay button here and on click it should navigate to that id and price
 //            RecentBottomSheet()
         },
-        sheetPeekHeight = 0.dp, //TODO: make it 200.dp if bottom sheet is uncommented
+        sheetPeekHeight = 0.dp,
     ) { paddingValues ->
         Column(
             Modifier.fillMaxSize().padding(paddingValues).padding(horizontal = KptTheme.spacing.md),
@@ -144,7 +137,7 @@ fun AddPayeeCard(
         shape = KptTheme.shapes.medium,
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.primary.copy(0.1f),
-        )
+        ),
     ) {
         Row(
             modifier = Modifier

@@ -256,7 +256,7 @@ internal data class MakeTransferV2State(
     val balanceMap: Map<String, Double> = emptyMap(),
 ) {
     val amountIsValid: Boolean
-        get() = amount.isNotEmpty() && amount.toDoubleOrNull() != null && amount.toDouble()<=selectedAccountBalance
+        get() = amount.isNotEmpty() && amount.toDoubleOrNull() != null && amount.toDouble() <= selectedAccountBalance
 
     val descriptionIsValid: Boolean
         get() = description.isNotEmpty()
