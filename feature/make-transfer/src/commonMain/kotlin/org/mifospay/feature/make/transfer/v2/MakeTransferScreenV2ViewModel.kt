@@ -50,7 +50,7 @@ internal class MakeTransferV2ScreenV2ViewModel(
             toAccountId = route.accountId.toInt(),
             toAccountName = route.toAccountName,
             toAccountNo = route.toAccountNo,
-            amount = route.amount.toString(),
+            amount = if(route.amount==0) "" else route.amount.toString(),
         )
     },
 ) {
