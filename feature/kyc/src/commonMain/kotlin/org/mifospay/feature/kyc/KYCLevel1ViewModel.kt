@@ -15,7 +15,6 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.datetime.Clock
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 import org.mifospay.core.common.DataState
@@ -30,6 +29,8 @@ import org.mifospay.core.ui.utils.BaseViewModel
 import org.mifospay.feature.kyc.KycLevel1Action.Internal.HandleLevel1Result
 import org.mifospay.feature.kyc.KycLevel1Action.Internal.KycLevel1DetailsResult
 import org.mifospay.feature.kyc.KycLevel1State.DialogState.Error
+import kotlin.time.Clock
+import kotlin.time.ExperimentalTime
 
 internal class KYCLevel1ViewModel(
     private val kycLevelRepository: KycLevelRepository,
@@ -266,6 +267,7 @@ internal data class KycLevel1State(
     val submitButtonText: String
         get() = if (doesExist) "Update" else "Submit"
 
+    @OptIn(ExperimentalTime::class)
     val initialDate = Clock.System.now().toEpochMilliseconds()
 
     @Transient

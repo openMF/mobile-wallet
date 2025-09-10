@@ -14,18 +14,16 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
-import org.mifospay.core.designsystem.component.MifosLoadingWheel
 import org.mifospay.core.designsystem.theme.MifosTheme
+import org.mifospay.core.ui.MifosProgressIndicatorOverlay
 import org.mifospay.core.ui.VerifyStepHeader
 import org.mifospay.feature.upi.setup.viewmodel.DebitCardUiState
 import org.mifospay.feature.upi.setup.viewmodel.DebitCardViewModel
@@ -99,14 +97,7 @@ internal fun DebitCardScreenWithHeaderAndContent(
                             is DebitCardUiState.Initials -> {
                             }
 
-                            is DebitCardUiState.Verifying -> {
-                                MifosLoadingWheel(
-                                    modifier = Modifier
-                                        .wrapContentSize()
-                                        .align(Alignment.Center),
-                                    contentDesc = "Verifying Debit Card",
-                                )
-                            }
+                            is DebitCardUiState.Verifying -> MifosProgressIndicatorOverlay()
 
                             is DebitCardUiState.Verified -> {
                                 onDebitCardVerified((debitCardUiState).otp)

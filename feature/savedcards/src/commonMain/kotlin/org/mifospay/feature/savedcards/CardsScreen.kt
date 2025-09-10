@@ -47,20 +47,19 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.launch
 import mobile_wallet.feature.savedcards.generated.resources.Res
 import mobile_wallet.feature.savedcards.generated.resources.feature_savedcards_error_oops
-import mobile_wallet.feature.savedcards.generated.resources.feature_savedcards_loading
 import mobile_wallet.feature.savedcards.generated.resources.feature_savedcards_subtitle
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.resources.vectorResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.mifospay.core.designsystem.component.BasicDialogState
 import org.mifospay.core.designsystem.component.LoadingDialogState
-import org.mifospay.core.designsystem.component.MfLoadingWheel
 import org.mifospay.core.designsystem.component.MifosBasicDialog
 import org.mifospay.core.designsystem.component.MifosLoadingDialog
 import org.mifospay.core.designsystem.component.MifosScaffold
 import org.mifospay.core.designsystem.icon.MifosIcons
 import org.mifospay.core.model.savedcards.SavedCard
 import org.mifospay.core.ui.EmptyContentScreen
+import org.mifospay.core.ui.MifosProgressIndicator
 import org.mifospay.core.ui.utils.EventsEffect
 import org.mifospay.feature.savedcards.createOrUpdate.CardAddEditType
 import org.mifospay.feature.savedcards.utils.CreditCardUtils.detectCardType
@@ -180,11 +179,7 @@ internal fun CardsScreen(
             contentAlignment = Alignment.Center,
         ) {
             when (state) {
-                is ViewState.Loading -> {
-                    MfLoadingWheel(
-                        contentDesc = stringResource(Res.string.feature_savedcards_loading),
-                    )
-                }
+                is ViewState.Loading -> MifosProgressIndicator()
 
                 is ViewState.Empty -> {
                     EmptyContentScreen(

@@ -1404,9 +1404,9 @@
 |    |    |    |         \--- org.jetbrains.kotlin:kotlin-stdlib:2.0.21 -> 2.1.21 (*)
 |    |    |    +--- com.squareup.okio:okio:3.15.0 (*)
 |    |    |    +--- org.jetbrains.kotlin:kotlin-stdlib:2.1.20 -> 2.1.21 (*)
-|    |    |    +--- org.jetbrains.kotlinx:kotlinx-datetime:0.6.2
-|    |    |    |    \--- org.jetbrains.kotlinx:kotlinx-datetime-jvm:0.6.2
-|    |    |    |         \--- org.jetbrains.kotlin:kotlin-stdlib:1.9.21 -> 2.1.21 (*)
+|    |    |    +--- org.jetbrains.kotlinx:kotlinx-datetime:0.7.1
+|    |    |    |    \--- org.jetbrains.kotlinx:kotlinx-datetime-jvm:0.7.1
+|    |    |    |         \--- org.jetbrains.kotlin:kotlin-stdlib:2.1.20 -> 2.1.21 (*)
 |    |    |    +--- io.insert-koin:koin-bom:4.1.0 (*)
 |    |    |    +--- io.insert-koin:koin-core:4.1.0 (*)
 |    |    |    +--- io.insert-koin:koin-annotations:2.1.0
@@ -1990,21 +1990,46 @@
 |    |    |         +--- org.jetbrains.kotlin:kotlin-stdlib:2.1.21-RC2 -> 2.1.21 (*)
 |    |    |         +--- androidx.annotation:annotation:1.9.1 (*)
 |    |    |         \--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2 (*)
-|    |    \--- io.github.vinceglb:filekit-dialogs-compose:0.10.0-beta04
-|    |         \--- io.github.vinceglb:filekit-dialogs-compose-android:0.10.0-beta04
-|    |              +--- androidx.activity:activity-compose:1.10.1 (*)
-|    |              +--- androidx.exifinterface:exifinterface:1.4.1 (*)
-|    |              +--- io.github.vinceglb:filekit-dialogs:0.10.0-beta04
-|    |              |    \--- io.github.vinceglb:filekit-dialogs-android:0.10.0-beta04
-|    |              |         +--- androidx.activity:activity-ktx:1.10.1 (*)
-|    |              |         +--- io.github.vinceglb:filekit-core:0.10.0-beta04 (*)
-|    |              |         +--- org.jetbrains.kotlin:kotlin-stdlib:2.1.21-RC2 -> 2.1.21 (*)
-|    |              |         \--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2 (*)
-|    |              +--- org.jetbrains.kotlin:kotlin-stdlib:2.1.21-RC2 -> 2.1.21 (*)
-|    |              +--- org.jetbrains.compose.runtime:runtime:1.8.0 -> 1.8.2 (*)
-|    |              +--- org.jetbrains.compose.ui:ui:1.8.0 -> 1.8.2 (*)
-|    |              +--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2 (*)
-|    |              \--- androidx.annotation:annotation:1.9.1 (*)
+|    |    +--- io.github.vinceglb:filekit-dialogs-compose:0.10.0-beta04
+|    |    |    \--- io.github.vinceglb:filekit-dialogs-compose-android:0.10.0-beta04
+|    |    |         +--- androidx.activity:activity-compose:1.10.1 (*)
+|    |    |         +--- androidx.exifinterface:exifinterface:1.4.1 (*)
+|    |    |         +--- io.github.vinceglb:filekit-dialogs:0.10.0-beta04
+|    |    |         |    \--- io.github.vinceglb:filekit-dialogs-android:0.10.0-beta04
+|    |    |         |         +--- androidx.activity:activity-ktx:1.10.1 (*)
+|    |    |         |         +--- io.github.vinceglb:filekit-core:0.10.0-beta04 (*)
+|    |    |         |         +--- org.jetbrains.kotlin:kotlin-stdlib:2.1.21-RC2 -> 2.1.21 (*)
+|    |    |         |         \--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2 (*)
+|    |    |         +--- org.jetbrains.kotlin:kotlin-stdlib:2.1.21-RC2 -> 2.1.21 (*)
+|    |    |         +--- org.jetbrains.compose.runtime:runtime:1.8.0 -> 1.8.2 (*)
+|    |    |         +--- org.jetbrains.compose.ui:ui:1.8.0 -> 1.8.2 (*)
+|    |    |         +--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2 (*)
+|    |    |         \--- androidx.annotation:annotation:1.9.1 (*)
+|    |    +--- io.github.alexzhirkevich:compottie-resources:2.0.0-rc05
+|    |    |    \--- io.github.alexzhirkevich:compottie-resources-android:2.0.0-rc05
+|    |    |         +--- io.github.alexzhirkevich:compottie-core:2.0.0-rc05
+|    |    |         |    \--- io.github.alexzhirkevich:compottie-core-android:2.0.0-rc05
+|    |    |         |         +--- io.github.alexzhirkevich:keight-core:0.0.02
+|    |    |         |         |    \--- io.github.alexzhirkevich:keight-core-android:0.0.02
+|    |    |         |         |         +--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0 -> 1.10.2 (*)
+|    |    |         |         |         +--- org.jetbrains.kotlinx:kotlinx-datetime:0.7.1 (*)
+|    |    |         |         |         \--- org.jetbrains.kotlin:kotlin-stdlib:2.1.20 -> 2.1.21 (*)
+|    |    |         |         +--- org.jetbrains.kotlin:kotlin-stdlib:2.1.20 -> 2.1.21 (*)
+|    |    |         |         +--- org.jetbrains.compose.foundation:foundation:1.8.2 (*)
+|    |    |         |         +--- org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3 -> 1.8.1 (*)
+|    |    |         |         +--- com.squareup.okio:okio:3.15.0 (*)
+|    |    |         |         \--- org.jetbrains.kotlinx:atomicfu:0.23.2
+|    |    |         |              \--- org.jetbrains.kotlinx:atomicfu-jvm:0.23.2
+|    |    |         |                   \--- org.jetbrains.kotlin:kotlin-stdlib:{prefer 1.9.21} -> 2.1.21 (*)
+|    |    |         +--- org.jetbrains.kotlin:kotlin-stdlib:2.1.20 -> 2.1.21 (*)
+|    |    |         +--- org.jetbrains.compose.ui:ui:1.8.2 (*)
+|    |    |         +--- org.jetbrains.compose.components:components-resources:1.8.2 (*)
+|    |    |         \--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2 (*)
+|    |    \--- io.github.alexzhirkevich:compottie-lite:2.0.0-rc05
+|    |         \--- io.github.alexzhirkevich:compottie-lite-android:2.0.0-rc05
+|    |              +--- io.github.alexzhirkevich:compottie-core:2.0.0-rc05 (*)
+|    |              +--- org.jetbrains.kotlin:kotlin-stdlib:2.1.20 -> 2.1.21 (*)
+|    |              \--- org.jetbrains.compose.foundation:foundation:1.8.2 (*)
 |    +--- project :core:designsystem (*)
 |    +--- io.insert-koin:koin-compose:4.1.0 (*)
 |    +--- io.insert-koin:koin-compose-viewmodel:4.1.0 (*)

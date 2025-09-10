@@ -50,11 +50,11 @@ import org.mifospay.core.designsystem.component.LoadingDialogState
 import org.mifospay.core.designsystem.component.MifosBasicDialog
 import org.mifospay.core.designsystem.component.MifosButton
 import org.mifospay.core.designsystem.component.MifosLoadingDialog
-import org.mifospay.core.designsystem.component.MifosLoadingWheel
 import org.mifospay.core.designsystem.component.MifosScaffold
 import org.mifospay.core.designsystem.component.MifosTextField
 import org.mifospay.core.designsystem.icon.MifosIcons
 import org.mifospay.core.ui.AvatarBox
+import org.mifospay.core.ui.MifosProgressIndicator
 import org.mifospay.core.ui.utils.EventsEffect
 import template.core.base.designsystem.theme.KptTheme
 
@@ -240,12 +240,7 @@ private fun DocumentPicker(
                         )
                     }
 
-                    is AsyncImagePainter.State.Loading -> {
-                        MifosLoadingWheel(
-                            contentDesc = "Loading Image",
-                            modifier = Modifier.align(Alignment.Center),
-                        )
-                    }
+                    is AsyncImagePainter.State.Loading -> MifosProgressIndicator()
 
                     is AsyncImagePainter.State.Success -> {
                         SubcomposeAsyncImageContent(

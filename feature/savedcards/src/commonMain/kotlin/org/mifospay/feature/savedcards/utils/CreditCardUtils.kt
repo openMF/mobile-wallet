@@ -10,7 +10,6 @@
 package org.mifospay.feature.savedcards.utils
 
 import androidx.compose.ui.graphics.Color
-import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.Month
 import kotlinx.datetime.TimeZone
@@ -24,6 +23,8 @@ import mobile_wallet.feature.savedcards.generated.resources.ic_visa
 import mobile_wallet.feature.savedcards.generated.resources.maestro
 import mobile_wallet.feature.savedcards.generated.resources.rupay_logo
 import org.jetbrains.compose.resources.DrawableResource
+import kotlin.time.Clock
+import kotlin.time.ExperimentalTime
 
 object CreditCardUtils {
     // Extension function for card type detection
@@ -109,12 +110,12 @@ object CreditCardUtils {
             }
         }
 
+        @OptIn(ExperimentalTime::class)
         fun isValid(): Boolean {
             if (month !in 1..12) return false
 
             val now = Clock.System.now()
                 .toLocalDateTime(TimeZone.currentSystemDefault())
-                .date
 
             val expiryDate = LocalDate(
                 year = year,
@@ -124,7 +125,7 @@ object CreditCardUtils {
 
             // Check if card is not expired
             // Add 1 month because cards typically expire at the end of the month
-            return now.monthsUntil(expiryDate) >= -1
+            return now.date.monthsUntil(expiryDate) >= -1
         }
     }
 

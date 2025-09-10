@@ -18,13 +18,12 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import mobile_wallet.feature.receipt.generated.resources.Res
-import mobile_wallet.feature.receipt.generated.resources.feature_receipt_loading
 import mobile_wallet.feature.receipt.generated.resources.feature_receipt_receipt
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
-import org.mifospay.core.designsystem.component.MifosLoadingWheel
 import org.mifospay.core.designsystem.component.MifosScaffold
 import org.mifospay.core.ui.EmptyContentScreen
+import org.mifospay.core.ui.MifosProgressIndicator
 import template.core.base.designsystem.theme.KptTheme
 
 @Composable
@@ -59,11 +58,7 @@ internal fun ReceiptScreen(
                 .padding(it),
         ) {
             when (uiState) {
-                is ReceiptUiState.Loading -> {
-                    MifosLoadingWheel(
-                        contentDesc = stringResource(Res.string.feature_receipt_loading),
-                    )
-                }
+                is ReceiptUiState.Loading -> MifosProgressIndicator()
 
                 is ReceiptUiState.Error -> {
                     EmptyContentScreen(

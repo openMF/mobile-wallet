@@ -9,7 +9,6 @@
  */
 package org.mifospay.core.common
 
-import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
@@ -17,9 +16,13 @@ import kotlinx.datetime.Month
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.atStartOfDayIn
 import kotlinx.datetime.format
+import kotlinx.datetime.format.FormatStringsInDatetimeFormats
 import kotlinx.datetime.format.byUnicodePattern
 import kotlinx.datetime.toLocalDateTime
+import kotlin.time.Clock
+import kotlin.time.ExperimentalTime
 
+@OptIn(ExperimentalTime::class)
 object DateHelper {
     /*
      * This is the full month format for the date picker.
@@ -35,10 +38,12 @@ object DateHelper {
 
     const val MONTH_FORMAT = "dd MMMM"
 
+    @OptIn(FormatStringsInDatetimeFormats::class)
     private val fullMonthFormat = LocalDateTime.Format {
         byUnicodePattern(FULL_MONTH)
     }
 
+    @OptIn(FormatStringsInDatetimeFormats::class)
     private val shortMonthFormat = LocalDateTime.Format {
         byUnicodePattern(SHORT_MONTH)
     }
@@ -94,6 +99,7 @@ object DateHelper {
      * @param dateString date string
      * @return dd MMMM yyyy format date string.
      */
+    @OptIn(FormatStringsInDatetimeFormats::class)
     fun getSpecificFormat(format: String, dateString: String): String {
         val pickerFormat = shortMonthFormat
         val finalFormat = LocalDateTime.Format { byUnicodePattern(format) }
@@ -101,6 +107,7 @@ object DateHelper {
         return finalFormat.format(pickerFormat.parse(dateString))
     }
 
+    @OptIn(FormatStringsInDatetimeFormats::class)
     private fun getFormatConverter(
         currentFormat: String,
         requiredFormat: String,
@@ -239,7 +246,7 @@ object DateHelper {
 
         val timeZone = TimeZone.currentSystemDefault()
         val now = Clock.System.now()
-        val nowDateTime = now.toLocalDateTime(timeZone)
+        val nowDateTime = Instant.fromEpochMilliseconds(now.toEpochMilliseconds()).toLocalDateTime(timeZone)
 
         return when {
             // Same year
@@ -296,7 +303,7 @@ object DateHelper {
         val timestamp = this.toLong()
         val instant = Instant.fromEpochMilliseconds(timestamp)
         val timeZone = TimeZone.currentSystemDefault()
-        val nowDateTime = Clock.System.now().toLocalDateTime(timeZone)
+        val nowDateTime = Instant.fromEpochMilliseconds(Clock.System.now().toEpochMilliseconds()).toLocalDateTime(timeZone)
         val neededDateTime = instant.toLocalDateTime(timeZone)
 
         return when {
@@ -356,19 +363,25 @@ object DateHelper {
         if (it.isLowerCase()) it.titlecase() else it.toString()
     }
 
-    val currentDate = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
+    val currentDate: LocalDateTime by lazy {
+        Instant.fromEpochMilliseconds(Clock.System.now().toEpochMilliseconds()).toLocalDateTime(TimeZone.currentSystemDefault())
+    }
 
     /**
      * This is the full date format for the date picker.
      * "dd MM yyyy" is the format of the date picker.
      */
-    val formattedFullDate = currentDate.format(fullMonthFormat)
+    val formattedFullDate: String by lazy {
+        currentDate.format(fullMonthFormat)
+    }
 
     /**
      * This is the short date format for the date picker.
      * "dd-MM-yyyy" is the format of the date picker.
      */
-    val formattedShortDate = currentDate.format(shortMonthFormat)
+    val formattedShortDate: String by lazy {
+        currentDate.format(shortMonthFormat)
+    }
 
     /**
      * Parses a date string in "dd MMM yyyy" format and converts it to milliseconds.
