@@ -59,6 +59,7 @@ import mobile_wallet.feature.send_money.generated.resources.feature_send_money_s
 import mobile_wallet.feature.send_money.generated.resources.feature_send_money_something_went_wrong
 import mobile_wallet.feature.send_money.generated.resources.feature_send_money_to_account
 import org.jetbrains.compose.resources.stringResource
+import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
 import org.mifospay.core.designsystem.component.MifosButton
 import org.mifospay.core.designsystem.component.MifosGradientBackground
@@ -72,6 +73,7 @@ import org.mifospay.core.ui.EmptyContentScreen
 import org.mifospay.core.ui.MifosProgressIndicator
 import org.mifospay.core.ui.SimpleSearchBar
 import org.mifospay.core.ui.utils.EventsEffect
+import template.core.base.designsystem.KptTheme
 import template.core.base.designsystem.theme.KptTheme
 
 @Composable
@@ -395,5 +397,89 @@ private fun SelectedAccountCard(
                 ),
             )
         }
+    }
+}
+
+@Preview
+@Composable
+private fun PreviewSelectAccountScreen() {
+    val mockAccount = AccountOption(
+        accountId = 1,
+        accountNo = "1234567890",
+        clientId = 10,
+        clientName = "Alex Doe",
+        officeId = 101,
+    )
+    val state = SelectScreenState(
+        state = SelectScreenState.State.Success,
+        filteredToAccounts = listOf(mockAccount),
+        selectedAccount = mockAccount,
+    )
+
+    KptTheme {
+        SelectAccountScreen(
+            state = state,
+            onAction = {}
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun PreviewAccountCardSelected() {
+    val mockAccount = AccountOption(
+        accountId = 1,
+        accountNo = "1234567890",
+        clientId = 10,
+        clientName = "Jane Smith",
+        officeId = 101,
+    )
+
+    KptTheme {
+        AccountCard(
+            account = mockAccount,
+            selected = { it?.accountId == 1 },
+            onClick = {}
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun PreviewSendMoneyBottomBar() {
+    val mockAccount = AccountOption(
+        accountId = 2,
+        accountNo = "9876543210",
+        clientId = 11,
+        clientName = "Chris Evans",
+        officeId = 102,
+    )
+
+    KptTheme {
+        SendMoneyBottomBar(
+            showDetails = true,
+            selectedAccount = mockAccount,
+            onClickProceed = {},
+            onDeselect = {}
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun PreviewSelectedAccountCard() {
+    val mockAccount = AccountOption(
+        accountId = 3,
+        accountNo = "111122223333",
+        clientId = 12,
+        clientName = "Natasha Romanoff",
+        officeId = 103,
+    )
+
+    KptTheme {
+        SelectedAccountCard(
+            account = mockAccount,
+            onDeselect = {}
+        )
     }
 }

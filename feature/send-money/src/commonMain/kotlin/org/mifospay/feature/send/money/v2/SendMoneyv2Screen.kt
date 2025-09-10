@@ -47,6 +47,7 @@ import mobile_wallet.feature.send_money.generated.resources.feature_send_money_p
 import mobile_wallet.feature.send_money.generated.resources.feature_send_money_recents_title
 import mobile_wallet.feature.send_money.generated.resources.feature_send_money_send
 import org.jetbrains.compose.resources.stringResource
+import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
 import org.mifospay.core.designsystem.component.MifosBottomSheetScaffold
 import org.mifospay.core.designsystem.component.MifosOutlinedButton
@@ -55,6 +56,7 @@ import org.mifospay.core.designsystem.component.MifosTopBar
 import org.mifospay.core.designsystem.icon.MifosIcons
 import org.mifospay.core.ui.SimpleSearchBar
 import org.mifospay.core.ui.utils.EventsEffect
+import template.core.base.designsystem.KptTheme
 import template.core.base.designsystem.theme.KptTheme
 
 @Composable
@@ -268,5 +270,47 @@ private fun RecentTransactionItem(transaction: RecentTransaction) {
         ) {
             Text(stringResource(Res.string.feature_send_money_pay_button))
         }
+    }
+}
+
+@Preview
+@Composable
+private fun PreviewSendMoneyScreen() {
+    KptTheme {
+        SendMoneyScreen(
+            onAction = {},
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun PreviewAddPayeeCard() {
+    KptTheme {
+        AddPayeeCard(
+            onClick = {}
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun PreviewRecentBottomSheet() {
+    KptTheme {
+        RecentBottomSheet()
+    }
+}
+
+@Preview
+@Composable
+private fun PreviewRecentTransactionItem() {
+    KptTheme {
+        RecentTransactionItem(
+            transaction = RecentTransaction(
+                name = "Alex Doe",
+                toAccount = "**** **** 1234",
+                amount = "₹1500"
+            )
+        )
     }
 }

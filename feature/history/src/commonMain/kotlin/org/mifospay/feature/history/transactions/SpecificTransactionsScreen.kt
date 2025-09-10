@@ -29,6 +29,7 @@ import org.koin.compose.viewmodel.koinViewModel
 import org.mifospay.core.designsystem.component.MfOverlayLoadingWheel
 import org.mifospay.core.designsystem.component.MifosScaffold
 import org.mifospay.core.ui.ErrorScreenContent
+import org.mifospay.core.ui.MifosProgressIndicator
 import org.mifospay.core.ui.utils.EventsEffect
 import org.mifospay.feature.history.components.TransactionDetail
 import org.mifospay.feature.history.components.TransactionItem
@@ -78,10 +79,7 @@ internal fun SpecificTransactionsScreenContent(
         ) {
             when (state) {
                 is STState.ViewState.Loading -> {
-                    MfOverlayLoadingWheel(
-                        modifier = Modifier.align(Alignment.Center),
-                        contentDesc = stringResource(Res.string.feature_history_loading),
-                    )
+                    MifosProgressIndicator()
                 }
 
                 is STState.ViewState.Error -> {
