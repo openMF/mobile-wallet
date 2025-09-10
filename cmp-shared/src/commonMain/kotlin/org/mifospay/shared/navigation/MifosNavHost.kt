@@ -29,6 +29,7 @@ import org.mifospay.feature.faq.navigation.navigateToFAQ
 import org.mifospay.feature.finance.FinanceScreenContents
 import org.mifospay.feature.finance.navigation.FINANCE_ROUTE
 import org.mifospay.feature.finance.navigation.financeScreen
+import org.mifospay.feature.history.HistoryScreen
 import org.mifospay.feature.history.navigation.historyNavigation
 import org.mifospay.feature.history.navigation.navigateToHistory
 import org.mifospay.feature.history.navigation.navigateToSpecificTransaction
@@ -62,6 +63,7 @@ import org.mifospay.feature.request.money.navigation.navigateToShowQrScreen
 import org.mifospay.feature.request.money.navigation.showQrScreen
 import org.mifospay.feature.savedcards.createOrUpdate.addEditCardScreen
 import org.mifospay.feature.savedcards.details.cardDetailRoute
+import org.mifospay.feature.send.money.SendMoneyScreen
 import org.mifospay.feature.send.money.navigation.SEND_MONEY_BASE_ROUTE
 import org.mifospay.feature.send.money.navigation.navigateToSendMoneyScreen
 import org.mifospay.feature.send.money.navigation.sendMoneyScreen
@@ -80,25 +82,25 @@ internal fun MifosNavHost(
     val navController = appState.navController
 
     val paymentsTabContents = listOf(
-//        TabContent(PaymentsScreenContents.SEND.name) {
-//            SendMoneyScreen(
-//                onBackClick = navController::navigateUp,
-//                navigateToTransferScreen = navController::navigateToTransferScreen,
-//                navigateToScanQrScreen = navController::navigateToScanQr,
-//                showTopBar = false,
-//            )
-//        },
+        TabContent(PaymentsScreenContents.SEND.name) {
+            SendMoneyScreen(
+                onBackClick = navController::navigateUp,
+                navigateToTransferScreen = navController::navigateToTransferScreen,
+                navigateToScanQrScreen = navController::navigateToScanQr,
+                showTopBar = false,
+            )
+        },
         TabContent(PaymentsScreenContents.REQUEST.name) {
             RequestScreen(
                 showQr = navController::navigateToShowQrScreen,
             )
         },
-//        TabContent(PaymentsScreenContents.HISTORY.name) {
-//            HistoryScreen(
-//                viewTransferDetail = navController::navigateToTransactionDetail,
-//                showTopBar = false,
-//            )
-//        },
+        TabContent(PaymentsScreenContents.HISTORY.name) {
+            HistoryScreen(
+                viewTransferDetail = navController::navigateToTransactionDetail,
+                showTopBar = false,
+            )
+        },
 //        TabContent(PaymentsScreenContents.SI.name) {
 //            StandingInstructionsScreen(
 //                onAddEditSI = navController::navigateToSIAddEdit,

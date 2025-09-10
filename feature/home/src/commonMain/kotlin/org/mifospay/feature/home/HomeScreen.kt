@@ -47,6 +47,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
@@ -105,6 +106,10 @@ import org.mifospay.core.designsystem.component.scrollbar.rememberDraggableScrol
 import org.mifospay.core.designsystem.component.scrollbar.scrollbarState
 import org.mifospay.core.designsystem.icon.MifosIcons
 import org.mifospay.core.model.account.Account
+import org.mifospay.core.model.savingsaccount.Currency
+import org.mifospay.core.model.savingsaccount.Status
+import org.mifospay.core.model.savingsaccount.Transaction
+import org.mifospay.core.model.savingsaccount.TransactionType
 import org.mifospay.core.ui.ErrorScreenContent
 import org.mifospay.core.ui.MifosProgressIndicator
 import org.mifospay.core.ui.MifosSmallChip
@@ -193,7 +198,6 @@ fun HomeScreenContent(
     MifosScaffold(
         modifier = modifier,
         snackbarHostState = snackbarHostState,
-        containerColor = KptTheme.colorScheme.background,
     ) {
         PullToRefreshBox(
             isRefreshing = isRefreshing,
@@ -250,7 +254,7 @@ private fun HomeScreenContent(
             modifier = modifier
                 .fillMaxSize(),
             state = state,
-            contentPadding = PaddingValues(KptTheme.spacing.md),
+            contentPadding = PaddingValues(),
         ) {
             item {
                 AccountList(
@@ -267,7 +271,10 @@ private fun HomeScreenContent(
 
             item {
                 PayRequestScreen(
-                    modifier = Modifier.padding(vertical = KptTheme.spacing.md),
+                    modifier = Modifier.padding(
+                        vertical = KptTheme.spacing.md,
+                        horizontal = KptTheme.spacing.md,
+                    ),
                     onRequest = {
                         onAction(HomeAction.RequestClicked)
                     },
@@ -283,7 +290,10 @@ private fun HomeScreenContent(
 
             item {
                 TransactionHistoryCard(
-                    modifier = Modifier.padding(vertical = KptTheme.spacing.md),
+                    modifier = Modifier.padding(
+                        vertical = KptTheme.spacing.md,
+                        horizontal = KptTheme.spacing.md,
+                    ),
                     transactions = viewState.transactions,
                     onClickViewAll = {
                         onAction(HomeAction.OnClickSeeAllTransactions)
@@ -326,6 +336,7 @@ private fun AccountList(
         state = pagerState,
         pageSpacing = KptTheme.spacing.xs,
         modifier = modifier,
+        contentPadding = PaddingValues(start = KptTheme.spacing.md, end = KptTheme.spacing.md),
     ) {
         AccountCard(
             account = accounts[it],
@@ -555,7 +566,7 @@ private fun MifosSendMoneyFreeCard(
     modifier: Modifier = Modifier,
 ) {
     Card(
-        modifier = modifier,
+        modifier = modifier.padding(horizontal = KptTheme.spacing.md),
         colors = CardDefaults.cardColors(
             containerColor = KptTheme.colorScheme.surface,
         ),
@@ -641,5 +652,159 @@ private fun HomeScreenDialog(
         )
 
         null -> Unit
+    }
+}
+
+@Preview
+@Composable
+private fun HomeScreenContentPreview() {
+    val accounts = listOf(
+        Account(
+            name = "Account 1",
+            number = "123456789",
+            balance = 1000.0,
+            id = 1L,
+            currency = Currency(
+                code = "USD",
+                name = "US Dollar",
+                decimalPlaces = 2,
+                displaySymbol = "$",
+                nameCode = "USD",
+                displayLabel = "US Dollar ($)",
+            ),
+            status = Status(
+                id = 300,
+                code = "status.active",
+                value = "Active",
+                submittedAndPendingApproval = false,
+                approved = false,
+                rejected = false,
+                withdrawnByApplicant = false,
+                active = true,
+                closed = false,
+                prematureClosed = false,
+                transferInProgress = false,
+                transferOnHold = false,
+                matured = false,
+            ),
+        ),
+        Account(
+            name = "Account 1",
+            number = "123456789",
+            balance = 1000.0,
+            id = 1L,
+            currency = Currency(
+                code = "USD",
+                name = "US Dollar",
+                decimalPlaces = 2,
+                displaySymbol = "$",
+                nameCode = "USD",
+                displayLabel = "US Dollar ($)",
+            ),
+            status = Status(
+                id = 300,
+                code = "status.active",
+                value = "Active",
+                submittedAndPendingApproval = false,
+                approved = false,
+                rejected = false,
+                withdrawnByApplicant = false,
+                active = true,
+                closed = false,
+                prematureClosed = false,
+                transferInProgress = false,
+                transferOnHold = false,
+                matured = false,
+            ),
+        ),
+    )
+    val transactions = listOf(
+        Transaction(
+            accountId = 1L,
+            amount = 100.0,
+            date = "2023-01-01",
+            currency = Currency(
+                code = "USD",
+                name = "US Dollar",
+                decimalPlaces = 2,
+                displaySymbol = "$",
+                nameCode = "USD",
+                displayLabel = "US Dollar ($)",
+            ),
+            transactionType = TransactionType.CREDIT,
+            transactionId = 101L,
+            accountNo = "123456789",
+            transferId = null,
+            originalTransactionId = 101L,
+            paymentDetailId = null,
+        ),
+        Transaction(
+            accountId = 2L,
+            amount = 100.0,
+            date = "2023-01-01",
+            currency = Currency(
+                code = "USD",
+                name = "US Dollar",
+                decimalPlaces = 2,
+                displaySymbol = "$",
+                nameCode = "USD",
+                displayLabel = "US Dollar ($)",
+            ),
+            transactionType = TransactionType.DEBIT,
+            transactionId = 101L,
+            accountNo = "123456789",
+            transferId = null,
+            originalTransactionId = 101L,
+            paymentDetailId = null,
+        ),
+        Transaction(
+            accountId = 3L,
+            amount = 100.0,
+            date = "2023-01-01",
+            currency = Currency(
+                code = "USD",
+                name = "US Dollar",
+                decimalPlaces = 2,
+                displaySymbol = "$",
+                nameCode = "USD",
+                displayLabel = "US Dollar ($)",
+            ),
+            transactionType = TransactionType.CREDIT,
+            transactionId = 101L,
+            accountNo = "123456789",
+            transferId = null,
+            originalTransactionId = 101L,
+            paymentDetailId = null,
+        ),
+        Transaction(
+            accountId = 4L,
+            amount = 100.0,
+            date = "2023-01-01",
+            currency = Currency(
+                code = "USD",
+                name = "US Dollar",
+                decimalPlaces = 2,
+                displaySymbol = "$",
+                nameCode = "USD",
+                displayLabel = "US Dollar ($)",
+            ),
+            transactionType = TransactionType.DEBIT,
+            transactionId = 101L,
+            accountNo = "123456789",
+            transferId = null,
+            originalTransactionId = 101L,
+            paymentDetailId = null,
+        ),
+    )
+    val viewState = ViewState.Content(
+        accounts = accounts,
+        transactions = transactions,
+    )
+    MaterialTheme {
+        HomeScreenContent(
+            viewState = viewState,
+            defaultAccountId = 1L,
+            onAction = {},
+        )
     }
 }
