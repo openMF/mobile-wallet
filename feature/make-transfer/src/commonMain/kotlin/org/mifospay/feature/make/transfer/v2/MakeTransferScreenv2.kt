@@ -580,7 +580,7 @@ private fun PreviewMakeTransferLoading() {
             state = MakeTransferV2State(
                 state = MakeTransferV2State.State.Loading,
             ),
-            onAction = {}
+            onAction = {},
         )
     }
 }
@@ -593,7 +593,7 @@ private fun PreviewMakeTransferNoAccounts() {
             state = MakeTransferV2State(
                 state = MakeTransferV2State.State.NoAccounts,
             ),
-            onAction = {}
+            onAction = {},
         )
     }
 }
@@ -611,12 +611,12 @@ private fun PreviewMakeTransferSuccess() {
                 description = "Payment for groceries",
                 selectedAccount = AccountOption(
                     clientName = "Jane Smith",
-                    accountNo = "987654321"
+                    accountNo = "987654321",
                 ),
                 selectedAccountBalance = 1000.0,
                 balanceMap = mapOf("987654321" to 1000.0),
             ),
-            onAction = {}
+            onAction = {},
         )
     }
 }

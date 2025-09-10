@@ -419,7 +419,7 @@ private fun PreviewSelectAccountScreen() {
     KptTheme {
         SelectAccountScreen(
             state = state,
-            onAction = {}
+            onAction = {},
         )
     }
 }
@@ -439,7 +439,7 @@ private fun PreviewAccountCardSelected() {
         AccountCard(
             account = mockAccount,
             selected = { it?.accountId == 1 },
-            onClick = {}
+            onClick = {},
         )
     }
 }
@@ -460,7 +460,7 @@ private fun PreviewSendMoneyBottomBar() {
             showDetails = true,
             selectedAccount = mockAccount,
             onClickProceed = {},
-            onDeselect = {}
+            onDeselect = {},
         )
     }
 }
@@ -479,7 +479,7 @@ private fun PreviewSelectedAccountCard() {
     KptTheme {
         SelectedAccountCard(
             account = mockAccount,
-            onDeselect = {}
+            onDeselect = {},
         )
     }
 }

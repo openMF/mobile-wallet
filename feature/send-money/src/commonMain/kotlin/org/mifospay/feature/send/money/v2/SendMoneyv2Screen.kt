@@ -288,7 +288,7 @@ private fun PreviewSendMoneyScreen() {
 private fun PreviewAddPayeeCard() {
     KptTheme {
         AddPayeeCard(
-            onClick = {}
+            onClick = {},
         )
     }
 }
@@ -309,8 +309,8 @@ private fun PreviewRecentTransactionItem() {
             transaction = RecentTransaction(
                 name = "Alex Doe",
                 toAccount = "**** **** 1234",
-                amount = "₹1500"
-            )
+                amount = "₹1500",
+            ),
         )
     }
 }
