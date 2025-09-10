@@ -24,12 +24,14 @@ fun NavController.navigateToSendMoneyV2Screen(navOptions: NavOptions? = null) {
 
 fun NavGraphBuilder.sendMoneyScreenDestination(
     navigateToSelectAccountScreen: () -> Unit,
+    navigateToBeneficiary: () -> Unit,
     navigateBack: () -> Unit,
 ) {
     composable<SendMoneyRoute> {
         SendMoneyv2Screen(
             navigateToSelectAccountScreen = navigateToSelectAccountScreen,
             navigateBack = navigateBack,
+            navigateToBeneficiary = navigateToBeneficiary,
         )
     }
 }

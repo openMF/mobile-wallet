@@ -20,6 +20,7 @@
     <string name="feature_make_transfer_description_label">Add a Message</string>
     <string name="feature_make_transfer_to_account">To %1$s</string>
     <string name="feature_make_transfer_from_account">From %1$s</string>
+    <string name="feature_make_transfer_from_account_title">From Account</string>
     <string name="feature_make_transfer_continue_button">Continue</string>
     <string name="feature_make_transfer_oops_title">Oops!</string>
     <string name="feature_make_transfer_no_accounts_found">No accounts found!</string>

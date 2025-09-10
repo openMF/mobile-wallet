@@ -61,6 +61,7 @@ import template.core.base.designsystem.theme.KptTheme
 fun SendMoneyv2Screen(
     navigateToSelectAccountScreen: () -> Unit,
     navigateBack: () -> Unit,
+    navigateToBeneficiary: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: SendMoneyV2ViewModel = koinViewModel(),
 ) {
@@ -69,6 +70,8 @@ fun SendMoneyv2Screen(
             SendMoneyV2Event.NavigateToSearchAccountSelection -> navigateToSelectAccountScreen()
 
             SendMoneyV2Event.NavigateBack -> navigateBack()
+
+            SendMoneyV2Event.NavigateToBeneficiary -> navigateToBeneficiary()
         }
     }
 
@@ -117,7 +120,9 @@ private fun SendMoneyScreen(
             )
             Spacer(Modifier.height(KptTheme.spacing.md))
             AddPayeeCard(
-                onClick = {},
+                onClick = {
+                    onAction(SendMoneyV2Action.OnAddPayeeClicked)
+                },
             )
         }
     }

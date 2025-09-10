@@ -15,6 +15,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.navOptions
 import org.mifospay.core.ui.utility.TabContent
 import org.mifospay.feature.accounts.AccountsScreen
+import org.mifospay.feature.accounts.beneficiary.BeneficiaryAddEditType
 import org.mifospay.feature.accounts.beneficiary.addEditBeneficiaryScreen
 import org.mifospay.feature.accounts.beneficiary.navigateToBeneficiaryAddEdit
 import org.mifospay.feature.accounts.savingsaccount.SavingsAddEditType
@@ -305,6 +306,11 @@ internal fun MifosNavHost(
         sendMoneyScreenDestination(
             navigateToSelectAccountScreen = {
                 navController.navigateToSelectAccountScreen()
+            },
+            navigateToBeneficiary = {
+                navController.navigateToBeneficiaryAddEdit(
+                    BeneficiaryAddEditType.AddItem,
+                )
             },
             navigateBack = navController::popBackStack,
         )

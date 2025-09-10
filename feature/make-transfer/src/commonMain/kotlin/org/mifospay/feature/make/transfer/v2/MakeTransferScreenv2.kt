@@ -13,7 +13,6 @@ import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -38,6 +37,8 @@ import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -46,6 +47,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -58,7 +60,7 @@ import mobile_wallet.feature.make_transfer.generated.resources.feature_make_tran
 import mobile_wallet.feature.make_transfer.generated.resources.feature_make_transfer_continue_button
 import mobile_wallet.feature.make_transfer.generated.resources.feature_make_transfer_description_label
 import mobile_wallet.feature.make_transfer.generated.resources.feature_make_transfer_from_account
-import mobile_wallet.feature.make_transfer.generated.resources.feature_make_transfer_loading
+import mobile_wallet.feature.make_transfer.generated.resources.feature_make_transfer_from_account_title
 import mobile_wallet.feature.make_transfer.generated.resources.feature_make_transfer_no_accounts_found
 import mobile_wallet.feature.make_transfer.generated.resources.feature_make_transfer_oops_title
 import mobile_wallet.feature.make_transfer.generated.resources.feature_make_transfer_review_title
@@ -67,18 +69,17 @@ import mobile_wallet.feature.make_transfer.generated.resources.feature_make_tran
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.mifospay.core.designsystem.component.BasicDialogState
-import org.mifospay.core.designsystem.component.LoadingDialogState
 import org.mifospay.core.designsystem.component.MifosBasicDialog
 import org.mifospay.core.designsystem.component.MifosBottomSheetScaffold
 import org.mifospay.core.designsystem.component.MifosButton
-import org.mifospay.core.designsystem.component.MifosLoadingDialog
-import org.mifospay.core.designsystem.component.MifosLoadingWheel
 import org.mifospay.core.designsystem.component.MifosTextField
 import org.mifospay.core.designsystem.component.MifosTopBar
 import org.mifospay.core.designsystem.icon.MifosIcons
 import org.mifospay.core.network.model.entity.templates.account.AccountOption
 import org.mifospay.core.ui.AvatarBox
 import org.mifospay.core.ui.EmptyContentScreen
+import org.mifospay.core.ui.MifosProgressIndicator
+import org.mifospay.core.ui.MifosProgressIndicatorOverlay
 import org.mifospay.core.ui.utils.EventsEffect
 import template.core.base.designsystem.theme.KptTheme
 
@@ -132,9 +133,9 @@ private fun MakeTransferDialogsV2(
                 onDismissRequest = onDismissRequest,
             )
         }
-        is MakeTransferV2State.DialogState.Loading -> MifosLoadingDialog(
-            visibilityState = LoadingDialogState.Shown,
-        )
+
+        is MakeTransferV2State.DialogState.Loading -> MifosProgressIndicatorOverlay()
+
         null -> Unit
     }
 }
@@ -182,14 +183,7 @@ internal fun MakeTransferScreenV2(
                 )
             }
             MakeTransferV2State.State.Loading -> {
-                Box(modifier = Modifier.fillMaxSize()) {
-                    MifosLoadingWheel(
-                        contentDesc = stringResource(Res.string.feature_make_transfer_loading),
-                        modifier = Modifier
-                            .align(Alignment.Center)
-                            .padding(KptTheme.spacing.md),
-                    )
-                }
+                MifosProgressIndicator()
             }
             MakeTransferV2State.State.NoAccounts -> {
                 EmptyContentScreen(
@@ -292,6 +286,7 @@ private fun FromAccountCard(
                     ),
                     style = LocalTextStyle.current.copy(
                         color = KptTheme.colorScheme.onSurface,
+                        fontWeight = FontWeight.SemiBold,
                     ),
                     maxLines = 1,
                 )
@@ -362,10 +357,14 @@ private fun EnterAmountCard(
                 style = KptTheme.typography.labelLarge,
             )
 
-            MifosTextField(
-                label = "",
+            TextField(
+                leadingIcon = {
+                    Text(
+                        text = "$",
+                        style = KptTheme.typography.headlineMedium,
+                    )
+                },
                 value = state.amount,
-                isError = !state.amountIsValid,
                 onValueChange = {
                     onAction(MakeTransferV2Action.AmountChanged(it))
                 },
@@ -373,10 +372,15 @@ private fun EnterAmountCard(
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Decimal,
                 ),
-                leadingIcon = {
-                    Text("$", style = KptTheme.typography.headlineMedium)
-                },
+                isError = !state.amountIsValid,
                 textStyle = KptTheme.typography.headlineMedium,
+                colors = TextFieldDefaults.colors(
+                    focusedContainerColor = Color.Transparent,
+                    unfocusedContainerColor = Color.Transparent,
+                    errorContainerColor = Color.Transparent,
+                    focusedIndicatorColor = KptTheme.colorScheme.primary,
+                    unfocusedIndicatorColor = Color.Transparent,
+                ),
             )
 
             if ((state.amount.toDoubleOrNull() ?: 0.0) > state.selectedAccountBalance) {
@@ -414,14 +418,14 @@ private fun AccountList(
         verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.md),
     ) {
         Text(
-            text = stringResource(Res.string.feature_make_transfer_from_account),
+            text = stringResource(Res.string.feature_make_transfer_from_account_title),
             style = KptTheme.typography.labelLarge,
         )
         LazyColumn(
             modifier = modifier.fillMaxWidth(),
             verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.md),
         ) {
-            items(items = accounts, key = { account -> account?.accountId ?: account?.accountNo ?: -1 }) { account ->
+            items(items = accounts) { account ->
                 AccountItem(
                     account = account,
                     selected = selected(account),
@@ -537,6 +541,7 @@ fun ClientCard(
                     maxLines = 1,
                     style = LocalTextStyle.current.copy(
                         color = KptTheme.colorScheme.onSurface,
+                        fontWeight = FontWeight.SemiBold,
                     ),
                 )
             },

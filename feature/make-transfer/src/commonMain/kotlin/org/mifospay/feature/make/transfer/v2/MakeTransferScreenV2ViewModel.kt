@@ -50,7 +50,7 @@ internal class MakeTransferV2ScreenV2ViewModel(
             toAccountId = route.accountId.toInt(),
             toAccountName = route.toAccountName,
             toAccountNo = route.toAccountNo,
-            amount = if(route.amount==0) "" else route.amount.toString(),
+            amount = if (route.amount == 0) "" else route.amount.toString(),
         )
     },
 ) {
@@ -96,7 +96,12 @@ internal class MakeTransferV2ScreenV2ViewModel(
                 }
             }
 
-            is MakeTransferV2Action.InitiateTransfer -> validateTransfer()
+            is MakeTransferV2Action.InitiateTransfer -> {
+                mutableStateFlow.update {
+                    it.copy(dialogState = MakeTransferV2State.DialogState.Loading)
+                }
+                validateTransfer()
+            }
 
             is MakeTransferV2Action.Internal.HandleTransferResult -> handleTransferResult(action)
 
@@ -194,10 +199,6 @@ internal class MakeTransferV2ScreenV2ViewModel(
     }
 
     private fun initiateTransfer() {
-        mutableStateFlow.update {
-            it.copy(dialogState = MakeTransferV2State.DialogState.Loading)
-        }
-
         viewModelScope.launch {
             val result = repository.makeTransfer(state.transferPayload)
 

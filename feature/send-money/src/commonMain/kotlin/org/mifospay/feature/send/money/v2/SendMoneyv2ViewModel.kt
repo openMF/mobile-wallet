@@ -25,6 +25,10 @@ class SendMoneyV2ViewModel() : BaseViewModel<SendMoneyV2State, SendMoneyV2Event,
             SendMoneyV2Action.OnSearchBarClicked -> {
                 sendEvent(SendMoneyV2Event.NavigateToSearchAccountSelection)
             }
+
+            SendMoneyV2Action.OnAddPayeeClicked -> {
+                sendEvent(SendMoneyV2Event.NavigateToBeneficiary)
+            }
         }
     }
 }
@@ -35,10 +39,13 @@ data object SendMoneyV2State
 sealed interface SendMoneyV2Event {
     data object NavigateToSearchAccountSelection : SendMoneyV2Event
     data object NavigateBack : SendMoneyV2Event
+    data object NavigateToBeneficiary : SendMoneyV2Event
 }
 
 sealed interface SendMoneyV2Action {
     data object NavigateBack : SendMoneyV2Action
 
     data object OnSearchBarClicked : SendMoneyV2Action
+
+    data object OnAddPayeeClicked : SendMoneyV2Action
 }

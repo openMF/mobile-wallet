@@ -26,6 +26,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import org.mifospay.core.designsystem.icon.MifosIcons
+import template.core.base.designsystem.KptTheme
 import template.core.base.designsystem.theme.KptTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -135,4 +136,31 @@ fun SimpleSearchBar(
         enabled = enabled,
         textStyle = MaterialTheme.typography.bodyMedium,
     )
+}
+
+@Composable
+@DevicePreviews
+fun PreviewMifosSearchBar() {
+    KptTheme {
+        MifosSearchBar(
+            query = "Hello",
+            placeHolder = "Search...",
+            onQueryChange = {},
+            onSearch = {},
+            onClearQuery = {},
+        )
+    }
+}
+
+@Composable
+@DevicePreviews
+fun PreviewSimpleSearchBar() {
+    KptTheme {
+        SimpleSearchBar(
+            query = "",
+            placeHolder = "Search here...",
+            onQueryChange = {},
+            onClearQuery = {},
+        )
+    }
 }

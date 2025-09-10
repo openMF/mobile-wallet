@@ -19,7 +19,6 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -52,7 +51,6 @@ import mobile_wallet.feature.send_money.generated.resources.feature_select_accou
 import mobile_wallet.feature.send_money.generated.resources.feature_select_payment_title
 import mobile_wallet.feature.send_money.generated.resources.feature_send_money_bottom_bar
 import mobile_wallet.feature.send_money.generated.resources.feature_send_money_close
-import mobile_wallet.feature.send_money.generated.resources.feature_send_money_loading
 import mobile_wallet.feature.send_money.generated.resources.feature_send_money_no_accounts_found
 import mobile_wallet.feature.send_money.generated.resources.feature_send_money_no_accounts_found_for_search
 import mobile_wallet.feature.send_money.generated.resources.feature_send_money_oops
@@ -64,7 +62,6 @@ import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.mifospay.core.designsystem.component.MifosButton
 import org.mifospay.core.designsystem.component.MifosGradientBackground
-import org.mifospay.core.designsystem.component.MifosLoadingWheel
 import org.mifospay.core.designsystem.component.MifosScaffold
 import org.mifospay.core.designsystem.component.MifosTopBar
 import org.mifospay.core.designsystem.icon.MifosIcons
@@ -72,6 +69,7 @@ import org.mifospay.core.designsystem.theme.toRoundedCornerShape
 import org.mifospay.core.network.model.entity.templates.account.AccountOption
 import org.mifospay.core.ui.AvatarBox
 import org.mifospay.core.ui.EmptyContentScreen
+import org.mifospay.core.ui.MifosProgressIndicator
 import org.mifospay.core.ui.SimpleSearchBar
 import org.mifospay.core.ui.utils.EventsEffect
 import template.core.base.designsystem.theme.KptTheme
@@ -177,12 +175,7 @@ private fun SelectAccountContent(
             )
         }
         SelectScreenState.State.Loading -> {
-            Box(
-                modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center,
-            ) {
-                MifosLoadingWheel(contentDesc = stringResource(Res.string.feature_send_money_loading))
-            }
+            MifosProgressIndicator()
         }
         SelectScreenState.State.NoAccounts -> {
             EmptyContentScreen(
