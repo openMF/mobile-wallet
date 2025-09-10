@@ -106,6 +106,7 @@ private fun EditProfileScreenContent(
             onAction(EditProfileAction.NavigateBack)
         },
         snackbarHost = { SnackbarHost(snackbarHostState) },
+        containerColor = KptTheme.colorScheme.background,
     ) { paddingValues ->
         LazyColumn(
             modifier = modifier

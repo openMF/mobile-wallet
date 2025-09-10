@@ -80,7 +80,6 @@ import mobile_wallet.feature.home.generated.resources.feature_home_account_type
 import mobile_wallet.feature.home.generated.resources.feature_home_arrow_up
 import mobile_wallet.feature.home.generated.resources.feature_home_coin_image
 import mobile_wallet.feature.home.generated.resources.feature_home_desc
-import mobile_wallet.feature.home.generated.resources.feature_home_loading
 import mobile_wallet.feature.home.generated.resources.feature_home_mark_default
 import mobile_wallet.feature.home.generated.resources.feature_home_request
 import mobile_wallet.feature.home.generated.resources.feature_home_request_money
@@ -98,7 +97,6 @@ import org.koin.compose.viewmodel.koinViewModel
 import org.mifospay.core.common.CurrencyFormatter
 import org.mifospay.core.designsystem.component.BasicDialogState
 import org.mifospay.core.designsystem.component.LoadingDialogState
-import org.mifospay.core.designsystem.component.MfLoadingWheel
 import org.mifospay.core.designsystem.component.MifosBasicDialog
 import org.mifospay.core.designsystem.component.MifosLoadingDialog
 import org.mifospay.core.designsystem.component.MifosScaffold
@@ -108,6 +106,7 @@ import org.mifospay.core.designsystem.component.scrollbar.scrollbarState
 import org.mifospay.core.designsystem.icon.MifosIcons
 import org.mifospay.core.model.account.Account
 import org.mifospay.core.ui.ErrorScreenContent
+import org.mifospay.core.ui.MifosProgressIndicator
 import org.mifospay.core.ui.MifosSmallChip
 import org.mifospay.core.ui.TransactionHistoryCard
 import org.mifospay.core.ui.utils.EventsEffect
@@ -206,11 +205,7 @@ fun HomeScreenContent(
             contentAlignment = Alignment.Center,
         ) {
             when (viewState) {
-                is ViewState.Loading -> {
-                    MfLoadingWheel(
-                        contentDesc = stringResource(Res.string.feature_home_loading),
-                    )
-                }
+                is ViewState.Loading -> MifosProgressIndicator()
 
                 is ViewState.Content -> {
                     HomeScreenContent(

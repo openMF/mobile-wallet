@@ -29,7 +29,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import mobile_wallet.feature.profile.generated.resources.Res
-import mobile_wallet.feature.profile.generated.resources.feature_profile_loading
 import mobile_wallet.feature.profile.generated.resources.feature_profile_personal_qr_code
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
@@ -38,10 +37,10 @@ import org.mifospay.core.designsystem.component.LoadingDialogState
 import org.mifospay.core.designsystem.component.MifosBasicDialog
 import org.mifospay.core.designsystem.component.MifosButton
 import org.mifospay.core.designsystem.component.MifosLoadingDialog
-import org.mifospay.core.designsystem.component.MifosOverlayLoadingWheel
 import org.mifospay.core.designsystem.component.MifosScaffold
 import org.mifospay.core.designsystem.icon.MifosIcons
 import org.mifospay.core.ui.ErrorScreenContent
+import org.mifospay.core.ui.MifosProgressIndicatorOverlay
 import org.mifospay.core.ui.utils.EventsEffect
 import org.mifospay.feature.profile.components.ProfileDetailsCard
 import org.mifospay.feature.profile.components.ProfileImage
@@ -98,12 +97,7 @@ internal fun ProfileScreenContent(
             contentAlignment = Alignment.Center,
         ) {
             when (clientState) {
-                is ProfileState.ViewState.Loading -> {
-                    MifosOverlayLoadingWheel(
-                        contentDesc = stringResource(Res.string.feature_profile_loading),
-                        modifier = Modifier.align(Alignment.Center),
-                    )
-                }
+                is ProfileState.ViewState.Loading -> MifosProgressIndicatorOverlay()
 
                 is ProfileState.ViewState.Error -> {
                     ErrorScreenContent(

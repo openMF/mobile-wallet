@@ -43,15 +43,14 @@ import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
 import org.mifospay.core.designsystem.component.BasicDialogState
-import org.mifospay.core.designsystem.component.LoadingDialogState
 import org.mifospay.core.designsystem.component.MifosBasicDialog
 import org.mifospay.core.designsystem.component.MifosButton
-import org.mifospay.core.designsystem.component.MifosLoadingDialog
 import org.mifospay.core.designsystem.component.MifosOutlinedTextField
 import org.mifospay.core.designsystem.component.MifosScaffold
 import org.mifospay.core.designsystem.theme.MifosTheme
 import org.mifospay.core.designsystem.theme.styleNormal18sp
 import org.mifospay.core.ui.MifosPasswordField
+import org.mifospay.core.ui.MifosProgressIndicatorOverlay
 import org.mifospay.core.ui.utils.EventsEffect
 import template.core.base.designsystem.theme.KptTheme
 
@@ -96,6 +95,10 @@ internal fun LoginScreen(
             { viewModel.trySendAction(it) }
         },
     )
+
+    if (state.dialogState is LoginState.DialogState.Loading) {
+        MifosProgressIndicatorOverlay()
+    }
 }
 
 @Composable
@@ -133,9 +136,7 @@ private fun LoginDialogs(
             onDismissRequest = onDismissRequest,
         )
 
-        is LoginState.DialogState.Loading -> MifosLoadingDialog(
-            visibilityState = LoadingDialogState.Shown,
-        )
+        is LoginState.DialogState.Loading -> Unit
 
         null -> Unit
     }
