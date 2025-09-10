@@ -90,10 +90,9 @@ class ClientRepositoryImpl(
         }
     }
 
-    override suspend fun getClientAccounts(clientId: Long): Flow<DataState<ClientAccountsEntity>> {
+    override suspend fun getClientAccounts(clientId: Long): ClientAccountsEntity {
         return apiManager.clientsApi
             .getClientAccounts(clientId)
-            .asDataStateFlow().flowOn(ioDispatcher)
     }
 
     override suspend fun getAccounts(

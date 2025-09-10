@@ -15,6 +15,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.navOptions
 import org.mifospay.core.ui.utility.TabContent
 import org.mifospay.feature.accounts.AccountsScreen
+import org.mifospay.feature.accounts.beneficiary.BeneficiaryAddEditType
 import org.mifospay.feature.accounts.beneficiary.addEditBeneficiaryScreen
 import org.mifospay.feature.accounts.beneficiary.navigateToBeneficiaryAddEdit
 import org.mifospay.feature.accounts.savingsaccount.SavingsAddEditType
@@ -47,6 +48,8 @@ import org.mifospay.feature.make.transfer.navigation.navigateToTransferScreen
 import org.mifospay.feature.make.transfer.navigation.transferScreen
 import org.mifospay.feature.make.transfer.success.navigateTransferSuccess
 import org.mifospay.feature.make.transfer.success.transferSuccessScreen
+import org.mifospay.feature.make.transfer.v2.makeTransferScreenV2
+import org.mifospay.feature.make.transfer.v2.navigateToMakeTransferScreenV2
 import org.mifospay.feature.merchants.navigation.merchantTransferScreen
 import org.mifospay.feature.notification.navigateToNotification
 import org.mifospay.feature.notification.notificationScreen
@@ -65,6 +68,10 @@ import org.mifospay.feature.savedcards.details.cardDetailRoute
 import org.mifospay.feature.send.money.navigation.SEND_MONEY_BASE_ROUTE
 import org.mifospay.feature.send.money.navigation.navigateToSendMoneyScreen
 import org.mifospay.feature.send.money.navigation.sendMoneyScreen
+import org.mifospay.feature.send.money.selectScreen.navigateToSelectAccountScreen
+import org.mifospay.feature.send.money.selectScreen.selectAccountScreenDestination
+import org.mifospay.feature.send.money.v2.navigateToSendMoneyV2Screen
+import org.mifospay.feature.send.money.v2.sendMoneyScreenDestination
 import org.mifospay.feature.settings.navigation.settingsScreen
 import org.mifospay.feature.standing.instruction.createOrUpdate.addEditSIScreen
 import org.mifospay.feature.standing.instruction.details.siDetailsScreen
@@ -150,7 +157,7 @@ internal fun MifosNavHost(
             onRequest = {
                 navController.navigateToShowQrScreen()
             },
-            onPay = navController::navigateToSendMoneyScreen,
+            onPay = navController::navigateToSendMoneyV2Screen,
             navigateToTransactionDetail = navController::navigateToSpecificTransaction,
             navigateToAccountDetail = navController::navigateToSavingAccountDetails,
             navigateToHistory = navController::navigateToHistory,
@@ -275,6 +282,37 @@ internal fun MifosNavHost(
             onBackClick = navController::popBackStack,
             navigateToTransferScreen = navController::navigateToTransferScreen,
             navigateToScanQrScreen = navController::navigateToScanQr,
+        )
+
+        selectAccountScreenDestination(
+            navigateToMakeTransferV2Screen = navController::navigateToMakeTransferScreenV2,
+            navigateBack = navController::popBackStack,
+        )
+
+        makeTransferScreenV2(
+            navigateBack = navController::popBackStack,
+            onTransferSuccess = {
+                navController.navigateTransferSuccess(
+                    navOptions {
+                        popUpTo(SEND_MONEY_BASE_ROUTE) {
+                            inclusive = true
+                        }
+                        launchSingleTop = true
+                    },
+                )
+            },
+        )
+
+        sendMoneyScreenDestination(
+            navigateToSelectAccountScreen = {
+                navController.navigateToSelectAccountScreen()
+            },
+            navigateToBeneficiary = {
+                navController.navigateToBeneficiaryAddEdit(
+                    BeneficiaryAddEditType.AddItem,
+                )
+            },
+            navigateBack = navController::popBackStack,
         )
 
         transferScreen(

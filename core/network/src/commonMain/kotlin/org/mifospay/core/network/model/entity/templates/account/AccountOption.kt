@@ -15,7 +15,7 @@ import kotlinx.serialization.Serializable
 data class AccountOption(
     val accountId: Int? = null,
     val accountNo: String? = null,
-    val accountType: org.mifospay.core.network.model.entity.templates.account.AccountType? = null,
+    val accountType: AccountType? = null,
     val clientId: Long? = null,
     val clientName: String? = null,
     val officeId: Int? = null,

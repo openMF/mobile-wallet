@@ -17,11 +17,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.SearchBar
-import androidx.compose.material3.SearchBarDefaults
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -33,18 +28,18 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.rememberNavController
 import mobile_wallet.feature.merchants.generated.resources.Res
-import mobile_wallet.feature.merchants.generated.resources.feature_merchants_close
 import mobile_wallet.feature.merchants.generated.resources.feature_merchants_empty_no_merchants_subtitle
 import mobile_wallet.feature.merchants.generated.resources.feature_merchants_empty_no_merchants_title
 import mobile_wallet.feature.merchants.generated.resources.feature_merchants_error_oops
+import mobile_wallet.feature.merchants.generated.resources.feature_merchants_loading
 import mobile_wallet.feature.merchants.generated.resources.feature_merchants_search
 import mobile_wallet.feature.merchants.generated.resources.feature_merchants_unexpected_error_subtitle
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
+import org.mifospay.core.designsystem.component.MfLoadingWheel
 import org.mifospay.core.designsystem.component.MifosScaffold
 import org.mifospay.core.designsystem.component.rememberMifosPullToRefreshState
-import org.mifospay.core.designsystem.icon.MifosIcons
 import org.mifospay.core.designsystem.theme.MifosTheme
 import org.mifospay.core.model.savingsaccount.Currency
 import org.mifospay.core.model.savingsaccount.DepositType
@@ -55,7 +50,7 @@ import org.mifospay.core.model.savingsaccount.SubStatus
 import org.mifospay.core.model.savingsaccount.Summary
 import org.mifospay.core.model.savingsaccount.Timeline
 import org.mifospay.core.ui.EmptyContentScreen
-import org.mifospay.core.ui.MifosProgressIndicator
+import org.mifospay.core.ui.MifosSearchBar
 import org.mifospay.feature.merchants.MerchantUiState
 import org.mifospay.feature.merchants.MerchantViewModel
 import org.mifospay.feature.merchants.navigation.navigateToMerchantTransferScreen
@@ -123,7 +118,12 @@ internal fun MerchantScreen(
                     )
                 }
 
-                MerchantUiState.Loading -> MifosProgressIndicator()
+                MerchantUiState.Loading -> {
+                    MfLoadingWheel(
+                        contentDesc = stringResource(Res.string.feature_merchants_loading),
+                        backgroundColor = KptTheme.colorScheme.surface,
+                    )
+                }
 
                 is MerchantUiState.ShowMerchants -> {
                     MerchantScreenContent(
@@ -204,48 +204,13 @@ private fun SearchBarScreen(
     onClearQuery: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    SearchBar(
-        inputField = {
-            SearchBarDefaults.InputField(
-                query = query,
-                onQueryChange = onQueryChange,
-                onSearch = onSearch,
-                expanded = false,
-                onExpandedChange = {},
-                enabled = true,
-                placeholder = {
-                    Text(text = stringResource(Res.string.feature_merchants_search))
-                },
-                leadingIcon = {
-                    Icon(
-                        imageVector = MifosIcons.Search,
-                        contentDescription = stringResource(Res.string.feature_merchants_search),
-                    )
-                },
-                trailingIcon = {
-                    IconButton(
-                        onClick = onClearQuery,
-                    ) {
-                        Icon(
-                            imageVector = MifosIcons.Close,
-                            contentDescription = stringResource(Res.string.feature_merchants_close),
-                        )
-                    }
-                },
-                interactionSource = null,
-            )
-        },
-        expanded = false,
-        onExpandedChange = {},
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(vertical = KptTheme.spacing.md, horizontal = KptTheme.spacing.md),
-        shape = SearchBarDefaults.inputFieldShape,
-        colors = SearchBarDefaults.colors(),
-        tonalElevation = SearchBarDefaults.TonalElevation,
-        shadowElevation = SearchBarDefaults.ShadowElevation,
-        windowInsets = SearchBarDefaults.windowInsets,
-        content = {},
+    MifosSearchBar(
+        query = query,
+        placeHolder = stringResource(Res.string.feature_merchants_search),
+        onQueryChange = onQueryChange,
+        onSearch = onSearch,
+        onClearQuery = onClearQuery,
+        modifier = modifier,
     )
 }
 

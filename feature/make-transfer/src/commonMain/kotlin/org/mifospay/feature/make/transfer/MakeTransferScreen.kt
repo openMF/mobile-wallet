@@ -33,6 +33,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -235,7 +236,7 @@ private fun AccountList(
     onClick: (Account) -> Unit,
 ) {
     Column(
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier.fillMaxWidth().padding(KptTheme.spacing.md),
         verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.md),
     ) {
         Text(
@@ -289,15 +290,18 @@ private fun AccountItem(
             trailingContent = {
                 AnimatedContent(
                     targetState = selected,
-                ) {
+                    label = "radioAnim",
+                ) { isSelected ->
                     Icon(
-                        imageVector = if (it) {
+                        imageVector = if (isSelected) {
                             MifosIcons.RadioButtonChecked
                         } else {
                             MifosIcons.RadioButtonUnchecked
                         },
-                        contentDescription = stringResource(Res.string.feature_make_transfer_check_icon_description),
-                        tint = if (it) {
+                        contentDescription = stringResource(
+                            Res.string.feature_make_transfer_check_icon_description,
+                        ),
+                        tint = if (isSelected) {
                             KptTheme.colorScheme.primary
                         } else {
                             KptTheme.colorScheme.outlineVariant
@@ -313,7 +317,7 @@ private fun AccountItem(
 }
 
 @Composable
-private fun ClientCard(
+fun ClientCard(
     client: PaymentQrData,
     modifier: Modifier = Modifier,
 ) {
@@ -369,7 +373,7 @@ private fun ClientCard(
 }
 
 @Composable
-private fun AccountBadge(
+fun AccountBadge(
     text: String,
     modifier: Modifier = Modifier,
     borderColor: Color = KptTheme.colorScheme.primary,

@@ -25,10 +25,13 @@ import androidx.compose.material.icons.filled.ContentCopy
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Description
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.Error
 import androidx.compose.material.icons.filled.FlashOff
 import androidx.compose.material.icons.filled.FlashOn
+import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Photo
 import androidx.compose.material.icons.filled.PhotoLibrary
@@ -78,6 +81,7 @@ object MifosIcons {
     val ChevronRight: ImageVector = Icons.Filled.ChevronRight
     val QrCode: ImageVector = Icons.Filled.QrCode
     val Close: ImageVector = Icons.Filled.Close
+    val Error: ImageVector = Icons.Filled.Error
     val AttachMoney: ImageVector = Icons.Filled.AttachMoney
     val OutlinedVisibilityOff: ImageVector = Icons.Outlined.VisibilityOff
     val OutlinedVisibility: ImageVector = Icons.Outlined.Visibility
@@ -85,6 +89,7 @@ object MifosIcons {
     val Visibility: ImageVector = Icons.Filled.Visibility
     val Check: ImageVector = Icons.Default.Check
     val KeyboardArrowDown: ImageVector = Icons.Default.KeyboardArrowDown
+    val KeyboardArrowUp: ImageVector = Icons.Default.KeyboardArrowUp
     val Home = Icons.Outlined.Home
     val HomeBoarder = Icons.Rounded.Home
     val Payment = Icons.Rounded.SwapHoriz
@@ -129,4 +134,5 @@ object MifosIcons {
     val Scan = Icons.Outlined.QrCodeScanner
     val RadioButtonUnchecked = Icons.Default.RadioButtonUnchecked
     val RadioButtonChecked = Icons.Filled.RadioButtonChecked
+    val History = Icons.Default.History
 }

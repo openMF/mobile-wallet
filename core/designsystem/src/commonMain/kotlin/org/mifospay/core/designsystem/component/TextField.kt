@@ -124,6 +124,7 @@ fun MifosTextField(
     errorText: String? = null,
     onClickClearIcon: () -> Unit = { onValueChange("") },
     visualTransformation: VisualTransformation = VisualTransformation.None,
+    textStyle: TextStyle? = null,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
     singleLine: Boolean = true,
     maxLines: Int = if (singleLine) 1 else Int.Companion.MAX_VALUE,
@@ -177,9 +178,9 @@ fun MifosTextField(
                 )
             }
         },
-        textStyle = LocalDensity.current.run {
-            TextStyle(color = KptTheme.colorScheme.onSurface)
-        },
+        textStyle = (textStyle ?: TextStyle()).copy(
+            color = KptTheme.colorScheme.onSurface,
+        ),
     )
 }
 
