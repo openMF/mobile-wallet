@@ -61,9 +61,9 @@ private fun PaymentScreenContent(
 //  https://venus.mifos.community/fineract-provider/api/v1/datatables/invoice/2
 //
 enum class PaymentsScreenContents {
-//    SEND,
+    SEND,
     REQUEST,
-//    HISTORY,
+    HISTORY,
 //    SI,
 //    INVOICES,
 }
