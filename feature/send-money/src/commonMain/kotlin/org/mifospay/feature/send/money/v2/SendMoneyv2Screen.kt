@@ -65,6 +65,7 @@ fun SendMoneyv2Screen(
     navigateBack: () -> Unit,
     navigateToBeneficiary: () -> Unit,
     modifier: Modifier = Modifier,
+    showTopBar: Boolean = true,
     viewModel: SendMoneyV2ViewModel = koinViewModel(),
 ) {
     EventsEffect(viewModel) { event ->
@@ -79,6 +80,7 @@ fun SendMoneyv2Screen(
 
     SendMoneyScreen(
         modifier = modifier,
+        showTopBar = showTopBar,
         onAction = remember(viewModel) {
             { viewModel.trySendAction(it) }
         },
@@ -89,17 +91,20 @@ fun SendMoneyv2Screen(
 @Composable
 private fun SendMoneyScreen(
     modifier: Modifier = Modifier,
+    showTopBar: Boolean = true,
     onAction: (SendMoneyV2Action) -> Unit,
 ) {
     MifosBottomSheetScaffold(
         modifier = modifier,
         topBar = {
-            MifosTopBar(
-                topBarTitle = stringResource(Res.string.feature_send_money_send),
-                backPress = {
-                    onAction(SendMoneyV2Action.NavigateBack)
-                },
-            )
+            if (showTopBar) {
+                MifosTopBar(
+                    topBarTitle = stringResource(Res.string.feature_send_money_send),
+                    backPress = {
+                        onAction(SendMoneyV2Action.NavigateBack)
+                    },
+                )
+            }
         },
         sheetContent = {
             // TODO : If we can get recent payment details in self with toAccount number and  amount
@@ -109,8 +114,12 @@ private fun SendMoneyScreen(
         sheetPeekHeight = 0.dp,
     ) { paddingValues ->
         Column(
-            Modifier.fillMaxSize().padding(paddingValues).padding(horizontal = KptTheme.spacing.md),
+            Modifier.fillMaxSize()
+                .padding(paddingValues)
+                .padding(horizontal = KptTheme.spacing.md),
         ) {
+            Spacer(Modifier.height(KptTheme.spacing.md))
+
             SimpleSearchBar(
                 query = "",
                 placeHolder = stringResource(Res.string.feature_select_account_placeholder),
@@ -120,7 +129,9 @@ private fun SendMoneyScreen(
                 },
                 enabled = false,
             )
+
             Spacer(Modifier.height(KptTheme.spacing.md))
+
             AddPayeeCard(
                 onClick = {
                     onAction(SendMoneyV2Action.OnAddPayeeClicked)

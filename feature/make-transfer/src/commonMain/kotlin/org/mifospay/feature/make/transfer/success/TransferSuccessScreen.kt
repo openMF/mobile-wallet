@@ -23,7 +23,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import mobile_wallet.feature.make_transfer.generated.resources.Res
-import mobile_wallet.feature.make_transfer.generated.resources.feature_make_transfer_back_to_home
+import mobile_wallet.feature.make_transfer.generated.resources.feature_make_transfer_continue
 import mobile_wallet.feature.make_transfer.generated.resources.feature_make_transfer_payment_done
 import mobile_wallet.feature.make_transfer.generated.resources.feature_make_transfer_payment_success
 import mobile_wallet.feature.make_transfer.generated.resources.feature_make_transfer_success
@@ -52,7 +52,7 @@ internal fun TransferSuccessScreen(
                         .fillMaxWidth()
                         .padding(KptTheme.spacing.md),
                 ) {
-                    Text(text = stringResource(Res.string.feature_make_transfer_back_to_home))
+                    Text(text = stringResource(Res.string.feature_make_transfer_continue))
                 }
             }
         },

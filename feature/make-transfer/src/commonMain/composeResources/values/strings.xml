@@ -30,7 +30,7 @@
     <string name="feature_make_transfer_icon_selected_description">Selected account indicator</string>
 
 <!--  Transfer Success Screen  -->
-    <string name="feature_make_transfer_back_to_home">Back To Home</string>
+    <string name="feature_make_transfer_continue">Continue</string>
     <string name="feature_make_transfer_success">Success</string>
     <string name="feature_make_transfer_payment_success">Payment Success</string>
     <string name="feature_make_transfer_payment_done">Your payment has been successfully done.</string>
