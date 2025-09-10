@@ -67,6 +67,7 @@ import mobile_wallet.feature.make_transfer.generated.resources.feature_make_tran
 import mobile_wallet.feature.make_transfer.generated.resources.feature_make_transfer_show_balance
 import mobile_wallet.feature.make_transfer.generated.resources.feature_make_transfer_to_account
 import org.jetbrains.compose.resources.stringResource
+import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
 import org.mifospay.core.designsystem.component.BasicDialogState
 import org.mifospay.core.designsystem.component.MifosBasicDialog
@@ -81,6 +82,7 @@ import org.mifospay.core.ui.EmptyContentScreen
 import org.mifospay.core.ui.MifosProgressIndicator
 import org.mifospay.core.ui.MifosProgressIndicatorOverlay
 import org.mifospay.core.ui.utils.EventsEffect
+import template.core.base.designsystem.KptTheme
 import template.core.base.designsystem.theme.KptTheme
 
 @Composable
@@ -566,6 +568,55 @@ fun ClientCard(
             colors = ListItemDefaults.colors(
                 containerColor = Color.Transparent,
             ),
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun PreviewMakeTransferLoading() {
+    KptTheme {
+        MakeTransferScreenV2(
+            state = MakeTransferV2State(
+                state = MakeTransferV2State.State.Loading,
+            ),
+            onAction = {},
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun PreviewMakeTransferNoAccounts() {
+    KptTheme {
+        MakeTransferScreenV2(
+            state = MakeTransferV2State(
+                state = MakeTransferV2State.State.NoAccounts,
+            ),
+            onAction = {},
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun PreviewMakeTransferSuccess() {
+    KptTheme {
+        MakeTransferScreenV2(
+            state = MakeTransferV2State(
+                state = MakeTransferV2State.State.Success,
+                toAccountName = "John Doe",
+                toAccountNo = "123456789",
+                amount = "250",
+                description = "Payment for groceries",
+                selectedAccount = AccountOption(
+                    clientName = "Jane Smith",
+                    accountNo = "987654321",
+                ),
+                selectedAccountBalance = 1000.0,
+                balanceMap = mapOf("987654321" to 1000.0),
+            ),
+            onAction = {},
         )
     }
 }

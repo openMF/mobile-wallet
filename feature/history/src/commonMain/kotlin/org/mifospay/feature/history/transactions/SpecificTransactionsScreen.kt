@@ -22,13 +22,12 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import mobile_wallet.feature.history.generated.resources.Res
 import mobile_wallet.feature.history.generated.resources.feature_history_error
 import mobile_wallet.feature.history.generated.resources.feature_history_error_oops
-import mobile_wallet.feature.history.generated.resources.feature_history_loading
 import mobile_wallet.feature.history.generated.resources.feature_history_specific_transactions_history
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
-import org.mifospay.core.designsystem.component.MfOverlayLoadingWheel
 import org.mifospay.core.designsystem.component.MifosScaffold
 import org.mifospay.core.ui.ErrorScreenContent
+import org.mifospay.core.ui.MifosProgressIndicator
 import org.mifospay.core.ui.utils.EventsEffect
 import org.mifospay.feature.history.components.TransactionDetail
 import org.mifospay.feature.history.components.TransactionItem
@@ -78,10 +77,7 @@ internal fun SpecificTransactionsScreenContent(
         ) {
             when (state) {
                 is STState.ViewState.Loading -> {
-                    MfOverlayLoadingWheel(
-                        modifier = Modifier.align(Alignment.Center),
-                        contentDesc = stringResource(Res.string.feature_history_loading),
-                    )
+                    MifosProgressIndicator()
                 }
 
                 is STState.ViewState.Error -> {
