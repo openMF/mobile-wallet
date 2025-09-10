@@ -13,13 +13,19 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
+import androidx.navigation.toRoute
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object SelectAccountRoute
+data class SelectAccountRoute(
+    val returnDestination: String = "home",
+)
 
-fun NavController.navigateToSelectAccountScreen(navOptions: NavOptions? = null) {
-    this.navigate(SelectAccountRoute, navOptions)
+fun NavController.navigateToSelectAccountScreen(
+    returnDestination: String = "home",
+    navOptions: NavOptions? = null,
+) {
+    this.navigate(SelectAccountRoute(returnDestination = returnDestination), navOptions)
 }
 
 fun NavGraphBuilder.selectAccountScreenDestination(
@@ -32,11 +38,15 @@ fun NavGraphBuilder.selectAccountScreenDestination(
         amount: Int,
         accountName: String,
         accountNo: String,
+        returnDestination: String,
     ) -> Unit,
 ) {
-    composable<SelectAccountRoute> {
+    composable<SelectAccountRoute> { backStackEntry ->
+        val route = backStackEntry.toRoute<SelectAccountRoute>()
         SelectPayeeScreen(
-            navigateToMakeTransferV2Screen = navigateToMakeTransferV2Screen,
+            navigateToMakeTransferV2Screen = { toOfficeId, toClientId, toAccountTypeId, toAccountId, amount, accountName, accountNo ->
+                navigateToMakeTransferV2Screen(toOfficeId, toClientId, toAccountTypeId, toAccountId, amount, accountName, accountNo, route.returnDestination)
+            },
             navigateBack = navigateBack,
         )
     }

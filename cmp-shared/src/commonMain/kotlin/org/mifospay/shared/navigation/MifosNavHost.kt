@@ -54,6 +54,7 @@ import org.mifospay.feature.make.transfer.v2.navigateToMakeTransferScreenV2
 import org.mifospay.feature.merchants.navigation.merchantTransferScreen
 import org.mifospay.feature.notification.navigateToNotification
 import org.mifospay.feature.notification.notificationScreen
+import org.mifospay.feature.payments.PAYMENTS_ROUTE
 import org.mifospay.feature.payments.PaymentsScreenContents
 import org.mifospay.feature.payments.RequestScreen
 import org.mifospay.feature.payments.paymentsScreen
@@ -66,12 +67,12 @@ import org.mifospay.feature.request.money.navigation.navigateToShowQrScreen
 import org.mifospay.feature.request.money.navigation.showQrScreen
 import org.mifospay.feature.savedcards.createOrUpdate.addEditCardScreen
 import org.mifospay.feature.savedcards.details.cardDetailRoute
-import org.mifospay.feature.send.money.SendMoneyScreen
 import org.mifospay.feature.send.money.navigation.SEND_MONEY_BASE_ROUTE
 import org.mifospay.feature.send.money.navigation.navigateToSendMoneyScreen
 import org.mifospay.feature.send.money.navigation.sendMoneyScreen
 import org.mifospay.feature.send.money.selectScreen.navigateToSelectAccountScreen
 import org.mifospay.feature.send.money.selectScreen.selectAccountScreenDestination
+import org.mifospay.feature.send.money.v2.SendMoneyv2Screen
 import org.mifospay.feature.send.money.v2.navigateToSendMoneyV2Screen
 import org.mifospay.feature.send.money.v2.sendMoneyScreenDestination
 import org.mifospay.feature.settings.navigation.settingsScreen
@@ -90,10 +91,16 @@ internal fun MifosNavHost(
 
     val paymentsTabContents = listOf(
         TabContent(PaymentsScreenContents.SEND.name) {
-            SendMoneyScreen(
-                onBackClick = navController::navigateUp,
-                navigateToTransferScreen = navController::navigateToTransferScreen,
-                navigateToScanQrScreen = navController::navigateToScanQr,
+            SendMoneyv2Screen(
+                navigateToSelectAccountScreen = {
+                    navController.navigateToSelectAccountScreen(returnDestination = "payments")
+                },
+                navigateBack = {
+                    navController.navigateUp()
+                },
+                navigateToBeneficiary = {
+                    navController.navigateToBeneficiaryAddEdit(BeneficiaryAddEditType.AddItem)
+                },
                 showTopBar = false,
             )
         },
@@ -293,11 +300,13 @@ internal fun MifosNavHost(
 
         makeTransferScreenV2(
             navigateBack = navController::popBackStack,
-            onTransferSuccess = {
+            onTransferSuccess = { returnDestination ->
                 navController.navigateTransferSuccess(
+                    returnDestination = returnDestination,
                     navOptions {
-                        popUpTo(SEND_MONEY_BASE_ROUTE) {
-                            inclusive = true
+                        when (returnDestination) {
+                            "payments" -> popUpTo(PAYMENTS_ROUTE) { inclusive = true }
+                            else -> popUpTo(SEND_MONEY_BASE_ROUTE) { inclusive = true }
                         }
                         launchSingleTop = true
                     },
@@ -321,6 +330,7 @@ internal fun MifosNavHost(
             navigateBack = navController::popBackStack,
             onTransferSuccess = {
                 navController.navigateTransferSuccess(
+                    returnDestination = "home",
                     navOptions {
                         popUpTo(SEND_MONEY_BASE_ROUTE) {
                             inclusive = true
@@ -332,12 +342,24 @@ internal fun MifosNavHost(
         )
 
         transferSuccessScreen(
-            navigateBack = {
-                navController.navigate(HOME_ROUTE) {
-                    popUpTo(HOME_ROUTE) {
-                        inclusive = false
+            navigateBack = { returnDestination ->
+                when (returnDestination) {
+                    "payments" -> {
+                        navController.navigate(PAYMENTS_ROUTE) {
+                            popUpTo(PAYMENTS_ROUTE) {
+                                inclusive = false
+                            }
+                            launchSingleTop = true
+                        }
                     }
-                    launchSingleTop = true
+                    else -> {
+                        navController.navigate(HOME_ROUTE) {
+                            popUpTo(HOME_ROUTE) {
+                                inclusive = false
+                            }
+                            launchSingleTop = true
+                        }
+                    }
                 }
             },
         )

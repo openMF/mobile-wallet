@@ -12,22 +12,32 @@ package org.mifospay.feature.make.transfer.success
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
-import org.mifospay.core.ui.composableWithSlideTransitions
+import androidx.navigation.compose.composable
+import androidx.navigation.toRoute
+import kotlinx.serialization.Serializable
 
-private const val TRANSFER_SUCCESS_ROUTE = "transfer_success_route"
+@Serializable
+data class TransferSuccessRoute(
+    val returnDestination: String = "home",
+)
 
 fun NavGraphBuilder.transferSuccessScreen(
-    navigateBack: () -> Unit,
+    navigateBack: (String) -> Unit,
 ) {
-    composableWithSlideTransitions(route = TRANSFER_SUCCESS_ROUTE) {
+    composable<TransferSuccessRoute> { backStackEntry ->
+        val route = backStackEntry.toRoute<TransferSuccessRoute>()
         TransferSuccessScreen(
-            navigateBack = navigateBack,
+            navigateBack = { navigateBack(route.returnDestination) },
         )
     }
 }
 
 fun NavController.navigateTransferSuccess(
+    returnDestination: String = "home",
     navOptions: NavOptions? = null,
 ) {
-    navigate(TRANSFER_SUCCESS_ROUTE, navOptions)
+    navigate(
+        TransferSuccessRoute(returnDestination = returnDestination),
+        navOptions,
+    )
 }
