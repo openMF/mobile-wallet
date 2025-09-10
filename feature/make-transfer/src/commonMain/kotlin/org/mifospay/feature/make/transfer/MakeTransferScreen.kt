@@ -279,7 +279,6 @@ private fun AccountItem(
     modifier: Modifier = Modifier,
     onClick: () -> Unit,
 ) {
-    var revealBalance by remember { mutableStateOf(false) }
 
     OutlinedCard(
         modifier = modifier.fillMaxWidth(),
@@ -293,28 +292,7 @@ private fun AccountItem(
                 Text(text = account.name)
             },
             supportingContent = {
-                Column(
-                    verticalArrangement = Arrangement.spacedBy(4.dp),
-                ) {
-                    Text(text = account.number)
-
-                    if (revealBalance) {
-                        Text(text = "Available Balance: ${account.balance}")
-                        Text(
-                            text = "Hide Balance",
-                            color = KptTheme.colorScheme.primary,
-                            style = KptTheme.typography.bodySmall,
-                            modifier = Modifier.clickable { revealBalance = false },
-                        )
-                    } else {
-                        Text(
-                            text = "Show Balance",
-                            color = KptTheme.colorScheme.primary,
-                            style = KptTheme.typography.bodySmall,
-                            modifier = Modifier.clickable { revealBalance = true },
-                        )
-                    }
-                }
+                Text(text = account.number)
             },
             leadingContent = {
                 AvatarBox(
