@@ -10,10 +10,7 @@
 package org.mifospay.core.data.repositoryImpl
 
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flowOn
 import org.mifospay.core.common.DataState
-import org.mifospay.core.common.asDataStateFlow
 import org.mifospay.core.data.repository.ThirdPartyTransferRepository
 import org.mifospay.core.network.SelfServiceApiManager
 import org.mifospay.core.network.model.entity.TPTResponse
@@ -29,9 +26,13 @@ class ThirdPartyTransferRepositoryImpl(
             .accountTransferTemplate()
     }
 
-    override suspend fun makeTransfer(payload: TransferPayload): Flow<DataState<TPTResponse>> {
-        return apiManager.thirdPartyTransferApi
-            .makeTransfer(payload)
-            .asDataStateFlow().flowOn(ioDispatcher)
+    override suspend fun makeTransfer(payload: TransferPayload): DataState<TPTResponse> {
+        return try {
+            val result = apiManager.thirdPartyTransferApi
+                .makeTransfer(payload)
+            DataState.Success(result)
+        } catch (e: Exception) {
+            DataState.Error(e)
+        }
     }
 }

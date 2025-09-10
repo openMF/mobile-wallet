@@ -19,6 +19,7 @@ import kotlinx.serialization.Serializable
 import mobile_wallet.feature.make_transfer.generated.resources.Res
 import mobile_wallet.feature.make_transfer.generated.resources.feature_make_transfer_error_empty_amount
 import mobile_wallet.feature.make_transfer.generated.resources.feature_make_transfer_error_empty_description
+import mobile_wallet.feature.make_transfer.generated.resources.feature_make_transfer_error_insufficient_balance
 import mobile_wallet.feature.make_transfer.generated.resources.feature_make_transfer_error_invalid_amount
 import mobile_wallet.feature.make_transfer.generated.resources.feature_make_transfer_error_same_account
 import mobile_wallet.feature.make_transfer.generated.resources.feature_make_transfer_error_select_account
@@ -47,6 +48,9 @@ internal class MakeTransferV2ScreenV2ViewModel(
             toClientId = route.toClientId,
             toAccountType = route.toAccountTypeId,
             toAccountId = route.accountId.toInt(),
+            toAccountName = route.toAccountName,
+            toAccountNo = route.toAccountNo,
+            amount = route.amount.toString(),
         )
     },
 ) {
@@ -182,9 +186,9 @@ internal class MakeTransferV2ScreenV2ViewModel(
             updateErrorState(Res.string.feature_make_transfer_error_same_account)
         }
 
-//        state.amount.toDouble() > state.selectedAccount?.balance!! -> {
-//            updateErrorState(Res.string.feature_make_transfer_error_insufficient_balance)
-//        }
+        state.amount.toDouble() > state.selectedAccountBalance -> {
+            updateErrorState(Res.string.feature_make_transfer_error_insufficient_balance)
+        }
 
         else -> initiateTransfer()
     }
@@ -197,7 +201,7 @@ internal class MakeTransferV2ScreenV2ViewModel(
         viewModelScope.launch {
             val result = repository.makeTransfer(state.transferPayload)
 
-//            sendAction(MakeTransferV2Action.Internal.HandleTransferResult(result))
+            sendAction(MakeTransferV2Action.Internal.HandleTransferResult(result))
         }
     }
 
@@ -238,6 +242,8 @@ internal data class MakeTransferV2State(
     val toClientId: Long? = null,
     val toAccountType: Int? = null,
     val toAccountId: Int? = null,
+    val toAccountName: String = "",
+    val toAccountNo: String = "",
     val amount: String = "",
 
     val showBottomSheet: Boolean = false,
@@ -250,7 +256,7 @@ internal data class MakeTransferV2State(
     val balanceMap: Map<String, Double> = emptyMap(),
 ) {
     val amountIsValid: Boolean
-        get() = amount.isNotEmpty() && amount.toDoubleOrNull() != null
+        get() = amount.isNotEmpty() && amount.toDoubleOrNull() != null && amount.toDouble()<=selectedAccountBalance
 
     val descriptionIsValid: Boolean
         get() = description.isNotEmpty()

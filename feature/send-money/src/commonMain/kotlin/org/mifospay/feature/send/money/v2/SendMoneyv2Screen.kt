@@ -40,6 +40,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import mobile_wallet.feature.send_money.generated.resources.Res
+import mobile_wallet.feature.send_money.generated.resources.feature_select_account_placeholder
 import mobile_wallet.feature.send_money.generated.resources.feature_send_money_add_icon_desc
 import mobile_wallet.feature.send_money.generated.resources.feature_send_money_add_payee_subtitle
 import mobile_wallet.feature.send_money.generated.resources.feature_send_money_add_payee_title
@@ -114,7 +115,7 @@ private fun SendMoneyScreen(
         ) {
             SimpleSearchBar(
                 query = "",
-                placeHolder = "",
+                placeHolder = stringResource(Res.string.feature_select_account_placeholder),
                 onQueryChange = {},
                 onClick = {
                     onAction(SendMoneyV2Action.OnSearchBarClicked)

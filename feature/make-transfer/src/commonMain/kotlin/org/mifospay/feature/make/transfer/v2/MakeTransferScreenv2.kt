@@ -12,40 +12,53 @@ package org.mifospay.feature.make.transfer.v2
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.scrollBy
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.BasicText
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.text.TextAutoSize
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.ListItemDefaults
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import kotlinx.coroutines.launch
 import mobile_wallet.feature.make_transfer.generated.resources.Res
 import mobile_wallet.feature.make_transfer.generated.resources.feature_make_transfer_amount
 import mobile_wallet.feature.make_transfer.generated.resources.feature_make_transfer_amount_error
@@ -58,6 +71,7 @@ import mobile_wallet.feature.make_transfer.generated.resources.feature_make_tran
 import mobile_wallet.feature.make_transfer.generated.resources.feature_make_transfer_no_accounts_found
 import mobile_wallet.feature.make_transfer.generated.resources.feature_make_transfer_oops_title
 import mobile_wallet.feature.make_transfer.generated.resources.feature_make_transfer_review_title
+import mobile_wallet.feature.make_transfer.generated.resources.feature_make_transfer_to_account
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.mifospay.core.designsystem.component.BasicDialogState
@@ -141,6 +155,7 @@ internal fun MakeTransferScreenV2(
     lazyListState: LazyListState = rememberLazyListState(),
     onAction: (MakeTransferV2Action) -> Unit,
 ) {
+
     MifosBottomSheetScaffold(
         topBar = {
             MifosTopBar(
@@ -165,7 +180,7 @@ internal fun MakeTransferScreenV2(
                 )
             }
         },
-        modifier = modifier.imePadding(),
+        modifier = modifier,
     ) { paddingValues ->
         when (state.state) {
             is MakeTransferV2State.State.Error -> {
@@ -195,16 +210,24 @@ internal fun MakeTransferScreenV2(
                 LazyColumn(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(paddingValues),
+                        .padding(paddingValues)
+                        .padding(KptTheme.spacing.md)
+                        .imePadding(),
                     state = lazyListState,
-                    contentPadding = PaddingValues(KptTheme.spacing.md),
                     verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.md),
                 ) {
+                    item {
+                        ClientCard(
+                            name = state.toAccountName,
+                            account = state.toAccountNo,
+                            onEdit = { onAction(MakeTransferV2Action.NavigateBack) },
+                        )
+                    }
+
                     if (state.selectedAccount != null) {
                         item {
                             FromAccountCard(
                                 account = state.selectedAccount,
-                                modifier = Modifier,
                                 onAction = onAction,
                                 isOpened = state.showBottomSheet,
                                 balance = state.selectedAccountBalance.toString(),
@@ -224,9 +247,7 @@ internal fun MakeTransferScreenV2(
                             label = stringResource(Res.string.feature_make_transfer_description_label),
                             value = state.description,
                             isError = !state.descriptionIsValid,
-                            onValueChange = {
-                                onAction(MakeTransferV2Action.DescriptionChanged(it))
-                            },
+                            onValueChange = { onAction(MakeTransferV2Action.DescriptionChanged(it)) },
                         )
                     }
 
@@ -253,72 +274,68 @@ private fun FromAccountCard(
     onAction: (MakeTransferV2Action) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Column(
-        modifier = modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.md),
+    OutlinedCard(
+        modifier = modifier.fillMaxWidth()
+            .clickable {
+                if (isOpened) {
+                    onAction(MakeTransferV2Action.CloseBottomSheet)
+                } else {
+                    onAction(MakeTransferV2Action.OpenBottomSheet)
+                }
+            },
+        colors = CardDefaults.outlinedCardColors(
+            containerColor = Color.Transparent,
+        ),
     ) {
-        Text(
-            text = stringResource(Res.string.feature_make_transfer_from_account),
-            style = KptTheme.typography.labelLarge,
-        )
-
-        OutlinedCard(
-            modifier = modifier.fillMaxWidth()
-                .clickable {
-                    if (isOpened) {
-                        onAction(MakeTransferV2Action.CloseBottomSheet)
-                    } else {
-                        onAction(MakeTransferV2Action.OpenBottomSheet)
-                    }
-                },
-            colors = CardDefaults.outlinedCardColors(
+        ListItem(
+            headlineContent = {
+                BasicText(
+                    text = stringResource(
+                        Res.string.feature_make_transfer_from_account,
+                        account.clientName ?: "",
+                    ),
+                    autoSize = TextAutoSize.StepBased(
+                        minFontSize = 6.sp,
+                        maxFontSize = 16.sp,
+                        stepSize = 1.sp,
+                    ),
+                    style = LocalTextStyle.current.copy(
+                        color = KptTheme.colorScheme.onSurface,
+                    ),
+                    maxLines = 1,
+                )
+            },
+            supportingContent = {
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.xs),
+                ) {
+                    Text(text = account.accountNo ?: "")
+                    Text(text = stringResource(Res.string.feature_make_transfer_available_balance, balance))
+                }
+            },
+            leadingContent = {
+                AvatarBox(
+                    icon = MifosIcons.Bank,
+                    backgroundColor = KptTheme.colorScheme.surfaceContainerHigh,
+                )
+            },
+            trailingContent = {
+                if (isOpened) {
+                    Icon(
+                        imageVector = MifosIcons.KeyboardArrowUp,
+                        contentDescription = stringResource(Res.string.feature_make_transfer_check_icon_description),
+                    )
+                } else {
+                    Icon(
+                        imageVector = MifosIcons.KeyboardArrowDown,
+                        contentDescription = stringResource(Res.string.feature_make_transfer_check_icon_description),
+                    )
+                }
+            },
+            colors = ListItemDefaults.colors(
                 containerColor = Color.Transparent,
             ),
-        ) {
-            ListItem(
-                headlineContent = {
-                    Text(text = account.clientName ?: "")
-                },
-                supportingContent = {
-                    Column(
-                        verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.xs),
-                    ) {
-                        Text(text = account.accountNo ?: "")
-                        Text(text = stringResource(Res.string.feature_make_transfer_available_balance, balance))
-                    }
-                },
-                leadingContent = {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxHeight(),
-                        contentAlignment = Alignment.Center,
-                    ) {
-                        AvatarBox(
-                            icon = MifosIcons.Bank,
-                            backgroundColor = KptTheme.colorScheme.surfaceContainerHigh,
-                        )
-                    }
-                },
-                trailingContent = {
-                    if (isOpened) {
-                        Icon(
-                            imageVector = MifosIcons.KeyboardArrowUp,
-                            contentDescription = stringResource(Res.string.feature_make_transfer_check_icon_description),
-                            tint = KptTheme.colorScheme.primary,
-                        )
-                    } else {
-                        Icon(
-                            imageVector = MifosIcons.KeyboardArrowDown,
-                            contentDescription = stringResource(Res.string.feature_make_transfer_check_icon_description),
-                            tint = KptTheme.colorScheme.primary,
-                        )
-                    }
-                },
-                colors = ListItemDefaults.colors(
-                    containerColor = Color.Transparent,
-                ),
-            )
-        }
+        )
     }
 }
 
@@ -365,15 +382,20 @@ private fun EnterAmountCard(
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Decimal,
                 ),
+                leadingIcon = {
+                    Text("₹", style = KptTheme.typography.headlineMedium)
+                },
+                textStyle = KptTheme.typography.headlineMedium,
             )
 
             if ((state.amount.toDoubleOrNull() ?: 0.0) > state.selectedAccountBalance) {
+                Spacer(modifier = Modifier.height(KptTheme.spacing.sm))
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(KptTheme.spacing.xs),
                 ) {
                     Icon(
-                        imageVector = MifosIcons.Close,
+                        imageVector = MifosIcons.Info,
                         contentDescription = null,
                         tint = MaterialTheme.colorScheme.error,
                     )
@@ -387,6 +409,7 @@ private fun EnterAmountCard(
         }
     }
 }
+
 
 @Composable
 private fun AccountList(
@@ -488,6 +511,62 @@ private fun AccountItem(
                         },
                     )
                 }
+            },
+            colors = ListItemDefaults.colors(
+                containerColor = Color.Transparent,
+            ),
+        )
+    }
+}
+
+@Composable
+fun ClientCard(
+    name: String,
+    account: String,
+    onEdit: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    OutlinedCard(
+        modifier = modifier.fillMaxWidth(),
+        colors = CardDefaults.outlinedCardColors(
+            containerColor = Color.Transparent,
+        ),
+    ) {
+        ListItem(
+            headlineContent = {
+                BasicText(
+                    text = stringResource(
+                        Res.string.feature_make_transfer_to_account,
+                        name,
+                    ),
+                    autoSize = TextAutoSize.StepBased(
+                        minFontSize = 6.sp,
+                        maxFontSize = 16.sp,
+                        stepSize = 1.sp,
+                    ),
+                    maxLines = 1,
+                    style = LocalTextStyle.current.copy(
+                        color = KptTheme.colorScheme.onSurface,
+                    ),
+                )
+            },
+            supportingContent = {
+                Text(text = account)
+            },
+            leadingContent = {
+                AvatarBox(
+                    icon = MifosIcons.Bank,
+                    backgroundColor = KptTheme.colorScheme.surfaceContainerHigh,
+                )
+            },
+            trailingContent = {
+                Icon(
+                    imageVector = MifosIcons.Edit,
+                    contentDescription = stringResource(
+                        Res.string.feature_make_transfer_check_icon_description,
+                    ),
+                    modifier = Modifier.clickable { onEdit() },
+                )
             },
             colors = ListItemDefaults.colors(
                 containerColor = Color.Transparent,

@@ -27,6 +27,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import org.mifospay.core.designsystem.icon.MifosIcons
+import template.core.base.designsystem.KptTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -129,5 +130,6 @@ fun SimpleSearchBar(
             unfocusedContainerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f),
         ),
         enabled = enabled,
+        textStyle = MaterialTheme.typography.bodySmall,
     )
 }

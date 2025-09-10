@@ -30,6 +30,8 @@ fun NavGraphBuilder.selectAccountScreenDestination(
         toAccountTypeId: Int?,
         toAccountId: Int,
         amount: Int,
+        accountName: String,
+        accountNo: String,
     ) -> Unit,
 ) {
     composable<SelectAccountRoute> {

@@ -22,6 +22,8 @@ data class MakeTransferScreenV2Route(
     val toOfficeId: Int? = null,
     val toClientId: Long? = null,
     val toAccountTypeId: Int? = null,
+    val toAccountName: String = "",
+    val toAccountNo: String = "",
 )
 
 fun NavController.navigateToMakeTransferScreenV2(
@@ -30,6 +32,8 @@ fun NavController.navigateToMakeTransferScreenV2(
     toAccountTypeId: Int?,
     toAccountId: Int,
     amount: Int,
+    toAccountName: String,
+    toAccountNo: String,
     navOptions: NavOptions? = null,
 ) {
     this.navigate(
@@ -40,6 +44,8 @@ fun NavController.navigateToMakeTransferScreenV2(
 
             accountId = toAccountId.toLong(),
             amount = amount,
+            toAccountName = toAccountName,
+            toAccountNo = toAccountNo,
         ),
         navOptions,
     )

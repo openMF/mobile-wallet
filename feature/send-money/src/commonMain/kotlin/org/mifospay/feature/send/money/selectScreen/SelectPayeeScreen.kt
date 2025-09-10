@@ -84,6 +84,8 @@ fun SelectPayeeScreen(
         toAccountTypeId: Int?,
         toAccountId: Int,
         amount: Int,
+        accountName: String,
+        accountNo: String,
     ) -> Unit,
     viewModel: SelectScreenViewModel = koinViewModel(),
 ) {
@@ -98,6 +100,8 @@ fun SelectPayeeScreen(
                     state.selectedAccount?.accountType?.id ?: 0,
                     state.selectedAccount?.accountId ?: 0,
                     state.amount.toIntOrNull() ?: 0,
+                    state.selectedAccount?.clientName ?: "",
+                    state.selectedAccount?.accountNo ?: "",
                 )
             }
 

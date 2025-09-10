@@ -12,14 +12,14 @@
     <string name="feature_make_transfer_loading">Loading</string>
     <string name="feature_make_transfer_send_money">Send money</string>
     <string name="feature_make_transfer_sending_to">Sending to</string>
-    <string name="feature_make_transfer_amount">Amount</string>
+    <string name="feature_make_transfer_amount">Enter Amount</string>
     <string name="feature_make_transfer_transaction_success">Transaction successful</string>
     <string name="feature_make_transfer_transaction_unable_to_process">Unable to process transfer</string>
 
     <string name="feature_make_transfer_review_title">Review Transfer</string>
     <string name="feature_make_transfer_description_label">Add a Message</string>
-    <string name="feature_make_transfer_to_account">To Account</string>
-    <string name="feature_make_transfer_from_account">From Account</string>
+    <string name="feature_make_transfer_to_account">To %1$s</string>
+    <string name="feature_make_transfer_from_account">From %1$s</string>
     <string name="feature_make_transfer_continue_button">Continue</string>
     <string name="feature_make_transfer_oops_title">Oops!</string>
     <string name="feature_make_transfer_no_accounts_found">No accounts found!</string>
@@ -46,7 +46,7 @@
     <string name="feature_make_transfer_available_balance">Available Balance: %1$s</string>
     <string name="feature_make_transfer_show_balance">Show Balance</string>
     <string name="feature_make_transfer_hide_balance">Hide Balance</string>
-    <string name="feature_make_transfer_amount_error">Amount should be less than the balance you have</string>
+    <string name="feature_make_transfer_amount_error">Your account has insufficient balance</string>
 
 
 </resources>
