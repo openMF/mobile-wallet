@@ -118,6 +118,7 @@ private fun TransactionDetails(
             onClick = {
                 onAction(STAction.ViewTransaction(it))
             },
+            showDescription = true,
         )
 
         state.detail?.let {

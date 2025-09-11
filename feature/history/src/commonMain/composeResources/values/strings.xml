@@ -29,5 +29,5 @@
     <string name="feature_history_paid_to">Paid To</string>
     <string name="feature_history_debited_from">Debited From</string>
     <string name="feature_history_error_fallback">Error</string>
-
+    <string name="feature_history_description">Transfer Description :</string>
 </resources>
