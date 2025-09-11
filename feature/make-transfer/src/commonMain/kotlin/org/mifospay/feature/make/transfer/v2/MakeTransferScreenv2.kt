@@ -12,6 +12,8 @@ package org.mifospay.feature.make.transfer.v2
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -40,6 +42,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -48,6 +51,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -226,6 +230,9 @@ internal fun MakeTransferScreenV2(
                         EnterAmountCard(
                             state = state,
                             onAction = onAction,
+                            onFocusChanged = {
+                                onAction(MakeTransferV2Action.CloseBottomSheet)
+                            },
                         )
                     }
 
@@ -235,6 +242,12 @@ internal fun MakeTransferScreenV2(
                             value = state.description,
                             isError = !state.descriptionIsValid,
                             onValueChange = { onAction(MakeTransferV2Action.DescriptionChanged(it)) },
+                            keyboardOptions = KeyboardOptions(
+                                imeAction = ImeAction.Done,
+                            ),
+                            onFocusChanged = {
+                                onAction(MakeTransferV2Action.CloseBottomSheet)
+                            },
                         )
                     }
 
@@ -331,8 +344,15 @@ private fun FromAccountCard(
 private fun EnterAmountCard(
     state: MakeTransferV2State,
     onAction: (MakeTransferV2Action) -> Unit,
+    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
+    onFocusChanged: (Boolean) -> Unit = {},
     modifier: Modifier = Modifier,
 ) {
+    val isFocused by interactionSource.collectIsFocusedAsState()
+
+    LaunchedEffect(isFocused) {
+        onFocusChanged(isFocused)
+    }
     OutlinedCard(
         modifier = modifier.fillMaxWidth().then(
             if (!state.amountIsValid) {
@@ -370,9 +390,11 @@ private fun EnterAmountCard(
                 onValueChange = {
                     onAction(MakeTransferV2Action.AmountChanged(it))
                 },
+                interactionSource = interactionSource,
                 modifier = Modifier.fillMaxWidth(),
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Decimal,
+                    imeAction = ImeAction.Next,
                 ),
                 isError = !state.amountIsValid,
                 textStyle = KptTheme.typography.headlineMedium,

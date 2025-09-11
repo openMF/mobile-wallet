@@ -35,5 +35,6 @@ fun TransactionsEntity.toModel(): Transaction {
         accountNo = this.accountNo,
         originalTransactionId = this.originalTransactionId,
         paymentDetailId = this.paymentDetailData?.id,
+        description = this.transfer?.transferDescription ?: "",
     )
 }

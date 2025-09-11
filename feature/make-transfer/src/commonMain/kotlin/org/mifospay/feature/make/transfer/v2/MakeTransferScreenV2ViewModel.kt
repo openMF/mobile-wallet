@@ -68,13 +68,17 @@ internal class MakeTransferV2ScreenV2ViewModel(
 
             is MakeTransferV2Action.AmountChanged -> {
                 mutableStateFlow.update {
-                    it.copy(amount = action.amount)
+                    it.copy(
+                        amount = action.amount,
+                    )
                 }
             }
 
             is MakeTransferV2Action.DescriptionChanged -> {
                 mutableStateFlow.update {
-                    it.copy(description = action.desc)
+                    it.copy(
+                        description = action.desc,
+                    )
                 }
             }
 
@@ -122,7 +126,10 @@ internal class MakeTransferV2ScreenV2ViewModel(
     private suspend fun getFromAccounts() {
         try {
             val res = repository.getTransferTemplate()
-            if (res.fromAccountOptions.isNullOrEmpty()) {
+            val fromAccounts = res.fromAccountOptions?.filter {
+                it.accountType?.id == 2
+            }
+            if (fromAccounts.isNullOrEmpty()) {
                 mutableStateFlow.update {
                     it.copy(
                         state = MakeTransferV2State.State.NoAccounts,
@@ -131,7 +138,7 @@ internal class MakeTransferV2ScreenV2ViewModel(
             } else {
                 mutableStateFlow.update {
                     it.copy(
-                        fromAccountOptions = res.fromAccountOptions,
+                        fromAccountOptions = fromAccounts,
                     )
                 }
                 getBalanceOfAccounts()
@@ -249,7 +256,7 @@ internal data class MakeTransferV2State(
 
     val showBottomSheet: Boolean = false,
     val state: State = State.Loading,
-    val description: String = "",
+    val description: String = " ",
     val selectedAccount: AccountOption? = null,
     val selectedAccountBalance: Double = 0.0,
     val dialogState: DialogState? = null,
@@ -260,7 +267,7 @@ internal data class MakeTransferV2State(
         get() = amount.isNotEmpty() && amount.toDoubleOrNull() != null && amount.toDouble() <= selectedAccountBalance
 
     val descriptionIsValid: Boolean
-        get() = description.isNotEmpty()
+        get() = description.trim().isNotEmpty()
 
     val transferPayload: TransferPayload
         get() = TransferPayload(
@@ -274,7 +281,7 @@ internal data class MakeTransferV2State(
             toAccountId = toAccountId,
             transferDate = DateHelper.formattedShortDate,
             transferAmount = amount.toDoubleOrNull() ?: 0.0,
-            transferDescription = description.capitalizeWords(),
+            transferDescription = description.trim().capitalizeWords(),
             locale = "en_IN",
             dateFormat = DateHelper.SHORT_MONTH,
         )
