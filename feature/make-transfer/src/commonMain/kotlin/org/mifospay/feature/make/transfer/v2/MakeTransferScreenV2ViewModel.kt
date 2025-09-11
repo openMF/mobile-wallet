@@ -70,7 +70,7 @@ internal class MakeTransferV2ScreenV2ViewModel(
                 mutableStateFlow.update {
                     it.copy(
                         showBottomSheet = false,
-                        amount = action.amount
+                        amount = action.amount,
                     )
                 }
             }
@@ -79,7 +79,7 @@ internal class MakeTransferV2ScreenV2ViewModel(
                 mutableStateFlow.update {
                     it.copy(
                         showBottomSheet = false,
-                        description = action.desc
+                        description = action.desc,
                     )
                 }
             }
@@ -128,8 +128,8 @@ internal class MakeTransferV2ScreenV2ViewModel(
     private suspend fun getFromAccounts() {
         try {
             val res = repository.getTransferTemplate()
-            val fromAccounts=res.fromAccountOptions?.filter {
-                it.accountType?.id==2
+            val fromAccounts = res.fromAccountOptions?.filter {
+                it.accountType?.id == 2
             }
             if (fromAccounts.isNullOrEmpty()) {
                 mutableStateFlow.update {

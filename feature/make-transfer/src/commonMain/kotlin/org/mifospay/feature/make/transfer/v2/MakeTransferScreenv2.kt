@@ -237,8 +237,8 @@ internal fun MakeTransferScreenV2(
                             isError = !state.descriptionIsValid,
                             onValueChange = { onAction(MakeTransferV2Action.DescriptionChanged(it)) },
                             keyboardOptions = KeyboardOptions(
-                                imeAction = ImeAction.Done
-                            )
+                                imeAction = ImeAction.Done,
+                            ),
                         )
                     }
 
@@ -377,7 +377,7 @@ private fun EnterAmountCard(
                 modifier = Modifier.fillMaxWidth(),
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Decimal,
-                    imeAction = ImeAction.Next
+                    imeAction = ImeAction.Next,
                 ),
                 isError = !state.amountIsValid,
                 textStyle = KptTheme.typography.headlineMedium,

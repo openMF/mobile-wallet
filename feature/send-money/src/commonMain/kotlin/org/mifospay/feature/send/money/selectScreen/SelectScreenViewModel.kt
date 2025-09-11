@@ -35,7 +35,7 @@ class SelectScreenViewModel(
             is SelectScreenAction.AccountNumberChanged -> {
                 val filteredAccounts = state.toAccountOptions?.filter { account ->
                     account.accountNo?.contains(action.accountNumber) == true ||
-                            account.clientName?.contains(action.accountNumber,true) == true
+                        account.clientName?.contains(action.accountNumber, true) == true
                 }
                 mutableStateFlow.update {
                     it.copy(
@@ -70,8 +70,8 @@ class SelectScreenViewModel(
     private suspend fun getToAccounts() {
         try {
             val res = repository.getTransferTemplate()
-            val toAccounts=res.toAccountOptions?.filter {
-                it.accountType?.id==2
+            val toAccounts = res.toAccountOptions?.filter {
+                it.accountType?.id == 2
             }
             if (toAccounts.isNullOrEmpty()) {
                 mutableStateFlow.update {
