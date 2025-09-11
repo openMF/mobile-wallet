@@ -230,6 +230,9 @@ internal fun MakeTransferScreenV2(
                         EnterAmountCard(
                             state = state,
                             onAction = onAction,
+                            onFocusChanged = {
+                                onAction(MakeTransferV2Action.CloseBottomSheet)
+                            },
                         )
                     }
 
