@@ -69,7 +69,6 @@ internal class MakeTransferV2ScreenV2ViewModel(
             is MakeTransferV2Action.AmountChanged -> {
                 mutableStateFlow.update {
                     it.copy(
-                        showBottomSheet = false,
                         amount = action.amount,
                     )
                 }
@@ -78,7 +77,6 @@ internal class MakeTransferV2ScreenV2ViewModel(
             is MakeTransferV2Action.DescriptionChanged -> {
                 mutableStateFlow.update {
                     it.copy(
-                        showBottomSheet = false,
                         description = action.desc,
                     )
                 }
