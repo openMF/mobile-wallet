@@ -252,8 +252,7 @@ fun HistoryScreenBottomSheet(
                     text = stringResource(Res.string.feature_history_filter_clear_all),
                     color = KptTheme.colorScheme.primary,
                     modifier = Modifier.clickable {
-                        onAction(HistoryAction.SetFilter(TransactionType.OTHER))
-                        onAction(HistoryAction.OnFilterClick)
+                        onAction(HistoryAction.ClearFilters)
                     },
                 )
             }

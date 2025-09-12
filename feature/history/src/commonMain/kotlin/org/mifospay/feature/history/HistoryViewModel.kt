@@ -54,9 +54,20 @@ class HistoryViewModel(
             is HistoryAction.OnApplyFilterClick -> handleApplyFilterClick()
 
             is HistoryAction.SetSelectedAccount -> handleSetSelectedAccount(action.account)
+
+            HistoryAction.ClearFilters -> handleClearFilters()
         }
     }
 
+    private fun handleClearFilters() {
+        mutableStateFlow.update {
+            it.copy(
+                currentSelectedTransactionType = TransactionType.OTHER,
+                showFilter = false,
+            )
+        }
+        applyFilter(state.transactions)
+    }
     private fun handleApplyFilterClick() {
         val transactions = state.transactionsWithAccounts[state.currentSelectedAccount]
         mutableStateFlow.update {
@@ -179,6 +190,7 @@ sealed interface HistoryAction {
     data object OnFilterClick : HistoryAction
     data class SetSelectedAccount(val account: Account) : HistoryAction
     data object OnApplyFilterClick : HistoryAction
+    data object ClearFilters : HistoryAction
 
     sealed interface Internal : HistoryAction {
         data class TransactionsLoaded(val result: DataState<Map<Account, List<Transaction>>>) : Internal
