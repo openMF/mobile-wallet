@@ -190,7 +190,10 @@ private fun HistoryScreenHeader(
         Column(
             Modifier.weight(1f),
         ) {
-            Text(stringResource(Res.string.feature_history_header_account, accountNo))
+            Text(
+                text = stringResource(Res.string.feature_history_header_account, accountNo),
+                style = KptTheme.typography.titleSmall,
+            )
             Spacer(Modifier.height(KptTheme.spacing.xs))
             Text(
                 text = when (selectedTransactionType) {
@@ -256,7 +259,7 @@ fun HistoryScreenBottomSheet(
             }
             Text(
                 text = stringResource(Res.string.feature_history_filter_by_account),
-                style = KptTheme.typography.bodyMedium,
+                style = KptTheme.typography.titleSmall,
             )
             FilterAccountDropDown(
                 selectedAccount = state.currentSelectedAccount,
@@ -267,7 +270,7 @@ fun HistoryScreenBottomSheet(
             )
             Text(
                 text = stringResource(Res.string.feature_history_filter_transaction_type),
-                style = KptTheme.typography.bodyMedium,
+                style = KptTheme.typography.titleSmall,
             )
             HistoryScreenFilter(
                 selectedTransactionType = state.currentSelectedTransactionType,

@@ -42,6 +42,7 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
@@ -162,7 +163,9 @@ fun FilterAccountDropDown(
                 Column {
                     Text(
                         text = stringResource(Res.string.feature_history_account_number, selectedAccount.number),
-                        style = KptTheme.typography.bodyMedium,
+                        style = KptTheme.typography.bodyMedium.copy(
+                            fontWeight = FontWeight.SemiBold,
+                        ),
                     )
                     Text(
                         text = stringResource(Res.string.feature_history_account_balance, selectedAccount.balance, selectedAccount.currency.code),
@@ -194,7 +197,9 @@ fun FilterAccountDropDown(
                         Column {
                             Text(
                                 text = stringResource(Res.string.feature_history_account_number, account.number),
-                                style = KptTheme.typography.bodyMedium,
+                                style = KptTheme.typography.bodyMedium.copy(
+                                    fontWeight = FontWeight.SemiBold,
+                                ),
                             )
                             Text(
                                 text = stringResource(Res.string.feature_history_account_balance, account.balance, account.currency.code),
