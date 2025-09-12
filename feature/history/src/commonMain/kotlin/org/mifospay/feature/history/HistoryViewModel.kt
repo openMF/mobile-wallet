@@ -16,6 +16,7 @@ import kotlinx.coroutines.flow.update
 import org.mifospay.core.common.DataState
 import org.mifospay.core.data.repository.SelfServiceRepository
 import org.mifospay.core.datastore.UserPreferencesRepository
+import org.mifospay.core.model.account.Account
 import org.mifospay.core.model.savingsaccount.Transaction
 import org.mifospay.core.model.savingsaccount.TransactionType
 import org.mifospay.core.ui.utils.BaseViewModel
@@ -35,25 +36,65 @@ class HistoryViewModel(
     },
 ) {
     init {
-        repository.getAccountsTransactions(state.clientId).onEach {
+        repository.getActiveAccountsWithTransactionsPerAccount(state.clientId, null).onEach {
             sendAction(TransactionsLoaded(it))
         }.launchIn(viewModelScope)
     }
 
     override fun handleAction(action: HistoryAction) {
         when (action) {
-            is HistoryAction.SetFilter -> applyFilter(action.filter)
+            is HistoryAction.SetFilter -> handleSetFilter(action.filter)
 
-            is HistoryAction.ViewTransaction -> {
-                sendEvent(HistoryEvent.OnTransactionDetail(action.transferId))
-            }
+            is HistoryAction.ViewTransaction -> handleViewTransaction(action.transferId)
 
             is TransactionsLoaded -> handleTransactionLoaded(action)
+
+            is HistoryAction.OnFilterClick -> handleFilterClick()
+
+            is HistoryAction.OnApplyFilterClick -> handleApplyFilterClick()
+
+            is HistoryAction.SetSelectedAccount -> handleSetSelectedAccount(action.account)
         }
     }
 
-    private fun applyFilter(filter: TransactionType) {
-        val filteredTransactions = state.transactions.filter {
+    private fun handleApplyFilterClick() {
+        val transactions = state.transactionsWithAccounts[state.currentSelectedAccount]
+        mutableStateFlow.update {
+            it.copy(
+                showFilter = false,
+                filteredEmpty = transactions.isNullOrEmpty(),
+                selectedAccount = state.currentSelectedAccount,
+                transactions = transactions ?: emptyList(),
+            )
+        }
+        applyFilter(transactions)
+    }
+
+    private fun handleSetFilter(filter: TransactionType) {
+        mutableStateFlow.update {
+            it.copy(currentSelectedTransactionType = filter)
+        }
+    }
+
+    private fun handleSetSelectedAccount(account: Account) {
+        mutableStateFlow.update {
+            it.copy(currentSelectedAccount = account)
+        }
+    }
+
+    private fun handleViewTransaction(transferId: Long) {
+        sendEvent(HistoryEvent.OnTransactionDetail(transferId))
+    }
+
+    private fun handleFilterClick() {
+        mutableStateFlow.update {
+            it.copy(showFilter = !state.showFilter)
+        }
+    }
+
+    private fun applyFilter(transactions: List<Transaction>?) {
+        val filter = state.currentSelectedTransactionType
+        val filteredTransactions = transactions?.filter {
             if (filter == TransactionType.OTHER) {
                 true
             } else {
@@ -64,11 +105,8 @@ class HistoryViewModel(
         mutableStateFlow.update {
             it.copy(
                 transactionType = filter,
-                viewState = if (filteredTransactions.isEmpty()) {
-                    HistoryState.ViewState.Empty
-                } else {
-                    HistoryState.ViewState.Content(filteredTransactions)
-                },
+                viewState = HistoryState.ViewState.Content(filteredTransactions ?: emptyList()),
+                filteredEmpty = filteredTransactions.isNullOrEmpty(),
             )
         }
     }
@@ -89,13 +127,19 @@ class HistoryViewModel(
             }
 
             is DataState.Success -> {
+                val result = action.result.data
+                val firstAccount = result.keys.first()
                 mutableStateFlow.update {
                     it.copy(
-                        transactions = action.result.data,
+                        transactionsWithAccounts = result,
+                        accounts = result.keys.toList(),
+                        selectedAccount = firstAccount,
+                        currentSelectedAccount = firstAccount,
+                        transactions = result[firstAccount] ?: emptyList(),
                         viewState = if (action.result.data.isEmpty()) {
                             HistoryState.ViewState.Empty
                         } else {
-                            HistoryState.ViewState.Content(action.result.data)
+                            HistoryState.ViewState.Content(result[firstAccount] ?: emptyList())
                         },
                     )
                 }
@@ -108,7 +152,14 @@ data class HistoryState(
     val clientId: Long,
     val viewState: ViewState,
     val transactionType: TransactionType,
+    val currentSelectedTransactionType: TransactionType = TransactionType.OTHER,
     val transactions: List<Transaction> = emptyList(),
+    val transactionsWithAccounts: Map<Account, List<Transaction>> = emptyMap(),
+    val accounts: List<Account> = emptyList(),
+    val selectedAccount: Account? = null,
+    val currentSelectedAccount: Account? = null,
+    val showFilter: Boolean = false,
+    val filteredEmpty: Boolean = false,
 ) {
     sealed interface ViewState {
         data object Loading : ViewState
@@ -125,8 +176,11 @@ sealed interface HistoryEvent {
 sealed interface HistoryAction {
     data class SetFilter(val filter: TransactionType) : HistoryAction
     data class ViewTransaction(val transferId: Long) : HistoryAction
+    data object OnFilterClick : HistoryAction
+    data class SetSelectedAccount(val account: Account) : HistoryAction
+    data object OnApplyFilterClick : HistoryAction
 
     sealed interface Internal : HistoryAction {
-        data class TransactionsLoaded(val result: DataState<List<Transaction>>) : Internal
+        data class TransactionsLoaded(val result: DataState<Map<Account, List<Transaction>>>) : Internal
     }
 }
