@@ -18,6 +18,7 @@ import org.mifospay.feature.accounts.AccountsScreen
 import org.mifospay.feature.accounts.beneficiary.BeneficiaryAddEditType
 import org.mifospay.feature.accounts.beneficiary.addEditBeneficiaryScreen
 import org.mifospay.feature.accounts.beneficiary.navigateToBeneficiaryAddEdit
+import org.mifospay.feature.accounts.benficiaryList.BeneficiaryListScreen
 import org.mifospay.feature.accounts.savingsaccount.SavingsAddEditType
 import org.mifospay.feature.accounts.savingsaccount.addEditSavingAccountScreen
 import org.mifospay.feature.accounts.savingsaccount.details.navigateToSavingAccountDetails
@@ -134,6 +135,12 @@ internal fun MifosNavHost(
             AccountsScreen(
                 onAddEditSavingsAccount = navController::navigateToSavingAccountAddEdit,
                 onViewSavingAccountDetails = navController::navigateToSavingAccountDetails,
+                onAddOrEditBeneficiary = navController::navigateToBeneficiaryAddEdit,
+            )
+        },
+
+        TabContent(FinanceScreenContents.BENEFICIARIES.name) {
+            BeneficiaryListScreen(
                 onAddOrEditBeneficiary = navController::navigateToBeneficiaryAddEdit,
             )
         },
