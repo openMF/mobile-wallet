@@ -17,6 +17,7 @@
     <string name="feature_history_view_Receipt">View Receipt</string>
     <string name="feature_history_error_oops">Oops!</string>
     <string name="feature_history_empty">Your transaction history is empty</string>
+    <string name="feature_history_empty_filter">Your transaction history is empty for selected Filters</string>
     <string name="feature_history_error">An unexpected error occurred. Please try again.</string>
     <string name="feature_history_all">All</string>
     <string name="feature_history_credits">Credits</string>

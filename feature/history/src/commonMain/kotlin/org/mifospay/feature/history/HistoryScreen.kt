@@ -35,6 +35,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import mobile_wallet.feature.history.generated.resources.Res
 import mobile_wallet.feature.history.generated.resources.feature_history_empty
+import mobile_wallet.feature.history.generated.resources.feature_history_empty_filter
 import mobile_wallet.feature.history.generated.resources.feature_history_error
 import mobile_wallet.feature.history.generated.resources.feature_history_error_oops
 import mobile_wallet.feature.history.generated.resources.feature_history_filter_apply
@@ -141,7 +142,7 @@ internal fun HistoryScreenContent(
                     Modifier.fillMaxWidth().padding(paddingValues),
                 ) {
                     HistoryScreenHeader(
-                        accountNo = state.selectedAccount?.number ?: "No Account Selected",
+                        accountNo = state.selectedAccount?.number ?: "",
                         selectedTransactionType = state.transactionType,
                         onFilterClick = {
                             onAction(HistoryAction.OnFilterClick)
@@ -150,15 +151,15 @@ internal fun HistoryScreenContent(
                     if (state.filteredEmpty) {
                         EmptyContentScreen(
                             title = stringResource(Res.string.feature_history_error_oops),
-                            subTitle = stringResource(Res.string.feature_history_empty),
+                            subTitle = stringResource(Res.string.feature_history_empty_filter),
                             modifier = Modifier
                                 .fillMaxSize(),
                         )
                     } else {
-                        HistoryScreenContent(
-                            state = state.viewState,
+                        TransactionList(
+                            transactions = state.viewState.list,
                             onAction = onAction,
-                            modifier = Modifier,
+                            modifier = modifier,
                         )
                     }
                 }
@@ -171,19 +172,6 @@ internal fun HistoryScreenContent(
             }
         }
     }
-}
-
-@Composable
-private fun HistoryScreenContent(
-    state: HistoryState.ViewState.Content,
-    modifier: Modifier = Modifier,
-    onAction: (HistoryAction) -> Unit,
-) {
-    TransactionList(
-        transactions = state.list,
-        onAction = onAction,
-        modifier = modifier,
-    )
 }
 
 @Composable
