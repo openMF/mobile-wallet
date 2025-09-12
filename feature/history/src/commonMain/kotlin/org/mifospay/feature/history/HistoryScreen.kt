@@ -9,19 +9,22 @@
  */
 package org.mifospay.feature.history
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -192,7 +195,7 @@ private fun HistoryScreenHeader(
         ) {
             Text(
                 text = stringResource(Res.string.feature_history_header_account, accountNo),
-                style = KptTheme.typography.titleSmall,
+                style = KptTheme.typography.bodyLarge,
             )
             Spacer(Modifier.height(KptTheme.spacing.xs))
             Text(
@@ -201,24 +204,42 @@ private fun HistoryScreenHeader(
                     TransactionType.DEBIT -> stringResource(Res.string.feature_history_header_debit)
                     TransactionType.CREDIT -> stringResource(Res.string.feature_history_header_credit)
                 },
+                style = KptTheme.typography.bodyMedium,
             )
         }
-        IconButton(
-            onClick = onFilterClick,
-            modifier = modifier
-                .size(40.dp)
+
+        Box(
+            modifier = Modifier
+                .size(32.dp)
                 .border(
                     width = 1.dp,
                     color = KptTheme.colorScheme.outline,
-                    shape = RoundedCornerShape(8.dp),
+                    shape = KptTheme.shapes.medium,
                 )
-                .clip(RoundedCornerShape(8.dp)),
+                .clip(KptTheme.shapes.medium),
+            contentAlignment = Alignment.Center,
         ) {
-            Icon(
-                imageVector = MifosIcons.Filter,
-                contentDescription = stringResource(Res.string.feature_history_filter_content_desc),
-                tint = KptTheme.colorScheme.onSurface,
-            )
+            IconButton(
+                onClick = onFilterClick,
+                modifier = Modifier.matchParentSize(),
+            ) {
+                Icon(
+                    imageVector = MifosIcons.Filter,
+                    contentDescription = stringResource(Res.string.feature_history_filter_content_desc),
+                    tint = KptTheme.colorScheme.onSurface,
+                )
+            }
+
+            if (selectedTransactionType != TransactionType.OTHER) {
+                Box(
+                    modifier = Modifier
+                        .align(Alignment.TopEnd)
+                        .offset(x = (-4).dp, y = 8.dp)
+                        .size(6.dp)
+                        .clip(CircleShape)
+                        .background(KptTheme.colorScheme.error),
+                )
+            }
         }
     }
 }
