@@ -17,6 +17,7 @@
     <string name="feature_history_view_Receipt">View Receipt</string>
     <string name="feature_history_error_oops">Oops!</string>
     <string name="feature_history_empty">Your transaction history is empty</string>
+    <string name="feature_history_empty_filter">Your transaction history is empty for selected Filters</string>
     <string name="feature_history_error">An unexpected error occurred. Please try again.</string>
     <string name="feature_history_all">All</string>
     <string name="feature_history_credits">Credits</string>
@@ -30,4 +31,17 @@
     <string name="feature_history_debited_from">Debited From</string>
     <string name="feature_history_error_fallback">Error</string>
     <string name="feature_history_description">Transfer Description :</string>
+    <string name="feature_history_select_account">Select Account</string>
+    <string name="feature_history_account_number">A/c No: %1$s</string>
+    <string name="feature_history_account_balance">Balance: %1$s %2$s</string>
+    <string name="feature_history_header_account">Account: %1$s</string>
+    <string name="feature_history_header_all">All Transactions</string>
+    <string name="feature_history_header_debit">Debit Transactions</string>
+    <string name="feature_history_header_credit">Credit Transactions</string>
+    <string name="feature_history_filter_content_desc">Filter</string>
+    <string name="feature_history_filter_title">Filter Transactions</string>
+    <string name="feature_history_filter_clear_all">Clear All</string>
+    <string name="feature_history_filter_by_account">Filter By Account :</string>
+    <string name="feature_history_filter_transaction_type">Transaction Type:</string>
+    <string name="feature_history_filter_apply">Apply Filters</string>
 </resources>

@@ -9,26 +9,52 @@
  */
 package org.mifospay.feature.history.components
 
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
+import androidx.compose.material3.MenuAnchorType
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.toSize
 import mobile_wallet.feature.history.generated.resources.Res
+import mobile_wallet.feature.history.generated.resources.feature_history_account_balance
+import mobile_wallet.feature.history.generated.resources.feature_history_account_number
 import mobile_wallet.feature.history.generated.resources.feature_history_all
 import mobile_wallet.feature.history.generated.resources.feature_history_credits
 import mobile_wallet.feature.history.generated.resources.feature_history_debits
+import mobile_wallet.feature.history.generated.resources.feature_history_select_account
 import org.jetbrains.compose.resources.stringResource
+import org.mifospay.core.model.account.Account
 import org.mifospay.core.model.savingsaccount.TransactionType
 import org.mifospay.feature.history.HistoryAction
 import template.core.base.designsystem.theme.KptTheme
@@ -42,8 +68,7 @@ internal fun HistoryScreenFilter(
     Box(modifier.fillMaxWidth()) {
         Row(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = KptTheme.spacing.md),
+                .fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(KptTheme.spacing.md),
         ) {
@@ -99,6 +124,97 @@ private fun FilterItem(
                 style = KptTheme.typography.bodyMedium,
                 textAlign = TextAlign.Center,
             )
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun FilterAccountDropDown(
+    selectedAccount: Account?,
+    accounts: List<Account>,
+    modifier: Modifier = Modifier,
+    onAccountSelected: (Account) -> Unit,
+) {
+    var expanded by remember { mutableStateOf(false) }
+    var parentSize by remember { mutableStateOf(Size.Zero) }
+
+    ExposedDropdownMenuBox(
+        expanded = expanded,
+        onExpandedChange = { expanded = !expanded },
+        modifier = modifier,
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .onGloballyPositioned { parentSize = it.size.toSize() }
+                .menuAnchor(MenuAnchorType.PrimaryNotEditable)
+                .clip(RoundedCornerShape(8.dp))
+                .border(
+                    width = 1.dp,
+                    color = KptTheme.colorScheme.outline,
+                    shape = RoundedCornerShape(8.dp),
+                )
+                .padding(KptTheme.spacing.md),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween,
+        ) {
+            if (selectedAccount != null) {
+                Column {
+                    Text(
+                        text = stringResource(Res.string.feature_history_account_number, selectedAccount.number),
+                        style = KptTheme.typography.bodyMedium.copy(
+                            fontWeight = FontWeight.SemiBold,
+                        ),
+                    )
+                    Text(
+                        text = stringResource(Res.string.feature_history_account_balance, selectedAccount.balance, selectedAccount.currency.code),
+                        style = KptTheme.typography.bodySmall,
+                        color = KptTheme.colorScheme.onSurfaceVariant,
+                    )
+                }
+            } else {
+                Text(
+                    text = stringResource(Res.string.feature_history_select_account),
+                    style = KptTheme.typography.bodyMedium,
+                    color = KptTheme.colorScheme.onSurfaceVariant,
+                )
+            }
+
+            ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
+        }
+
+        DropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false },
+            modifier = Modifier
+                .width(with(LocalDensity.current) { parentSize.width.toDp() })
+                .heightIn(max = 300.dp),
+        ) {
+            accounts.forEach { account ->
+                DropdownMenuItem(
+                    text = {
+                        Column {
+                            Text(
+                                text = stringResource(Res.string.feature_history_account_number, account.number),
+                                style = KptTheme.typography.bodyMedium.copy(
+                                    fontWeight = FontWeight.SemiBold,
+                                ),
+                            )
+                            Text(
+                                text = stringResource(Res.string.feature_history_account_balance, account.balance, account.currency.code),
+                                style = KptTheme.typography.bodySmall,
+                                color = KptTheme.colorScheme.onSurfaceVariant,
+                            )
+                        }
+                    },
+                    onClick = {
+                        onAccountSelected(account)
+                        expanded = false
+                    },
+                    contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding,
+                )
+            }
         }
     }
 }

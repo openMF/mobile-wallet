@@ -10,7 +10,6 @@
 package org.mifospay.feature.history.components
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -121,7 +120,7 @@ internal fun TransactionItem(
                     horizontalArrangement = Arrangement.spacedBy(KptTheme.spacing.sm),
                 ) {
                     AnimatedVisibility(showLeadingIcon) {
-                        Image(
+                        Icon(
                             modifier = Modifier
                                 .size(20.dp)
                                 .padding(top = KptTheme.spacing.xs),
