@@ -138,7 +138,7 @@ internal fun HistoryScreenContent(
 
             is HistoryState.ViewState.Content -> {
                 Column(
-                    Modifier.fillMaxWidth(),
+                    Modifier.fillMaxWidth().padding(paddingValues),
                 ) {
                     HistoryScreenHeader(
                         accountNo = state.selectedAccount?.number ?: "No Account Selected",
@@ -152,14 +152,13 @@ internal fun HistoryScreenContent(
                             title = stringResource(Res.string.feature_history_error_oops),
                             subTitle = stringResource(Res.string.feature_history_empty),
                             modifier = Modifier
-                                .fillMaxSize()
-                                .padding(paddingValues),
+                                .fillMaxSize(),
                         )
                     } else {
                         HistoryScreenContent(
                             state = state.viewState,
                             onAction = onAction,
-                            modifier = Modifier.padding(paddingValues),
+                            modifier = Modifier,
                         )
                     }
                 }
