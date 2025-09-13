@@ -82,6 +82,7 @@ class HomeViewModel(
                                 accounts = accountsWithTx.keys.toList(),
                                 accountsWithTransactions = accountsWithTx,
                                 selectedAccount = selected,
+                                currentSelectedAccount = selected,
                                 viewState = ViewState.Content,
                             )
                         }
@@ -178,6 +179,7 @@ class HomeViewModel(
                     it.copy(
                         transactions = state.accountsWithTransactions[action.account],
                         selectedAccount = action.account,
+                        currentSelectedAccount = action.account,
                     )
                 }
                 applyFilter()
@@ -220,12 +222,28 @@ class HomeViewModel(
                     it.copy(currentSelectedTransactionType = action.filter)
                 }
             }
+
+            is HomeAction.OnFilterAccountSelected -> {
+                mutableStateFlow.update {
+                    it.copy(
+                        currentSelectedAccount = action.account,
+                    )
+                }
+            }
+
+            is HomeAction.OnFilterTransactionTypeSelected -> {
+                mutableStateFlow.update {
+                    it.copy(
+                        currentSelectedTransactionType = action.transactionType,
+                    )
+                }
+            }
         }
     }
 
     private fun applyFilter() {
         val filter = state.currentSelectedTransactionType
-        val transactions = state.accountsWithTransactions[state.selectedAccount]
+        val transactions = state.accountsWithTransactions[state.currentSelectedAccount]
         val filteredTransactions = transactions?.filter {
             if (filter == TransactionType.OTHER) {
                 true
@@ -238,6 +256,7 @@ class HomeViewModel(
             it.copy(
                 transactions = filteredTransactions,
                 transactionType = filter,
+                selectedAccount = it.currentSelectedAccount,
             )
         }
     }
@@ -248,7 +267,9 @@ data class HomeState(
     val client: Client,
     val defaultAccountId: Long?,
     val transactionType: TransactionType = TransactionType.OTHER,
+    val currentTransactionType: TransactionType = TransactionType.OTHER,
     val selectedAccount: Account? = null,
+    val currentSelectedAccount: Account? = null,
     val isRefreshing: Boolean = false,
     val dialogState: DialogState? = null,
     val accounts: List<Account> = emptyList(),
@@ -310,4 +331,7 @@ sealed interface HomeAction {
     data object OnApplyFilterClick : HomeAction
     data object ClearFilters : HomeAction
     data class SetFilter(val filter: TransactionType) : HomeAction
+
+    data class OnFilterTransactionTypeSelected(val transactionType: TransactionType) : HomeAction
+    data class OnFilterAccountSelected(val account: Account) : HomeAction
 }

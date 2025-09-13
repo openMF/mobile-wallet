@@ -25,11 +25,6 @@
     <string name="feature_home_coin_image">Coin</string>
     <string name="feature_home_account_type">Account type</string>
     <string name="home_filter_transactions">Filter Transactions</string>
-    <string name="home_clear">Clear</string>
-    <string name="home_apply_filters">Apply Filters</string>
-    <string name="home_all">All</string>
-    <string name="home_debit">Debit</string>
-    <string name="home_credit">Credit</string>
     <string name="home_transaction_history">Transaction History</string>
     <string name="home_see_all">See All</string>
     <string name="home_no_transactions_found">No Transactions Found With Selected Filters</string>

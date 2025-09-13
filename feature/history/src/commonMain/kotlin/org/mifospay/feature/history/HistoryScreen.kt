@@ -11,8 +11,6 @@ package org.mifospay.feature.history
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -41,12 +39,7 @@ import mobile_wallet.feature.history.generated.resources.feature_history_empty
 import mobile_wallet.feature.history.generated.resources.feature_history_empty_filter
 import mobile_wallet.feature.history.generated.resources.feature_history_error
 import mobile_wallet.feature.history.generated.resources.feature_history_error_oops
-import mobile_wallet.feature.history.generated.resources.feature_history_filter_apply
-import mobile_wallet.feature.history.generated.resources.feature_history_filter_by_account
-import mobile_wallet.feature.history.generated.resources.feature_history_filter_clear_all
 import mobile_wallet.feature.history.generated.resources.feature_history_filter_content_desc
-import mobile_wallet.feature.history.generated.resources.feature_history_filter_title
-import mobile_wallet.feature.history.generated.resources.feature_history_filter_transaction_type
 import mobile_wallet.feature.history.generated.resources.feature_history_header_account
 import mobile_wallet.feature.history.generated.resources.feature_history_header_all
 import mobile_wallet.feature.history.generated.resources.feature_history_header_credit
@@ -54,17 +47,14 @@ import mobile_wallet.feature.history.generated.resources.feature_history_header_
 import mobile_wallet.feature.history.generated.resources.feature_history_title
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
-import org.mifospay.core.designsystem.component.MifosBottomSheet
-import org.mifospay.core.designsystem.component.MifosButton
 import org.mifospay.core.designsystem.component.MifosScaffold
 import org.mifospay.core.designsystem.component.MifosTopBar
 import org.mifospay.core.designsystem.icon.MifosIcons
 import org.mifospay.core.model.savingsaccount.TransactionType
 import org.mifospay.core.ui.EmptyContentScreen
 import org.mifospay.core.ui.MifosProgressIndicator
+import org.mifospay.core.ui.TransactionFilterBottomSheet
 import org.mifospay.core.ui.utils.EventsEffect
-import org.mifospay.feature.history.components.FilterAccountDropDown
-import org.mifospay.feature.history.components.HistoryScreenFilter
 import org.mifospay.feature.history.components.TransactionList
 import template.core.base.designsystem.theme.KptTheme
 
@@ -167,9 +157,25 @@ internal fun HistoryScreenContent(
                     }
                 }
                 if (state.showFilter) {
-                    HistoryScreenBottomSheet(
-                        onAction = onAction,
-                        state = state,
+                    TransactionFilterBottomSheet(
+                        selectedAccount = state.currentSelectedAccount,
+                        accounts = state.accounts,
+                        selectedTransactionType = state.currentSelectedTransactionType,
+                        onAccountSelected = {
+                            onAction(HistoryAction.SetSelectedAccount(it))
+                        },
+                        onTransactionTypeSelected = {
+                            onAction(HistoryAction.SetFilter(it))
+                        },
+                        onClearFilters = {
+                            onAction(HistoryAction.ClearFilters)
+                        },
+                        onApplyFilters = {
+                            onAction(HistoryAction.OnApplyFilterClick)
+                        },
+                        onDismiss = {
+                            onAction(HistoryAction.OnFilterClick)
+                        },
                     )
                 }
             }
@@ -240,74 +246,6 @@ private fun HistoryScreenHeader(
                         .background(KptTheme.colorScheme.error),
                 )
             }
-        }
-    }
-}
-
-@Composable
-fun HistoryScreenBottomSheet(
-    modifier: Modifier = Modifier,
-    onAction: (HistoryAction) -> Unit,
-    state: HistoryState,
-) {
-    MifosBottomSheet(
-        modifier = modifier,
-        onDismiss = {
-            onAction(HistoryAction.OnFilterClick)
-        },
-    ) {
-        Column(
-            modifier = Modifier.fillMaxWidth().padding(KptTheme.spacing.md),
-            verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.md),
-        ) {
-            Row(
-                Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-            ) {
-                Text(
-                    text = stringResource(Res.string.feature_history_filter_title),
-                    style = KptTheme.typography.titleMedium,
-                    modifier = Modifier.padding(end = KptTheme.spacing.md),
-                )
-                Text(
-                    text = stringResource(Res.string.feature_history_filter_clear_all),
-                    color = KptTheme.colorScheme.primary,
-                    modifier = Modifier.clickable {
-                        onAction(HistoryAction.ClearFilters)
-                    },
-                )
-            }
-            Text(
-                text = stringResource(Res.string.feature_history_filter_by_account),
-                style = KptTheme.typography.titleSmall,
-            )
-            FilterAccountDropDown(
-                selectedAccount = state.currentSelectedAccount,
-                accounts = state.accounts,
-                onAccountSelected = {
-                    onAction(HistoryAction.SetSelectedAccount(it))
-                },
-            )
-            Text(
-                text = stringResource(Res.string.feature_history_filter_transaction_type),
-                style = KptTheme.typography.titleSmall,
-            )
-            HistoryScreenFilter(
-                selectedTransactionType = state.currentSelectedTransactionType,
-                onAction = onAction,
-                modifier = modifier.padding(top = KptTheme.spacing.sm),
-            )
-
-            Spacer(Modifier.height(KptTheme.spacing.lg))
-            MifosButton(
-                onClick = {
-                    onAction(HistoryAction.OnApplyFilterClick)
-                },
-                text = {
-                    Text(text = stringResource(Res.string.feature_history_filter_apply))
-                },
-                modifier = Modifier.fillMaxWidth(),
-            )
         }
     }
 }
