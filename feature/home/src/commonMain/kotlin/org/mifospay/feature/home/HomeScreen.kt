@@ -12,6 +12,7 @@ package org.mifospay.feature.home
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.layout.Arrangement
@@ -21,10 +22,12 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBars
@@ -34,6 +37,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowUp
@@ -49,6 +53,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.pulltorefresh.PullToRefreshState
@@ -57,11 +62,13 @@ import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSiz
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -70,6 +77,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -88,6 +96,15 @@ import mobile_wallet.feature.home.generated.resources.feature_home_send
 import mobile_wallet.feature.home.generated.resources.feature_home_send_money
 import mobile_wallet.feature.home.generated.resources.feature_home_view_more
 import mobile_wallet.feature.home.generated.resources.feature_home_wallet_balance
+import mobile_wallet.feature.home.generated.resources.home_all
+import mobile_wallet.feature.home.generated.resources.home_apply_filters
+import mobile_wallet.feature.home.generated.resources.home_clear
+import mobile_wallet.feature.home.generated.resources.home_credit
+import mobile_wallet.feature.home.generated.resources.home_debit
+import mobile_wallet.feature.home.generated.resources.home_filter_transactions
+import mobile_wallet.feature.home.generated.resources.home_no_transactions_found
+import mobile_wallet.feature.home.generated.resources.home_see_all
+import mobile_wallet.feature.home.generated.resources.home_transaction_history
 import mobile_wallet.feature.home.generated.resources.start_sending_your_money_tax_free
 import org.jetbrains.compose.resources.getString
 import org.jetbrains.compose.resources.painterResource
@@ -99,6 +116,8 @@ import org.mifospay.core.common.CurrencyFormatter
 import org.mifospay.core.designsystem.component.BasicDialogState
 import org.mifospay.core.designsystem.component.LoadingDialogState
 import org.mifospay.core.designsystem.component.MifosBasicDialog
+import org.mifospay.core.designsystem.component.MifosBottomSheet
+import org.mifospay.core.designsystem.component.MifosButton
 import org.mifospay.core.designsystem.component.MifosLoadingDialog
 import org.mifospay.core.designsystem.component.MifosScaffold
 import org.mifospay.core.designsystem.component.scrollbar.DraggableScrollbar
@@ -111,9 +130,10 @@ import org.mifospay.core.model.savingsaccount.Status
 import org.mifospay.core.model.savingsaccount.Transaction
 import org.mifospay.core.model.savingsaccount.TransactionType
 import org.mifospay.core.ui.ErrorScreenContent
+import org.mifospay.core.ui.MifosDivider
 import org.mifospay.core.ui.MifosProgressIndicator
 import org.mifospay.core.ui.MifosSmallChip
-import org.mifospay.core.ui.TransactionHistoryCard
+import org.mifospay.core.ui.TransactionItem
 import org.mifospay.core.ui.utils.EventsEffect
 import template.core.base.designsystem.theme.KptTheme
 
@@ -138,7 +158,6 @@ internal fun HomeScreen(
     val scope = rememberCoroutineScope()
 
     val homeUIState by viewModel.stateFlow.collectAsStateWithLifecycle()
-    val accountState by viewModel.accountState.collectAsStateWithLifecycle()
     val pullRefreshState = rememberPullToRefreshState()
 
     EventsEffect(viewModel) { event ->
@@ -172,7 +191,7 @@ internal fun HomeScreen(
     )
 
     HomeScreenContent(
-        viewState = accountState,
+        viewState = homeUIState.viewState,
         defaultAccountId = homeUIState.defaultAccountId,
         snackbarHostState = snackbarState,
         isRefreshing = homeUIState.isRefreshing,
@@ -181,12 +200,14 @@ internal fun HomeScreen(
         onAction = remember(viewModel) {
             { viewModel.trySendAction(it) }
         },
+        uiState = homeUIState,
     )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreenContent(
+    uiState: HomeState,
     viewState: ViewState,
     defaultAccountId: Long?,
     snackbarHostState: SnackbarHostState,
@@ -213,10 +234,15 @@ fun HomeScreenContent(
 
                 is ViewState.Content -> {
                     HomeScreenContent(
-                        viewState = viewState,
+                        transactions = uiState.transactions,
+                        accounts = uiState.accounts,
                         defaultAccountId = defaultAccountId,
                         onAction = onAction,
                         modifier = Modifier,
+                        showBottomSheet = uiState.showBottomSheet,
+                        selectedTransactionType = uiState.currentSelectedTransactionType,
+                        currentSelectedAccount = uiState.selectedAccount?.number ?: "",
+                        transactionType = uiState.transactionType,
                     )
                 }
 
@@ -235,8 +261,13 @@ fun HomeScreenContent(
 @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 @Composable
 private fun HomeScreenContent(
-    viewState: ViewState.Content,
+    showBottomSheet: Boolean,
+    currentSelectedAccount: String,
+    accounts: List<Account>,
+    transactions: List<Transaction>?,
     defaultAccountId: Long?,
+    selectedTransactionType: TransactionType,
+    transactionType: TransactionType,
     onAction: (HomeAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -258,13 +289,16 @@ private fun HomeScreenContent(
         ) {
             item {
                 AccountList(
-                    accounts = viewState.accounts,
+                    accounts = accounts,
                     defaultAccountId = defaultAccountId,
                     onClick = {
                         onAction(HomeAction.AccountDetailsClicked(it))
                     },
                     onMarkAsDefault = { accId, accNo ->
                         onAction(HomeAction.MarkAsDefault(accId, accNo))
+                    },
+                    onPageChanged = {
+                        onAction(HomeAction.OnSelectedAccountChanged(accounts[it]))
                     },
                 )
             }
@@ -289,18 +323,15 @@ private fun HomeScreenContent(
             }
 
             item {
-                TransactionHistoryCard(
+                HomeTransactionHistoryCard(
                     modifier = Modifier.padding(
                         vertical = KptTheme.spacing.md,
                         horizontal = KptTheme.spacing.md,
                     ),
-                    transactions = viewState.transactions,
-                    onClickViewAll = {
-                        onAction(HomeAction.OnClickSeeAllTransactions)
-                    },
-                    onViewTransaction = { accountId, transactionId ->
-                        onAction(HomeAction.TransactionClicked(accountId, transactionId))
-                    },
+                    transactions = transactions,
+                    currentSelectedAccount = currentSelectedAccount,
+                    onAction = onAction,
+                    selectedTransactionType = transactionType,
                 )
             }
         }
@@ -319,6 +350,13 @@ private fun HomeScreenContent(
                 ),
             )
         }
+
+        if (showBottomSheet) {
+            HomeBottomSheet(
+                selectedTransactionType = selectedTransactionType,
+                onAction = onAction,
+            )
+        }
     }
 }
 
@@ -329,8 +367,16 @@ private fun AccountList(
     modifier: Modifier = Modifier,
     onMarkAsDefault: (Long, String) -> Unit,
     onClick: (Long) -> Unit,
+    onPageChanged: (Int) -> Unit,
 ) {
     val pagerState = rememberPagerState { accounts.size }
+
+    LaunchedEffect(pagerState) {
+        snapshotFlow { pagerState.currentPage }
+            .collect { page ->
+                onPageChanged(page)
+            }
+    }
 
     HorizontalPager(
         state = pagerState,
@@ -655,6 +701,242 @@ private fun HomeScreenDialog(
     }
 }
 
+@Composable
+private fun HomeBottomSheet(
+    selectedTransactionType: TransactionType,
+    modifier: Modifier = Modifier,
+    onAction: (HomeAction) -> Unit,
+) {
+    MifosBottomSheet(
+        modifier = modifier,
+        onDismiss = {
+            onAction(HomeAction.DismissBottomSheet)
+        },
+    ) {
+        Column(Modifier.fillMaxWidth().padding(KptTheme.spacing.lg)) {
+            Row(
+                Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+            ) {
+                Text(
+                    text = stringResource(Res.string.home_filter_transactions),
+                    style = KptTheme.typography.titleMedium,
+                    modifier = Modifier.padding(end = KptTheme.spacing.md),
+                )
+                Text(
+                    text = stringResource(Res.string.home_clear),
+                    color = KptTheme.colorScheme.primary,
+                    modifier = Modifier.clickable {
+                        onAction(HomeAction.ClearFilters)
+                    },
+                )
+            }
+            Spacer(Modifier.height(KptTheme.spacing.lg))
+            HomeScreenFilter(
+                selectedTransactionType = selectedTransactionType,
+                modifier = Modifier.fillMaxWidth(),
+                onAction = onAction,
+            )
+
+            Spacer(Modifier.height(KptTheme.spacing.lg))
+            MifosButton(
+                onClick = {
+                    onAction(HomeAction.OnApplyFilterClick)
+                },
+                text = {
+                    Text(text = stringResource(Res.string.home_apply_filters))
+                },
+                modifier = Modifier.fillMaxWidth(),
+            )
+        }
+    }
+}
+
+@Composable
+internal fun HomeScreenFilter(
+    selectedTransactionType: TransactionType,
+    modifier: Modifier = Modifier,
+    onAction: (HomeAction.SetFilter) -> Unit,
+) {
+    Box(modifier.fillMaxWidth()) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(KptTheme.spacing.md),
+        ) {
+            TransactionType.entries.forEach { transactionType ->
+                FilterItem(
+                    transactionType = transactionType,
+                    isSelected = transactionType == selectedTransactionType,
+                    onAction = onAction,
+                    modifier = Modifier.weight(1f),
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun FilterItem(
+    transactionType: TransactionType,
+    isSelected: Boolean,
+    onAction: (HomeAction.SetFilter) -> Unit,
+    selectedColor: Color = KptTheme.colorScheme.primary,
+    unSelectedColor: Color = KptTheme.colorScheme.surface,
+    modifier: Modifier = Modifier,
+) {
+    val containerColor = if (isSelected) selectedColor else unSelectedColor
+    val contentColor = if (isSelected) unSelectedColor else selectedColor
+
+    Surface(
+        modifier = modifier,
+        shape = CircleShape,
+        contentColor = contentColor,
+        color = containerColor,
+        onClick = {
+            onAction(HomeAction.SetFilter(transactionType))
+        },
+    ) {
+        Row(
+            modifier = Modifier
+                .defaultMinSize(
+                    minWidth = ButtonDefaults.MinWidth,
+                    minHeight = ButtonDefaults.MinHeight,
+                )
+                .padding(horizontal = KptTheme.spacing.lg, vertical = KptTheme.spacing.sm),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center,
+        ) {
+            Text(
+                text = when (transactionType) {
+                    TransactionType.OTHER -> stringResource(Res.string.home_all)
+                    TransactionType.DEBIT -> stringResource(Res.string.home_debit)
+                    TransactionType.CREDIT -> stringResource(Res.string.home_credit)
+                },
+                style = KptTheme.typography.bodyMedium,
+                textAlign = TextAlign.Center,
+            )
+        }
+    }
+}
+
+@Composable
+private fun HomeTransactionHistoryCard(
+    selectedTransactionType: TransactionType,
+    currentSelectedAccount: String,
+    transactions: List<Transaction>?,
+    modifier: Modifier = Modifier,
+    onAction: (HomeAction) -> Unit,
+) {
+    Card(
+        modifier = modifier
+            .fillMaxWidth(),
+        colors = CardDefaults.cardColors(
+            containerColor = KptTheme.colorScheme.surface,
+        ),
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth(),
+        ) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(KptTheme.spacing.md),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Column {
+                    Text(
+                        text = currentSelectedAccount,
+                        style = KptTheme.typography.bodyMedium.copy(
+                            fontWeight = FontWeight.Bold,
+                        ),
+                    )
+                    Text(
+                        text = stringResource(Res.string.home_transaction_history),
+                        style = KptTheme.typography.bodyMedium.copy(
+                            fontWeight = FontWeight.Bold,
+                        ),
+                    )
+                    Spacer(Modifier.height(KptTheme.spacing.xs))
+                    Text(
+                        text = stringResource(Res.string.home_see_all),
+                        style = KptTheme.typography.bodyMedium.copy(
+                            fontWeight = FontWeight.Bold,
+                        ),
+                        modifier = Modifier.clickable {
+                            onAction(HomeAction.OnClickSeeAllTransactions)
+                        },
+                    )
+                }
+                Box(
+                    modifier = Modifier
+                        .size(32.dp)
+                        .border(
+                            width = 1.dp,
+                            color = KptTheme.colorScheme.outline,
+                            shape = KptTheme.shapes.medium,
+                        )
+                        .clip(KptTheme.shapes.medium),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    IconButton(
+                        onClick = {
+                            onAction(
+                                HomeAction.ShowBottomSheet,
+                            )
+                        },
+                        modifier = Modifier.matchParentSize(),
+                    ) {
+                        Icon(
+                            imageVector = MifosIcons.Filter,
+                            contentDescription = null,
+                            tint = KptTheme.colorScheme.onSurface,
+                        )
+                    }
+
+                    if (selectedTransactionType != TransactionType.OTHER) {
+                        Box(
+                            modifier = Modifier
+                                .align(Alignment.TopEnd)
+                                .offset(x = (-4).dp, y = 8.dp)
+                                .size(6.dp)
+                                .clip(CircleShape)
+                                .background(KptTheme.colorScheme.error),
+                        )
+                    }
+                }
+            }
+
+            transactions?.forEachIndexed { i, transaction ->
+                TransactionItem(
+                    transaction = transaction,
+                    onClick = { accountId, transactionId ->
+                        onAction(HomeAction.TransactionClicked(accountId, transactionId))
+                    },
+                    showLeadingIcon = false,
+                )
+
+                if (i != transactions.size - 1) {
+                    MifosDivider(
+                        modifier = Modifier.padding(horizontal = KptTheme.spacing.sm),
+                    )
+                }
+            }
+
+            if (transactions != null && transactions.isEmpty()) {
+                Text(
+                    text = stringResource(Res.string.home_no_transactions_found),
+                    style = KptTheme.typography.bodyMedium,
+                    modifier = Modifier.padding(KptTheme.spacing.md),
+                )
+            }
+        }
+    }
+}
+
 @Preview
 @Composable
 private fun HomeScreenContentPreview() {
@@ -796,15 +1078,16 @@ private fun HomeScreenContentPreview() {
             paymentDetailId = null,
         ),
     )
-    val viewState = ViewState.Content(
-        accounts = accounts,
-        transactions = transactions,
-    )
     MaterialTheme {
         HomeScreenContent(
-            viewState = viewState,
             defaultAccountId = 1L,
             onAction = {},
+            transactions = transactions,
+            accounts = accounts,
+            showBottomSheet = false,
+            selectedTransactionType = TransactionType.OTHER,
+            currentSelectedAccount = "123456789",
+            transactionType = TransactionType.CREDIT,
         )
     }
 }
