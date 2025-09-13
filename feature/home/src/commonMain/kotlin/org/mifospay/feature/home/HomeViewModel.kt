@@ -9,7 +9,6 @@
  */
 package org.mifospay.feature.home
 
-import androidx.compose.runtime.snapshotFlow
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.update
@@ -49,12 +48,7 @@ class HomeViewModel(
 ) {
 
     init {
-        viewModelScope.launch {
-            snapshotFlow { state.reloadTrigger }
-                .collect {
-                    fetchAccountsWithTransactions()
-                }
-        }
+        fetchAccountsWithTransactions()
     }
 
     private fun fetchAccountsWithTransactions() {
@@ -169,15 +163,14 @@ class HomeViewModel(
             }
 
             is HomeAction.OnRetryClicked -> {
-                mutableStateFlow.update {
-                    it.copy(reloadTrigger = !it.reloadTrigger)
-                }
+                fetchAccountsWithTransactions()
             }
 
             is HomeAction.OnPullToRefresh -> {
                 mutableStateFlow.update {
-                    it.copy(isRefreshing = true, reloadTrigger = !it.reloadTrigger)
+                    it.copy(isRefreshing = true)
                 }
+                fetchAccountsWithTransactions()
             }
 
             is HomeAction.OnSelectedAccountChanged -> {
@@ -256,7 +249,6 @@ data class HomeState(
     val defaultAccountId: Long?,
     val transactionType: TransactionType = TransactionType.OTHER,
     val selectedAccount: Account? = null,
-    val reloadTrigger: Boolean = false,
     val isRefreshing: Boolean = false,
     val dialogState: DialogState? = null,
     val accounts: List<Account> = emptyList(),
