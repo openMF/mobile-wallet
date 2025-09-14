@@ -148,6 +148,8 @@ internal class AddEditBeneficiaryViewModel(
 
             AEBAction.SaveBeneficiary -> initiateSaveBeneficiary()
 
+            AEBAction.OnQrScanClicked -> sendEvent(AEBEvent.NavigateToQr)
+
             is HandleBeneficiaryAddEditResult -> handleBeneficiaryAddEditResult(action)
         }
     }
@@ -311,6 +313,7 @@ internal data class AEBState(
 
 internal sealed interface AEBEvent {
     data object NavigateBack : AEBEvent
+    data object NavigateToQr : AEBEvent
     data class ShowToast(val message: String) : AEBEvent
 }
 
@@ -321,6 +324,7 @@ internal sealed interface AEBAction {
     data class ChangeAccountNumber(val accountNumber: String) : AEBAction
     data class ChangeAccountType(val accountType: Int) : AEBAction
     data class ChangeTransferLimit(val transferLimit: String) : AEBAction
+    data object OnQrScanClicked : AEBAction
 
     data object DismissDialog : AEBAction
     data object NavigateBack : AEBAction

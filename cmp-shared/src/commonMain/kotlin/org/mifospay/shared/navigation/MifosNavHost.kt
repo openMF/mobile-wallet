@@ -225,6 +225,7 @@ internal fun MifosNavHost(
 
         addEditBeneficiaryScreen(
             navigateBack = navController::navigateUp,
+            navigateToQrReaderScreen = navController::navigateToScanQr,
         )
 
         savingAccountDetailRoute(
@@ -376,6 +377,17 @@ internal fun MifosNavHost(
             navigateToSendScreen = {
                 navController.navigateToSendMoneyScreen(
                     requestData = it,
+                    navOptions = navOptions {
+                        popUpTo(SCAN_QR_ROUTE) {
+                            inclusive = true
+                        }
+                    },
+                )
+            },
+
+            navigateToAddBeneficiaryScreen = {
+                navController.navigateToBeneficiaryAddEdit(
+                    BeneficiaryAddEditType.EditItem(it),
                     navOptions = navOptions {
                         popUpTo(SCAN_QR_ROUTE) {
                             inclusive = true

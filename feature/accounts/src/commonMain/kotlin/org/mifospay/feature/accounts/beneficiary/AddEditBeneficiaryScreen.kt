@@ -9,10 +9,14 @@
  */
 package org.mifospay.feature.accounts.beneficiary
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -52,6 +56,8 @@ import mobile_wallet.feature.accounts.generated.resources.feature_accounts_benef
 import mobile_wallet.feature.accounts.generated.resources.feature_accounts_beneficiary_nickname
 import mobile_wallet.feature.accounts.generated.resources.feature_accounts_beneficiary_office_name
 import mobile_wallet.feature.accounts.generated.resources.feature_accounts_beneficiary_transfer_limit
+import mobile_wallet.feature.accounts.generated.resources.scan_qr_code
+import mobile_wallet.feature.accounts.generated.resources.skip_the_form
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.mifospay.core.designsystem.component.BasicDialogState
@@ -70,6 +76,7 @@ import template.core.base.designsystem.theme.KptTheme
 @Composable
 internal fun AddEditBeneficiaryScreen(
     navigateBack: () -> Unit,
+    navigateToQrReaderScreen: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: AddEditBeneficiaryViewModel = koinViewModel(),
 ) {
@@ -82,6 +89,9 @@ internal fun AddEditBeneficiaryScreen(
     EventsEffect(viewModel) { event ->
         when (event) {
             is AEBEvent.NavigateBack -> navigateBack.invoke()
+
+            is AEBEvent.NavigateToQr -> navigateToQrReaderScreen.invoke()
+
             is AEBEvent.ShowToast -> {
                 scope.launch {
                     snackbarHostState.showSnackbar(event.message)
@@ -280,6 +290,22 @@ internal fun AddEditBeneficiaryScreenContent(
                     },
                     modifier = Modifier.fillMaxWidth(),
                 )
+
+                Spacer(modifier = Modifier.height(KptTheme.spacing.md))
+
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(KptTheme.spacing.sm),
+                ) {
+                    Text(
+                        text = stringResource(Res.string.skip_the_form),
+                    )
+
+                    Text(
+                        text = stringResource(Res.string.scan_qr_code),
+                        modifier = Modifier
+                            .clickable { onAction(AEBAction.OnQrScanClicked) },
+                    )
+                }
             }
         }
     }

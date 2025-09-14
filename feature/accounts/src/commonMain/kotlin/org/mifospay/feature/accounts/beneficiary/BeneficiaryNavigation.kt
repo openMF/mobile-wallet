@@ -43,6 +43,7 @@ data class BeneficiaryAddEditArgs(
 
 fun NavGraphBuilder.addEditBeneficiaryScreen(
     navigateBack: () -> Unit,
+    navigateToQrReaderScreen: () -> Unit,
 ) {
     composableWithSlideTransitions(
         route = ADD_EDIT_ITEM_ROUTE,
@@ -52,6 +53,7 @@ fun NavGraphBuilder.addEditBeneficiaryScreen(
     ) {
         AddEditBeneficiaryScreen(
             navigateBack = navigateBack,
+            navigateToQrReaderScreen = navigateToQrReaderScreen,
         )
     }
 }

@@ -160,4 +160,8 @@
     <string name="feature_accounts_saving_button_update">Update</string>
     <string name="feature_accounts_saving_title_create">Create Saving Account</string>
     <string name="feature_accounts_saving_title_update">Update Saving Account</string>
+
+
+    <string name="skip_the_form">Skip the form </string>
+    <string name="scan_qr_code">Scan QR Code</string>
 </resources>
