@@ -24,10 +24,14 @@
     <string name="feature_home_send_money">Send Money</string>
     <string name="feature_home_coin_image">Coin</string>
     <string name="feature_home_account_type">Account type</string>
-
+    <string name="home_filter_transactions">Filter Transactions</string>
+    <string name="home_transaction_history">Transaction History</string>
+    <string name="home_see_all">See All</string>
+    <string name="home_no_transactions_found">No Transactions Found With Selected Filters</string>
 
     /* HomeScreenViewModel */
     <string name="feature_home_account_success">Account marked as default</string>
     <string name="feature_home_account_error">Error marking account as default</string>
     <string name="feature_home_no_account">"No accounts found"</string>
+
 </resources>

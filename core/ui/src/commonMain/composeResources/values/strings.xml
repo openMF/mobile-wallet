@@ -25,4 +25,18 @@
         <item>Strong</item> <!-- STRONG -->
         <item>Very Strong</item> <!-- VERY_STRONG -->
     </string-array>
+
+    <string name="core_ui_all">All</string>
+    <string name="core_ui_credits">Credits</string>
+    <string name="core_ui_debits">Debits</string>
+    <string name="core_ui_select_account">Select Account</string>
+    <string name="core_ui_account_number">A/c No: %1$s</string>
+    <string name="core_ui_account_balance">Balance: %1$s %2$s</string>
+    <string name="core_ui_header_account">Account: %1$s</string>
+    <string name="core_ui_filter_content_desc">Filter</string>
+    <string name="core_ui_filter_title">Filter Transactions</string>
+    <string name="core_ui_filter_clear_all">Clear All</string>
+    <string name="core_ui_filter_by_account">Filter By Account :</string>
+    <string name="core_ui_filter_transaction_type">Transaction Type:</string>
+    <string name="core_ui_filter_apply">Apply Filters</string>
 </resources>

@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 Mifos Initiative
+ * Copyright 2025 Mifos Initiative
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -7,15 +7,17 @@
  *
  * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
  */
-package org.mifospay.feature.history.components
+package org.mifospay.core.ui
 
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -46,40 +48,110 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
-import mobile_wallet.feature.history.generated.resources.Res
-import mobile_wallet.feature.history.generated.resources.feature_history_account_balance
-import mobile_wallet.feature.history.generated.resources.feature_history_account_number
-import mobile_wallet.feature.history.generated.resources.feature_history_all
-import mobile_wallet.feature.history.generated.resources.feature_history_credits
-import mobile_wallet.feature.history.generated.resources.feature_history_debits
-import mobile_wallet.feature.history.generated.resources.feature_history_select_account
+import mobile_wallet.core.ui.generated.resources.Res
+import mobile_wallet.core.ui.generated.resources.core_ui_account_balance
+import mobile_wallet.core.ui.generated.resources.core_ui_account_number
+import mobile_wallet.core.ui.generated.resources.core_ui_all
+import mobile_wallet.core.ui.generated.resources.core_ui_credits
+import mobile_wallet.core.ui.generated.resources.core_ui_debits
+import mobile_wallet.core.ui.generated.resources.core_ui_filter_apply
+import mobile_wallet.core.ui.generated.resources.core_ui_filter_by_account
+import mobile_wallet.core.ui.generated.resources.core_ui_filter_clear_all
+import mobile_wallet.core.ui.generated.resources.core_ui_filter_title
+import mobile_wallet.core.ui.generated.resources.core_ui_filter_transaction_type
+import mobile_wallet.core.ui.generated.resources.core_ui_select_account
 import org.jetbrains.compose.resources.stringResource
+import org.mifospay.core.designsystem.component.MifosBottomSheet
+import org.mifospay.core.designsystem.component.MifosButton
 import org.mifospay.core.model.account.Account
 import org.mifospay.core.model.savingsaccount.TransactionType
-import org.mifospay.feature.history.HistoryAction
 import template.core.base.designsystem.theme.KptTheme
 
 @Composable
-internal fun HistoryScreenFilter(
-    selectedTransactionType: TransactionType,
+fun TransactionFilterBottomSheet(
     modifier: Modifier = Modifier,
-    onAction: (HistoryAction.SetFilter) -> Unit,
+    selectedAccount: Account?,
+    accounts: List<Account>,
+    selectedTransactionType: TransactionType,
+    onAccountSelected: (Account) -> Unit,
+    onTransactionTypeSelected: (TransactionType) -> Unit,
+    onClearFilters: () -> Unit,
+    onApplyFilters: () -> Unit,
+    onDismiss: () -> Unit,
 ) {
-    Box(modifier.fillMaxWidth()) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(KptTheme.spacing.md),
+    MifosBottomSheet(
+        modifier = modifier,
+        onDismiss = onDismiss,
+    ) {
+        Column(
+            modifier = Modifier.fillMaxWidth().padding(KptTheme.spacing.md),
+            verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.md),
         ) {
-            TransactionType.entries.forEach { transactionType ->
-                FilterItem(
-                    transactionType = transactionType,
-                    isSelected = transactionType == selectedTransactionType,
-                    onAction = onAction,
-                    modifier = Modifier.weight(1f),
+            Row(
+                Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+            ) {
+                Text(
+                    text = stringResource(Res.string.core_ui_filter_title),
+                    style = KptTheme.typography.titleMedium,
+                    modifier = Modifier.padding(end = KptTheme.spacing.md),
+                )
+                Text(
+                    text = stringResource(Res.string.core_ui_filter_clear_all),
+                    color = KptTheme.colorScheme.primary,
+                    modifier = Modifier.clickable { onClearFilters() },
                 )
             }
+
+            Text(
+                text = stringResource(Res.string.core_ui_filter_by_account),
+                style = KptTheme.typography.titleSmall,
+            )
+            FilterAccountDropDown(
+                selectedAccount = selectedAccount,
+                accounts = accounts,
+                onAccountSelected = onAccountSelected,
+            )
+
+            Text(
+                text = stringResource(Res.string.core_ui_filter_transaction_type),
+                style = KptTheme.typography.titleSmall,
+            )
+            TransactionTypeFilter(
+                selectedTransactionType = selectedTransactionType,
+                onTransactionTypeSelected = onTransactionTypeSelected,
+                modifier = modifier.padding(top = KptTheme.spacing.sm),
+            )
+
+            Spacer(Modifier.height(KptTheme.spacing.lg))
+
+            MifosButton(
+                onClick = onApplyFilters,
+                text = { Text(text = stringResource(Res.string.core_ui_filter_apply)) },
+                modifier = Modifier.fillMaxWidth(),
+            )
+        }
+    }
+}
+
+@Composable
+fun TransactionTypeFilter(
+    selectedTransactionType: TransactionType,
+    onTransactionTypeSelected: (TransactionType) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Row(
+        modifier = modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(KptTheme.spacing.md),
+    ) {
+        TransactionType.entries.forEach { transactionType ->
+            FilterItem(
+                transactionType = transactionType,
+                isSelected = transactionType == selectedTransactionType,
+                onSelected = onTransactionTypeSelected,
+                modifier = Modifier.weight(1f),
+            )
         }
     }
 }
@@ -88,7 +160,7 @@ internal fun HistoryScreenFilter(
 private fun FilterItem(
     transactionType: TransactionType,
     isSelected: Boolean,
-    onAction: (HistoryAction.SetFilter) -> Unit,
+    onSelected: (TransactionType) -> Unit,
     selectedColor: Color = KptTheme.colorScheme.primary,
     unSelectedColor: Color = KptTheme.colorScheme.surface,
     modifier: Modifier = Modifier,
@@ -101,9 +173,7 @@ private fun FilterItem(
         shape = CircleShape,
         contentColor = contentColor,
         color = containerColor,
-        onClick = {
-            onAction(HistoryAction.SetFilter(transactionType))
-        },
+        onClick = { onSelected(transactionType) },
     ) {
         Row(
             modifier = Modifier
@@ -117,9 +187,9 @@ private fun FilterItem(
         ) {
             Text(
                 text = when (transactionType) {
-                    TransactionType.OTHER -> stringResource(Res.string.feature_history_all)
-                    TransactionType.DEBIT -> stringResource(Res.string.feature_history_debits)
-                    TransactionType.CREDIT -> stringResource(Res.string.feature_history_credits)
+                    TransactionType.OTHER -> stringResource(Res.string.core_ui_all)
+                    TransactionType.DEBIT -> stringResource(Res.string.core_ui_debits)
+                    TransactionType.CREDIT -> stringResource(Res.string.core_ui_credits)
                 },
                 style = KptTheme.typography.bodyMedium,
                 textAlign = TextAlign.Center,
@@ -162,20 +232,20 @@ fun FilterAccountDropDown(
             if (selectedAccount != null) {
                 Column {
                     Text(
-                        text = stringResource(Res.string.feature_history_account_number, selectedAccount.number),
+                        text = stringResource(Res.string.core_ui_account_number, selectedAccount.number),
                         style = KptTheme.typography.bodyMedium.copy(
                             fontWeight = FontWeight.SemiBold,
                         ),
                     )
                     Text(
-                        text = stringResource(Res.string.feature_history_account_balance, selectedAccount.balance, selectedAccount.currency.code),
+                        text = stringResource(Res.string.core_ui_account_balance, selectedAccount.balance, selectedAccount.currency.code),
                         style = KptTheme.typography.bodySmall,
                         color = KptTheme.colorScheme.onSurfaceVariant,
                     )
                 }
             } else {
                 Text(
-                    text = stringResource(Res.string.feature_history_select_account),
+                    text = stringResource(Res.string.core_ui_select_account),
                     style = KptTheme.typography.bodyMedium,
                     color = KptTheme.colorScheme.onSurfaceVariant,
                 )
@@ -196,13 +266,13 @@ fun FilterAccountDropDown(
                     text = {
                         Column {
                             Text(
-                                text = stringResource(Res.string.feature_history_account_number, account.number),
+                                text = stringResource(Res.string.core_ui_account_number, account.number),
                                 style = KptTheme.typography.bodyMedium.copy(
                                     fontWeight = FontWeight.SemiBold,
                                 ),
                             )
                             Text(
-                                text = stringResource(Res.string.feature_history_account_balance, account.balance, account.currency.code),
+                                text = stringResource(Res.string.core_ui_account_balance, account.balance, account.currency.code),
                                 style = KptTheme.typography.bodySmall,
                                 color = KptTheme.colorScheme.onSurfaceVariant,
                             )

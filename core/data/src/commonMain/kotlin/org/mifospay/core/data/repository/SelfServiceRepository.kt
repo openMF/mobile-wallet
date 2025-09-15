@@ -53,9 +53,15 @@ interface SelfServiceRepository {
         limit: Int?,
     ): Flow<DataState<Map<Account, List<Transaction>>>>
 
+    fun getActiveAccounts(
+        clientId: Long,
+    ): Flow<DataState<List<Account>>>
+
     fun getAccountsTransactions(clientId: Long): Flow<DataState<List<Transaction>>>
 
     fun getTransactions(accountId: List<Long>, limit: Int?): Flow<List<Transaction>>
+
+    fun getTransactions(accountId: Long, limit: Int?): Flow<DataState<List<Transaction>>>
 
     fun getAccountAndBeneficiaryList(clientId: Long): Flow<DataState<AccountContent>>
 
