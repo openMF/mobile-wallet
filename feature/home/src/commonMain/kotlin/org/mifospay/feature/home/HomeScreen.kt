@@ -94,7 +94,6 @@ import mobile_wallet.feature.home.generated.resources.feature_home_send_money
 import mobile_wallet.feature.home.generated.resources.feature_home_view_more
 import mobile_wallet.feature.home.generated.resources.feature_home_wallet_balance
 import mobile_wallet.feature.home.generated.resources.home_no_transactions_found
-import mobile_wallet.feature.home.generated.resources.home_see_all
 import mobile_wallet.feature.home.generated.resources.home_transaction_history
 import mobile_wallet.feature.home.generated.resources.start_sending_your_money_tax_free
 import org.jetbrains.compose.resources.getString
@@ -121,6 +120,7 @@ import org.mifospay.core.model.savingsaccount.TransactionType
 import org.mifospay.core.ui.ErrorScreenContent
 import org.mifospay.core.ui.MifosDivider
 import org.mifospay.core.ui.MifosProgressIndicator
+import org.mifospay.core.ui.MifosProgressIndicatorMini
 import org.mifospay.core.ui.MifosSmallChip
 import org.mifospay.core.ui.TransactionFilterBottomSheet
 import org.mifospay.core.ui.TransactionItem
@@ -144,6 +144,10 @@ internal fun HomeScreen(
     modifier: Modifier = Modifier,
     viewModel: HomeViewModel = koinViewModel(),
 ) {
+    LaunchedEffect(Unit) {
+        viewModel.getAccounts()
+    }
+
     val snackbarState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
 
@@ -234,6 +238,7 @@ fun HomeScreenContent(
                         selectedTransactionType = uiState.currentSelectedTransactionType,
                         currentSelectedAccount = uiState.currentSelectedAccount,
                         selectedAccount = uiState.selectedAccount,
+                        transactionLoading = uiState.transactionsLoading,
                     )
                 }
 
@@ -252,6 +257,7 @@ fun HomeScreenContent(
 @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 @Composable
 private fun HomeScreenContent(
+    transactionLoading: Boolean,
     showBottomSheet: Boolean,
     currentSelectedAccount: Account?,
     selectedAccount: Account?,
@@ -321,9 +327,10 @@ private fun HomeScreenContent(
                         horizontal = KptTheme.spacing.md,
                     ),
                     transactions = transactions,
-                    currentSelectedAccount = selectedAccount?.number ?: "",
+                    selectedAccount = selectedAccount?.number ?: "",
                     onAction = onAction,
                     selectedTransactionType = transactionType,
+                    transactionsLoading = transactionLoading,
                 )
             }
         }
@@ -711,8 +718,9 @@ private fun HomeScreenDialog(
 
 @Composable
 private fun HomeTransactionHistoryCard(
+    transactionsLoading: Boolean,
     selectedTransactionType: TransactionType,
-    currentSelectedAccount: String,
+    selectedAccount: String,
     transactions: List<Transaction>?,
     modifier: Modifier = Modifier,
     onAction: (HomeAction) -> Unit,
@@ -726,37 +734,35 @@ private fun HomeTransactionHistoryCard(
     ) {
         Column(
             modifier = Modifier
-                .fillMaxWidth(),
+                .fillMaxWidth()
+                .padding(KptTheme.spacing.md),
         ) {
             Row(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(KptTheme.spacing.md),
+                    .fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Column {
+                    Row {
+                        Text(
+                            text = stringResource(Res.string.home_transaction_history),
+                            style = KptTheme.typography.bodyMedium.copy(
+                                fontWeight = FontWeight.Bold,
+                            ),
+                        )
+                        Spacer(Modifier.width(KptTheme.spacing.xs))
+                        Icon(
+                            imageVector = MifosIcons.OpenInNew,
+                            contentDescription = null,
+                            modifier = Modifier.size(16.dp).clickable {
+                                onAction(HomeAction.OnClickSeeAllTransactions)
+                            },
+                        )
+                    }
                     Text(
-                        text = currentSelectedAccount,
-                        style = KptTheme.typography.bodyMedium.copy(
-                            fontWeight = FontWeight.Bold,
-                        ),
-                    )
-                    Text(
-                        text = stringResource(Res.string.home_transaction_history),
-                        style = KptTheme.typography.bodyMedium.copy(
-                            fontWeight = FontWeight.Bold,
-                        ),
-                    )
-                    Spacer(Modifier.height(KptTheme.spacing.xs))
-                    Text(
-                        text = stringResource(Res.string.home_see_all),
-                        style = KptTheme.typography.bodyMedium.copy(
-                            fontWeight = FontWeight.Bold,
-                        ),
-                        modifier = Modifier.clickable {
-                            onAction(HomeAction.OnClickSeeAllTransactions)
-                        },
+                        text = selectedAccount,
+                        style = KptTheme.typography.bodySmall,
                     )
                 }
                 Box(
@@ -814,12 +820,16 @@ private fun HomeTransactionHistoryCard(
                 }
             }
 
-            if (transactions != null && transactions.isEmpty()) {
-                Text(
-                    text = stringResource(Res.string.home_no_transactions_found),
-                    style = KptTheme.typography.bodyMedium,
-                    modifier = Modifier.padding(KptTheme.spacing.md),
-                )
+            if (transactionsLoading) {
+                MifosProgressIndicatorMini()
+            } else {
+                if (transactions != null && transactions.isEmpty()) {
+                    Text(
+                        text = stringResource(Res.string.home_no_transactions_found),
+                        style = KptTheme.typography.bodyMedium,
+                        modifier = Modifier.padding(KptTheme.spacing.md),
+                    )
+                }
             }
         }
     }
@@ -977,6 +987,7 @@ private fun HomeScreenContentPreview() {
             currentSelectedAccount = null,
             transactionType = TransactionType.CREDIT,
             selectedAccount = null,
+            transactionLoading = false,
         )
     }
 }

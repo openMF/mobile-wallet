@@ -177,6 +177,17 @@ class SelfServiceRepositoryImpl(
         }.asDataStateFlow()
     }
 
+    override fun getActiveAccounts(
+        clientId: Long,
+    ): Flow<DataState<List<Account>>> {
+        return apiManager.clientsApi
+            .getAccounts(clientId, Constants.SAVINGS)
+            .map { entity -> entity.savingsAccounts.filter { it.status.active } }
+            .map { it.toAccount() }
+            .flowOn(dispatcher)
+            .asDataStateFlow()
+    }
+
     override fun getTransactions(accountId: List<Long>, limit: Int?): Flow<List<Transaction>> {
         return accountId.asFlow().flatMapMerge { clientId ->
             getSelfAccountTransactions(clientId)
@@ -187,6 +198,20 @@ class SelfServiceRepositoryImpl(
                 limit?.let { sortedList.take(it) } ?: sortedList
             }
         }
+    }
+
+    override fun getTransactions(accountId: Long, limit: Int?): Flow<DataState<List<Transaction>>> {
+        return apiManager.savingAccountsListApi
+            .getSavingsWithAssociations(accountId, Constants.TRANSACTIONS)
+            .map {
+                if (limit != null) {
+                    it.toTransactionList().take(limit)
+                } else {
+                    it.toTransactionList()
+                }
+            }
+            .flowOn(dispatcher)
+            .asDataStateFlow()
     }
 
     override fun getAccountsTransactions(
