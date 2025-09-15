@@ -23,7 +23,7 @@
     <string name="feature_auth_or">or</string>
     <string name="feature_auth_google_account">Ease my sign-up using Google Account</string>
     <string name="feature_auth_validate_email">Please enter a valid email address</string>
-    <string name="feature_auth_all_fields_are_mandatory">All fields are mandatory.</string>
+    <string name="feature_auth_all_fields_are_mandatory">All fields are mandatory except Address Line 2.</string>
     <string name="feature_auth_complete_your_registration">Complete your registration</string>
 
     <!-- Labels -->
@@ -33,7 +33,7 @@
     <string name="feature_auth_confirm_password">Confirm Password</string>
     <string name="feature_auth_name_of_business">Name of Business</string>
     <string name="feature_auth_address_line_1">Address Line 1</string>
-    <string name="feature_auth_address_line_2">Address Line 2</string>
+    <string name="feature_auth_address_line_2">Address Line 2 (optional)</string>
     <string name="feature_auth_pin_code">Pin Code</string>
     <string name="feature_auth_state">State</string>
     <string name="feature_auth_country">Country</string>
@@ -69,7 +69,6 @@
     <string name="feature_auth_error_confirm_password_required">The confirm password field cannot be empty.</string>
     <string name="feature_auth_error_passwords_mismatch">Passwords do not match.</string>
     <string name="feature_auth_error_address_line1_required">Please enter your address line 1.</string>
-    <string name="feature_auth_error_address_line2_required">Please enter your address line 2.</string>
     <string name="feature_auth_error_pincode_required">Please enter your pin code.</string>
     <string name="feature_auth_error_country_required">Please enter your country.</string>
     <string name="feature_auth_error_state_required">Please enter your state.</string>

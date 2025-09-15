@@ -26,7 +26,6 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 import mobile_wallet.feature.auth.generated.resources.Res
 import mobile_wallet.feature.auth.generated.resources.feature_auth_error_address_line1_required
-import mobile_wallet.feature.auth.generated.resources.feature_auth_error_address_line2_required
 import mobile_wallet.feature.auth.generated.resources.feature_auth_error_check_uniqueness_failed
 import mobile_wallet.feature.auth.generated.resources.feature_auth_error_confirm_password_required
 import mobile_wallet.feature.auth.generated.resources.feature_auth_error_country_required
@@ -382,14 +381,6 @@ class SignupViewModel(
             mutableStateFlow.update {
                 it.copy(
                     dialogState = DialogState.Error.ResourceMessage(Res.string.feature_auth_error_address_line1_required),
-                )
-            }
-        }
-
-        state.addressLine2Input.isEmpty() -> {
-            mutableStateFlow.update {
-                it.copy(
-                    dialogState = DialogState.Error.ResourceMessage(Res.string.feature_auth_error_address_line2_required),
                 )
             }
         }
