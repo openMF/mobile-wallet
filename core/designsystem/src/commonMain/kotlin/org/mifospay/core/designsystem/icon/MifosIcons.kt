@@ -45,6 +45,7 @@ import androidx.compose.material.icons.filled.RadioButtonUnchecked
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
+import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material.icons.outlined.Cancel
 import androidx.compose.material.icons.outlined.DeleteOutline
@@ -140,4 +141,5 @@ object MifosIcons {
     val History = Icons.Default.History
     val Filter = Icons.Default.FilterList
     val OpenInNew = Icons.AutoMirrored.Filled.OpenInNew
+    val Warning = Icons.Default.Warning
 }
