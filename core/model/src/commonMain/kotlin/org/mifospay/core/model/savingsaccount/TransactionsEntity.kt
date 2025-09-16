@@ -15,7 +15,7 @@ import kotlinx.serialization.Serializable
 data class TransactionsEntity(
     val id: Long,
     val transactionType: TransactionType,
-    val entryType: String,
+    val entryType: String? = null,
     val accountId: Long,
     val accountNo: String,
     val date: List<Int>,

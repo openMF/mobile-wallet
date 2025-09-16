@@ -82,11 +82,13 @@ import kotlinx.coroutines.launch
 import mobile_wallet.feature.home.generated.resources.Res
 import mobile_wallet.feature.home.generated.resources.arrow_backward
 import mobile_wallet.feature.home.generated.resources.coin_image
+import mobile_wallet.feature.home.generated.resources.feature_home_account_number
 import mobile_wallet.feature.home.generated.resources.feature_home_account_type
 import mobile_wallet.feature.home.generated.resources.feature_home_arrow_up
 import mobile_wallet.feature.home.generated.resources.feature_home_coin_image
 import mobile_wallet.feature.home.generated.resources.feature_home_desc
 import mobile_wallet.feature.home.generated.resources.feature_home_mark_default
+import mobile_wallet.feature.home.generated.resources.feature_home_no_account
 import mobile_wallet.feature.home.generated.resources.feature_home_request
 import mobile_wallet.feature.home.generated.resources.feature_home_request_money
 import mobile_wallet.feature.home.generated.resources.feature_home_send
@@ -117,6 +119,7 @@ import org.mifospay.core.model.savingsaccount.Currency
 import org.mifospay.core.model.savingsaccount.Status
 import org.mifospay.core.model.savingsaccount.Transaction
 import org.mifospay.core.model.savingsaccount.TransactionType
+import org.mifospay.core.ui.EmptyContentScreen
 import org.mifospay.core.ui.ErrorScreenContent
 import org.mifospay.core.ui.MifosDivider
 import org.mifospay.core.ui.MifosProgressIndicator
@@ -247,6 +250,14 @@ fun HomeScreenContent(
                         onClickRetry = {
                             onAction(HomeAction.OnRetryClicked)
                         },
+                    )
+                }
+
+                ViewState.NoAccounts -> {
+                    EmptyContentScreen(
+                        title = stringResource(Res.string.feature_home_no_account),
+                        subTitle = "",
+                        modifier = Modifier.fillMaxSize(),
                     )
                 }
             }
@@ -761,7 +772,7 @@ private fun HomeTransactionHistoryCard(
                         )
                     }
                     Text(
-                        text = selectedAccount,
+                        text = stringResource(Res.string.feature_home_account_number, selectedAccount),
                         style = KptTheme.typography.bodySmall,
                     )
                 }

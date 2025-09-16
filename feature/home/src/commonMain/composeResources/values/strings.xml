@@ -33,5 +33,6 @@
     <string name="feature_home_account_success">Account marked as default</string>
     <string name="feature_home_account_error">Error marking account as default</string>
     <string name="feature_home_no_account">"No accounts found"</string>
+    <string name="feature_home_account_number">A/c No: %1$s</string>
 
 </resources>
