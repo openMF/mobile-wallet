@@ -10,7 +10,6 @@
 package org.mifospay.feature.home
 
 import androidx.lifecycle.viewModelScope
-import co.touchlab.kermit.Logger
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.update
@@ -68,22 +67,37 @@ class HomeViewModel(
                         }
 
                         is DataState.Success -> {
-                            val selected = result.data.firstOrNull()
-                            mutableStateFlow.update {
-                                it.copy(
-                                    isRefreshing = false,
-                                    accounts = result.data,
-                                    accountsWithTransactions = emptyMap(),
-                                    viewState = ViewState.Content,
-                                    selectedAccount = selected,
-                                    currentSelectedAccount = selected,
-                                )
-                            }
-                            if (state.defaultAccountId == null && selected != null) {
-                                sendAction(HomeAction.MarkAsDefault(selected.id, selected.number))
-                            }
-                            if (selected != null) {
-                                getAccountBasedOnId(selected)
+                            if (result.data.isEmpty()) {
+                                mutableStateFlow.update {
+                                    it.copy(
+                                        isRefreshing = false,
+                                        accounts = emptyList(),
+                                        accountsWithTransactions = emptyMap(),
+                                        viewState = ViewState.NoAccounts,
+                                    )
+                                }
+                            } else {
+                                val selected = result.data.firstOrNull()
+
+                                if (selected != null) {
+                                    mutableStateFlow.update {
+                                        it.copy(
+                                            isRefreshing = false,
+                                            accounts = result.data,
+                                            accountsWithTransactions = emptyMap(),
+                                            viewState = ViewState.Content,
+                                            selectedAccount = selected,
+                                            currentSelectedAccount = selected,
+                                        )
+                                    }
+                                }
+
+                                if (state.defaultAccountId == null && selected != null) {
+                                    sendAction(HomeAction.MarkAsDefault(selected.id, selected.number))
+                                }
+                                if (selected != null) {
+                                    getAccountBasedOnId(selected)
+                                }
                             }
                         }
                     }
@@ -104,9 +118,6 @@ class HomeViewModel(
             }
             applyFilter()
         } else {
-            Logger.e("Revanth") {
-                account.toString()
-            }
             // cancel the previous job if it's still active
             loadTransactionsJob?.cancel()
 
@@ -352,6 +363,8 @@ sealed interface ViewState {
     data class Error(val message: StringResource) : ViewState
 
     data object Content : ViewState
+
+    data object NoAccounts : ViewState
 }
 
 sealed interface HomeEvent {
