@@ -82,6 +82,7 @@ import kotlinx.coroutines.launch
 import mobile_wallet.feature.home.generated.resources.Res
 import mobile_wallet.feature.home.generated.resources.arrow_backward
 import mobile_wallet.feature.home.generated.resources.coin_image
+import mobile_wallet.feature.home.generated.resources.feature_home_account_number
 import mobile_wallet.feature.home.generated.resources.feature_home_account_type
 import mobile_wallet.feature.home.generated.resources.feature_home_arrow_up
 import mobile_wallet.feature.home.generated.resources.feature_home_coin_image
@@ -771,7 +772,7 @@ private fun HomeTransactionHistoryCard(
                         )
                     }
                     Text(
-                        text = selectedAccount,
+                        text = stringResource(Res.string.feature_home_account_number, selectedAccount),
                         style = KptTheme.typography.bodySmall,
                     )
                 }
