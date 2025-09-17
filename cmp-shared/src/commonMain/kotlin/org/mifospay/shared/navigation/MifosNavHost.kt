@@ -18,6 +18,7 @@ import org.mifospay.feature.accounts.AccountsScreen
 import org.mifospay.feature.accounts.beneficiary.BeneficiaryAddEditType
 import org.mifospay.feature.accounts.beneficiary.addEditBeneficiaryScreen
 import org.mifospay.feature.accounts.beneficiary.navigateToBeneficiaryAddEdit
+import org.mifospay.feature.accounts.benficiaryList.BeneficiaryListScreen
 import org.mifospay.feature.accounts.savingsaccount.SavingsAddEditType
 import org.mifospay.feature.accounts.savingsaccount.addEditSavingAccountScreen
 import org.mifospay.feature.accounts.savingsaccount.details.navigateToSavingAccountDetails
@@ -137,6 +138,12 @@ internal fun MifosNavHost(
                 onAddOrEditBeneficiary = navController::navigateToBeneficiaryAddEdit,
             )
         },
+
+        TabContent(FinanceScreenContents.BENEFICIARIES.name) {
+            BeneficiaryListScreen(
+                onAddOrEditBeneficiary = navController::navigateToBeneficiaryAddEdit,
+            )
+        },
 //        TabContent(FinanceScreenContents.CARDS.name) {
 //            CardsScreen(
 //                navigateToViewDetail = navController::navigateToCardDetails,
@@ -218,6 +225,7 @@ internal fun MifosNavHost(
 
         addEditBeneficiaryScreen(
             navigateBack = navController::navigateUp,
+            navigateToQrReaderScreen = navController::navigateToScanQr,
         )
 
         savingAccountDetailRoute(
@@ -369,6 +377,17 @@ internal fun MifosNavHost(
             navigateToSendScreen = {
                 navController.navigateToSendMoneyScreen(
                     requestData = it,
+                    navOptions = navOptions {
+                        popUpTo(SCAN_QR_ROUTE) {
+                            inclusive = true
+                        }
+                    },
+                )
+            },
+
+            navigateToAddBeneficiaryScreen = {
+                navController.navigateToBeneficiaryAddEdit(
+                    BeneficiaryAddEditType.EditItem(it),
                     navOptions = navOptions {
                         popUpTo(SCAN_QR_ROUTE) {
                             inclusive = true

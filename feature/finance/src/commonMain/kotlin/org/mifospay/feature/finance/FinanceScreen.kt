@@ -38,6 +38,7 @@ internal fun FinanceRoute(
 //  https://venus.mifos.community/fineract-provider/api/v1/datatables/kyc_level1_details/2
 enum class FinanceScreenContents {
     ACCOUNTS,
+    BENEFICIARIES,
 //    CARDS,
 //    MERCHANTS,
 //    KYC,

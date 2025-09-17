@@ -17,5 +17,7 @@
     <string name="feature_qr_loading">Loading</string>
     <string name="feature_qr_oops">Oops</string>
     <string name="feature_qr_unexpected_error_subtitle">An unexpected error occurred. Please try again.</string>
-
+    <string name="feature_qr_instruction">Please, align QR Code within the frame to make scanning easily detectable.</string>
+    <string name="feature_qr_warning_title">Potential Warning</string>
+    <string name="feature_qr_warning_message">If you scan the QR code, it could take you to a phishing website that steals your personal information, like credit card numbers or usernames and passwords. It could also download malware onto your phone and give hackers access to your device.</string>
 </resources>
