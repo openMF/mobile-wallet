@@ -10,6 +10,7 @@
 package org.mifospay.core.model.account
 
 import kotlinx.serialization.Serializable
+import org.mifospay.core.model.savingsaccount.AccountType
 import org.mifospay.core.model.savingsaccount.Currency
 import org.mifospay.core.model.savingsaccount.Status
 
@@ -25,4 +26,8 @@ data class Account(
     val productId: Long = 0L,
     val currency: Currency,
     val status: Status,
+    val clientName: String = "",
+    val accountType: AccountType? = null,
+    val officeName: String? = null,
+    val officeId: Int? = null
 )

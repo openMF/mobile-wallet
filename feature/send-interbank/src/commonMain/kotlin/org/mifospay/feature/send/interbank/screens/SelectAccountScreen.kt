@@ -13,8 +13,10 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -31,11 +33,15 @@ import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import mobile_wallet.feature.send_interbank.generated.resources.Res
+import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_account
+import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_account_type
+import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_balance
 import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_select_account
 import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_select_your_account
 import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_choose_account_to_send
 import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_no_accounts
 import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_no_accounts_available
+import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_office
 import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_oops
 import org.mifospay.core.common.CurrencyFormatter
 import org.mifospay.core.designsystem.component.MifosCard
@@ -49,6 +55,7 @@ import org.mifospay.core.designsystem.icon.MifosIcons
 import org.mifospay.core.designsystem.theme.MifosTheme
 import org.mifospay.core.model.savingsaccount.Currency
 import org.mifospay.core.model.savingsaccount.Status
+import org.mifospay.core.network.model.entity.templates.account.AccountType
 import template.core.base.designsystem.theme.KptTheme
 
 @Composable
@@ -145,12 +152,12 @@ private fun AccountSelectionCard(
     modifier: Modifier = Modifier,
 ) {
     MifosCard(
+        colors = CardDefaults.cardColors(KptTheme.colorScheme.background),
+        shape = KptTheme.shapes.medium,
         modifier = modifier
             .clickable(onClick = onClick)
             .fillMaxWidth()
             .padding(KptTheme.spacing.xs),
-        shape = KptTheme.shapes.medium,
-        colors = CardDefaults.cardColors(KptTheme.colorScheme.surfaceContainer),
     ) {
         val accountBalance = CurrencyFormatter.format(
             balance = account.balance,
@@ -160,7 +167,7 @@ private fun AccountSelectionCard(
         ListItem(
             headlineContent = {
                 Text(
-                    text = account.name,
+                    text = account.clientName,
                     fontWeight = FontWeight.SemiBold,
                 )
             },
@@ -169,14 +176,35 @@ private fun AccountSelectionCard(
                     verticalArrangement = Arrangement.spacedBy(4.dp),
                 ) {
                     Text(
-                        text = "Account: ${account.number}",
+                        text = stringResource(
+                            Res.string.feature_send_interbank_balance,
+                            accountBalance,
+                        ),
                         style = KptTheme.typography.bodySmall,
                     )
                     Text(
-                        text = "Balance: $accountBalance",
+                        text = stringResource(
+                            Res.string.feature_send_interbank_account,
+                            account.name,
+                            account.number,
+                        ),
                         style = KptTheme.typography.bodySmall,
-                        color = KptTheme.colorScheme.onSurfaceVariant,
                     )
+                    Text(
+                        text = stringResource(
+                            Res.string.feature_send_interbank_office,
+                            account.officeName ?: "",
+                        ),
+                        style = KptTheme.typography.bodySmall,
+                    )
+                    Text(
+                        text = stringResource(
+                            Res.string.feature_send_interbank_account_type,
+                            account.accountType?.value ?: "",
+                        ),
+                        style = KptTheme.typography.bodySmall,
+                    )
+                    Spacer(modifier = Modifier.height(KptTheme.spacing.xs))
                 }
             },
             leadingContent = {
@@ -199,10 +227,17 @@ fun SelectAccountScreenPreview() {
         val mockAccounts = listOf(
             Account(
                 id = 1L,
-                name = "ALEJANDRO ESCUTIA",
+                name = "WALLET",
+                clientName = "ALEJANDRO ESCUTIA",
                 number = "00000002",
                 balance = 5000.50,
                 productId = 1L,
+                officeName = "SAN JUAN OZOLOTEPEC",
+                accountType = org.mifospay.core.model.savingsaccount.AccountType(
+                    id = 1L,
+                    code = "savingsAccountType.savings",
+                    value = "Savings",
+                ),
                 currency = Currency(
                     code = "USD",
                     name = "US Dollar",
@@ -230,10 +265,17 @@ fun SelectAccountScreenPreview() {
             ),
             Account(
                 id = 2L,
-                name = "JUAN PEREZ",
+                name = "WALLET",
                 number = "00000003",
+                clientName = "JUAN PEREZ",
                 balance = 3200.75,
                 productId = 1L,
+                officeName = "SAN JUAN OZOLOTEPEC",
+                accountType = org.mifospay.core.model.savingsaccount.AccountType(
+                    id = 1L,
+                    code = "savingsAccountType.savings",
+                    value = "Savings",
+                ),
                 currency = Currency(
                     code = "USD",
                     name = "US Dollar",

@@ -24,9 +24,13 @@
     <string name="feature_send_interbank_no_recipients_found">No recipients found matching your search</string>
     <string name="feature_send_interbank_found_recipients">Found %1$d recipient(s)</string>
     <string name="feature_send_interbank_enter_phone_to_search">Enter a phone number to search for recipients</string>
-    <string name="feature_send_interbank_account">A/C: %1$d</string>
+    <string name="feature_send_interbank_account">Account: %1$d -# %2$d</string>
+    <string name="feature_send_interbank_to_account_interbank">Account: %1$d</string>
+    <string name="feature_send_interbank_office">Office: %1$d</string>
+    <string name="feature_send_interbank_account_type">Account Type: %1$d</string>
     <string name="feature_send_interbank_id">ID</string>
     <string name="feature_send_interbank_bank">Bank: %1$d</string>
+    <string name="feature_send_interbank_balance">Balance: %1$d</string>
 
     <!-- Transfer Details Screen -->
     <string name="feature_send_interbank_transfer_details">Transfer Details</string>

@@ -42,6 +42,7 @@ import mobile_wallet.feature.send_interbank.generated.resources.feature_send_int
 import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_enter_phone_to_search
 import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_account
 import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_bank
+import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_to_account_interbank
 import org.mifospay.core.designsystem.component.MifosButton
 import org.mifospay.core.designsystem.component.MifosCard
 import org.mifospay.core.designsystem.component.MifosScaffold
@@ -185,7 +186,7 @@ private fun RecipientSelectionCard(
                 ) {
                     Text(
                         text = stringResource(
-                            Res.string.feature_send_interbank_account,
+                            Res.string.feature_send_interbank_to_account_interbank,
                             recipient.partyId,
                         ),
                         style = KptTheme.typography.bodySmall,

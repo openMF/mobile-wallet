@@ -46,5 +46,6 @@ fun SavingAccountDetail.toAccount(): Account {
         productId = savingsProductId,
         currency = currency,
         status = status,
+        clientName = clientName,
     )
 }

@@ -19,6 +19,7 @@ import org.mifospay.core.model.account.AccountTransferPayload
 import org.mifospay.core.model.savingsaccount.TransactionsEntity
 import org.mifospay.core.model.savingsaccount.TransferDetail
 import org.mifospay.core.model.search.AccountResult
+import org.mifospay.core.network.model.entity.templates.account.AccountOptionsTemplate
 import org.mifospay.core.network.utils.ApiEndPoints
 
 interface AccountTransfersService {
@@ -42,4 +43,7 @@ interface AccountTransfersService {
     suspend fun makeTransfer(
         @Body payload: AccountTransferPayload,
     )
+
+    @GET(ApiEndPoints.ACCOUNT_TRANSFER + "/template")
+    fun getAccountTransferTemplate(): Flow<AccountOptionsTemplate>
 }
