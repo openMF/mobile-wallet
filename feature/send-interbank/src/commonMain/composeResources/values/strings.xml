@@ -39,7 +39,7 @@
     <string name="feature_send_interbank_amount">Amount</string>
     <string name="feature_send_interbank_date">Transaction Date</string>
     <string name="feature_send_interbank_description">Description (Optional)</string>
-    <string name="feature_send_interbank_continue">Review Transfer</string>
+    <string name="feature_send_interbank_continue">Continue</string>
     <string name="feature_send_interbank_amount_exceeds_balance">Amount exceeds available balance</string>
     <string name="feature_send_interbank_available_balance">Available Balance: %1$d</string>
     <string name="feature_send_interbank_enter_amount">Enter amount</string>

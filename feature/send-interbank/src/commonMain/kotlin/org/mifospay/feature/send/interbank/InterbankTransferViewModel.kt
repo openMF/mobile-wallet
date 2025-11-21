@@ -12,8 +12,14 @@ package org.mifospay.feature.send.interbank
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.format
+import kotlinx.datetime.todayIn
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 import org.mifospay.core.common.DataState
+import org.mifospay.core.common.DateHelper
+import org.mifospay.core.common.DateHelper.format
 import org.mifospay.core.data.repository.InterBankRepository
 import org.mifospay.core.data.repository.SelfServiceRepository
 import org.mifospay.core.datastore.UserPreferencesRepository
@@ -25,6 +31,8 @@ import org.mifospay.core.model.interbank.InterBankTransferRequest
 import org.mifospay.core.model.interbank.Party
 import org.mifospay.core.model.interbank.TransactionType
 import org.mifospay.core.ui.utils.BaseViewModel
+import kotlin.time.Clock
+import kotlin.time.ExperimentalTime
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
@@ -113,8 +121,9 @@ class InterbankTransferViewModel(
             }
 
             is InterbankTransferAction.UpdateDate -> {
+                val date = DateHelper.getDateAsStringFromLong(action.date)
                 mutableStateFlow.update {
-                    it.copy(transferDate = action.date)
+                    it.copy(transferDate = date)
                 }
             }
 
@@ -364,6 +373,7 @@ class InterbankTransferViewModel(
     }
 }
 
+@OptIn(ExperimentalTime::class)
 @Serializable
 data class InterbankTransferState(
     val client: Client,
@@ -373,7 +383,11 @@ data class InterbankTransferState(
     val selectedFromAccount: Account? = null,
     val selectedParticipantInfo: InterBankPartyInfoResponse? = null,
     val transferAmount: String = "1.0",
-    val transferDate: String = "",
+    val transferDate: String = Clock.System.todayIn(TimeZone.currentSystemDefault()).format("dd MM yyyy"),
+
+    @Transient
+    val initialDate: Long = Clock.System.now().toEpochMilliseconds(),
+
     val transferDescription: String = "",
     val isProcessing: Boolean = false,
     val errorMessage: String? = null,
@@ -448,7 +462,7 @@ sealed interface InterbankTransferAction {
 
     // Transfer details
     data class UpdateAmount(val amount: String) : InterbankTransferAction
-    data class UpdateDate(val date: String) : InterbankTransferAction
+    data class UpdateDate(val date: Long) : InterbankTransferAction
     data class UpdateDescription(val description: String) : InterbankTransferAction
 
     // Recipient search

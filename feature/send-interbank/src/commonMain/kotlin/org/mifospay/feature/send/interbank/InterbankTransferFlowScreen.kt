@@ -107,6 +107,7 @@ fun InterbankTransferFlowScreen(
                     viewModel.trySendAction(InterbankTransferAction.UpdateAmount(amount))
                 },
                 date = state.transferDate,
+                initialDate = state.initialDate,
                 onDateChanged = { date ->
                     viewModel.trySendAction(InterbankTransferAction.UpdateDate(date))
                 },
@@ -119,11 +120,6 @@ fun InterbankTransferFlowScreen(
                 },
                 onBackClick = {
                     viewModel.trySendAction(InterbankTransferAction.NavigateBack)
-                },
-                availableAccounts = state.fromAccounts,
-                onFromAccountChange = { account ->
-                    // Update the selected account
-                    viewModel.trySendAction(InterbankTransferAction.NavigateToRecipientSearch(account))
                 },
                 onEditFromAccount = {
                     viewModel.trySendAction(InterbankTransferAction.EditFromAccount)

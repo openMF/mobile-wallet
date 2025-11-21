@@ -22,10 +22,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DatePicker
-import androidx.compose.material3.DatePickerDefaults
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -35,14 +35,13 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.TransformOrigin
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import org.jetbrains.compose.resources.stringResource
@@ -56,7 +55,6 @@ import mobile_wallet.feature.send_interbank.generated.resources.feature_send_int
 import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_description
 import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_continue
 import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_available_balance
-import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_today
 import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_verified
 import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_edit
 import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_to_account_interbank
@@ -73,7 +71,6 @@ import org.mifospay.core.model.savingsaccount.Status
 import org.mifospay.core.model.interbank.InterBankPartyInfoResponse
 import org.mifospay.core.ui.AmountEditText
 import template.core.base.designsystem.theme.KptTheme
-import kotlin.time.Clock
 import kotlin.time.ExperimentalTime
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalTime::class)
@@ -83,27 +80,19 @@ fun TransferDetailsScreen(
     recipient: InterBankPartyInfoResponse?,
     amount: String,
     onAmountChanged: (String) -> Unit,
+    initialDate: Long,
     date: String,
-    onDateChanged: (String) -> Unit,
+    onDateChanged: (Long) -> Unit,
     description: String,
     onDescriptionChanged: (String) -> Unit,
     onContinueClick: () -> Unit,
     onBackClick: () -> Unit,
-    availableAccounts: List<Account> = emptyList(),
-    onFromAccountChange: (Account) -> Unit = {},
     onEditFromAccount: () -> Unit = {},
     onEditRecipient: () -> Unit = {},
     modifier: Modifier = Modifier,
 ) {
     var showDatePicker by remember { mutableStateOf(false) }
-    val datePickerState = rememberDatePickerState(
-        initialSelectedDateMillis = Clock.System.now().toEpochMilliseconds(),
-        selectableDates = object : SelectableDates {
-            override fun isSelectableDate(utcTimeMillis: Long): Boolean {
-                return utcTimeMillis >= Clock.System.now().toEpochMilliseconds()
-            }
-        },
-    )
+
     MifosScaffold(
         modifier = modifier,
         topBar = {
@@ -249,12 +238,12 @@ fun TransferDetailsScreen(
                                     style = KptTheme.typography.headlineSmall,
                                     fontWeight = FontWeight.SemiBold,
                                 )
-                                Text(
-                                    text = stringResource(Res.string.feature_send_interbank_today),
-                                    style = KptTheme.typography.bodySmall,
-                                    color = KptTheme.colorScheme.onSurfaceVariant,
-                                )
                             }
+                            Icon(
+                                imageVector = Icons.Default.CalendarMonth,
+                                contentDescription = stringResource(Res.string.feature_send_interbank_edit),
+                                tint = KptTheme.colorScheme.primary,
+                            )
                         }
                     }
                 }
@@ -291,22 +280,30 @@ fun TransferDetailsScreen(
         }
     }
 
-    // Create a formatter
-    val dateFormatter = remember { DatePickerDefaults.dateFormatter("dd MMMM yyyy") }
+    val dateState = rememberDatePickerState(
+        initialSelectedDateMillis = initialDate,
+        selectableDates = object : SelectableDates {
+            override fun isSelectableDate(utcTimeMillis: Long): Boolean {
+                return utcTimeMillis <= initialDate
+            }
+        },
+    )
+
+    val confirmEnabled = remember {
+        derivedStateOf { dateState.selectedDateMillis != null }
+    }
 
     // Date Picker Dialog
     AnimatedVisibility(showDatePicker) {
-
         DatePickerDialog(
             onDismissRequest = { showDatePicker = false },
             confirmButton = {
                 TextButton(
                     onClick = {
-                        datePickerState.selectedDateMillis?.let { millis ->
-                            //onDateChanged(millis ?: Clock.System.now().toEpochMilliseconds())
-                        }
                         showDatePicker = false
+                        onDateChanged(dateState.selectedDateMillis ?: initialDate)
                     },
+                    enabled = confirmEnabled.value,
                 ) {
                     Text("OK")
                 }
@@ -317,17 +314,7 @@ fun TransferDetailsScreen(
                 }
             },
         ) {
-            DatePicker(
-                state = datePickerState,
-                dateFormatter = dateFormatter,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .graphicsLayer(
-                        scaleX = 1f,
-                        scaleY = 1f,
-                        transformOrigin = TransformOrigin(0f, 0f),
-                    ),
-            )
+            DatePicker(state = dateState)
         }
     }
 }
@@ -532,6 +519,7 @@ fun TransferDetailsScreenPreview() {
             onDescriptionChanged = {},
             onContinueClick = {},
             onBackClick = {},
+            initialDate = 1
         )
     }
 }
@@ -603,6 +591,7 @@ fun TransferDetailsScreenEmptyPreview() {
             onDescriptionChanged = {},
             onContinueClick = {},
             onBackClick = {},
+            initialDate = 1
         )
     }
 }
