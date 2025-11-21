@@ -9,20 +9,28 @@
  */
 package org.mifospay.feature.send.interbank.screens
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDefaults
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.SelectableDates
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDatePickerState
@@ -37,7 +45,6 @@ import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.KeyboardType
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import mobile_wallet.feature.send_interbank.generated.resources.Res
@@ -48,7 +55,14 @@ import mobile_wallet.feature.send_interbank.generated.resources.feature_send_int
 import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_date
 import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_description
 import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_continue
+import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_available_balance
+import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_today
+import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_verified
+import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_edit
+import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_to_account_interbank
+import org.mifospay.core.common.CurrencyFormatter
 import org.mifospay.core.designsystem.component.MifosButton
+import org.mifospay.core.designsystem.component.MifosCard
 import org.mifospay.core.designsystem.component.MifosScaffold
 import org.mifospay.core.designsystem.component.MifosTextField
 import org.mifospay.core.designsystem.component.MifosTopBar
@@ -57,7 +71,9 @@ import org.mifospay.core.model.account.Account
 import org.mifospay.core.model.savingsaccount.Currency
 import org.mifospay.core.model.savingsaccount.Status
 import org.mifospay.core.model.interbank.InterBankPartyInfoResponse
+import org.mifospay.core.ui.AmountEditText
 import template.core.base.designsystem.theme.KptTheme
+import kotlin.time.Clock
 import kotlin.time.ExperimentalTime
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalTime::class)
@@ -75,10 +91,19 @@ fun TransferDetailsScreen(
     onBackClick: () -> Unit,
     availableAccounts: List<Account> = emptyList(),
     onFromAccountChange: (Account) -> Unit = {},
+    onEditFromAccount: () -> Unit = {},
+    onEditRecipient: () -> Unit = {},
     modifier: Modifier = Modifier,
 ) {
     var showDatePicker by remember { mutableStateOf(false) }
-    val dateState = rememberDatePickerState()
+    val datePickerState = rememberDatePickerState(
+        initialSelectedDateMillis = Clock.System.now().toEpochMilliseconds(),
+        selectableDates = object : SelectableDates {
+            override fun isSelectableDate(utcTimeMillis: Long): Boolean {
+                return utcTimeMillis >= Clock.System.now().toEpochMilliseconds()
+            }
+        },
+    )
     MifosScaffold(
         modifier = modifier,
         topBar = {
@@ -97,7 +122,9 @@ fun TransferDetailsScreen(
                 MifosButton(
                     onClick = onContinueClick,
                     modifier = Modifier.fillMaxWidth(),
-                    enabled = amount.isNotEmpty() && description.isNotEmpty(),
+                    enabled = amount.isNotEmpty() && amount.toDoubleOrNull()?.let {
+                        it <= (fromAccount?.balance ?: 0.0)
+                    } ?: false && description.isNotEmpty(),
                 ) {
                     Text(stringResource(Res.string.feature_send_interbank_continue))
                 }
@@ -113,110 +140,149 @@ fun TransferDetailsScreen(
                 .imePadding(),
             verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.md),
         ) {
-            /*item {
-                Text(
-                    text = stringResource(Res.string.feature_send_interbank_transfer_details),
-                    style = KptTheme.typography.headlineSmall,
-                    fontWeight = FontWeight.SemiBold,
-                )
-            }*/
-
-            // From Account Selection
+            // From Account Card
             item {
-                if (availableAccounts.isNotEmpty()) {
-                    Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clickable { /* Show account selection dialog */ },
-                        verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.xs),
-                    ) {
-                        Text(
-                            text = stringResource(Res.string.feature_send_interbank_from_account),
-                            style = KptTheme.typography.labelMedium,
-                            fontWeight = FontWeight.SemiBold,
-                            color = KptTheme.colorScheme.onSurfaceVariant,
-                        )
-                        TransferInfoCard(
-                            title = "",
-                            name = fromAccount?.name ?: "Select Account",
-                            accountNo = fromAccount?.number ?: "N/A",
-                        )
-                    }
-                } else {
-                    TransferInfoCard(
-                        title = stringResource(Res.string.feature_send_interbank_from_account),
-                        name = fromAccount?.name ?: "Unknown",
-                        accountNo = fromAccount?.number ?: "N/A",
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.xs),
+                ) {
+                    Text(
+                        text = stringResource(Res.string.feature_send_interbank_from_account),
+                        style = KptTheme.typography.labelMedium,
+                        fontWeight = FontWeight.SemiBold,
+                        color = KptTheme.colorScheme.onSurfaceVariant,
+                    )
+                    AccountDetailCard(
+                        account = fromAccount,
+                        showVerified = false,
+                        onEditClick = onEditFromAccount,
                     )
                 }
             }
 
-            // To Account Info
+            // To Account Card
             item {
-                TransferInfoCard(
-                    title = stringResource(Res.string.feature_send_interbank_to_account),
-                    name = "${recipient?.firstName ?: ""} ${recipient?.lastName ?: ""}".trim(),
-                    accountNo = recipient?.partyId ?: "N/A",
-                )
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.xs),
+                ) {
+                    Text(
+                        text = stringResource(Res.string.feature_send_interbank_to_account),
+                        style = KptTheme.typography.labelMedium,
+                        fontWeight = FontWeight.SemiBold,
+                        color = KptTheme.colorScheme.onSurfaceVariant,
+                    )
+                    RecipientDetailCard(
+                        recipient = recipient,
+                        onEditClick = onEditRecipient,
+                    )
+                }
             }
 
             // Amount Input
             item {
-                val amountError = if (amount.isNotEmpty()) {
-                    val amountValue = amount.toDoubleOrNull()
-                    when {
-                        amountValue == null -> "Invalid amount"
-                        amountValue <= 0 -> "Amount must be greater than 0"
-                        fromAccount != null && amountValue > fromAccount.balance -> 
-                            "Insufficient balance. Available: ${fromAccount.balance}"
-                        else -> null
-                    }
-                } else {
-                    null
-                }
-                
-                MifosTextField(
-                    label = stringResource(Res.string.feature_send_interbank_amount),
-                    value = amount,
-                    onValueChange = onAmountChanged,
-                    keyboardOptions = KeyboardOptions(
-                        keyboardType = KeyboardType.Decimal,
-                        imeAction = ImeAction.Next,
-                    ),
+                var amountLocal by remember { mutableStateOf(amount) }
+                var errorMsg by remember { mutableStateOf<String?>(null) }
+                var isError by remember { mutableStateOf(false) }
+
+                Column(
                     modifier = Modifier.fillMaxWidth(),
-                    isError = amountError != null,
-                )
+                    verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.xs),
+                ) {
+                    Text(
+                        text = stringResource(Res.string.feature_send_interbank_amount),
+                        style = KptTheme.typography.labelMedium,
+                        fontWeight = FontWeight.SemiBold,
+                        color = KptTheme.colorScheme.onSurfaceVariant,
+                    )
+                    AmountEditText(
+                        value = amountLocal,
+                        onValueChange = { doubleAmount ->
+                            onAmountChanged.invoke(doubleAmount.toString())
+                            amountLocal = doubleAmount.toString()
+                        },
+                        currencyCode = fromAccount?.currency?.code ?: "MXN",
+                        availableBalance = fromAccount?.balance ?: 0.0,
+                        maxAmount = fromAccount?.balance ?: 0.0,
+                        errorMessage = errorMsg,
+                        onAmountValidation = { _, error ->
+                            errorMsg = error ?: ""
+                            isError = error != null
+                        },
+                        isError = isError,
+                    )
+                }
             }
 
             // Date Input with Picker
             item {
-                MifosTextField(
-                    label = stringResource(Res.string.feature_send_interbank_date),
-                    value = date,
-                    onValueChange = {},
-                    keyboardOptions = KeyboardOptions(
-                        keyboardType = KeyboardType.Number,
-                        imeAction = ImeAction.Next,
-                    ),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clickable { showDatePicker = true },
-                    readOnly = true,
-                )
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.xs),
+                ) {
+                    Text(
+                        text = stringResource(Res.string.feature_send_interbank_date),
+                        style = KptTheme.typography.labelMedium,
+                        fontWeight = FontWeight.SemiBold,
+                        color = KptTheme.colorScheme.onSurfaceVariant,
+                    )
+                    MifosCard(
+                        colors = CardDefaults.cardColors(KptTheme.colorScheme.background),
+                        shape = KptTheme.shapes.medium,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable { showDatePicker = true },
+                    ) {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(KptTheme.spacing.md),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            Column(
+                                modifier = Modifier.weight(1f),
+                                verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.xs),
+                            ) {
+                                Text(
+                                    text = date,
+                                    style = KptTheme.typography.headlineSmall,
+                                    fontWeight = FontWeight.SemiBold,
+                                )
+                                Text(
+                                    text = stringResource(Res.string.feature_send_interbank_today),
+                                    style = KptTheme.typography.bodySmall,
+                                    color = KptTheme.colorScheme.onSurfaceVariant,
+                                )
+                            }
+                        }
+                    }
+                }
             }
 
             // Description Input
             item {
-                MifosTextField(
-                    label = stringResource(Res.string.feature_send_interbank_description),
-                    value = description,
-                    onValueChange = onDescriptionChanged,
-                    keyboardOptions = KeyboardOptions(
-                        imeAction = ImeAction.Done,
-                    ),
+                Column(
                     modifier = Modifier.fillMaxWidth(),
-                    minLines = 3,
-                )
+                    verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.xs),
+                ) {
+                    Text(
+                        text = stringResource(Res.string.feature_send_interbank_description),
+                        style = KptTheme.typography.labelMedium,
+                        fontWeight = FontWeight.SemiBold,
+                        color = KptTheme.colorScheme.onSurfaceVariant,
+                    )
+                    MifosTextField(
+                        label = "",
+                        value = description,
+                        onValueChange = onDescriptionChanged,
+                        keyboardOptions = KeyboardOptions(
+                            imeAction = ImeAction.Done,
+                        ),
+                        modifier = Modifier.fillMaxWidth(),
+                        minLines = 3,
+                    )
+                }
             }
 
             item {
@@ -225,25 +291,20 @@ fun TransferDetailsScreen(
         }
     }
 
-    // Create a DatePicker state
-    val datePickerState = rememberDatePickerState()
     // Create a formatter
     val dateFormatter = remember { DatePickerDefaults.dateFormatter("dd MMMM yyyy") }
 
-
     // Date Picker Dialog
-    if (showDatePicker) {
+    AnimatedVisibility(showDatePicker) {
+
         DatePickerDialog(
             onDismissRequest = { showDatePicker = false },
             confirmButton = {
                 TextButton(
                     onClick = {
-                        /*dateState.selectedDateMillis?.let { millis ->
-                            val instant = Instant.fromEpochMilliseconds(millis)
-                            val localDate = instant.toLocalDateTime(TimeZone.currentSystemDefault()).date
-                            val formatter = DateTimeFormatBuilder.b.ofPattern("dd MMMM yyyy")
-                            onDateChanged(localDate.format(formatter))
-                        }*/
+                        datePickerState.selectedDateMillis?.let { millis ->
+                            //onDateChanged(millis ?: Clock.System.now().toEpochMilliseconds())
+                        }
                         showDatePicker = false
                     },
                 ) {
@@ -264,43 +325,143 @@ fun TransferDetailsScreen(
                     .graphicsLayer(
                         scaleX = 1f,
                         scaleY = 1f,
-                        transformOrigin = TransformOrigin(0f, 0f)
-                    )
+                        transformOrigin = TransformOrigin(0f, 0f),
+                    ),
             )
-           // DatePicker(state = dateState)
         }
     }
 }
 
 @Composable
-private fun TransferInfoCard(
-    title: String,
-    name: String,
-    accountNo: String,
+private fun AccountDetailCard(
+    account: Account?,
     modifier: Modifier = Modifier,
+    showVerified: Boolean = false,
+    onEditClick: () -> Unit = {},
 ) {
-    Column(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(KptTheme.spacing.md),
-        verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.xs),
+    MifosCard(
+        colors = CardDefaults.cardColors(KptTheme.colorScheme.background),
+        shape = KptTheme.shapes.medium,
+        modifier = modifier.fillMaxWidth(),
     ) {
-        Text(
-            text = title,
-            style = KptTheme.typography.labelMedium,
-            fontWeight = FontWeight.SemiBold,
-            color = KptTheme.colorScheme.onSurfaceVariant,
-        )
-        Text(
-            text = name,
-            style = KptTheme.typography.bodyLarge,
-            fontWeight = FontWeight.SemiBold,
-        )
-        Text(
-            text = "Account: $accountNo",
-            style = KptTheme.typography.bodySmall,
-            color = KptTheme.colorScheme.onSurfaceVariant,
-        )
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(KptTheme.spacing.md),
+            horizontalArrangement = Arrangement.spacedBy(KptTheme.spacing.md),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Column(
+                modifier = Modifier.weight(1f),
+                verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.xs),
+            ) {
+                Text(
+                    text = account?.clientName ?: "",
+                    style = KptTheme.typography.bodyLarge,
+                    fontWeight = FontWeight.SemiBold,
+                )
+                Text(
+                    text = "${account?.name ?: ""} - #${account?.number ?: ""}",
+                    style = KptTheme.typography.bodySmall,
+                )
+                Text(
+                    text = "${account?.accountType?.value ?: ""} | ${account?.currency?.name ?: ""}",
+                    style = KptTheme.typography.bodySmall,
+                    color = KptTheme.colorScheme.onSurfaceVariant,
+                )
+                Text(
+                    text = stringResource(
+                        Res.string.feature_send_interbank_available_balance,
+                        CurrencyFormatter.format(
+                            account?.balance ?: 0.0,
+                            account?.currency?.code ?: "",
+                            null,
+                        ),
+                    ),
+                    style = KptTheme.typography.bodySmall,
+                    color = KptTheme.colorScheme.primary,
+                    fontWeight = FontWeight.SemiBold,
+                )
+            }
+            IconButton(onClick = onEditClick) {
+                Icon(
+                    imageVector = Icons.Default.Edit,
+                    contentDescription = stringResource(Res.string.feature_send_interbank_edit),
+                    tint = KptTheme.colorScheme.primary,
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun RecipientDetailCard(
+    recipient: InterBankPartyInfoResponse?,
+    modifier: Modifier = Modifier,
+    onEditClick: () -> Unit = {},
+) {
+    MifosCard(
+        colors = CardDefaults.cardColors(KptTheme.colorScheme.background),
+        shape = KptTheme.shapes.medium,
+        modifier = modifier.fillMaxWidth(),
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(KptTheme.spacing.md),
+            horizontalArrangement = Arrangement.spacedBy(KptTheme.spacing.md),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Column(
+                modifier = Modifier.weight(1f),
+                verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.xs),
+            ) {
+                Text(
+                    text = "${recipient?.firstName ?: ""} ${recipient?.lastName ?: ""}".trim(),
+                    style = KptTheme.typography.bodyLarge,
+                    fontWeight = FontWeight.SemiBold,
+                )
+                Text(
+                    text = "${recipient?.destinationFspId ?: ""} | ${recipient?.partyIdType ?: ""}",
+                    style = KptTheme.typography.bodySmall,
+                )
+                Text(
+                    text = stringResource(
+                        Res.string.feature_send_interbank_to_account_interbank,
+                        recipient?.partyId ?: "",
+                    ),
+                    style = KptTheme.typography.bodySmall,
+                    color = KptTheme.colorScheme.onSurfaceVariant,
+                )
+                if (recipient?.executionStatus == true) {
+                    Row(
+                        modifier = Modifier.padding(top = KptTheme.spacing.xs),
+                        horizontalArrangement = Arrangement.spacedBy(KptTheme.spacing.xs),
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Text(
+                            text = "✓",
+                            style = KptTheme.typography.bodySmall,
+                            color = KptTheme.colorScheme.primary,
+                            fontWeight = FontWeight.Bold,
+                        )
+                        Text(
+                            text = stringResource(Res.string.feature_send_interbank_verified),
+                            style = KptTheme.typography.bodySmall,
+                            color = KptTheme.colorScheme.primary,
+                            fontWeight = FontWeight.SemiBold,
+                        )
+                    }
+                }
+            }
+            IconButton(onClick = onEditClick) {
+                Icon(
+                    imageVector = Icons.Default.Edit,
+                    contentDescription = stringResource(Res.string.feature_send_interbank_edit),
+                    tint = KptTheme.colorScheme.primary,
+                )
+            }
+        }
     }
 }
 
@@ -309,19 +470,25 @@ private fun TransferInfoCard(
 fun TransferDetailsScreenPreview() {
     MifosTheme {
         val mockFromAccount = Account(
-            name = "John Doe",
-            number = "9876-5432-1098-7654",
-            balance = 1250.75,
+            name = "WALLET",
+            number = "00000002",
+            balance = 5000.0,
             id = 101L,
             productId = 202L,
+            clientName = "ALEJANDRO ESCUTIA",
+            accountType = org.mifospay.core.model.savingsaccount.AccountType(
+                id = 1L,
+                code = "savingsAccountType.savings",
+                value = "Savings Account",
+            ),
             currency = Currency(
-                code = "USD",
-                name = "US Dollar",
-                displaySymbol = "$",
-                displayLabel = "US Dollar ($)",
+                code = "MXN",
+                name = "Mexican Peso",
+                displaySymbol = "MX$",
+                displayLabel = "Mexican Peso (MX$)",
                 decimalPlaces = 2,
                 inMultiplesOf = 10,
-                nameCode = "USD"
+                nameCode = "MXN",
             ),
             status = Status(
                 id = 300,
@@ -336,9 +503,9 @@ fun TransferDetailsScreenPreview() {
                 prematureClosed = false,
                 transferInProgress = false,
                 transferOnHold = false,
-                matured = false
+                matured = false,
             ),
-            image = "" // Optional: "https://example.com/path/to/image.png"
+            image = "",
         )
 
         val mockRecipient = InterBankPartyInfoResponse(
@@ -374,19 +541,25 @@ fun TransferDetailsScreenPreview() {
 fun TransferDetailsScreenEmptyPreview() {
     MifosTheme {
         val mockFromAccount = Account(
-            name = "John Doe",
-            number = "9876-5432-1098-7654",
-            balance = 1250.75,
+            name = "WALLET",
+            number = "00000002",
+            balance = 5000.0,
             id = 101L,
             productId = 202L,
+            clientName = "ALEJANDRO ESCUTIA",
+            accountType = org.mifospay.core.model.savingsaccount.AccountType(
+                id = 1L,
+                code = "savingsAccountType.savings",
+                value = "Savings Account",
+            ),
             currency = Currency(
-                code = "USD",
-                name = "US Dollar",
-                displaySymbol = "$",
-                displayLabel = "US Dollar ($)",
+                code = "MXN",
+                name = "Mexican Peso",
+                displaySymbol = "MX$",
+                displayLabel = "Mexican Peso (MX$)",
                 decimalPlaces = 2,
                 inMultiplesOf = 10,
-                nameCode = "USD"
+                nameCode = "MXN",
             ),
             status = Status(
                 id = 300,
@@ -401,9 +574,9 @@ fun TransferDetailsScreenEmptyPreview() {
                 prematureClosed = false,
                 transferInProgress = false,
                 transferOnHold = false,
-                matured = false
+                matured = false,
             ),
-            image = "" // Optional: "https://example.com/path/to/image.png"
+            image = "",
         )
 
         val mockRecipient = InterBankPartyInfoResponse(

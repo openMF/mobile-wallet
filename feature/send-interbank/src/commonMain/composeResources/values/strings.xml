@@ -34,18 +34,25 @@
 
     <!-- Transfer Details Screen -->
     <string name="feature_send_interbank_transfer_details">Transfer Details</string>
-    <string name="feature_send_interbank_from_account">From Account</string>
-    <string name="feature_send_interbank_to_account">To Account</string>
+    <string name="feature_send_interbank_from_account">FROM Account</string>
+    <string name="feature_send_interbank_to_account">TO Account</string>
     <string name="feature_send_interbank_amount">Amount</string>
-    <string name="feature_send_interbank_date">Date</string>
-    <string name="feature_send_interbank_description">Description</string>
-    <string name="feature_send_interbank_continue">Continue</string>
+    <string name="feature_send_interbank_date">Transaction Date</string>
+    <string name="feature_send_interbank_description">Description (Optional)</string>
+    <string name="feature_send_interbank_continue">Review Transfer</string>
+    <string name="feature_send_interbank_amount_exceeds_balance">Amount exceeds available balance</string>
+    <string name="feature_send_interbank_available_balance">Available Balance: %1$d</string>
+    <string name="feature_send_interbank_enter_amount">Enter amount</string>
+    <string name="feature_send_interbank_today">Today</string>
+    <string name="feature_send_interbank_verified">Verified</string>
+    <string name="feature_send_interbank_exchange_rate_info">Exchange rate info or fees</string>
 
     <!-- Preview Transfer Screen -->
     <string name="feature_send_interbank_preview_transfer">Preview Transfer</string>
     <string name="feature_send_interbank_review_transfer">Review Your Transfer</string>
     <string name="feature_send_interbank_confirm_pay">Confirm &amp; Pay</string>
     <string name="feature_send_interbank_edit">Edit</string>
+    <string name="feature_send_interbank_review_transfer_button">Review Transfer</string>
 
     <!-- Transfer Result Screens -->
     <string name="feature_send_interbank_transfer_successful">Transfer Successful</string>

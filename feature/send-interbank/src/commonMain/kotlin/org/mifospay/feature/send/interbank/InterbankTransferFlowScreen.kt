@@ -125,6 +125,12 @@ fun InterbankTransferFlowScreen(
                     // Update the selected account
                     viewModel.trySendAction(InterbankTransferAction.NavigateToRecipientSearch(account))
                 },
+                onEditFromAccount = {
+                    viewModel.trySendAction(InterbankTransferAction.EditFromAccount)
+                },
+                onEditRecipient = {
+                    viewModel.trySendAction(InterbankTransferAction.EditRecipient)
+                },
                 modifier = modifier,
             )
         }

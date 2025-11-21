@@ -93,6 +93,18 @@ class InterbankTransferViewModel(
                 }
             }
 
+            InterbankTransferAction.EditFromAccount -> {
+                mutableStateFlow.update {
+                    it.copy(currentStep = InterbankTransferState.Step.SelectAccount)
+                }
+            }
+
+            InterbankTransferAction.EditRecipient -> {
+                mutableStateFlow.update {
+                    it.copy(currentStep = InterbankTransferState.Step.SearchRecipient)
+                }
+            }
+
             // Transfer details actions
             is InterbankTransferAction.UpdateAmount -> {
                 mutableStateFlow.update {
@@ -360,7 +372,7 @@ data class InterbankTransferState(
     val fromAccounts: List<Account> = emptyList(),
     val selectedFromAccount: Account? = null,
     val selectedParticipantInfo: InterBankPartyInfoResponse? = null,
-    val transferAmount: String = "",
+    val transferAmount: String = "1.0",
     val transferDate: String = "",
     val transferDescription: String = "",
     val isProcessing: Boolean = false,
@@ -431,6 +443,8 @@ sealed interface InterbankTransferAction {
     data class NavigateToTransferDetails(val participantInfo: InterBankPartyInfoResponse) : InterbankTransferAction
     data object NavigateToPreview : InterbankTransferAction
     data object NavigateBack : InterbankTransferAction
+    data object EditFromAccount : InterbankTransferAction
+    data object EditRecipient : InterbankTransferAction
 
     // Transfer details
     data class UpdateAmount(val amount: String) : InterbankTransferAction
