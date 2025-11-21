@@ -20,6 +20,8 @@ data class Account(
     val number: String,
     val balance: Double = 0.0,
     val id: Long = 0L,
+    val externalId: String? = null,
+    val productName: String? = null,
     val productId: Long = 0L,
     val currency: Currency,
     val status: Status,

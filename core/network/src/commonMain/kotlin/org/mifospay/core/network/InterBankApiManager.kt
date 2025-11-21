@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 Mifos Initiative
+ * Copyright 2025 Mifos Initiative
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -7,10 +7,10 @@
  *
  * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
  */
-package org.mifospay.core.network.di
+package org.mifospay.core.network
 
-import org.koin.core.qualifier.named
-
-val SelfClient = named("SelfClient")
-val BaseClient = named("BaseClient")
-val InterBankClient = named("InterBankClient")
+class InterBankApiManager(
+    private val ktorfitClient: KtorfitClient,
+) {
+    val interBankApi by lazy { ktorfitClient.interBankApi }
+}

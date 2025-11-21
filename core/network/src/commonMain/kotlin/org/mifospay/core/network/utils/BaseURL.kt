@@ -22,9 +22,17 @@ object BaseURL {
     const val HEADER_AUTH = "Authorization"
     const val DEFAULT = "default"
 
+    const val API_ENDPOINT_INTERBANK = "apis.flexcore.mx"
+    const val API_PATH_INTERBANK = "/v1.0/vnext1/"
+
+    const val FINERACT_PLATFORM_TENANT_ID = "mifos-bank-1"
+
     val url: String
         get() = PROTOCOL_HTTPS + API_ENDPOINT + API_PATH
 
     val selfServiceUrl: String
         get() = PROTOCOL_HTTPS + API_ENDPOINT_SELF + API_PATH_SELF
+
+    val interBankUrl: String
+        get() = PROTOCOL_HTTPS + API_ENDPOINT_INTERBANK + API_PATH_INTERBANK
 }

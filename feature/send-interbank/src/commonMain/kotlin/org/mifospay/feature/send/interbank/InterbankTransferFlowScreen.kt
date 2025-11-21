@@ -39,7 +39,6 @@ fun InterbankTransferFlowScreen(
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     var searchQuery by remember { mutableStateOf("") }
-    var searchResults by remember { mutableStateOf<List<RecipientInfo>>(emptyList()) }
 
     EventsEffect(viewModel) { event ->
         when (event) {
@@ -70,33 +69,28 @@ fun InterbankTransferFlowScreen(
         }
 
         InterbankTransferState.Step.SearchRecipient -> {
+            val searchState = state.searchRecipientState
+            val isSearching = searchState is InterbankTransferState.SearchRecipientState.Loading
+            val searchError = (searchState as? InterbankTransferState.SearchRecipientState.Error)?.message
+
             SearchRecipientScreen(
                 searchQuery = searchQuery,
                 onSearchQueryChanged = { query ->
                     searchQuery = query
-                    // TODO: Implement actual recipient search from API
-                    // For now, mock search results
-                    searchResults = if (query.isNotEmpty()) {
-                        listOf(
-                            RecipientInfo(
-                                clientId = 1L,
-                                officeId = 1,
-                                accountId = 1,
-                                accountType = 2,
-                                clientName = "Pedro Barreto",
-                                accountNo = "9880000020",
-                            ),
-                        )
-                    } else {
-                        emptyList()
-                    }
                 },
-                recipients = searchResults,
-                onRecipientSelected = { recipient ->
+                recipients = state.searchResults,
+                onRecipientSelected = { participantInfo ->
                     viewModel.trySendAction(
-                        InterbankTransferAction.NavigateToTransferDetails(recipient),
+                        InterbankTransferAction.NavigateToTransferDetails(participantInfo),
                     )
                 },
+                onSearchClick = { phoneNumber ->
+                    viewModel.trySendAction(
+                        InterbankTransferAction.SearchRecipient(phoneNumber),
+                    )
+                },
+                isSearching = isSearching,
+                searchError = searchError,
                 onBackClick = {
                     viewModel.trySendAction(InterbankTransferAction.NavigateBack)
                 },
@@ -107,7 +101,7 @@ fun InterbankTransferFlowScreen(
         InterbankTransferState.Step.TransferDetails -> {
             TransferDetailsScreen(
                 fromAccount = state.selectedFromAccount,
-                recipient = state.selectedRecipient,
+                recipient = state.selectedParticipantInfo,
                 amount = state.transferAmount,
                 onAmountChanged = { amount ->
                     viewModel.trySendAction(InterbankTransferAction.UpdateAmount(amount))
@@ -126,16 +120,23 @@ fun InterbankTransferFlowScreen(
                 onBackClick = {
                     viewModel.trySendAction(InterbankTransferAction.NavigateBack)
                 },
+                availableAccounts = state.fromAccounts,
+                onFromAccountChange = { account ->
+                    // Update the selected account
+                    viewModel.trySendAction(InterbankTransferAction.NavigateToRecipientSearch(account))
+                },
                 modifier = modifier,
             )
         }
 
         InterbankTransferState.Step.PreviewTransfer -> {
             PreviewTransferScreen(
-                transferPayload = state.transferPayload,
+                amount = state.transferAmount,
+                transferDate = state.transferDate,
+                transferDescription = state.transferDescription,
                 fromAccountName = state.selectedFromAccount?.name ?: "Unknown",
                 fromAccountNo = state.selectedFromAccount?.number ?: "N/A",
-                recipientInfo = state.selectedRecipient,
+                recipientInfo = state.selectedParticipantInfo,
                 isProcessing = state.isProcessing,
                 onEditClick = {
                     viewModel.trySendAction(InterbankTransferAction.NavigateBack)
@@ -152,7 +153,7 @@ fun InterbankTransferFlowScreen(
 
         InterbankTransferState.Step.TransferSuccess -> {
             TransferSuccessScreen(
-                recipientName = state.selectedRecipient?.clientName ?: "Recipient",
+                recipientName = "${state.selectedParticipantInfo?.firstName ?: ""} ${state.selectedParticipantInfo?.lastName ?: ""}".trim().ifEmpty { "Recipient" },
                 amount = state.transferAmount,
                 onDownloadReceipt = {
                     // TODO: Implement receipt download

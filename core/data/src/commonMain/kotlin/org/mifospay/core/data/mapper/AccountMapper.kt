@@ -23,9 +23,11 @@ fun List<SavingAccountEntity>.toAccount(): List<Account> {
             name = it.productName,
             number = it.accountNo,
             id = it.id,
+            externalId = it.externalId,
             balance = it.accountBalance,
             currency = it.currency,
             productId = it.productId,
+            productName = it.productName,
             status = it.status,
         )
     }

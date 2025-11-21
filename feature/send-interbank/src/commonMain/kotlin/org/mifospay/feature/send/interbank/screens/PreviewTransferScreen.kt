@@ -45,17 +45,18 @@ import org.mifospay.core.designsystem.component.MifosScaffold
 import org.mifospay.core.designsystem.component.MifosTopBar
 import org.mifospay.core.designsystem.icon.MifosIcons
 import org.mifospay.core.designsystem.theme.MifosTheme
-import org.mifospay.core.network.model.entity.payload.TransferPayload
+import org.mifospay.core.model.interbank.InterBankPartyInfoResponse
 import org.mifospay.core.ui.AvatarBox
-import org.mifospay.feature.send.interbank.RecipientInfo
 import template.core.base.designsystem.theme.KptTheme
 
 @Composable
 fun PreviewTransferScreen(
-    transferPayload: TransferPayload,
+    amount: String,
+    transferDate: String,
+    transferDescription: String,
     fromAccountName: String,
     fromAccountNo: String,
-    recipientInfo: RecipientInfo?,
+    recipientInfo: InterBankPartyInfoResponse?,
     isProcessing: Boolean,
     onEditClick: () -> Unit,
     onConfirmClick: () -> Unit,
@@ -125,8 +126,8 @@ fun PreviewTransferScreen(
             item {
                 PreviewCard(
                     title = stringResource(Res.string.feature_send_interbank_to_account),
-                    name = recipientInfo?.clientName ?: "Unknown",
-                    accountNo = recipientInfo?.accountNo ?: "N/A",
+                    name = "${recipientInfo?.firstName ?: ""} ${recipientInfo?.lastName ?: ""}".trim(),
+                    accountNo = recipientInfo?.partyId ?: "N/A",
                     icon = MifosIcons.Person,
                 )
             }
@@ -135,7 +136,7 @@ fun PreviewTransferScreen(
             item {
                 PreviewDetailRow(
                     label = stringResource(Res.string.feature_send_interbank_amount),
-                    value = "$${transferPayload.transferAmount}",
+                    value = "$$amount",
                     isHighlight = true,
                 )
             }
@@ -144,7 +145,7 @@ fun PreviewTransferScreen(
             item {
                 PreviewDetailRow(
                     label = stringResource(Res.string.feature_send_interbank_date),
-                    value = transferPayload.transferDate ?: "N/A",
+                    value = transferDate.ifEmpty { "N/A" },
                 )
             }
 
@@ -152,7 +153,7 @@ fun PreviewTransferScreen(
             item {
                 PreviewDetailRow(
                     label = stringResource(Res.string.feature_send_interbank_description),
-                    value = transferPayload.transferDescription ?: "N/A",
+                    value = transferDescription.ifEmpty { "N/A" },
                 )
             }
 
@@ -252,31 +253,23 @@ private fun PreviewDetailRow(
 @Composable
 fun PreviewTransferScreenPreview() {
     MifosTheme {
-        val mockPayload = TransferPayload(
-            fromOfficeId = 1,
-            fromClientId = 1L,
-            fromAccountType = 2,
-            fromAccountId = 1,
-            toOfficeId = 1,
-            toClientId = 1L,
-            toAccountType = 2,
-            toAccountId = 1,
-            transferDate = "11/09/25",
-            transferAmount = 100.0,
-            transferDescription = "Dinner share",
-        )
-
-        val mockRecipient = RecipientInfo(
-            clientId = 1L,
-            officeId = 1,
-            accountId = 1,
-            accountType = 2,
-            clientName = "Pedro Barreto",
-            accountNo = "9880000020",
+        val mockRecipient = InterBankPartyInfoResponse(
+            sourceFspId = "mifos-bank-1",
+            destinationFspId = "blackbank-test",
+            requestId = "req-001",
+            partyId = "9880000020",
+            currencyCode = "MXN",
+            firstName = "Pedro",
+            lastName = "Barreto",
+            systemMessage = "Success",
+            executionStatus = true,
+            partyIdType = "MSISDN",
         )
 
         PreviewTransferScreen(
-            transferPayload = mockPayload,
+            amount = "100.00",
+            transferDate = "11/09/25",
+            transferDescription = "Dinner share",
             fromAccountName = "ALEJANDRO ESCUTIA",
             fromAccountNo = "00000002",
             recipientInfo = mockRecipient,
@@ -292,31 +285,23 @@ fun PreviewTransferScreenPreview() {
 @Composable
 fun PreviewTransferScreenProcessingPreview() {
     MifosTheme {
-        val mockPayload = TransferPayload(
-            fromOfficeId = 1,
-            fromClientId = 1L,
-            fromAccountType = 2,
-            fromAccountId = 1,
-            toOfficeId = 1,
-            toClientId = 1L,
-            toAccountType = 2,
-            toAccountId = 1,
-            transferDate = "11/09/25",
-            transferAmount = 100.0,
-            transferDescription = "Dinner share",
-        )
-
-        val mockRecipient = RecipientInfo(
-            clientId = 1L,
-            officeId = 1,
-            accountId = 1,
-            accountType = 2,
-            clientName = "Pedro Barreto",
-            accountNo = "9880000020",
+        val mockRecipient = InterBankPartyInfoResponse(
+            sourceFspId = "mifos-bank-1",
+            destinationFspId = "blackbank-test",
+            requestId = "req-001",
+            partyId = "9880000020",
+            currencyCode = "MXN",
+            firstName = "Pedro",
+            lastName = "Barreto",
+            systemMessage = "Success",
+            executionStatus = true,
+            partyIdType = "MSISDN",
         )
 
         PreviewTransferScreen(
-            transferPayload = mockPayload,
+            amount = "100.00",
+            transferDate = "11/09/25",
+            transferDescription = "Dinner share",
             fromAccountName = "ALEJANDRO ESCUTIA",
             fromAccountNo = "00000002",
             recipientInfo = mockRecipient,

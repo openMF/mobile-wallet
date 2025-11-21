@@ -147,9 +147,10 @@ private fun AccountSelectionCard(
     MifosCard(
         modifier = modifier
             .clickable(onClick = onClick)
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .padding(KptTheme.spacing.xs),
         shape = KptTheme.shapes.medium,
-        colors = CardDefaults.cardColors(KptTheme.colorScheme.surface),
+        colors = CardDefaults.cardColors(KptTheme.colorScheme.surfaceContainer),
     ) {
         val accountBalance = CurrencyFormatter.format(
             balance = account.balance,

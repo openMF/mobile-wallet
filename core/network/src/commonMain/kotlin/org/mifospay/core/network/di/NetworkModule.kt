@@ -16,6 +16,7 @@ import org.mifos.corebase.network.httpClient
 import org.mifos.corebase.network.setupDefaultHttpClient
 import org.mifospay.core.datastore.UserPreferencesRepository
 import org.mifospay.core.network.FineractApiManager
+import org.mifospay.core.network.InterBankApiManager
 import org.mifospay.core.network.KtorfitClient
 import org.mifospay.core.network.SelfServiceApiManager
 import org.mifospay.core.network.utils.BaseURL
@@ -64,7 +65,7 @@ val NetworkModule = module {
                                 "Content-Type" to "application/json",
                                 "Accept" to "application/json",
                             ),
-                            loggableHosts = listOf("mifos-bank-1.mifos.community"),
+                            loggableHosts = listOf("mifos-bank-1.mifos.community", "apis.flexcore.mx"),
                         ),
                     ),
                 )
@@ -75,11 +76,36 @@ val NetworkModule = module {
         )
     }
 
+    single<KtorfitClient>(qualifier = InterBankClient) {
+        KtorfitClient(
+            Ktorfit.Builder()
+                .httpClient(
+                    client = httpClient(
+                        config = setupDefaultHttpClient(
+                            baseUrl = BaseURL.interBankUrl,
+                            defaultHeaders = mapOf(
+                                "Fineract-Platform-TenantId" to BaseURL.FINERACT_PLATFORM_TENANT_ID,
+                                "Content-Type" to "application/json",
+                                "Accept" to "application/json",
+                            ),
+                            loggableHosts = listOf("apis.flexcore.mx"),
+                        ),
+                    ),
+                )
+                .converterFactories(FlowConverterFactory())
+                .build(),
+        )
+    }
+
     single {
         FineractApiManager(ktorfitClient = get(BaseClient))
     }
 
     single {
         SelfServiceApiManager(ktorfitClient = get(SelfClient))
+    }
+
+    single {
+        InterBankApiManager(ktorfitClient = get(InterBankClient))
     }
 }

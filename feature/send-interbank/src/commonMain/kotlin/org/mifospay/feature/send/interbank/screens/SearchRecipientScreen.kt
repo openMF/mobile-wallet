@@ -19,8 +19,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.Text
@@ -41,7 +41,9 @@ import mobile_wallet.feature.send_interbank.generated.resources.feature_send_int
 import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_found_recipients
 import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_enter_phone_to_search
 import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_account
-import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_id
+import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_bank
+import org.mifospay.core.designsystem.component.MifosButton
+import org.mifospay.core.designsystem.component.MifosCard
 import org.mifospay.core.designsystem.component.MifosScaffold
 import org.mifospay.core.designsystem.component.MifosTextField
 import org.mifospay.core.designsystem.component.MifosTopBar
@@ -49,15 +51,18 @@ import org.mifospay.core.designsystem.icon.MifosIcons
 import org.mifospay.core.designsystem.theme.MifosTheme
 import org.mifospay.core.ui.AvatarBox
 import org.mifospay.core.ui.EmptyContentScreen
-import org.mifospay.feature.send.interbank.RecipientInfo
+import org.mifospay.core.model.interbank.InterBankPartyInfoResponse
 import template.core.base.designsystem.theme.KptTheme
 
 @Composable
 fun SearchRecipientScreen(
     searchQuery: String,
     onSearchQueryChanged: (String) -> Unit,
-    recipients: List<RecipientInfo>,
-    onRecipientSelected: (RecipientInfo) -> Unit,
+    recipients: List<InterBankPartyInfoResponse>,
+    onRecipientSelected: (InterBankPartyInfoResponse) -> Unit,
+    onSearchClick: (String) -> Unit,
+    isSearching: Boolean = false,
+    searchError: String? = null,
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -88,14 +93,39 @@ fun SearchRecipientScreen(
                 modifier = Modifier.fillMaxWidth(),
             )
 
-            if (recipients.isEmpty() && searchQuery.isNotEmpty()) {
+            MifosButton(
+                onClick = { onSearchClick(searchQuery) },
+                modifier = Modifier.fillMaxWidth(),
+                enabled = searchQuery.length >= 10 && !isSearching,
+            ) {
+                Text(stringResource(Res.string.feature_send_interbank_search_recipient))
+            }
+
+            if (isSearching) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(vertical = KptTheme.spacing.lg),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    CircularProgressIndicator()
+                }
+            } else if (searchError != null) {
+                EmptyContentScreen(
+                    title = stringResource(Res.string.feature_send_interbank_no_results),
+                    subTitle = searchError,
+                )
+            } else if (recipients.isEmpty() && searchQuery.isNotEmpty()) {
                 EmptyContentScreen(
                     title = stringResource(Res.string.feature_send_interbank_no_results),
                     subTitle = stringResource(Res.string.feature_send_interbank_no_recipients_found),
                 )
             } else if (recipients.isNotEmpty()) {
                 Text(
-                    text = stringResource(Res.string.feature_send_interbank_found_recipients, recipients.size),
+                    text = stringResource(
+                        Res.string.feature_send_interbank_found_recipients,
+                        recipients.size,
+                    ),
                     style = KptTheme.typography.labelLarge,
                     fontWeight = FontWeight.SemiBold,
                 )
@@ -130,22 +160,22 @@ fun SearchRecipientScreen(
 
 @Composable
 private fun RecipientSelectionCard(
-    recipient: RecipientInfo,
+    recipient: InterBankPartyInfoResponse,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Card(
+    MifosCard(
         modifier = modifier
             .fillMaxWidth()
+            .padding(KptTheme.spacing.xs)
             .clickable(onClick = onClick),
-        colors = CardDefaults.cardColors(
-            containerColor = KptTheme.colorScheme.surfaceContainer,
-        ),
+        shape = KptTheme.shapes.medium,
+        colors = CardDefaults.cardColors(KptTheme.colorScheme.surface),
     ) {
         ListItem(
             headlineContent = {
                 Text(
-                    text = recipient.clientName,
+                    text = "${recipient.firstName} ${recipient.lastName}",
                     fontWeight = FontWeight.SemiBold,
                 )
             },
@@ -154,11 +184,17 @@ private fun RecipientSelectionCard(
                     verticalArrangement = Arrangement.spacedBy(4.dp),
                 ) {
                     Text(
-                        text = stringResource(Res.string.feature_send_interbank_account) + ": ${recipient.accountNo}",
+                        text = stringResource(
+                            Res.string.feature_send_interbank_account,
+                            recipient.partyId,
+                        ),
                         style = KptTheme.typography.bodySmall,
                     )
                     Text(
-                        text = stringResource(Res.string.feature_send_interbank_id) + ": ${recipient.clientId}",
+                        text = stringResource(
+                            Res.string.feature_send_interbank_bank,
+                            recipient.destinationFspId,
+                        ),
                         style = KptTheme.typography.bodySmall,
                         color = KptTheme.colorScheme.onSurfaceVariant,
                     )
@@ -182,21 +218,29 @@ private fun RecipientSelectionCard(
 fun SearchRecipientScreenPreview() {
     MifosTheme {
         val mockRecipients = listOf(
-            RecipientInfo(
-                clientId = 1L,
-                officeId = 1,
-                accountId = 1,
-                accountType = 2,
-                clientName = "Pedro Barreto",
-                accountNo = "9880000020",
+            InterBankPartyInfoResponse(
+                sourceFspId = "mifos-bank-1",
+                destinationFspId = "blackbank-test",
+                requestId = "req-001",
+                partyId = "9880000020",
+                currencyCode = "MXN",
+                firstName = "Pedro",
+                lastName = "Barreto",
+                systemMessage = "Success",
+                executionStatus = true,
+                partyIdType = "MSISDN",
             ),
-            RecipientInfo(
-                clientId = 2L,
-                officeId = 1,
-                accountId = 2,
-                accountType = 2,
-                clientName = "Maria Garcia",
-                accountNo = "9880000021",
+            InterBankPartyInfoResponse(
+                sourceFspId = "mifos-bank-1",
+                destinationFspId = "blackbank-test",
+                requestId = "req-002",
+                partyId = "9880000021",
+                currencyCode = "MXN",
+                firstName = "Maria",
+                lastName = "Garcia",
+                systemMessage = "Success",
+                executionStatus = true,
+                partyIdType = "MSISDN",
             ),
         )
 
@@ -205,6 +249,7 @@ fun SearchRecipientScreenPreview() {
             onSearchQueryChanged = {},
             recipients = mockRecipients,
             onRecipientSelected = {},
+            onSearchClick = {},
             onBackClick = {},
         )
     }
@@ -219,6 +264,7 @@ fun SearchRecipientScreenEmptyPreview() {
             onSearchQueryChanged = {},
             recipients = emptyList(),
             onRecipientSelected = {},
+            onSearchClick = {},
             onBackClick = {},
         )
     }
@@ -233,6 +279,23 @@ fun SearchRecipientScreenNoResultsPreview() {
             onSearchQueryChanged = {},
             recipients = emptyList(),
             onRecipientSelected = {},
+            onSearchClick = {},
+            onBackClick = {},
+        )
+    }
+}
+
+@Preview
+@Composable
+fun SearchRecipientScreenLoadingPreview() {
+    MifosTheme {
+        SearchRecipientScreen(
+            searchQuery = "9388006020",
+            onSearchQueryChanged = {},
+            recipients = emptyList(),
+            onRecipientSelected = {},
+            onSearchClick = {},
+            isSearching = true,
             onBackClick = {},
         )
     }
