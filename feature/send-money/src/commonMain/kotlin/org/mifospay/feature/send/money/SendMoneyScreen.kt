@@ -67,6 +67,7 @@ import mobile_wallet.feature.send_money.generated.resources.feature_send_money_s
 import mobile_wallet.feature.send_money.generated.resources.feature_send_money_to_account
 import mobile_wallet.feature.send_money.generated.resources.feature_send_money_vpa_mobile_account_number
 import org.jetbrains.compose.resources.stringResource
+import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
 import org.mifospay.core.common.utils.maskString
 import org.mifospay.core.designsystem.component.BasicDialogState.Shown
@@ -80,6 +81,7 @@ import org.mifospay.core.designsystem.component.MifosScaffold
 import org.mifospay.core.designsystem.component.MifosTextField
 import org.mifospay.core.designsystem.component.MifosTopBar
 import org.mifospay.core.designsystem.icon.MifosIcons
+import org.mifospay.core.designsystem.theme.MifosTheme
 import org.mifospay.core.designsystem.theme.toRoundedCornerShape
 import org.mifospay.core.model.search.AccountResult
 import org.mifospay.core.ui.AvatarBox
@@ -528,5 +530,150 @@ private fun SendMoneyDialogs(
         )
 
         null -> Unit
+    }
+}
+
+@Preview
+@Composable
+private fun SendMoneyScreenPreview() {
+    MifosTheme {
+        SendMoneyScreen(
+            state = SendMoneyState(
+                amount = "100",
+                accountNumber = "1234567890",
+                selectedAccount = null,
+                dialogState = null,
+            ),
+            accountState = ViewState.Empty,
+            showTopBar = true,
+            onAction = {},
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun SendMoneyScreenWithAccountsPreview() {
+    MifosTheme {
+        SendMoneyScreen(
+            state = SendMoneyState(
+                amount = "500",
+                accountNumber = "9876543210",
+                selectedAccount = AccountResult(
+                    entityId = 1,
+                    entityName = "Savings",
+                    entityType = "SAVINGS",
+                    parentName = "John Doe",
+                    entityAccountNo = "1234567890",
+                    entityExternalId = "1234567890",
+                    parentId = 1,
+                    subEntityType = "SAVINGS",
+                    parentType = "SAVINGS",
+                ),
+                dialogState = null,
+            ),
+            accountState = ViewState.Content(
+                data = listOf(
+                    AccountResult(
+                        entityId = 1,
+                        entityName = "Savings",
+                        entityType = "SAVINGS",
+                        parentName = "John Doe",
+                        entityAccountNo = "1234567890",
+                        entityExternalId = "1234567890",
+                        parentId = 1,
+                        subEntityType = "SAVINGS",
+                        parentType = "SAVINGS",
+                    ),
+                    AccountResult(
+                        entityId = 2,
+                        entityName = "Checking",
+                        entityType = "CHECKING",
+                        parentName = "Jane Smith",
+                        entityAccountNo = "1234567890",
+                        entityExternalId = "1234567890",
+                        parentId = 1,
+                        subEntityType = "SAVINGS",
+                        parentType = "SAVINGS",
+                    ),
+                ),
+            ),
+            showTopBar = true,
+            onAction = {},
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun SendMoneyBottomBarPreview() {
+    MifosTheme {
+        SendMoneyBottomBar(
+            showDetails = true,
+            selectedAccount = AccountResult(
+                entityId = 1,
+                entityName = "Savings",
+                entityType = "SAVINGS",
+                parentName = "John Doe",
+                entityAccountNo = "1234567890",
+                entityExternalId = "1234567890",
+                parentId = 1,
+                subEntityType = "SAVINGS",
+                parentType = "SAVINGS",
+            ),
+            onClickProceed = {},
+            onDeselect = {},
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun SelectedAccountCardPreview() {
+    MifosTheme {
+        SelectedAccountCard(
+            account = AccountResult(
+                entityId = 1,
+                entityName = "Savings",
+                entityType = "SAVINGS",
+                parentName = "John Doe",
+                entityAccountNo = "1234567890",
+                entityExternalId = "1234567890",
+                parentId = 1,
+                subEntityType = "SAVINGS",
+                parentType = "SAVINGS",
+            ),
+            onDeselect = {},
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun AccountCardPreview() {
+    MifosTheme {
+        AccountCard(
+            account = AccountResult(
+                entityId = 1,
+                entityName = "Savings",
+                entityType = "SAVINGS",
+                parentName = "John Doe",
+                entityAccountNo = "1234567890",
+                entityExternalId = "1234567890",
+                parentId = 1,
+                subEntityType = "SAVINGS",
+                parentType = "SAVINGS",
+            ),
+            selected = { true },
+            onClick = {},
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun AccountBadgePreview() {
+    MifosTheme {
+        AccountBadge(text = "SAVINGS")
     }
 }

@@ -33,7 +33,7 @@ val NetworkModule = module {
                     client = httpClient(
                         config = setupDefaultHttpClient(
                             baseUrl = BaseURL.selfServiceUrl,
-                            loggableHosts = listOf("tt.mifos.community"),
+                            loggableHosts = listOf("mifos-bank-1.mifos.community"),
                         ),
                     ).config {
                         install(KtorInterceptor) {
@@ -60,11 +60,11 @@ val NetworkModule = module {
                                 )
                             },
                             defaultHeaders = mapOf(
-                                "Fineract-Platform-TenantId" to "default",
+                                "Fineract-Platform-TenantId" to "mifos-bank-1",
                                 "Content-Type" to "application/json",
                                 "Accept" to "application/json",
                             ),
-                            loggableHosts = listOf("tt.mifos.community"),
+                            loggableHosts = listOf("mifos-bank-1.mifos.community"),
                         ),
                     ),
                 )

@@ -76,6 +76,8 @@ import org.mifospay.feature.send.money.selectScreen.selectAccountScreenDestinati
 import org.mifospay.feature.send.money.v2.SendMoneyv2Screen
 import org.mifospay.feature.send.money.v2.navigateToSendMoneyV2Screen
 import org.mifospay.feature.send.money.v2.sendMoneyScreenDestination
+import org.mifospay.feature.send.interbank.navigation.interbankTransferScreen
+import org.mifospay.feature.send.interbank.navigation.navigateToInterbankTransfer
 import org.mifospay.feature.settings.navigation.settingsScreen
 import org.mifospay.feature.standing.instruction.createOrUpdate.addEditSIScreen
 import org.mifospay.feature.standing.instruction.details.siDetailsScreen
@@ -173,7 +175,7 @@ internal fun MifosNavHost(
             onRequest = {
                 navController.navigateToShowQrScreen()
             },
-            onPay = navController::navigateToSendMoneyV2Screen,
+            onPay = navController::navigateToTransferOptions,
             navigateToTransactionDetail = navController::navigateToSpecificTransaction,
             navigateToAccountDetail = navController::navigateToSavingAccountDetails,
             navigateToHistory = navController::navigateToHistory,
@@ -404,6 +406,30 @@ internal fun MifosNavHost(
 
         setupUpiPinScreen(
             navigateBack = navController::navigateUp,
+        )
+
+        transferOptionsDialog(
+            onIntraBankTransferClick = navController::navigateToSendMoneyV2Screen,
+            onInterBankTransferClick = navController::navigateToInterbankTransfer,
+            onDismiss = {
+                navController.popBackStack()
+            },
+        )
+
+        interbankTransferScreen(
+            onBackClick = navController::popBackStack,
+            onTransferSuccess = { returnDestination ->
+                navController.navigateTransferSuccess(
+                    returnDestination = returnDestination,
+                    navOptions {
+                        popUpTo(HOME_ROUTE) { inclusive = false }
+                        launchSingleTop = true
+                    },
+                )
+            },
+            onContactSupport = {
+                // Handle contact support action
+            },
         )
     }
 }

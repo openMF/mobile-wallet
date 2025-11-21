@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copyright 2024 Mifos Initiative
+
+    This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+    If a copy of the MPL was not distributed with this file,
+    You can obtain one at https://mozilla.org/MPL/2.0/.
+
+    See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+-->
+<resources>
+    <!-- Select Account Screen -->
+    <string name="feature_send_interbank_select_account">Select Account</string>
+    <string name="feature_send_interbank_select_your_account">Select Your Account</string>
+    <string name="feature_send_interbank_choose_account_to_send">Choose the account you want to send money from</string>
+    <string name="feature_send_interbank_no_accounts">No Accounts</string>
+    <string name="feature_send_interbank_no_accounts_available">You don\'t have any accounts available for transfer</string>
+    <string name="feature_send_interbank_oops">Oops!</string>
+
+    <!-- Search Recipient Screen -->
+    <string name="feature_send_interbank_search_recipient">Search Recipient</string>
+    <string name="feature_send_interbank_enter_phone_number">Enter Phone Number</string>
+    <string name="feature_send_interbank_no_results">No Results</string>
+    <string name="feature_send_interbank_no_recipients_found">No recipients found matching your search</string>
+    <string name="feature_send_interbank_found_recipients">Found %d recipient(s)</string>
+    <string name="feature_send_interbank_enter_phone_to_search">Enter a phone number to search for recipients</string>
+    <string name="feature_send_interbank_account">Account</string>
+    <string name="feature_send_interbank_id">ID</string>
+
+    <!-- Transfer Details Screen -->
+    <string name="feature_send_interbank_transfer_details">Transfer Details</string>
+    <string name="feature_send_interbank_from_account">From Account</string>
+    <string name="feature_send_interbank_to_account">To Account</string>
+    <string name="feature_send_interbank_amount">Amount</string>
+    <string name="feature_send_interbank_date">Date</string>
+    <string name="feature_send_interbank_description">Description</string>
+    <string name="feature_send_interbank_continue">Continue</string>
+
+    <!-- Preview Transfer Screen -->
+    <string name="feature_send_interbank_preview_transfer">Preview Transfer</string>
+    <string name="feature_send_interbank_review_transfer">Review Your Transfer</string>
+    <string name="feature_send_interbank_confirm_pay">Confirm &amp; Pay</string>
+    <string name="feature_send_interbank_edit">Edit</string>
+
+    <!-- Transfer Result Screens -->
+    <string name="feature_send_interbank_transfer_successful">Transfer Successful</string>
+    <string name="feature_send_interbank_transfer_completed">Your transfer to %s has been completed successfully.</string>
+    <string name="feature_send_interbank_amount_label">Amount: $%s</string>
+    <string name="feature_send_interbank_download_receipt">Download Receipt</string>
+    <string name="feature_send_interbank_back_to_home">Back to Home</string>
+
+    <string name="feature_send_interbank_transfer_failed">Transfer Failed</string>
+    <string name="feature_send_interbank_transaction_failed">The transaction could not be completed. Please check your details and try again.</string>
+    <string name="feature_send_interbank_error">Error: %s</string>
+    <string name="feature_send_interbank_retry_transfer">Retry Transfer</string>
+    <string name="feature_send_interbank_contact_support">Contact Support</string>
+
+    <!-- Success Icon Description -->
+    <string name="feature_send_interbank_success">Success</string>
+    <!-- Failed Icon Description -->
+    <string name="feature_send_interbank_failed">Failed</string>
+</resources>
