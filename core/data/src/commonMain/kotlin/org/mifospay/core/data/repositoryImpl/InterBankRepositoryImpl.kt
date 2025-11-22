@@ -34,7 +34,7 @@ class InterBankRepositoryImpl(
             val request = InterBankParticipantRequest(
                 partyId = partyId.trim(),
                 currencyCode = currencyCode,
-                partyIdType = "MSISDN"
+                partyIdType = "MSISDN",
             )
             val result = withContext(ioDispatcher) {
                 apiManager.interBankApi.fetchParticipant(request)
@@ -55,7 +55,7 @@ class InterBankRepositoryImpl(
                 partyId = partyId.trim(),
                 currencyCode = currencyCode,
                 ownerFspId = ownerFspId,
-                partyIdType = "MSISDN"
+                partyIdType = "MSISDN",
             )
             val result = withContext(ioDispatcher) {
                 apiManager.interBankApi.fetchPartyInfo(request)
@@ -73,7 +73,7 @@ class InterBankRepositoryImpl(
         return try {
             // First, fetch participant to get the FSP ID
             val participantResult = fetchParticipant(partyId, currencyCode)
-            
+
             if (participantResult !is DataState.Success) {
                 return DataState.Error(
                     Exception("Failed to fetch participant"),
@@ -81,7 +81,7 @@ class InterBankRepositoryImpl(
             }
 
             val participant = participantResult.data
-            
+
             // Then, fetch party info using the FSP ID
             val partyInfoResult = fetchPartyInfo(
                 partyId = partyId,

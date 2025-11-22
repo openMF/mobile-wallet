@@ -50,6 +50,7 @@ import androidx.compose.material.icons.filled.Wallet
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material.icons.outlined.Cancel
+import androidx.compose.material.icons.outlined.CheckCircle
 import androidx.compose.material.icons.outlined.DeleteOutline
 import androidx.compose.material.icons.outlined.DoneAll
 import androidx.compose.material.icons.outlined.Edit
@@ -149,5 +150,5 @@ object MifosIcons {
     val Location = Icons.Filled.LocationOn
     val Savings = Icons.Rounded.AccountBalanceWallet
     val Transfer = Icons.Rounded.Money
-
+    val CheckCircle = Icons.Outlined.CheckCircle
 }

@@ -201,7 +201,7 @@ class SelfServiceRepositoryImpl(
                         clientName = templateAccount?.clientName ?: "",
                         accountType = templateAccount?.accountType?.toModelAccountType(),
                         officeName = templateAccount?.officeName,
-                        officeId = templateAccount?.officeId
+                        officeId = templateAccount?.officeId,
                     )
                 }
         }.asDataStateFlow()

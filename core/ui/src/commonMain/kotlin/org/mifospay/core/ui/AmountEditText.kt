@@ -1,7 +1,14 @@
+/*
+ * Copyright 2025 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay.core.ui
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.CheckCircle
 import androidx.compose.ui.focus.onFocusChanged
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.mifospay.core.designsystem.theme.MifosTheme
@@ -22,6 +29,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import org.mifospay.core.designsystem.icon.MifosIcons
 import template.core.base.designsystem.theme.KptTheme
 
 /**
@@ -65,18 +73,18 @@ fun AmountEditText(
     currencyTextStyle: TextStyle = TextStyle(
         fontSize = 24.sp,
         fontWeight = FontWeight.Bold,
-        color = KptTheme.colorScheme.primary
+        color = KptTheme.colorScheme.primary,
     ),
     amountTextStyle: TextStyle = TextStyle(
         fontSize = 40.sp,
         fontWeight = FontWeight.Bold,
-        color = KptTheme.colorScheme.primary
+        color = KptTheme.colorScheme.primary,
     ),
     balanceTextStyle: TextStyle = TextStyle(
         fontSize = 14.sp,
         fontWeight = FontWeight.Normal,
-        color = Color(0xFF388E3C)
-    )
+        color = Color(0xFF388E3C),
+    ),
 ) {
     var isFocused by remember { mutableStateOf(false) }
 
@@ -87,7 +95,7 @@ fun AmountEditText(
                 .fillMaxWidth()
                 .background(
                     color = backgroundColor,
-                    shape = RoundedCornerShape(cornerRadius)
+                    shape = RoundedCornerShape(cornerRadius),
                 )
                 .border(
                     width = borderWidth,
@@ -96,18 +104,18 @@ fun AmountEditText(
                         isFocused -> MaterialTheme.colorScheme.primary
                         else -> successBorderColor
                     },
-                    shape = RoundedCornerShape(cornerRadius)
+                    shape = RoundedCornerShape(cornerRadius),
                 )
-                .padding(contentPadding)
+                .padding(contentPadding),
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
             ) {
                 // Currency Symbol
                 Text(
                     text = currencyCode,
-                    style = currencyTextStyle
+                    style = currencyTextStyle,
                 )
 
                 Spacer(modifier = Modifier.width(12.dp))
@@ -118,7 +126,7 @@ fun AmountEditText(
                         .width(2.dp)
                         .height(48.dp),
                     thickness = 2.dp,
-                    color = KptTheme.colorScheme.primary
+                    color = KptTheme.colorScheme.primary,
                 )
 
                 Spacer(modifier = Modifier.width(12.dp))
@@ -129,17 +137,17 @@ fun AmountEditText(
                     onValueChange = { newValue ->
                         val formattedValue = formatAmount(newValue)
                         val doubleValue = formattedValue.replace(",", "").toDoubleOrNull() ?: 0.0
-                        
+
                         // Validate amount
                         val validationError = validateAmount(doubleValue, maxAmount)
                         onAmountValidation?.invoke(doubleValue, validationError)
-                        
+
                         // Always call onValueChange with Double value
                         onValueChange(doubleValue)
                     },
                     textStyle = amountTextStyle,
                     keyboardOptions = KeyboardOptions(
-                        keyboardType = KeyboardType.Decimal
+                        keyboardType = KeyboardType.Decimal,
                     ),
                     enabled = enabled,
                     singleLine = true,
@@ -153,12 +161,12 @@ fun AmountEditText(
                             Text(
                                 text = "0.00",
                                 style = amountTextStyle.copy(
-                                    color = amountTextStyle.color.copy(alpha = 0.3f)
-                                )
+                                    color = amountTextStyle.color.copy(alpha = 0.3f),
+                                ),
                             )
                         }
                         innerTextField()
-                    }
+                    },
                 )
             }
         }
@@ -172,21 +180,21 @@ fun AmountEditText(
                     .padding(top = 8.dp)
                     .background(
                         color = Color(0xFFFFEBEE),
-                        shape = RoundedCornerShape(4.dp)
+                        shape = RoundedCornerShape(4.dp),
                     )
-                    .padding(8.dp)
+                    .padding(8.dp),
             ) {
                 Text(
                     text = "⚠️",
                     style = MaterialTheme.typography.bodySmall,
-                    modifier = Modifier.padding(end = 4.dp)
+                    modifier = Modifier.padding(end = 4.dp),
                 )
                 Text(
                     text = errorMessage,
                     style = MaterialTheme.typography.bodySmall.copy(
                         color = Color(0xFFD32F2F),
-                        fontWeight = FontWeight.SemiBold
-                    )
+                        fontWeight = FontWeight.SemiBold,
+                    ),
                 )
             }
         }
@@ -195,20 +203,20 @@ fun AmountEditText(
         if (availableBalance != null && availableBalance > 0) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.padding(top = 8.dp)
+                modifier = Modifier.padding(top = 8.dp),
             ) {
                 Icon(
-                    imageVector = Icons.Outlined.CheckCircle,
+                    imageVector = MifosIcons.CheckCircle,
                     contentDescription = null,
                     tint = balanceTextStyle.color,
-                    modifier = Modifier.size(16.dp)
+                    modifier = Modifier.size(16.dp),
                 )
 
                 Spacer(modifier = Modifier.width(4.dp))
 
                 Text(
                     text = "Available Balance: $availableBalance $currencyCode",
-                    style = balanceTextStyle
+                    style = balanceTextStyle,
                 )
             }
         }
@@ -269,7 +277,7 @@ private fun AmountEditTextPreview() {
         Surface(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp)
+                .padding(16.dp),
         ) {
             AmountEditText(
                 value = amount,
@@ -284,7 +292,7 @@ private fun AmountEditTextPreview() {
                     errorMsg = error
                     isError = error != null
                 },
-                isError = isError
+                isError = isError,
             )
         }
     }
@@ -301,7 +309,7 @@ private fun AmountEditTextEmptyPreview() {
         Surface(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp)
+                .padding(16.dp),
         ) {
             AmountEditText(
                 value = amount,
@@ -316,7 +324,7 @@ private fun AmountEditTextEmptyPreview() {
                     errorMsg = error
                     isError = error != null
                 },
-                isError = isError
+                isError = isError,
             )
         }
     }
@@ -333,7 +341,7 @@ private fun AmountEditTextErrorPreview() {
         Surface(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp)
+                .padding(16.dp),
         ) {
             AmountEditText(
                 value = amount,
@@ -348,7 +356,7 @@ private fun AmountEditTextErrorPreview() {
                     errorMsg = error ?: ""
                     isError = error != null
                 },
-                isError = isError
+                isError = isError,
             )
         }
     }

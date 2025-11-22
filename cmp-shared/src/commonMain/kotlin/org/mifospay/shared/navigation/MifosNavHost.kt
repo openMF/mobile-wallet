@@ -358,6 +358,7 @@ internal fun MifosNavHost(
                             launchSingleTop = true
                         }
                     }
+
                     else -> {
                         navController.navigate(HOME_ROUTE) {
                             popUpTo(HOME_ROUTE) {
@@ -421,7 +422,7 @@ internal fun MifosNavHost(
                     }
                     launchSingleTop = true
                 }
-            }
+            },
         )
     }
 }

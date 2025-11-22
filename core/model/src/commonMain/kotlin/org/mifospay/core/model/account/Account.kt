@@ -29,5 +29,5 @@ data class Account(
     val clientName: String = "",
     val accountType: AccountType? = null,
     val officeName: String? = null,
-    val officeId: Int? = null
+    val officeId: Int? = null,
 )
