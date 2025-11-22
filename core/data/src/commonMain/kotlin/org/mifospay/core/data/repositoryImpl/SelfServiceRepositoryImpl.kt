@@ -31,6 +31,7 @@ import org.mifospay.core.common.asDataStateFlow
 import org.mifospay.core.common.combineResultsWith
 import org.mifospay.core.data.mapper.toAccount
 import org.mifospay.core.data.mapper.toModel
+import org.mifospay.core.data.mapper.toModelAccountType
 import org.mifospay.core.data.mapper.toTransactionList
 import org.mifospay.core.data.repository.SelfServiceRepository
 import org.mifospay.core.data.util.Constants
@@ -186,6 +187,39 @@ class SelfServiceRepositoryImpl(
             .map { it.toAccount() }
             .flowOn(dispatcher)
             .asDataStateFlow()
+    }
+
+    override fun getActiveAccountsWithAccountTransferTemplate(
+        clientId: Long,
+    ): Flow<DataState<List<Account>>> {
+        val accountsFlow = apiManager.clientsApi
+            .getAccounts(clientId, Constants.SAVINGS)
+            .map { entity -> entity.savingsAccounts.filter { it.status.active } }
+            .flowOn(dispatcher)
+
+        val templateFlow = apiManager.accountTransfersApi
+            .getAccountTransferTemplate()
+            .flowOn(dispatcher)
+
+        return accountsFlow.zip(templateFlow) { accounts, template ->
+            accounts
+                .toAccount()
+                .map { account ->
+                    val templateAccount = template.fromAccountOptions?.firstOrNull {
+                        it.accountNo == account.number
+                    }
+                    if (templateAccount == null) {
+                        account
+                    } else {
+                        account.copy(
+                            clientName = templateAccount.clientName ?: "",
+                            accountType = templateAccount.accountType?.toModelAccountType(),
+                            officeName = templateAccount.officeName,
+                            officeId = templateAccount.officeId,
+                        )
+                    }
+                }
+        }.asDataStateFlow()
     }
 
     override fun getTransactions(accountId: List<Long>, limit: Int?): Flow<List<Transaction>> {

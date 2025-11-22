@@ -13,3 +13,4 @@ import org.koin.core.qualifier.named
 
 val SelfClient = named("SelfClient")
 val BaseClient = named("BaseClient")
+val InterBankClient = named("InterBankClient")

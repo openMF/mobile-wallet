@@ -59,6 +59,7 @@ import org.mifospay.feature.payments.PAYMENTS_ROUTE
 import org.mifospay.feature.payments.PaymentsScreenContents
 import org.mifospay.feature.payments.RequestScreen
 import org.mifospay.feature.payments.paymentsScreen
+import org.mifospay.feature.payments.selectTransferType.SelectTransferTypeScreen
 import org.mifospay.feature.profile.navigation.profileNavGraph
 import org.mifospay.feature.qr.navigation.SCAN_QR_ROUTE
 import org.mifospay.feature.qr.navigation.navigateToScanQr
@@ -68,12 +69,13 @@ import org.mifospay.feature.request.money.navigation.navigateToShowQrScreen
 import org.mifospay.feature.request.money.navigation.showQrScreen
 import org.mifospay.feature.savedcards.createOrUpdate.addEditCardScreen
 import org.mifospay.feature.savedcards.details.cardDetailRoute
+import org.mifospay.feature.send.interbank.navigation.interbankTransferScreen
+import org.mifospay.feature.send.interbank.navigation.navigateToInterbankTransfer
 import org.mifospay.feature.send.money.navigation.SEND_MONEY_BASE_ROUTE
 import org.mifospay.feature.send.money.navigation.navigateToSendMoneyScreen
 import org.mifospay.feature.send.money.navigation.sendMoneyScreen
 import org.mifospay.feature.send.money.selectScreen.navigateToSelectAccountScreen
 import org.mifospay.feature.send.money.selectScreen.selectAccountScreenDestination
-import org.mifospay.feature.send.money.v2.SendMoneyv2Screen
 import org.mifospay.feature.send.money.v2.navigateToSendMoneyV2Screen
 import org.mifospay.feature.send.money.v2.sendMoneyScreenDestination
 import org.mifospay.feature.settings.navigation.settingsScreen
@@ -92,17 +94,13 @@ internal fun MifosNavHost(
 
     val paymentsTabContents = listOf(
         TabContent(PaymentsScreenContents.SEND.name) {
-            SendMoneyv2Screen(
-                navigateToSelectAccountScreen = {
-                    navController.navigateToSelectAccountScreen(returnDestination = "payments")
+            SelectTransferTypeScreen(
+                onIntraBankTransferClick = {
+                    navController.navigateToSendMoneyV2Screen()
                 },
-                navigateBack = {
-                    navController.navigateUp()
+                onInterBankTransferClick = {
+                    navController.navigateToInterbankTransfer()
                 },
-                navigateToBeneficiary = {
-                    navController.navigateToBeneficiaryAddEdit(BeneficiaryAddEditType.AddItem)
-                },
-                showTopBar = false,
             )
         },
         TabContent(PaymentsScreenContents.REQUEST.name) {
@@ -173,7 +171,7 @@ internal fun MifosNavHost(
             onRequest = {
                 navController.navigateToShowQrScreen()
             },
-            onPay = navController::navigateToSendMoneyV2Screen,
+            onPay = navController::navigateToTransferOptions,
             navigateToTransactionDetail = navController::navigateToSpecificTransaction,
             navigateToAccountDetail = navController::navigateToSavingAccountDetails,
             navigateToHistory = navController::navigateToHistory,
@@ -360,6 +358,7 @@ internal fun MifosNavHost(
                             launchSingleTop = true
                         }
                     }
+
                     else -> {
                         navController.navigate(HOME_ROUTE) {
                             popUpTo(HOME_ROUTE) {
@@ -404,6 +403,26 @@ internal fun MifosNavHost(
 
         setupUpiPinScreen(
             navigateBack = navController::navigateUp,
+        )
+
+        transferOptionsDialog(
+            onIntraBankTransferClick = navController::navigateToSendMoneyV2Screen,
+            onInterBankTransferClick = navController::navigateToInterbankTransfer,
+            onDismiss = {
+                navController.popBackStack()
+            },
+        )
+
+        interbankTransferScreen(
+            onBackClick = navController::popBackStack,
+            onTransferSuccess = {
+                navController.navigate(HOME_ROUTE) {
+                    popUpTo(HOME_ROUTE) {
+                        inclusive = false
+                    }
+                    launchSingleTop = true
+                }
+            },
         )
     }
 }

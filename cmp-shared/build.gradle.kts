@@ -51,6 +51,7 @@ kotlin {
             implementation(projects.feature.standingInstruction)
             implementation(projects.feature.requestMoney)
             implementation(projects.feature.sendMoney)
+            implementation(projects.feature.sendInterbank)
             implementation(projects.feature.makeTransfer)
             implementation(projects.feature.qr)
             implementation(projects.feature.merchants)
