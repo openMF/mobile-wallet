@@ -10,6 +10,7 @@
 package org.mifospay.feature.send.interbank.screens
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,21 +18,30 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Checkbox
+import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.material3.Icon
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import mobile_wallet.feature.send_interbank.generated.resources.Res
 import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_amount
+import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_available_balance
 import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_preview_transfer
 import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_review_transfer
 import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_confirm_pay
@@ -40,6 +50,7 @@ import mobile_wallet.feature.send_interbank.generated.resources.feature_send_int
 import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_edit
 import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_from_account
 import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_to_account
+import org.mifospay.core.common.CurrencyFormatter
 import org.mifospay.core.designsystem.component.MifosButton
 import org.mifospay.core.designsystem.component.MifosScaffold
 import org.mifospay.core.designsystem.component.MifosTopBar
@@ -56,13 +67,17 @@ fun PreviewTransferScreen(
     transferDescription: String,
     fromAccountName: String,
     fromAccountNo: String,
+    fromAccountBalance: Double = 0.0,
+    fromAccountType: String = "",
     recipientInfo: InterBankPartyInfoResponse?,
     isProcessing: Boolean,
     onEditClick: () -> Unit,
     onConfirmClick: () -> Unit,
     onBackClick: () -> Unit,
+    currencyCode: String = "MXN",
     modifier: Modifier = Modifier,
 ) {
+    var disclaimerAccepted by remember { mutableStateOf(false) }
     MifosScaffold(
         modifier = modifier,
         topBar = {
@@ -81,7 +96,7 @@ fun PreviewTransferScreen(
                 MifosButton(
                     onClick = onConfirmClick,
                     modifier = Modifier.fillMaxWidth(),
-                    enabled = !isProcessing,
+                    enabled = !isProcessing && disclaimerAccepted,
                 ) {
                     Text(stringResource(Res.string.feature_send_interbank_confirm_pay))
                 }
@@ -101,59 +116,159 @@ fun PreviewTransferScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .padding(KptTheme.spacing.md),
-            verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.md),
+                .padding(horizontal = KptTheme.spacing.md),
+            verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.lg),
         ) {
+            // From Account Section
             item {
-                Text(
-                    text = stringResource(Res.string.feature_send_interbank_review_transfer),
-                    style = KptTheme.typography.headlineSmall,
-                    fontWeight = FontWeight.SemiBold,
-                )
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.sm),
+                ) {
+                    Text(
+                        text = stringResource(Res.string.feature_send_interbank_from_account),
+                        style = KptTheme.typography.labelMedium,
+                        fontWeight = FontWeight.SemiBold,
+                        color = KptTheme.colorScheme.onSurfaceVariant,
+                    )
+                    TransferPreviewCard(
+                        name = fromAccountName,
+                        accountNo = fromAccountNo,
+                        accountType = fromAccountType,
+                        balance = fromAccountBalance,
+                        currencyCode = currencyCode,
+                        icon = MifosIcons.Bank,
+                    )
+                }
             }
 
-            // From Account
+            // To Account Section
             item {
-                PreviewCard(
-                    title = stringResource(Res.string.feature_send_interbank_from_account),
-                    name = fromAccountName,
-                    accountNo = fromAccountNo,
-                    icon = MifosIcons.Bank,
-                )
-            }
-
-            // To Account
-            item {
-                PreviewCard(
-                    title = stringResource(Res.string.feature_send_interbank_to_account),
-                    name = "${recipientInfo?.firstName ?: ""} ${recipientInfo?.lastName ?: ""}".trim(),
-                    accountNo = recipientInfo?.partyId ?: "N/A",
-                    icon = MifosIcons.Person,
-                )
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.sm),
+                ) {
+                    Text(
+                        text = stringResource(Res.string.feature_send_interbank_to_account),
+                        style = KptTheme.typography.labelMedium,
+                        fontWeight = FontWeight.SemiBold,
+                        color = KptTheme.colorScheme.onSurfaceVariant,
+                    )
+                    TransferPreviewCard(
+                        name = "${recipientInfo?.firstName ?: ""} ${recipientInfo?.lastName ?: ""}".trim(),
+                        accountNo = recipientInfo?.partyId ?: "N/A",
+                        accountType = recipientInfo?.destinationFspId ?: "",
+                        icon = MifosIcons.Person,
+                        isVerified = recipientInfo?.executionStatus == true,
+                    )
+                }
             }
 
             // Amount
             item {
-                PreviewDetailRow(
-                    label = stringResource(Res.string.feature_send_interbank_amount),
-                    value = "$$amount",
-                    isHighlight = true,
-                )
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.sm),
+                ) {
+                    Text(
+                        text = stringResource(Res.string.feature_send_interbank_amount),
+                        style = KptTheme.typography.labelMedium,
+                        fontWeight = FontWeight.SemiBold,
+                        color = KptTheme.colorScheme.onSurfaceVariant,
+                    )
+                    Card(
+                        modifier = Modifier.fillMaxWidth(),
+                        colors = CardDefaults.cardColors(
+                            containerColor = KptTheme.colorScheme.primaryContainer,
+                        ),
+                        shape = KptTheme.shapes.medium,
+                    ) {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(KptTheme.spacing.lg),
+                            horizontalArrangement = Arrangement.spacedBy(KptTheme.spacing.md),
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            Text(
+                                text = currencyCode,
+                                style = KptTheme.typography.headlineSmall,
+                                fontWeight = FontWeight.SemiBold,
+                                color = KptTheme.colorScheme.onPrimaryContainer,
+                            )
+                            Text(
+                                text = amount,
+                                style = KptTheme.typography.displaySmall,
+                                fontWeight = FontWeight.Bold,
+                                color = KptTheme.colorScheme.onPrimaryContainer,
+                            )
+                        }
+                    }
+                }
             }
 
             // Date
             item {
-                PreviewDetailRow(
-                    label = stringResource(Res.string.feature_send_interbank_date),
-                    value = transferDate.ifEmpty { "N/A" },
-                )
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.sm),
+                ) {
+                    Text(
+                        text = stringResource(Res.string.feature_send_interbank_date),
+                        style = KptTheme.typography.labelMedium,
+                        fontWeight = FontWeight.SemiBold,
+                        color = KptTheme.colorScheme.onSurfaceVariant,
+                    )
+                    Card(
+                        modifier = Modifier.fillMaxWidth(),
+                        colors = CardDefaults.cardColors(
+                            containerColor = KptTheme.colorScheme.surface,
+                        ),
+                        shape = KptTheme.shapes.medium,
+                    ) {
+                        Text(
+                            text = transferDate.ifEmpty { "N/A" },
+                            style = KptTheme.typography.bodyLarge,
+                            fontWeight = FontWeight.SemiBold,
+                            modifier = Modifier.padding(KptTheme.spacing.md),
+                        )
+                    }
+                }
             }
 
             // Description
             item {
-                PreviewDetailRow(
-                    label = stringResource(Res.string.feature_send_interbank_description),
-                    value = transferDescription.ifEmpty { "N/A" },
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.sm),
+                ) {
+                    Text(
+                        text = stringResource(Res.string.feature_send_interbank_description),
+                        style = KptTheme.typography.labelMedium,
+                        fontWeight = FontWeight.SemiBold,
+                        color = KptTheme.colorScheme.onSurfaceVariant,
+                    )
+                    Card(
+                        modifier = Modifier.fillMaxWidth(),
+                        colors = CardDefaults.cardColors(
+                            containerColor = KptTheme.colorScheme.surface,
+                        ),
+                        shape = KptTheme.shapes.medium,
+                    ) {
+                        Text(
+                            text = transferDescription.ifEmpty { "N/A" },
+                            style = KptTheme.typography.bodyMedium,
+                            modifier = Modifier.padding(KptTheme.spacing.md),
+                        )
+                    }
+                }
+            }
+
+            // Disclaimer with Checkbox
+            item {
+                DisclaimerCheckboxCard(
+                    isChecked = disclaimerAccepted,
+                    onCheckedChange = { disclaimerAccepted = it },
                 )
             }
 
@@ -165,33 +280,31 @@ fun PreviewTransferScreen(
 }
 
 @Composable
-private fun PreviewCard(
-    title: String,
+private fun TransferPreviewCard(
     name: String,
     accountNo: String,
     icon: ImageVector,
+    accountType: String = "",
+    balance: Double = 0.0,
+    currencyCode: String = "",
+    isVerified: Boolean = false,
     modifier: Modifier = Modifier,
 ) {
     Card(
         modifier = modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(
-            containerColor = KptTheme.colorScheme.surfaceContainer,
+            containerColor = KptTheme.colorScheme.surface,
         ),
+        shape = KptTheme.shapes.medium,
     ) {
         Column(
-            modifier = Modifier.padding(KptTheme.spacing.md),
-            verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.sm),
+            modifier = Modifier.padding(KptTheme.spacing.lg),
+            verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.md),
         ) {
-            Text(
-                text = title,
-                style = KptTheme.typography.labelMedium,
-                color = KptTheme.colorScheme.onSurfaceVariant,
-            )
-
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(KptTheme.spacing.md),
-                verticalAlignment = Alignment.CenterVertically,
+                verticalAlignment = Alignment.Top,
             ) {
                 AvatarBox(
                     icon = icon,
@@ -200,52 +313,122 @@ private fun PreviewCard(
 
                 Column(
                     modifier = Modifier.weight(1f),
-                    verticalArrangement = Arrangement.spacedBy(4.dp),
+                    verticalArrangement = Arrangement.spacedBy(6.dp),
                 ) {
                     Text(
                         text = name,
                         style = KptTheme.typography.bodyLarge,
                         fontWeight = FontWeight.SemiBold,
+                        color = KptTheme.colorScheme.onSurface,
                     )
+                    if (accountType.isNotEmpty()) {
+                        Text(
+                            text = accountType,
+                            style = KptTheme.typography.bodySmall,
+                            color = KptTheme.colorScheme.onSurfaceVariant,
+                        )
+                    }
                     Text(
                         text = accountNo,
                         style = KptTheme.typography.bodySmall,
                         color = KptTheme.colorScheme.onSurfaceVariant,
                     )
+                    if (isVerified) {
+                        Text(
+                            text = "✓ Verified",
+                            style = KptTheme.typography.labelSmall,
+                            color = KptTheme.colorScheme.primary,
+                            fontWeight = FontWeight.SemiBold,
+                        )
+                    }
                 }
+            }
+            if (balance > 0.0 && currencyCode.isNotEmpty()) {
+                Text(
+                    text = stringResource(
+                        Res.string.feature_send_interbank_available_balance,
+                        CurrencyFormatter.format(balance, currencyCode, null),
+                    ),
+                    style = KptTheme.typography.labelMedium,
+                    color = KptTheme.colorScheme.primary,
+                    fontWeight = FontWeight.SemiBold,
+                )
             }
         }
     }
 }
 
+
 @Composable
-private fun PreviewDetailRow(
-    label: String,
-    value: String,
-    isHighlight: Boolean = false,
+private fun DisclaimerCheckboxCard(
+    isChecked: Boolean,
+    onCheckedChange: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Column(
-        modifier = modifier
-            .fillMaxWidth()
-            .background(
-                color = if (isHighlight) KptTheme.colorScheme.primaryContainer else Color.Transparent,
-                shape = KptTheme.shapes.medium,
-            )
-            .padding(KptTheme.spacing.md),
-        verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.xs),
+    val containerColor = if (isChecked) {
+        KptTheme.colorScheme.tertiaryContainer
+    } else {
+        KptTheme.colorScheme.errorContainer
+    }
+
+    val textColor = if (isChecked) {
+        KptTheme.colorScheme.onTertiaryContainer
+    } else {
+        KptTheme.colorScheme.onErrorContainer
+    }
+
+    val checkboxColor = if (isChecked) {
+        KptTheme.colorScheme.tertiary
+    } else {
+        KptTheme.colorScheme.error
+    }
+
+    Card(
+        modifier = modifier.fillMaxWidth(),
+        colors = CardDefaults.cardColors(
+            containerColor = containerColor,
+        ),
     ) {
-        Text(
-            text = label,
-            style = KptTheme.typography.labelMedium,
-            color = if (isHighlight) KptTheme.colorScheme.onPrimaryContainer else KptTheme.colorScheme.onSurfaceVariant,
-        )
-        Text(
-            text = value,
-            style = if (isHighlight) KptTheme.typography.headlineSmall else KptTheme.typography.bodyLarge,
-            fontWeight = FontWeight.SemiBold,
-            color = if (isHighlight) KptTheme.colorScheme.onPrimaryContainer else KptTheme.colorScheme.onSurface,
-        )
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable { onCheckedChange(!isChecked) }
+                .padding(KptTheme.spacing.md),
+            horizontalArrangement = Arrangement.spacedBy(KptTheme.spacing.md),
+            verticalAlignment = Alignment.Top,
+        ) {
+            Checkbox(
+                checked = isChecked,
+                onCheckedChange = onCheckedChange,
+                modifier = Modifier.size(24.dp),
+                colors = CheckboxDefaults.colors(
+                    checkedColor = checkboxColor,
+                    uncheckedColor = checkboxColor,
+                ),
+            )
+
+            Column(
+                modifier = Modifier.weight(1f),
+                verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.xs),
+            ) {
+                Text(
+                    text = if (isChecked) {
+                        "Terms Acknowledged"
+                    } else {
+                        "I Acknowledge"
+                    },
+                    style = KptTheme.typography.labelMedium,
+                    fontWeight = FontWeight.SemiBold,
+                    color = textColor,
+                )
+                Text(
+                    text = "By completing this final payment, you acknowledge that the transaction is irreversible. Please ensure all details are correct before submission.",
+                    style = KptTheme.typography.bodySmall,
+                    color = textColor,
+                    modifier = Modifier.padding(top = 2.dp),
+                )
+            }
+        }
     }
 }
 
@@ -272,6 +455,8 @@ fun PreviewTransferScreenPreview() {
             transferDescription = "Dinner share",
             fromAccountName = "ALEJANDRO ESCUTIA",
             fromAccountNo = "00000002",
+            fromAccountBalance = 90760.0,
+            fromAccountType = "Savings Account | Mexican Peso",
             recipientInfo = mockRecipient,
             isProcessing = false,
             onEditClick = {},
@@ -304,6 +489,8 @@ fun PreviewTransferScreenProcessingPreview() {
             transferDescription = "Dinner share",
             fromAccountName = "ALEJANDRO ESCUTIA",
             fromAccountNo = "00000002",
+            fromAccountBalance = 90760.0,
+            fromAccountType = "Savings Account | Mexican Peso",
             recipientInfo = mockRecipient,
             isProcessing = true,
             onEditClick = {},

@@ -388,7 +388,7 @@ data class InterbankTransferState(
     @Transient
     val initialDate: Long = Clock.System.now().toEpochMilliseconds(),
 
-    val transferDescription: String = "",
+    val transferDescription: String = "Interbank Transfer",
     val isProcessing: Boolean = false,
     val errorMessage: String? = null,
     val transferResponse: String? = null,

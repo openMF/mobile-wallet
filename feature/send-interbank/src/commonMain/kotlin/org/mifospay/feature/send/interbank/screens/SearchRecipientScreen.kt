@@ -28,6 +28,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
@@ -40,7 +41,6 @@ import mobile_wallet.feature.send_interbank.generated.resources.feature_send_int
 import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_no_recipients_found
 import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_found_recipients
 import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_enter_phone_to_search
-import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_account
 import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_bank
 import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_to_account_interbank
 import org.mifospay.core.designsystem.component.MifosButton
@@ -67,6 +67,8 @@ fun SearchRecipientScreen(
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val keyboardController = LocalSoftwareKeyboardController.current
+
     MifosScaffold(
         modifier = modifier,
         topBar = {
@@ -95,7 +97,10 @@ fun SearchRecipientScreen(
             )
 
             MifosButton(
-                onClick = { onSearchClick(searchQuery) },
+                onClick = {
+                    keyboardController?.hide()
+                    onSearchClick(searchQuery)
+                },
                 modifier = Modifier.fillMaxWidth(),
                 enabled = searchQuery.length >= 10 && !isSearching,
             ) {

@@ -138,8 +138,11 @@ fun InterbankTransferFlowScreen(
                 transferDescription = state.transferDescription,
                 fromAccountName = state.selectedFromAccount?.name ?: "Unknown",
                 fromAccountNo = state.selectedFromAccount?.number ?: "N/A",
+                fromAccountBalance = state.selectedFromAccount?.balance ?: 0.0,
+                fromAccountType = "${state.selectedFromAccount?.accountType?.value ?: ""} | ${state.selectedFromAccount?.currency?.name ?: ""}".trim(),
                 recipientInfo = state.selectedParticipantInfo,
                 isProcessing = state.isProcessing,
+                currencyCode = state.selectedFromAccount?.currency?.code ?: "MXN",
                 onEditClick = {
                     viewModel.trySendAction(InterbankTransferAction.NavigateBack)
                 },

@@ -111,9 +111,11 @@ fun TransferDetailsScreen(
                 MifosButton(
                     onClick = onContinueClick,
                     modifier = Modifier.fillMaxWidth(),
-                    enabled = amount.isNotEmpty() && amount.toDoubleOrNull()?.let {
-                        it <= (fromAccount?.balance ?: 0.0)
-                    } ?: false && description.isNotEmpty(),
+                    enabled = amount.isNotEmpty() &&
+                            amount.toDoubleOrNull()?.let {
+                                it <= (fromAccount?.balance ?: 0.0)
+                            } ?: false &&
+                            description.isNotEmpty(),
                 ) {
                     Text(stringResource(Res.string.feature_send_interbank_continue))
                 }
@@ -220,7 +222,11 @@ fun TransferDetailsScreen(
                         shape = KptTheme.shapes.medium,
                         modifier = Modifier
                             .fillMaxWidth()
-                            .clickable { showDatePicker = true },
+                            .clickable {
+                                // Hide the onclick show transaction date picker for now as
+                                // we are not allowing
+                                //showDatePicker = true
+                            },
                     ) {
                         Row(
                             modifier = Modifier
@@ -519,7 +525,7 @@ fun TransferDetailsScreenPreview() {
             onDescriptionChanged = {},
             onContinueClick = {},
             onBackClick = {},
-            initialDate = 1
+            initialDate = 1,
         )
     }
 }
@@ -591,7 +597,7 @@ fun TransferDetailsScreenEmptyPreview() {
             onDescriptionChanged = {},
             onContinueClick = {},
             onBackClick = {},
-            initialDate = 1
+            initialDate = 1,
         )
     }
 }
