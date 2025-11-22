@@ -9,7 +9,6 @@
  */
 package org.mifospay.feature.send.interbank.screens
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -33,7 +32,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -51,6 +49,9 @@ import mobile_wallet.feature.send_interbank.generated.resources.feature_send_int
 import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_from_account
 import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_to_account
 import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_acknowledgement_section
+import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_i_acknowledged
+import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_terms_acknowledged
+import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_terms_acknowledged_description
 import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_transfer_amount
 import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_verified_recipient
 import org.mifospay.core.common.CurrencyFormatter
@@ -477,16 +478,16 @@ private fun DisclaimerCheckboxCard(
             ) {
                 Text(
                     text = if (isChecked) {
-                        "Terms Acknowledged"
+                        stringResource(Res.string.feature_send_interbank_terms_acknowledged)
                     } else {
-                        "I Acknowledge"
+                        stringResource(Res.string.feature_send_interbank_i_acknowledged)
                     },
                     style = KptTheme.typography.labelMedium,
                     fontWeight = FontWeight.SemiBold,
                     color = textColor,
                 )
                 Text(
-                    text = "By completing this final payment, you acknowledge that the transaction is irreversible. Please ensure all details are correct before submission.",
+                    text = stringResource(Res.string.feature_send_interbank_terms_acknowledged_description),
                     style = KptTheme.typography.bodySmall,
                     color = textColor,
                     modifier = Modifier.padding(top = 2.dp),

@@ -95,4 +95,9 @@
     <string name="feature_send_interbank_error_enter_description">Please enter a description</string>
     <string name="feature_send_interbank_error_phone_number_digits">Phone number must be at least 10 digits</string>
     <string name="feature_send_interbank_error_failed_to_search_recipient">Failed to search recipient</string>
+    <string name="feature_send_interbank_terms_acknowledged">Terms Acknowledged</string>
+    <string name="feature_send_interbank_i_acknowledged">I Acknowledge</string>
+    <string name="feature_send_interbank_terms_acknowledged_description">By completing this final payment, you acknowledge that the transaction is irreversible. Please ensure all details are correct before submission.</string>
+    <string name="feature_send_interbank_cancel">Cancel</string>
+    <string name="feature_send_interbank_ok">Ok</string>
 </resources>

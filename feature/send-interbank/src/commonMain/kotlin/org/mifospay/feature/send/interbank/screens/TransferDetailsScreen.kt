@@ -58,6 +58,8 @@ import mobile_wallet.feature.send_interbank.generated.resources.feature_send_int
 import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_verified
 import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_edit
 import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_to_account_interbank
+import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_cancel
+import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_ok
 import org.mifospay.core.common.CurrencyFormatter
 import org.mifospay.core.designsystem.component.MifosButton
 import org.mifospay.core.designsystem.component.MifosCard
@@ -311,12 +313,12 @@ fun TransferDetailsScreen(
                     },
                     enabled = confirmEnabled.value,
                 ) {
-                    Text("OK")
+                    Text(text = stringResource(Res.string.feature_send_interbank_ok))
                 }
             },
             dismissButton = {
                 TextButton(onClick = { showDatePicker = false }) {
-                    Text("Cancel")
+                    Text(text = stringResource(Res.string.feature_send_interbank_cancel))
                 }
             },
         ) {

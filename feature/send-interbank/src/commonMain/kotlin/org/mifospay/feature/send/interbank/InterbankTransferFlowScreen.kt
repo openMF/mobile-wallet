@@ -36,7 +36,6 @@ import org.mifospay.feature.send.interbank.screens.TransferSuccessScreen
 fun InterbankTransferFlowScreen(
     onBackClick: () -> Unit,
     onTransferSuccess: () -> Unit,
-    onContactSupport: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: InterbankTransferViewModel = koinViewModel(),
 ) {
@@ -211,8 +210,7 @@ fun InterbankTransferFlowScreenPreview() {
     MifosTheme {
         InterbankTransferFlowScreen(
             onBackClick = {},
-            onTransferSuccess = {},
-            onContactSupport = {},
+            onTransferSuccess = {}
         )
     }
 }

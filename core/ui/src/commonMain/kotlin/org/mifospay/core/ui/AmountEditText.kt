@@ -22,6 +22,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import template.core.base.designsystem.theme.KptTheme
 
 /**
  * AmountEditText - Generic amount input component with validation
@@ -55,8 +56,8 @@ fun AmountEditText(
     onAmountValidation: ((Double, String?) -> Unit)? = null,
     enabled: Boolean = true,
     isError: Boolean = false,
-    backgroundColor: Color = Color(0xFFF5F9FF),
-    errorBorderColor: Color = Color(0xFFD32F2F),
+    backgroundColor: Color = KptTheme.colorScheme.background,
+    errorBorderColor: Color = KptTheme.colorScheme.error,
     successBorderColor: Color = Color(0xFFE0E0E0),
     borderWidth: Dp = 2.dp,
     cornerRadius: Dp = 12.dp,
@@ -64,12 +65,12 @@ fun AmountEditText(
     currencyTextStyle: TextStyle = TextStyle(
         fontSize = 24.sp,
         fontWeight = FontWeight.Bold,
-        color = Color(0xFF1976D2)
+        color = KptTheme.colorScheme.primary
     ),
     amountTextStyle: TextStyle = TextStyle(
         fontSize = 40.sp,
         fontWeight = FontWeight.Bold,
-        color = Color(0xFF1A1A1A)
+        color = KptTheme.colorScheme.primary
     ),
     balanceTextStyle: TextStyle = TextStyle(
         fontSize = 14.sp,
@@ -112,11 +113,12 @@ fun AmountEditText(
                 Spacer(modifier = Modifier.width(12.dp))
 
                 // Divider
-                Divider(
+                VerticalDivider(
                     modifier = Modifier
                         .width(2.dp)
                         .height(48.dp),
-                    color = Color(0xFFE0E0E0)
+                    thickness = 2.dp,
+                    color = KptTheme.colorScheme.primary
                 )
 
                 Spacer(modifier = Modifier.width(12.dp))

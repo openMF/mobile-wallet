@@ -146,10 +146,8 @@ object MifosIcons {
     val Filter = Icons.Default.FilterList
     val OpenInNew = Icons.AutoMirrored.Filled.OpenInNew
     val Warning = Icons.Default.Warning
-    val Wallet = Icons.Filled.Wallet
     val Location = Icons.Filled.LocationOn
     val Savings = Icons.Rounded.AccountBalanceWallet
-    val Currency = Icons.Filled.Money
     val Transfer = Icons.Rounded.Money
 
 }

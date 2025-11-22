@@ -60,8 +60,6 @@ import org.mifospay.feature.payments.PaymentsScreenContents
 import org.mifospay.feature.payments.RequestScreen
 import org.mifospay.feature.payments.paymentsScreen
 import org.mifospay.feature.payments.selectTransferType.SelectTransferTypeScreen
-import org.mifospay.feature.payments.selectTransferType.navigateToSelectTransferType
-import org.mifospay.feature.payments.selectTransferType.selectTransferTypeScreen
 import org.mifospay.feature.profile.navigation.profileNavGraph
 import org.mifospay.feature.qr.navigation.SCAN_QR_ROUTE
 import org.mifospay.feature.qr.navigation.navigateToScanQr
@@ -76,7 +74,6 @@ import org.mifospay.feature.send.money.navigation.navigateToSendMoneyScreen
 import org.mifospay.feature.send.money.navigation.sendMoneyScreen
 import org.mifospay.feature.send.money.selectScreen.navigateToSelectAccountScreen
 import org.mifospay.feature.send.money.selectScreen.selectAccountScreenDestination
-import org.mifospay.feature.send.money.v2.SendMoneyv2Screen
 import org.mifospay.feature.send.money.v2.navigateToSendMoneyV2Screen
 import org.mifospay.feature.send.money.v2.sendMoneyScreenDestination
 import org.mifospay.feature.send.interbank.navigation.interbankTransferScreen
@@ -212,15 +209,6 @@ internal fun MifosNavHost(
         )
 
         paymentsScreen(tabContents = paymentsTabContents)
-
-        selectTransferTypeScreen(
-            onIntraBankTransferClick = {
-                navController.navigateToSendMoneyV2Screen()
-            },
-            onInterBankTransferClick = {
-                navController.navigateToInterbankTransfer()
-            },
-        )
 
         financeScreen(tabContents = tabContents)
 
@@ -433,10 +421,7 @@ internal fun MifosNavHost(
                     }
                     launchSingleTop = true
                 }
-            },
-            onContactSupport = {
-                // Handle contact support action
-            },
+            }
         )
     }
 }
