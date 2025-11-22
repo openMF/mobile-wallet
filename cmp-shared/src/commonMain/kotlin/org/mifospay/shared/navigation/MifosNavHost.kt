@@ -418,14 +418,13 @@ internal fun MifosNavHost(
 
         interbankTransferScreen(
             onBackClick = navController::popBackStack,
-            onTransferSuccess = { returnDestination ->
-                navController.navigateTransferSuccess(
-                    returnDestination = returnDestination,
-                    navOptions {
-                        popUpTo(HOME_ROUTE) { inclusive = false }
-                        launchSingleTop = true
-                    },
-                )
+            onTransferSuccess = {
+                navController.navigate(HOME_ROUTE) {
+                    popUpTo(HOME_ROUTE) {
+                        inclusive = false
+                    }
+                    launchSingleTop = true
+                }
             },
             onContactSupport = {
                 // Handle contact support action

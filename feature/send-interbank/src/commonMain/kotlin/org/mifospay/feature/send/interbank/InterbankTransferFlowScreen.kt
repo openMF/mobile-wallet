@@ -10,6 +10,7 @@
 package org.mifospay.feature.send.interbank
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -44,9 +45,8 @@ fun InterbankTransferFlowScreen(
     EventsEffect(viewModel) { event ->
         when (event) {
             InterbankTransferEvent.OnNavigateBack -> onBackClick()
-            InterbankTransferEvent.OnTransferSuccess -> onTransferSuccess()
-            is InterbankTransferEvent.OnTransferFailed -> {
-                // Error is handled in the state
+            else -> {
+                // Other steps don't require navigation
             }
         }
     }
@@ -167,10 +167,8 @@ fun InterbankTransferFlowScreen(
                 toAccount = "${state.selectedParticipantInfo?.firstName ?: ""} ${state.selectedParticipantInfo?.lastName ?: ""}".trim(),
                 toAccountNumber = "Account: ${state.selectedParticipantInfo?.partyId ?: "N/A"}",
                 transactionDate = state.transferDate,
+                description = state.transferDescription,
                 currencyCode = state.selectedFromAccount?.currency?.code ?: "MXN",
-                onDownloadReceipt = {
-                    // TODO: Implement receipt download
-                },
                 onBackToHome = onTransferSuccess,
                 modifier = modifier,
             )
@@ -190,11 +188,15 @@ fun InterbankTransferFlowScreen(
                     state.selectedFromAccount?.currency?.code ?: "MXN",
                     null,
                 ),
+                fromAccount = state.selectedFromAccount?.number ?: "N/A",
+                fromAccountName = state.selectedFromAccount?.name ?: "Unknown",
+                toAccount = "${state.selectedParticipantInfo?.firstName ?: ""} ${state.selectedParticipantInfo?.lastName ?: ""}".trim(),
+                toAccountNumber = "Account: ${state.selectedParticipantInfo?.partyId ?: "N/A"}",
                 transactionDate = state.transferDate,
+                description = state.transferDescription,
                 onRetry = {
                     viewModel.trySendAction(InterbankTransferAction.RetryTransfer)
                 },
-                onContactSupport = onContactSupport,
                 onBackToHome = onBackClick,
                 modifier = modifier,
             )

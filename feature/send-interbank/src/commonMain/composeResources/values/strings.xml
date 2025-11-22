@@ -56,14 +56,14 @@
 
     <!-- Transfer Result Screens -->
     <string name="feature_send_interbank_transfer_successful">Transfer Successful</string>
-    <string name="feature_send_interbank_transfer_completed">Your transfer to %s has been completed successfully.</string>
-    <string name="feature_send_interbank_amount_label">Amount: $%s</string>
+    <string name="feature_send_interbank_transfer_completed">Your transfer to %1$s has been completed successfully.</string>
+    <string name="feature_send_interbank_amount_label">Amount: %1$s</string>
     <string name="feature_send_interbank_download_receipt">Download Receipt</string>
     <string name="feature_send_interbank_back_to_home">Back to Home</string>
 
     <string name="feature_send_interbank_transfer_failed">Transfer Failed</string>
     <string name="feature_send_interbank_transaction_failed">The transaction could not be completed. Please check your details and try again.</string>
-    <string name="feature_send_interbank_error">Error: %s</string>
+    <string name="feature_send_interbank_error">Error: %1$s</string>
     <string name="feature_send_interbank_retry_transfer">Retry Transfer</string>
     <string name="feature_send_interbank_contact_support">Contact Support</string>
 
@@ -76,4 +76,13 @@
     <string name="feature_send_interbank_acknowledgement_section">Acknowledgement Section</string>
     <string name="feature_send_interbank_transfer_amount">Transfer Amount</string>
     <string name="feature_send_interbank_verified_recipient">✓ Verified Recipient</string>
+
+    <!-- Transfer Result Screens - Additional Strings -->
+    <string name="feature_send_interbank_transaction_reference">Transaction Reference</string>
+    <string name="feature_send_interbank_amount_transferred">Amount Transferred</string>
+    <string name="feature_send_interbank_from_account_label">From Account</string>
+    <string name="feature_send_interbank_to_account_label">To Account</string>
+    <string name="feature_send_interbank_transaction_date_label">Transaction Date</string>
+    <string name="feature_send_interbank_attempted_amount">Attempted Amount</string>
+    <string name="feature_send_interbank_available_balance_label">Available Balance</string>
 </resources>

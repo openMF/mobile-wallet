@@ -31,14 +31,14 @@ fun NavController.navigateToInterbankTransfer(
 
 fun NavGraphBuilder.interbankTransferScreen(
     onBackClick: () -> Unit,
-    onTransferSuccess: (String) -> Unit,
+    onTransferSuccess: () -> Unit,
     onContactSupport: () -> Unit,
 ) {
     composable<InterbankTransferRoute> { backStackEntry ->
         val route = backStackEntry.toRoute<InterbankTransferRoute>()
         InterbankTransferFlowScreen(
             onBackClick = onBackClick,
-            onTransferSuccess = { onTransferSuccess(route.returnDestination) },
+            onTransferSuccess = onTransferSuccess,
             onContactSupport = onContactSupport,
         )
     }
