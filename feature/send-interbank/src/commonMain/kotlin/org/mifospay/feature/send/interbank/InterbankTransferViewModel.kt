@@ -383,7 +383,7 @@ data class InterbankTransferState(
     val selectedFromAccount: Account? = null,
     val selectedParticipantInfo: InterBankPartyInfoResponse? = null,
     val transferAmount: String = "1.0",
-    val transferDate: String = Clock.System.todayIn(TimeZone.currentSystemDefault()).format("dd MM yyyy"),
+    val transferDate: String = DateHelper.getDateAsString(Clock.System.todayIn(TimeZone.currentSystemDefault()).toString()),
 
     @Transient
     val initialDate: Long = Clock.System.now().toEpochMilliseconds(),
