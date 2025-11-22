@@ -22,6 +22,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import mobile_wallet.feature.payments.generated.resources.Res
+import mobile_wallet.feature.payments.generated.resources.feature_payments_inter_bank_transfer_description
+import mobile_wallet.feature.payments.generated.resources.feature_payments_inter_bank_transfer_title
+import mobile_wallet.feature.payments.generated.resources.feature_payments_intra_bank_transfer_description
+import mobile_wallet.feature.payments.generated.resources.feature_payments_intra_bank_transfer_title
+import mobile_wallet.feature.payments.generated.resources.feature_payments_transfer_options_title
+import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.mifospay.core.designsystem.component.MifosBottomSheet
 import org.mifospay.core.designsystem.theme.MifosTheme
@@ -45,7 +52,7 @@ fun TransferOptionsBottomSheet(
                 verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.sm),
             ) {
                 Text(
-                    text = "Transfer Options",
+                    text = stringResource(Res.string.feature_payments_transfer_options_title),
                     modifier = Modifier.padding(horizontal = KptTheme.spacing.md),
                     style = KptTheme.typography.headlineSmall,
                     fontWeight = FontWeight.Bold,
@@ -54,7 +61,7 @@ fun TransferOptionsBottomSheet(
                 ListItem(
                     headlineContent = {
                         Text(
-                            text = "Intra-Bank Transfer",
+                            text = stringResource(Res.string.feature_payments_intra_bank_transfer_title),
                             style = KptTheme.typography.bodyLarge,
                             fontWeight = FontWeight.SemiBold,
                             color = KptTheme.colorScheme.onSurface,
@@ -62,7 +69,7 @@ fun TransferOptionsBottomSheet(
                     },
                     supportingContent = {
                         Text(
-                            text = "Move funds between accounts within this bank.",
+                            text = stringResource(Res.string.feature_payments_intra_bank_transfer_description),
                             style = KptTheme.typography.bodySmall,
                             color = KptTheme.colorScheme.onSurfaceVariant,
                         )
@@ -86,7 +93,7 @@ fun TransferOptionsBottomSheet(
                 ListItem(
                     headlineContent = {
                         Text(
-                            text = "Inter-Bank Transfer",
+                            text = stringResource(Res.string.feature_payments_inter_bank_transfer_title),
                             style = KptTheme.typography.bodyLarge,
                             fontWeight = FontWeight.SemiBold,
                             color = KptTheme.colorScheme.onSurface,
@@ -94,7 +101,7 @@ fun TransferOptionsBottomSheet(
                     },
                     supportingContent = {
                         Text(
-                            text = "Send funds to accounts in different banks.",
+                            text = stringResource(Res.string.feature_payments_inter_bank_transfer_description),
                             style = KptTheme.typography.bodySmall,
                             color = KptTheme.colorScheme.onSurfaceVariant,
                         )

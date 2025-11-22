@@ -59,6 +59,9 @@ import org.mifospay.feature.payments.PAYMENTS_ROUTE
 import org.mifospay.feature.payments.PaymentsScreenContents
 import org.mifospay.feature.payments.RequestScreen
 import org.mifospay.feature.payments.paymentsScreen
+import org.mifospay.feature.payments.selectTransferType.SelectTransferTypeScreen
+import org.mifospay.feature.payments.selectTransferType.navigateToSelectTransferType
+import org.mifospay.feature.payments.selectTransferType.selectTransferTypeScreen
 import org.mifospay.feature.profile.navigation.profileNavGraph
 import org.mifospay.feature.qr.navigation.SCAN_QR_ROUTE
 import org.mifospay.feature.qr.navigation.navigateToScanQr
@@ -94,17 +97,13 @@ internal fun MifosNavHost(
 
     val paymentsTabContents = listOf(
         TabContent(PaymentsScreenContents.SEND.name) {
-            SendMoneyv2Screen(
-                navigateToSelectAccountScreen = {
-                    navController.navigateToSelectAccountScreen(returnDestination = "payments")
+            SelectTransferTypeScreen(
+                onIntraBankTransferClick = {
+                    navController.navigateToSendMoneyV2Screen()
                 },
-                navigateBack = {
-                    navController.navigateUp()
+                onInterBankTransferClick = {
+                    navController.navigateToInterbankTransfer()
                 },
-                navigateToBeneficiary = {
-                    navController.navigateToBeneficiaryAddEdit(BeneficiaryAddEditType.AddItem)
-                },
-                showTopBar = false,
             )
         },
         TabContent(PaymentsScreenContents.REQUEST.name) {
@@ -213,6 +212,15 @@ internal fun MifosNavHost(
         )
 
         paymentsScreen(tabContents = paymentsTabContents)
+
+        selectTransferTypeScreen(
+            onIntraBankTransferClick = {
+                navController.navigateToSendMoneyV2Screen()
+            },
+            onInterBankTransferClick = {
+                navController.navigateToInterbankTransfer()
+            },
+        )
 
         financeScreen(tabContents = tabContents)
 
