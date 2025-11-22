@@ -181,6 +181,17 @@ class SelfServiceRepositoryImpl(
     override fun getActiveAccounts(
         clientId: Long,
     ): Flow<DataState<List<Account>>> {
+        return apiManager.clientsApi
+            .getAccounts(clientId, Constants.SAVINGS)
+            .map { entity -> entity.savingsAccounts.filter { it.status.active } }
+            .map { it.toAccount() }
+            .flowOn(dispatcher)
+            .asDataStateFlow()
+    }
+
+    override fun getActiveAccountsWithAccountTransferTemplate(
+        clientId: Long,
+    ): Flow<DataState<List<Account>>> {
         val accountsFlow = apiManager.clientsApi
             .getAccounts(clientId, Constants.SAVINGS)
             .map { entity -> entity.savingsAccounts.filter { it.status.active } }
@@ -197,12 +208,16 @@ class SelfServiceRepositoryImpl(
                     val templateAccount = template.fromAccountOptions?.firstOrNull {
                         it.accountNo == account.number
                     }
-                    account.copy(
-                        clientName = templateAccount?.clientName ?: "",
-                        accountType = templateAccount?.accountType?.toModelAccountType(),
-                        officeName = templateAccount?.officeName,
-                        officeId = templateAccount?.officeId,
-                    )
+                    if (templateAccount == null) {
+                        account
+                    } else {
+                        account.copy(
+                            clientName = templateAccount.clientName ?: "",
+                            accountType = templateAccount.accountType?.toModelAccountType(),
+                            officeName = templateAccount.officeName,
+                            officeId = templateAccount.officeId,
+                        )
+                    }
                 }
         }.asDataStateFlow()
     }

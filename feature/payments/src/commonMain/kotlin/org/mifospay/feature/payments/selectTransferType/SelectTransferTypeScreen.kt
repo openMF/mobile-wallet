@@ -23,8 +23,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -177,14 +175,13 @@ private fun TransferTypeCard(
 
             // Arrow Icon
             Icon(
-                imageVector = Icons.AutoMirrored.Filled.ArrowForward,
+                imageVector = MifosIcons.ArrowRight,
                 contentDescription = "Navigate to $title",
                 modifier = Modifier
                     .padding(end = KptTheme.spacing.sm)
                     .size(24.dp),
                 tint = KptTheme.colorScheme.primary,
             )
-            //   Spacer(modifier = Modifier.width(4.dp))
         }
     }
 }

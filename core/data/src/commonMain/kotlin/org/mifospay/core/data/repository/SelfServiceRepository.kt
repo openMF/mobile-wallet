@@ -57,6 +57,10 @@ interface SelfServiceRepository {
         clientId: Long,
     ): Flow<DataState<List<Account>>>
 
+    fun getActiveAccountsWithAccountTransferTemplate(
+        clientId: Long,
+    ): Flow<DataState<List<Account>>>
+
     fun getAccountsTransactions(clientId: Long): Flow<DataState<List<Transaction>>>
 
     fun getTransactions(accountId: List<Long>, limit: Int?): Flow<List<Transaction>>

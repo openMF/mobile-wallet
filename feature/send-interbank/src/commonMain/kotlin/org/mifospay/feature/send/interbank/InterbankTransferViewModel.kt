@@ -88,6 +88,7 @@ class InterbankTransferViewModel(
                         sendEvent(InterbankTransferEvent.OnNavigateBack)
                         return
                     }
+
                     InterbankTransferState.Step.SearchRecipient -> InterbankTransferState.Step.SelectAccount
                     InterbankTransferState.Step.TransferDetails -> InterbankTransferState.Step.SearchRecipient
                     InterbankTransferState.Step.PreviewTransfer -> InterbankTransferState.Step.TransferDetails
@@ -165,45 +166,46 @@ class InterbankTransferViewModel(
                 it.copy(loadingState = InterbankTransferState.LoadingState.Loading)
             }
 
-            selfServiceRepository.getActiveAccounts(state.client.id).collect { result ->
-                when (result) {
-                    is DataState.Error -> {
-                        mutableStateFlow.update {
-                            it.copy(
-                                loadingState = InterbankTransferState.LoadingState.Error(
-                                    result.message ?: "Failed to load accounts",
-                                ),
-                            )
-                        }
-                    }
-
-                    is DataState.Loading -> {
-                        mutableStateFlow.update {
-                            it.copy(loadingState = InterbankTransferState.LoadingState.Loading)
-                        }
-                    }
-
-                    is DataState.Success -> {
-                        val accounts = result.data
-                        if (accounts.isEmpty()) {
+            selfServiceRepository.getActiveAccountsWithAccountTransferTemplate(state.client.id)
+                .collect { result ->
+                    when (result) {
+                        is DataState.Error -> {
                             mutableStateFlow.update {
                                 it.copy(
                                     loadingState = InterbankTransferState.LoadingState.Error(
-                                        "No accounts available",
+                                        result.message ?: "Failed to load accounts",
                                     ),
                                 )
                             }
-                        } else {
+                        }
+
+                        is DataState.Loading -> {
                             mutableStateFlow.update {
-                                it.copy(
-                                    loadingState = InterbankTransferState.LoadingState.Success,
-                                    fromAccounts = accounts,
-                                )
+                                it.copy(loadingState = InterbankTransferState.LoadingState.Loading)
+                            }
+                        }
+
+                        is DataState.Success -> {
+                            val accounts = result.data
+                            if (accounts.isEmpty()) {
+                                mutableStateFlow.update {
+                                    it.copy(
+                                        loadingState = InterbankTransferState.LoadingState.Error(
+                                            "No accounts available",
+                                        ),
+                                    )
+                                }
+                            } else {
+                                mutableStateFlow.update {
+                                    it.copy(
+                                        loadingState = InterbankTransferState.LoadingState.Success,
+                                        fromAccounts = accounts,
+                                    )
+                                }
                             }
                         }
                     }
                 }
-            }
         } catch (e: Exception) {
             mutableStateFlow.update {
                 it.copy(
@@ -237,7 +239,8 @@ class InterbankTransferViewModel(
                 from = Party(
                     fspId = participantInfo.sourceFspId,
                     idType = participantInfo.partyIdType,
-                    idValue = state.selectedFromAccount?.externalId ?: state.selectedFromAccount?.number ?: "",
+                    idValue = state.selectedFromAccount?.externalId
+                        ?: state.selectedFromAccount?.number ?: "",
                 ),
                 to = Party(
                     fspId = participantInfo.destinationFspId,
@@ -246,7 +249,8 @@ class InterbankTransferViewModel(
                 ),
                 amountType = "SEND",
                 amount = Amount(
-                    currencyCode = state.selectedFromAccount?.currency?.code ?: participantInfo.currencyCode,
+                    currencyCode = state.selectedFromAccount?.currency?.code
+                        ?: participantInfo.currencyCode,
                     amount = state.transferAmount.toDoubleOrNull() ?: 0.0,
                 ),
                 transactionType = TransactionType(
@@ -343,6 +347,7 @@ class InterbankTransferViewModel(
                     is org.mifospay.core.model.interbank.InterBankTransferResponse -> {
                         "Transfer ID: ${transferResponse.transactionId}"
                     }
+
                     else -> "Transfer completed successfully"
                 }
 
@@ -380,7 +385,9 @@ data class InterbankTransferState(
     val selectedFromAccount: Account? = null,
     val selectedParticipantInfo: InterBankPartyInfoResponse? = null,
     val transferAmount: String = "1.0",
-    val transferDate: String = DateHelper.getDateAsString(Clock.System.todayIn(TimeZone.currentSystemDefault()).toString()),
+    val transferDate: String = DateHelper.getDateAsString(
+        Clock.System.todayIn(TimeZone.currentSystemDefault()).toString(),
+    ),
 
     @Transient
     val initialDate: Long = Clock.System.now().toEpochMilliseconds(),
@@ -450,7 +457,9 @@ sealed interface InterbankTransferEvent {
 sealed interface InterbankTransferAction {
     // Navigation
     data class NavigateToRecipientSearch(val account: Account) : InterbankTransferAction
-    data class NavigateToTransferDetails(val participantInfo: InterBankPartyInfoResponse) : InterbankTransferAction
+    data class NavigateToTransferDetails(val participantInfo: InterBankPartyInfoResponse) :
+        InterbankTransferAction
+
     data object NavigateToPreview : InterbankTransferAction
     data object NavigateBack : InterbankTransferAction
     data object EditFromAccount : InterbankTransferAction
