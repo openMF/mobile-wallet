@@ -53,6 +53,7 @@ import org.mifospay.core.designsystem.theme.MifosTheme
 import org.mifospay.core.ui.AvatarBox
 import org.mifospay.core.ui.EmptyContentScreen
 import org.mifospay.core.model.interbank.InterBankPartyInfoResponse
+import org.mifospay.core.ui.MifosProgressIndicator
 import template.core.base.designsystem.theme.KptTheme
 
 @Composable
@@ -114,7 +115,7 @@ fun SearchRecipientScreen(
                         .padding(vertical = KptTheme.spacing.lg),
                     contentAlignment = Alignment.Center,
                 ) {
-                    CircularProgressIndicator()
+                    MifosProgressIndicator()
                 }
             } else if (searchError != null) {
                 EmptyContentScreen(

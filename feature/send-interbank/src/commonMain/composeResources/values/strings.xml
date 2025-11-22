@@ -85,4 +85,14 @@
     <string name="feature_send_interbank_transaction_date_label">Transaction Date</string>
     <string name="feature_send_interbank_attempted_amount">Attempted Amount</string>
     <string name="feature_send_interbank_available_balance_label">Available Balance</string>
+
+    <!-- Validation Error Messages -->
+    <string name="feature_send_interbank_error_select_sender_account">Please select a sender account</string>
+    <string name="feature_send_interbank_error_select_recipient">Please select a recipient</string>
+    <string name="feature_send_interbank_error_enter_amount">Please enter an amount</string>
+    <string name="feature_send_interbank_error_invalid_amount">Invalid amount</string>
+    <string name="feature_send_interbank_error_amount_greater_than_zero">Amount must be greater than 0</string>
+    <string name="feature_send_interbank_error_enter_description">Please enter a description</string>
+    <string name="feature_send_interbank_error_phone_number_digits">Phone number must be at least 10 digits</string>
+    <string name="feature_send_interbank_error_failed_to_search_recipient">Failed to search recipient</string>
 </resources>

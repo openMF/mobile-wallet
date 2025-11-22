@@ -10,15 +10,16 @@
 package org.mifospay.feature.send.interbank
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
 import org.mifospay.core.common.CurrencyFormatter
+import org.mifospay.core.designsystem.theme.MifosTheme
 import org.mifospay.core.ui.utils.EventsEffect
 import org.mifospay.feature.send.interbank.screens.PreviewTransferScreen
 import org.mifospay.feature.send.interbank.screens.SearchRecipientScreen
@@ -201,5 +202,17 @@ fun InterbankTransferFlowScreen(
                 modifier = modifier,
             )
         }
+    }
+}
+
+@Preview
+@Composable
+fun InterbankTransferFlowScreenPreview() {
+    MifosTheme {
+        InterbankTransferFlowScreen(
+            onBackClick = {},
+            onTransferSuccess = {},
+            onContactSupport = {},
+        )
     }
 }
