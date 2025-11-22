@@ -71,4 +71,9 @@
     <string name="feature_send_interbank_success">Success</string>
     <!-- Failed Icon Description -->
     <string name="feature_send_interbank_failed">Failed</string>
+
+    <!-- Preview Transfer Screen - Additional Strings -->
+    <string name="feature_send_interbank_acknowledgement_section">Acknowledgement Section</string>
+    <string name="feature_send_interbank_transfer_amount">Transfer Amount</string>
+    <string name="feature_send_interbank_verified_recipient">✓ Verified Recipient</string>
 </resources>

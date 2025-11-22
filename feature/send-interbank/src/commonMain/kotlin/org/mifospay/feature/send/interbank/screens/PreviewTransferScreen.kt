@@ -44,13 +44,15 @@ import mobile_wallet.feature.send_interbank.generated.resources.Res
 import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_amount
 import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_available_balance
 import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_preview_transfer
-import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_review_transfer
 import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_confirm_pay
 import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_date
 import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_description
 import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_edit
 import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_from_account
 import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_to_account
+import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_acknowledgement_section
+import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_transfer_amount
+import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_verified_recipient
 import org.mifospay.core.common.CurrencyFormatter
 import org.mifospay.core.designsystem.component.MifosButton
 import org.mifospay.core.designsystem.component.MifosCard
@@ -60,6 +62,7 @@ import org.mifospay.core.designsystem.icon.MifosIcons
 import org.mifospay.core.designsystem.theme.MifosTheme
 import org.mifospay.core.model.interbank.InterBankPartyInfoResponse
 import org.mifospay.core.ui.AvatarBox
+import org.mifospay.core.ui.MifosProgressIndicatorOverlay
 import template.core.base.designsystem.theme.KptTheme
 
 @Composable
@@ -114,6 +117,7 @@ fun PreviewTransferScreen(
         },
         containerColor = KptTheme.colorScheme.background,
     ) { paddingValues ->
+
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
@@ -208,7 +212,7 @@ fun PreviewTransferScreen(
                                 )
                             }
                             Text(
-                                text = "Transfer Amount",
+                                text = stringResource(Res.string.feature_send_interbank_transfer_amount),
                                 style = KptTheme.typography.labelSmall,
                                 color = KptTheme.colorScheme.onPrimaryContainer,
                             )
@@ -310,7 +314,7 @@ fun PreviewTransferScreen(
                     verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.sm),
                 ) {
                     Text(
-                        text = "Acknowledgement Section",
+                        text = stringResource(Res.string.feature_send_interbank_acknowledgement_section),
                         style = KptTheme.typography.labelMedium,
                         fontWeight = FontWeight.SemiBold,
                         color = KptTheme.colorScheme.onSurfaceVariant,
@@ -325,6 +329,10 @@ fun PreviewTransferScreen(
             item {
                 Box(modifier = Modifier.padding(vertical = KptTheme.spacing.lg))
             }
+        }
+
+        if (isProcessing) {
+            MifosProgressIndicatorOverlay()
         }
     }
 }
@@ -391,7 +399,7 @@ private fun TransferPreviewCard(
                     )
                     if (isVerified) {
                         Text(
-                            text = "✓ Verified Recipient",
+                            text = stringResource(Res.string.feature_send_interbank_verified_recipient),
                             style = KptTheme.typography.labelSmall,
                             color = KptTheme.colorScheme.primary,
                             fontWeight = FontWeight.SemiBold,
