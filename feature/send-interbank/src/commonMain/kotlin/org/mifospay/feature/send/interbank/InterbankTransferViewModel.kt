@@ -161,7 +161,6 @@ class InterbankTransferViewModel(
 
     private suspend fun loadFromAccounts() {
         try {
-            
             mutableStateFlow.update {
                 it.copy(loadingState = InterbankTransferState.LoadingState.Loading)
             }
@@ -172,7 +171,7 @@ class InterbankTransferViewModel(
                         mutableStateFlow.update {
                             it.copy(
                                 loadingState = InterbankTransferState.LoadingState.Error(
-                                    result.message ?: "Failed to load accounts"
+                                    result.message ?: "Failed to load accounts",
                                 ),
                             )
                         }
@@ -190,7 +189,7 @@ class InterbankTransferViewModel(
                             mutableStateFlow.update {
                                 it.copy(
                                     loadingState = InterbankTransferState.LoadingState.Error(
-                                        "No accounts available"
+                                        "No accounts available",
                                     ),
                                 )
                             }
@@ -254,7 +253,7 @@ class InterbankTransferViewModel(
                     scenario = "TRANSFER",
                     subScenario = "DOMESTIC",
                     initiator = "PAYER",
-                    initiatorType = "CUSTOMER"
+                    initiatorType = "CUSTOMER",
                 ),
                 note = state.transferDescription,
             )
@@ -281,7 +280,7 @@ class InterbankTransferViewModel(
             mutableStateFlow.update {
                 it.copy(
                     searchRecipientState = InterbankTransferState.SearchRecipientState.Error(
-                        "Phone number must be at least 10 digits"
+                        "Phone number must be at least 10 digits",
                     ),
                     searchResults = emptyList(),
                 )
@@ -314,7 +313,7 @@ class InterbankTransferViewModel(
                     mutableStateFlow.update {
                         it.copy(
                             searchRecipientState = InterbankTransferState.SearchRecipientState.Error(
-                                result.message ?: "Failed to search recipient"
+                                result.message ?: "Failed to search recipient",
                             ),
                             searchResults = emptyList(),
                         )
@@ -346,7 +345,7 @@ class InterbankTransferViewModel(
                     }
                     else -> "Transfer completed successfully"
                 }
-                
+
                 mutableStateFlow.update {
                     it.copy(
                         isProcessing = false,
@@ -440,7 +439,6 @@ data class InterbankTransferState(
         @Serializable
         data class Error(val message: String) : SearchRecipientState
     }
-
 }
 
 sealed interface InterbankTransferEvent {

@@ -210,7 +210,7 @@ fun InterbankTransferFlowScreenPreview() {
     MifosTheme {
         InterbankTransferFlowScreen(
             onBackClick = {},
-            onTransferSuccess = {}
+            onTransferSuccess = {},
         )
     }
 }

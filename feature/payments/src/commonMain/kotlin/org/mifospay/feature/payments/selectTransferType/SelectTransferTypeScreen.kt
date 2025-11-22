@@ -139,7 +139,7 @@ private fun TransferTypeCard(
                 modifier = Modifier.size(60.dp),
                 colors = CardDefaults.cardColors(
                     containerColor = KptTheme.colorScheme.surface,
-                )
+                ),
             ) {
                 Column(
                     modifier = Modifier.fillMaxSize(),
@@ -184,7 +184,7 @@ private fun TransferTypeCard(
                     .size(24.dp),
                 tint = KptTheme.colorScheme.primary,
             )
-         //   Spacer(modifier = Modifier.width(4.dp))
+            //   Spacer(modifier = Modifier.width(4.dp))
         }
     }
 }

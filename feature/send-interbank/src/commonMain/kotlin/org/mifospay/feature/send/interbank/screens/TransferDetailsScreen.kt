@@ -44,22 +44,22 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
-import org.jetbrains.compose.resources.stringResource
-import org.jetbrains.compose.ui.tooling.preview.Preview
 import mobile_wallet.feature.send_interbank.generated.resources.Res
-import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_transfer_details
-import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_from_account
-import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_to_account
 import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_amount
+import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_available_balance
+import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_cancel
+import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_continue
 import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_date
 import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_description
-import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_continue
-import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_available_balance
-import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_verified
 import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_edit
-import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_to_account_interbank
-import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_cancel
+import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_from_account
 import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_ok
+import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_to_account
+import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_to_account_interbank
+import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_transfer_details
+import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_verified
+import org.jetbrains.compose.resources.stringResource
+import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.mifospay.core.common.CurrencyFormatter
 import org.mifospay.core.designsystem.component.MifosButton
 import org.mifospay.core.designsystem.component.MifosCard
@@ -68,9 +68,9 @@ import org.mifospay.core.designsystem.component.MifosTextField
 import org.mifospay.core.designsystem.component.MifosTopBar
 import org.mifospay.core.designsystem.theme.MifosTheme
 import org.mifospay.core.model.account.Account
+import org.mifospay.core.model.interbank.InterBankPartyInfoResponse
 import org.mifospay.core.model.savingsaccount.Currency
 import org.mifospay.core.model.savingsaccount.Status
-import org.mifospay.core.model.interbank.InterBankPartyInfoResponse
 import org.mifospay.core.ui.AmountEditText
 import template.core.base.designsystem.theme.KptTheme
 import kotlin.time.ExperimentalTime
@@ -114,10 +114,10 @@ fun TransferDetailsScreen(
                     onClick = onContinueClick,
                     modifier = Modifier.fillMaxWidth(),
                     enabled = amount.isNotEmpty() &&
-                            amount.toDoubleOrNull()?.let {
-                                it <= (fromAccount?.balance ?: 0.0)
-                            } ?: false &&
-                            description.isNotEmpty(),
+                        amount.toDoubleOrNull()?.let {
+                            it <= (fromAccount?.balance ?: 0.0)
+                        } ?: false &&
+                        description.isNotEmpty(),
                 ) {
                     Text(stringResource(Res.string.feature_send_interbank_continue))
                 }
@@ -227,7 +227,7 @@ fun TransferDetailsScreen(
                             .clickable {
                                 // Hide the onclick show transaction date picker for now as
                                 // we are not allowing
-                                //showDatePicker = true
+                                // showDatePicker = true
                             },
                     ) {
                         Row(

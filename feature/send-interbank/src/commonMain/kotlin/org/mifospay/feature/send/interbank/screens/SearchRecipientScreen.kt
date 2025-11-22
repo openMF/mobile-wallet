@@ -20,7 +20,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.Text
@@ -32,17 +31,17 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import mobile_wallet.feature.send_interbank.generated.resources.Res
+import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_bank
+import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_enter_phone_number
+import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_enter_phone_to_search
+import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_found_recipients
+import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_no_recipients_found
+import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_no_results
+import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_search_recipient
+import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_to_account_interbank
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
-import mobile_wallet.feature.send_interbank.generated.resources.Res
-import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_search_recipient
-import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_enter_phone_number
-import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_no_results
-import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_no_recipients_found
-import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_found_recipients
-import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_enter_phone_to_search
-import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_bank
-import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_to_account_interbank
 import org.mifospay.core.designsystem.component.MifosButton
 import org.mifospay.core.designsystem.component.MifosCard
 import org.mifospay.core.designsystem.component.MifosScaffold
@@ -50,9 +49,9 @@ import org.mifospay.core.designsystem.component.MifosTextField
 import org.mifospay.core.designsystem.component.MifosTopBar
 import org.mifospay.core.designsystem.icon.MifosIcons
 import org.mifospay.core.designsystem.theme.MifosTheme
+import org.mifospay.core.model.interbank.InterBankPartyInfoResponse
 import org.mifospay.core.ui.AvatarBox
 import org.mifospay.core.ui.EmptyContentScreen
-import org.mifospay.core.model.interbank.InterBankPartyInfoResponse
 import org.mifospay.core.ui.MifosProgressIndicator
 import template.core.base.designsystem.theme.KptTheme
 

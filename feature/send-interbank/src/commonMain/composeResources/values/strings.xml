@@ -100,4 +100,5 @@
     <string name="feature_send_interbank_terms_acknowledged_description">By completing this final payment, you acknowledge that the transaction is irreversible. Please ensure all details are correct before submission.</string>
     <string name="feature_send_interbank_cancel">Cancel</string>
     <string name="feature_send_interbank_ok">Ok</string>
+    <string name="feature_send_interbank_edit_transfer">Edit Transfer</string>
 </resources>

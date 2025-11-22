@@ -37,21 +37,22 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import mobile_wallet.feature.send_interbank.generated.resources.Res
+import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_amount_transferred
+import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_attempted_amount
+import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_available_balance_label
 import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_back_to_home
 import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_description
+import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_edit_transfer
 import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_failed
+import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_from_account_label
 import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_success
+import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_to_account_label
+import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_transaction_date_label
 import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_transaction_failed
+import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_transaction_reference
 import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_transfer_completed
 import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_transfer_failed
 import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_transfer_successful
-import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_transaction_reference
-import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_amount_transferred
-import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_from_account_label
-import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_to_account_label
-import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_transaction_date_label
-import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_attempted_amount
-import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_available_balance_label
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.mifospay.core.designsystem.component.MifosButton
@@ -88,7 +89,6 @@ fun TransferSuccessScreen(
                     .padding(KptTheme.spacing.md),
                 verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.sm),
             ) {
-
                 MifosButton(
                     onClick = onBackToHome,
                     modifier = Modifier.fillMaxWidth(),
@@ -214,7 +214,6 @@ fun TransferSuccessScreen(
                             .padding(KptTheme.spacing.md),
                         verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.md),
                     ) {
-
                         // Amount
                         Column(
                             modifier = Modifier.fillMaxWidth(),
@@ -345,7 +344,7 @@ fun TransferFailedScreen(
                     onClick = onRetry,
                     modifier = Modifier.fillMaxWidth(),
                 ) {
-                    Text("Edit Transfer")
+                    Text(stringResource(Res.string.feature_send_interbank_edit_transfer))
                 }
 
                 MifosButton(
@@ -464,7 +463,6 @@ fun TransferFailedScreen(
                             .padding(KptTheme.spacing.md),
                         verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.md),
                     ) {
-
                         // Amount
                         Column(
                             modifier = Modifier.fillMaxWidth(),
@@ -614,8 +612,6 @@ fun TransferFailedScreen(
                                 )
                             }
                         }
-
-
 
                         // Transaction Date
                         Row(
