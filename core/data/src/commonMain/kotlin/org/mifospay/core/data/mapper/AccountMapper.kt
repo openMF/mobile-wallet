@@ -31,7 +31,7 @@ fun List<SavingAccountEntity>.toAccount(): List<Account> {
             productId = it.productId,
             productName = it.productName,
             status = it.status,
-            accountType = it.accountType
+            accountType = it.accountType,
         )
     }
 }
@@ -40,6 +40,6 @@ fun NetworkAccountType.toModelAccountType(): AccountType {
     return AccountType(
         id = this.id?.toLong() ?: 0L,
         code = this.code ?: "",
-        value = this.value ?: ""
+        value = this.value ?: "",
     )
 }

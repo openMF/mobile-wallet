@@ -28,6 +28,7 @@
 :feature:receipt
 :feature:request-money
 :feature:savedcards
+:feature:send-interbank
 :feature:send-money
 :feature:settings
 :feature:standing-instruction

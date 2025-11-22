@@ -15,8 +15,8 @@ import org.mifospay.core.network.services.createAuthenticationService
 import org.mifospay.core.network.services.createBeneficiaryService
 import org.mifospay.core.network.services.createClientService
 import org.mifospay.core.network.services.createDocumentService
-import org.mifospay.core.network.services.createInvoiceService
 import org.mifospay.core.network.services.createInterBankService
+import org.mifospay.core.network.services.createInvoiceService
 import org.mifospay.core.network.services.createKYCLevel1Service
 import org.mifospay.core.network.services.createNotificationService
 import org.mifospay.core.network.services.createRegistrationService
