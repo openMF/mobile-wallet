@@ -9,18 +9,32 @@
  */
 package org.mifospay.feature.send.interbank.screens
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalClipboardManager
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.resources.stringResource
@@ -48,10 +62,20 @@ import template.core.base.designsystem.theme.KptTheme
 fun TransferSuccessScreen(
     recipientName: String,
     amount: String,
+    transactionReference: String = "TXN-20250911-0001",
+    fromAccount: String = "WALLET - #0000000001",
+    fromAccountName: String = "TOMAS ASCENCIO ASCENCIO",
+    toAccount: String = "Pedro Barreto",
+    toAccountNumber: String = "Account: 9388006020",
+    transactionDate: String = "11/09/25 at 09:41 AM",
+    currencyCode: String = "MXN",
     onDownloadReceipt: () -> Unit,
     onBackToHome: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val clipboardManager = LocalClipboardManager.current
+    var copied by remember { mutableStateOf(false) }
+
     MifosScaffold(
         modifier = modifier,
         bottomBar = {
@@ -78,47 +102,199 @@ fun TransferSuccessScreen(
         },
         containerColor = KptTheme.colorScheme.background,
     ) { paddingValues ->
-        Box(
+        LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(paddingValues),
-            contentAlignment = Alignment.Center,
+                .padding(paddingValues)
+                .padding(KptTheme.spacing.md),
+            verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.lg),
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(KptTheme.spacing.lg),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(
-                    KptTheme.spacing.md,
-                    Alignment.CenterVertically,
-                ),
-            ) {
-                Icon(
-                    imageVector = MifosIcons.Check,
-                    contentDescription = stringResource(Res.string.feature_send_interbank_success),
-                    modifier = Modifier.size(80.dp),
-                    tint = KptTheme.colorScheme.primary,
-                )
+            // Success Icon
+            item {
+                Box(
+                    modifier = Modifier
+                        .size(100.dp)
+                        .background(
+                            color = KptTheme.colorScheme.primary.copy(alpha = 0.1f),
+                            shape = KptTheme.shapes.large,
+                        ),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    Icon(
+                        imageVector = MifosIcons.Check,
+                        contentDescription = stringResource(Res.string.feature_send_interbank_success),
+                        modifier = Modifier.size(56.dp),
+                        tint = KptTheme.colorScheme.primary,
+                    )
+                }
+            }
 
-                Text(
-                    text = stringResource(Res.string.feature_send_interbank_transfer_successful),
-                    style = KptTheme.typography.headlineMedium,
-                    fontWeight = FontWeight.SemiBold,
-                )
+            // Title and Subtitle
+            item {
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.xs),
+                ) {
+                    Text(
+                        text = stringResource(Res.string.feature_send_interbank_transfer_successful),
+                        style = KptTheme.typography.headlineMedium,
+                        fontWeight = FontWeight.Bold,
+                    )
+                    Text(
+                        text = stringResource(Res.string.feature_send_interbank_transfer_completed, recipientName),
+                        style = KptTheme.typography.bodyMedium,
+                        color = KptTheme.colorScheme.onSurfaceVariant,
+                    )
+                }
+            }
 
-                Text(
-                    text = stringResource(Res.string.feature_send_interbank_transfer_completed, recipientName),
-                    style = KptTheme.typography.bodyMedium,
-                    color = KptTheme.colorScheme.onSurfaceVariant,
-                )
+            // Transaction Reference
+            item {
+                Card(
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = CardDefaults.cardColors(
+                        containerColor = KptTheme.colorScheme.surfaceContainer,
+                    ),
+                    shape = KptTheme.shapes.medium,
+                ) {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(KptTheme.spacing.md),
+                        verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.sm),
+                    ) {
+                        Text(
+                            text = "Transaction Reference",
+                            style = KptTheme.typography.labelMedium,
+                            color = KptTheme.colorScheme.onSurfaceVariant,
+                        )
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            Text(
+                                text = transactionReference,
+                                style = KptTheme.typography.bodyLarge,
+                                fontWeight = FontWeight.SemiBold,
+                                color = KptTheme.colorScheme.primary,
+                            )
+                            IconButton(
+                                onClick = {
+                                    clipboardManager.setText(AnnotatedString(transactionReference))
+                                    copied = true
+                                },
+                                modifier = Modifier.size(24.dp),
+                            ) {
+                                Icon(
+                                    imageVector = MifosIcons.Copy,
+                                    contentDescription = "Copy transaction reference",
+                                    modifier = Modifier.size(20.dp),
+                                    tint = KptTheme.colorScheme.primary,
+                                )
+                            }
+                        }
+                    }
+                }
+            }
 
-                Text(
-                    text = stringResource(Res.string.feature_send_interbank_amount_label, amount),
-                    style = KptTheme.typography.headlineSmall,
-                    fontWeight = FontWeight.Bold,
-                    color = KptTheme.colorScheme.primary,
-                )
+            // Transaction Details
+            item {
+                Card(
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = CardDefaults.cardColors(
+                        containerColor = KptTheme.colorScheme.surface,
+                    ),
+                    shape = KptTheme.shapes.medium,
+                ) {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(KptTheme.spacing.md),
+                        verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.md),
+                    ) {
+                        // From Account
+                        Column(
+                            modifier = Modifier.fillMaxWidth(),
+                            verticalArrangement = Arrangement.spacedBy(4.dp),
+                        ) {
+                            Text(
+                                text = "From Account",
+                                style = KptTheme.typography.labelMedium,
+                                fontWeight = FontWeight.SemiBold,
+                            )
+                            Text(
+                                text = fromAccount,
+                                style = KptTheme.typography.bodySmall,
+                                color = KptTheme.colorScheme.onSurfaceVariant,
+                            )
+                            Text(
+                                text = fromAccountName,
+                                style = KptTheme.typography.bodySmall,
+                                color = KptTheme.colorScheme.onSurfaceVariant,
+                            )
+                        }
+
+                        // To Account
+                        Column(
+                            modifier = Modifier.fillMaxWidth(),
+                            verticalArrangement = Arrangement.spacedBy(4.dp),
+                        ) {
+                            Text(
+                                text = "To Account",
+                                style = KptTheme.typography.labelMedium,
+                                fontWeight = FontWeight.SemiBold,
+                            )
+                            Text(
+                                text = toAccount,
+                                style = KptTheme.typography.bodySmall,
+                                color = KptTheme.colorScheme.onSurfaceVariant,
+                            )
+                            Text(
+                                text = toAccountNumber,
+                                style = KptTheme.typography.bodySmall,
+                                color = KptTheme.colorScheme.onSurfaceVariant,
+                            )
+                        }
+
+                        // Amount
+                        Column(
+                            modifier = Modifier.fillMaxWidth(),
+                            verticalArrangement = Arrangement.spacedBy(4.dp),
+                        ) {
+                            Text(
+                                text = "Amount Transferred",
+                                style = KptTheme.typography.labelMedium,
+                                fontWeight = FontWeight.SemiBold,
+                            )
+                            Text(
+                                text = "$currencyCode $amount",
+                                style = KptTheme.typography.headlineSmall,
+                                fontWeight = FontWeight.Bold,
+                                color = KptTheme.colorScheme.primary,
+                            )
+                        }
+
+                        // Date
+                        Column(
+                            modifier = Modifier.fillMaxWidth(),
+                            verticalArrangement = Arrangement.spacedBy(4.dp),
+                        ) {
+                            Text(
+                                text = "Transaction Date",
+                                style = KptTheme.typography.labelMedium,
+                                fontWeight = FontWeight.SemiBold,
+                            )
+                            Text(
+                                text = transactionDate,
+                                style = KptTheme.typography.bodySmall,
+                                color = KptTheme.colorScheme.onSurfaceVariant,
+                            )
+                        }
+                    }
+                }
             }
         }
     }
@@ -127,6 +303,10 @@ fun TransferSuccessScreen(
 @Composable
 fun TransferFailedScreen(
     errorMessage: String,
+    errorTitle: String = "Insufficient Balance",
+    attemptedAmount: String = "MXN 1.00",
+    availableBalance: String = "MXN 5,000.00",
+    transactionDate: String = "11/09/25 at 09:41 AM",
     onRetry: () -> Unit,
     onContactSupport: () -> Unit,
     onBackToHome: () -> Unit,
@@ -145,14 +325,7 @@ fun TransferFailedScreen(
                     onClick = onRetry,
                     modifier = Modifier.fillMaxWidth(),
                 ) {
-                    Text(stringResource(Res.string.feature_send_interbank_retry_transfer))
-                }
-
-                MifosButton(
-                    onClick = onContactSupport,
-                    modifier = Modifier.fillMaxWidth(),
-                ) {
-                    Text(stringResource(Res.string.feature_send_interbank_contact_support))
+                    Text("Edit Transfer")
                 }
 
                 MifosButton(
@@ -165,47 +338,194 @@ fun TransferFailedScreen(
         },
         containerColor = KptTheme.colorScheme.background,
     ) { paddingValues ->
-        Box(
+        LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(paddingValues),
-            contentAlignment = Alignment.Center,
+                .padding(paddingValues)
+                .padding(KptTheme.spacing.md),
+            verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.lg),
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(KptTheme.spacing.lg),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(
-                    KptTheme.spacing.md,
-                    Alignment.CenterVertically,
-                ),
-            ) {
-                Icon(
-                    imageVector = MifosIcons.Error,
-                    contentDescription = stringResource(Res.string.feature_send_interbank_failed),
-                    modifier = Modifier.size(80.dp),
-                    tint = KptTheme.colorScheme.error,
-                )
+            // Error Icon
+            item {
+                Box(
+                    modifier = Modifier
+                        .size(100.dp)
+                        .background(
+                            color = KptTheme.colorScheme.error.copy(alpha = 0.1f),
+                            shape = KptTheme.shapes.large,
+                        ),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    Icon(
+                        imageVector = MifosIcons.Error,
+                        contentDescription = stringResource(Res.string.feature_send_interbank_failed),
+                        modifier = Modifier.size(56.dp),
+                        tint = KptTheme.colorScheme.error,
+                    )
+                }
+            }
 
-                Text(
-                    text = stringResource(Res.string.feature_send_interbank_transfer_failed),
-                    style = KptTheme.typography.headlineMedium,
-                    fontWeight = FontWeight.SemiBold,
-                    color = KptTheme.colorScheme.error,
-                )
+            // Title and Subtitle
+            item {
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.xs),
+                ) {
+                    Text(
+                        text = stringResource(Res.string.feature_send_interbank_transfer_failed),
+                        style = KptTheme.typography.headlineMedium,
+                        fontWeight = FontWeight.Bold,
+                        color = KptTheme.colorScheme.error,
+                    )
+                    Text(
+                        text = stringResource(Res.string.feature_send_interbank_transaction_failed),
+                        style = KptTheme.typography.bodyMedium,
+                        color = KptTheme.colorScheme.onSurfaceVariant,
+                    )
+                }
+            }
 
-                Text(
-                    text = stringResource(Res.string.feature_send_interbank_transaction_failed),
-                    style = KptTheme.typography.bodyMedium,
-                    color = KptTheme.colorScheme.onSurfaceVariant,
-                )
+            // Error Card
+            item {
+                Card(
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = CardDefaults.cardColors(
+                        containerColor = KptTheme.colorScheme.error.copy(alpha = 0.1f),
+                    ),
+                    shape = KptTheme.shapes.medium,
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(KptTheme.spacing.md),
+                        horizontalArrangement = Arrangement.spacedBy(KptTheme.spacing.md),
+                        verticalAlignment = Alignment.Top,
+                    ) {
+                        Icon(
+                            imageVector = MifosIcons.Error,
+                            contentDescription = null,
+                            modifier = Modifier.size(24.dp),
+                            tint = KptTheme.colorScheme.error,
+                        )
+                        Column(
+                            modifier = Modifier.weight(1f),
+                            verticalArrangement = Arrangement.spacedBy(4.dp),
+                        ) {
+                            Text(
+                                text = errorTitle,
+                                style = KptTheme.typography.labelMedium,
+                                fontWeight = FontWeight.SemiBold,
+                                color = KptTheme.colorScheme.error,
+                            )
+                            Text(
+                                text = errorMessage,
+                                style = KptTheme.typography.bodySmall,
+                                color = KptTheme.colorScheme.onSurfaceVariant,
+                            )
+                        }
+                    }
+                }
+            }
 
-                Text(
-                    text = stringResource(Res.string.feature_send_interbank_error, errorMessage),
-                    style = KptTheme.typography.bodySmall,
-                    color = KptTheme.colorScheme.error,
-                )
+            // Transaction Details
+            item {
+                Card(
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = CardDefaults.cardColors(
+                        containerColor = KptTheme.colorScheme.surface,
+                    ),
+                    shape = KptTheme.shapes.medium,
+                ) {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(KptTheme.spacing.md),
+                        verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.md),
+                    ) {
+                        // Attempted Amount
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            Column(
+                                verticalArrangement = Arrangement.spacedBy(4.dp),
+                            ) {
+                                Text(
+                                    text = "Attempted Amount",
+                                    style = KptTheme.typography.labelMedium,
+                                    fontWeight = FontWeight.SemiBold,
+                                )
+                                Text(
+                                    text = attemptedAmount,
+                                    style = KptTheme.typography.bodySmall,
+                                    color = KptTheme.colorScheme.onSurfaceVariant,
+                                )
+                            }
+                            Text(
+                                text = "#757575",
+                                style = KptTheme.typography.labelSmall,
+                                color = KptTheme.colorScheme.onSurfaceVariant,
+                            )
+                        }
+
+                        // Available Balance
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            Column(
+                                verticalArrangement = Arrangement.spacedBy(4.dp),
+                            ) {
+                                Text(
+                                    text = "Available Balance",
+                                    style = KptTheme.typography.labelMedium,
+                                    fontWeight = FontWeight.SemiBold,
+                                )
+                                Text(
+                                    text = availableBalance,
+                                    style = KptTheme.typography.bodySmall,
+                                    color = KptTheme.colorScheme.onSurfaceVariant,
+                                )
+                            }
+                            Text(
+                                text = "#4CAF50",
+                                style = KptTheme.typography.labelSmall,
+                                color = KptTheme.colorScheme.primary,
+                            )
+                        }
+
+                        // Transaction Date
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            Column(
+                                verticalArrangement = Arrangement.spacedBy(4.dp),
+                            ) {
+                                Text(
+                                    text = "Transaction Date",
+                                    style = KptTheme.typography.labelMedium,
+                                    fontWeight = FontWeight.SemiBold,
+                                )
+                                Text(
+                                    text = transactionDate,
+                                    style = KptTheme.typography.bodySmall,
+                                    color = KptTheme.colorScheme.onSurfaceVariant,
+                                )
+                            }
+                            Text(
+                                text = "#757575",
+                                style = KptTheme.typography.labelSmall,
+                                color = KptTheme.colorScheme.onSurfaceVariant,
+                            )
+                        }
+                    }
+                }
             }
         }
     }
@@ -217,7 +537,14 @@ fun TransferSuccessScreenPreview() {
     MifosTheme {
         TransferSuccessScreen(
             recipientName = "Pedro Barreto",
-            amount = "100.00",
+            amount = "1.00",
+            transactionReference = "TXN-20250911-0001",
+            fromAccount = "WALLET - #0000000001",
+            fromAccountName = "TOMAS ASCENCIO ASCENCIO",
+            toAccount = "Pedro Barreto",
+            toAccountNumber = "Account: 9388006020",
+            transactionDate = "11/09/25 at 09:41 AM",
+            currencyCode = "MXN",
             onDownloadReceipt = {},
             onBackToHome = {},
         )
@@ -229,7 +556,11 @@ fun TransferSuccessScreenPreview() {
 fun TransferFailedScreenPreview() {
     MifosTheme {
         TransferFailedScreen(
-            errorMessage = "T-402: Transaction failed. Please try again.",
+            errorMessage = "Your available balance is not enough to complete this transfer. Please update the amount and try again.",
+            errorTitle = "Insufficient Balance",
+            attemptedAmount = "MXN 1.00",
+            availableBalance = "MXN 5,000.00",
+            transactionDate = "11/09/25 at 09:41 AM",
             onRetry = {},
             onContactSupport = {},
             onBackToHome = {},

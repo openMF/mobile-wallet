@@ -10,6 +10,7 @@
 package org.mifospay.feature.send.interbank.screens
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -52,6 +53,7 @@ import mobile_wallet.feature.send_interbank.generated.resources.feature_send_int
 import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_to_account
 import org.mifospay.core.common.CurrencyFormatter
 import org.mifospay.core.designsystem.component.MifosButton
+import org.mifospay.core.designsystem.component.MifosCard
 import org.mifospay.core.designsystem.component.MifosScaffold
 import org.mifospay.core.designsystem.component.MifosTopBar
 import org.mifospay.core.designsystem.icon.MifosIcons
@@ -183,23 +185,31 @@ fun PreviewTransferScreen(
                         ),
                         shape = KptTheme.shapes.medium,
                     ) {
-                        Row(
+                        Column(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(KptTheme.spacing.lg),
-                            horizontalArrangement = Arrangement.spacedBy(KptTheme.spacing.md),
-                            verticalAlignment = Alignment.CenterVertically,
                         ) {
+                            Row(
+                                horizontalArrangement = Arrangement.spacedBy(KptTheme.spacing.sm),
+                                verticalAlignment = Alignment.CenterVertically,
+                            ) {
+                                Text(
+                                    text = currencyCode,
+                                    style = KptTheme.typography.headlineSmall,
+                                    fontWeight = FontWeight.SemiBold,
+                                    color = KptTheme.colorScheme.onPrimaryContainer,
+                                )
+                                Text(
+                                    text = amount,
+                                    style = KptTheme.typography.displaySmall,
+                                    fontWeight = FontWeight.Bold,
+                                    color = KptTheme.colorScheme.onPrimaryContainer,
+                                )
+                            }
                             Text(
-                                text = currencyCode,
-                                style = KptTheme.typography.headlineSmall,
-                                fontWeight = FontWeight.SemiBold,
-                                color = KptTheme.colorScheme.onPrimaryContainer,
-                            )
-                            Text(
-                                text = amount,
-                                style = KptTheme.typography.displaySmall,
-                                fontWeight = FontWeight.Bold,
+                                text = "Transfer Amount",
+                                style = KptTheme.typography.labelSmall,
                                 color = KptTheme.colorScheme.onPrimaryContainer,
                             )
                         }
@@ -219,19 +229,42 @@ fun PreviewTransferScreen(
                         fontWeight = FontWeight.SemiBold,
                         color = KptTheme.colorScheme.onSurfaceVariant,
                     )
-                    Card(
+                    MifosCard(
                         modifier = Modifier.fillMaxWidth(),
                         colors = CardDefaults.cardColors(
                             containerColor = KptTheme.colorScheme.surface,
                         ),
                         shape = KptTheme.shapes.medium,
                     ) {
-                        Text(
-                            text = transferDate.ifEmpty { "N/A" },
-                            style = KptTheme.typography.bodyLarge,
-                            fontWeight = FontWeight.SemiBold,
-                            modifier = Modifier.padding(KptTheme.spacing.md),
-                        )
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(KptTheme.spacing.md),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            Row(
+                                horizontalArrangement = Arrangement.spacedBy(KptTheme.spacing.sm),
+                                verticalAlignment = Alignment.CenterVertically,
+                            ) {
+                                Icon(
+                                    imageVector = MifosIcons.CalenderMonth,
+                                    contentDescription = null,
+                                    modifier = Modifier.size(20.dp),
+                                    tint = KptTheme.colorScheme.primary,
+                                )
+                                Text(
+                                    text = transferDate.ifEmpty { "N/A" },
+                                    style = KptTheme.typography.bodyLarge,
+                                    fontWeight = FontWeight.SemiBold,
+                                )
+                            }
+                            Text(
+                                text = "Today",
+                                style = KptTheme.typography.bodySmall,
+                                color = KptTheme.colorScheme.onSurfaceVariant,
+                            )
+                        }
                     }
                 }
             }
@@ -242,13 +275,19 @@ fun PreviewTransferScreen(
                     modifier = Modifier.fillMaxWidth(),
                     verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.sm),
                 ) {
-                    Text(
-                        text = stringResource(Res.string.feature_send_interbank_description),
-                        style = KptTheme.typography.labelMedium,
-                        fontWeight = FontWeight.SemiBold,
-                        color = KptTheme.colorScheme.onSurfaceVariant,
-                    )
-                    Card(
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Text(
+                            text = stringResource(Res.string.feature_send_interbank_description),
+                            style = KptTheme.typography.labelMedium,
+                            fontWeight = FontWeight.SemiBold,
+                            color = KptTheme.colorScheme.onSurfaceVariant,
+                        )
+                    }
+                    MifosCard(
                         modifier = Modifier.fillMaxWidth(),
                         colors = CardDefaults.cardColors(
                             containerColor = KptTheme.colorScheme.surface,
@@ -264,16 +303,27 @@ fun PreviewTransferScreen(
                 }
             }
 
-            // Disclaimer with Checkbox
+            // Acknowledgement Section
             item {
-                DisclaimerCheckboxCard(
-                    isChecked = disclaimerAccepted,
-                    onCheckedChange = { disclaimerAccepted = it },
-                )
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.sm),
+                ) {
+                    Text(
+                        text = "Acknowledgement Section",
+                        style = KptTheme.typography.labelMedium,
+                        fontWeight = FontWeight.SemiBold,
+                        color = KptTheme.colorScheme.onSurfaceVariant,
+                    )
+                    DisclaimerCheckboxCard(
+                        isChecked = disclaimerAccepted,
+                        onCheckedChange = { disclaimerAccepted = it },
+                    )
+                }
             }
 
             item {
-                Box(modifier = Modifier.padding(vertical = KptTheme.spacing.md))
+                Box(modifier = Modifier.padding(vertical = KptTheme.spacing.lg))
             }
         }
     }
@@ -291,9 +341,15 @@ private fun TransferPreviewCard(
     modifier: Modifier = Modifier,
 ) {
     Card(
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier
+            .fillMaxWidth()
+            .border(
+                width = 2.dp,
+                color = KptTheme.colorScheme.primary,
+                shape = KptTheme.shapes.medium,
+            ),
         colors = CardDefaults.cardColors(
-            containerColor = KptTheme.colorScheme.surface,
+            containerColor = KptTheme.colorScheme.primary.copy(alpha = 0.08f),
         ),
         shape = KptTheme.shapes.medium,
     ) {
@@ -308,7 +364,7 @@ private fun TransferPreviewCard(
             ) {
                 AvatarBox(
                     icon = icon,
-                    backgroundColor = KptTheme.colorScheme.primaryContainer,
+                    backgroundColor = KptTheme.colorScheme.primary,
                 )
 
                 Column(
@@ -335,7 +391,7 @@ private fun TransferPreviewCard(
                     )
                     if (isVerified) {
                         Text(
-                            text = "✓ Verified",
+                            text = "✓ Verified Recipient",
                             style = KptTheme.typography.labelSmall,
                             color = KptTheme.colorScheme.primary,
                             fontWeight = FontWeight.SemiBold,
@@ -366,19 +422,19 @@ private fun DisclaimerCheckboxCard(
     modifier: Modifier = Modifier,
 ) {
     val containerColor = if (isChecked) {
-        KptTheme.colorScheme.tertiaryContainer
+        KptTheme.colorScheme.primaryContainer
     } else {
         KptTheme.colorScheme.errorContainer
     }
 
     val textColor = if (isChecked) {
-        KptTheme.colorScheme.onTertiaryContainer
+        KptTheme.colorScheme.onPrimaryContainer
     } else {
         KptTheme.colorScheme.onErrorContainer
     }
 
     val checkboxColor = if (isChecked) {
-        KptTheme.colorScheme.tertiary
+        KptTheme.colorScheme.primary
     } else {
         KptTheme.colorScheme.error
     }

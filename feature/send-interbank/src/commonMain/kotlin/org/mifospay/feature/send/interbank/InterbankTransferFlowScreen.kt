@@ -17,6 +17,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.koin.compose.viewmodel.koinViewModel
+import org.mifospay.core.common.CurrencyFormatter
 import org.mifospay.core.ui.utils.EventsEffect
 import org.mifospay.feature.send.interbank.screens.PreviewTransferScreen
 import org.mifospay.feature.send.interbank.screens.SearchRecipientScreen
@@ -160,6 +161,13 @@ fun InterbankTransferFlowScreen(
             TransferSuccessScreen(
                 recipientName = "${state.selectedParticipantInfo?.firstName ?: ""} ${state.selectedParticipantInfo?.lastName ?: ""}".trim().ifEmpty { "Recipient" },
                 amount = state.transferAmount,
+                transactionReference = state.transferResponse ?: "N/A",
+                fromAccount = state.selectedFromAccount?.number ?: "N/A",
+                fromAccountName = state.selectedFromAccount?.name ?: "Unknown",
+                toAccount = "${state.selectedParticipantInfo?.firstName ?: ""} ${state.selectedParticipantInfo?.lastName ?: ""}".trim(),
+                toAccountNumber = "Account: ${state.selectedParticipantInfo?.partyId ?: "N/A"}",
+                transactionDate = state.transferDate,
+                currencyCode = state.selectedFromAccount?.currency?.code ?: "MXN",
                 onDownloadReceipt = {
                     // TODO: Implement receipt download
                 },
@@ -171,6 +179,18 @@ fun InterbankTransferFlowScreen(
         InterbankTransferState.Step.TransferFailed -> {
             TransferFailedScreen(
                 errorMessage = state.errorMessage ?: "Unknown error occurred",
+                errorTitle = "Transfer Failed",
+                attemptedAmount = CurrencyFormatter.format(
+                    state.transferAmount.toDoubleOrNull() ?: 0.0,
+                    state.selectedFromAccount?.currency?.code ?: "MXN",
+                    null,
+                ),
+                availableBalance = CurrencyFormatter.format(
+                    state.selectedFromAccount?.balance ?: 0.0,
+                    state.selectedFromAccount?.currency?.code ?: "MXN",
+                    null,
+                ),
+                transactionDate = state.transferDate,
                 onRetry = {
                     viewModel.trySendAction(InterbankTransferAction.RetryTransfer)
                 },
