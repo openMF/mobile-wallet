@@ -108,10 +108,6 @@ fun InterbankTransferFlowScreen(
                     viewModel.trySendAction(InterbankTransferAction.UpdateAmount(amount))
                 },
                 date = state.transferDate,
-                initialDate = state.initialDate,
-                onDateChanged = { date ->
-                    viewModel.trySendAction(InterbankTransferAction.UpdateDate(date))
-                },
                 description = state.transferDescription,
                 onDescriptionChanged = { desc ->
                     viewModel.trySendAction(InterbankTransferAction.UpdateDescription(desc))

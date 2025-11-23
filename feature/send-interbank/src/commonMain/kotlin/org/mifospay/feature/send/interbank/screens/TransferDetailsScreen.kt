@@ -9,8 +9,6 @@
  */
 package org.mifospay.feature.send.interbank.screens
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -25,17 +23,11 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.DatePicker
-import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.SelectableDates
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
-import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -47,13 +39,11 @@ import androidx.compose.ui.text.input.ImeAction
 import mobile_wallet.feature.send_interbank.generated.resources.Res
 import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_amount
 import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_available_balance
-import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_cancel
 import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_continue
 import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_date
 import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_description
 import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_edit
 import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_from_account
-import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_ok
 import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_to_account
 import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_to_account_interbank
 import mobile_wallet.feature.send_interbank.generated.resources.feature_send_interbank_transfer_details
@@ -73,18 +63,15 @@ import org.mifospay.core.model.savingsaccount.Currency
 import org.mifospay.core.model.savingsaccount.Status
 import org.mifospay.core.ui.AmountEditText
 import template.core.base.designsystem.theme.KptTheme
-import kotlin.time.ExperimentalTime
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalTime::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TransferDetailsScreen(
     fromAccount: Account?,
     recipient: InterBankPartyInfoResponse?,
     amount: String,
     onAmountChanged: (String) -> Unit,
-    initialDate: Long,
     date: String,
-    onDateChanged: (Long) -> Unit,
     description: String,
     onDescriptionChanged: (String) -> Unit,
     onContinueClick: () -> Unit,
@@ -93,8 +80,6 @@ fun TransferDetailsScreen(
     onEditRecipient: () -> Unit = {},
     modifier: Modifier = Modifier,
 ) {
-    var showDatePicker by remember { mutableStateOf(false) }
-
     MifosScaffold(
         modifier = modifier,
         topBar = {
@@ -223,12 +208,7 @@ fun TransferDetailsScreen(
                         colors = CardDefaults.cardColors(KptTheme.colorScheme.background),
                         shape = KptTheme.shapes.medium,
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .clickable {
-                                // Hide the onclick show transaction date picker for now as
-                                // we are not allowing
-                                // showDatePicker = true
-                            },
+                            .fillMaxWidth(),
                     ) {
                         Row(
                             modifier = Modifier
@@ -285,44 +265,6 @@ fun TransferDetailsScreen(
             item {
                 Box(modifier = Modifier.padding(vertical = KptTheme.spacing.md))
             }
-        }
-    }
-
-    val dateState = rememberDatePickerState(
-        initialSelectedDateMillis = initialDate,
-        selectableDates = object : SelectableDates {
-            override fun isSelectableDate(utcTimeMillis: Long): Boolean {
-                return utcTimeMillis <= initialDate
-            }
-        },
-    )
-
-    val confirmEnabled = remember {
-        derivedStateOf { dateState.selectedDateMillis != null }
-    }
-
-    // Date Picker Dialog
-    AnimatedVisibility(showDatePicker) {
-        DatePickerDialog(
-            onDismissRequest = { showDatePicker = false },
-            confirmButton = {
-                TextButton(
-                    onClick = {
-                        showDatePicker = false
-                        onDateChanged(dateState.selectedDateMillis ?: initialDate)
-                    },
-                    enabled = confirmEnabled.value,
-                ) {
-                    Text(text = stringResource(Res.string.feature_send_interbank_ok))
-                }
-            },
-            dismissButton = {
-                TextButton(onClick = { showDatePicker = false }) {
-                    Text(text = stringResource(Res.string.feature_send_interbank_cancel))
-                }
-            },
-        ) {
-            DatePicker(state = dateState)
         }
     }
 }
@@ -522,12 +464,10 @@ fun TransferDetailsScreenPreview() {
             amount = "100.00",
             onAmountChanged = {},
             date = "11/09/25",
-            onDateChanged = {},
             description = "Dinner share",
             onDescriptionChanged = {},
             onContinueClick = {},
             onBackClick = {},
-            initialDate = 1,
         )
     }
 }
@@ -594,12 +534,10 @@ fun TransferDetailsScreenEmptyPreview() {
             amount = "",
             onAmountChanged = {},
             date = "",
-            onDateChanged = {},
             description = "",
             onDescriptionChanged = {},
             onContinueClick = {},
             onBackClick = {},
-            initialDate = 1,
         )
     }
 }
