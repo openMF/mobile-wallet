@@ -20,6 +20,7 @@ import org.mifospay.core.network.InterBankApiManager
 import org.mifospay.core.network.KtorfitClient
 import org.mifospay.core.network.SelfServiceApiManager
 import org.mifospay.core.network.utils.BaseURL
+import org.mifospay.core.network.utils.BaseURL.FINERACT_PLATFORM_TENANT_ID
 import org.mifospay.core.network.utils.FlowConverterFactory
 import org.mifospay.core.network.utils.KtorInterceptor
 import kotlin.io.encoding.ExperimentalEncodingApi
@@ -34,7 +35,7 @@ val NetworkModule = module {
                     client = httpClient(
                         config = setupDefaultHttpClient(
                             baseUrl = BaseURL.selfServiceUrl,
-                            loggableHosts = listOf("mifos-bank-1.mifos.community"),
+                            loggableHosts = listOf("mifos-bank-2.mifos.community"),
                         ),
                     ).config {
                         install(KtorInterceptor) {
@@ -61,11 +62,11 @@ val NetworkModule = module {
                                 )
                             },
                             defaultHeaders = mapOf(
-                                "Fineract-Platform-TenantId" to "mifos-bank-1",
+                                "Fineract-Platform-TenantId" to FINERACT_PLATFORM_TENANT_ID,
                                 "Content-Type" to "application/json",
                                 "Accept" to "application/json",
                             ),
-                            loggableHosts = listOf("mifos-bank-1.mifos.community", "apis.flexcore.mx"),
+                            loggableHosts = listOf("mifos-bank-2.mifos.community", "apis.flexcore.mx"),
                         ),
                     ),
                 )
@@ -84,7 +85,7 @@ val NetworkModule = module {
                         config = setupDefaultHttpClient(
                             baseUrl = BaseURL.interBankUrl,
                             defaultHeaders = mapOf(
-                                "Fineract-Platform-TenantId" to BaseURL.FINERACT_PLATFORM_TENANT_ID,
+                                "Fineract-Platform-TenantId" to FINERACT_PLATFORM_TENANT_ID,
                                 "Content-Type" to "application/json",
                                 "Accept" to "application/json",
                             ),
