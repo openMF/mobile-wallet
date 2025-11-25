@@ -23,7 +23,7 @@ object BaseURL {
     const val DEFAULT = "default"
 
     const val API_ENDPOINT_INTERBANK = "apis.flexcore.mx"
-    const val API_PATH_INTERBANK = "/v1.0/vnext1/"
+    const val API_PATH_INTERBANK = "/v1.0/vnext2/"
 
     const val FINERACT_PLATFORM_TENANT_ID = "mifos-bank-2"
 
