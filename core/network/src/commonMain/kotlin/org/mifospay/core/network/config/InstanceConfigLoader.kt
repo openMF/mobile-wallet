@@ -16,6 +16,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.serialization.json.Json
 import org.mifospay.core.common.DataState
+import org.mifospay.core.model.instance.InstanceType
 import org.mifospay.core.model.instance.InstancesConfig
 import org.mifospay.core.model.instance.ServerInstance
 
@@ -43,7 +44,17 @@ class FirebaseInstanceConfigLoader : InstanceConfigLoader {
                     protocol = "https://",
                     path = "/fineract-provider/api/v1/",
                     platformTenantId = "mifos-bank-2",
-                    label = "Default Instance",
+                    label = "Default Main Instance",
+                    type = InstanceType.MAIN,
+                    isDefault = true,
+                ),
+                ServerInstance(
+                    endpoint = "apis.flexcore.mx",
+                    protocol = "https://",
+                    path = "/v1.0/vnext1/",
+                    platformTenantId = "mifos-bank-2",
+                    label = "Default Interbank Instance",
+                    type = InstanceType.INTERBANK,
                     isDefault = true,
                 ),
             ),

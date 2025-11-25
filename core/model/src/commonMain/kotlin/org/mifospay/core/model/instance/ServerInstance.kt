@@ -11,6 +11,11 @@ package org.mifospay.core.model.instance
 
 import kotlinx.serialization.Serializable
 
+enum class InstanceType {
+    MAIN,
+    INTERBANK,
+}
+
 @Serializable
 data class ServerInstance(
     val endpoint: String,
@@ -18,6 +23,7 @@ data class ServerInstance(
     val path: String,
     val platformTenantId: String,
     val label: String,
+    val type: InstanceType = InstanceType.MAIN,
     val isDefault: Boolean = false,
 ) {
     val fullUrl: String

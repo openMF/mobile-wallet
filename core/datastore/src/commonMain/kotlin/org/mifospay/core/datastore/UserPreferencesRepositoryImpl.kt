@@ -80,6 +80,13 @@ class UserPreferencesRepositoryImpl(
             started = SharingStarted.Eagerly,
         )
 
+    override val selectedInterbankInstance: StateFlow<ServerInstance?>
+        get() = preferenceManager.selectedInterbankInstance.stateIn(
+            scope = unconfinedScope,
+            initialValue = null,
+            started = SharingStarted.Eagerly,
+        )
+
     override suspend fun updateDefaultAccount(account: DefaultAccount): DataState<Unit> {
         return try {
             val result = preferenceManager.updateDefaultAccount(account)
@@ -93,6 +100,15 @@ class UserPreferencesRepositoryImpl(
     override suspend fun updateSelectedInstance(instance: ServerInstance): DataState<Unit> {
         return try {
             preferenceManager.updateSelectedInstance(instance)
+            DataState.Success(Unit)
+        } catch (e: Exception) {
+            DataState.Error(e)
+        }
+    }
+
+    override suspend fun updateSelectedInterbankInstance(instance: ServerInstance): DataState<Unit> {
+        return try {
+            preferenceManager.updateSelectedInterbankInstance(instance)
             DataState.Success(Unit)
         } catch (e: Exception) {
             DataState.Error(e)

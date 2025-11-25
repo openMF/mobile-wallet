@@ -33,6 +33,7 @@ import org.mifospay.core.model.user.UserInfo
 private const val USER_INFO_KEY = "userInfo"
 private const val CLIENT_INFO_KEY = "clientInfo"
 private const val SELECTED_INSTANCE_KEY = "selectedInstance"
+private const val SELECTED_INTERBANK_INSTANCE_KEY = "selectedInterbankInstance"
 
 @OptIn(ExperimentalSerializationApi::class)
 class UserPreferencesDataSource(
@@ -79,6 +80,13 @@ class UserPreferencesDataSource(
         ),
     )
 
+    private val _selectedInterbankInstance = MutableStateFlow(
+        settings.decodeValueOrNull(
+            key = SELECTED_INTERBANK_INSTANCE_KEY,
+            serializer = ServerInstance.serializer(),
+        ),
+    )
+
     val token = _userInfo.map {
         it.base64EncodedAuthenticationKey
     }
@@ -91,6 +99,8 @@ class UserPreferencesDataSource(
     val defaultAccount = _defaultAccount.map { it.takeIf { it.accountId != 0L } }
 
     val selectedInstance = _selectedInstance
+
+    val selectedInterbankInstance = _selectedInterbankInstance
 
     suspend fun updateClientInfo(client: Client) {
         withContext(dispatcher) {
@@ -156,6 +166,13 @@ class UserPreferencesDataSource(
         }
     }
 
+    suspend fun updateSelectedInterbankInstance(instance: ServerInstance) {
+        withContext(dispatcher) {
+            settings.putSelectedInterbankInstance(instance)
+            _selectedInterbankInstance.value = instance
+        }
+    }
+
     suspend fun clearInfo() {
         withContext(dispatcher) {
             settings.clear()
@@ -195,6 +212,14 @@ private fun Settings.putDefaultAccount(account: DefaultAccount) {
 private fun Settings.putSelectedInstance(instance: ServerInstance) {
     encodeValue(
         key = SELECTED_INSTANCE_KEY,
+        serializer = ServerInstance.serializer(),
+        value = instance,
+    )
+}
+
+private fun Settings.putSelectedInterbankInstance(instance: ServerInstance) {
+    encodeValue(
+        key = SELECTED_INTERBANK_INSTANCE_KEY,
         serializer = ServerInstance.serializer(),
         value = instance,
     )

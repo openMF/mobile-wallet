@@ -15,5 +15,15 @@ import kotlinx.serialization.Serializable
 data class InstancesConfig(
     val instances: List<ServerInstance> = emptyList(),
 ) {
-    fun getDefaultInstance(): ServerInstance? = instances.firstOrNull { it.isDefault }
+    fun getDefaultInstance(): ServerInstance? =
+        instances.firstOrNull { it.isDefault && it.type == InstanceType.MAIN }
+
+    fun getDefaultInterbankInstance(): ServerInstance? =
+        instances.firstOrNull { it.isDefault && it.type == InstanceType.INTERBANK }
+
+    fun getMainInstances(): List<ServerInstance> =
+        instances.filter { it.type == InstanceType.MAIN }
+
+    fun getInterbankInstances(): List<ServerInstance> =
+        instances.filter { it.type == InstanceType.INTERBANK }
 }

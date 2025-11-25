@@ -35,6 +35,8 @@ interface UserPreferencesRepository {
 
     val selectedInstance: StateFlow<ServerInstance?>
 
+    val selectedInterbankInstance: StateFlow<ServerInstance?>
+
     suspend fun updateToken(token: String): DataState<Unit>
 
     suspend fun updateUserInfo(user: UserInfo): DataState<Unit>
@@ -46,6 +48,8 @@ interface UserPreferencesRepository {
     suspend fun updateDefaultAccount(account: DefaultAccount): DataState<Unit>
 
     suspend fun updateSelectedInstance(instance: ServerInstance): DataState<Unit>
+
+    suspend fun updateSelectedInterbankInstance(instance: ServerInstance): DataState<Unit>
 
     suspend fun logOut(): Unit
 }

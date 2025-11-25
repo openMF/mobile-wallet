@@ -37,9 +37,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.compose.material3.HorizontalDivider
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
 import org.mifospay.core.designsystem.icon.MifosIcons
+import org.mifospay.core.model.instance.InstanceType
 import org.mifospay.core.model.instance.ServerInstance
 import template.core.base.designsystem.theme.KptTheme
 
@@ -85,11 +87,12 @@ fun InstanceSelectorScreen(
 
             is InstanceSelectorUiState.Success -> {
                 InstancesList(
-                    instances = state.instances,
-                    selectedInstance = state.selectedInstance,
+                    mainInstances = state.mainInstances,
+                    interbankInstances = state.interbankInstances,
+                    selectedMainInstance = state.selectedMainInstance,
+                    selectedInterbankInstance = state.selectedInterbankInstance,
                     onInstanceSelected = { instance ->
                         viewModel.selectInstance(instance)
-                        onDismiss()
                     },
                     modifier = Modifier.padding(paddingValues),
                 )
@@ -115,8 +118,10 @@ fun InstanceSelectorScreen(
 
 @Composable
 private fun InstancesList(
-    instances: List<ServerInstance>,
-    selectedInstance: ServerInstance?,
+    mainInstances: List<ServerInstance>,
+    interbankInstances: List<ServerInstance>,
+    selectedMainInstance: ServerInstance?,
+    selectedInterbankInstance: ServerInstance?,
     onInstanceSelected: (ServerInstance) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -126,10 +131,40 @@ private fun InstancesList(
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
-        items(instances) { instance ->
+        item {
+            Text(
+                text = "Main Server Instances",
+                style = MaterialTheme.typography.titleLarge,
+                modifier = Modifier.padding(vertical = 8.dp),
+            )
+        }
+
+        items(mainInstances) { instance ->
             InstanceItem(
                 instance = instance,
-                isSelected = instance == selectedInstance,
+                isSelected = instance == selectedMainInstance,
+                onClick = { onInstanceSelected(instance) },
+            )
+        }
+
+        item {
+            Spacer(modifier = Modifier.height(16.dp))
+            HorizontalDivider()
+            Spacer(modifier = Modifier.height(16.dp))
+        }
+
+        item {
+            Text(
+                text = "Interbank Server Instances",
+                style = MaterialTheme.typography.titleLarge,
+                modifier = Modifier.padding(vertical = 8.dp),
+            )
+        }
+
+        items(interbankInstances) { instance ->
+            InstanceItem(
+                instance = instance,
+                isSelected = instance == selectedInterbankInstance,
                 onClick = { onInstanceSelected(instance) },
             )
         }
@@ -194,6 +229,7 @@ private fun InstanceItemPreview() {
                 path = "/fineract-provider/api/v1/",
                 platformTenantId = "mifos-bank-2",
                 label = "Production",
+                type = InstanceType.MAIN,
                 isDefault = true,
             ),
             isSelected = true,

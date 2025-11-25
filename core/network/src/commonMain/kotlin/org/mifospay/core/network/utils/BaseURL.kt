@@ -18,10 +18,6 @@ class BaseURL(
         const val HEADER_TENANT = "Fineract-Platform-TenantId"
         const val HEADER_AUTH = "Authorization"
         const val DEFAULT = "default"
-
-        const val API_ENDPOINT_INTERBANK = "apis.flexcore.mx"
-        const val API_PATH_INTERBANK = "/v1.0/vnext1/"
-        private const val PROTOCOL_HTTPS = "https://"
     }
 
     val url: String
@@ -31,7 +27,7 @@ class BaseURL(
         get() = configManager.getSelfServiceUrl()
 
     val interBankUrl: String
-        get() = PROTOCOL_HTTPS + API_ENDPOINT_INTERBANK + API_PATH_INTERBANK
+        get() = configManager.getInterbankUrl()
 
     val fineractPlatformTenantId: String
         get() = configManager.getPlatformTenantId()

@@ -17,6 +17,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import org.mifospay.core.common.DataState
 import org.mifospay.core.datastore.UserPreferencesRepository
+import org.mifospay.core.model.instance.InstanceType
 import org.mifospay.core.model.instance.InstancesConfig
 import org.mifospay.core.model.instance.ServerInstance
 import org.mifospay.core.network.config.InstanceConfigLoader
@@ -24,8 +25,10 @@ import org.mifospay.core.network.config.InstanceConfigLoader
 sealed interface InstanceSelectorUiState {
     data object Loading : InstanceSelectorUiState
     data class Success(
-        val instances: List<ServerInstance>,
-        val selectedInstance: ServerInstance?,
+        val mainInstances: List<ServerInstance>,
+        val interbankInstances: List<ServerInstance>,
+        val selectedMainInstance: ServerInstance?,
+        val selectedInterbankInstance: ServerInstance?,
     ) : InstanceSelectorUiState
     data class Error(val message: String) : InstanceSelectorUiState
 }
@@ -48,10 +51,13 @@ class InstanceSelectorViewModel(
             when (val result = instanceConfigLoader.fetchInstancesConfig()) {
                 is DataState.Success -> {
                     val config = result.data
-                    val selectedInstance = userPreferencesRepository.selectedInstance.value
+                    val selectedMainInstance = userPreferencesRepository.selectedInstance.value
+                    val selectedInterbankInstance = userPreferencesRepository.selectedInterbankInstance.value
                     _uiState.value = InstanceSelectorUiState.Success(
-                        instances = config.instances,
-                        selectedInstance = selectedInstance ?: config.getDefaultInstance(),
+                        mainInstances = config.getMainInstances(),
+                        interbankInstances = config.getInterbankInstances(),
+                        selectedMainInstance = selectedMainInstance ?: config.getDefaultInstance(),
+                        selectedInterbankInstance = selectedInterbankInstance ?: config.getDefaultInterbankInstance(),
                     )
                 }
                 is DataState.Error -> {
@@ -68,10 +74,18 @@ class InstanceSelectorViewModel(
 
     fun selectInstance(instance: ServerInstance) {
         viewModelScope.launch {
-            userPreferencesRepository.updateSelectedInstance(instance)
             val currentState = _uiState.value
             if (currentState is InstanceSelectorUiState.Success) {
-                _uiState.value = currentState.copy(selectedInstance = instance)
+                when (instance.type) {
+                    InstanceType.MAIN -> {
+                        userPreferencesRepository.updateSelectedInstance(instance)
+                        _uiState.value = currentState.copy(selectedMainInstance = instance)
+                    }
+                    InstanceType.INTERBANK -> {
+                        userPreferencesRepository.updateSelectedInterbankInstance(instance)
+                        _uiState.value = currentState.copy(selectedInterbankInstance = instance)
+                    }
+                }
             }
         }
     }
