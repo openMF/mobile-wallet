@@ -19,27 +19,48 @@ import org.mifospay.core.network.FineractApiManager
 import org.mifospay.core.network.InterBankApiManager
 import org.mifospay.core.network.KtorfitClient
 import org.mifospay.core.network.SelfServiceApiManager
+import org.mifospay.core.network.config.FirebaseInstanceConfigLoader
+import org.mifospay.core.network.config.InstanceConfigLoader
+import org.mifospay.core.network.config.InstanceConfigManager
 import org.mifospay.core.network.utils.BaseURL
-import org.mifospay.core.network.utils.BaseURL.FINERACT_PLATFORM_TENANT_ID
 import org.mifospay.core.network.utils.FlowConverterFactory
 import org.mifospay.core.network.utils.KtorInterceptor
 import kotlin.io.encoding.ExperimentalEncodingApi
 
 @OptIn(ExperimentalEncodingApi::class)
 val NetworkModule = module {
+    single<InstanceConfigLoader> {
+        FirebaseInstanceConfigLoader()
+    }
+
+    single {
+        InstanceConfigManager(
+            userPreferencesRepository = get(),
+        )
+    }
+
+    single {
+        BaseURL(
+            configManager = get(),
+        )
+    }
+
     single<KtorfitClient>(qualifier = SelfClient) {
         val preferencesRepository = get<UserPreferencesRepository>()
+        val baseURL = get<BaseURL>()
+        val configManager = get<InstanceConfigManager>()
         KtorfitClient(
             Ktorfit.Builder()
                 .httpClient(
                     client = httpClient(
                         config = setupDefaultHttpClient(
-                            baseUrl = BaseURL.selfServiceUrl,
-                            loggableHosts = listOf("mifos-bank-2.mifos.community"),
+                            baseUrl = baseURL.selfServiceUrl,
+                            loggableHosts = listOf(configManager.getEndpoint()),
                         ),
                     ).config {
                         install(KtorInterceptor) {
                             getToken = { preferencesRepository.authToken }
+                            this.configManager = configManager
                         }
                     },
                 )
@@ -49,12 +70,14 @@ val NetworkModule = module {
     }
 
     single<KtorfitClient>(qualifier = BaseClient) {
+        val baseURL = get<BaseURL>()
+        val configManager = get<InstanceConfigManager>()
         KtorfitClient(
             Ktorfit.Builder()
                 .httpClient(
                     client = httpClient(
                         config = setupDefaultHttpClient(
-                            baseUrl = BaseURL.url,
+                            baseUrl = baseURL.url,
                             basicCredentialsProvider = {
                                 BasicAuthCredentials(
                                     username = "mifos",
@@ -62,11 +85,11 @@ val NetworkModule = module {
                                 )
                             },
                             defaultHeaders = mapOf(
-                                "Fineract-Platform-TenantId" to FINERACT_PLATFORM_TENANT_ID,
+                                "Fineract-Platform-TenantId" to configManager.getPlatformTenantId(),
                                 "Content-Type" to "application/json",
                                 "Accept" to "application/json",
                             ),
-                            loggableHosts = listOf("mifos-bank-2.mifos.community", "apis.flexcore.mx"),
+                            loggableHosts = listOf(configManager.getEndpoint(), "apis.flexcore.mx"),
                         ),
                     ),
                 )
@@ -78,14 +101,16 @@ val NetworkModule = module {
     }
 
     single<KtorfitClient>(qualifier = InterBankClient) {
+        val baseURL = get<BaseURL>()
+        val configManager = get<InstanceConfigManager>()
         KtorfitClient(
             Ktorfit.Builder()
                 .httpClient(
                     client = httpClient(
                         config = setupDefaultHttpClient(
-                            baseUrl = BaseURL.interBankUrl,
+                            baseUrl = baseURL.interBankUrl,
                             defaultHeaders = mapOf(
-                                "Fineract-Platform-TenantId" to FINERACT_PLATFORM_TENANT_ID,
+                                "Fineract-Platform-TenantId" to configManager.getPlatformTenantId(),
                                 "Content-Type" to "application/json",
                                 "Accept" to "application/json",
                             ),

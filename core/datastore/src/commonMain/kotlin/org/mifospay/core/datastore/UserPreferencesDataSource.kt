@@ -27,10 +27,12 @@ import org.mifospay.core.datastore.model.UserInfoPreferences
 import org.mifospay.core.model.account.DefaultAccount
 import org.mifospay.core.model.client.Client
 import org.mifospay.core.model.client.UpdatedClient
+import org.mifospay.core.model.instance.ServerInstance
 import org.mifospay.core.model.user.UserInfo
 
 private const val USER_INFO_KEY = "userInfo"
 private const val CLIENT_INFO_KEY = "clientInfo"
+private const val SELECTED_INSTANCE_KEY = "selectedInstance"
 
 @OptIn(ExperimentalSerializationApi::class)
 class UserPreferencesDataSource(
@@ -70,6 +72,13 @@ class UserPreferencesDataSource(
         ),
     )
 
+    private val _selectedInstance = MutableStateFlow(
+        settings.decodeValueOrNull(
+            key = SELECTED_INSTANCE_KEY,
+            serializer = ServerInstance.serializer(),
+        ),
+    )
+
     val token = _userInfo.map {
         it.base64EncodedAuthenticationKey
     }
@@ -80,6 +89,8 @@ class UserPreferencesDataSource(
     val clientId = _clientInfo.map { it.id }
 
     val defaultAccount = _defaultAccount.map { it.takeIf { it.accountId != 0L } }
+
+    val selectedInstance = _selectedInstance
 
     suspend fun updateClientInfo(client: Client) {
         withContext(dispatcher) {
@@ -138,6 +149,13 @@ class UserPreferencesDataSource(
         return settings.getString(AUTH_TOKEN, "").ifEmpty { null }
     }
 
+    suspend fun updateSelectedInstance(instance: ServerInstance) {
+        withContext(dispatcher) {
+            settings.putSelectedInstance(instance)
+            _selectedInstance.value = instance
+        }
+    }
+
     suspend fun clearInfo() {
         withContext(dispatcher) {
             settings.clear()
@@ -171,5 +189,13 @@ private fun Settings.putDefaultAccount(account: DefaultAccount) {
         key = DEFAULT_ACCOUNT,
         serializer = DefaultAccount.serializer(),
         value = account,
+    )
+}
+
+private fun Settings.putSelectedInstance(instance: ServerInstance) {
+    encodeValue(
+        key = SELECTED_INSTANCE_KEY,
+        serializer = ServerInstance.serializer(),
+        value = instance,
     )
 }

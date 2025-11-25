@@ -18,10 +18,11 @@ import io.ktor.http.HttpStatusCode
 import io.ktor.util.AttributeKey
 import org.mifospay.core.common.GlobalAuthManager
 import org.mifospay.core.datastore.UserPreferencesRepository
-import org.mifospay.core.network.utils.BaseURL.FINERACT_PLATFORM_TENANT_ID
+import org.mifospay.core.network.config.InstanceConfigManager
 
 class KtorInterceptor(
     private val getToken: () -> String?,
+    private val configManager: InstanceConfigManager,
 ) {
     companion object Plugin : HttpClientPlugin<Config, KtorInterceptor> {
         private const val HEADER_TENANT = "Fineract-Platform-TenantId"
@@ -33,7 +34,7 @@ class KtorInterceptor(
             scope.requestPipeline.intercept(HttpRequestPipeline.State) {
                 context.header("Content-Type", "application/json")
                 context.header("Accept", "application/json")
-                context.header(HEADER_TENANT, FINERACT_PLATFORM_TENANT_ID)
+                context.header(HEADER_TENANT, plugin.configManager.getPlatformTenantId())
 
                 plugin.getToken()?.let { token ->
                     if (token.isNotEmpty()) {
@@ -52,17 +53,19 @@ class KtorInterceptor(
 
         override fun prepare(block: Config.() -> Unit): KtorInterceptor {
             val config = Config().apply(block)
-            return KtorInterceptor(config.getToken)
+            return KtorInterceptor(config.getToken, config.configManager)
         }
     }
 }
 
 class Config {
     lateinit var getToken: () -> String?
+    lateinit var configManager: InstanceConfigManager
 }
 
 class KtorInterceptorRe(
     private val repository: UserPreferencesRepository,
+    private val configManager: InstanceConfigManager,
 ) {
     companion object Plugin : HttpClientPlugin<ConfigRe, KtorInterceptorRe> {
         private const val HEADER_TENANT = "Fineract-Platform-TenantId"
@@ -76,7 +79,7 @@ class KtorInterceptorRe(
             scope.requestPipeline.intercept(HttpRequestPipeline.State) {
                 context.header("Content-Type", "application/json")
                 context.header("Accept", "application/json")
-                context.header(HEADER_TENANT, FINERACT_PLATFORM_TENANT_ID)
+                context.header(HEADER_TENANT, plugin.configManager.getPlatformTenantId())
 
                 token?.let { token ->
                     if (token.isNotEmpty()) {
@@ -95,11 +98,12 @@ class KtorInterceptorRe(
 
         override fun prepare(block: ConfigRe.() -> Unit): KtorInterceptorRe {
             val config = ConfigRe().apply(block)
-            return KtorInterceptorRe(config.repository)
+            return KtorInterceptorRe(config.repository, config.configManager)
         }
     }
 }
 
 class ConfigRe {
     lateinit var repository: UserPreferencesRepository
+    lateinit var configManager: InstanceConfigManager
 }

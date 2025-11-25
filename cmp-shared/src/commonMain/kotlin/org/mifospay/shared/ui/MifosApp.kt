@@ -34,8 +34,11 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.composed
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.geometry.Offset
@@ -60,6 +63,8 @@ import org.mifospay.core.designsystem.icon.MifosIcons
 import org.mifospay.core.designsystem.theme.LocalGradientColors
 import org.mifospay.feature.profile.navigation.navigateToEditProfile
 import org.mifospay.feature.settings.navigation.navigateToSettings
+import org.mifospay.shared.instance.InstanceSelectorScreen
+import org.mifospay.shared.instance.detectInstanceSelectorGesture
 import org.mifospay.shared.navigation.MifosNavHost
 import org.mifospay.shared.utils.TopLevelDestination
 import template.core.base.designsystem.theme.KptTheme
@@ -71,6 +76,8 @@ internal fun MifosApp(
     onClickLogout: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    var showInstanceSelector by remember { mutableStateOf(false) }
+
     MifosGradientBackground(
         gradientColors = LocalGradientColors.current,
     ) {
@@ -96,7 +103,9 @@ internal fun MifosApp(
         }
 
         Scaffold(
-            modifier = Modifier,
+            modifier = Modifier.detectInstanceSelectorGesture(
+                onGestureDetected = { showInstanceSelector = true },
+            ),
             containerColor = Color.Transparent,
             contentColor = KptTheme.colorScheme.onBackground,
             snackbarHost = { SnackbarHost(snackbarHostState) },
@@ -160,6 +169,17 @@ internal fun MifosApp(
                         onClickLogout = onClickLogout,
                     )
                 }
+            }
+        }
+
+        // Show instance selector dialog
+        if (showInstanceSelector) {
+            Dialog(
+                onDismissRequest = { showInstanceSelector = false },
+            ) {
+                InstanceSelectorScreen(
+                    onDismiss = { showInstanceSelector = false },
+                )
             }
         }
     }

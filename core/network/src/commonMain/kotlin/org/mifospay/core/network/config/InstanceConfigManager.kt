@@ -1,0 +1,51 @@
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
+package org.mifospay.core.network.config
+
+import kotlinx.coroutines.flow.StateFlow
+import org.mifospay.core.datastore.UserPreferencesRepository
+import org.mifospay.core.model.instance.ServerInstance
+
+class InstanceConfigManager(
+    private val userPreferencesRepository: UserPreferencesRepository,
+) {
+    companion object {
+        // Default instance configuration
+        private val DEFAULT_INSTANCE = ServerInstance(
+            endpoint = "mifos-bank-2.mifos.community",
+            protocol = "https://",
+            path = "/fineract-provider/api/v1/",
+            platformTenantId = "mifos-bank-2",
+            label = "Default Instance",
+            isDefault = true,
+        )
+    }
+
+    val selectedInstance: StateFlow<ServerInstance?> = userPreferencesRepository.selectedInstance
+
+    fun getCurrentInstance(): ServerInstance {
+        return selectedInstance.value ?: DEFAULT_INSTANCE
+    }
+
+    fun getEndpoint(): String = getCurrentInstance().endpoint
+
+    fun getProtocol(): String = getCurrentInstance().protocol
+
+    fun getPath(): String = getCurrentInstance().path
+
+    fun getPlatformTenantId(): String = getCurrentInstance().platformTenantId
+
+    fun getUrl(): String = getCurrentInstance().fullUrl
+
+    fun getSelfServiceUrl(): String {
+        val instance = getCurrentInstance()
+        return "${instance.protocol}${instance.endpoint}${instance.path}self/"
+    }
+}

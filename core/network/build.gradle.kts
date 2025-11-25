@@ -38,6 +38,7 @@ kotlin {
             implementation(libs.ktor.client.serialization)
             implementation(libs.squareup.okio)
             api(projects.coreBase.network)
+            implementation(libs.gitlive.firebase.config)
         }
     }
 }

@@ -21,6 +21,7 @@ import org.mifospay.core.common.DataState
 import org.mifospay.core.model.account.DefaultAccount
 import org.mifospay.core.model.client.Client
 import org.mifospay.core.model.client.UpdatedClient
+import org.mifospay.core.model.instance.ServerInstance
 import org.mifospay.core.model.user.UserInfo
 
 class UserPreferencesRepositoryImpl(
@@ -72,11 +73,27 @@ class UserPreferencesRepositoryImpl(
                 started = SharingStarted.Eagerly,
             )
 
+    override val selectedInstance: StateFlow<ServerInstance?>
+        get() = preferenceManager.selectedInstance.stateIn(
+            scope = unconfinedScope,
+            initialValue = null,
+            started = SharingStarted.Eagerly,
+        )
+
     override suspend fun updateDefaultAccount(account: DefaultAccount): DataState<Unit> {
         return try {
             val result = preferenceManager.updateDefaultAccount(account)
 
             DataState.Success(result)
+        } catch (e: Exception) {
+            DataState.Error(e)
+        }
+    }
+
+    override suspend fun updateSelectedInstance(instance: ServerInstance): DataState<Unit> {
+        return try {
+            preferenceManager.updateSelectedInstance(instance)
+            DataState.Success(Unit)
         } catch (e: Exception) {
             DataState.Error(e)
         }

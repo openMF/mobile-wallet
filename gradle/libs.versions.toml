@@ -220,6 +220,7 @@ firebase-performance-gradlePlugin = { group = "com.google.firebase", name = "per
 gitlive-firebase-analytics = { module = "dev.gitlive:firebase-analytics", version.ref = "gitLive" }
 gitlive-firebase-crashlytics = { module = "dev.gitlive:firebase-crashlytics", version.ref = "gitLive" }
 gitlive-firebase-performance = { module = "dev.gitlive:firebase-performance", version.ref = "gitLive" }
+gitlive-firebase-config = { module = "dev.gitlive:firebase-config", version.ref = "gitLive" }
 
 play-services-auth = { group = "com.google.android.gms", name = "play-services-auth", version.ref = "playServicesAuthVersion" }
 google-oss-licenses = { group = "com.google.android.gms", name = "play-services-oss-licenses", version.ref = "googleOss" }
