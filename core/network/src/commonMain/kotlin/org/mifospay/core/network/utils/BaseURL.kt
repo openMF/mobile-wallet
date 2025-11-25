@@ -11,11 +11,11 @@ package org.mifospay.core.network.utils
 
 object BaseURL {
     private const val PROTOCOL_HTTPS = "https://"
-    private const val API_ENDPOINT = "mifos-bank-1.mifos.community"
+    private const val API_ENDPOINT = "mifos-bank-2.mifos.community"
     private const val API_PATH = "/fineract-provider/api/v1/"
 
     // self service url
-    private const val API_ENDPOINT_SELF = "mifos-bank-1.mifos.community"
+    private const val API_ENDPOINT_SELF = "mifos-bank-2.mifos.community"
     private const val API_PATH_SELF = "/fineract-provider/api/v1/self/"
 
     const val HEADER_TENANT = "Fineract-Platform-TenantId"
@@ -25,7 +25,7 @@ object BaseURL {
     const val API_ENDPOINT_INTERBANK = "apis.flexcore.mx"
     const val API_PATH_INTERBANK = "/v1.0/vnext1/"
 
-    const val FINERACT_PLATFORM_TENANT_ID = "mifos-bank-1"
+    const val FINERACT_PLATFORM_TENANT_ID = "mifos-bank-2"
 
     val url: String
         get() = PROTOCOL_HTTPS + API_ENDPOINT + API_PATH

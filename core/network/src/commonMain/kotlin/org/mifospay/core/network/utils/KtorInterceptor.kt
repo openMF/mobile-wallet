@@ -18,6 +18,7 @@ import io.ktor.http.HttpStatusCode
 import io.ktor.util.AttributeKey
 import org.mifospay.core.common.GlobalAuthManager
 import org.mifospay.core.datastore.UserPreferencesRepository
+import org.mifospay.core.network.utils.BaseURL.FINERACT_PLATFORM_TENANT_ID
 
 class KtorInterceptor(
     private val getToken: () -> String?,
@@ -25,7 +26,6 @@ class KtorInterceptor(
     companion object Plugin : HttpClientPlugin<Config, KtorInterceptor> {
         private const val HEADER_TENANT = "Fineract-Platform-TenantId"
         private const val HEADER_AUTH = "Authorization"
-        private const val DEFAULT = "mifos-bank-1"
 
         override val key: AttributeKey<KtorInterceptor> = AttributeKey("KtorInterceptor")
 
@@ -33,7 +33,7 @@ class KtorInterceptor(
             scope.requestPipeline.intercept(HttpRequestPipeline.State) {
                 context.header("Content-Type", "application/json")
                 context.header("Accept", "application/json")
-                context.header(HEADER_TENANT, DEFAULT)
+                context.header(HEADER_TENANT, FINERACT_PLATFORM_TENANT_ID)
 
                 plugin.getToken()?.let { token ->
                     if (token.isNotEmpty()) {
@@ -67,7 +67,6 @@ class KtorInterceptorRe(
     companion object Plugin : HttpClientPlugin<ConfigRe, KtorInterceptorRe> {
         private const val HEADER_TENANT = "Fineract-Platform-TenantId"
         private const val HEADER_AUTH = "Authorization"
-        private const val DEFAULT = "venus"
 
         override val key: AttributeKey<KtorInterceptorRe> = AttributeKey("KtorInterceptorRe")
 
@@ -77,7 +76,7 @@ class KtorInterceptorRe(
             scope.requestPipeline.intercept(HttpRequestPipeline.State) {
                 context.header("Content-Type", "application/json")
                 context.header("Accept", "application/json")
-                context.header(HEADER_TENANT, DEFAULT)
+                context.header(HEADER_TENANT, FINERACT_PLATFORM_TENANT_ID)
 
                 token?.let { token ->
                     if (token.isNotEmpty()) {
