@@ -25,7 +25,6 @@ import org.mifospay.core.model.instance.ServerInstance
 import org.mifospay.core.network.config.InstanceConfigLoader
 import org.mifospay.core.ui.utils.BaseViewModel
 
-@Suppress("`suppressLintsFor`")
 class InstanceSelectorViewModel(
     instanceConfigLoader: InstanceConfigLoader,
     private val userPreferencesRepository: UserPreferencesRepository,
@@ -33,8 +32,8 @@ class InstanceSelectorViewModel(
     initialState = InstanceSelectorState(),
 ) {
 
-    private val _tempSelectedMainInstance = MutableStateFlow<ServerInstance?>(null)
-    private val _tempSelectedInterbankInstance = MutableStateFlow<ServerInstance?>(null)
+    private val tempSelectedMainInstance = MutableStateFlow<ServerInstance?>(null)
+    private val tempSelectedInterbankInstance = MutableStateFlow<ServerInstance?>(null)
 
     init {
         // Combine all sources and update state
@@ -42,8 +41,8 @@ class InstanceSelectorViewModel(
             instanceConfigLoader.observeInstancesConfig(),
             userPreferencesRepository.selectedInstance,
             userPreferencesRepository.selectedInterbankInstance,
-            _tempSelectedMainInstance,
-            _tempSelectedInterbankInstance,
+            tempSelectedMainInstance,
+            tempSelectedInterbankInstance,
         ) { remoteConfig, selectedMainInstance, selectedInterbankInstance, tempMainInstance, tempInterbankInstance ->
             when (remoteConfig) {
                 is DataState.Success -> {
@@ -94,11 +93,11 @@ class InstanceSelectorViewModel(
             is InstanceSelectorAction.SelectInstance -> {
                 when (action.instance.type) {
                     InstanceType.MAIN -> {
-                        _tempSelectedMainInstance.value = action.instance
+                        tempSelectedMainInstance.value = action.instance
                     }
 
                     InstanceType.INTERBANK -> {
-                        _tempSelectedInterbankInstance.value = action.instance
+                        tempSelectedInterbankInstance.value = action.instance
                     }
                 }
             }
@@ -117,23 +116,23 @@ class InstanceSelectorViewModel(
         viewModelScope.launch {
             val currentState = state
             val mainInstanceChanged =
-                _tempSelectedMainInstance.value != currentState.selectedMainInstance
+                tempSelectedMainInstance.value != currentState.selectedMainInstance
             val interbankInstanceChanged =
-                _tempSelectedInterbankInstance.value != currentState.selectedInterbankInstance
+                tempSelectedInterbankInstance.value != currentState.selectedInterbankInstance
 
-            if (mainInstanceChanged && _tempSelectedMainInstance.value != null) {
-                userPreferencesRepository.updateSelectedInstance(_tempSelectedMainInstance.value!!)
+            if (mainInstanceChanged && tempSelectedMainInstance.value != null) {
+                userPreferencesRepository.updateSelectedInstance(tempSelectedMainInstance.value!!)
             }
 
-            if (interbankInstanceChanged && _tempSelectedInterbankInstance.value != null) {
+            if (interbankInstanceChanged && tempSelectedInterbankInstance.value != null) {
                 userPreferencesRepository.updateSelectedInterbankInstance(
-                    _tempSelectedInterbankInstance.value!!,
+                    tempSelectedInterbankInstance.value!!,
                 )
             }
 
             // Reset temp selections after update
-            _tempSelectedMainInstance.value = null
-            _tempSelectedInterbankInstance.value = null
+            tempSelectedMainInstance.value = null
+            tempSelectedInterbankInstance.value = null
 
             sendEvent(InstanceSelectorEvent.DismissSheet)
         }
@@ -153,7 +152,7 @@ data class InstanceSelectorState(
 ) {
     val isUpdateEnabled: Boolean
         get() = tempSelectedMainInstance != selectedMainInstance ||
-                tempSelectedInterbankInstance != selectedInterbankInstance
+            tempSelectedInterbankInstance != selectedInterbankInstance
 }
 
 // Events
