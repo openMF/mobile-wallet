@@ -18,7 +18,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
+import kotlin.time.Clock
+import kotlin.time.ExperimentalTime
 
+@OptIn(ExperimentalTime::class)
 @Composable
 fun Modifier.detectInstanceSelectorGesture(
     onGestureDetected: () -> Unit,
@@ -30,7 +33,7 @@ fun Modifier.detectInstanceSelectorGesture(
     return this.pointerInput(Unit) {
         detectTapGestures(
             onTap = {
-                val currentTime = System.currentTimeMillis()
+                val currentTime = Clock.System.now().toEpochMilliseconds()
                 if (currentTime - lastTapTime > tapTimeoutMs) {
                     tapCount = 0
                 }
