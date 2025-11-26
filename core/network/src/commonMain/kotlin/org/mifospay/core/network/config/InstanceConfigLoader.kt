@@ -11,7 +11,6 @@ package org.mifospay.core.network.config
 
 import dev.gitlive.firebase.Firebase
 import dev.gitlive.firebase.remoteconfig.remoteConfig
-import dev.gitlive.firebase.remoteconfig.remoteConfigSettings
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.serialization.json.Json
@@ -61,20 +60,18 @@ class FirebaseInstanceConfigLoader : InstanceConfigLoader {
         )
     }
 
-    init {
-        // Configure Remote Config settings
-        remoteConfig.settings = remoteConfigSettings {
-            minimumFetchIntervalInSeconds = FETCH_INTERVAL_SECONDS
-        }
-    }
-
     override suspend fun fetchInstancesConfig(): DataState<InstancesConfig> {
         return try {
+            // Configure Remote Config settings
+            remoteConfig.settings {
+                minimumFetchIntervalInSeconds = FETCH_INTERVAL_SECONDS
+            }
+
             // Fetch and activate the latest config
             remoteConfig.fetchAndActivate()
 
             // Get the config value
-            val configJson = remoteConfig.getString(INSTANCES_CONFIG_KEY)
+            val configJson = remoteConfig[INSTANCES_CONFIG_KEY].asString()
 
             if (configJson.isBlank()) {
                 return DataState.Success(DEFAULT_CONFIG)
