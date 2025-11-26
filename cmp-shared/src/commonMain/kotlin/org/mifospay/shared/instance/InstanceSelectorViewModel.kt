@@ -25,8 +25,9 @@ import org.mifospay.core.model.instance.ServerInstance
 import org.mifospay.core.network.config.InstanceConfigLoader
 import org.mifospay.core.ui.utils.BaseViewModel
 
+@Suppress("`suppressLintsFor`")
 class InstanceSelectorViewModel(
-    private val instanceConfigLoader: InstanceConfigLoader,
+    instanceConfigLoader: InstanceConfigLoader,
     private val userPreferencesRepository: UserPreferencesRepository,
 ) : BaseViewModel<InstanceSelectorState, InstanceSelectorEvent, InstanceSelectorAction>(
     initialState = InstanceSelectorState(),

@@ -97,7 +97,7 @@ fun InstanceSelectorScreen(
                         Text(stringResource(Res.string.update))
                     }
                 }
-            }
+            },
         ) { contentPadding ->
             when {
                 state.isLoading -> {
