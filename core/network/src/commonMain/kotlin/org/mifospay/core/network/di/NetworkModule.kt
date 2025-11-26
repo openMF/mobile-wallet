@@ -11,9 +11,11 @@ package org.mifospay.core.network.di
 
 import de.jensklingenberg.ktorfit.Ktorfit
 import io.ktor.client.plugins.auth.providers.BasicAuthCredentials
+import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import org.mifos.corebase.network.httpClient
 import org.mifos.corebase.network.setupDefaultHttpClient
+import org.mifospay.core.common.MifosDispatchers
 import org.mifospay.core.datastore.UserPreferencesRepository
 import org.mifospay.core.network.FineractApiManager
 import org.mifospay.core.network.InterBankApiManager
@@ -27,22 +29,23 @@ import org.mifospay.core.network.utils.FlowConverterFactory
 import org.mifospay.core.network.utils.KtorInterceptor
 import kotlin.io.encoding.ExperimentalEncodingApi
 
+private val ioDispatcher = named(MifosDispatchers.IO.name)
+
 @OptIn(ExperimentalEncodingApi::class)
 val NetworkModule = module {
     single<InstanceConfigLoader> {
-        FirebaseInstanceConfigLoader()
-    }
-
-    single {
-        InstanceConfigManager(
-            userPreferencesRepository = get(),
+        FirebaseInstanceConfigLoader(
+            ioDispatcher = get(ioDispatcher),
+            json = get(),
         )
     }
 
     single {
-        BaseURL(
-            configManager = get(),
-        )
+        InstanceConfigManager(userPreferencesRepository = get())
+    }
+
+    single {
+        BaseURL(configManager = get())
     }
 
     single<KtorfitClient>(qualifier = SelfClient) {
@@ -85,11 +88,11 @@ val NetworkModule = module {
                                 )
                             },
                             defaultHeaders = mapOf(
-                                "Fineract-Platform-TenantId" to configManager.getPlatformTenantId(),
-                                "Content-Type" to "application/json",
-                                "Accept" to "application/json",
+                                BaseURL.HEADER_TENANT to configManager.getPlatformTenantId(),
+                                BaseURL.HEADER_CONTENT_TYPE to BaseURL.HEADER_CONTENT_TYPE_VALUE,
+                                BaseURL.HEADER_ACCEPT to BaseURL.HEADER_ACCEPT_VALUE,
                             ),
-                            loggableHosts = listOf(configManager.getEndpoint(), "apis.flexcore.mx"),
+                            loggableHosts = listOf(configManager.getEndpoint()),
                         ),
                     ),
                 )
@@ -110,11 +113,11 @@ val NetworkModule = module {
                         config = setupDefaultHttpClient(
                             baseUrl = baseURL.interBankUrl,
                             defaultHeaders = mapOf(
-                                "Fineract-Platform-TenantId" to configManager.getPlatformTenantId(),
-                                "Content-Type" to "application/json",
-                                "Accept" to "application/json",
+                                BaseURL.HEADER_TENANT to configManager.getPlatformTenantId(),
+                                BaseURL.HEADER_CONTENT_TYPE to BaseURL.HEADER_CONTENT_TYPE_VALUE,
+                                BaseURL.HEADER_ACCEPT to BaseURL.HEADER_ACCEPT_VALUE,
                             ),
-                            loggableHosts = listOf("apis.flexcore.mx"),
+                            loggableHosts = listOf(configManager.getEndpoint()),
                         ),
                     ),
                 )

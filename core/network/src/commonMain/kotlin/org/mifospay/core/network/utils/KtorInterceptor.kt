@@ -25,20 +25,18 @@ class KtorInterceptor(
     private val configManager: InstanceConfigManager,
 ) {
     companion object Plugin : HttpClientPlugin<Config, KtorInterceptor> {
-        private const val HEADER_TENANT = "Fineract-Platform-TenantId"
-        private const val HEADER_AUTH = "Authorization"
 
         override val key: AttributeKey<KtorInterceptor> = AttributeKey("KtorInterceptor")
 
         override fun install(plugin: KtorInterceptor, scope: HttpClient) {
             scope.requestPipeline.intercept(HttpRequestPipeline.State) {
-                context.header("Content-Type", "application/json")
-                context.header("Accept", "application/json")
-                context.header(HEADER_TENANT, plugin.configManager.getPlatformTenantId())
+                context.header(BaseURL.HEADER_CONTENT_TYPE, BaseURL.HEADER_CONTENT_TYPE_VALUE)
+                context.header(BaseURL.HEADER_ACCEPT, BaseURL.HEADER_ACCEPT_VALUE)
+                context.header(BaseURL.HEADER_TENANT, plugin.configManager.getPlatformTenantId())
 
                 plugin.getToken()?.let { token ->
                     if (token.isNotEmpty()) {
-                        context.headers[HEADER_AUTH] = "Basic $token"
+                        context.headers[BaseURL.HEADER_AUTHORIZATION] = "Basic $token"
                     }
                 }
             }
@@ -68,8 +66,6 @@ class KtorInterceptorRe(
     private val configManager: InstanceConfigManager,
 ) {
     companion object Plugin : HttpClientPlugin<ConfigRe, KtorInterceptorRe> {
-        private const val HEADER_TENANT = "Fineract-Platform-TenantId"
-        private const val HEADER_AUTH = "Authorization"
 
         override val key: AttributeKey<KtorInterceptorRe> = AttributeKey("KtorInterceptorRe")
 
@@ -77,13 +73,13 @@ class KtorInterceptorRe(
             val token = plugin.repository.token.value
 
             scope.requestPipeline.intercept(HttpRequestPipeline.State) {
-                context.header("Content-Type", "application/json")
-                context.header("Accept", "application/json")
-                context.header(HEADER_TENANT, plugin.configManager.getPlatformTenantId())
+                context.header(BaseURL.HEADER_CONTENT_TYPE, BaseURL.HEADER_CONTENT_TYPE_VALUE)
+                context.header(BaseURL.HEADER_ACCEPT, BaseURL.HEADER_ACCEPT_VALUE)
+                context.header(BaseURL.HEADER_TENANT, plugin.configManager.getPlatformTenantId())
 
                 token?.let { token ->
                     if (token.isNotEmpty()) {
-                        context.headers[HEADER_AUTH] = "Basic $token"
+                        context.headers[BaseURL.HEADER_AUTHORIZATION] = "Basic $token"
                     }
                 }
             }

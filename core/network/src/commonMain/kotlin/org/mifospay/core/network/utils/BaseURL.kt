@@ -16,8 +16,12 @@ class BaseURL(
 ) {
     companion object {
         const val HEADER_TENANT = "Fineract-Platform-TenantId"
-        const val HEADER_AUTH = "Authorization"
-        const val DEFAULT = "default"
+        const val HEADER_CONTENT_TYPE = "Content-Type"
+        const val HEADER_ACCEPT = "Accept"
+        const val HEADER_AUTHORIZATION = "Authorization"
+
+        const val HEADER_CONTENT_TYPE_VALUE = "application/json"
+        const val HEADER_ACCEPT_VALUE = "application/json"
     }
 
     val url: String
