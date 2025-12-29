@@ -31,16 +31,18 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import mobile_wallet.libs.mifos_passcode.generated.resources.Res
 import mobile_wallet.libs.mifos_passcode.generated.resources.library_mifos_passcode_confirm_passcode
+import mobile_wallet.libs.mifos_passcode.generated.resources.library_mifos_passcode_create_new_passcode
 import mobile_wallet.libs.mifos_passcode.generated.resources.library_mifos_passcode_create_passcode
 import mobile_wallet.libs.mifos_passcode.generated.resources.library_mifos_passcode_enter_your_passcode
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
+import org.mifos.library.passcode.Intention
 import org.mifos.library.passcode.utility.Step
 
 @Composable
 internal fun PasscodeHeader(
     activeStep: Step,
-    isPasscodeAlreadySet: Boolean,
+    intention: Intention,
     modifier: Modifier = Modifier,
 ) {
     val transitionState = remember { MutableTransitionState(activeStep) }
@@ -76,42 +78,43 @@ internal fun PasscodeHeader(
     }
 
     Box(
-        modifier = modifier.fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth(),
         contentAlignment = Alignment.Center,
     ) {
-        Box(
-            modifier = Modifier.fillMaxWidth(),
-            contentAlignment = Alignment.Center,
-        ) {
-            if (isPasscodeAlreadySet) {
+        when (activeStep) {
+            Step.Verify -> {
+                Text(
+                    text = stringResource(Res.string.library_mifos_passcode_enter_your_passcode),
+                    style = TextStyle(fontSize = 20.sp),
+                )
+            }
+
+            Step.Create -> {
                 Text(
                     modifier = Modifier
                         .offset(x = xTransitionHeader1.x.dp)
                         .alpha(alpha = alphaHeader1)
                         .scale(scale = scaleHeader1),
-                    text = stringResource(Res.string.library_mifos_passcode_enter_your_passcode),
+                    text = if (intention == Intention.CHANGE_PASSCODE) {
+                        stringResource(Res.string.library_mifos_passcode_create_new_passcode)
+                    } else {
+                        stringResource(
+                            Res.string.library_mifos_passcode_create_passcode,
+                        )
+                    },
                     style = TextStyle(fontSize = 20.sp),
                 )
-            } else {
-                if (activeStep == Step.Create) {
-                    Text(
-                        modifier = Modifier
-                            .offset(x = xTransitionHeader1.x.dp)
-                            .alpha(alpha = alphaHeader1)
-                            .scale(scale = scaleHeader1),
-                        text = stringResource(Res.string.library_mifos_passcode_create_passcode),
-                        style = TextStyle(fontSize = 20.sp),
-                    )
-                } else if (activeStep == Step.Confirm) {
-                    Text(
-                        modifier = Modifier
-                            .offset(x = xTransitionHeader2.x.dp)
-                            .alpha(alpha = alphaHeader2)
-                            .scale(scale = scaleHeader2),
-                        text = stringResource(Res.string.library_mifos_passcode_confirm_passcode),
-                        style = TextStyle(fontSize = 20.sp),
-                    )
-                }
+            }
+
+            Step.Confirm -> {
+                Text(
+                    modifier = Modifier
+                        .offset(x = xTransitionHeader2.x.dp)
+                        .alpha(alpha = alphaHeader2)
+                        .scale(scale = scaleHeader2),
+                    text = stringResource(Res.string.library_mifos_passcode_confirm_passcode),
+                    style = TextStyle(fontSize = 20.sp),
+                )
             }
         }
     }
@@ -120,5 +123,8 @@ internal fun PasscodeHeader(
 @Preview
 @Composable
 private fun PasscodeHeaderPreview() {
-    PasscodeHeader(activeStep = Step.Create, isPasscodeAlreadySet = true)
+    PasscodeHeader(
+        activeStep = Step.Verify,
+        intention = Intention.LOGIN_WITH_PASSCODE,
+    )
 }

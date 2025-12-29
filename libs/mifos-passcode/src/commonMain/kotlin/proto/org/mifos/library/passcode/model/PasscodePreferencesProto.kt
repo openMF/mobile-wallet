@@ -15,8 +15,13 @@ import kotlinx.serialization.Serializable
 data class PasscodePreferencesProto(
     val passcode: String,
     val hasPasscode: Boolean,
+    val hasSkippedPasscodeSetup: Boolean = false,
 ) {
     companion object {
-        val DEFAULT = PasscodePreferencesProto(passcode = "", hasPasscode = false)
+        val DEFAULT = PasscodePreferencesProto(
+            passcode = "",
+            hasPasscode = false,
+            hasSkippedPasscodeSetup = false,
+        )
     }
 }

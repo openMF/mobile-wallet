@@ -10,6 +10,7 @@
 package org.mifos.library.passcode.utility
 
 enum class Step(var index: Int) {
-    Create(0),
-    Confirm(1),
+    Verify(0),
+    Create(1),
+    Confirm(2),
 }

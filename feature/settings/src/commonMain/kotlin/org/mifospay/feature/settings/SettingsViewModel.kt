@@ -10,6 +10,7 @@
 package org.mifospay.feature.settings
 
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import mobile_wallet.feature.settings.generated.resources.Res
@@ -24,10 +25,12 @@ import org.mifospay.core.datastore.UserPreferencesRepository
 import org.mifospay.core.model.client.Client
 import org.mifospay.core.ui.utils.BaseViewModel
 import org.mifospay.feature.settings.SettingsAction.Internal.DisableAccountResult
+import proto.org.mifos.library.passcode.data.PasscodeManager
 
 class SettingsViewModel(
     private val userPreferencesRepository: UserPreferencesRepository,
     private val repository: SavingsAccountRepository,
+    private val passcodeRepository: PasscodeManager,
 ) : BaseViewModel<SettingsState, SettingsEvent, SettingsAction>(
     initialState = run {
         val client = requireNotNull(userPreferencesRepository.client.value)
@@ -38,6 +41,7 @@ class SettingsViewModel(
         )
     },
 ) {
+    val hasPasscode: StateFlow<Boolean> = passcodeRepository.hasPasscode
 
     override fun handleAction(action: SettingsAction) {
         when (action) {

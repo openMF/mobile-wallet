@@ -14,28 +14,27 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.navOptions
 import androidx.navigation.navigation
+import org.mifos.library.passcode.INTENTION
 import org.mifos.library.passcode.PASSCODE_SCREEN
 import org.mifos.library.passcode.passcodeRoute
+import org.mifospay.feature.auth.navigation.navigateToLogin
 
 internal fun NavGraphBuilder.passcodeNavGraph(navController: NavController) {
     navigation(
-        route = MifosNavGraph.PASSCODE_GRAPH,
-        startDestination = PASSCODE_SCREEN,
+        // Start destination includes the intention placeholder so it's inherited from the graph route
+        startDestination = "$PASSCODE_SCREEN?$INTENTION={$INTENTION}",
+        route = MifosNavGraph.PASSCODE_GRAPH_ROUTE,
     ) {
         passcodeRoute(
             onForgotButton = {
                 navController.popBackStack()
-                navController.navigateToMainGraph()
+                navController.navigateToLogin()
             },
             onSkipButton = {
                 navController.popBackStack()
                 navController.navigateToMainGraph()
             },
-            onPasscodeConfirm = {
-                navController.popBackStack()
-                navController.navigateToMainGraph()
-            },
-            onPasscodeRejected = {
+            onPasscodeFlowComplete = {
                 navController.popBackStack()
                 navController.navigateToMainGraph()
             },

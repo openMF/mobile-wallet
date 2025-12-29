@@ -16,9 +16,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.rememberNavController
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
+import org.mifos.library.passcode.Intention
 import org.mifospay.core.common.GlobalAuthManager
 import org.mifospay.core.data.util.NetworkMonitor
 import org.mifospay.core.data.util.TimeZoneMonitor
@@ -26,7 +28,8 @@ import org.mifospay.core.designsystem.component.MifosDialogBox
 import org.mifospay.core.designsystem.theme.MifosTheme
 import org.mifospay.shared.MainUiState.Success
 import org.mifospay.shared.navigation.MifosNavGraph.LOGIN_GRAPH
-import org.mifospay.shared.navigation.MifosNavGraph.PASSCODE_GRAPH
+import org.mifospay.shared.navigation.MifosNavGraph.MAIN_GRAPH
+import org.mifospay.shared.navigation.MifosNavGraph.passcodeGraphRoute
 import org.mifospay.shared.navigation.RootNavGraph
 
 @Composable
@@ -77,13 +80,25 @@ private fun MifosPayApp(
         )
     }
 
-    val navDestination = when (uiState) {
-        is MainUiState.Loading -> LOGIN_GRAPH
-        is Success -> if ((uiState as Success).userData.authenticated) {
-            PASSCODE_GRAPH
-        } else {
-            LOGIN_GRAPH
+    // Navigation logic:
+    // 1. If still loading -> LOGIN_GRAPH (temporary until we know auth state)
+    // 2. If not authenticated -> LOGIN_GRAPH
+    // 3. If authenticated AND has passcode -> PASSCODE_GRAPH with LOGIN_WITH_PASSCODE intention (verify)
+    // 4. If authenticated AND skipped passcode setup -> MAIN_GRAPH (user chose to skip)
+    // 5. If authenticated but no passcode and not skipped -> PASSCODE_GRAPH with CREATE_PASSCODE intention (first time)
+    val navDestination = when {
+        uiState is Success -> {
+            val userData = (uiState as Success).userData
+            val hasPasscode = (uiState as Success).hasPasscode
+            val hasSkippedPasscodeSetup = (uiState as Success).hasSkippedPasscodeSetup
+            when {
+                !userData.authenticated -> LOGIN_GRAPH
+                hasPasscode -> passcodeGraphRoute(Intention.LOGIN_WITH_PASSCODE)
+                hasSkippedPasscodeSetup -> MAIN_GRAPH
+                else -> passcodeGraphRoute(Intention.CREATE_PASSCODE)
+            }
         }
+        else -> LOGIN_GRAPH
     }
 
     MifosTheme {

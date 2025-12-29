@@ -102,7 +102,6 @@ class LoginViewModel(
                 mutableStateFlow.update {
                     it.copy(dialogState = null)
                 }
-                sendEvent(LoginEvent.NavigateToPasscodeScreen)
             }
         }
     }
@@ -140,7 +139,6 @@ data class LoginState(
 sealed class LoginEvent {
     data object NavigateBack : LoginEvent()
     data object NavigateToSignup : LoginEvent()
-    data object NavigateToPasscodeScreen : LoginEvent()
     data class ShowToast(val message: String) : LoginEvent()
 }
 

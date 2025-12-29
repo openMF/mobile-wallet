@@ -31,6 +31,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import mobile_wallet.feature.settings.generated.resources.Res
 import mobile_wallet.feature.settings.generated.resources.feature_settings_change_passcode
 import mobile_wallet.feature.settings.generated.resources.feature_settings_change_password
+import mobile_wallet.feature.settings.generated.resources.feature_settings_create_passcode
 import mobile_wallet.feature.settings.generated.resources.feature_settings_disable_account
 import mobile_wallet.feature.settings.generated.resources.feature_settings_faq
 import mobile_wallet.feature.settings.generated.resources.feature_settings_log_out
@@ -63,6 +64,7 @@ internal fun SettingsScreenRoute(
     viewmodel: SettingsViewModel = koinViewModel(),
 ) {
     val state by viewmodel.stateFlow.collectAsStateWithLifecycle()
+    val hasPasscode by viewmodel.hasPasscode.collectAsStateWithLifecycle()
 
     EventsEffect(viewmodel) { event ->
         when (event) {
@@ -86,6 +88,7 @@ internal fun SettingsScreenRoute(
         SettingsScreenContent(
             modifier = Modifier,
             onAction = viewmodel::trySendAction,
+            hasPasscode = hasPasscode,
         )
     }
 }
@@ -94,6 +97,7 @@ internal fun SettingsScreenRoute(
 private fun SettingsScreenContent(
     modifier: Modifier = Modifier,
     onAction: (SettingsAction) -> Unit,
+    hasPasscode: Boolean,
 ) {
     MifosScaffold(
         modifier = modifier,
@@ -135,7 +139,7 @@ private fun SettingsScreenContent(
             )
 
             SettingsCardItem(
-                title = stringResource(Res.string.feature_settings_change_passcode),
+                title = if (hasPasscode) stringResource(Res.string.feature_settings_change_passcode) else stringResource(Res.string.feature_settings_create_passcode),
                 icon = vectorResource(Res.drawable.outline_pin),
                 onClick = {
                     onAction(SettingsAction.ChangePasscode)
@@ -240,5 +244,6 @@ private fun SettingsDialogs(
 private fun SettingsScreenPreview() {
     SettingsScreenContent(
         onAction = {},
+        hasPasscode = false,
     )
 }

@@ -42,6 +42,7 @@ internal fun RootNavGraph(
                 networkMonitor = networkMonitor,
                 timeZoneMonitor = timeZoneMonitor,
                 onClickLogout = onClickLogout,
+                rootNavController = navHostController,
             )
         }
     }

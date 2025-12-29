@@ -14,6 +14,8 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import org.mifos.library.passcode.INTENTION
+import org.mifos.library.passcode.Intention
 import org.mifos.library.passcode.utility.Step
 import org.mifospay.core.common.Parcelable
 import org.mifospay.core.common.Parcelize
@@ -25,15 +27,37 @@ private const val PASSCODE_LENGTH = 4
 
 class PasscodeViewModel(
     private val passcodeRepository: PasscodeManager,
-    savedStateHandle: SavedStateHandle,
+    private val savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<PasscodeState, PasscodeEvent, PasscodeAction>(
     initialState = savedStateHandle[KEY_STATE] ?: PasscodeState(),
 ) {
+    private var verifyPasscode: StringBuilder = StringBuilder()
     private var createPasscode: StringBuilder = StringBuilder()
     private var confirmPasscode: StringBuilder = StringBuilder()
 
     init {
         observePasscodeRepository()
+        getIntention()
+    }
+
+    private fun getIntention() {
+        mutableStateFlow.update {
+            it.copy(
+                intention = savedStateHandle.get<String>(INTENTION)
+                    ?.let(Intention::fromValue)
+                    ?: Intention.LOGIN_WITH_PASSCODE,
+            )
+        }
+        if (
+            state.intention == Intention.CREATE_PASSCODE ||
+            (state.intention == Intention.CHANGE_PASSCODE && !state.hasPasscode) // in case if user have skipped setting the passcode initially, then the "Change passcode" button should directly allow him to create a new passcode
+        ) {
+            mutableStateFlow.update {
+                it.copy(
+                    activeStep = Step.Create,
+                )
+            }
+        }
     }
 
     private fun observePasscodeRepository() {
@@ -42,7 +66,6 @@ class PasscodeViewModel(
                 mutableStateFlow.update {
                     it.copy(
                         hasPasscode = hasPasscode,
-                        isPasscodeAlreadySet = hasPasscode,
                     )
                 }
             }
@@ -57,14 +80,27 @@ class PasscodeViewModel(
             is PasscodeAction.TogglePasscodeVisibility -> togglePasscodeVisibility()
             is PasscodeAction.Restart -> restart()
             is PasscodeAction.Internal.ProcessCompletedPasscode -> processCompletedPasscode()
+            PasscodeAction.DismissChangePasscodeSuccessDialog -> onDismissChangePasscodeSuccessDialog()
+            PasscodeAction.SkipPasscodeSetup -> onSkipPasscodeSetup()
         }
+    }
+
+    private fun onSkipPasscodeSetup() {
+        viewModelScope.launch {
+            passcodeRepository.setSkippedPasscodeSetup(true)
+        }
+        sendEvent(PasscodeEvent.PasscodeSetupSkipped)
     }
 
     private fun enterKey(key: String) {
         if (state.filledDots >= PASSCODE_LENGTH) return
 
-        val currentPasscode =
-            if (state.activeStep == Step.Create) createPasscode else confirmPasscode
+        val currentPasscode = when (state.activeStep) {
+            Step.Verify -> verifyPasscode
+            Step.Create -> createPasscode
+            Step.Confirm -> confirmPasscode
+        }
+
         currentPasscode.append(key)
 
         mutableStateFlow.update {
@@ -82,8 +118,11 @@ class PasscodeViewModel(
     }
 
     private fun deleteKey() {
-        val currentPasscode =
-            if (state.activeStep == Step.Create) createPasscode else confirmPasscode
+        val currentPasscode = when (state.activeStep) {
+            Step.Verify -> verifyPasscode
+            Step.Create -> createPasscode
+            Step.Confirm -> confirmPasscode
+        }
         if (currentPasscode.isNotEmpty()) {
             currentPasscode.deleteAt(currentPasscode.length - 1)
             mutableStateFlow.update {
@@ -96,11 +135,12 @@ class PasscodeViewModel(
     }
 
     private fun deleteAllKeys() {
-        if (state.activeStep == Step.Create) {
-            createPasscode.clear()
-        } else {
-            confirmPasscode.clear()
+        when (state.activeStep) {
+            Step.Verify -> verifyPasscode.clear()
+            Step.Create -> createPasscode.clear()
+            Step.Confirm -> confirmPasscode.clear()
         }
+
         mutableStateFlow.update {
             it.copy(
                 currentPasscodeInput = "",
@@ -120,22 +160,49 @@ class PasscodeViewModel(
     private fun processCompletedPasscode() {
         viewModelScope.launch {
             when {
-                state.isPasscodeAlreadySet -> validateExistingPasscode()
-                state.activeStep == Step.Create -> moveToConfirmStep()
-                else -> validateNewPasscode()
+                state.intention == Intention.CREATE_PASSCODE && state.activeStep == Step.Create -> moveToConfirmStep()
+                state.intention == Intention.CREATE_PASSCODE && state.activeStep == Step.Confirm -> validateAndSavePasscode()
+
+                state.intention == Intention.LOGIN_WITH_PASSCODE -> validateExistingPasscode()
+
+                state.intention == Intention.CHANGE_PASSCODE && state.activeStep == Step.Verify -> {
+                    validateExistingPasscode()
+                }
+
+                state.intention == Intention.CHANGE_PASSCODE && state.activeStep == Step.Create -> moveToConfirmStep()
+                state.intention == Intention.CHANGE_PASSCODE && state.activeStep == Step.Confirm -> validateAndSavePasscode()
             }
         }
     }
 
+    private fun onDismissChangePasscodeSuccessDialog() {
+        mutableStateFlow.update { it.copy(isChangePasscodeSuccessful = true) }
+        sendEvent(PasscodeEvent.PasscodeConfirmed)
+    }
+
     private suspend fun validateExistingPasscode() {
         val savedPasscode = passcodeRepository.getPasscode.first()
-        if (savedPasscode == createPasscode.toString()) {
-            sendEvent(PasscodeEvent.PasscodeConfirmed(createPasscode.toString()))
-            createPasscode.clear()
+        if (savedPasscode == verifyPasscode.toString()) {
+            if (state.intention == Intention.CHANGE_PASSCODE && state.activeStep == Step.Verify) {
+                moveToCreateStep()
+            } else {
+                sendEvent(PasscodeEvent.PasscodeConfirmed)
+            }
+            verifyPasscode.clear()
         } else {
             sendEvent(PasscodeEvent.PasscodeRejected)
         }
         mutableStateFlow.update { it.copy(currentPasscodeInput = "") }
+    }
+
+    private fun moveToCreateStep() {
+        mutableStateFlow.update {
+            it.copy(
+                activeStep = Step.Create,
+                filledDots = 0,
+                currentPasscodeInput = "",
+            )
+        }
     }
 
     private fun moveToConfirmStep() {
@@ -148,10 +215,16 @@ class PasscodeViewModel(
         }
     }
 
-    private suspend fun validateNewPasscode() {
+    private suspend fun validateAndSavePasscode() {
         if (createPasscode.toString() == confirmPasscode.toString()) {
             passcodeRepository.savePasscode(confirmPasscode.toString())
-            sendEvent(PasscodeEvent.PasscodeConfirmed(confirmPasscode.toString()))
+
+            if (state.intention == Intention.CHANGE_PASSCODE) {
+                mutableStateFlow.update { it.copy(isChangePasscodeSuccessful = true) }
+            } else {
+                sendEvent(PasscodeEvent.PasscodeConfirmed)
+            }
+
             resetState()
         } else {
             sendEvent(PasscodeEvent.PasscodeRejected)
@@ -161,11 +234,12 @@ class PasscodeViewModel(
 
     private fun resetState() {
         mutableStateFlow.update {
-            PasscodeState(
-                hasPasscode = it.hasPasscode,
-                isPasscodeAlreadySet = it.isPasscodeAlreadySet,
+            it.copy(
+                currentPasscodeInput = "",
+                filledDots = 0,
             )
         }
+        verifyPasscode.clear()
         createPasscode.clear()
         confirmPasscode.clear()
     }
@@ -174,16 +248,18 @@ class PasscodeViewModel(
 @Parcelize
 data class PasscodeState(
     val hasPasscode: Boolean = false,
-    val activeStep: Step = Step.Create,
+    val activeStep: Step = Step.Verify,
     val filledDots: Int = 0,
     val passcodeVisible: Boolean = false,
     val currentPasscodeInput: String = "",
-    val isPasscodeAlreadySet: Boolean = false,
+    val intention: Intention = Intention.LOGIN_WITH_PASSCODE,
+    val isChangePasscodeSuccessful: Boolean = false,
 ) : Parcelable
 
 sealed class PasscodeEvent {
-    data class PasscodeConfirmed(val passcode: String) : PasscodeEvent()
+    data object PasscodeConfirmed : PasscodeEvent()
     data object PasscodeRejected : PasscodeEvent()
+    data object PasscodeSetupSkipped : PasscodeEvent()
 }
 
 sealed class PasscodeAction {
@@ -192,6 +268,8 @@ sealed class PasscodeAction {
     data object DeleteAllKeys : PasscodeAction()
     data object TogglePasscodeVisibility : PasscodeAction()
     data object Restart : PasscodeAction()
+    data object DismissChangePasscodeSuccessDialog : PasscodeAction()
+    data object SkipPasscodeSetup : PasscodeAction()
 
     sealed class Internal : PasscodeAction() {
         data object ProcessCompletedPasscode : Internal()

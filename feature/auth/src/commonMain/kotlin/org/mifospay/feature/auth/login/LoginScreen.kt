@@ -57,7 +57,6 @@ import template.core.base.designsystem.theme.KptTheme
 @Composable
 internal fun LoginScreen(
     onNavigateBack: () -> Unit,
-    navigateToPasscodeScreen: () -> Unit,
     navigateToSignupScreen: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: LoginViewModel = koinViewModel(),
@@ -71,7 +70,6 @@ internal fun LoginScreen(
         when (event) {
             is LoginEvent.NavigateBack -> onNavigateBack.invoke()
             is LoginEvent.NavigateToSignup -> navigateToSignupScreen.invoke()
-            is LoginEvent.NavigateToPasscodeScreen -> navigateToPasscodeScreen.invoke()
             is LoginEvent.ShowToast -> {
                 scope.launch {
                     snackbarHostState.showSnackbar(event.message)

@@ -22,16 +22,17 @@ import mobile_wallet.libs.mifos_passcode.generated.resources.Res
 import mobile_wallet.libs.mifos_passcode.generated.resources.library_mifos_passcode_login_manually
 import mobile_wallet.libs.mifos_passcode.generated.resources.library_mifos_passcode_skip
 import org.jetbrains.compose.resources.stringResource
+import org.mifos.library.passcode.Intention
 import org.mifos.library.passcode.theme.forgotButtonStyle
 import org.mifos.library.passcode.theme.skipButtonStyle
 
 @Composable
 internal fun PasscodeSkipButton(
-    hasPassCode: Boolean,
+    intention: Intention,
     onSkipButton: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    if (!hasPassCode) {
+    if (intention == Intention.CREATE_PASSCODE) {
         Row(
             modifier = modifier
                 .fillMaxWidth()
@@ -52,11 +53,11 @@ internal fun PasscodeSkipButton(
 
 @Composable
 internal fun PasscodeForgotButton(
-    hasPassCode: Boolean,
+    intention: Intention,
     onForgotButton: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    if (hasPassCode) {
+    if (intention == Intention.LOGIN_WITH_PASSCODE) {
         Row(
             modifier = modifier
                 .fillMaxWidth()

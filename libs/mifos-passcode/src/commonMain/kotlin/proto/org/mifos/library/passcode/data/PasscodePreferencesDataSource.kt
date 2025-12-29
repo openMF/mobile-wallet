@@ -42,11 +42,20 @@ class PasscodePreferencesDataSource(
 
     val passcode = passcodeSettings.map { it.passcode }
     val hasPasscode = passcodeSettings.map { it.hasPasscode }
+    val hasSkippedPasscodeSetup = passcodeSettings.map { it.hasSkippedPasscodeSetup }
 
     suspend fun updatePasscodeSettings(passcodePreferences: PasscodePreferencesProto) {
         withContext(dispatcher) {
             settings.putPasscodePreference(passcodePreferences)
             passcodeSettings.value = passcodePreferences
+        }
+    }
+
+    suspend fun updateSkippedPasscodeSetup(skipped: Boolean) {
+        withContext(dispatcher) {
+            val updated = passcodeSettings.value.copy(hasSkippedPasscodeSetup = skipped)
+            settings.putPasscodePreference(updated)
+            passcodeSettings.value = updated
         }
     }
 
