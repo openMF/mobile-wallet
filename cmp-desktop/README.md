@@ -14,12 +14,9 @@ graph LR
     :core:model["model"]
     :core:datastore["datastore"]
   end
-  :cmp-desktop --> :core:common
-  :cmp-desktop --> :core:data
-  :cmp-desktop --> :core:model
-  :cmp-desktop --> :core:datastore
-  :cmp-desktop --> :mifospay-shared
+  :mifos-desktop --> :core:common
+  :mifos-desktop --> :core:data
+  :mifos-desktop --> :core:model
+  :mifos-desktop --> :core:datastore
+  :mifos-desktop --> :mifos-shared
 ```
-# :cmp-desktop module
-## Dependency graph
-![Dependency graph](../docs/images/graphs-kmp/dep_graph_mifospay_desktop.svg)

@@ -49,6 +49,9 @@ kotlin {
                 implementation(libs.multiplatform.settings)
                 implementation(libs.multiplatform.settings.serialization)
                 implementation(libs.multiplatform.settings.coroutines)
+
+                implementation(libs.koin.core)
+                implementation(libs.ktor.client.js)
             }
         }
 

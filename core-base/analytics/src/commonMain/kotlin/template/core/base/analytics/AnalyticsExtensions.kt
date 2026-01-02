@@ -5,14 +5,13 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 package template.core.base.analytics
 
 import kotlin.time.Clock
 import kotlin.time.Duration
 import kotlin.time.DurationUnit
-import kotlin.time.ExperimentalTime
 
 /**
  * Extension functions for enhanced analytics functionality
@@ -116,10 +115,8 @@ class TimedEvent internal constructor(
     private val eventType: String,
     private val baseParams: List<Param>,
 ) {
-    @OptIn(ExperimentalTime::class)
     private val startTime = Clock.System.now().toEpochMilliseconds()
 
-    @OptIn(ExperimentalTime::class)
     fun complete(additionalParams: Map<String, String> = emptyMap()) {
         val duration = Clock.System.now().toEpochMilliseconds() - startTime
         val params = baseParams +
@@ -140,7 +137,6 @@ fun AnalyticsHelper.startTiming(eventType: String, vararg params: Pair<String, S
 /**
  * Time a block of code execution
  */
-@OptIn(ExperimentalTime::class)
 inline fun <T> AnalyticsHelper.timeExecution(
     eventType: String,
     vararg params: Pair<String, String>,

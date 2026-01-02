@@ -1,13 +1,14 @@
 source "https://rubygems.org"
 
-begin
-  ruby File.read(".ruby-version").strip
-rescue Errno::ENOENT
-  ruby "3.3.5"  # Default version if .ruby-version doesn't exist
-end
+ruby '3.3.6'
+
+# Add compatibility gems for Ruby 3.3+
+gem "abbrev"
+gem "base64"
+gem "mutex_m"
+gem "bigdecimal"
 
 gem "fastlane"
-gem "cocoapods"
 
-plugins_path = File.join(File.dirname(__FILE__), "fastlane", "Pluginfile")
+plugins_path = File.join(File.dirname(__FILE__), 'fastlane', 'Pluginfile')
 eval_gemfile(plugins_path) if File.exist?(plugins_path)

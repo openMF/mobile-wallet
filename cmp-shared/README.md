@@ -71,6 +71,3 @@ graph LR
   :mifospay-shared --> :feature:merchants
   :mifospay-shared --> :feature:upi-setup
 ```
-# :mifospay-shared module
-## Dependency graph
-![Dependency graph](../docs/images/graphs-kmp/dep_graph_mifospay_shared.svg)

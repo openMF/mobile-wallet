@@ -5,12 +5,11 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 package template.core.base.analytics
 
 import kotlin.time.Clock
-import kotlin.time.ExperimentalTime
 
 /** Performance tracking utilities for analytics */
 
@@ -263,7 +262,6 @@ fun AnalyticsHelper.performanceTracker(
 /** Create an app lifecycle tracker */
 fun AnalyticsHelper.lifecycleTracker(): AppLifecycleTracker = AppLifecycleTracker(this)
 
-@OptIn(ExperimentalTime::class)
 private val currentTime = Clock.System.now().toEpochMilliseconds()
 
 /** Quick performance timing for suspend functions */
