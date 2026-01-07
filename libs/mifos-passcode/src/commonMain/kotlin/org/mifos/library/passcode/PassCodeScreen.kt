@@ -46,6 +46,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
+import org.mifos.library.passcode.component.ChangePasscodeSuccessDialog
 import org.mifos.library.passcode.component.MifosIcon
 import org.mifos.library.passcode.component.PasscodeForgotButton
 import org.mifos.library.passcode.component.PasscodeHeader
@@ -65,8 +66,7 @@ import org.mifospay.core.ui.utils.EventsEffect
 internal fun PasscodeScreen(
     onForgotButton: () -> Unit,
     onSkipButton: () -> Unit,
-    onPasscodeConfirm: (String) -> Unit,
-    onPasscodeRejected: () -> Unit,
+    onPasscodeFlowComplete: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: PasscodeViewModel = koinViewModel(),
 ) {
@@ -79,7 +79,7 @@ internal fun PasscodeScreen(
     EventsEffect(viewModel) { event ->
         when (event) {
             is PasscodeEvent.PasscodeConfirmed -> {
-                onPasscodeConfirm(event.passcode)
+                onPasscodeFlowComplete()
             }
 
             is PasscodeEvent.PasscodeRejected -> {
@@ -87,8 +87,9 @@ internal fun PasscodeScreen(
                 scope.launch {
                     performShakeAnimation(xShake)
                 }
-                onPasscodeRejected()
             }
+
+            is PasscodeEvent.PasscodeSetupSkipped -> onSkipButton()
         }
     }
 
@@ -106,11 +107,18 @@ internal fun PasscodeScreen(
             PasscodeToolbar(activeStep = state.activeStep, state.hasPasscode)
 
             PasscodeSkipButton(
-                hasPassCode = state.hasPasscode,
-                onSkipButton = onSkipButton,
+                intention = state.intention,
+                onSkipButton = {
+                    viewModel.trySendAction(PasscodeAction.SkipPasscodeSetup)
+                },
             )
 
             MifosIcon(modifier = Modifier.fillMaxWidth())
+
+            ChangePasscodeSuccessDialog(
+                visible = state.isChangePasscodeSuccessful,
+                onDismiss = { viewModel.trySendAction(PasscodeAction.DismissChangePasscodeSuccessDialog) },
+            )
 
             Column(
                 modifier = Modifier
@@ -120,7 +128,7 @@ internal fun PasscodeScreen(
             ) {
                 PasscodeHeader(
                     activeStep = state.activeStep,
-                    isPasscodeAlreadySet = state.hasPasscode,
+                    intention = state.intention,
                 )
                 PasscodeView(
                     restart = remember(viewModel) {
@@ -155,7 +163,7 @@ internal fun PasscodeScreen(
             Spacer(modifier = Modifier.height(8.dp))
 
             PasscodeForgotButton(
-                hasPassCode = state.hasPasscode,
+                intention = state.intention,
                 onForgotButton = onForgotButton,
             )
         }
@@ -242,7 +250,6 @@ private fun PasscodeScreenPreview() {
     PasscodeScreen(
         onForgotButton = {},
         onSkipButton = {},
-        onPasscodeConfirm = {},
-        onPasscodeRejected = {},
+        onPasscodeFlowComplete = {},
     )
 }

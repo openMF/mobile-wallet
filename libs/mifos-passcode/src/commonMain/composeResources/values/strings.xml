@@ -18,7 +18,10 @@
     <string name="lib_mifos_passcode">passcode</string>
     <string name="lib_mifos_passcode_drag_passcode">drag_passcode</string>
 
+    <string name="library_mifos_passcode_done">Done</string>
+    <string name="library_mifos_passcode_passcode_changed_message">Your passcode has been updated.</string>
     <string name="library_mifos_passcode_create_passcode">Create Passcode</string>
+    <string name="library_mifos_passcode_create_new_passcode">Create new Passcode</string>
     <string name="library_mifos_passcode_confirm_passcode">Confirm Passcode</string>
     <string name="library_mifos_passcode_enter_your_passcode">Enter your Passcode</string>
     <string name="library_mifos_passcode_forgot_passcode">Forgot Passcode</string>

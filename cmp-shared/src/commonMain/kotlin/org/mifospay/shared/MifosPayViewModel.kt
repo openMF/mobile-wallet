@@ -25,7 +25,9 @@ class MifosPayViewModel(
     private val passcodeManager: PasscodeManager,
 ) : ViewModel() {
     val uiState: StateFlow<MainUiState> = userDataRepository.userInfo.map {
-        MainUiState.Success(it)
+        val hasPasscode = passcodeManager.hasPasscode.value
+        val hasSkippedPasscodeSetup = passcodeManager.hasSkippedPasscodeSetup.value
+        MainUiState.Success(it, hasPasscode, hasSkippedPasscodeSetup)
     }.stateIn(
         scope = viewModelScope,
         initialValue = MainUiState.Loading,
@@ -42,5 +44,9 @@ class MifosPayViewModel(
 
 sealed interface MainUiState {
     data object Loading : MainUiState
-    data class Success(val userData: UserInfo) : MainUiState
+    data class Success(
+        val userData: UserInfo,
+        val hasPasscode: Boolean,
+        val hasSkippedPasscodeSetup: Boolean,
+    ) : MainUiState
 }

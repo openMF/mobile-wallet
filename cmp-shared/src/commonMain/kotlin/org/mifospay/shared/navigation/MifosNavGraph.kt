@@ -9,9 +9,18 @@
  */
 package org.mifospay.shared.navigation
 
+import org.mifos.library.passcode.Intention
+
 internal object MifosNavGraph {
     const val ROOT_GRAPH = "root_graph"
     const val LOGIN_GRAPH = "login_graph"
-    const val PASSCODE_GRAPH = "passcode_graph"
     const val MAIN_GRAPH = "main_graph"
+
+    private const val PASSCODE_GRAPH_BASE = "passcode_graph"
+    private const val INTENTION_ARG = "intention"
+    const val PASSCODE_GRAPH_ROUTE = "$PASSCODE_GRAPH_BASE?$INTENTION_ARG={$INTENTION_ARG}"
+
+    fun passcodeGraphRoute(intention: Intention): String {
+        return "$PASSCODE_GRAPH_BASE?$INTENTION_ARG=${intention.value}"
+    }
 }

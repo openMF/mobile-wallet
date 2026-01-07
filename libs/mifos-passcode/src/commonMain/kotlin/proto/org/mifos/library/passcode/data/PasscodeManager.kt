@@ -33,13 +33,24 @@ class PasscodeManager(
         initialValue = false,
     )
 
+    val hasSkippedPasscodeSetup = source.hasSkippedPasscodeSetup.stateIn(
+        scope = coroutineScope,
+        started = SharingStarted.Eagerly,
+        initialValue = false,
+    )
+
     suspend fun savePasscode(passcode: String) {
         source.updatePasscodeSettings(
             PasscodePreferencesProto(
                 passcode = passcode,
                 hasPasscode = passcode.isNotEmpty(),
+                hasSkippedPasscodeSetup = false,
             ),
         )
+    }
+
+    suspend fun setSkippedPasscodeSetup(skipped: Boolean) {
+        source.updateSkippedPasscodeSetup(skipped)
     }
 
     suspend fun clearPasscode() {

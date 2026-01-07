@@ -17,7 +17,7 @@ import proto.org.mifos.library.passcode.data.PasscodeManager
 import proto.org.mifos.library.passcode.data.PasscodePreferencesDataSource
 
 val PasscodePreferenceModule = module {
-    factory<Settings> { Settings() }
-    factory { PasscodePreferencesDataSource(get(), get(named(MifosDispatchers.IO.name))) }
-    factory { PasscodeManager(get(), get(named(MifosDispatchers.Unconfined.name))) }
+    single<Settings> { Settings() }
+    single { PasscodePreferencesDataSource(get(), get(named(MifosDispatchers.IO.name))) }
+    single { PasscodeManager(get(), get(named(MifosDispatchers.Unconfined.name))) }
 }

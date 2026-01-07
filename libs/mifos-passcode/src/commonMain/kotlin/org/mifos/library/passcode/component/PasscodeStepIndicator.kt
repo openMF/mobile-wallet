@@ -21,39 +21,49 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.mifos.library.passcode.theme.blueTint
 import org.mifos.library.passcode.utility.Constants.STEPS_COUNT
 import org.mifos.library.passcode.utility.Step
+import template.core.base.designsystem.theme.KptTheme
 
 @Composable
 internal fun PasscodeStepIndicator(
     activeStep: Step,
     modifier: Modifier = Modifier,
 ) {
-    Row(
-        modifier = modifier,
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(
-            space = 6.dp,
-            alignment = Alignment.CenterHorizontally,
-        ),
-    ) {
-        repeat(STEPS_COUNT) { step ->
-            val isActiveStep = step <= activeStep.index
-            val stepColor =
-                animateColorAsState(if (isActiveStep) blueTint else Color.Gray, label = "")
+    if (activeStep != Step.Verify) {
+        Row(
+            modifier = modifier,
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(
+                space = KptTheme.spacing.sm,
+                alignment = Alignment.CenterHorizontally,
+            ),
+        ) {
+            repeat(STEPS_COUNT) { step ->
+                val isActiveStep = step + 1 == activeStep.index
+                val stepColor =
+                    animateColorAsState(if (isActiveStep) blueTint else Color.Gray, label = "")
 
-            Box(
-                modifier = Modifier
-                    .size(
-                        width = 72.dp,
-                        height = 4.dp,
-                    )
-                    .background(
-                        color = stepColor.value,
-                        shape = MaterialTheme.shapes.medium,
-                    ),
-            )
+                Box(
+                    modifier = Modifier
+                        .size(
+                            width = 72.dp,
+                            height = 4.dp,
+                        )
+                        .background(
+                            color = stepColor.value,
+                            shape = MaterialTheme.shapes.medium,
+                        ),
+                )
+            }
         }
     }
+}
+
+@Preview
+@Composable
+fun PasscodeStepIndicatorPreview() {
+    PasscodeStepIndicator(activeStep = Step.Confirm)
 }

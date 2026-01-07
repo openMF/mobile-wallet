@@ -11,8 +11,11 @@ package org.mifospay.shared.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.navOptions
+import org.mifos.library.passcode.Intention
+import org.mifos.library.passcode.navigateToPasscodeScreen
 import org.mifospay.core.ui.utility.TabContent
 import org.mifospay.feature.accounts.AccountsScreen
 import org.mifospay.feature.accounts.beneficiary.BeneficiaryAddEditType
@@ -85,6 +88,7 @@ import org.mifospay.shared.ui.MifosAppState
 internal fun MifosNavHost(
     appState: MifosAppState,
     onClickLogout: () -> Unit,
+    rootNavController: NavHostController,
     modifier: Modifier = Modifier,
 ) {
     val navController = appState.navController
@@ -177,7 +181,11 @@ internal fun MifosNavHost(
         settingsScreen(
             onBackPress = navController::navigateUp,
             onLogout = onClickLogout,
-            onChangePasscode = {},
+            onChangePasscode = {
+                rootNavController.navigateToPasscodeScreen(
+                    intention = Intention.CHANGE_PASSCODE,
+                )
+            },
             navigateToEditPasswordScreen = navController::navigateToEditPassword,
             navigateToFaqScreen = navController::navigateToFAQ,
             navigateToNotificationScreen = navController::navigateToNotification,

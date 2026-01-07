@@ -51,6 +51,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
+import androidx.navigation.NavHostController
 import mobile_wallet.cmp_shared.generated.resources.Res
 import mobile_wallet.cmp_shared.generated.resources.not_connected
 import org.jetbrains.compose.resources.stringResource
@@ -76,6 +77,7 @@ internal fun MifosApp(
     networkMonitor: NetworkMonitor,
     timeZoneMonitor: TimeZoneMonitor,
     onClickLogout: () -> Unit,
+    rootNavController: NavHostController,
     modifier: Modifier = Modifier,
 ) {
     MifosGradientBackground(
@@ -167,6 +169,7 @@ internal fun MifosApp(
                     MifosNavHost(
                         appState = appState,
                         onClickLogout = onClickLogout,
+                        rootNavController = rootNavController,
                     )
                 }
             }
