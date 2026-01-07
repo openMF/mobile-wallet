@@ -26,7 +26,6 @@ plugins {
     alias(libs.plugins.module.graph) apply true
     alias(libs.plugins.detekt) apply false
     alias(libs.plugins.spotless) apply false
-    alias(libs.plugins.ktlint) apply false
     alias(libs.plugins.version.catalog.linter) apply true
     // Multiplatform plugins
     alias(libs.plugins.jetbrainsCompose) apply false
