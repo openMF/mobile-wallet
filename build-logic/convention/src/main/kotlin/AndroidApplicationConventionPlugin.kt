@@ -10,6 +10,9 @@ import org.mifospay.configureGradleManagedDevices
 import org.mifospay.configureKotlinAndroid
 import org.mifospay.configurePrintApksTask
 
+/**
+ * Plugin that applies the Android application plugin and configures it.
+ */
 class AndroidApplicationConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {

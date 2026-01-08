@@ -9,6 +9,9 @@ import org.mifospay.configureKotlinAndroid
 import org.mifospay.configureKotlinMultiplatform
 import org.mifospay.libs
 
+/**
+ * Plugin that applies the Android library and Kotlin multiplatform plugins and configures them.
+ */
 class KMPLibraryConventionPlugin: Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
@@ -36,6 +39,7 @@ class KMPLibraryConventionPlugin: Plugin<Project> {
             }
 
             dependencies {
+                add("commonMainImplementation", libs.findLibrary("kotlinx.serialization.json").get())
                 add("commonTestImplementation", libs.findLibrary("kotlin.test").get())
                 add("commonTestImplementation", libs.findLibrary("kotlinx.coroutines.test").get())
             }

@@ -5,6 +5,9 @@ import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.getByType
 import org.mifospay.configureAndroidCompose
 
+/**
+ * Plugin that applies the Android application and Compose plugins and configures them.
+ */
 class AndroidApplicationComposeConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
