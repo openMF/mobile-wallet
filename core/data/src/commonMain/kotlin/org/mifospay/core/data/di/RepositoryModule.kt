@@ -23,6 +23,7 @@ import org.mifospay.core.data.repository.InterBankRepository
 import org.mifospay.core.data.repository.InvoiceRepository
 import org.mifospay.core.data.repository.KycLevelRepository
 import org.mifospay.core.data.repository.LocalAssetRepository
+import org.mifospay.core.data.repository.NetworkMonitor
 import org.mifospay.core.data.repository.NotificationRepository
 import org.mifospay.core.data.repository.RegistrationRepository
 import org.mifospay.core.data.repository.RunReportRepository
@@ -55,7 +56,6 @@ import org.mifospay.core.data.repositoryImpl.StandingInstructionRepositoryImpl
 import org.mifospay.core.data.repositoryImpl.ThirdPartyTransferRepositoryImpl
 import org.mifospay.core.data.repositoryImpl.TwoFactorAuthRepositoryImpl
 import org.mifospay.core.data.repositoryImpl.UserRepositoryImpl
-import org.mifospay.core.data.util.NetworkMonitor
 import org.mifospay.core.data.util.TimeZoneMonitor
 
 private val ioDispatcher = named(MifosDispatchers.IO.name)

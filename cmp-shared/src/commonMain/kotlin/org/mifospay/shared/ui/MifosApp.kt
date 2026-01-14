@@ -48,7 +48,7 @@ import androidx.navigation.NavDestination.Companion.hierarchy
 import mobile_wallet.cmp_shared.generated.resources.Res
 import mobile_wallet.cmp_shared.generated.resources.not_connected
 import org.jetbrains.compose.resources.stringResource
-import org.mifospay.core.data.util.NetworkMonitor
+import org.mifospay.core.data.repository.NetworkMonitor
 import org.mifospay.core.data.util.TimeZoneMonitor
 import org.mifospay.core.designsystem.component.IconBox
 import org.mifospay.core.designsystem.component.MifosGradientBackground

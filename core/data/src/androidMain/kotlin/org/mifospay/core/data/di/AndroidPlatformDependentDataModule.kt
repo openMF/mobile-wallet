@@ -12,8 +12,8 @@ package org.mifospay.core.data.di
 import android.content.Context
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
+import org.mifospay.core.data.repository.NetworkMonitor
 import org.mifospay.core.data.util.ConnectivityManagerNetworkMonitor
-import org.mifospay.core.data.util.NetworkMonitor
 import org.mifospay.core.data.util.TimeZoneBroadcastMonitor
 import org.mifospay.core.data.util.TimeZoneMonitor
 

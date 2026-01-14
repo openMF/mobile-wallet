@@ -10,7 +10,7 @@
 package org.mifospay.core.data.di
 
 import org.koin.core.module.Module
-import org.mifospay.core.data.util.NetworkMonitor
+import org.mifospay.core.data.repository.NetworkMonitor
 import org.mifospay.core.data.util.TimeZoneMonitor
 
 interface PlatformDependentDataModule {

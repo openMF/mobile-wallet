@@ -39,6 +39,7 @@ include(":cmp-shared")
 include(":cmp-android")
 include(":cmp-desktop")
 include(":cmp-web")
+include(":cmp-navigation")
 
 include(":core:data")
 include(":core:domain")

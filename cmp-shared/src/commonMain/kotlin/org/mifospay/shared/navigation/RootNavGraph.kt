@@ -14,7 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import org.mifospay.core.data.util.NetworkMonitor
+import org.mifospay.core.data.repository.NetworkMonitor
 import org.mifospay.core.data.util.TimeZoneMonitor
 import org.mifospay.shared.ui.MifosApp
 

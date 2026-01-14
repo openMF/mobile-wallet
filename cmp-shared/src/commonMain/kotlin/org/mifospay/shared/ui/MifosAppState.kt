@@ -29,7 +29,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.datetime.TimeZone
-import org.mifospay.core.data.util.NetworkMonitor
+import org.mifospay.core.data.repository.NetworkMonitor
 import org.mifospay.core.data.util.TimeZoneMonitor
 import org.mifospay.feature.finance.navigation.FINANCE_ROUTE
 import org.mifospay.feature.finance.navigation.navigateToFinance

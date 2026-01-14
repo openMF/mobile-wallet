@@ -377,6 +377,7 @@ compottie-resources = { module = "io.github.alexzhirkevich:compottie-resources",
 
 kermit-logging = { group = "co.touchlab", name = "kermit", version.ref = "kermit" }
 kermit-simple = { group = "co.touchlab", name = "kermit-simple", version.ref = "kermit" }
+kermit-koin = { group = "co.touchlab", name = "kermit-koin", version.ref = "kermit" }
 
 multiplatform-settings = { group = "com.russhwolf", name = "multiplatform-settings-no-arg", version.ref = "multiplatformSettings" }
 multiplatform-settings-coroutines = { group = "com.russhwolf", name = "multiplatform-settings-coroutines", version.ref = "multiplatformSettings" }

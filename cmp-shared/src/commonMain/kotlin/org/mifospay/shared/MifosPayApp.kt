@@ -20,7 +20,7 @@ import androidx.navigation.compose.rememberNavController
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 import org.mifospay.core.common.GlobalAuthManager
-import org.mifospay.core.data.util.NetworkMonitor
+import org.mifospay.core.data.repository.NetworkMonitor
 import org.mifospay.core.data.util.TimeZoneMonitor
 import org.mifospay.core.designsystem.component.MifosDialogBox
 import org.mifospay.core.designsystem.theme.MifosTheme

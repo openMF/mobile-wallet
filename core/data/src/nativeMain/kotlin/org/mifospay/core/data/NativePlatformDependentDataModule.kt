@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.datetime.TimeZone
 import org.mifospay.core.data.di.PlatformDependentDataModule
-import org.mifospay.core.data.util.NetworkMonitor
+import org.mifospay.core.data.repository.NetworkMonitor
 import org.mifospay.core.data.util.TimeZoneMonitor
 
 class NativePlatformDependentDataModule : PlatformDependentDataModule {

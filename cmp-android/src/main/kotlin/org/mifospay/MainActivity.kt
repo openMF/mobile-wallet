@@ -28,7 +28,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import org.mifospay.core.data.util.NetworkMonitor
+import org.mifospay.core.data.repository.NetworkMonitor
 import org.mifospay.core.data.util.TimeZoneMonitor
 import org.mifospay.core.ui.utils.ShareUtils
 import org.mifospay.shared.MainUiState

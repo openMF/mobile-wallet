@@ -24,6 +24,7 @@ kotlin {
             implementation(projects.core.domain)
             api(projects.core.data)
             api(projects.core.network)
+            implementation(projects.cmpNavigation)
             //put your multiplatform dependencies here
             implementation(compose.material3)
             implementation(compose.foundation)

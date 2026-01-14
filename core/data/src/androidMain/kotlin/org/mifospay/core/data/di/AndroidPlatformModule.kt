@@ -14,8 +14,8 @@ import org.koin.core.module.Module
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import org.mifospay.core.common.MifosDispatchers
+import org.mifospay.core.data.repository.NetworkMonitor
 import org.mifospay.core.data.util.ConnectivityManagerNetworkMonitor
-import org.mifospay.core.data.util.NetworkMonitor
 import org.mifospay.core.data.util.TimeZoneBroadcastMonitor
 import org.mifospay.core.data.util.TimeZoneMonitor
 
