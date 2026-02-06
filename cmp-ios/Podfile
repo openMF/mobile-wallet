@@ -5,6 +5,13 @@ target 'iosApp' do
   platform :ios, deployment_target
   # Pods for iosApp
   pod 'cmp_shared', :path => '../cmp-shared'
+
+  # Firebase dependencies required by gitlive
+  pod 'FirebaseCore'
+  pod 'FirebaseRemoteConfig'
+  pod 'FirebaseAnalytics'
+  pod 'FirebaseCrashlytics'
+  pod 'FirebasePerformance'
 end
 
 post_install do |installer|

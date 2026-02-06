@@ -3,26 +3,26 @@ accompanist = "0.36.0"
 
 # Android
 androidDesugarJdkLibs = "2.1.5"
-androidGradlePlugin = "8.10.0"
-androidTools = "31.10.0"
+androidGradlePlugin = "8.12.3"
+androidTools = "31.12.3"
 
 # AndroidX Dependencies
-androidx-test-ext-junit = "1.2.1"
-androidxActivity = "1.10.1"
-androidxBrowser = "1.8.0"
-androidxComposeBom = "2025.07.00"
+androidx-test-ext-junit = "1.3.0"
+androidxActivity = "1.12.2"
+androidxBrowser = "1.9.0"
+androidxComposeBom = "2025.12.01"
 androidxComposeCompiler = "1.5.15"
 androidxComposeMaterial3Adaptive = "1.1.0"
-androidxComposeRuntimeTracing = "1.8.3"
-androidxCoreSplashscreen = "1.0.1"
+androidxComposeRuntimeTracing = "1.10.0"
+androidxCoreSplashscreen = "1.2.0"
 androidxLifecycle = "2.9.2"
-androidxMetrics = "1.0.0-beta02"
+androidxMetrics = "1.0.0"
 androidxNavigation = "2.9.2"
 androidxProfileinstaller = "1.4.1"
 androidxTracing = "1.3.0"
 appcompatVersion = "1.7.1"
-coreKtxVersion = "1.16.0"
-androidxMacroBenchmark = "1.3.4"
+coreKtxVersion = "1.17.0"
+androidxMacroBenchmark = "1.4.1"
 
 calfPermissions = "0.8.0"
 
@@ -42,9 +42,9 @@ espresso-core = "3.6.1"
 junitVersion = "4.13.2"
 kotestVersion = "5.9.1"
 mokkeryVersion = "2.7.2"
-truth = "1.4.4"
+truth = "1.4.5"
 turbineVersion = "1.2.1"
-roborazzi = "1.46.1"
+roborazzi = "1.52.0"
 zxingVersion = "3.5.3"
 coreKtx = "1.6.1"
 composeTest = "1.8.3"
@@ -56,15 +56,15 @@ moduleGraph = "2.9.0"
 secrets = "2.0.1"
 protobuf = "4.31.1"
 protobufPlugin = "0.9.5"
-gmsPlugin = "4.4.3"
-googleOss = "17.2.1"
-googleOssPlugin = "0.10.6"
+gmsPlugin = "4.4.4"
+googleOss = "17.3.0"
+googleOssPlugin = "0.10.10"
 googleidVersion = "1.1.1"
 guavaVersion = "33.4.8-android"
 credentialsVersion = "1.5.0"
 review = "2.0.2"
 appUpdate = "2.1.0"
-integrity = "1.4.0"
+integrity = "1.6.0"
 lottie = "6.6.7"
 compottie = "2.0.0-rc05"
 
@@ -79,56 +79,54 @@ versionCatalogLinterVersion = "1.1.0"
 fineractSdk = "1.0.3"
 
 # Firebase
-firebaseBom = "33.16.0"
-firebaseCrashlyticsPlugin = "3.0.4"
-firebasePerfPlugin = "1.4.2"
+firebaseBom = "34.7.0"
+firebaseCrashlyticsPlugin = "3.0.6"
+firebasePerfPlugin = "2.0.2"
 
 # Kotlin KMP Dependencies
-kotlin = "2.1.20"
+kotlin = "2.2.21"
 kotlinInject = "0.7.2"
-kotlinxCoroutines = "1.9.0"
+kotlinxCoroutines = "1.10.2"
 kotlinxDatetime = "0.7.1"
-kotlinxImmutable = "0.3.8"
-kotlinxSerializationJson = "1.8.1"
-ksp = "2.1.20-2.0.1"
+kotlinxImmutable = "0.4.0"
+kotlinxSerializationJson = "1.9.0"
+ksp = "2.2.21-2.0.4"
 
 # Ktor & Ktorfit
-ktorVersion = "3.1.2"
-ktorfit = "2.5.2"
-ktorfitKsp = "2.5.1"
+ktorVersion = "3.3.3"
+ktorfit = "2.7.1"
 
 # Koin CMP Dependencies
-koin = "4.1.0"
+koin = "4.1.1"
 koinAnnotationsVersion = "2.1.0"
 
 # CMP Libraries
-compose-plugin = "1.8.2"
-coil = "3.2.0"
+compose-plugin = "1.9.3"
+coil = "3.3.0"
 backHandlerVersion = "2.5.0"
 constraintLayout = "0.6.0"
 multiplatformSettings = "1.3.0"
 mokoPermission = "0.19.1"
 qroseVersion = "1.0.1"
-okioVersion = "3.15.0"
-kermit = "2.0.6"
-fileKit = "0.10.0-beta04"
-fileKitCompose = "0.8.8"
-wire = "5.3.5"
-uiBackhandler = "1.8.2"
+okioVersion = "3.16.4"
+kermit = "2.0.8"
+fileKit = "0.12.0"
+wire = "5.4.0"
+uiBackhandler = "1.9.3"
 
 # Jetbrains CMP
 windowsSizeClass = "0.5.0"
-uiDesktopVersion = "1.7.0"
-composeJB = "1.8.2"
-composeLifecycle = "2.9.1"
-composeNavigation = "2.9.0-beta03"
+composeJB = "1.9.3"
+composeLifecycle = "2.9.6"
+composeNavigation = "2.9.1"
 jbCoreBundle = "1.0.1"
-jbSavedState = "1.3.1"
+jbSavedState = "1.4.0"
 gitLive = "2.4.0"
 material3adaptive = "1.1.2"
 
 #Room
-room = "2.7.2"
+room = "2.8.4"
+sqliteBundled = "2.6.2"
 
 # Desktop Version
 packageName = "Mifos Pay"
@@ -196,7 +194,11 @@ androidx-navigation-testing = { group = "androidx.navigation", name = "navigatio
 
 androidx-profileinstaller = { group = "androidx.profileinstaller", name = "profileinstaller", version.ref = "androidxProfileinstaller" }
 
+androidx-room-gradle-plugin = { module = "androidx.room:room-gradle-plugin", version.ref = "room" }
+androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
+androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
+androidx-sqlite-bundled = { module = "androidx.sqlite:sqlite-bundled", version.ref = "sqliteBundled" }
 
 androidx-test-ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidx-test-ext-junit" }
 androidx-tracing-ktx = { group = "androidx.tracing", name = "tracing-ktx", version.ref = "androidxTracing" }
@@ -330,7 +332,7 @@ ktor-client-winhttp = { group = "io.ktor", name = "ktor-client-winhttp", version
 ktor-serialization-kotlinx-json = { group = "io.ktor", name = "ktor-serialization-kotlinx-json", version.ref = "ktorVersion" }
 ktor-server-auth = { group = "io.ktor", name = "ktor-server-auth", version.ref = "ktorVersion" }
 
-ktorfit-ksp = { group = "de.jensklingenberg.ktorfit", name = "ktorfit-ksp", version.ref = "ktorfitKsp" }
+ktorfit-ksp = { group = "de.jensklingenberg.ktorfit", name = "ktorfit-ksp", version.ref = "ktorfit" }
 ktorfit-converters-flow = { group = "de.jensklingenberg.ktorfit", name = "ktorfit-converters-flow", version.ref = "ktorfit" }
 ktorfit-lib = { group = "de.jensklingenberg.ktorfit", name = "ktorfit-lib", version.ref = "ktorfit" }
 
@@ -345,10 +347,10 @@ squareup-okio = { group = "com.squareup.okio", name = "okio", version.ref = "oki
 back-handler = { group = "com.arkivanov.essenty", name = "back-handler", version.ref = "backHandlerVersion" }
 constraint-layout = { group = "tech.annexflow.compose", name="constraintlayout-compose-multiplatform", version.ref = "constraintLayout" }
 filekit-core = { group = "io.github.vinceglb", name = "filekit-core", version.ref = "fileKit" }
+filekit-compose = { module = "io.github.vinceglb:filekit-dialogs-compose", version.ref = "fileKit" }
 filekit-dialogs = { module = "io.github.vinceglb:filekit-dialogs", version.ref = "fileKit" }
 filekit-dialogs-compose = { module = "io.github.vinceglb:filekit-dialogs-compose", version.ref = "fileKit" }
 filekit-coil = { module = "io.github.vinceglb:filekit-coil", version.ref = "fileKit" }
-filekit-compose = { group = "io.github.vinceglb", name = "filekit-compose", version.ref = "fileKitCompose" }
 qrose = { group = "io.github.alexzhirkevich", name="qrose", version.ref = "qroseVersion" }
 lottie-compose = { group = "com.airbnb.android", name = "lottie-compose", version.ref = "lottie" }
 compottie = { module = "io.github.alexzhirkevich:compottie", version.ref = "compottie" }
@@ -359,6 +361,7 @@ compottie-resources = { module = "io.github.alexzhirkevich:compottie-resources",
 
 kermit-logging = { group = "co.touchlab", name = "kermit", version.ref = "kermit" }
 kermit-simple = { group = "co.touchlab", name = "kermit-simple", version.ref = "kermit" }
+kermit-koin = { group = "co.touchlab", name = "kermit-koin", version.ref = "kermit" }
 
 multiplatform-settings = { group = "com.russhwolf", name = "multiplatform-settings-no-arg", version.ref = "multiplatformSettings" }
 multiplatform-settings-coroutines = { group = "com.russhwolf", name = "multiplatform-settings-coroutines", version.ref = "multiplatformSettings" }
@@ -437,3 +440,6 @@ detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
 ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint" }
 spotless = { id = "com.diffplug.spotless", version.ref = "spotlessVersion" }
 version-catalog-linter = { id = "io.github.pemistahl.version-catalog-linter", version.ref = "versionCatalogLinterVersion" }
+
+#Room Plugin
+room = { id = "androidx.room", version.ref = "room" }
