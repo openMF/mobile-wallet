@@ -9,8 +9,8 @@
  */
 package org.mifospay.core.analytics.di
 
-import com.google.firebase.analytics.ktx.analytics
-import com.google.firebase.ktx.Firebase
+import com.google.firebase.Firebase
+import com.google.firebase.analytics.analytics
 import org.koin.dsl.module
 import org.mifospay.core.analytics.AnalyticsHelper
 
