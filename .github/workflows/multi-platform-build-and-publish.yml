@@ -113,7 +113,7 @@ concurrency:
 jobs:
   multi_platform_build_and_publish:
     name: Multi-Platform Build and Publish
-    uses: openMF/mifos-x-actionhub/.github/workflows/multi-platform-build-and-publish.yaml@v1.0.7
+    uses: openMF/mifos-x-actionhub/.github/workflows/multi-platform-build-and-publish.yaml@v1.0.9
     with:
       java-version: 21
       release_type: ${{ inputs.release_type }}
