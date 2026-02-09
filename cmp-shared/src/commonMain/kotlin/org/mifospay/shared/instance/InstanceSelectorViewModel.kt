@@ -19,8 +19,8 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.mifospay.core.common.DataState
 import org.mifospay.core.datastore.UserPreferencesRepository
-import org.mifospay.core.model.instance.InstanceType
 import org.mifospay.core.model.instance.InstancesConfig
+import org.mifospay.core.model.instance.InterbankServer
 import org.mifospay.core.model.instance.ServerInstance
 import org.mifospay.core.network.config.InstanceConfigLoader
 import org.mifospay.core.ui.utils.BaseViewModel
@@ -33,7 +33,7 @@ class InstanceSelectorViewModel(
 ) {
 
     private val tempSelectedMainInstance = MutableStateFlow<ServerInstance?>(null)
-    private val tempSelectedInterbankInstance = MutableStateFlow<ServerInstance?>(null)
+    private val tempSelectedInterbankInstance = MutableStateFlow<InterbankServer?>(null)
 
     init {
         // Combine all sources and update state
@@ -47,19 +47,26 @@ class InstanceSelectorViewModel(
             when (remoteConfig) {
                 is DataState.Success -> {
                     val config = remoteConfig.data
+                    val defaultInstance = config.getDefaultInstance()
+
+                    // Determine the effective main instance
+                    val effectiveMainInstance = tempMainInstance
+                        ?: selectedMainInstance
+                        ?: defaultInstance
+
+                    // Determine the effective interbank instance
+                    val effectiveInterbankInstance = tempInterbankInstance
+                        ?: selectedInterbankInstance
+                        ?: effectiveMainInstance?.getDefaultInterbankServer()
+
                     mutableStateFlow.update {
                         it.copy(
-                            mainInstances = config.getMainInstances(),
-                            interbankInstances = config.getInterbankInstances(),
-                            selectedMainInstance = selectedMainInstance
-                                ?: config.getDefaultInstance(),
+                            instances = config.instances,
+                            selectedMainInstance = selectedMainInstance ?: defaultInstance,
                             selectedInterbankInstance = selectedInterbankInstance
-                                ?: config.getDefaultInterbankInstance(),
-                            tempSelectedMainInstance = tempMainInstance
-                                ?: selectedMainInstance ?: config.getDefaultInstance(),
-                            tempSelectedInterbankInstance = tempInterbankInstance
-                                ?: selectedInterbankInstance
-                                ?: config.getDefaultInterbankInstance(),
+                                ?: defaultInstance?.getDefaultInterbankServer(),
+                            tempSelectedMainInstance = effectiveMainInstance,
+                            tempSelectedInterbankInstance = effectiveInterbankInstance,
                             isLoading = false,
                             error = null,
                         )
@@ -90,16 +97,14 @@ class InstanceSelectorViewModel(
 
     override fun handleAction(action: InstanceSelectorAction) {
         when (action) {
-            is InstanceSelectorAction.SelectInstance -> {
-                when (action.instance.type) {
-                    InstanceType.MAIN -> {
-                        tempSelectedMainInstance.value = action.instance
-                    }
+            is InstanceSelectorAction.SelectMainInstance -> {
+                tempSelectedMainInstance.value = action.instance
+                // Auto-select the default interbank server for the new main instance
+                tempSelectedInterbankInstance.value = action.instance.getDefaultInterbankServer()
+            }
 
-                    InstanceType.INTERBANK -> {
-                        tempSelectedInterbankInstance.value = action.instance
-                    }
-                }
+            is InstanceSelectorAction.SelectInterbankInstance -> {
+                tempSelectedInterbankInstance.value = action.instance
             }
 
             is InstanceSelectorAction.UpdateInstances -> {
@@ -141,12 +146,11 @@ class InstanceSelectorViewModel(
 
 // State
 data class InstanceSelectorState(
-    val mainInstances: List<ServerInstance> = emptyList(),
-    val interbankInstances: List<ServerInstance> = emptyList(),
+    val instances: List<ServerInstance> = emptyList(),
     val selectedMainInstance: ServerInstance? = null,
-    val selectedInterbankInstance: ServerInstance? = null,
+    val selectedInterbankInstance: InterbankServer? = null,
     val tempSelectedMainInstance: ServerInstance? = null,
-    val tempSelectedInterbankInstance: ServerInstance? = null,
+    val tempSelectedInterbankInstance: InterbankServer? = null,
     val isLoading: Boolean = true,
     val error: String? = null,
 ) {
@@ -162,7 +166,8 @@ sealed interface InstanceSelectorEvent {
 
 // Actions
 sealed interface InstanceSelectorAction {
-    data class SelectInstance(val instance: ServerInstance) : InstanceSelectorAction
+    data class SelectMainInstance(val instance: ServerInstance) : InstanceSelectorAction
+    data class SelectInterbankInstance(val instance: InterbankServer) : InstanceSelectorAction
     data object UpdateInstances : InstanceSelectorAction
     data class ConfigLoaded(val config: DataState<InstancesConfig>) : InstanceSelectorAction
 }

@@ -9,20 +9,27 @@
  */
 package org.mifospay.shared.instance
 
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
@@ -39,7 +46,7 @@ import mobile_wallet.cmp_shared.generated.resources.Res
 import mobile_wallet.cmp_shared.generated.resources.default
 import mobile_wallet.cmp_shared.generated.resources.error_message
 import mobile_wallet.cmp_shared.generated.resources.interbank_server
-import mobile_wallet.cmp_shared.generated.resources.main_server
+import mobile_wallet.cmp_shared.generated.resources.no_interbank_servers
 import mobile_wallet.cmp_shared.generated.resources.select_instance
 import mobile_wallet.cmp_shared.generated.resources.tenant_value
 import mobile_wallet.cmp_shared.generated.resources.update
@@ -50,11 +57,13 @@ import org.mifospay.core.designsystem.component.MifosBottomSheet
 import org.mifospay.core.designsystem.component.MifosButton
 import org.mifospay.core.designsystem.component.MifosCard
 import org.mifospay.core.designsystem.component.MifosScaffold
+import org.mifospay.core.designsystem.icon.MifosIcons
 import org.mifospay.core.designsystem.theme.MifosTheme
-import org.mifospay.core.model.instance.InstanceType
+import org.mifospay.core.model.instance.InterbankServer
 import org.mifospay.core.model.instance.ServerInstance
 import org.mifospay.core.ui.MifosProgressIndicator
 import org.mifospay.core.ui.utils.EventsEffect
+import template.core.base.designsystem.KptMaterialTheme
 import template.core.base.designsystem.KptTheme
 import template.core.base.designsystem.theme.KptTheme
 
@@ -130,12 +139,18 @@ fun InstanceSelectorScreen(
                 else -> {
                     InstancesList(
                         modifier = Modifier.padding(contentPadding),
-                        mainInstances = state.mainInstances,
-                        interbankInstances = state.interbankInstances,
+                        instances = state.instances,
                         selectedMainInstance = state.tempSelectedMainInstance,
                         selectedInterbankInstance = state.tempSelectedInterbankInstance,
-                        onInstanceSelected = { instance ->
-                            viewModel.trySendAction(InstanceSelectorAction.SelectInstance(instance))
+                        onMainInstanceSelected = { instance ->
+                            viewModel.trySendAction(
+                                InstanceSelectorAction.SelectMainInstance(instance),
+                            )
+                        },
+                        onInterbankInstanceSelected = { instance ->
+                            viewModel.trySendAction(
+                                InstanceSelectorAction.SelectInterbankInstance(instance),
+                            )
                         },
                     )
                 }
@@ -146,11 +161,11 @@ fun InstanceSelectorScreen(
 
 @Composable
 private fun InstancesList(
-    mainInstances: List<ServerInstance>,
-    interbankInstances: List<ServerInstance>,
+    instances: List<ServerInstance>,
     selectedMainInstance: ServerInstance?,
-    selectedInterbankInstance: ServerInstance?,
-    onInstanceSelected: (ServerInstance) -> Unit,
+    selectedInterbankInstance: InterbankServer?,
+    onMainInstanceSelected: (ServerInstance) -> Unit,
+    onInterbankInstanceSelected: (InterbankServer) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     LazyColumn(
@@ -176,48 +191,18 @@ private fun InstancesList(
             }
         }
 
-        if (mainInstances.isNotEmpty()) {
-            item {
-                Text(
-                    text = stringResource(Res.string.main_server),
-                    style = MaterialTheme.typography.titleSmall.copy(
-                        fontWeight = FontWeight.SemiBold,
-                        fontSize = 12.sp,
-                    ),
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    modifier = Modifier.padding(top = 8.dp),
-                )
-            }
+        items(instances) { instance ->
+            val isMainSelected = instance == selectedMainInstance
 
-            items(mainInstances) { instance ->
-                InstanceItem(
-                    instance = instance,
-                    isSelected = instance == selectedMainInstance,
-                    onClick = { onInstanceSelected(instance) },
-                )
-            }
-        }
-
-        if (interbankInstances.isNotEmpty()) {
-            item {
-                Text(
-                    text = stringResource(Res.string.interbank_server),
-                    style = MaterialTheme.typography.titleSmall.copy(
-                        fontWeight = FontWeight.SemiBold,
-                        fontSize = 12.sp,
-                    ),
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    modifier = Modifier.padding(top = 8.dp),
-                )
-            }
-
-            items(interbankInstances) { instance ->
-                InstanceItem(
-                    instance = instance,
-                    isSelected = instance == selectedInterbankInstance,
-                    onClick = { onInstanceSelected(instance) },
-                )
-            }
+            MainInstanceItem(
+                instance = instance,
+                isSelected = isMainSelected,
+                selectedInterbankInstance = selectedInterbankInstance,
+                onMainInstanceClick = { onMainInstanceSelected(instance) },
+                onInterbankInstanceClick = { interbankServer ->
+                    onInterbankInstanceSelected(interbankServer)
+                },
+            )
         }
 
         item {
@@ -227,150 +212,393 @@ private fun InstancesList(
 }
 
 @Composable
-private fun InstanceItem(
+private fun MainInstanceItem(
     instance: ServerInstance,
     isSelected: Boolean,
-    onClick: () -> Unit,
+    selectedInterbankInstance: InterbankServer?,
+    onMainInstanceClick: () -> Unit,
+    onInterbankInstanceClick: (InterbankServer) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    MifosCard(
-        modifier = modifier
-            .fillMaxWidth()
-            .clickable(onClick = onClick),
-        colors = CardDefaults.cardColors(
-            containerColor = KptTheme.colorScheme.surface,
-        ),
-        shape = KptTheme.shapes.medium,
+    Column(
+        modifier = modifier.fillMaxWidth(),
+        verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
-        Row(
+        MifosCard(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(12.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(12.dp),
+                .clickable(onClick = onMainInstanceClick),
+            colors = CardDefaults.cardColors(
+                containerColor = KptTheme.colorScheme.surface,
+            ),
+            shape = KptTheme.shapes.medium,
         ) {
-            RadioButton(
-                selected = isSelected,
-                onClick = onClick,
-                modifier = Modifier.padding(0.dp),
-            )
-
-            Column(
-                modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.spacedBy(4.dp),
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(12.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(12.dp),
             ) {
-                // Instance Label
-                Text(
-                    text = instance.label,
-                    style = MaterialTheme.typography.titleSmall.copy(
-                        fontWeight = FontWeight.SemiBold,
-                    ),
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
+                RadioButton(
+                    selected = isSelected,
+                    onClick = onMainInstanceClick,
+                    modifier = Modifier.padding(0.dp),
                 )
 
-                // Instance Type Badge
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp),
-                    verticalAlignment = Alignment.CenterVertically,
+                Column(
+                    modifier = Modifier.weight(1f),
+                    verticalArrangement = Arrangement.spacedBy(4.dp),
                 ) {
+                    // Instance Label
                     Text(
-                        text = instance.type.name,
-                        style = MaterialTheme.typography.labelSmall.copy(
-                            fontSize = 10.sp,
-                            fontWeight = FontWeight.Medium,
+                        text = instance.label,
+                        style = MaterialTheme.typography.titleSmall.copy(
+                            fontWeight = FontWeight.SemiBold,
                         ),
-                        color = MaterialTheme.colorScheme.onPrimaryContainer,
-                        modifier = Modifier
-                            .background(
-                                color = MaterialTheme.colorScheme.primaryContainer,
-                                shape = RoundedCornerShape(4.dp),
-                            )
-                            .padding(horizontal = 6.dp, vertical = 2.dp),
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
                     )
 
-                    if (instance.isDefault) {
-                        Text(
-                            text = stringResource(Res.string.default),
-                            style = MaterialTheme.typography.labelSmall.copy(
-                                fontSize = 10.sp,
-                                fontWeight = FontWeight.Medium,
-                            ),
-                            color = MaterialTheme.colorScheme.onTertiaryContainer,
-                            modifier = Modifier
-                                .background(
-                                    color = MaterialTheme.colorScheme.tertiaryContainer,
-                                    shape = RoundedCornerShape(4.dp),
-                                )
-                                .padding(horizontal = 6.dp, vertical = 2.dp),
-                        )
+                    // Badges Row
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        if (instance.isDefault) {
+                            Text(
+                                text = stringResource(Res.string.default),
+                                style = MaterialTheme.typography.labelSmall.copy(
+                                    fontSize = 10.sp,
+                                    fontWeight = FontWeight.Medium,
+                                ),
+                                color = MaterialTheme.colorScheme.onTertiaryContainer,
+                                modifier = Modifier
+                                    .background(
+                                        color = MaterialTheme.colorScheme.tertiaryContainer,
+                                        shape = RoundedCornerShape(4.dp),
+                                    )
+                                    .padding(horizontal = 6.dp, vertical = 2.dp),
+                            )
+                        }
                     }
+
+                    // Endpoint URL
+                    Text(
+                        text = instance.endpoint,
+                        style = MaterialTheme.typography.labelSmall.copy(
+                            fontSize = 11.sp,
+                        ),
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                    )
+
+                    // Tenant ID
+                    Text(
+                        text = stringResource(Res.string.tenant_value, instance.platformTenantId),
+                        style = MaterialTheme.typography.labelSmall.copy(
+                            fontSize = 11.sp,
+                        ),
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                    )
                 }
+            }
+        }
 
-                // Endpoint URL
-                Text(
-                    text = instance.endpoint,
-                    style = MaterialTheme.typography.labelSmall.copy(
-                        fontSize = 11.sp,
-                    ),
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                )
+        // Show interbank servers when main instance is selected
+        if (isSelected) {
+            InterbankServersList(
+                interbankServers = instance.interbankServers,
+                selectedInterbankInstance = selectedInterbankInstance,
+                onInterbankInstanceClick = onInterbankInstanceClick,
+            )
+        }
+    }
+}
 
-                // Tenant ID
-                Text(
-                    text = stringResource(Res.string.tenant_value, instance.platformTenantId),
-                    style = MaterialTheme.typography.labelSmall.copy(
-                        fontSize = 11.sp,
-                    ),
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
+@Composable
+private fun InterbankServersList(
+    interbankServers: List<InterbankServer>,
+    selectedInterbankInstance: InterbankServer?,
+    onInterbankInstanceClick: (InterbankServer) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(start = 24.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+    ) {
+        Text(
+            text = stringResource(Res.string.interbank_server),
+            style = MaterialTheme.typography.labelMedium.copy(
+                fontWeight = FontWeight.SemiBold,
+            ),
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
+
+        if (interbankServers.isEmpty()) {
+            Text(
+                text = stringResource(Res.string.no_interbank_servers),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
+                modifier = Modifier.padding(start = 8.dp),
+            )
+        } else {
+            interbankServers.forEach { interbankServer ->
+                InterbankServerItem(
+                    interbankServer = interbankServer,
+                    isSelected = interbankServer == selectedInterbankInstance,
+                    onClick = { onInterbankInstanceClick(interbankServer) },
                 )
             }
         }
     }
 }
 
+@Composable
+private fun InterbankServerItem(
+    interbankServer: InterbankServer,
+    isSelected: Boolean,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    val animatedContainerColor = animateColorAsState(
+        targetValue = if (isSelected) {
+            KptTheme.colorScheme.secondaryContainer
+        } else {
+            KptTheme.colorScheme.surfaceContainerLow
+        },
+        animationSpec = tween(durationMillis = 200),
+        label = "containerColor",
+    )
+
+    val animatedBorderColor = animateColorAsState(
+        targetValue = if (isSelected) {
+            KptTheme.colorScheme.primary
+        } else {
+            KptTheme.colorScheme.outlineVariant.copy(alpha = 0.5f)
+        },
+        animationSpec = tween(durationMillis = 200),
+        label = "borderColor",
+    )
+
+    val animatedIconBackground = animateColorAsState(
+        targetValue = if (isSelected) {
+            KptTheme.colorScheme.primary
+        } else {
+            KptTheme.colorScheme.surfaceContainerHighest
+        },
+        animationSpec = tween(durationMillis = 200),
+        label = "iconBackground",
+    )
+
+    val animatedIconTint = animateColorAsState(
+        targetValue = if (isSelected) {
+            KptTheme.colorScheme.onPrimary
+        } else {
+            KptTheme.colorScheme.onSurfaceVariant
+        },
+        animationSpec = tween(durationMillis = 200),
+        label = "iconTint",
+    )
+
+    MifosCard(
+        modifier = modifier
+            .fillMaxWidth()
+            .border(
+                width = if (isSelected) 2.dp else 1.dp,
+                color = animatedBorderColor.value,
+                shape = RoundedCornerShape(12.dp),
+            )
+            .clickable(onClick = onClick),
+        colors = CardDefaults.cardColors(
+            containerColor = animatedContainerColor.value,
+        ),
+        shape = RoundedCornerShape(12.dp),
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(14.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
+        ) {
+            // Icon with animated background
+            Box(
+                modifier = Modifier
+                    .size(40.dp)
+                    .background(
+                        color = animatedIconBackground.value,
+                        shape = CircleShape,
+                    ),
+                contentAlignment = Alignment.Center,
+            ) {
+                Icon(
+                    imageVector = MifosIcons.Bank,
+                    contentDescription = null,
+                    tint = animatedIconTint.value,
+                    modifier = Modifier.size(20.dp),
+                )
+            }
+
+            // Content
+            Column(
+                modifier = Modifier.weight(1f),
+                verticalArrangement = Arrangement.spacedBy(4.dp),
+            ) {
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Text(
+                        text = interbankServer.label,
+                        style = KptTheme.typography.bodyMedium.copy(
+                            fontWeight = FontWeight.SemiBold,
+                        ),
+                        color = if (isSelected) {
+                            KptTheme.colorScheme.onSecondaryContainer
+                        } else {
+                            KptTheme.colorScheme.onSurface
+                        },
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                        modifier = Modifier.weight(1f, fill = false),
+                    )
+
+                    if (interbankServer.isDefault) {
+                        Text(
+                            text = stringResource(Res.string.default),
+                            style = KptTheme.typography.labelSmall.copy(
+                                fontSize = 9.sp,
+                                fontWeight = FontWeight.SemiBold,
+                            ),
+                            color = KptTheme.colorScheme.onTertiaryContainer,
+                            modifier = Modifier
+                                .background(
+                                    color = KptTheme.colorScheme.tertiaryContainer,
+                                    shape = RoundedCornerShape(6.dp),
+                                )
+                                .padding(horizontal = 6.dp, vertical = 2.dp),
+                        )
+                    }
+                }
+
+                Text(
+                    text = interbankServer.endpoint,
+                    style = KptTheme.typography.labelMedium,
+                    color = if (isSelected) {
+                        KptTheme.colorScheme.onSecondaryContainer.copy(alpha = 0.8f)
+                    } else {
+                        KptTheme.colorScheme.onSurfaceVariant
+                    },
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                )
+            }
+
+            // Radio button
+            RadioButton(
+                selected = isSelected,
+                onClick = onClick,
+            )
+        }
+    }
+}
+
 @Preview
 @Composable
-private fun InstanceItemPreview() {
+private fun MainInstanceItemPreview() {
     KptTheme {
-        InstanceItem(
+        MainInstanceItem(
             instance = ServerInstance(
                 endpoint = "mifos-bank-2.mifos.community",
                 protocol = "https://",
                 path = "/fineract-provider/api/v1/",
                 platformTenantId = "mifos-bank-2",
-                label = "Production",
-                type = InstanceType.MAIN,
+                label = "Mifos Bank 2 Instance",
                 isDefault = true,
+                interbankServers = listOf(
+                    InterbankServer(
+                        endpoint = "apis.flexcore.mx",
+                        protocol = "https://",
+                        path = "/v1.0/vnext2/",
+                        label = "Mifos Bank 2 Interbank",
+                        isDefault = true,
+                    ),
+                ),
             ),
             isSelected = true,
-            onClick = {},
+            selectedInterbankInstance = InterbankServer(
+                endpoint = "apis.flexcore.mx",
+                protocol = "https://",
+                path = "/v1.0/vnext2/",
+                label = "Mifos Bank 2 Interbank",
+                isDefault = true,
+            ),
+            onMainInstanceClick = {},
+            onInterbankInstanceClick = {},
         )
     }
 }
 
 @Preview
 @Composable
-private fun InstanceItemUnselectedPreview() {
+private fun MainInstanceItemUnselectedPreview() {
     MifosTheme {
-        InstanceItem(
+        MainInstanceItem(
             instance = ServerInstance(
-                endpoint = "apis.flexcore.mx",
+                endpoint = "venus.mifos.community",
                 protocol = "https://",
-                path = "/v1.0/vnext2/",
-                platformTenantId = "interbank-1",
-                label = "Interbank",
-                type = InstanceType.INTERBANK,
+                path = "/fineract-provider/api/v1/",
+                platformTenantId = "venus",
+                label = "Venus Instance",
                 isDefault = false,
+                interbankServers = emptyList(),
             ),
             isSelected = false,
-            onClick = {},
+            selectedInterbankInstance = null,
+            onMainInstanceClick = {},
+            onInterbankInstanceClick = {},
         )
+    }
+}
+
+@Preview
+@Composable
+private fun InterbankServerItemSelectedPreview() {
+    KptTheme {
+        Column(
+            modifier = Modifier.padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp),
+        ) {
+            InterbankServerItem(
+                interbankServer = InterbankServer(
+                    endpoint = "apis.flexcore.mx",
+                    protocol = "https://",
+                    path = "/v1.0/vnext2/",
+                    label = "Mifos Bank 2 Interbank",
+                    isDefault = true,
+                ),
+                isSelected = true,
+                onClick = {},
+            )
+            InterbankServerItem(
+                interbankServer = InterbankServer(
+                    endpoint = "apis.flexcore.mx",
+                    protocol = "https://",
+                    path = "/v1.0/vnext1/",
+                    label = "Mifos Bank 1 Interbank",
+                    isDefault = false,
+                ),
+                isSelected = false,
+                onClick = {},
+            )
+        }
     }
 }
 
@@ -379,35 +607,49 @@ private fun InstanceItemUnselectedPreview() {
 private fun InstancesListPreview() {
     MifosTheme {
         InstancesList(
-            mainInstances = listOf(
+            instances = listOf(
                 ServerInstance(
                     endpoint = "mifos-bank-2.mifos.community",
                     protocol = "https://",
                     path = "/fineract-provider/api/v1/",
                     platformTenantId = "mifos-bank-2",
-                    label = "Production",
-                    type = InstanceType.MAIN,
+                    label = "Mifos Bank 2 Instance",
                     isDefault = true,
+                    interbankServers = listOf(
+                        InterbankServer(
+                            endpoint = "apis.flexcore.mx",
+                            protocol = "https://",
+                            path = "/v1.0/vnext2/",
+                            label = "Mifos Bank 2 Interbank",
+                            isDefault = true,
+                        ),
+                    ),
                 ),
                 ServerInstance(
                     endpoint = "mifos-bank-1.mifos.community",
                     protocol = "https://",
                     path = "/fineract-provider/api/v1/",
                     platformTenantId = "mifos-bank-1",
-                    label = "Staging",
-                    type = InstanceType.MAIN,
+                    label = "Mifos Bank 1 Instance",
                     isDefault = false,
+                    interbankServers = listOf(
+                        InterbankServer(
+                            endpoint = "apis.flexcore.mx",
+                            protocol = "https://",
+                            path = "/v1.0/vnext1/",
+                            label = "Mifos Bank 1 Interbank",
+                            isDefault = true,
+                        ),
+                    ),
                 ),
-            ),
-            interbankInstances = listOf(
                 ServerInstance(
-                    endpoint = "apis.flexcore.mx",
+                    endpoint = "venus.mifos.community",
                     protocol = "https://",
-                    path = "/v1.0/vnext2/",
-                    platformTenantId = "interbank-1",
-                    label = "Interbank Production",
-                    type = InstanceType.INTERBANK,
-                    isDefault = true,
+                    path = "/fineract-provider/api/v1/",
+                    platformTenantId = "venus",
+                    label = "Venus Instance",
+                    isDefault = false,
+                    interbankServers = emptyList(),
                 ),
             ),
             selectedMainInstance = ServerInstance(
@@ -415,12 +657,27 @@ private fun InstancesListPreview() {
                 protocol = "https://",
                 path = "/fineract-provider/api/v1/",
                 platformTenantId = "mifos-bank-2",
-                label = "Production",
-                type = InstanceType.MAIN,
+                label = "Mifos Bank 2 Instance",
+                isDefault = true,
+                interbankServers = listOf(
+                    InterbankServer(
+                        endpoint = "apis.flexcore.mx",
+                        protocol = "https://",
+                        path = "/v1.0/vnext2/",
+                        label = "Mifos Bank 2 Interbank",
+                        isDefault = true,
+                    ),
+                ),
+            ),
+            selectedInterbankInstance = InterbankServer(
+                endpoint = "apis.flexcore.mx",
+                protocol = "https://",
+                path = "/v1.0/vnext2/",
+                label = "Mifos Bank 2 Interbank",
                 isDefault = true,
             ),
-            selectedInterbankInstance = null,
-            onInstanceSelected = {},
+            onMainInstanceSelected = {},
+            onInterbankInstanceSelected = {},
         )
     }
 }

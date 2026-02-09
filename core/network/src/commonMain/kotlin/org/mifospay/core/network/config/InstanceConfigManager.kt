@@ -11,7 +11,7 @@ package org.mifospay.core.network.config
 
 import kotlinx.coroutines.flow.StateFlow
 import org.mifospay.core.datastore.UserPreferencesRepository
-import org.mifospay.core.model.instance.InstanceType
+import org.mifospay.core.model.instance.InterbankServer
 import org.mifospay.core.model.instance.ServerInstance
 
 class InstanceConfigManager(
@@ -25,31 +25,40 @@ class InstanceConfigManager(
             path = "/fineract-provider/api/v1/",
             platformTenantId = "mifos-bank-2",
             label = "Default Instance",
-            type = InstanceType.MAIN,
             isDefault = true,
+            interbankServers = listOf(
+                InterbankServer(
+                    endpoint = "apis.flexcore.mx",
+                    protocol = "https://",
+                    path = "/v1.0/vnext2/",
+                    label = "Default Interbank",
+                    isDefault = true,
+                ),
+            ),
         )
 
         // Default interbank instance configuration
-        private val DEFAULT_INTERBANK_INSTANCE = ServerInstance(
+        private val DEFAULT_INTERBANK_INSTANCE = InterbankServer(
             endpoint = "apis.flexcore.mx",
             protocol = "https://",
-            path = "/v1.0/vnext1/",
-            platformTenantId = "mifos-bank-2",
+            path = "/v1.0/vnext2/",
             label = "Default Interbank",
-            type = InstanceType.INTERBANK,
             isDefault = true,
         )
     }
 
     val selectedInstance: StateFlow<ServerInstance?> = userPreferencesRepository.selectedInstance
-    val selectedInterbankInstance: StateFlow<ServerInstance?> = userPreferencesRepository.selectedInterbankInstance
+    val selectedInterbankInstance: StateFlow<InterbankServer?> =
+        userPreferencesRepository.selectedInterbankInstance
 
     fun getCurrentInstance(): ServerInstance {
         return selectedInstance.value ?: DEFAULT_MAIN_INSTANCE
     }
 
-    fun getCurrentInterbankInstance(): ServerInstance {
-        return selectedInterbankInstance.value ?: DEFAULT_INTERBANK_INSTANCE
+    fun getCurrentInterbankInstance(): InterbankServer {
+        return selectedInterbankInstance.value
+            ?: getCurrentInstance().getDefaultInterbankServer()
+            ?: DEFAULT_INTERBANK_INSTANCE
     }
 
     fun getEndpoint(): String = getCurrentInstance().endpoint

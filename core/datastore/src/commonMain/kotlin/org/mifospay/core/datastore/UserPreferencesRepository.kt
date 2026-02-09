@@ -15,6 +15,7 @@ import org.mifospay.core.common.DataState
 import org.mifospay.core.model.account.DefaultAccount
 import org.mifospay.core.model.client.Client
 import org.mifospay.core.model.client.UpdatedClient
+import org.mifospay.core.model.instance.InterbankServer
 import org.mifospay.core.model.instance.ServerInstance
 import org.mifospay.core.model.user.UserInfo
 
@@ -35,7 +36,7 @@ interface UserPreferencesRepository {
 
     val selectedInstance: StateFlow<ServerInstance?>
 
-    val selectedInterbankInstance: StateFlow<ServerInstance?>
+    val selectedInterbankInstance: StateFlow<InterbankServer?>
 
     suspend fun updateToken(token: String): DataState<Unit>
 
@@ -49,7 +50,7 @@ interface UserPreferencesRepository {
 
     suspend fun updateSelectedInstance(instance: ServerInstance): DataState<Unit>
 
-    suspend fun updateSelectedInterbankInstance(instance: ServerInstance): DataState<Unit>
+    suspend fun updateSelectedInterbankInstance(instance: InterbankServer): DataState<Unit>
 
     suspend fun logOut(): Unit
 }

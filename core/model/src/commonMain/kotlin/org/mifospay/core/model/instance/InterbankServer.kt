@@ -12,9 +12,13 @@ package org.mifospay.core.model.instance
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class InstancesConfig(
-    val instances: List<ServerInstance> = emptyList(),
+data class InterbankServer(
+    val endpoint: String,
+    val protocol: String,
+    val path: String,
+    val label: String,
+    val isDefault: Boolean = false,
 ) {
-    fun getDefaultInstance(): ServerInstance? =
-        instances.firstOrNull { it.isDefault } ?: instances.firstOrNull()
+    val fullUrl: String
+        get() = "$protocol$endpoint$path"
 }

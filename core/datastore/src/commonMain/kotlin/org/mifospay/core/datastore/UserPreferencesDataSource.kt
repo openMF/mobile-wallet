@@ -27,6 +27,7 @@ import org.mifospay.core.datastore.model.UserInfoPreferences
 import org.mifospay.core.model.account.DefaultAccount
 import org.mifospay.core.model.client.Client
 import org.mifospay.core.model.client.UpdatedClient
+import org.mifospay.core.model.instance.InterbankServer
 import org.mifospay.core.model.instance.ServerInstance
 import org.mifospay.core.model.user.UserInfo
 
@@ -83,7 +84,7 @@ class UserPreferencesDataSource(
     private val _selectedInterbankInstance = MutableStateFlow(
         settings.decodeValueOrNull(
             key = SELECTED_INTERBANK_INSTANCE_KEY,
-            serializer = ServerInstance.serializer(),
+            serializer = InterbankServer.serializer(),
         ),
     )
 
@@ -166,7 +167,7 @@ class UserPreferencesDataSource(
         }
     }
 
-    suspend fun updateSelectedInterbankInstance(instance: ServerInstance) {
+    suspend fun updateSelectedInterbankInstance(instance: InterbankServer) {
         withContext(dispatcher) {
             settings.putSelectedInterbankInstance(instance)
             _selectedInterbankInstance.value = instance
@@ -217,10 +218,10 @@ private fun Settings.putSelectedInstance(instance: ServerInstance) {
     )
 }
 
-private fun Settings.putSelectedInterbankInstance(instance: ServerInstance) {
+private fun Settings.putSelectedInterbankInstance(instance: InterbankServer) {
     encodeValue(
         key = SELECTED_INTERBANK_INSTANCE_KEY,
-        serializer = ServerInstance.serializer(),
+        serializer = InterbankServer.serializer(),
         value = instance,
     )
 }

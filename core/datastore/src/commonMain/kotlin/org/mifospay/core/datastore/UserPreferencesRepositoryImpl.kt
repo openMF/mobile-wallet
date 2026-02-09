@@ -21,6 +21,7 @@ import org.mifospay.core.common.DataState
 import org.mifospay.core.model.account.DefaultAccount
 import org.mifospay.core.model.client.Client
 import org.mifospay.core.model.client.UpdatedClient
+import org.mifospay.core.model.instance.InterbankServer
 import org.mifospay.core.model.instance.ServerInstance
 import org.mifospay.core.model.user.UserInfo
 
@@ -80,7 +81,7 @@ class UserPreferencesRepositoryImpl(
             started = SharingStarted.Eagerly,
         )
 
-    override val selectedInterbankInstance: StateFlow<ServerInstance?>
+    override val selectedInterbankInstance: StateFlow<InterbankServer?>
         get() = preferenceManager.selectedInterbankInstance.stateIn(
             scope = unconfinedScope,
             initialValue = null,
@@ -106,7 +107,7 @@ class UserPreferencesRepositoryImpl(
         }
     }
 
-    override suspend fun updateSelectedInterbankInstance(instance: ServerInstance): DataState<Unit> {
+    override suspend fun updateSelectedInterbankInstance(instance: InterbankServer): DataState<Unit> {
         return try {
             preferenceManager.updateSelectedInterbankInstance(instance)
             DataState.Success(Unit)
