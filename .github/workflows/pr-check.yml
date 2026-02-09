@@ -46,6 +46,10 @@
 #       - Detekt
 #       - Dependency Guard
 #
+### Required Secrets (Optional for PR checks)
+#   - SUPABASECREDS: Supabase credentials JSON (Base64 encoded)
+#     Format: {"url": "https://xxx.supabase.co", "anonKey": "xxx"}
+#
 ### Configuration Parameters
 # The workflow requires two input parameters:
 #

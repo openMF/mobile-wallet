@@ -26,9 +26,11 @@
 # - UPLOAD_KEYSTORE_ALIAS: Keystore alias
 # - UPLOAD_KEYSTORE_ALIAS_PASSWORD: Keystore alias password
 
-# - GOOGLESERVICES: Google Services configuration JSON
-# - PLAYSTORECREDS: Play Store service account credentials
-# - FIREBASECREDS: Firebase distribution credentials
+# - GOOGLESERVICES: Google Services configuration JSON (Base64 encoded)
+# - PLAYSTORECREDS: Play Store service account credentials (Base64 encoded)
+# - FIREBASECREDS: Firebase distribution credentials (Base64 encoded)
+# - SUPABASECREDS: Supabase credentials JSON (Base64 encoded)
+#   Format: {"url": "https://xxx.supabase.co", "anonKey": "xxx"}
 
 # - NOTARIZATION_APPLE_ID: Apple ID for macOS app notarization
 # - NOTARIZATION_PASSWORD: Notarization password
@@ -178,4 +180,5 @@ jobs:
       google_services: ${{ secrets.GOOGLESERVICES }}
       firebase_creds: ${{ secrets.FIREBASECREDS }}
       playstore_creds: ${{ secrets.PLAYSTORECREDS }}
+      supabase_creds: ${{ secrets.SUPABASECREDS }}
       token: ${{ secrets.GITHUB_TOKEN }}
