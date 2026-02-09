@@ -1,4 +1,4 @@
-package: name='org.mifospay' versionCode='1' versionName='2025.10.5-beta.0.23' platformBuildVersionName='16' platformBuildVersionCode='36' compileSdkVersion='36' compileSdkVersionCodename='16'
+package: name='org.mifospay' versionCode='1' versionName='2025.10.5-beta.0.26' platformBuildVersionName='16' platformBuildVersionCode='36' compileSdkVersion='36' compileSdkVersionCodename='16'
 minSdkVersion:'26'
 targetSdkVersion:'34'
 uses-permission: name='android.permission.INTERNET'
