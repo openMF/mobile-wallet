@@ -21,9 +21,9 @@ import org.mifospay.core.network.FineractApiManager
 import org.mifospay.core.network.InterBankApiManager
 import org.mifospay.core.network.KtorfitClient
 import org.mifospay.core.network.SelfServiceApiManager
-import org.mifospay.core.network.config.FirebaseInstanceConfigLoader
 import org.mifospay.core.network.config.InstanceConfigLoader
 import org.mifospay.core.network.config.InstanceConfigManager
+import org.mifospay.core.network.config.SupabaseInstanceConfigLoader
 import org.mifospay.core.network.utils.BaseURL
 import org.mifospay.core.network.utils.FlowConverterFactory
 import org.mifospay.core.network.utils.KtorInterceptor
@@ -34,7 +34,7 @@ private val ioDispatcher = named(MifosDispatchers.IO.name)
 @OptIn(ExperimentalEncodingApi::class)
 val NetworkModule = module {
     single<InstanceConfigLoader> {
-        FirebaseInstanceConfigLoader(
+        SupabaseInstanceConfigLoader(
             ioDispatcher = get(ioDispatcher),
             json = get(),
         )

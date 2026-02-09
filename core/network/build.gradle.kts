@@ -9,9 +9,12 @@
  */
 plugins {
     alias(libs.plugins.kmp.library.convention)
+    alias(libs.plugins.kmp.supabase.config)
     alias(libs.plugins.ktorfit)
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.ksp)
+    alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.jetbrainsCompose)
 }
 
 android {
@@ -38,7 +41,8 @@ kotlin {
             implementation(libs.ktor.client.serialization)
             implementation(libs.squareup.okio)
             api(projects.coreBase.network)
-            implementation(libs.gitlive.firebase.config)
+            implementation(libs.jb.composeRuntime)
+            implementation(compose.components.resources)
         }
     }
 }

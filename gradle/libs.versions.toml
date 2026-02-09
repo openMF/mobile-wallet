@@ -121,8 +121,8 @@ composeLifecycle = "2.9.6"
 composeNavigation = "2.9.1"
 jbCoreBundle = "1.0.1"
 jbSavedState = "1.4.0"
-gitLive = "2.4.0"
 material3adaptive = "1.1.2"
+supabase = "3.1.1"
 
 #Room
 room = "2.8.4"
@@ -219,10 +219,7 @@ firebase-crashlytics-gradlePlugin = { group = "com.google.firebase", name = "fir
 firebase-performance = { group = "com.google.firebase", name = "firebase-perf" }
 firebase-performance-gradlePlugin = { group = "com.google.firebase", name = "perf-plugin", version.ref = "firebasePerfPlugin" }
 
-gitlive-firebase-analytics = { module = "dev.gitlive:firebase-analytics", version.ref = "gitLive" }
-gitlive-firebase-crashlytics = { module = "dev.gitlive:firebase-crashlytics", version.ref = "gitLive" }
-gitlive-firebase-performance = { module = "dev.gitlive:firebase-performance", version.ref = "gitLive" }
-gitlive-firebase-config = { module = "dev.gitlive:firebase-config", version.ref = "gitLive" }
+supabase-postgrest = { group = "io.github.jan-tennert.supabase", name = "postgrest-kt", version.ref = "supabase" }
 
 play-services-auth = { group = "com.google.android.gms", name = "play-services-auth", version.ref = "playServicesAuthVersion" }
 google-oss-licenses = { group = "com.google.android.gms", name = "play-services-oss-licenses", version.ref = "googleOss" }
@@ -416,6 +413,7 @@ baselineprofile = { id = "androidx.baselineprofile", version.ref = "androidxMacr
 cmp-feature-convention = { id = "org.convention.cmp.feature", version = "unspecified" }
 kmp-koin-convention = { id = "org.convention.kmp.koin", version = "unspecified" }
 kmp-library-convention = { id = "org.convention.kmp.library", version = "unspecified" }
+kmp-supabase-config = { id = "org.convention.kmp.supabase.config", version = "unspecified" }
 
 android-application-firebase = { id = "org.convention.android.application.firebase" }
 android-lint = { id = "org.convention.android.application.lint" }
