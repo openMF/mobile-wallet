@@ -26,7 +26,10 @@ class SupabaseConfigConventionPlugin : Plugin<Project> {
                 val secretsFile = rootProject.file("secrets/supabaseCredentialsFile.json")
                 val outputDir = generatedDir.get().asFile
 
-                inputs.file(secretsFile).optional()
+                // Only declare file as input if it exists - Gradle's optional() doesn't work as expected
+                if (secretsFile.exists()) {
+                    inputs.file(secretsFile)
+                }
                 outputs.dir(outputDir)
 
                 doLast {
