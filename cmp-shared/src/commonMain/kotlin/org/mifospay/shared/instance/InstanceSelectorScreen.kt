@@ -63,7 +63,6 @@ import org.mifospay.core.model.instance.InterbankServer
 import org.mifospay.core.model.instance.ServerInstance
 import org.mifospay.core.ui.MifosProgressIndicator
 import org.mifospay.core.ui.utils.EventsEffect
-import template.core.base.designsystem.KptMaterialTheme
 import template.core.base.designsystem.KptTheme
 import template.core.base.designsystem.theme.KptTheme
 
