@@ -83,6 +83,11 @@ gradlePlugin {
             implementationClass = "KMPLibraryConventionPlugin"
         }
 
+        register("kmpSupabaseConfig") {
+            id = "org.convention.kmp.supabase.config"
+            implementationClass = "SupabaseConfigConventionPlugin"
+        }
+
         // Static Analysis & Formatting Plugins
         register("detekt") {
             id = "mifos.detekt.plugin"

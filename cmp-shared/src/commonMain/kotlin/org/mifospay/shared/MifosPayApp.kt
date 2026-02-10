@@ -14,6 +14,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.rememberNavController
@@ -25,6 +26,8 @@ import org.mifospay.core.data.util.TimeZoneMonitor
 import org.mifospay.core.designsystem.component.MifosDialogBox
 import org.mifospay.core.designsystem.theme.MifosTheme
 import org.mifospay.shared.MainUiState.Success
+import org.mifospay.shared.instance.InstanceSelectorScreen
+import org.mifospay.shared.instance.detectInstanceSelectorGesture
 import org.mifospay.shared.navigation.MifosNavGraph.LOGIN_GRAPH
 import org.mifospay.shared.navigation.MifosNavGraph.PASSCODE_GRAPH
 import org.mifospay.shared.navigation.RootNavGraph
@@ -49,6 +52,7 @@ private fun MifosPayApp(
     val navController = rememberNavController()
 
     var showErrorDialog = remember { mutableStateOf<Boolean>(false) }
+    var showInstanceSelector by remember { mutableStateOf(false) }
     val isUnauthorized by GlobalAuthManager.isUnauthorized.collectAsStateWithLifecycle()
 
     LaunchedEffect(isUnauthorized) {
@@ -86,13 +90,29 @@ private fun MifosPayApp(
         }
     }
 
+    // Show instance selector dialog
+    if (showInstanceSelector) {
+        MifosTheme {
+            InstanceSelectorScreen(
+                onDismiss = { showInstanceSelector = false },
+            )
+        }
+    }
+
     MifosTheme {
         RootNavGraph(
             networkMonitor = networkMonitor,
             timeZoneMonitor = timeZoneMonitor,
             navHostController = navController,
             startDestination = navDestination,
-            modifier = modifier,
+            modifier = modifier.detectInstanceSelectorGesture(
+                onGestureDetected = {
+                    // Show instance selector dialog when login graph visible
+                    if (navDestination == LOGIN_GRAPH) {
+                        showInstanceSelector = true
+                    }
+                },
+            ),
             onClickLogout = {
                 viewModel.logOut()
                 navController.navigate(LOGIN_GRAPH) {

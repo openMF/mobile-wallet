@@ -46,6 +46,10 @@
 #       - Detekt
 #       - Dependency Guard
 #
+### Required Secrets (Optional for PR checks)
+#   - SUPABASECREDS: Supabase credentials JSON (Base64 encoded)
+#     Format: {"url": "https://xxx.supabase.co", "anonKey": "xxx"}
+#
 ### Configuration Parameters
 # The workflow requires two input parameters:
 #
@@ -87,7 +91,7 @@ permissions:
 jobs:
   pr_checks:
     name: PR Checks
-    uses: openMF/mifos-x-actionhub/.github/workflows/pr-check.yaml@v1.0.7
+    uses: openMF/mifos-x-actionhub/.github/workflows/pr-check.yaml@v1.0.10
     secrets: inherit
     with:
       android_package_name: 'cmp-android' # <-- Change Your Android Package Name

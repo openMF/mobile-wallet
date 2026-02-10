@@ -27,10 +27,14 @@ import org.mifospay.core.datastore.model.UserInfoPreferences
 import org.mifospay.core.model.account.DefaultAccount
 import org.mifospay.core.model.client.Client
 import org.mifospay.core.model.client.UpdatedClient
+import org.mifospay.core.model.instance.InterbankServer
+import org.mifospay.core.model.instance.ServerInstance
 import org.mifospay.core.model.user.UserInfo
 
 private const val USER_INFO_KEY = "userInfo"
 private const val CLIENT_INFO_KEY = "clientInfo"
+private const val SELECTED_INSTANCE_KEY = "selectedInstance"
+private const val SELECTED_INTERBANK_INSTANCE_KEY = "selectedInterbankInstance"
 
 @OptIn(ExperimentalSerializationApi::class)
 class UserPreferencesDataSource(
@@ -70,6 +74,20 @@ class UserPreferencesDataSource(
         ),
     )
 
+    private val _selectedInstance = MutableStateFlow(
+        settings.decodeValueOrNull(
+            key = SELECTED_INSTANCE_KEY,
+            serializer = ServerInstance.serializer(),
+        ),
+    )
+
+    private val _selectedInterbankInstance = MutableStateFlow(
+        settings.decodeValueOrNull(
+            key = SELECTED_INTERBANK_INSTANCE_KEY,
+            serializer = InterbankServer.serializer(),
+        ),
+    )
+
     val token = _userInfo.map {
         it.base64EncodedAuthenticationKey
     }
@@ -80,6 +98,10 @@ class UserPreferencesDataSource(
     val clientId = _clientInfo.map { it.id }
 
     val defaultAccount = _defaultAccount.map { it.takeIf { it.accountId != 0L } }
+
+    val selectedInstance = _selectedInstance
+
+    val selectedInterbankInstance = _selectedInterbankInstance
 
     suspend fun updateClientInfo(client: Client) {
         withContext(dispatcher) {
@@ -138,6 +160,20 @@ class UserPreferencesDataSource(
         return settings.getString(AUTH_TOKEN, "").ifEmpty { null }
     }
 
+    suspend fun updateSelectedInstance(instance: ServerInstance) {
+        withContext(dispatcher) {
+            settings.putSelectedInstance(instance)
+            _selectedInstance.value = instance
+        }
+    }
+
+    suspend fun updateSelectedInterbankInstance(instance: InterbankServer) {
+        withContext(dispatcher) {
+            settings.putSelectedInterbankInstance(instance)
+            _selectedInterbankInstance.value = instance
+        }
+    }
+
     suspend fun clearInfo() {
         withContext(dispatcher) {
             settings.clear()
@@ -171,5 +207,21 @@ private fun Settings.putDefaultAccount(account: DefaultAccount) {
         key = DEFAULT_ACCOUNT,
         serializer = DefaultAccount.serializer(),
         value = account,
+    )
+}
+
+private fun Settings.putSelectedInstance(instance: ServerInstance) {
+    encodeValue(
+        key = SELECTED_INSTANCE_KEY,
+        serializer = ServerInstance.serializer(),
+        value = instance,
+    )
+}
+
+private fun Settings.putSelectedInterbankInstance(instance: InterbankServer) {
+    encodeValue(
+        key = SELECTED_INTERBANK_INSTANCE_KEY,
+        serializer = InterbankServer.serializer(),
+        value = instance,
     )
 }
