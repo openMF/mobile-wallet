@@ -25,11 +25,30 @@ import org.mifospay.core.network.config.InstanceConfigLoader
 import org.mifospay.core.network.config.InstanceConfigManager
 import org.mifospay.core.network.config.SupabaseInstanceConfigLoader
 import org.mifospay.core.network.utils.BaseURL
+import org.mifospay.core.network.utils.DynamicBaseUrlPlugin
 import org.mifospay.core.network.utils.FlowConverterFactory
 import org.mifospay.core.network.utils.KtorInterceptor
 import kotlin.io.encoding.ExperimentalEncodingApi
 
 private val ioDispatcher = named(MifosDispatchers.IO.name)
+
+/**
+ * Dynamic list that provides current loggable hosts from [InstanceConfigManager].
+ * The list is evaluated each time it's iterated, so it reflects the currently
+ * selected main and interbank server endpoints.
+ */
+private class DynamicLoggableHosts(
+    private val configManager: InstanceConfigManager,
+) : AbstractList<String>() {
+    override val size: Int
+        get() = 2
+
+    override fun get(index: Int): String = when (index) {
+        0 -> configManager.getEndpoint()
+        1 -> configManager.getCurrentInterbankInstance().endpoint
+        else -> throw IndexOutOfBoundsException("Index: $index, Size: 2")
+    }
+}
 
 @OptIn(ExperimentalEncodingApi::class)
 val NetworkModule = module {
@@ -50,17 +69,22 @@ val NetworkModule = module {
 
     single<KtorfitClient>(qualifier = SelfClient) {
         val preferencesRepository = get<UserPreferencesRepository>()
-        val baseURL = get<BaseURL>()
         val configManager = get<InstanceConfigManager>()
         KtorfitClient(
             Ktorfit.Builder()
                 .httpClient(
                     client = httpClient(
                         config = setupDefaultHttpClient(
-                            baseUrl = baseURL.selfServiceUrl,
-                            loggableHosts = listOf(configManager.getEndpoint()),
+                            // Use placeholder - actual URL is set dynamically by DynamicBaseUrlPlugin
+                            baseUrl = "https://placeholder.local/",
+                            // Dynamic loggable hosts - reads current endpoints from configManager
+                            loggableHosts = DynamicLoggableHosts(configManager),
                         ),
                     ).config {
+                        install(DynamicBaseUrlPlugin) {
+                            this.configManager = configManager
+                            urlType = DynamicBaseUrlPlugin.UrlType.SELF_SERVICE
+                        }
                         install(KtorInterceptor) {
                             getToken = { preferencesRepository.authToken }
                             this.configManager = configManager
@@ -73,28 +97,38 @@ val NetworkModule = module {
     }
 
     single<KtorfitClient>(qualifier = BaseClient) {
-        val baseURL = get<BaseURL>()
         val configManager = get<InstanceConfigManager>()
         KtorfitClient(
             Ktorfit.Builder()
                 .httpClient(
                     client = httpClient(
                         config = setupDefaultHttpClient(
-                            baseUrl = baseURL.url,
+                            // Use placeholder - actual URL is set dynamically by DynamicBaseUrlPlugin
+                            baseUrl = "https://placeholder.local/",
                             basicCredentialsProvider = {
                                 BasicAuthCredentials(
                                     username = "mifos",
                                     password = "password",
                                 )
                             },
+                            // Headers are set dynamically by KtorInterceptor
                             defaultHeaders = mapOf(
-                                BaseURL.HEADER_TENANT to configManager.getPlatformTenantId(),
                                 BaseURL.HEADER_CONTENT_TYPE to BaseURL.HEADER_CONTENT_TYPE_VALUE,
                                 BaseURL.HEADER_ACCEPT to BaseURL.HEADER_ACCEPT_VALUE,
                             ),
-                            loggableHosts = listOf(configManager.getEndpoint()),
+                            // Dynamic loggable hosts - reads current endpoints from configManager
+                            loggableHosts = DynamicLoggableHosts(configManager),
                         ),
-                    ),
+                    ).config {
+                        install(DynamicBaseUrlPlugin) {
+                            this.configManager = configManager
+                            urlType = DynamicBaseUrlPlugin.UrlType.MAIN
+                        }
+                        install(KtorInterceptor) {
+                            getToken = { null }
+                            this.configManager = configManager
+                        }
+                    },
                 )
                 .converterFactories(
                     FlowConverterFactory(),
@@ -104,22 +138,32 @@ val NetworkModule = module {
     }
 
     single<KtorfitClient>(qualifier = InterBankClient) {
-        val baseURL = get<BaseURL>()
         val configManager = get<InstanceConfigManager>()
         KtorfitClient(
             Ktorfit.Builder()
                 .httpClient(
                     client = httpClient(
                         config = setupDefaultHttpClient(
-                            baseUrl = baseURL.interBankUrl,
+                            // Use placeholder - actual URL is set dynamically by DynamicBaseUrlPlugin
+                            baseUrl = "https://placeholder.local/",
+                            // Headers are set dynamically by KtorInterceptor
                             defaultHeaders = mapOf(
-                                BaseURL.HEADER_TENANT to configManager.getPlatformTenantId(),
                                 BaseURL.HEADER_CONTENT_TYPE to BaseURL.HEADER_CONTENT_TYPE_VALUE,
                                 BaseURL.HEADER_ACCEPT to BaseURL.HEADER_ACCEPT_VALUE,
                             ),
-                            loggableHosts = listOf(configManager.getEndpoint()),
+                            // Dynamic loggable hosts - reads current endpoints from configManager
+                            loggableHosts = DynamicLoggableHosts(configManager),
                         ),
-                    ),
+                    ).config {
+                        install(DynamicBaseUrlPlugin) {
+                            this.configManager = configManager
+                            urlType = DynamicBaseUrlPlugin.UrlType.INTERBANK
+                        }
+                        install(KtorInterceptor) {
+                            getToken = { null }
+                            this.configManager = configManager
+                        }
+                    },
                 )
                 .converterFactories(FlowConverterFactory())
                 .build(),

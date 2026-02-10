@@ -22,7 +22,10 @@ import org.mifospay.feature.auth.navigation.signupScreen
 import org.mifospay.feature.auth.socialSignup.navigateToSignupMethod
 import org.mifospay.feature.auth.socialSignup.signupMethodScreen
 
-internal fun NavGraphBuilder.loginNavGraph(navController: NavController) {
+internal fun NavGraphBuilder.loginNavGraph(
+    navController: NavController,
+    onShowInstanceSelector: () -> Unit,
+) {
     navigation(
         route = MifosNavGraph.LOGIN_GRAPH,
         startDestination = LOGIN_ROUTE,
@@ -31,6 +34,7 @@ internal fun NavGraphBuilder.loginNavGraph(navController: NavController) {
             onNavigateBack = navController::popBackStack,
             onNavigateToPasscodeScreen = navController::navigateToPasscodeScreen,
             onNavigateToSignupScreen = navController::navigateToSignupMethod,
+            onShowInstanceSelector = onShowInstanceSelector,
         )
 
         signupMethodScreen(

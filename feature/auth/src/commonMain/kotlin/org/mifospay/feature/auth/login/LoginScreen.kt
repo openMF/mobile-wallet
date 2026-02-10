@@ -52,6 +52,7 @@ import org.mifospay.core.designsystem.theme.styleNormal18sp
 import org.mifospay.core.ui.MifosPasswordField
 import org.mifospay.core.ui.MifosProgressIndicatorOverlay
 import org.mifospay.core.ui.utils.EventsEffect
+import org.mifospay.core.ui.utils.detectMultiTapGesture
 import template.core.base.designsystem.theme.KptTheme
 
 @Composable
@@ -59,6 +60,7 @@ internal fun LoginScreen(
     onNavigateBack: () -> Unit,
     navigateToPasscodeScreen: () -> Unit,
     navigateToSignupScreen: () -> Unit,
+    onShowInstanceSelector: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: LoginViewModel = koinViewModel(),
 ) {
@@ -94,6 +96,7 @@ internal fun LoginScreen(
         onAction = remember(viewModel) {
             { viewModel.trySendAction(it) }
         },
+        onShowInstanceSelector = onShowInstanceSelector,
     )
 
     if (state.dialogState is LoginState.DialogState.Loading) {
@@ -107,6 +110,7 @@ private fun LoginScreen(
     snackbarHostState: SnackbarHostState,
     modifier: Modifier = Modifier,
     onAction: (LoginAction) -> Unit,
+    onShowInstanceSelector: () -> Unit,
 ) {
     MifosScaffold(
         snackbarHostState = snackbarHostState,
@@ -116,6 +120,7 @@ private fun LoginScreen(
         LoginScreenContent(
             state = state,
             onAction = onAction,
+            onShowInstanceSelector = onShowInstanceSelector,
             modifier = modifier
                 .fillMaxSize()
                 .padding(paddingValues),
@@ -147,6 +152,7 @@ private fun LoginScreenContent(
     state: LoginState,
     modifier: Modifier = Modifier,
     onAction: (LoginAction) -> Unit,
+    onShowInstanceSelector: () -> Unit,
 ) {
     Column(
         modifier = modifier
@@ -212,6 +218,15 @@ private fun LoginScreenContent(
                 onAction(LoginAction.SignupClicked)
             },
         )
+
+        Spacer(modifier = Modifier.weight(1f))
+
+        // Server Instance Info at bottom - tap 5 times to show instance selector
+        ServerInstanceInfo(
+            endpoint = state.selectedInstanceEndpoint ?: "",
+            onShowInstanceSelector = onShowInstanceSelector,
+            modifier = Modifier.padding(bottom = KptTheme.spacing.lg),
+        )
     }
 }
 
@@ -246,6 +261,25 @@ private fun SignupButton(
     }
 }
 
+@Composable
+private fun ServerInstanceInfo(
+    endpoint: String,
+    onShowInstanceSelector: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    if (endpoint.isNotEmpty()) {
+        Text(
+            text = "Connected to: $endpoint",
+            style = KptTheme.typography.labelSmall,
+            color = KptTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
+            modifier = modifier
+                .fillMaxWidth()
+                .detectMultiTapGesture(onGestureDetected = onShowInstanceSelector),
+            textAlign = androidx.compose.ui.text.style.TextAlign.Center,
+        )
+    }
+}
+
 @Preview
 @Composable
 private fun LoanScreenPreview() {
@@ -254,6 +288,7 @@ private fun LoanScreenPreview() {
             state = LoginState(dialogState = null),
             snackbarHostState = remember { SnackbarHostState() },
             onAction = {},
+            onShowInstanceSelector = {},
         )
     }
 }

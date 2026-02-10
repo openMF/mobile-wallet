@@ -22,10 +22,12 @@ import org.mifospay.core.common.getSerialized
 import org.mifospay.core.common.setSerialized
 import org.mifospay.core.domain.LoginUseCase
 import org.mifospay.core.model.user.UserInfo
+import org.mifospay.core.network.config.InstanceConfigManager
 import org.mifospay.core.ui.utils.BaseViewModel
 
 class LoginViewModel(
     private val loginUseCase: LoginUseCase,
+    private val instanceConfigManager: InstanceConfigManager,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<LoginState, LoginEvent, LoginAction>(
     initialState = savedStateHandle.getSerialized(KEY_STATE)
@@ -39,6 +41,19 @@ class LoginViewModel(
     init {
         stateFlow
             .onEach { savedStateHandle.setSerialized(key = KEY_STATE, value = it) }
+            .launchIn(viewModelScope)
+
+        // Observe selected instance changes (uses default if none selected)
+        instanceConfigManager.selectedInstance
+            .onEach { instance ->
+                val currentInstance = instance ?: instanceConfigManager.getCurrentInstance()
+                mutableStateFlow.update {
+                    it.copy(
+                        selectedInstanceLabel = currentInstance.label,
+                        selectedInstanceEndpoint = currentInstance.endpoint,
+                    )
+                }
+            }
             .launchIn(viewModelScope)
 
         savedStateHandle.get<String>("username")?.let {
@@ -130,6 +145,8 @@ data class LoginState(
     val isPasswordVisible: Boolean = false,
     @Transient
     val dialogState: DialogState? = null,
+    val selectedInstanceLabel: String? = null,
+    val selectedInstanceEndpoint: String? = null,
 ) {
     sealed class DialogState {
         data class Error(val message: String) : DialogState()
