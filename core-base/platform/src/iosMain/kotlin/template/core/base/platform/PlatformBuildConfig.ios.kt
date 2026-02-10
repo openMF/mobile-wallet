@@ -9,10 +9,15 @@
  */
 package template.core.base.platform
 
+import kotlin.experimental.ExperimentalNativeApi
+
 /**
- * Android implementation of PlatformBuildConfig.
- * Uses the generated BuildConfig.DEBUG constant which is set at compile time.
+ * iOS implementation of PlatformBuildConfig.
+ *
+ * Uses Kotlin/Native's Platform.isDebugBinary to detect if the app
+ * was compiled in debug mode.
  */
 actual object PlatformBuildConfig {
-    actual val isDebug: Boolean = BuildConfig.DEBUG
+    @OptIn(ExperimentalNativeApi::class)
+    actual val isDebug: Boolean = Platform.isDebugBinary
 }
