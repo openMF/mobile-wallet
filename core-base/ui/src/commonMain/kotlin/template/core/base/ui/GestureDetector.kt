@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 Mifos Initiative
+ * Copyright 2025 Mifos Initiative
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -7,7 +7,7 @@
  *
  * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
  */
-package org.mifospay.core.ui.utils
+package template.core.base.ui
 
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.runtime.Composable
@@ -22,10 +22,11 @@ import kotlin.time.Clock
 import kotlin.time.ExperimentalTime
 
 /**
- * Modifier that detects a 5-tap gesture within a 1-second timeout window.
- * Used to reveal developer/debug features like instance selector.
+ * Modifier that detects a multi-tap gesture within a configurable timeout window.
  *
- * @param onGestureDetected Callback invoked when 5 taps are detected within the timeout
+ * @param tapCount Number of taps required to trigger the gesture. Defaults to 5.
+ * @param tapTimeoutMs Time window in milliseconds. Defaults to 1000ms.
+ * @param onGestureDetected Callback invoked when the gesture is detected.
  */
 @OptIn(ExperimentalTime::class)
 @Composable
@@ -52,6 +53,34 @@ fun Modifier.detectMultiTapGesture(
                     currentTapCount = 0
                 }
             },
+        )
+    }
+}
+
+/**
+ * Modifier that detects a long press gesture.
+ */
+@Composable
+fun Modifier.detectLongPressGesture(
+    onLongPress: () -> Unit,
+): Modifier {
+    return this.pointerInput(Unit) {
+        detectTapGestures(
+            onLongPress = { onLongPress() },
+        )
+    }
+}
+
+/**
+ * Modifier that detects a double tap gesture.
+ */
+@Composable
+fun Modifier.detectDoubleTapGesture(
+    onDoubleTap: () -> Unit,
+): Modifier {
+    return this.pointerInput(Unit) {
+        detectTapGestures(
+            onDoubleTap = { onDoubleTap() },
         )
     }
 }

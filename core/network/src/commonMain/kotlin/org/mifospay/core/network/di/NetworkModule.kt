@@ -13,6 +13,9 @@ import de.jensklingenberg.ktorfit.Ktorfit
 import io.ktor.client.plugins.auth.providers.BasicAuthCredentials
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
+import org.mifos.corebase.network.DynamicBaseUrlPlugin
+import org.mifos.corebase.network.DynamicLoggableHosts
+import org.mifos.corebase.network.MultiUrlConfigProvider
 import org.mifos.corebase.network.httpClient
 import org.mifos.corebase.network.setupDefaultHttpClient
 import org.mifospay.core.common.MifosDispatchers
@@ -25,30 +28,11 @@ import org.mifospay.core.network.config.InstanceConfigLoader
 import org.mifospay.core.network.config.InstanceConfigManager
 import org.mifospay.core.network.config.SupabaseInstanceConfigLoader
 import org.mifospay.core.network.utils.BaseURL
-import org.mifospay.core.network.utils.DynamicBaseUrlPlugin
 import org.mifospay.core.network.utils.FlowConverterFactory
 import org.mifospay.core.network.utils.KtorInterceptor
 import kotlin.io.encoding.ExperimentalEncodingApi
 
 private val ioDispatcher = named(MifosDispatchers.IO.name)
-
-/**
- * Dynamic list that provides current loggable hosts from [InstanceConfigManager].
- * The list is evaluated each time it's iterated, so it reflects the currently
- * selected main and interbank server endpoints.
- */
-private class DynamicLoggableHosts(
-    private val configManager: InstanceConfigManager,
-) : AbstractList<String>() {
-    override val size: Int
-        get() = 2
-
-    override fun get(index: Int): String = when (index) {
-        0 -> configManager.getEndpoint()
-        1 -> configManager.getCurrentInterbankInstance().endpoint
-        else -> throw IndexOutOfBoundsException("Index: $index, Size: 2")
-    }
-}
 
 @OptIn(ExperimentalEncodingApi::class)
 val NetworkModule = module {
@@ -82,8 +66,8 @@ val NetworkModule = module {
                         ),
                     ).config {
                         install(DynamicBaseUrlPlugin) {
-                            this.configManager = configManager
-                            urlType = DynamicBaseUrlPlugin.UrlType.SELF_SERVICE
+                            multiConfigProvider = configManager
+                            urlType = MultiUrlConfigProvider.UrlType.SELF_SERVICE
                         }
                         install(KtorInterceptor) {
                             getToken = { preferencesRepository.authToken }
@@ -121,8 +105,8 @@ val NetworkModule = module {
                         ),
                     ).config {
                         install(DynamicBaseUrlPlugin) {
-                            this.configManager = configManager
-                            urlType = DynamicBaseUrlPlugin.UrlType.MAIN
+                            multiConfigProvider = configManager
+                            urlType = MultiUrlConfigProvider.UrlType.MAIN
                         }
                         install(KtorInterceptor) {
                             getToken = { null }
@@ -156,8 +140,8 @@ val NetworkModule = module {
                         ),
                     ).config {
                         install(DynamicBaseUrlPlugin) {
-                            this.configManager = configManager
-                            urlType = DynamicBaseUrlPlugin.UrlType.INTERBANK
+                            multiConfigProvider = configManager
+                            urlType = MultiUrlConfigProvider.UrlType.INTERBANK
                         }
                         install(KtorInterceptor) {
                             getToken = { null }

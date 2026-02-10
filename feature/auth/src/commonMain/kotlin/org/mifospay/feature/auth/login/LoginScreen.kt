@@ -52,8 +52,8 @@ import org.mifospay.core.designsystem.theme.styleNormal18sp
 import org.mifospay.core.ui.MifosPasswordField
 import org.mifospay.core.ui.MifosProgressIndicatorOverlay
 import org.mifospay.core.ui.utils.EventsEffect
-import org.mifospay.core.ui.utils.detectMultiTapGesture
 import template.core.base.designsystem.theme.KptTheme
+import template.core.base.ui.detectMultiTapGesture
 
 @Composable
 internal fun LoginScreen(

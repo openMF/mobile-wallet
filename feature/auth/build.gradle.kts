@@ -34,6 +34,7 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             implementation(projects.core.domain)
+            implementation(projects.coreBase.ui)
             implementation(compose.material3)
             implementation(compose.foundation)
             implementation(compose.ui)
