@@ -1,6 +1,7 @@
 :cmp-shared
 :core-base:designsystem
 :core-base:network
+:core-base:ui
 :core:analytics
 :core:common
 :core:data
@@ -302,8 +303,10 @@ dev.chrisbanes.material3:material3-window-size-class-multiplatform-android:0.5.0
 dev.chrisbanes.material3:material3-window-size-class-multiplatform:0.5.0
 dev.chrisbanes.snapper:snapper:0.2.2
 io.coil-kt.coil3:coil-android:3.3.0
+io.coil-kt.coil3:coil-compose-android:3.3.0
 io.coil-kt.coil3:coil-compose-core-android:3.3.0
 io.coil-kt.coil3:coil-compose-core:3.3.0
+io.coil-kt.coil3:coil-compose:3.3.0
 io.coil-kt.coil3:coil-core-android:3.3.0
 io.coil-kt.coil3:coil-core:3.3.0
 io.coil-kt.coil3:coil-network-core-android:3.3.0
@@ -331,6 +334,8 @@ io.github.jan-tennert.supabase:postgrest-kt-android:3.1.1
 io.github.jan-tennert.supabase:postgrest-kt:3.1.1
 io.github.jan-tennert.supabase:supabase-kt-android:3.1.1
 io.github.jan-tennert.supabase:supabase-kt:3.1.1
+io.github.vinceglb:filekit-coil-android:0.12.0
+io.github.vinceglb:filekit-coil:0.12.0
 io.github.vinceglb:filekit-core-android:0.12.0
 io.github.vinceglb:filekit-core:0.12.0
 io.github.vinceglb:filekit-dialogs-android:0.12.0
@@ -423,7 +428,8 @@ org.jetbrains.compose.material3:material3-adaptive-navigation-suite:1.9.0-beta03
 org.jetbrains.compose.material3:material3:1.9.0-beta03
 org.jetbrains.compose.material:material-icons-core:1.7.3
 org.jetbrains.compose.material:material-icons-extended:1.7.3
-org.jetbrains.compose.material:material-ripple:1.9.0-beta03
+org.jetbrains.compose.material:material-ripple:1.9.3
+org.jetbrains.compose.material:material:1.9.3
 org.jetbrains.compose.runtime:runtime-saveable:1.9.3
 org.jetbrains.compose.runtime:runtime:1.9.3
 org.jetbrains.compose.ui:ui-backhandler-android:1.9.3

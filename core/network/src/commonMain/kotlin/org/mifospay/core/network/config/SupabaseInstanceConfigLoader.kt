@@ -18,9 +18,9 @@ import kotlinx.serialization.json.Json
 import mobile_wallet.core.network.generated.resources.Res
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.mifos.corebase.network.SupabaseConfigClient
-import org.mifos.corebase.network.SupabaseCredentials as GenericSupabaseCredentials
 import org.mifospay.core.common.DataState
 import org.mifospay.core.model.instance.InstancesConfig
+import org.mifos.corebase.network.SupabaseCredentials as GenericSupabaseCredentials
 
 /**
  * Adapter to bridge generated SupabaseCredentials object with the generic interface.
