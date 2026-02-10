@@ -30,10 +30,12 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.launch
 import mobile_wallet.feature.auth.generated.resources.Res
+import mobile_wallet.feature.auth.generated.resources.feature_auth_connected_to
 import mobile_wallet.feature.auth.generated.resources.feature_auth_login
 import mobile_wallet.feature.auth.generated.resources.feature_auth_password
 import mobile_wallet.feature.auth.generated.resources.feature_auth_sign_up
@@ -271,18 +273,18 @@ private fun ServerInstanceInfo(
 ) {
     if (endpoint.isNotEmpty()) {
         Text(
-            text = "Connected to: $endpoint",
+            text = stringResource(Res.string.feature_auth_connected_to, endpoint),
             style = KptTheme.typography.labelSmall,
             color = KptTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
             modifier = modifier.fillMaxWidth(),
-            textAlign = androidx.compose.ui.text.style.TextAlign.Center,
+            textAlign = TextAlign.Center,
         )
     }
 }
 
 @Preview
 @Composable
-private fun LoanScreenPreview() {
+private fun LoginScreenPreview() {
     MifosTheme {
         LoginScreen(
             state = LoginState(dialogState = null),

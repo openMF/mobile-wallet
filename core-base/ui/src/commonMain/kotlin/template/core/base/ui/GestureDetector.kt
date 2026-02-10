@@ -14,6 +14,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
@@ -34,22 +35,26 @@ fun Modifier.detectMultiTapGesture(
     tapTimeoutMs: Long = 1000L,
     onGestureDetected: () -> Unit,
 ): Modifier = composed {
-    var currentTapCount by remember { mutableIntStateOf(0) }
+    val currentOnGestureDetected by rememberUpdatedState(onGestureDetected)
+    val currentTapCount by rememberUpdatedState(tapCount)
+    val currentTapTimeout by rememberUpdatedState(tapTimeoutMs)
+
+    var tapCounter by remember { mutableIntStateOf(0) }
     var lastTapTime by remember { mutableLongStateOf(0L) }
 
     this.pointerInput(Unit) {
         detectTapGestures(
             onTap = {
                 val currentTime = Clock.System.now().toEpochMilliseconds()
-                if (currentTime - lastTapTime > tapTimeoutMs) {
-                    currentTapCount = 0
+                if (currentTime - lastTapTime > currentTapTimeout) {
+                    tapCounter = 0
                 }
-                currentTapCount++
+                tapCounter++
                 lastTapTime = currentTime
 
-                if (currentTapCount >= tapCount) {
-                    onGestureDetected()
-                    currentTapCount = 0
+                if (tapCounter >= currentTapCount) {
+                    currentOnGestureDetected()
+                    tapCounter = 0
                 }
             },
         )
@@ -62,9 +67,11 @@ fun Modifier.detectMultiTapGesture(
 fun Modifier.detectLongPressGesture(
     onLongPress: () -> Unit,
 ): Modifier = composed {
+    val currentOnLongPress by rememberUpdatedState(onLongPress)
+
     this.pointerInput(Unit) {
         detectTapGestures(
-            onLongPress = { onLongPress() },
+            onLongPress = { currentOnLongPress() },
         )
     }
 }
@@ -75,9 +82,11 @@ fun Modifier.detectLongPressGesture(
 fun Modifier.detectDoubleTapGesture(
     onDoubleTap: () -> Unit,
 ): Modifier = composed {
+    val currentOnDoubleTap by rememberUpdatedState(onDoubleTap)
+
     this.pointerInput(Unit) {
         detectTapGestures(
-            onDoubleTap = { onDoubleTap() },
+            onDoubleTap = { currentOnDoubleTap() },
         )
     }
 }
