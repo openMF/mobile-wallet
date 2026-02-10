@@ -145,7 +145,9 @@ data class LoginState(
     val isPasswordVisible: Boolean = false,
     @Transient
     val dialogState: DialogState? = null,
+    @Transient
     val selectedInstanceLabel: String? = null,
+    @Transient
     val selectedInstanceEndpoint: String? = null,
 ) {
     sealed class DialogState {
