@@ -10,13 +10,13 @@
 package template.core.base.ui
 
 import androidx.compose.foundation.gestures.detectTapGestures
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.composed
 import androidx.compose.ui.input.pointer.pointerInput
 import kotlin.time.Clock
 import kotlin.time.ExperimentalTime
@@ -29,16 +29,15 @@ import kotlin.time.ExperimentalTime
  * @param onGestureDetected Callback invoked when the gesture is detected.
  */
 @OptIn(ExperimentalTime::class)
-@Composable
 fun Modifier.detectMultiTapGesture(
     tapCount: Int = 5,
     tapTimeoutMs: Long = 1000L,
     onGestureDetected: () -> Unit,
-): Modifier {
+): Modifier = composed {
     var currentTapCount by remember { mutableIntStateOf(0) }
     var lastTapTime by remember { mutableLongStateOf(0L) }
 
-    return this.pointerInput(Unit) {
+    this.pointerInput(Unit) {
         detectTapGestures(
             onTap = {
                 val currentTime = Clock.System.now().toEpochMilliseconds()
@@ -60,11 +59,10 @@ fun Modifier.detectMultiTapGesture(
 /**
  * Modifier that detects a long press gesture.
  */
-@Composable
 fun Modifier.detectLongPressGesture(
     onLongPress: () -> Unit,
-): Modifier {
-    return this.pointerInput(Unit) {
+): Modifier = composed {
+    this.pointerInput(Unit) {
         detectTapGestures(
             onLongPress = { onLongPress() },
         )
@@ -74,11 +72,10 @@ fun Modifier.detectLongPressGesture(
 /**
  * Modifier that detects a double tap gesture.
  */
-@Composable
 fun Modifier.detectDoubleTapGesture(
     onDoubleTap: () -> Unit,
-): Modifier {
-    return this.pointerInput(Unit) {
+): Modifier = composed {
+    this.pointerInput(Unit) {
         detectTapGestures(
             onDoubleTap = { onDoubleTap() },
         )
