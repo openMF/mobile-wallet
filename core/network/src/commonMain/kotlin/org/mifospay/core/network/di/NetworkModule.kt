@@ -10,12 +10,14 @@
 package org.mifospay.core.network.di
 
 import de.jensklingenberg.ktorfit.Ktorfit
+import io.github.jan.supabase.logging.LogLevel
 import io.ktor.client.plugins.auth.providers.BasicAuthCredentials
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import org.mifos.corebase.network.DynamicBaseUrlPlugin
 import org.mifos.corebase.network.DynamicLoggableHosts
 import org.mifos.corebase.network.MultiUrlConfigProvider
+import org.mifos.corebase.network.SupabaseConfigClient
 import org.mifos.corebase.network.httpClient
 import org.mifos.corebase.network.setupDefaultHttpClient
 import org.mifospay.core.common.MifosDispatchers
@@ -24,8 +26,10 @@ import org.mifospay.core.network.FineractApiManager
 import org.mifospay.core.network.InterBankApiManager
 import org.mifospay.core.network.KtorfitClient
 import org.mifospay.core.network.SelfServiceApiManager
+import org.mifospay.core.network.SupabaseApiManager
 import org.mifospay.core.network.config.InstanceConfigLoader
 import org.mifospay.core.network.config.InstanceConfigManager
+import org.mifospay.core.network.config.SupabaseCredentialsImpl
 import org.mifospay.core.network.config.SupabaseInstanceConfigLoader
 import org.mifospay.core.network.utils.BaseURL
 import org.mifospay.core.network.utils.FlowConverterFactory
@@ -36,8 +40,20 @@ private val ioDispatcher = named(MifosDispatchers.IO.name)
 
 @OptIn(ExperimentalEncodingApi::class)
 val NetworkModule = module {
+    single {
+        SupabaseConfigClient(
+            credentials = SupabaseCredentialsImpl,
+            logLevel = LogLevel.DEBUG,
+        )
+    }
+
+    single {
+        SupabaseApiManager(supabaseClient = get())
+    }
+
     single<InstanceConfigLoader> {
         SupabaseInstanceConfigLoader(
+            supabaseApiManager = get(),
             ioDispatcher = get(ioDispatcher),
             json = get(),
         )

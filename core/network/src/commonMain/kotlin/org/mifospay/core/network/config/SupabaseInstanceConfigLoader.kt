@@ -9,7 +9,6 @@
  */
 package org.mifospay.core.network.config
 
-import io.github.jan.supabase.logging.LogLevel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -17,41 +16,26 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.serialization.json.Json
 import mobile_wallet.core.network.generated.resources.Res
 import org.jetbrains.compose.resources.ExperimentalResourceApi
-import org.mifos.corebase.network.SupabaseConfigClient
 import org.mifospay.core.common.DataState
 import org.mifospay.core.model.instance.InstancesConfig
-import org.mifos.corebase.network.SupabaseCredentials as GenericSupabaseCredentials
+import org.mifospay.core.network.SupabaseApiManager
 
 /**
- * Adapter to bridge generated SupabaseCredentials object with the generic interface.
+ * Instance config loader that fetches configuration from Supabase.
+ * Uses SupabaseApiManager for API interactions.
  */
-private object SupabaseCredentialsAdapter : GenericSupabaseCredentials {
-    override val url: String get() = SupabaseCredentials.URL
-    override val anonKey: String get() = SupabaseCredentials.ANON_KEY
-    override val isConfigured: Boolean get() = SupabaseCredentials.isConfigured
-}
-
 class SupabaseInstanceConfigLoader(
+    private val supabaseApiManager: SupabaseApiManager,
     private val ioDispatcher: CoroutineDispatcher,
     private val json: Json,
 ) : InstanceConfigLoader {
 
-    private val supabaseClient by lazy {
-        SupabaseConfigClient(
-            credentials = SupabaseCredentialsAdapter,
-            logLevel = LogLevel.DEBUG,
-        )
-    }
-
     override suspend fun fetchInstancesConfig(): DataState<InstancesConfig> {
-        if (!supabaseClient.isConfigured) {
+        if (!supabaseApiManager.isConfigured) {
             return loadFallbackConfig()
         }
         return try {
-            val config = supabaseClient.postgrest
-                .from("app_config")
-                .select()
-                .decodeSingle<InstancesConfig>()
+            val config = supabaseApiManager.appConfigService.fetchInstancesConfig()
             DataState.Success(config)
         } catch (e: Exception) {
             loadFallbackConfig()
