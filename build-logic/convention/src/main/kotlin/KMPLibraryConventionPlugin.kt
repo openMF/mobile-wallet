@@ -4,6 +4,7 @@ import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.dependencies
+import org.mifospay.configureFlavors
 import org.mifospay.configureKotlinAndroid
 import org.mifospay.configureKotlinMultiplatform
 import org.mifospay.libs
@@ -24,9 +25,7 @@ class KMPLibraryConventionPlugin: Plugin<Project> {
             extensions.configure<LibraryExtension> {
                 configureKotlinAndroid(this)
                 defaultConfig.targetSdk = 34
-                // Note: Do NOT add configureFlavors here - KMP libraries should not have
-                // product flavors as it causes "android, android, android, android" resolution
-                // errors. Flavors should only be on the application module.
+                configureFlavors(this)
                 // The resource prefix is derived from the module name,
                 // so resources inside ":core:module1" must be prefixed with "core_module1_"
                 resourcePrefix = path
