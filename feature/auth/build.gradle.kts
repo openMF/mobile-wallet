@@ -35,6 +35,7 @@ kotlin {
         commonMain.dependencies {
             implementation(projects.core.domain)
             implementation(projects.coreBase.ui)
+            implementation(projects.coreBase.platform)
             implementation(compose.material3)
             implementation(compose.foundation)
             implementation(compose.ui)
