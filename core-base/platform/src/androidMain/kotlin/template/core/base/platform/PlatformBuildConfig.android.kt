@@ -20,6 +20,8 @@ actual object PlatformBuildConfig : KoinComponent {
     private val context: android.content.Context by inject()
 
     actual val isDebug: Boolean
-        get() = (context.applicationInfo.flags and
-            android.content.pm.ApplicationInfo.FLAG_DEBUGGABLE) != 0
+        get() = (
+            context.applicationInfo.flags and
+                android.content.pm.ApplicationInfo.FLAG_DEBUGGABLE
+            ) != 0
 }
