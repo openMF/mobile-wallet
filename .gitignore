@@ -24,11 +24,20 @@ build/
 build-cache/
 .externalNativeBuild
 .cxx
+# iOS/CocoaPods (cmp-ios module)
+cmp-ios/Podfile.lock
+cmp-ios/Pods/
+cmp-ios/iosApp.xcworkspace/xcuserdata/
+cmp-ios/iosApp.xcodeproj/xcuserdata/
+!cmp-ios/iosApp.xcodeproj/project.pbxproj
+
+# Legacy iosApp paths (kept for backwards compatibility)
 iosApp/Podfile.lock
 iosApp/Pods/*
 iosApp/iosApp.xcworkspace/*
 iosApp/iosApp.xcodeproj/*
 !iosApp/iosApp.xcodeproj/project.pbxproj
+
 cmp-shared/cmp-shared.podspec
 
 # Eclipse project files
@@ -76,5 +85,8 @@ secrets/
 
 # Sync Log File
 *.log
+
+# Java heap dumps
+*.hprof
 
 *.provisionprofile
