@@ -67,6 +67,7 @@ import org.mifospay.core.designsystem.component.MifosButton
 import org.mifospay.core.designsystem.component.MifosLoadingDialog
 import org.mifospay.core.designsystem.component.MifosScaffold
 import org.mifospay.core.designsystem.component.MifosTextField
+import org.mifospay.core.model.office.Office
 import org.mifospay.core.model.utils.Locale
 import org.mifospay.core.model.utils.filterLocales
 import org.mifospay.core.ui.MifosDivider
@@ -85,6 +86,7 @@ internal fun AddEditBeneficiaryScreen(
 
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val localeList by viewModel.filteredLocalList.collectAsStateWithLifecycle()
+    val officeList by viewModel.officeList.collectAsStateWithLifecycle()
 
     EventsEffect(viewModel) { event ->
         when (event) {
@@ -110,6 +112,7 @@ internal fun AddEditBeneficiaryScreen(
     AddEditBeneficiaryScreenContent(
         state = state,
         localeList = localeList,
+        officeList = officeList,
         snackbarHostState = snackbarHostState,
         modifier = modifier,
         onAction = remember(viewModel) {
@@ -126,6 +129,7 @@ internal fun AddEditBeneficiaryScreenContent(
     snackbarHostState: SnackbarHostState,
     modifier: Modifier = Modifier,
     onAction: (AEBAction) -> Unit,
+    officeList: List<Office>,
 ) {
     MifosScaffold(
         topBarTitle = stringResource(state.title),
@@ -185,86 +189,46 @@ internal fun AddEditBeneficiaryScreenContent(
                         localeList.filterLocales(state.locale)
                     }
                 }
-
-                var textFieldSize by remember { mutableStateOf(Size.Zero) }
-                var localeToggled by remember { mutableStateOf(false) }
-
-                ExposedDropdownMenuBox(
-                    expanded = localeToggled && localeList.isNotEmpty(),
-                    onExpandedChange = {
-                        localeToggled = !localeToggled
+                MifosDropdownMenu(
+                    label = stringResource(Res.string.feature_accounts_beneficiary_locale),
+                    selectedValue = state.locale,
+                    items = filteredLocalList,
+                    onItemSelected = { locale ->
+                        onAction(AEBAction.ChangeLocale(locale.localName))
                     },
-                ) {
-                    MifosTextField(
-                        label = stringResource(Res.string.feature_accounts_beneficiary_locale),
-                        value = state.locale,
-                        onValueChange = {
-                            localeToggled = true
-                            onAction(AEBAction.ChangeLocale(it))
-                        },
-                        onClickClearIcon = {
-                            onAction(AEBAction.ChangeLocale(""))
-                        },
-                        trailingIcon = {
-                            ExposedDropdownMenuDefaults.TrailingIcon(
-                                expanded = localeToggled,
-                            )
-                        },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .onGloballyPositioned { coordinates ->
-                                textFieldSize = coordinates.size.toSize()
-                            }
-                            .menuAnchor(MenuAnchorType.PrimaryNotEditable),
-                    )
-
-                    DropdownMenu(
-                        expanded = localeToggled,
-                        onDismissRequest = {
-                            localeToggled = false
-                        },
-                        properties = PopupProperties(
-                            focusable = false,
-                            dismissOnBackPress = true,
-                            dismissOnClickOutside = true,
-                            clippingEnabled = true,
-                        ),
-                        modifier = Modifier
-                            .width(with(LocalDensity.current) { textFieldSize.width.toDp() })
-                            .heightIn(max = 200.dp),
-                    ) {
-                        filteredLocalList.forEachIndexed { index, locale ->
-                            DropdownMenuItem(
-                                modifier = Modifier
-                                    .fillMaxWidth(),
-                                onClick = {
-                                    onAction(AEBAction.ChangeLocale(locale.localName))
-                                    localeToggled = false
-                                },
-                                text = {
-                                    Text(
-                                        text = locale.countryName,
-                                    )
-                                },
-                            )
-
-                            if (index != filteredLocalList.size - 1) {
-                                MifosDivider()
-                            }
-                        }
-                    }
-                }
+                    onValueChange = { value ->
+                        onAction(AEBAction.ChangeLocale(value))
+                    },
+                    onClearClick = {
+                        onAction(AEBAction.ChangeLocale(""))
+                    },
+                    itemToString = { locale -> locale.countryName },
+                )
             }
 
             item {
-                MifosTextField(
+                val filteredOfficeList by remember(officeList, state.officeName) {
+                    derivedStateOf {
+                        officeList.filter { office ->
+                            office.name.contains(state.officeName, ignoreCase = true)
+                        }
+                    }
+                }
+
+                MifosDropdownMenu(
                     label = stringResource(Res.string.feature_accounts_beneficiary_office_name),
-                    value = state.officeName,
-                    showClearIcon = false,
-                    readOnly = true,
-                    onValueChange = {
-                        onAction(AEBAction.ChangeOfficeName(it))
+                    selectedValue = state.officeName,
+                    items = filteredOfficeList,
+                    onItemSelected = { office ->
+                        onAction(AEBAction.ChangeOfficeName(office.name))
                     },
+                    onValueChange = { value ->
+                        onAction(AEBAction.ChangeOfficeName(value))
+                    },
+                    onClearClick = {
+                        onAction(AEBAction.ChangeOfficeName(""))
+                    },
+                    itemToString = { office -> office.name },
                 )
             }
 
@@ -305,6 +269,88 @@ internal fun AddEditBeneficiaryScreenContent(
                         modifier = Modifier
                             .clickable { onAction(AEBAction.OnQrScanClicked) },
                     )
+                }
+            }
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+internal fun <T> MifosDropdownMenu(
+    label: String,
+    selectedValue: String,
+    items: List<T>,
+    onItemSelected: (T) -> Unit,
+    onValueChange: (String) -> Unit,
+    onClearClick: () -> Unit,
+    itemToString: (T) -> String,
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true,
+) {
+    var textFieldSize by remember { mutableStateOf(Size.Zero) }
+    var expanded by remember { mutableStateOf(false) }
+
+    ExposedDropdownMenuBox(
+        expanded = expanded && items.isNotEmpty(),
+        onExpandedChange = {
+            if (enabled) {
+                expanded = !expanded
+            }
+        },
+        modifier = modifier,
+    ) {
+        MifosTextField(
+            label = label,
+            value = selectedValue,
+            onValueChange = {
+                expanded = true
+                onValueChange(it)
+            },
+            onClickClearIcon = onClearClick,
+            trailingIcon = {
+                ExposedDropdownMenuDefaults.TrailingIcon(
+                    expanded = expanded,
+                )
+            },
+            enabled = enabled,
+            modifier = Modifier
+                .fillMaxWidth()
+                .onGloballyPositioned { coordinates ->
+                    textFieldSize = coordinates.size.toSize()
+                }
+                .menuAnchor(MenuAnchorType.PrimaryNotEditable),
+        )
+
+        DropdownMenu(
+            expanded = expanded && items.isNotEmpty(),
+            onDismissRequest = {
+                expanded = false
+            },
+            properties = PopupProperties(
+                focusable = false,
+                dismissOnBackPress = true,
+                dismissOnClickOutside = true,
+                clippingEnabled = true,
+            ),
+            modifier = Modifier
+                .width(with(LocalDensity.current) { textFieldSize.width.toDp() })
+                .heightIn(max = 200.dp),
+        ) {
+            items.forEachIndexed { index, item ->
+                DropdownMenuItem(
+                    modifier = Modifier.fillMaxWidth(),
+                    onClick = {
+                        onItemSelected(item)
+                        expanded = false
+                    },
+                    text = {
+                        Text(text = itemToString(item))
+                    },
+                )
+
+                if (index != items.size - 1) {
+                    MifosDivider()
                 }
             }
         }
