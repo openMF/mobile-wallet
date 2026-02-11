@@ -16,11 +16,15 @@ import androidx.compose.ui.Modifier
 actual fun QrCodeScanner(
     types: List<CodeType>,
     modifier: Modifier,
+    isTorchEnabled: Boolean,
+    onTorchAvailabilityChanged: (Boolean) -> Unit,
     onScanned: (String) -> Boolean,
 ) {
     UiScannerView(
         modifier = modifier,
         onScanned = onScanned,
         allowedMetadataTypes = types.toFormat(),
+        isTorchEnabled = isTorchEnabled,
+        onTorchAvailabilityChanged = onTorchAvailabilityChanged,
     )
 }

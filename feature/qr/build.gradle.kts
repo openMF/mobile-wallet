@@ -22,12 +22,15 @@ android {
 kotlin {
     sourceSets {
         commonMain.dependencies {
+            implementation(projects.coreBase.platform)
             implementation(compose.ui)
             implementation(compose.foundation)
             implementation(compose.material3)
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
             implementation(libs.coil.kt.compose)
+            implementation(libs.filekit.core)
+            implementation(libs.filekit.compose)
         }
 
         androidMain.dependencies {
@@ -37,10 +40,16 @@ kotlin {
             implementation(libs.accompanist.permissions)
             implementation(libs.mlkit.barcode.scanning)
             implementation(libs.guava)
+            implementation(libs.kotlinx.coroutines.play.services)
         }
 
         nativeMain.dependencies {
             implementation(libs.moko.permission.compose)
+        }
+
+        desktopMain.dependencies {
+            implementation(libs.zxing)
+            implementation(libs.zxing.javase)
         }
     }
 }

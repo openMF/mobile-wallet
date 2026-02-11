@@ -9,6 +9,7 @@
  */
 package org.mifospay.feature.qr
 
+import androidx.camera.core.Camera
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.Preview
@@ -17,7 +18,11 @@ import androidx.camera.view.PreviewView
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.viewinterop.AndroidView
@@ -32,16 +37,27 @@ import co.touchlab.kermit.Logger
 fun CameraView(
     modifier: Modifier = Modifier,
     analyzer: BarcodeAnalyzer,
+    isTorchEnabled: Boolean = false,
+    onTorchAvailabilityChanged: (Boolean) -> Unit = {},
 ) {
     val localContext = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
     val cameraProviderFuture = remember {
         ProcessCameraProvider.getInstance(localContext)
     }
+    var camera by remember { mutableStateOf<Camera?>(null) }
 
     DisposableEffect(cameraProviderFuture) {
         onDispose {
             cameraProviderFuture.get().unbindAll()
+        }
+    }
+
+    LaunchedEffect(isTorchEnabled, camera) {
+        camera?.let { cam ->
+            if (cam.cameraInfo.hasFlashUnit()) {
+                cam.cameraControl.enableTorch(isTorchEnabled)
+            }
         }
     }
 
@@ -64,12 +80,15 @@ fun CameraView(
 
             runCatching {
                 cameraProviderFuture.get().unbindAll()
-                cameraProviderFuture.get().bindToLifecycle(
+                camera = cameraProviderFuture.get().bindToLifecycle(
                     lifecycleOwner,
                     selector,
                     preview,
                     imageAnalysis,
                 )
+                camera?.let { cam ->
+                    onTorchAvailabilityChanged(cam.cameraInfo.hasFlashUnit())
+                }
             }.onFailure {
                 Logger.d("CAMERA", it)
             }

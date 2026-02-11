@@ -12,6 +12,7 @@ package org.mifospay.feature.qr
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.UIKitInteropProperties
@@ -43,6 +44,10 @@ import platform.AVFoundation.AVLayerVideoGravityResizeAspectFill
 import platform.AVFoundation.AVMediaTypeVideo
 import platform.AVFoundation.AVMetadataMachineReadableCodeObject
 import platform.AVFoundation.AVMetadataObjectType
+import platform.AVFoundation.AVCaptureTorchModeOff
+import platform.AVFoundation.AVCaptureTorchModeOn
+import platform.AVFoundation.hasTorch
+import platform.AVFoundation.torchMode
 import platform.CoreGraphics.CGRect
 import platform.CoreGraphics.CGRectZero
 import platform.Foundation.NSError
@@ -63,11 +68,21 @@ fun UiScannerView(
     modifier: Modifier = Modifier,
     allowedMetadataTypes: List<AVMetadataObjectType>,
     onScanned: (String) -> Boolean,
+    isTorchEnabled: Boolean = false,
+    onTorchAvailabilityChanged: (Boolean) -> Unit = {},
 ) {
     val coordinator = remember {
         ScannerCameraCoordinator(
             onScanned = onScanned,
         )
+    }
+
+    LaunchedEffect(isTorchEnabled) {
+        coordinator.setTorchEnabled(isTorchEnabled)
+    }
+
+    LaunchedEffect(Unit) {
+        onTorchAvailabilityChanged(coordinator.isTorchAvailable())
     }
 
     DisposableEffect(Unit) {
@@ -106,6 +121,13 @@ fun UiScannerView(
 
 @OptIn(ExperimentalForeignApi::class)
 class ScannerPreviewView(private val coordinator: ScannerCameraCoordinator) : UIView(frame = cValue { CGRectZero }) {
+
+    init {
+        // Set background color to black initially, camera will show on top
+        backgroundColor = platform.UIKit.UIColor.blackColor
+        clipsToBounds = true
+    }
+
     @OptIn(ExperimentalForeignApi::class)
     override fun layoutSubviews() {
         super.layoutSubviews()
@@ -113,7 +135,7 @@ class ScannerPreviewView(private val coordinator: ScannerCameraCoordinator) : UI
         CATransaction.setValue(true, kCATransactionDisableActions)
 
         layer.setFrame(frame)
-        coordinator.setFrame(frame)
+        coordinator.setFrame(bounds)
         CATransaction.commit()
     }
 }
@@ -125,11 +147,36 @@ class ScannerCameraCoordinator(
 
     private var previewLayer: AVCaptureVideoPreviewLayer? = null
     lateinit var captureSession: AVCaptureSession
+    private var captureDevice: AVCaptureDevice? = null
+
+    fun isTorchAvailable(): Boolean {
+        return captureDevice?.hasTorch == true
+    }
+
+    @OptIn(BetaInteropApi::class)
+    fun setTorchEnabled(enabled: Boolean) {
+        val device = captureDevice ?: return
+        if (!device.hasTorch) return
+
+        try {
+            memScoped {
+                val error: ObjCObjectVar<NSError?> = alloc<ObjCObjectVar<NSError?>>()
+                device.lockForConfiguration(error.ptr)
+                if (error.value == null) {
+                    device.torchMode = if (enabled) AVCaptureTorchModeOn else AVCaptureTorchModeOff
+                    device.unlockForConfiguration()
+                }
+            }
+        } catch (e: Exception) {
+            println("Failed to set torch: ${e.message}")
+        }
+    }
 
     @OptIn(ExperimentalForeignApi::class, BetaInteropApi::class)
     fun prepare(layer: CALayer, allowedMetadataTypes: List<AVMetadataObjectType>) {
         captureSession = AVCaptureSession()
-        val device = AVCaptureDevice.defaultDeviceWithMediaType(AVMediaTypeVideo)
+        captureDevice = AVCaptureDevice.defaultDeviceWithMediaType(AVMediaTypeVideo)
+        val device = captureDevice
         if (device == null) {
             println("Device has no camera")
             return
@@ -169,18 +216,20 @@ class ScannerCameraCoordinator(
         }
         println("Adding preview layer")
         previewLayer = AVCaptureVideoPreviewLayer(session = captureSession).also {
-            it.frame = layer.bounds
             it.videoGravity = AVLayerVideoGravityResizeAspectFill
+            // Insert at index 0 so it's behind any other sublayers
+            layer.insertSublayer(it, 0u)
+            // Set frame after adding to layer
+            it.frame = layer.bounds
             println("Set orientation")
             setCurrentOrientation(newOrientation = UIDevice.currentDevice.orientation)
-            println("Adding sublayer")
+            println("Preview layer added")
             layer.bounds.useContents {
                 println("Bounds: ${this.size.width}x${this.size.height}")
             }
             layer.frame.useContents {
                 println("Frame: ${this.size.width}x${this.size.height}")
             }
-            layer.addSublayer(it)
         }
 
         println("Launching capture session")

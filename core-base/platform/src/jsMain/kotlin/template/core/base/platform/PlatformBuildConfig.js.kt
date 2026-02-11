@@ -9,10 +9,8 @@
  */
 package template.core.base.platform
 
-import kotlin.js.js
-
 /**
- * JS/WasmJS implementation of PlatformBuildConfig.
+ * JS implementation of PlatformBuildConfig.
  *
  * Checks if running in development mode by examining NODE_ENV environment variable.
  * Defaults to true (debug mode) if unable to determine.

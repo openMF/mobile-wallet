@@ -17,11 +17,18 @@ import androidx.compose.ui.Modifier
 actual fun QrCodeScanner(
     types: List<CodeType>,
     modifier: Modifier,
+    isTorchEnabled: Boolean,
+    onTorchAvailabilityChanged: (Boolean) -> Unit,
     onScanned: (String) -> Boolean,
 ) {
     val analyzer = remember {
         BarcodeAnalyzer(types.toFormat(), onScanned)
     }
 
-    CameraView(modifier, analyzer)
+    CameraView(
+        modifier = modifier,
+        analyzer = analyzer,
+        isTorchEnabled = isTorchEnabled,
+        onTorchAvailabilityChanged = onTorchAvailabilityChanged,
+    )
 }

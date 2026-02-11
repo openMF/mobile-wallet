@@ -10,17 +10,58 @@
 package org.mifospay.feature.qr
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import org.mifospay.core.ui.EmptyContentScreen
+import io.github.vinceglb.filekit.dialogs.FileKitType
+import io.github.vinceglb.filekit.dialogs.compose.rememberFilePickerLauncher
+import io.github.vinceglb.filekit.readBytes
+import kotlinx.coroutines.launch
+import org.mifospay.feature.qr.components.QrImportScreen
 
 @Composable
 actual fun QrCodeScanner(
     types: List<CodeType>,
     modifier: Modifier,
+    isTorchEnabled: Boolean,
+    onTorchAvailabilityChanged: (Boolean) -> Unit,
     onScanned: (String) -> Boolean,
 ) {
-    EmptyContentScreen(
-        title = "Oops!",
-        subTitle = "QR code scanning is not supported on desktop yet.",
+    var isProcessing by remember { mutableStateOf(false) }
+    var imagePreviewBytes by remember { mutableStateOf<ByteArray?>(null) }
+    val scope = rememberCoroutineScope()
+
+    val imagePicker = rememberFilePickerLauncher(
+        type = FileKitType.Image,
+    ) { file ->
+        if (file != null) {
+            scope.launch {
+                isProcessing = true
+                imagePreviewBytes = file.readBytes()
+                val result = decodeQrFromFile(file)
+                isProcessing = false
+                if (result != null) {
+                    onScanned(result)
+                } else {
+                    // Clear preview on failure after a short delay
+                    imagePreviewBytes = null
+                }
+            }
+        }
+    }
+
+    LaunchedEffect(Unit) {
+        onTorchAvailabilityChanged(false)
+    }
+
+    QrImportScreen(
+        isProcessing = isProcessing,
+        onSelectImage = { imagePicker.launch() },
+        modifier = modifier,
+        imagePreviewBytes = imagePreviewBytes,
     )
 }
