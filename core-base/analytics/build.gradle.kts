@@ -30,6 +30,14 @@ kotlin {
             implementation(libs.kotlinx.datetime)
         }
 
+        // Firebase Analytics for non-JS platforms (Android, iOS, Desktop)
+        val nonJsCommonMain by getting {
+            dependencies {
+                implementation(libs.gitlive.firebase.app)
+                implementation(libs.gitlive.firebase.analytics)
+            }
+        }
+
         // Test dependencies for all platforms
         commonTest.dependencies {
             implementation(libs.kotlin.test)

@@ -80,6 +80,7 @@ fineractSdk = "1.0.3"
 
 # Firebase
 firebaseBom = "34.7.0"
+gitliveFirebase = "2.1.0"
 firebaseCrashlyticsPlugin = "3.0.6"
 firebasePerfPlugin = "2.0.2"
 
@@ -218,6 +219,9 @@ firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashly
 firebase-crashlytics-gradlePlugin = { group = "com.google.firebase", name = "firebase-crashlytics-gradle", version.ref = "firebaseCrashlyticsPlugin" }
 firebase-performance = { group = "com.google.firebase", name = "firebase-perf" }
 firebase-performance-gradlePlugin = { group = "com.google.firebase", name = "perf-plugin", version.ref = "firebasePerfPlugin" }
+
+gitlive-firebase-analytics = { group = "dev.gitlive", name = "firebase-analytics", version.ref = "gitliveFirebase" }
+gitlive-firebase-app = { group = "dev.gitlive", name = "firebase-app", version.ref = "gitliveFirebase" }
 
 supabase-postgrest = { group = "io.github.jan-tennert.supabase", name = "postgrest-kt", version.ref = "supabase" }
 

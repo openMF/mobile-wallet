@@ -100,7 +100,7 @@ module FastlaneConfig
       code_signing: {
         match_type: "adhoc",
         match_git_url: ENV['MATCH_GIT_URL'] || "git@github.com:openMF/ios-provisioning-profile.git",
-        match_git_branch: ENV['MATCH_GIT_BRANCH'] || "mifospay",
+        match_git_branch: ENV['MATCH_GIT_BRANCH'] || "master",
         match_git_private_key: ENV['MATCH_SSH_KEY_PATH'] || "./secrets/match_ci_key",
         # Provisioning profile names are generated based on app_identifier
         provisioning_profiles: {
