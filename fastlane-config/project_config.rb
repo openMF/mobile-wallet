@@ -1,0 +1,247 @@
+# ==============================================================================
+# Project Configuration - Update these values when setting up a new project
+# ==============================================================================
+# This is the SINGLE SOURCE OF TRUTH for all project-specific configurations.
+# Update these values once, and they will be applied across all fastlane lanes.
+# ==============================================================================
+
+module FastlaneConfig
+  module ProjectConfig
+    # ============================================================================
+    # Core Project Information
+    # ============================================================================
+    PROJECT_NAME = "mobile-wallet"
+    ORGANIZATION_NAME = "Mifos Initiative"
+
+    # ============================================================================
+    # Android Configuration
+    # ============================================================================
+    ANDROID = {
+      # Package name for Android app
+      package_name: "org.mifospay",
+
+      # Play Store credentials file path
+      play_store_json_key: "secrets/playStorePublishServiceCredentialsFile.json",
+
+      # Build output paths (relative to project root)
+      apk_paths: {
+        prod: "cmp-android/build/outputs/apk/prod/release/cmp-android-prod-release.apk",
+        demo: "cmp-android/build/outputs/apk/demo/release/cmp-android-demo-release.apk"
+      },
+      aab_path: "cmp-android/build/outputs/bundle/prodRelease/cmp-android-prod-release.aab",
+
+      # Keystore configuration
+      keystore: {
+        file: "release_keystore.keystore",
+        password: "Mifospay",
+        key_alias: "key0",
+        key_password: "Mifos@123"
+      },
+
+      # Firebase App Distribution
+      firebase: {
+        prod_app_id: "1:728434912738:android:0490c291986f0a691a1dbb",
+        demo_app_id: "1:728434912738:android:48ccd9153349f31e1a1dbb",
+        groups: "mifos-mobile-apps"
+      }
+    }
+
+    # ============================================================================
+    # iOS Configuration - App Specific (Change for each app)
+    # ============================================================================
+    IOS = {
+      # Bundle identifier (CHANGE THIS FOR EACH APP)
+      app_identifier: "org.mifospay",
+
+      # Firebase App Distribution (CHANGE THIS FOR EACH APP)
+      firebase: {
+        app_id: "1:728434912738:ios:86a7badfaed88b841a1dbb",
+        groups: "mifos-mobile-apps"
+      },
+
+      # Project paths (relative to project root)
+      project_path: "cmp-ios/iosApp.xcodeproj",
+      workspace_path: "cmp-ios/iosApp.xcworkspace",
+      plist_path: "cmp-ios/iosApp/Info.plist",
+
+      # Build configuration
+      scheme: "iosApp",
+      output_name: "iosApp.ipa",
+      output_directory: "cmp-ios/build",
+
+      # App Store metadata paths
+      metadata_path: "./fastlane/metadata/ios",
+      age_rating_config_path: "./fastlane/age_rating.json",
+
+      # Version configuration (fallback only - actual version read from version.txt)
+      version_number: "1.1.0"
+    }
+
+    # ============================================================================
+    # Shared iOS Configuration (SAME FOR ALL APPS - from shared_keys.env)
+    # ============================================================================
+    IOS_SHARED = {
+      # Team and Developer Account (SHARED)
+      team_id: ENV['TEAM_ID'] || "L432S2FZP5",
+
+      # CI/CD Configuration
+      ci_provider: "github_actions",
+
+      # App Store Connect API (SHARED)
+      app_store_connect: {
+        key_id: ENV['APPSTORE_KEY_ID'] || "7V3ABCDEFG",
+        issuer_id: ENV['APPSTORE_ISSUER_ID'] || "7ab9e231-9603-4c3e-a147-be3b0f123456",
+        key_filepath: ENV['APPSTORE_KEY_PATH'] || "./secrets/AuthKey.p8"
+      },
+
+      # Code Signing & Provisioning (SHARED)
+      code_signing: {
+        match_type: "adhoc",
+        match_git_url: ENV['MATCH_GIT_URL'] || "git@github.com:openMF/ios-provisioning-profile.git",
+        match_git_branch: ENV['MATCH_GIT_BRANCH'] || "mifospay",
+        match_git_private_key: ENV['MATCH_SSH_KEY_PATH'] || "./secrets/match_ci_key",
+        # Provisioning profile names are generated based on app_identifier
+        provisioning_profiles: {
+          adhoc: "match AdHoc #{IOS[:app_identifier]}",
+          appstore: "match AppStore #{IOS[:app_identifier]}"
+        }
+      },
+
+      # TestFlight Beta Configuration
+      testflight: {
+        beta_app_review_info: {
+          contact_email: ENV['TESTFLIGHT_CONTACT_EMAIL'] || "team@mifos.org",
+          contact_first_name: ENV['TESTFLIGHT_FIRST_NAME'] || "Mifos",
+          contact_last_name: ENV['TESTFLIGHT_LAST_NAME'] || "Initiative",
+          contact_phone: ENV['TESTFLIGHT_PHONE'] || "9078675309",
+          demo_account_name: ENV['TESTFLIGHT_DEMO_EMAIL'] || "",
+          demo_account_password: ENV['TESTFLIGHT_DEMO_PASSWORD'] || "",
+          notes: "Thank you for reviewing our app!"
+        },
+        beta_app_feedback_email: ENV['BETA_FEEDBACK_EMAIL'] || "team@mifos.org",
+        beta_app_description: "Mifos Pay - Mobile Wallet Application",
+        demo_account_required: false,
+        distribute_external: true,
+        notify_external_testers: true,
+        groups: ENV['TESTFLIGHT_GROUPS']&.split(',') || ["mifos-mobile-apps"],
+        skip_submission: false,
+        skip_waiting_for_build_processing: true,
+        submit_beta_review: true,
+        expire_previous_builds: false,
+        reject_build_waiting_for_review: false,
+        wait_processing_interval: 30,
+        wait_processing_timeout_duration: 3600,
+        uses_non_exempt_encryption: false,
+        localized_app_info: {
+          "default" => {
+            feedback_email: ENV['BETA_FEEDBACK_EMAIL'] || "team@mifos.org",
+            marketing_url: ENV['APP_MARKETING_URL'] || "https://mifos.org",
+            privacy_policy_url: ENV['APP_PRIVACY_URL'] || "https://mifos.org/privacy",
+            description: "Mifos Pay - Mobile Wallet Application"
+          }
+        }
+      },
+
+      # App Store Release Configuration
+      appstore: {
+        app_review_information: {
+          first_name: ENV['APPSTORE_REVIEW_FIRST_NAME'] || "Mifos",
+          last_name: ENV['APPSTORE_REVIEW_LAST_NAME'] || "Initiative",
+          phone_number: ENV['APPSTORE_REVIEW_PHONE'] || "9078675309",
+          email_address: ENV['APPSTORE_REVIEW_EMAIL'] || "team@mifos.org",
+          demo_user: ENV['APPSTORE_DEMO_EMAIL'] || "",
+          demo_password: ENV['APPSTORE_DEMO_PASSWORD'] || "",
+          notes: "Thank you for reviewing our app!"
+        },
+        submit_for_review: true,
+        automatic_release: true,
+        phased_release: false,
+        skip_app_version_update: false,
+        reject_if_possible: true,
+        force: true,
+        precheck_include_in_app_purchases: false,
+        run_precheck_before_submit: true,
+        submission_information: {
+          add_id_info_uses_idfa: false,
+          add_id_info_limits_tracking: false,
+          add_id_info_serves_ads: false,
+          add_id_info_tracks_action: false,
+          add_id_info_tracks_install: false,
+          content_rights_has_rights: true,
+          content_rights_contains_third_party_content: false,
+          export_compliance_platform: 'ios',
+          export_compliance_compliance_required: false,
+          export_compliance_encryption_updated: false,
+          export_compliance_app_type: nil,
+          export_compliance_uses_encryption: false,
+          export_compliance_is_exempt: true,
+          export_compliance_contains_third_party_cryptography: false,
+          export_compliance_contains_proprietary_cryptography: false,
+          export_compliance_available_on_french_store: true
+        }
+      }
+    }
+
+    # ============================================================================
+    # Shared Configuration (Both Android & iOS)
+    # ============================================================================
+    SHARED = {
+      firebase_service_credentials: "secrets/firebaseAppDistributionServiceCredentialsFile.json"
+    }
+
+    # ============================================================================
+    # Helper Methods
+    # ============================================================================
+
+    def self.android_package_name
+      ANDROID[:package_name]
+    end
+
+    def self.ios_bundle_identifier
+      IOS[:app_identifier]
+    end
+
+    def self.firebase_credentials_file
+      SHARED[:firebase_service_credentials]
+    end
+
+    def self.ios_config
+      IOS.merge(IOS_SHARED)
+    end
+
+    def self.validate_config
+      required_files = [
+        SHARED[:firebase_service_credentials],
+        IOS_SHARED[:app_store_connect][:key_filepath],
+        IOS_SHARED[:code_signing][:match_git_private_key]
+      ]
+
+      if ENV['FASTLANE_PLATFORM_NAME'] == 'android'
+        required_files << ANDROID[:play_store_json_key]
+      end
+
+      missing_files = required_files.reject { |file| File.exist?(File.join(Dir.pwd, '..', file)) }
+
+      unless missing_files.empty?
+        UI.important("Warning: The following required files are missing:")
+        missing_files.each { |file| UI.important("   - #{file}") }
+        UI.important("\nPlease ensure these files are in place before running deployment lanes.")
+      end
+    end
+
+    def self.print_config_summary
+      UI.header "Configuration Summary"
+      UI.message "Project: #{PROJECT_NAME}"
+      UI.message "Organization: #{ORGANIZATION_NAME}"
+      UI.message ""
+      UI.message "iOS Bundle ID: #{IOS[:app_identifier]}"
+      UI.message "iOS Team ID: #{IOS_SHARED[:team_id]}"
+      UI.message "Firebase iOS App: #{IOS[:firebase][:app_id]}"
+      UI.message "Match Repo: #{IOS_SHARED[:code_signing][:match_git_url]}"
+      UI.message ""
+      UI.message "Android Package: #{ANDROID[:package_name]}"
+      UI.message "Firebase Android App (Prod): #{ANDROID[:firebase][:prod_app_id]}"
+      UI.message ""
+    end
+  end
+end
