@@ -74,7 +74,9 @@ module FastlaneConfig
       age_rating_config_path: "./fastlane/age_rating.json",
 
       # Version configuration (fallback only - actual version read from version.txt)
-      version_number: "1.1.0"
+      # The versionFile gradle task generates version.txt from project.version
+      # Fastlane lanes read version.txt to sync iOS version with Android
+      version_number: "1.1.0"  # Fallback if version.txt is not available
     }
 
     # ============================================================================
@@ -109,6 +111,7 @@ module FastlaneConfig
 
       # TestFlight Beta Configuration
       testflight: {
+        # Beta App Review Information (shown to Apple reviewers)
         beta_app_review_info: {
           contact_email: ENV['TESTFLIGHT_CONTACT_EMAIL'] || "team@mifos.org",
           contact_first_name: ENV['TESTFLIGHT_FIRST_NAME'] || "Mifos",
@@ -118,22 +121,46 @@ module FastlaneConfig
           demo_account_password: ENV['TESTFLIGHT_DEMO_PASSWORD'] || "",
           notes: "Thank you for reviewing our app!"
         },
+
+        # Beta App Feedback Configuration
         beta_app_feedback_email: ENV['BETA_FEEDBACK_EMAIL'] || "team@mifos.org",
         beta_app_description: "Mifos Pay - Mobile Wallet Application",
+
+        # Demo account requirement
         demo_account_required: false,
-        distribute_external: true,
-        notify_external_testers: true,
+
+        # Distribution settings
+        distribute_external: true, # Distribute to external testers
+        notify_external_testers: true, # Notify external testers when build is available
+
+        # Tester Groups (Required when distribute_external is true)
         groups: ENV['TESTFLIGHT_GROUPS']&.split(',') || ["mifos-mobile-apps"],
-        skip_submission: false,
-        skip_waiting_for_build_processing: true,
-        submit_beta_review: true,
-        expire_previous_builds: false,
-        reject_build_waiting_for_review: false,
-        wait_processing_interval: 30,
-        wait_processing_timeout_duration: 3600,
-        uses_non_exempt_encryption: false,
+
+        # Submission settings
+        skip_submission: false, # Submit the build for distribution
+        skip_waiting_for_build_processing: true, # Don't wait for full processing (saves CI minutes)
+        submit_beta_review: true, # Submit for beta review automatically
+
+        # Build management
+        expire_previous_builds: false, # Don't expire previous builds automatically
+        reject_build_waiting_for_review: false, # Don't reject builds waiting for review
+
+        # Processing wait settings (if skip_waiting_for_build_processing is false)
+        wait_processing_interval: 30, # Check every 30 seconds
+        wait_processing_timeout_duration: 3600, # Timeout after 1 hour (3600 seconds)
+
+        # Encryption compliance
+        uses_non_exempt_encryption: false, # Set to true if app uses encryption
+
+        # Localized App Information (for TestFlight)
         localized_app_info: {
           "default" => {
+            feedback_email: ENV['BETA_FEEDBACK_EMAIL'] || "team@mifos.org",
+            marketing_url: ENV['APP_MARKETING_URL'] || "https://mifos.org",
+            privacy_policy_url: ENV['APP_PRIVACY_URL'] || "https://mifos.org/privacy",
+            description: "Mifos Pay - Mobile Wallet Application"
+          },
+          "en-US" => {
             feedback_email: ENV['BETA_FEEDBACK_EMAIL'] || "team@mifos.org",
             marketing_url: ENV['APP_MARKETING_URL'] || "https://mifos.org",
             privacy_policy_url: ENV['APP_PRIVACY_URL'] || "https://mifos.org/privacy",
@@ -144,6 +171,7 @@ module FastlaneConfig
 
       # App Store Release Configuration
       appstore: {
+        # App Review Information (shown to Apple reviewers during App Store review)
         app_review_information: {
           first_name: ENV['APPSTORE_REVIEW_FIRST_NAME'] || "Mifos",
           last_name: ENV['APPSTORE_REVIEW_LAST_NAME'] || "Initiative",
@@ -153,22 +181,35 @@ module FastlaneConfig
           demo_password: ENV['APPSTORE_DEMO_PASSWORD'] || "",
           notes: "Thank you for reviewing our app!"
         },
-        submit_for_review: true,
-        automatic_release: true,
-        phased_release: false,
-        skip_app_version_update: false,
-        reject_if_possible: true,
-        force: true,
-        precheck_include_in_app_purchases: false,
-        run_precheck_before_submit: true,
+
+        # Submission settings
+        submit_for_review: true, # Automatically submit for review after upload
+        automatic_release: true, # Automatically release after approval
+        phased_release: false, # Phased release over 7 days (set to true if desired)
+
+        # Version and build management
+        skip_app_version_update: false, # Let Fastlane create versions in App Store Connect
+        reject_if_possible: true, # Reject previous submission if possible
+
+        # Processing settings
+        force: true, # Skip HTML file verification
+        precheck_include_in_app_purchases: false, # Skip in-app purchase precheck
+        run_precheck_before_submit: true, # Run precheck validation before submitting
+
+        # Submission information (compliance, privacy, ads, etc.)
         submission_information: {
+          # Advertising Identifier (IDFA) usage
           add_id_info_uses_idfa: false,
           add_id_info_limits_tracking: false,
           add_id_info_serves_ads: false,
           add_id_info_tracks_action: false,
           add_id_info_tracks_install: false,
+
+          # Content rights
           content_rights_has_rights: true,
           content_rights_contains_third_party_content: false,
+
+          # Export compliance (encryption)
           export_compliance_platform: 'ios',
           export_compliance_compliance_required: false,
           export_compliance_encryption_updated: false,
@@ -186,6 +227,7 @@ module FastlaneConfig
     # Shared Configuration (Both Android & iOS)
     # ============================================================================
     SHARED = {
+      # Firebase service credentials (used by both platforms)
       firebase_service_credentials: "secrets/firebaseAppDistributionServiceCredentialsFile.json"
     }
 
@@ -193,22 +235,27 @@ module FastlaneConfig
     # Helper Methods
     # ============================================================================
 
+    # Get Android package name
     def self.android_package_name
       ANDROID[:package_name]
     end
 
+    # Get iOS bundle identifier
     def self.ios_bundle_identifier
       IOS[:app_identifier]
     end
 
+    # Get Firebase credentials file
     def self.firebase_credentials_file
       SHARED[:firebase_service_credentials]
     end
 
+    # Get merged iOS config (app-specific + shared)
     def self.ios_config
       IOS.merge(IOS_SHARED)
     end
 
+    # Validate that all required files exist
     def self.validate_config
       required_files = [
         SHARED[:firebase_service_credentials],
@@ -216,6 +263,7 @@ module FastlaneConfig
         IOS_SHARED[:code_signing][:match_git_private_key]
       ]
 
+      # Add Android files only if running Android lanes
       if ENV['FASTLANE_PLATFORM_NAME'] == 'android'
         required_files << ANDROID[:play_store_json_key]
       end
@@ -229,6 +277,7 @@ module FastlaneConfig
       end
     end
 
+    # Print configuration summary
     def self.print_config_summary
       UI.header "Configuration Summary"
       UI.message "Project: #{PROJECT_NAME}"
