@@ -10,13 +10,14 @@
 package org.mifospay.core.network.config
 
 import kotlinx.coroutines.flow.StateFlow
+import org.mifos.corebase.network.MultiUrlConfigProvider
 import org.mifospay.core.datastore.UserPreferencesRepository
 import org.mifospay.core.model.instance.InterbankServer
 import org.mifospay.core.model.instance.ServerInstance
 
 class InstanceConfigManager(
     private val userPreferencesRepository: UserPreferencesRepository,
-) {
+) : MultiUrlConfigProvider {
     companion object {
         // Default main instance configuration
         private val DEFAULT_MAIN_INSTANCE = ServerInstance(
@@ -77,4 +78,16 @@ class InstanceConfigManager(
     }
 
     fun getInterbankUrl(): String = getCurrentInterbankInstance().fullUrl
+
+    // MultiUrlConfigProvider implementation
+    override fun getBaseUrl(type: MultiUrlConfigProvider.UrlType): String = when (type) {
+        MultiUrlConfigProvider.UrlType.MAIN -> getUrl()
+        MultiUrlConfigProvider.UrlType.SELF_SERVICE -> getSelfServiceUrl()
+        MultiUrlConfigProvider.UrlType.INTERBANK -> getInterbankUrl()
+    }
+
+    override fun getLoggableHosts(): List<String> = listOf(
+        getEndpoint(),
+        getCurrentInterbankInstance().endpoint,
+    )
 }

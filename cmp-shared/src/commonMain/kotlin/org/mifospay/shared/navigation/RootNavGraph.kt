@@ -10,12 +10,17 @@
 package org.mifospay.shared.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import org.mifospay.core.data.util.NetworkMonitor
 import org.mifospay.core.data.util.TimeZoneMonitor
+import org.mifospay.shared.instance.InstanceSelectorScreen
 import org.mifospay.shared.ui.MifosApp
 
 @Composable
@@ -27,13 +32,18 @@ internal fun RootNavGraph(
     onClickLogout: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    var showInstanceSelector by remember { mutableStateOf(false) }
+
     NavHost(
         navController = navHostController,
         startDestination = startDestination,
         route = MifosNavGraph.ROOT_GRAPH,
         modifier = modifier,
     ) {
-        loginNavGraph(navHostController)
+        loginNavGraph(
+            navController = navHostController,
+            onShowInstanceSelector = { showInstanceSelector = true },
+        )
 
         passcodeNavGraph(navHostController)
 
@@ -44,5 +54,11 @@ internal fun RootNavGraph(
                 onClickLogout = onClickLogout,
             )
         }
+    }
+
+    if (showInstanceSelector) {
+        InstanceSelectorScreen(
+            onDismiss = { showInstanceSelector = false },
+        )
     }
 }

@@ -9,9 +9,6 @@
  */
 package org.mifospay.core.network.config
 
-import io.github.jan.supabase.createSupabaseClient
-import io.github.jan.supabase.postgrest.Postgrest
-import io.github.jan.supabase.postgrest.postgrest
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -21,30 +18,24 @@ import mobile_wallet.core.network.generated.resources.Res
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.mifospay.core.common.DataState
 import org.mifospay.core.model.instance.InstancesConfig
+import org.mifospay.core.network.SupabaseApiManager
 
+/**
+ * Instance config loader that fetches configuration from Supabase.
+ * Uses SupabaseApiManager for API interactions.
+ */
 class SupabaseInstanceConfigLoader(
+    private val supabaseApiManager: SupabaseApiManager,
     private val ioDispatcher: CoroutineDispatcher,
     private val json: Json,
 ) : InstanceConfigLoader {
 
-    private val supabase by lazy {
-        createSupabaseClient(
-            supabaseUrl = SupabaseCredentials.URL,
-            supabaseKey = SupabaseCredentials.ANON_KEY,
-        ) {
-            install(Postgrest)
-        }
-    }
-
     override suspend fun fetchInstancesConfig(): DataState<InstancesConfig> {
-        if (!SupabaseCredentials.isConfigured) {
+        if (!supabaseApiManager.isConfigured) {
             return loadFallbackConfig()
         }
         return try {
-            val config = supabase.postgrest
-                .from("app_config")
-                .select()
-                .decodeSingle<InstancesConfig>()
+            val config = supabaseApiManager.appConfigService.fetchInstancesConfig()
             DataState.Success(config)
         } catch (e: Exception) {
             loadFallbackConfig()

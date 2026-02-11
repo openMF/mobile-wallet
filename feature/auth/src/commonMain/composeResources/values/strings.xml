@@ -76,4 +76,7 @@
     <string name="feature_auth_error_field_already_exists">%1$s already exists.</string>
     <string name="feature_auth_error_check_uniqueness_failed">Unable to check if %1$s is unique. Please try again later.</string>
     <string name="feature_auth_registration_successful">Registration successful.</string>
+
+    <!-- Server Instance -->
+    <string name="feature_auth_connected_to">Connected to: %1$s</string>
 </resources>

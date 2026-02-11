@@ -22,6 +22,7 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             implementation(projects.core.domain)
+            implementation(projects.coreBase.ui)
             api(projects.core.data)
             api(projects.core.network)
             //put your multiplatform dependencies here

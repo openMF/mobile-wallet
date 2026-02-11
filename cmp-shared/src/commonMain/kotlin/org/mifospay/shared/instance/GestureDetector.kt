@@ -9,42 +9,19 @@
  */
 package org.mifospay.shared.instance
 
-import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableLongStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.input.pointer.pointerInput
-import kotlin.time.Clock
-import kotlin.time.ExperimentalTime
+import template.core.base.ui.detectMultiTapGesture
 
-@OptIn(ExperimentalTime::class)
+/**
+ * Convenience wrapper for instance selector gesture detection.
+ * Uses the generic [detectMultiTapGesture] from core-base/ui.
+ */
 @Composable
 fun Modifier.detectInstanceSelectorGesture(
     onGestureDetected: () -> Unit,
-): Modifier {
-    var tapCount by remember { mutableIntStateOf(0) }
-    var lastTapTime by remember { mutableLongStateOf(0L) }
-    val tapTimeoutMs = 1000L // Reset tap count after 1 second
-
-    return this.pointerInput(Unit) {
-        detectTapGestures(
-            onTap = {
-                val currentTime = Clock.System.now().toEpochMilliseconds()
-                if (currentTime - lastTapTime > tapTimeoutMs) {
-                    tapCount = 0
-                }
-                tapCount++
-                lastTapTime = currentTime
-
-                if (tapCount >= 5) {
-                    onGestureDetected()
-                    tapCount = 0
-                }
-            },
-        )
-    }
-}
+): Modifier = detectMultiTapGesture(
+    tapCount = 5,
+    tapTimeoutMs = 1000L,
+    onGestureDetected = onGestureDetected,
+)

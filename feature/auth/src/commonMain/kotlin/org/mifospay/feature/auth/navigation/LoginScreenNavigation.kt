@@ -22,6 +22,7 @@ fun NavGraphBuilder.loginScreen(
     onNavigateBack: () -> Unit,
     onNavigateToPasscodeScreen: () -> Unit,
     onNavigateToSignupScreen: () -> Unit,
+    onShowInstanceSelector: () -> Unit,
 ) {
     composable(
         route = "$LOGIN_ROUTE?username={username}",
@@ -36,6 +37,7 @@ fun NavGraphBuilder.loginScreen(
             onNavigateBack = onNavigateBack,
             navigateToPasscodeScreen = onNavigateToPasscodeScreen,
             navigateToSignupScreen = onNavigateToSignupScreen,
+            onShowInstanceSelector = onShowInstanceSelector,
         )
     }
 }

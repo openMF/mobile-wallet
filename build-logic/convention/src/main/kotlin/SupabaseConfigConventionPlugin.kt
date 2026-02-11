@@ -20,22 +20,28 @@ class SupabaseConfigConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
             val generatedDir = layout.buildDirectory.dir("generated/supabase")
+            val secretsFile = rootProject.file("secrets/supabaseCredentialsFile.json")
 
             // Register the code generation task
             val generateTask = tasks.register("generateSupabaseConfig") {
-                val secretsFile = rootProject.file("secrets/supabaseCredentialsFile.json")
-                val outputDir = generatedDir.get().asFile
+                val outputFile = generatedDir.get().asFile
+                    .resolve("org/mifospay/core/network/config/SupabaseCredentials.kt")
 
-                // Only declare file as input if it exists - Gradle's optional() doesn't work as expected
-                if (secretsFile.exists()) {
-                    inputs.file(secretsFile)
+                // Track file content as input property for proper up-to-date checking
+                // This handles both file changes and file existence changes
+                val fileContent = if (secretsFile.exists() && secretsFile.length() > 0) {
+                    secretsFile.readText()
+                } else {
+                    ""
                 }
-                outputs.dir(outputDir)
+                inputs.property("credentialsContent", fileContent)
+                outputs.file(outputFile)
 
                 doLast {
-                    val (url, anonKey) = if (secretsFile.exists() && secretsFile.length() > 0) {
+                    val currentContent = inputs.properties["credentialsContent"] as String
+                    val (url, anonKey) = if (currentContent.isNotEmpty()) {
                         try {
-                            parseCredentials(secretsFile.readText())
+                            parseCredentials(currentContent)
                         } catch (e: Exception) {
                             logger.warn("Failed to parse Supabase credentials file: ${e.message}")
                             Pair("", "")
@@ -46,15 +52,13 @@ class SupabaseConfigConventionPlugin : Plugin<Project> {
                         Pair("", "")
                     }
 
-                    val packageDir = File(outputDir, "org/mifospay/core/network/config")
-                    packageDir.mkdirs()
-
+                    outputFile.parentFile.mkdirs()
                     val isConfigured = url.isNotBlank() && anonKey.isNotBlank()
 
-                    File(packageDir, "SupabaseCredentials.kt").writeText(
+                    outputFile.writeText(
                         """
                         |/*
-                        | * Copyright 2024 Mifos Initiative
+                        | * Copyright 2026 Mifos Initiative
                         | *
                         | * This Source Code Form is subject to the terms of the Mozilla Public
                         | * License, v. 2.0. If a copy of the MPL was not distributed with this

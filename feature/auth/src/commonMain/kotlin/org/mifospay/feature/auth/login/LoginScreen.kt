@@ -30,10 +30,12 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.launch
 import mobile_wallet.feature.auth.generated.resources.Res
+import mobile_wallet.feature.auth.generated.resources.feature_auth_connected_to
 import mobile_wallet.feature.auth.generated.resources.feature_auth_login
 import mobile_wallet.feature.auth.generated.resources.feature_auth_password
 import mobile_wallet.feature.auth.generated.resources.feature_auth_sign_up
@@ -53,12 +55,15 @@ import org.mifospay.core.ui.MifosPasswordField
 import org.mifospay.core.ui.MifosProgressIndicatorOverlay
 import org.mifospay.core.ui.utils.EventsEffect
 import template.core.base.designsystem.theme.KptTheme
+import template.core.base.platform.PlatformBuildConfig
+import template.core.base.ui.detectMultiTapGesture
 
 @Composable
 internal fun LoginScreen(
     onNavigateBack: () -> Unit,
     navigateToPasscodeScreen: () -> Unit,
     navigateToSignupScreen: () -> Unit,
+    onShowInstanceSelector: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: LoginViewModel = koinViewModel(),
 ) {
@@ -94,6 +99,7 @@ internal fun LoginScreen(
         onAction = remember(viewModel) {
             { viewModel.trySendAction(it) }
         },
+        onShowInstanceSelector = onShowInstanceSelector,
     )
 
     if (state.dialogState is LoginState.DialogState.Loading) {
@@ -107,6 +113,7 @@ private fun LoginScreen(
     snackbarHostState: SnackbarHostState,
     modifier: Modifier = Modifier,
     onAction: (LoginAction) -> Unit,
+    onShowInstanceSelector: () -> Unit,
 ) {
     MifosScaffold(
         snackbarHostState = snackbarHostState,
@@ -116,6 +123,7 @@ private fun LoginScreen(
         LoginScreenContent(
             state = state,
             onAction = onAction,
+            onShowInstanceSelector = onShowInstanceSelector,
             modifier = modifier
                 .fillMaxSize()
                 .padding(paddingValues),
@@ -147,10 +155,12 @@ private fun LoginScreenContent(
     state: LoginState,
     modifier: Modifier = Modifier,
     onAction: (LoginAction) -> Unit,
+    onShowInstanceSelector: () -> Unit,
 ) {
     Column(
         modifier = modifier
             .fillMaxSize()
+            .detectMultiTapGesture(onGestureDetected = onShowInstanceSelector)
             .verticalScroll(rememberScrollState())
             .padding(horizontal = KptTheme.spacing.lg)
             .padding(top = KptTheme.spacing.xxl),
@@ -212,6 +222,16 @@ private fun LoginScreenContent(
                 onAction(LoginAction.SignupClicked)
             },
         )
+
+        Spacer(modifier = Modifier.weight(1f))
+
+        // Server Instance Info at bottom - only visible in debug builds
+        if (PlatformBuildConfig.isDebug) {
+            ServerInstanceInfo(
+                endpoint = state.selectedInstanceEndpoint ?: "",
+                modifier = Modifier.padding(bottom = KptTheme.spacing.lg),
+            )
+        }
     }
 }
 
@@ -246,14 +266,31 @@ private fun SignupButton(
     }
 }
 
+@Composable
+private fun ServerInstanceInfo(
+    endpoint: String,
+    modifier: Modifier = Modifier,
+) {
+    if (endpoint.isNotEmpty()) {
+        Text(
+            text = stringResource(Res.string.feature_auth_connected_to, endpoint),
+            style = KptTheme.typography.labelSmall,
+            color = KptTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
+            modifier = modifier.fillMaxWidth(),
+            textAlign = TextAlign.Center,
+        )
+    }
+}
+
 @Preview
 @Composable
-private fun LoanScreenPreview() {
+private fun LoginScreenPreview() {
     MifosTheme {
         LoginScreen(
             state = LoginState(dialogState = null),
             snackbarHostState = remember { SnackbarHostState() },
             onAction = {},
+            onShowInstanceSelector = {},
         )
     }
 }
