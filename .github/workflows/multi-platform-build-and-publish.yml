@@ -123,12 +123,6 @@ jobs:
       desktop_package_name: 'cmp-desktop'
       web_package_name: 'cmp-web'
       tester_groups: 'mifos-mobile-apps'
-      app_identifier: 'org.mifospay'
-      git_url: 'git@github.com:openMF/ios-provisioning-profile.git'
-      git_branch: 'mifospay'
-      match_type: 'adhoc'
-      provisioning_profile_name: 'match AdHoc org.mifospay'
-      firebase_app_id: '1:728434912738:ios:86a7badfaed88b841a1dbb'
       metadata_path: './fastlane/metadata/ios'
       use_cocoapods: true         # <-- Set to true if using CocoaPods integration for KMP
       shared_module: ':cmp-shared' # <-- Gradle path to your shared KMP module (e.g., :shared)
