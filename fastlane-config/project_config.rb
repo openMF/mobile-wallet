@@ -87,7 +87,7 @@ module FastlaneConfig
       team_id: ENV['TEAM_ID'] || "L432S2FZP5",
 
       # CI/CD Configuration
-      ci_provider: "github_actions",
+      ci_provider: "circleci",
 
       # App Store Connect API (SHARED)
       app_store_connect: {
