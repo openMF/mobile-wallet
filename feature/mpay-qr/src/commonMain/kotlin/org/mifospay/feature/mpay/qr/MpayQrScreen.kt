@@ -13,7 +13,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -39,7 +38,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import io.github.alexzhirkevich.qrose.ImageFormat
-import io.github.alexzhirkevich.qrose.QrCodePainter
 import io.github.alexzhirkevich.qrose.rememberQrCodePainter
 import io.github.alexzhirkevich.qrose.toByteArray
 import org.koin.compose.viewmodel.koinViewModel
@@ -159,22 +157,6 @@ private fun MpayQrScreenContent(
         }
     }
 
-    val intraBankPainter = rememberQrCodePainter(
-        data = state.intraBankData,
-        options = state.options,
-    )
-
-    val interBankPainter = rememberQrCodePainter(
-        data = state.interBankData,
-        options = state.options,
-    )
-
-    // Get bytes for current page's QR code
-    val currentPainter = if (pagerState.currentPage == 0) intraBankPainter else interBankPainter
-    val bytes: ByteArray = remember(currentPainter) {
-        currentPainter.toByteArray(1024, 1024, ImageFormat.PNG)
-    }
-
     LazyColumn(
         modifier = modifier.fillMaxSize(),
         state = lazyListState,
@@ -196,11 +178,13 @@ private fun MpayQrScreenContent(
             HorizontalPager(
                 state = pagerState,
                 modifier = Modifier.fillMaxWidth(),
+                key = { it },
             ) { page ->
-                when (page) {
-                    0 -> QrDataContent(painter = intraBankPainter)
-                    1 -> QrDataContent(painter = interBankPainter)
-                }
+                val data = if (page == 0) state.intraBankData else state.interBankData
+                QrDataContent(
+                    data = data,
+                    options = state.options,
+                )
             }
         }
 
@@ -225,8 +209,19 @@ private fun MpayQrScreenContent(
         }
 
         item {
+            val currentData = if (pagerState.currentPage == 0) {
+                state.intraBankData
+            } else {
+                state.interBankData
+            }
+            val sharePainter = rememberQrCodePainter(
+                data = currentData,
+                options = state.options,
+            )
+
             MifosOutlinedButton(
                 onClick = {
+                    val bytes = sharePainter.toByteArray(1024, 1024, ImageFormat.PNG)
                     onAction(MpayQrAction.ShareQrCode(bytes))
                 },
                 modifier = Modifier.fillMaxWidth(),
@@ -267,38 +262,25 @@ private fun HorizontalPagerIndicator(
 
 @Composable
 private fun QrDataContent(
-    painter: QrCodePainter,
+    data: String,
+    options: io.github.alexzhirkevich.qrose.options.QrOptions,
     modifier: Modifier = Modifier,
 ) {
+    val painter = rememberQrCodePainter(
+        data = data,
+        options = options,
+    )
+
     Box(
         modifier = modifier
-            .size(350.dp, 381.dp)
+            .size(300.dp)
             .background(Color.White, shape = KptTheme.shapes.large),
         contentAlignment = Alignment.Center,
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .align(Alignment.Center),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(
-                KptTheme.spacing.lg,
-                Alignment.CenterVertically,
-            ),
-        ) {
-            Text(
-                text = "Mifos Pay",
-                style = KptTheme.typography.titleLarge,
-                color = KptTheme.colorScheme.primary,
-            )
-
-            Image(
-                painter = painter,
-                contentDescription = null,
-                modifier = Modifier
-                    .padding(bottom = KptTheme.spacing.xxl)
-                    .size(260.dp),
-            )
-        }
+        Image(
+            painter = painter,
+            contentDescription = null,
+            modifier = Modifier.size(260.dp),
+        )
     }
 }
