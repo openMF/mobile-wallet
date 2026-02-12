@@ -160,18 +160,29 @@ object MpayQrCodeProcessor {
      * @throws IllegalArgumentException for any validation failures
      */
     private fun validate(data: QrCodeData) {
-        // Name validation
-        require(data.clientName.isNotBlank()) {
-            "Client name cannot be empty"
-        }
+        // Validation depends on QR type
+        when (data.type) {
+            QrCodeType.INTER_BANK -> {
+                // Inter-bank QR requires phone number
+                require(!data.phoneNumber.isNullOrBlank()) {
+                    "Phone number is required for inter-bank QR"
+                }
+            }
 
-        require(data.clientName.length <= 50) {
-            "Client name too long (max 50 characters)"
-        }
+            else -> {
+                // Intra-bank and other types require account details
+                require(data.clientName.isNotBlank()) {
+                    "Client name cannot be empty"
+                }
 
-        // Account number validation
-        require(data.accountNo.isNotBlank()) {
-            "Account number cannot be empty"
+                require(data.clientName.length <= 50) {
+                    "Client name too long (max 50 characters)"
+                }
+
+                require(data.accountNo.isNotBlank()) {
+                    "Account number cannot be empty"
+                }
+            }
         }
 
         // Optional amount validation (if not empty)
