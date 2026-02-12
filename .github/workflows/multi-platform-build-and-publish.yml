@@ -26,11 +26,9 @@
 # - UPLOAD_KEYSTORE_ALIAS: Keystore alias
 # - UPLOAD_KEYSTORE_ALIAS_PASSWORD: Keystore alias password
 
-# - GOOGLESERVICES: Google Services configuration JSON (Base64 encoded)
-# - PLAYSTORECREDS: Play Store service account credentials (Base64 encoded)
-# - FIREBASECREDS: Firebase distribution credentials (Base64 encoded)
-# - SUPABASECREDS: Supabase credentials JSON (Base64 encoded)
-#   Format: {"url": "https://xxx.supabase.co", "anonKey": "xxx"}
+# - GOOGLESERVICES: Google Services configuration JSON
+# - PLAYSTORECREDS: Play Store service account credentials
+# - FIREBASECREDS: Firebase distribution credentials
 
 # - NOTARIZATION_APPLE_ID: Apple ID for macOS app notarization
 # - NOTARIZATION_PASSWORD: Notarization password
@@ -113,9 +111,8 @@ concurrency:
 jobs:
   multi_platform_build_and_publish:
     name: Multi-Platform Build and Publish
-    uses: openMF/mifos-x-actionhub/.github/workflows/multi-platform-build-and-publish.yaml@v1.0.10
+    uses: openMF/mifos-x-actionhub/.github/workflows/multi-platform-build-and-publish.yaml@v1.0.8
     with:
-      java-version: 21
       release_type: ${{ inputs.release_type }}
       target_branch: ${{ inputs.target_branch }}
       android_package_name: 'cmp-android'

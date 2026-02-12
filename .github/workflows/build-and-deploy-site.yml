@@ -62,5 +62,4 @@ jobs:
     uses: openMF/mifos-x-actionhub/.github/workflows/build-and-deploy-site.yaml@v1.0.10
     secrets: inherit
     with:
-      web_package_name: 'mifospay-web' # <-- Change with your web package name
-      java-version: 21
+      web_package_name: 'cmp-web' # <-- Change with your web package name

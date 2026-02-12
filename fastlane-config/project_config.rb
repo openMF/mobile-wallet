@@ -70,7 +70,7 @@ module FastlaneConfig
       output_directory: "cmp-ios/build",
 
       # App Store metadata paths
-      metadata_path: "./fastlane/metadata/ios",
+      metadata_path: "./fastlane/metadata",
       age_rating_config_path: "./fastlane/age_rating.json",
 
       # Version configuration (fallback only - actual version read from version.txt)
@@ -87,12 +87,12 @@ module FastlaneConfig
       team_id: ENV['TEAM_ID'] || "L432S2FZP5",
 
       # CI/CD Configuration
-      ci_provider: "circleci",
+      ci_provider: "circleci", # Options: circleci, travis, jenkins, gitlab_ci, etc.
 
       # App Store Connect API (SHARED)
       app_store_connect: {
-        key_id: ENV['APPSTORE_KEY_ID'] || "7V3ABCDEFG",
-        issuer_id: ENV['APPSTORE_ISSUER_ID'] || "7ab9e231-9603-4c3e-a147-be3b0f123456",
+        key_id: ENV['APPSTORE_KEY_ID'] || "ZVQ6W6P822",
+        issuer_id: ENV['APPSTORE_ISSUER_ID'] || "7ab9e361-9603-4c3e-b147-be3b0f816099",
         key_filepath: ENV['APPSTORE_KEY_PATH'] || "./secrets/AuthKey.p8"
       },
 
@@ -271,7 +271,7 @@ module FastlaneConfig
       missing_files = required_files.reject { |file| File.exist?(File.join(Dir.pwd, '..', file)) }
 
       unless missing_files.empty?
-        UI.important("Warning: The following required files are missing:")
+        UI.important("⚠️  Warning: The following required files are missing:")
         missing_files.each { |file| UI.important("   - #{file}") }
         UI.important("\nPlease ensure these files are in place before running deployment lanes.")
       end
@@ -279,7 +279,7 @@ module FastlaneConfig
 
     # Print configuration summary
     def self.print_config_summary
-      UI.header "Configuration Summary"
+      UI.header "📋 Configuration Summary"
       UI.message "Project: #{PROJECT_NAME}"
       UI.message "Organization: #{ORGANIZATION_NAME}"
       UI.message ""
