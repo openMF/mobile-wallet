@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copyright 2024 Mifos Initiative
+
+    This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+    If a copy of the MPL was not distributed with this file,
+    You can obtain one at https://mozilla.org/MPL/2.0/.
+
+    See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+-->
+<resources>
+    <string name="feature_request_money_enter_valid_amount">Please enter a valid amount</string>
+    <string name="feature_request_money_enter_currency">Enter Currency</string>
+    <string name="feature_request_money_set_amount">Set Amount</string>
+    <string name="feature_request_money_currency">Set Currency</string>
+    <string name="feature_request_money_cancel">Cancel</string>
+    <string name="feature_request_money_confirm">Confirm</string>
+    <string name="feature_request_money_qr_code_details">QR code details</string>
+    <string name="feature_request_money_vpa">VPA</string>
+    <string name="feature_request_money_amount">Amount</string>
+    <string name="feature_request_money_usd">USD</string>
+    <string name="feature_request_money_request">Request</string>
+    <string name="feature_request_money_loading">Loading</string>
+    <string name="feature_request_money_nothing_to_notify">Nothing To Notify</string>
+    <string name="feature_request_money_there_is_nothing_to_show">There is nothing to show</string>
+    <string name="feature_request_money_error_oops">Oops!</string>
+    <string name="feature_request_money_unexpected_error_subtitle">An unexpected error occurred. Please try again.</string>
+
+</resources>

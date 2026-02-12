@@ -26,12 +26,14 @@ import org.mifospay.feature.accounts.di.AccountsModule
 import org.mifospay.feature.auth.di.AuthModule
 import org.mifospay.feature.editpassword.di.EditPasswordModule
 import org.mifospay.feature.faq.di.FaqModule
+import org.mifospay.feature.fastmpay.di.FastMpayModule
 import org.mifospay.feature.history.di.HistoryModule
 import org.mifospay.feature.home.di.HomeModule
 import org.mifospay.feature.invoices.di.InvoicesModule
 import org.mifospay.feature.kyc.di.KYCModule
 import org.mifospay.feature.make.transfer.di.MakeTransferModule
 import org.mifospay.feature.merchants.di.MerchantsModule
+import org.mifospay.feature.mpay.qr.di.MpayQrModule
 import org.mifospay.feature.notification.di.NotificationModule
 import org.mifospay.feature.payments.di.PaymentsModule
 import org.mifospay.feature.profile.di.ProfileModule
@@ -90,6 +92,8 @@ object KoinModules {
             interbankTransferModule,
             MakeTransferModule,
             QrModule,
+            MpayQrModule,
+            FastMpayModule,
             MerchantsModule,
             UpiSetupModule,
         )

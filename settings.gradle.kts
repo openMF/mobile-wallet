@@ -84,5 +84,7 @@ include(":feature:payments")
 include(":feature:request-money")
 include(":feature:upi-setup")
 include(":feature:qr")
+include(":feature:mpay-qr")
+include(":feature:fast-mpay")
 
 include(":libs:mifos-passcode")

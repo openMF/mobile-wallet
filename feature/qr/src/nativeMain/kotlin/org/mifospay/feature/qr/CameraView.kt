@@ -35,6 +35,8 @@ import platform.AVFoundation.AVCaptureDeviceInput
 import platform.AVFoundation.AVCaptureMetadataOutput
 import platform.AVFoundation.AVCaptureMetadataOutputObjectsDelegateProtocol
 import platform.AVFoundation.AVCaptureSession
+import platform.AVFoundation.AVCaptureTorchModeOff
+import platform.AVFoundation.AVCaptureTorchModeOn
 import platform.AVFoundation.AVCaptureVideoOrientationLandscapeLeft
 import platform.AVFoundation.AVCaptureVideoOrientationLandscapeRight
 import platform.AVFoundation.AVCaptureVideoOrientationPortrait
@@ -44,8 +46,6 @@ import platform.AVFoundation.AVLayerVideoGravityResizeAspectFill
 import platform.AVFoundation.AVMediaTypeVideo
 import platform.AVFoundation.AVMetadataMachineReadableCodeObject
 import platform.AVFoundation.AVMetadataObjectType
-import platform.AVFoundation.AVCaptureTorchModeOff
-import platform.AVFoundation.AVCaptureTorchModeOn
 import platform.AVFoundation.hasTorch
 import platform.AVFoundation.torchMode
 import platform.CoreGraphics.CGRect

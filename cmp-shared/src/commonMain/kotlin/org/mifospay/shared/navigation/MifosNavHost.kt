@@ -28,6 +28,8 @@ import org.mifospay.feature.editpassword.navigation.editPasswordScreen
 import org.mifospay.feature.editpassword.navigation.navigateToEditPassword
 import org.mifospay.feature.faq.navigation.faqScreen
 import org.mifospay.feature.faq.navigation.navigateToFAQ
+import org.mifospay.feature.fastmpay.navigation.FAST_MPAY_ROUTE
+import org.mifospay.feature.fastmpay.navigation.fastMpayScreen
 import org.mifospay.feature.finance.FinanceScreenContents
 import org.mifospay.feature.finance.navigation.FINANCE_ROUTE
 import org.mifospay.feature.finance.navigation.financeScreen
@@ -53,6 +55,8 @@ import org.mifospay.feature.make.transfer.success.transferSuccessScreen
 import org.mifospay.feature.make.transfer.v2.makeTransferScreenV2
 import org.mifospay.feature.make.transfer.v2.navigateToMakeTransferScreenV2
 import org.mifospay.feature.merchants.navigation.merchantTransferScreen
+import org.mifospay.feature.mpay.qr.navigation.mpayQrScreen
+import org.mifospay.feature.mpay.qr.navigation.navigateToMpayQrScreen
 import org.mifospay.feature.notification.navigateToNotification
 import org.mifospay.feature.notification.notificationScreen
 import org.mifospay.feature.payments.PAYMENTS_ROUTE
@@ -65,7 +69,6 @@ import org.mifospay.feature.qr.navigation.SCAN_QR_ROUTE
 import org.mifospay.feature.qr.navigation.navigateToScanQr
 import org.mifospay.feature.qr.navigation.scanQrScreen
 import org.mifospay.feature.receipt.navigation.receiptScreen
-import org.mifospay.feature.request.money.navigation.navigateToShowQrScreen
 import org.mifospay.feature.request.money.navigation.showQrScreen
 import org.mifospay.feature.savedcards.createOrUpdate.addEditCardScreen
 import org.mifospay.feature.savedcards.details.cardDetailRoute
@@ -105,7 +108,7 @@ internal fun MifosNavHost(
         },
         TabContent(PaymentsScreenContents.REQUEST.name) {
             RequestScreen(
-                showQr = navController::navigateToShowQrScreen,
+                showQr = navController::navigateToMpayQrScreen,
             )
         },
         TabContent(PaymentsScreenContents.HISTORY.name) {
@@ -169,7 +172,7 @@ internal fun MifosNavHost(
         homeScreen(
             onNavigateBack = navController::popBackStack,
             onRequest = {
-                navController.navigateToShowQrScreen()
+                navController.navigateToMpayQrScreen()
             },
             onPay = navController::navigateToTransferOptions,
             navigateToTransactionDetail = navController::navigateToSpecificTransaction,
@@ -200,7 +203,7 @@ internal fun MifosNavHost(
             onLinkBankAccount = {
                 navController.navigateToSavingAccountAddEdit(SavingsAddEditType.AddItem)
             },
-            showQrCode = navController::navigateToShowQrScreen,
+            showQrCode = navController::navigateToMpayQrScreen,
         )
 
         historyNavigation(
@@ -291,6 +294,77 @@ internal fun MifosNavHost(
 
         showQrScreen(
             navigateBack = navController::navigateUp,
+        )
+
+        mpayQrScreen(
+            navigateBack = navController::navigateUp,
+        )
+
+        fastMpayScreen(
+            onNavigateToAddBeneficiary = { beneficiaryData ->
+                navController.navigateToBeneficiaryAddEdit(
+                    BeneficiaryAddEditType.EditItem(beneficiaryData),
+                    navOptions = navOptions {
+                        popUpTo(FAST_MPAY_ROUTE) {
+                            inclusive = true
+                        }
+                    },
+                )
+            },
+            onNavigateToSendMoneyV2 = { qrData, _ ->
+                navController.navigateToMakeTransferScreenV2(
+                    toOfficeId = qrData.officeId.toInt(),
+                    toClientId = qrData.clientId,
+                    toAccountTypeId = qrData.accountTypeId.toInt(),
+                    toAccountId = qrData.accountId.toInt(),
+                    amount = qrData.amount.toIntOrNull() ?: 0,
+                    toAccountName = qrData.clientName,
+                    toAccountNo = qrData.accountNo,
+                    returnDestination = "home",
+                    navOptions = navOptions {
+                        popUpTo(FAST_MPAY_ROUTE) {
+                            inclusive = true
+                        }
+                    },
+                )
+            },
+            onNavigateToInterbankTransfer = { phoneNumber, recipientName, amount ->
+                navController.navigateToInterbankTransfer(
+                    phoneNumber = phoneNumber,
+                    recipientName = recipientName,
+                    amount = amount,
+                    navOptions = navOptions {
+                        popUpTo(FAST_MPAY_ROUTE) {
+                            inclusive = true
+                        }
+                    },
+                )
+            },
+            onNavigateToIntraBankTransfer = { qrData ->
+                navController.navigateToMakeTransferScreenV2(
+                    toOfficeId = qrData.officeId.toInt(),
+                    toClientId = qrData.clientId,
+                    toAccountTypeId = qrData.accountTypeId.toInt(),
+                    toAccountId = qrData.accountId.toInt(),
+                    amount = qrData.amount.toIntOrNull() ?: 0,
+                    toAccountName = qrData.clientName,
+                    toAccountNo = qrData.accountNo,
+                    returnDestination = "home",
+                    navOptions = navOptions {
+                        popUpTo(FAST_MPAY_ROUTE) {
+                            inclusive = true
+                        }
+                    },
+                )
+            },
+            onNavigateToMerchantPayment = { qrData ->
+                // TODO: Navigate to merchant payment screen when implemented
+                navController.navigateUp()
+            },
+            onError = { _ ->
+                // Navigate back on error
+                navController.navigateUp()
+            },
         )
 
         sendMoneyScreen(

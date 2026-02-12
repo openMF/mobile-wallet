@@ -13,15 +13,33 @@ import kotlinx.serialization.Serializable
 import org.mifospay.core.model.search.AccountResult
 
 /**
- * Parcelable data class representing the UPI payment request details
+ * Data class representing QR code data for MPay transactions.
+ *
+ * Supports multiple QR formats based on [type]:
+ * 1. INTRA_BANK: clientId > 0, accountId > 0, phoneNumber = null
+ *    Contains internal Mifos IDs for direct beneficiary addition.
+ *
+ * 2. INTER_BANK: clientId = 0, accountId = 0, phoneNumber != null
+ *    Contains only phone number for participant lookup to identify bank (fspId).
+ *
+ * 3. BENEFICIARY: For adding a beneficiary with pre-filled data.
+ *
+ * 4. MERCHANT: For future merchant payment support.
+ *
+ * @property type The type of QR code determining how it should be processed
+ * @property clientId Virtual Payment Address (VPA) of the payee (0 for inter-bank QR)
  * @property clientName Payee name
- * @property clientId Virtual Payment Address (VPA) of the payee
- * @property accountNo Account number
- * @property currency Currency code
+ * @property accountNo Account number (empty for inter-bank QR)
  * @property amount Payment amount as a string
+ * @property accountId Account ID (0 for inter-bank QR)
+ * @property currency Currency code
+ * @property officeId Office ID (0 for inter-bank QR)
+ * @property accountTypeId Account type ID (0 for inter-bank QR)
+ * @property phoneNumber Phone number for inter-bank participant lookup (null for intra-bank QR)
  */
 @Serializable
-data class PaymentQrData(
+data class QrCodeData(
+    val type: QrCodeType = QrCodeType.INTRA_BANK,
     val clientId: Long,
     val clientName: String,
     val accountNo: String,
@@ -30,6 +48,7 @@ data class PaymentQrData(
     val currency: String = DEFAULT_CURRENCY,
     val officeId: Long = OFFICE_ID,
     val accountTypeId: Long = ACCOUNT_TYPE_ID,
+    val phoneNumber: String? = null,
 ) {
 
     /**
@@ -45,7 +64,7 @@ data class PaymentQrData(
     }
 }
 
-fun PaymentQrData.toAccount(): AccountResult {
+fun QrCodeData.toAccount(): AccountResult {
     return AccountResult(
         entityId = accountId,
         entityAccountNo = accountNo,
@@ -58,3 +77,12 @@ fun PaymentQrData.toAccount(): AccountResult {
         subEntityType = "depositAccountType.savingsDeposit",
     )
 }
+
+/**
+ * Type alias for backwards compatibility with code that still uses PaymentQrData.
+ */
+@Deprecated(
+    message = "Use QrCodeData instead",
+    replaceWith = ReplaceWith("QrCodeData"),
+)
+typealias PaymentQrData = QrCodeData

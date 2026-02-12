@@ -55,6 +55,8 @@ kotlin {
             implementation(projects.feature.sendInterbank)
             implementation(projects.feature.makeTransfer)
             implementation(projects.feature.qr)
+            implementation(projects.feature.mpayQr)
+            implementation(projects.feature.fastMpay)
             implementation(projects.feature.merchants)
             implementation(projects.feature.upiSetup)
         }

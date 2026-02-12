@@ -44,7 +44,6 @@ import org.koin.compose.viewmodel.koinViewModel
 import org.mifospay.core.designsystem.icon.MifosIcons
 import org.mifospay.feature.qr.components.QrActionButton
 import org.mifospay.feature.qr.components.QrHelpDialog
-import org.mifospay.feature.qr.components.QrPermissionDenied
 import org.mifospay.feature.qr.components.QrProcessingOverlay
 import org.mifospay.feature.qr.components.QrScanFooter
 import org.mifospay.feature.qr.components.QrScanTopBar
