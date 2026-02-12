@@ -28,12 +28,14 @@ import io.github.alexzhirkevich.qrose.options.QrShapes
 import io.github.alexzhirkevich.qrose.options.circle
 import io.github.alexzhirkevich.qrose.options.roundCorners
 import io.github.alexzhirkevich.qrose.options.solid
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 import mobile_wallet.feature.mpay_qr.generated.resources.Res
@@ -57,6 +59,7 @@ class MpayQrViewModel(
     localRepository: LocalAssetRepository,
     repository: UserPreferencesRepository,
     savedStateHandle: SavedStateHandle,
+    private val ioDispatcher: CoroutineDispatcher,
 ) : BaseViewModel<MpayQrState, MpayQrEvent, MpayQrAction>(
     initialState = savedStateHandle.getSerialized(KEY_STATE) ?: run {
         val client = requireNotNull(repository.client.value)
@@ -151,28 +154,43 @@ class MpayQrViewModel(
     }
 
     private fun generateQr() {
-        mutableStateFlow.update {
-            it.copy(
-                viewState = MpayQrState.ViewState.Content(
-                    intraBankData = MpayQrCodeProcessor.encodeMpayString(state.qrData),
-                    interBankData = MpayQrCodeProcessor.encodeMpayString(state.interBankQrData),
-                ),
-            )
+        viewModelScope.launch {
+            val (intraBankData, interBankData) = withContext(ioDispatcher) {
+                Pair(
+                    MpayQrCodeProcessor.encodeMpayString(state.qrData),
+                    MpayQrCodeProcessor.encodeMpayString(state.interBankQrData),
+                )
+            }
+
+            mutableStateFlow.update {
+                it.copy(
+                    viewState = MpayQrState.ViewState.Content(
+                        intraBankData = intraBankData,
+                        interBankData = interBankData,
+                    ),
+                )
+            }
         }
     }
 
     private fun initiateSetAmount() {
-        val intraBankData = MpayQrCodeProcessor.encodeMpayString(state.qrData)
-        val interBankData = MpayQrCodeProcessor.encodeMpayString(state.interBankQrData)
+        viewModelScope.launch {
+            val (intraBankData, interBankData) = withContext(ioDispatcher) {
+                Pair(
+                    MpayQrCodeProcessor.encodeMpayString(state.qrData),
+                    MpayQrCodeProcessor.encodeMpayString(state.interBankQrData),
+                )
+            }
 
-        updateContent {
-            it.copy(
-                intraBankData = intraBankData,
-                interBankData = interBankData,
-            )
+            updateContent {
+                it.copy(
+                    intraBankData = intraBankData,
+                    interBankData = interBankData,
+                )
+            }
+
+            mutableStateFlow.update { it.copy(dialogState = null) }
         }
-
-        mutableStateFlow.update { it.copy(dialogState = null) }
     }
 
     private inline fun updateQrData(

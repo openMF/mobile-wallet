@@ -9,10 +9,18 @@
  */
 package org.mifospay.feature.mpay.qr.di
 
-import org.koin.core.module.dsl.viewModelOf
+import org.koin.core.qualifier.named
 import org.koin.dsl.module
+import org.mifospay.core.common.MifosDispatchers
 import org.mifospay.feature.mpay.qr.MpayQrViewModel
 
 val MpayQrModule = module {
-    viewModelOf(::MpayQrViewModel)
+    factory {
+        MpayQrViewModel(
+            localRepository = get(),
+            repository = get(),
+            savedStateHandle = get(),
+            ioDispatcher = get(named(MifosDispatchers.IO.name)),
+        )
+    }
 }
