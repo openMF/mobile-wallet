@@ -13,7 +13,7 @@
 ### Workflow Jobs
 # 1. **Setup**: Prepares the build environment
 #   - Checks out repository code
-#   - Sets up Java (configurable; defaults to 17)
+#   - Sets up Java 17
 #   - Configures Gradle
 #   - Manages dependency caching
 #
@@ -36,7 +36,7 @@
 #   - Generates platform-specific executables and packages
 #
 ### Prerequisites
-#   - Java (configurable; default 17)
+#   - Java 17
 #   - Gradle
 #   - Configured build scripts for:
 #       - Android module
@@ -46,23 +46,13 @@
 #       - Detekt
 #       - Dependency Guard
 #
-### Required Secrets (Optional for PR checks)
-#   - SUPABASECREDS: Supabase credentials JSON (Base64 encoded)
-#     Format: {"url": "https://xxx.supabase.co", "anonKey": "xxx"}
-#
 ### Configuration Parameters
 # The workflow requires two input parameters:
 #
-#   |         Parameter      |              Description           |  Type  | Required  |
-#   |------------------------|------------------------------------|--------|-----------|
-#   | `android_package_name` | Name of the Android project module | String |    Yes    |
-#   | `desktop_package_name` | Name of the Desktop project module | String |    Yes    |
-#   |`web_package_name`      | Name of the Web (Kotlin/JS) project/module | String | No|
-#   |`ios_package_name`      | Name of the iOS project/module	| String |	No	       |
-#   |`build_ios`	         | Build iOS targets as part of PR checks |	Boolean	| No   |
-#   |`use_cocoapods`         | Use CocoaPods for iOS integration	| Boolean	| No   |
-#   |`shared_module	         | Path of the shared KMP module  |	String	| (required when build_ios=true) |
-#   |`java-version	         | Java version to use (configurable; defaults to 17)| No  |
+#   |         Parameter      |              Description           |  Type  | Required |
+#   |------------------------|------------------------------------|--------|----------|
+#   | `android_package_name` | Name of the Android project module | String |    Yes   |
+#   | `desktop_package_name` | Name of the Desktop project module | String |    Yes   |
 #
 
 # https://github.com/openMF/mifos-x-actionhub/blob/main/.github/workflows/pr-check.yaml
@@ -78,7 +68,8 @@ name: PR Checks
 on:
   push:
     branches: [ dev ]  # Runs on pushes to dev branch
-  pull_request:       # Runs on all pull requests
+  pull_request:
+    branches: [ dev ]  # Runs on pushes to dev branch
 
 # Concurrency settings to prevent multiple simultaneous workflow runs
 concurrency:
@@ -98,7 +89,6 @@ jobs:
       desktop_package_name: 'cmp-desktop' # <-- Change Your Desktop Package Name
       web_package_name: 'cmp-web' # <-- Change Your Web Package Name
       ios_package_name: 'cmp-ios' # <-- Change Your iOS Package Name
-      build_ios: true
+      build_ios: true # <-- Change to 'false' if you don't want to build iOS
       use_cocoapods: true
       shared_module: ':cmp-shared'
-      java-version: '21'
