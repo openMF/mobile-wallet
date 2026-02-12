@@ -64,7 +64,7 @@ import org.mifospay.core.designsystem.component.MifosTextField
 import org.mifospay.core.designsystem.component.MifosTopBar
 import org.mifospay.core.designsystem.icon.MifosIcons
 import org.mifospay.core.model.account.Account
-import org.mifospay.core.model.utils.PaymentQrData
+import org.mifospay.core.model.utils.QrCodeData
 import org.mifospay.core.ui.AvatarBox
 import org.mifospay.core.ui.EmptyContentScreen
 import org.mifospay.core.ui.MifosProgressIndicator
@@ -318,7 +318,7 @@ private fun AccountItem(
 
 @Composable
 fun ClientCard(
-    client: PaymentQrData,
+    client: QrCodeData,
     modifier: Modifier = Modifier,
 ) {
     Column(

@@ -42,11 +42,11 @@ import org.jetbrains.compose.resources.painterResource
 import org.mifospay.core.common.getSerialized
 import org.mifospay.core.common.setSerialized
 import org.mifospay.core.data.repository.LocalAssetRepository
-import org.mifospay.core.data.util.UpiQrCodeProcessor
+import org.mifospay.core.data.util.MpayQrCodeProcessor
 import org.mifospay.core.datastore.UserPreferencesRepository
 import org.mifospay.core.model.account.DefaultAccount
 import org.mifospay.core.model.client.Client
-import org.mifospay.core.model.utils.PaymentQrData
+import org.mifospay.core.model.utils.QrCodeData
 import org.mifospay.core.ui.utils.BaseViewModel
 import org.mifospay.core.ui.utils.MimeType
 import org.mifospay.core.ui.utils.ShareFileModel
@@ -147,14 +147,14 @@ class ShowQrViewModel(
         mutableStateFlow.update {
             it.copy(
                 viewState = ShowQrState.ViewState.Content(
-                    data = UpiQrCodeProcessor.encodeUpiString(state.qrData),
+                    data = MpayQrCodeProcessor.encodeMpayString(state.qrData),
                 ),
             )
         }
     }
 
     private fun initiateSetAmount() {
-        val data = UpiQrCodeProcessor.encodeUpiString(state.qrData)
+        val data = MpayQrCodeProcessor.encodeMpayString(state.qrData)
 
         updateContent {
             it.copy(data = data)
@@ -164,7 +164,7 @@ class ShowQrViewModel(
     }
 
     private inline fun updateQrData(
-        crossinline block: (PaymentQrData) -> PaymentQrData,
+        crossinline block: (QrCodeData) -> QrCodeData,
     ) {
         mutableStateFlow.update {
             it.copy(qrData = block(it.qrData))
@@ -193,7 +193,7 @@ data class ShowQrState(
     @Transient
     val viewState: ViewState = ViewState.Loading,
 
-    val qrData: PaymentQrData = PaymentQrData(
+    val qrData: QrCodeData = QrCodeData(
         clientId = client.id,
         clientName = client.displayName,
         accountNo = defaultAccount.accountNo,

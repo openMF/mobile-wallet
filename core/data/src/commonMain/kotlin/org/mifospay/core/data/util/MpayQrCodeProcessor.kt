@@ -208,31 +208,4 @@ object MpayQrCodeProcessor {
                 key to value
             }
     }
-
-    /**
-     * Backwards-compatible method for legacy code.
-     */
-    @Deprecated(
-        message = "Use encodeMpayString instead",
-        replaceWith = ReplaceWith("encodeMpayString(qrCodeData)"),
-    )
-    fun encodeUpiString(qrCodeData: QrCodeData): String = encodeMpayString(qrCodeData)
-
-    /**
-     * Backwards-compatible method for legacy code.
-     */
-    @Deprecated(
-        message = "Use decodeMpayString instead",
-        replaceWith = ReplaceWith("decodeMpayString(encodedString)"),
-    )
-    fun decodeUpiString(encodedString: String): QrCodeData = decodeMpayString(encodedString)
 }
-
-/**
- * Type alias for backwards compatibility with code that still uses UpiQrCodeProcessor.
- */
-@Deprecated(
-    message = "Use MpayQrCodeProcessor instead",
-    replaceWith = ReplaceWith("MpayQrCodeProcessor"),
-)
-typealias UpiQrCodeProcessor = MpayQrCodeProcessor

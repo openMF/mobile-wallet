@@ -34,11 +34,11 @@ import org.mifospay.core.common.getSerialized
 import org.mifospay.core.common.setSerialized
 import org.mifospay.core.common.utils.capitalizeWords
 import org.mifospay.core.data.repository.AccountRepository
-import org.mifospay.core.data.util.UpiQrCodeProcessor
+import org.mifospay.core.data.util.MpayQrCodeProcessor
 import org.mifospay.core.datastore.UserPreferencesRepository
 import org.mifospay.core.model.account.Account
 import org.mifospay.core.model.account.AccountTransferPayload
-import org.mifospay.core.model.utils.PaymentQrData
+import org.mifospay.core.model.utils.QrCodeData
 import org.mifospay.core.ui.utils.BaseViewModel
 import org.mifospay.feature.make.transfer.MakeTransferAction.Internal.HandleTransferResult
 import org.mifospay.feature.make.transfer.MakeTransferState.DialogState.Error
@@ -53,7 +53,7 @@ internal class MakeTransferViewModel(
         val fromClientId = requireNotNull(repository.clientId.value)
         val defaultAccountId = requireNotNull(repository.defaultAccountId.value)
         val paymentData = requireNotNull(savedStateHandle.get<String>(TRANSFER_ARG))
-        val clientData = UpiQrCodeProcessor.decodeUpiString(paymentData)
+        val clientData = MpayQrCodeProcessor.decodeMpayString(paymentData)
 
         MakeTransferState(
             fromClientId = fromClientId,
@@ -206,7 +206,7 @@ internal class MakeTransferViewModel(
 @Serializable
 internal data class MakeTransferState(
     val fromClientId: Long,
-    val toClientData: PaymentQrData,
+    val toClientData: QrCodeData,
     val defaultAccountId: Long,
     val amount: String = toClientData.amount,
     val description: String = "",

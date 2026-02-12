@@ -77,12 +77,3 @@ fun QrCodeData.toAccount(): AccountResult {
         subEntityType = "depositAccountType.savingsDeposit",
     )
 }
-
-/**
- * Type alias for backwards compatibility with code that still uses PaymentQrData.
- */
-@Deprecated(
-    message = "Use QrCodeData instead",
-    replaceWith = ReplaceWith("QrCodeData"),
-)
-typealias PaymentQrData = QrCodeData

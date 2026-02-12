@@ -17,7 +17,7 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.serialization.json.Json
-import org.mifospay.core.data.util.UpiQrCodeProcessor
+import org.mifospay.core.data.util.MpayQrCodeProcessor
 import org.mifospay.core.model.beneficiary.Beneficiary
 import template.core.base.platform.PlatformBuildConfig
 
@@ -84,7 +84,7 @@ class ScanQrViewModel : ViewModel() {
 
     fun onScanned(data: String): Boolean {
         return try {
-            UpiQrCodeProcessor.decodeUpiString(data)
+            MpayQrCodeProcessor.decodeMpayString(data)
 
             _eventFlow.update {
                 ScanQrEvent.OnScanSuccess
