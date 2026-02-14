@@ -34,12 +34,11 @@ import org.mifospay.feature.kyc.di.KYCModule
 import org.mifospay.feature.make.transfer.di.MakeTransferModule
 import org.mifospay.feature.merchants.di.MerchantsModule
 import org.mifospay.feature.mpay.qr.di.MpayQrModule
+import org.mifospay.feature.mpay.qr.scan.di.MpayQrScanModule
 import org.mifospay.feature.notification.di.NotificationModule
 import org.mifospay.feature.payments.di.PaymentsModule
 import org.mifospay.feature.profile.di.ProfileModule
-import org.mifospay.feature.qr.di.QrModule
 import org.mifospay.feature.receipt.di.ReceiptModule
-import org.mifospay.feature.request.money.di.RequestMoneyModule
 import org.mifospay.feature.savedcards.di.SavedCardsModule
 import org.mifospay.feature.send.interbank.di.interbankTransferModule
 import org.mifospay.feature.send.money.di.SendMoneyModule
@@ -87,12 +86,11 @@ object KoinModules {
             SavedCardsModule,
             ReceiptModule,
             StandingInstructionModule,
-            RequestMoneyModule,
             SendMoneyModule,
             interbankTransferModule,
             MakeTransferModule,
-            QrModule,
             MpayQrModule,
+            MpayQrScanModule,
             FastMpayModule,
             MerchantsModule,
             UpiSetupModule,

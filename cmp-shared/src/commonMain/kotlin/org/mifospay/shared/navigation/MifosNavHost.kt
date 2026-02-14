@@ -65,11 +65,10 @@ import org.mifospay.feature.payments.RequestScreen
 import org.mifospay.feature.payments.paymentsScreen
 import org.mifospay.feature.payments.selectTransferType.SelectTransferTypeScreen
 import org.mifospay.feature.profile.navigation.profileNavGraph
-import org.mifospay.feature.qr.navigation.SCAN_QR_ROUTE
-import org.mifospay.feature.qr.navigation.navigateToScanQr
-import org.mifospay.feature.qr.navigation.scanQrScreen
+import org.mifospay.feature.mpay.qr.scan.navigation.SCAN_QR_ROUTE
+import org.mifospay.feature.mpay.qr.scan.navigation.navigateToScanQr
+import org.mifospay.feature.mpay.qr.scan.navigation.scanQrScreen
 import org.mifospay.feature.receipt.navigation.receiptScreen
-import org.mifospay.feature.request.money.navigation.showQrScreen
 import org.mifospay.feature.savedcards.createOrUpdate.addEditCardScreen
 import org.mifospay.feature.savedcards.details.cardDetailRoute
 import org.mifospay.feature.send.interbank.navigation.interbankTransferScreen
@@ -291,10 +290,6 @@ internal fun MifosNavHost(
         )
 
         siDetailsScreen(navigateBack = navController::navigateUp)
-
-        showQrScreen(
-            navigateBack = navController::navigateUp,
-        )
 
         mpayQrScreen(
             navigateBack = navController::navigateUp,

@@ -65,7 +65,7 @@ import org.mifospay.core.designsystem.component.MifosNavigationRailItem
 import org.mifospay.core.designsystem.icon.MifosIcons
 import org.mifospay.core.designsystem.theme.LocalGradientColors
 import org.mifospay.feature.profile.navigation.navigateToEditProfile
-import org.mifospay.feature.qr.navigation.navigateToScanQr
+import org.mifospay.feature.mpay.qr.scan.navigation.navigateToScanQr
 import org.mifospay.feature.settings.navigation.navigateToSettings
 import org.mifospay.shared.navigation.MifosNavHost
 import org.mifospay.shared.utils.TopLevelDestination

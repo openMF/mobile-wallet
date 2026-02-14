@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copyright 2024 Mifos Initiative
+
+    This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+    If a copy of the MPL was not distributed with this file,
+    You can obtain one at https://mozilla.org/MPL/2.0/.
+
+    See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+-->
+<resources>
+    <string name="feature_qr_approve_permission_description_camera">You need to approve these permissions in order to access the camera.</string>
+    <string name="feature_qr_permission_required">Permission Required</string>
+    <string name="feature_qr_dismiss">Dismiss</string>
+    <string name="feature_qr_proceed">Proceed</string>
+    <string name="feature_qr_scan_code">Scan Code</string>
+    <string name="feature_qr_loading">Loading</string>
+    <string name="feature_qr_oops">Oops</string>
+    <string name="feature_qr_unexpected_error_subtitle">An unexpected error occurred. Please try again.</string>
+    <string name="feature_qr_instruction">Please, align QR Code within the frame to make scanning easily detectable.</string>
+    <string name="feature_qr_warning_title">Potential Warning</string>
+    <string name="feature_qr_warning_message">If you scan the QR code, it could take you to a phishing website that steals your personal information, like credit card numbers or usernames and passwords. It could also download malware onto your phone and give hackers access to your device.</string>
+    <string name="feature_qr_scan_any_qr">Scan any QR</string>
+    <string name="feature_qr_supported_transfers">Inter-bank • Intra-bank</string>
+    <string name="feature_qr_upload_qr">Upload QR</string>
+    <string name="feature_qr_torch">Torch</string>
+    <string name="feature_qr_powered_by">Powered by Mifos</string>
+    <string name="feature_qr_help_title">QR Code Safety</string>
+    <string name="feature_qr_help_description">Be cautious when scanning QR codes. They could lead to phishing websites that steal your personal information, or download malware onto your device. Only scan QR codes from trusted sources.</string>
+    <string name="feature_qr_ok">OK</string>
+    <string name="feature_qr_import_qr_code">Import QR Code</string>
+    <string name="feature_qr_import_description">Select a QR code image from your device to process payment or add beneficiary</string>
+    <string name="feature_qr_select_image">Select Image</string>
+    <string name="feature_qr_drag_drop_hint">or drag and drop an image here</string>
+    <string name="feature_qr_supported_formats">Supported formats: PNG, JPG, JPEG</string>
+    <string name="feature_qr_processing">Processing QR Code...</string>
+    <string name="feature_qr_no_qr_found">No QR code found in the selected image</string>
+    <string name="feature_qr_scan_success">QR Code scanned successfully</string>
+    <string name="feature_qr_camera_permission_title">Camera Access Required</string>
+    <string name="feature_qr_camera_permission_description">To scan QR codes, please allow camera access. You can also upload a QR code image instead.</string>
+    <string name="feature_qr_open_settings">Open Settings</string>
+    <string name="feature_qr_close">Close</string>
+    <string name="feature_qr_help">Help</string>
+    <string name="feature_qr_scan_qr_code">Scan QR Code</string>
+    <string name="feature_qr_viewfinder">QR code viewfinder</string>
+    <string name="feature_qr_toggle_flash">Toggle flashlight</string>
+    <string name="feature_qr_select_qr_image">Select QR code image</string>
+    <string name="feature_qr_drop_image_here">Drop image here</string>
+    <string name="feature_qr_preview_image">Preview of selected image</string>
+</resources>
