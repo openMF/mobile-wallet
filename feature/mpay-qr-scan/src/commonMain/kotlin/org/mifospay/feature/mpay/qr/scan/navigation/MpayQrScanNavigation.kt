@@ -23,12 +23,14 @@ fun NavController.navigateToScanQr(navOptions: NavOptions? = null) =
 fun NavGraphBuilder.scanQrScreen(
     navigateBack: () -> Unit,
     navigateToSendScreen: (String) -> Unit,
+    navigateToInterbankTransfer: (phoneNumber: String, recipientName: String, amount: String) -> Unit,
     navigateToAddBeneficiaryScreen: (String) -> Unit,
 ) {
     composableWithSlideTransitions(route = SCAN_QR_ROUTE) {
         ScanQrCodeScreen(
             navigateBack = navigateBack,
             navigateToSendScreen = navigateToSendScreen,
+            navigateToInterbankTransfer = navigateToInterbankTransfer,
             navigateToAddBeneficiaryScreen = navigateToAddBeneficiaryScreen,
         )
     }

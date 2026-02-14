@@ -57,6 +57,9 @@ import org.mifospay.feature.make.transfer.v2.navigateToMakeTransferScreenV2
 import org.mifospay.feature.merchants.navigation.merchantTransferScreen
 import org.mifospay.feature.mpay.qr.navigation.mpayQrScreen
 import org.mifospay.feature.mpay.qr.navigation.navigateToMpayQrScreen
+import org.mifospay.feature.mpay.qr.scan.navigation.SCAN_QR_ROUTE
+import org.mifospay.feature.mpay.qr.scan.navigation.navigateToScanQr
+import org.mifospay.feature.mpay.qr.scan.navigation.scanQrScreen
 import org.mifospay.feature.notification.navigateToNotification
 import org.mifospay.feature.notification.notificationScreen
 import org.mifospay.feature.payments.PAYMENTS_ROUTE
@@ -65,9 +68,6 @@ import org.mifospay.feature.payments.RequestScreen
 import org.mifospay.feature.payments.paymentsScreen
 import org.mifospay.feature.payments.selectTransferType.SelectTransferTypeScreen
 import org.mifospay.feature.profile.navigation.profileNavGraph
-import org.mifospay.feature.mpay.qr.scan.navigation.SCAN_QR_ROUTE
-import org.mifospay.feature.mpay.qr.scan.navigation.navigateToScanQr
-import org.mifospay.feature.mpay.qr.scan.navigation.scanQrScreen
 import org.mifospay.feature.receipt.navigation.receiptScreen
 import org.mifospay.feature.savedcards.createOrUpdate.addEditCardScreen
 import org.mifospay.feature.savedcards.details.cardDetailRoute
@@ -452,7 +452,18 @@ internal fun MifosNavHost(
                     },
                 )
             },
-
+            navigateToInterbankTransfer = { phoneNumber, recipientName, amount ->
+                navController.navigateToInterbankTransfer(
+                    phoneNumber = phoneNumber,
+                    recipientName = recipientName,
+                    amount = amount,
+                    navOptions = navOptions {
+                        popUpTo(SCAN_QR_ROUTE) {
+                            inclusive = true
+                        }
+                    },
+                )
+            },
             navigateToAddBeneficiaryScreen = {
                 navController.navigateToBeneficiaryAddEdit(
                     BeneficiaryAddEditType.EditItem(it),

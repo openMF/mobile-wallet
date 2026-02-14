@@ -19,6 +19,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.serialization.json.Json
 import org.mifospay.core.data.util.MpayQrCodeProcessor
 import org.mifospay.core.model.beneficiary.Beneficiary
+import org.mifospay.core.model.utils.QrCodeType
 import template.core.base.platform.PlatformBuildConfig
 
 class ScanQrViewModel : ViewModel() {
@@ -84,13 +85,29 @@ class ScanQrViewModel : ViewModel() {
 
     fun onScanned(data: String): Boolean {
         return try {
-            MpayQrCodeProcessor.decodeMpayString(data)
+            val qrCodeData = MpayQrCodeProcessor.decodeMpayString(data)
 
             _eventFlow.update {
                 ScanQrEvent.OnScanSuccess
             }
-            _eventFlow.update {
-                ScanQrEvent.OnNavigateToSendScreen(data)
+
+            // Navigate based on QR type
+            when (qrCodeData.type) {
+                QrCodeType.INTER_BANK -> {
+                    _eventFlow.update {
+                        ScanQrEvent.OnNavigateToInterbankTransfer(
+                            phoneNumber = qrCodeData.accountExternalId ?: "",
+                            recipientName = qrCodeData.clientName,
+                            amount = qrCodeData.amount,
+                        )
+                    }
+                }
+
+                else -> {
+                    _eventFlow.update {
+                        ScanQrEvent.OnNavigateToSendScreen(data)
+                    }
+                }
             }
 
             true
@@ -148,6 +165,11 @@ class ScanQrViewModel : ViewModel() {
 
 sealed interface ScanQrEvent {
     data class OnNavigateToSendScreen(val data: String) : ScanQrEvent
+    data class OnNavigateToInterbankTransfer(
+        val phoneNumber: String,
+        val recipientName: String,
+        val amount: String,
+    ) : ScanQrEvent
     data class OnNavigateToAddBeneficiary(val beneficiary: String) : ScanQrEvent
     data class ShowToast(val message: String) : ScanQrEvent
     data object OnScanSuccess : ScanQrEvent

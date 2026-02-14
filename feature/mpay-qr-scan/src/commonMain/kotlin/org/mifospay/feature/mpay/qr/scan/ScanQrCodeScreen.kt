@@ -53,6 +53,7 @@ import org.mifospay.feature.mpay.qr.scan.components.QrViewfinder
 internal fun ScanQrCodeScreen(
     navigateBack: () -> Unit,
     navigateToSendScreen: (String) -> Unit,
+    navigateToInterbankTransfer: (phoneNumber: String, recipientName: String, amount: String) -> Unit,
     navigateToAddBeneficiaryScreen: (String) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: ScanQrViewModel = koinViewModel(),
@@ -73,6 +74,15 @@ internal fun ScanQrCodeScreen(
         when (eventFlow) {
             is ScanQrEvent.OnNavigateToSendScreen -> {
                 navigateToSendScreen.invoke((eventFlow as ScanQrEvent.OnNavigateToSendScreen).data)
+            }
+
+            is ScanQrEvent.OnNavigateToInterbankTransfer -> {
+                val event = eventFlow as ScanQrEvent.OnNavigateToInterbankTransfer
+                navigateToInterbankTransfer.invoke(
+                    event.phoneNumber,
+                    event.recipientName,
+                    event.amount,
+                )
             }
 
             is ScanQrEvent.ShowToast -> {
