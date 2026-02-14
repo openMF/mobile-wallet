@@ -46,7 +46,7 @@ object MpayQrCodeProcessor {
      *
      * Supports multiple QR formats based on [QrCodeData.type]:
      * - INTRA_BANK: Contains internal Mifos IDs (clientId, accountId > 0)
-     * - INTER_BANK: Contains only phone number (clientId, accountId = 0, phoneNumber set)
+     * - INTER_BANK: Contains only accountExternalId (simplified format)
      * - BENEFICIARY: For adding beneficiaries
      * - MERCHANT: For merchant payments
      *
@@ -58,21 +58,38 @@ object MpayQrCodeProcessor {
         // Validate input data
         validate(qrCodeData)
 
-        // Build MPay string with type
-        val requestPaymentString = buildString {
-            append(MPAY_PROTOCOL)
-            append("?qt=${qrCodeData.type.ordinal}")
-            append("&ci=${qrCodeData.clientId}")
-            append("&am=${qrCodeData.amount}")
-            append("&cn=${qrCodeData.clientName}")
-            append("&an=${qrCodeData.accountNo}")
-            append("&ai=${qrCodeData.accountId}")
-            append("&cu=${qrCodeData.currency}")
-            append("&oi=${qrCodeData.officeId}")
-            append("&pi=${qrCodeData.accountTypeId}")
-            append("&pn=${qrCodeData.phoneNumber ?: ""}")
-            append("&mode=02")
-            append("&s=000000")
+        // Build MPay string based on type
+        val requestPaymentString = when (qrCodeData.type) {
+            QrCodeType.INTER_BANK -> {
+                // Simplified inter-bank format: only accountExternalId + optional amount/currency
+                buildString {
+                    append(MPAY_PROTOCOL)
+                    append("?qt=${qrCodeData.type.ordinal}")
+                    append("&ae=${qrCodeData.accountExternalId ?: ""}")
+                    append("&am=${qrCodeData.amount}")
+                    append("&cu=${qrCodeData.currency}")
+                }
+            }
+
+            else -> {
+                // Full format for intra-bank and other types
+                buildString {
+                    append(MPAY_PROTOCOL)
+                    append("?qt=${qrCodeData.type.ordinal}")
+                    append("&ci=${qrCodeData.clientId}")
+                    append("&am=${qrCodeData.amount}")
+                    append("&cn=${qrCodeData.clientName}")
+                    append("&an=${qrCodeData.accountNo}")
+                    append("&ai=${qrCodeData.accountId}")
+                    append("&cu=${qrCodeData.currency}")
+                    append("&oi=${qrCodeData.officeId}")
+                    append("&pi=${qrCodeData.accountTypeId}")
+                    append("&pn=${qrCodeData.phoneNumber ?: ""}")
+                    append("&ae=${qrCodeData.accountExternalId ?: ""}")
+                    append("&mode=02")
+                    append("&s=000000")
+                }
+            }
         }
 
         return requestPaymentString.encodeBase64()
@@ -98,23 +115,26 @@ object MpayQrCodeProcessor {
             else -> throw IllegalArgumentException("Invalid QR code format: unknown protocol")
         }
 
-        // Get phoneNumber for inter-bank QR support
+        // Get accountExternalId for inter-bank QR support
+        val accountExternalId = params["ae"]?.takeIf { it.isNotBlank() }
+
+        // Get phoneNumber for legacy inter-bank QR support
         val phoneNumber = params["pn"]?.takeIf { it.isNotBlank() }
 
-        // For inter-bank QR codes (phone number only), clientId and accountId may be 0
+        // For inter-bank QR codes, clientId and accountId may be 0
         val clientId = params["ci"]?.toLongOrNull() ?: 0L
         val accountId = params["ai"]?.toLongOrNull() ?: 0L
 
         // Determine QR type - check qt field first, then infer from fields
         val type = params["qt"]?.toIntOrNull()?.let { QrCodeType.fromOrdinal(it) }
-            ?: inferTypeFromFields(clientId, accountId, phoneNumber)
+            ?: inferTypeFromFields(clientId, accountId, accountExternalId)
 
-        // Validate: must have either internal IDs or phone number
+        // Validate: must have either internal IDs or accountExternalId for inter-bank
         val hasInternalIds = clientId > 0 && accountId > 0
-        val hasPhoneNumber = phoneNumber != null
+        val hasAccountExternalId = accountExternalId != null
 
-        if (!hasInternalIds && !hasPhoneNumber) {
-            throw IllegalArgumentException("QR code missing required data: needs internal IDs or phone number")
+        if (!hasInternalIds && !hasAccountExternalId) {
+            throw IllegalArgumentException("QR code missing required data: needs internal IDs or accountExternalId")
         }
 
         // Create QrCodeData
@@ -129,6 +149,7 @@ object MpayQrCodeProcessor {
             officeId = params["oi"]?.toLongOrNull() ?: QrCodeData.OFFICE_ID,
             accountTypeId = params["pi"]?.toLongOrNull() ?: QrCodeData.ACCOUNT_TYPE_ID,
             phoneNumber = phoneNumber,
+            accountExternalId = accountExternalId,
         )
 
         // Validate the created object (only for intra-bank with internal IDs)
@@ -145,11 +166,11 @@ object MpayQrCodeProcessor {
     private fun inferTypeFromFields(
         clientId: Long,
         accountId: Long,
-        phoneNumber: String?,
+        accountExternalId: String?,
     ): QrCodeType {
         return when {
             clientId > 0 && accountId > 0 -> QrCodeType.INTRA_BANK
-            phoneNumber != null -> QrCodeType.INTER_BANK
+            accountExternalId != null -> QrCodeType.INTER_BANK
             else -> QrCodeType.INTRA_BANK
         }
     }
@@ -163,9 +184,9 @@ object MpayQrCodeProcessor {
         // Validation depends on QR type
         when (data.type) {
             QrCodeType.INTER_BANK -> {
-                // Inter-bank QR requires phone number
-                require(!data.phoneNumber.isNullOrBlank()) {
-                    "Phone number is required for inter-bank QR"
+                // Inter-bank QR requires accountExternalId
+                require(!data.accountExternalId.isNullOrBlank()) {
+                    "Account external ID is required for inter-bank QR"
                 }
             }
 

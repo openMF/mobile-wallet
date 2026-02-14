@@ -73,7 +73,7 @@ fun FastMpayScreen(
             }
 
             is QrProcessResult.NavigateToInterbankTransfer -> {
-                onNavigateToInterbankTransfer(r.phoneNumber, r.recipientName, r.amount)
+                onNavigateToInterbankTransfer(r.accountExternalId, r.recipientName, r.amount)
             }
 
             is QrProcessResult.NavigateToIntraBankTransfer -> {

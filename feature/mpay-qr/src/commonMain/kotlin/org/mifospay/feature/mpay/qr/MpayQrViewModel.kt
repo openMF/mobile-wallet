@@ -62,12 +62,31 @@ class MpayQrViewModel(
     private val ioDispatcher: CoroutineDispatcher,
 ) : BaseViewModel<MpayQrState, MpayQrEvent, MpayQrAction>(
     initialState = savedStateHandle.getSerialized(KEY_STATE) ?: run {
-        val client = requireNotNull(repository.client.value)
-        val defaultAccount = requireNotNull(repository.defaultAccount.value)
+        val client = repository.client.value ?: Client(
+            id = 0,
+            accountNo = "",
+            externalId = "",
+            active = false,
+            activationDate = emptyList(),
+            firstname = "",
+            lastname = "",
+            displayName = "Unknown",
+            mobileNo = "",
+            emailAddress = "",
+            dateOfBirth = emptyList(),
+            isStaff = false,
+            officeId = 0,
+            officeName = "",
+            savingsProductName = "",
+        )
+        val defaultAccount = repository.defaultAccount.value ?: DefaultAccount.DEFAULT
+        // Get the account external ID for inter-bank QR
+        val accountExternalId = repository.getAccountExternalId(defaultAccount.accountId)
 
         MpayQrState(
             client = client,
             defaultAccount = defaultAccount,
+            accountExternalId = accountExternalId ?: "",
             viewState = MpayQrState.ViewState.Loading,
         )
     },
@@ -155,20 +174,42 @@ class MpayQrViewModel(
 
     private fun generateQr() {
         viewModelScope.launch {
-            val (intraBankData, interBankData) = withContext(ioDispatcher) {
-                Pair(
-                    MpayQrCodeProcessor.encodeMpayString(state.qrData),
-                    MpayQrCodeProcessor.encodeMpayString(state.interBankQrData),
-                )
+            // Check if default account is properly set
+            if (state.defaultAccount.accountNo.isBlank()) {
+                mutableStateFlow.update {
+                    it.copy(
+                        viewState = MpayQrState.ViewState.Error(
+                            "No default account set. Please set a default account first.",
+                        ),
+                    )
+                }
+                return@launch
             }
 
-            mutableStateFlow.update {
-                it.copy(
-                    viewState = MpayQrState.ViewState.Content(
-                        intraBankData = intraBankData,
-                        interBankData = interBankData,
-                    ),
-                )
+            try {
+                val (intraBankData, interBankData) = withContext(ioDispatcher) {
+                    Pair(
+                        MpayQrCodeProcessor.encodeMpayString(state.qrData),
+                        MpayQrCodeProcessor.encodeMpayString(state.interBankQrData),
+                    )
+                }
+
+                mutableStateFlow.update {
+                    it.copy(
+                        viewState = MpayQrState.ViewState.Content(
+                            intraBankData = intraBankData,
+                            interBankData = interBankData,
+                        ),
+                    )
+                }
+            } catch (e: IllegalArgumentException) {
+                mutableStateFlow.update {
+                    it.copy(
+                        viewState = MpayQrState.ViewState.Error(
+                            e.message ?: "Failed to generate QR code",
+                        ),
+                    )
+                }
             }
         }
     }
@@ -220,6 +261,12 @@ data class MpayQrState(
 
     val defaultAccount: DefaultAccount,
 
+    /**
+     * The external ID of the default account, used for inter-bank QR codes.
+     * This is fetched from the saved account external IDs map in the datastore.
+     */
+    val accountExternalId: String = "",
+
     @Transient
     val viewState: ViewState = ViewState.Loading,
 
@@ -239,19 +286,24 @@ data class MpayQrState(
 ) {
     /**
      * Computed property for inter-bank QR data.
-     * Uses the user's phone number for participant lookup.
+     * Simplified format: only contains accountExternalId for participant lookup.
      */
     val interBankQrData: QrCodeData
-        get() = qrData.copy(
+        get() = QrCodeData(
             type = QrCodeType.INTER_BANK,
             clientId = 0L,
-            accountId = 0L,
+            clientName = "",
             accountNo = "",
-            phoneNumber = client.mobileNo,
+            amount = qrData.amount,
+            accountId = 0L,
+            currency = qrData.currency,
+            accountExternalId = accountExternalId,
         )
 
     sealed interface ViewState {
         data object Loading : ViewState
+
+        data class Error(val message: String) : ViewState
 
         data class Content(
             val intraBankData: String,

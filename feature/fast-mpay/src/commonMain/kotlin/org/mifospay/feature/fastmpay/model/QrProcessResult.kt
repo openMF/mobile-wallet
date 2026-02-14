@@ -31,13 +31,13 @@ sealed interface QrProcessResult {
     /**
      * Navigate to Inter-bank Transfer screen.
      *
-     * @param phoneNumber Phone number for participant lookup (REQUIRED)
+     * @param accountExternalId Account external ID for participant lookup (REQUIRED)
      * @param recipientName Display name from QR (optional, used as hint while loading)
      * @param amount Pre-filled amount from QR (optional)
      */
     @Serializable
     data class NavigateToInterbankTransfer(
-        val phoneNumber: String,
+        val accountExternalId: String,
         val recipientName: String? = null,
         val amount: String? = null,
     ) : QrProcessResult

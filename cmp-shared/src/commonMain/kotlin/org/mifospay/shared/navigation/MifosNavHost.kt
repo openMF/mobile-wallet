@@ -323,9 +323,9 @@ internal fun MifosNavHost(
                     },
                 )
             },
-            onNavigateToInterbankTransfer = { phoneNumber, recipientName, amount ->
+            onNavigateToInterbankTransfer = { accountExternalId, recipientName, amount ->
                 navController.navigateToInterbankTransfer(
-                    phoneNumber = phoneNumber,
+                    phoneNumber = accountExternalId,
                     recipientName = recipientName,
                     amount = amount,
                     navOptions = navOptions {

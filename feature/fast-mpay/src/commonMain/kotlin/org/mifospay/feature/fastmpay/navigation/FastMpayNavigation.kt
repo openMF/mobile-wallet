@@ -46,7 +46,7 @@ fun NavController.navigateToFastMpay(
  *
  * @param onNavigateToAddBeneficiary Callback for INTRA_BANK/BENEFICIARY type when beneficiary doesn't exist
  * @param onNavigateToSendMoneyV2 Callback for INTRA_BANK type when beneficiary exists (qrData, beneficiaryName)
- * @param onNavigateToInterbankTransfer Callback for INTER_BANK type (phoneNumber, recipientName, amount)
+ * @param onNavigateToInterbankTransfer Callback for INTER_BANK type (accountExternalId, recipientName, amount)
  * @param onNavigateToIntraBankTransfer Callback for future intra-bank direct transfer
  * @param onNavigateToMerchantPayment Callback for MERCHANT type
  * @param onError Callback when processing fails
@@ -54,7 +54,7 @@ fun NavController.navigateToFastMpay(
 fun NavGraphBuilder.fastMpayScreen(
     onNavigateToAddBeneficiary: (beneficiaryData: String) -> Unit,
     onNavigateToSendMoneyV2: (qrData: QrCodeData, beneficiaryName: String) -> Unit,
-    onNavigateToInterbankTransfer: (phoneNumber: String, recipientName: String?, amount: String?) -> Unit,
+    onNavigateToInterbankTransfer: (accountExternalId: String, recipientName: String?, amount: String?) -> Unit,
     onNavigateToIntraBankTransfer: (qrData: QrCodeData) -> Unit,
     onNavigateToMerchantPayment: (qrData: QrCodeData) -> Unit,
     onError: (message: String) -> Unit,

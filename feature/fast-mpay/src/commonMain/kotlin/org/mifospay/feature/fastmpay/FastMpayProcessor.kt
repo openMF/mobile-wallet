@@ -47,13 +47,13 @@ class FastMpayProcessor(
             }
 
             QrCodeType.INTER_BANK -> {
-                // Inter-bank: Has phone number -> Go to inter-bank transfer
-                val phoneNumber = qrData.phoneNumber
-                if (phoneNumber.isNullOrBlank()) {
-                    return QrProcessResult.Error("Inter-bank QR missing phone number")
+                // Inter-bank: Has accountExternalId -> Go to inter-bank transfer
+                val accountExternalId = qrData.accountExternalId
+                if (accountExternalId.isNullOrBlank()) {
+                    return QrProcessResult.Error("Inter-bank QR missing account external ID")
                 }
                 QrProcessResult.NavigateToInterbankTransfer(
-                    phoneNumber = phoneNumber,
+                    accountExternalId = accountExternalId,
                     recipientName = qrData.clientName.takeIf { it.isNotBlank() },
                     amount = qrData.amount.takeIf { it.isNotBlank() },
                 )
