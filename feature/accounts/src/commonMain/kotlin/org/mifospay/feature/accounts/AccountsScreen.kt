@@ -304,7 +304,7 @@ private fun AccountsList(
 
         items(
             items = beneficiaryList,
-            key = { it.accountNumber },
+            key = { it.id },
         ) { beneficiary ->
             BeneficiaryItem(
                 beneficiary = beneficiary,

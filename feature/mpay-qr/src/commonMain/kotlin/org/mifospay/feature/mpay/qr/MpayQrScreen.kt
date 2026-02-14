@@ -124,6 +124,13 @@ internal fun MpayQrScreen(
             when (state.viewState) {
                 is MpayQrState.ViewState.Loading -> MifosProgressIndicator()
 
+                is MpayQrState.ViewState.Error -> {
+                    MpayQrErrorContent(
+                        message = state.viewState.message,
+                        onNavigateBack = { onAction(MpayQrAction.NavigateBack) },
+                    )
+                }
+
                 is MpayQrState.ViewState.Content -> {
                     MpayQrScreenContent(
                         state = state.viewState,
@@ -227,6 +234,46 @@ private fun MpayQrScreenContent(
                 modifier = Modifier.fillMaxWidth(),
             ) {
                 Text(text = "Share")
+            }
+        }
+    }
+}
+
+@Composable
+private fun MpayQrErrorContent(
+    message: String,
+    onNavigateBack: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    LazyColumn(
+        modifier = modifier.fillMaxSize(),
+        contentPadding = PaddingValues(KptTheme.spacing.md),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center,
+    ) {
+        item {
+            Text(
+                text = "Unable to Generate QR Code",
+                style = KptTheme.typography.titleMedium,
+                color = KptTheme.colorScheme.error,
+            )
+        }
+
+        item {
+            Text(
+                text = message,
+                style = KptTheme.typography.bodyMedium,
+                color = KptTheme.colorScheme.onSurface,
+                modifier = Modifier.padding(vertical = KptTheme.spacing.md),
+            )
+        }
+
+        item {
+            MifosOutlinedButton(
+                onClick = onNavigateBack,
+                modifier = Modifier.fillMaxWidth(),
+            ) {
+                Text(text = "Go Back")
             }
         }
     }

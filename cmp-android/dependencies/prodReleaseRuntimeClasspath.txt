@@ -25,12 +25,11 @@
 :feature:make-transfer
 :feature:merchants
 :feature:mpay-qr
+:feature:mpay-qr-scan
 :feature:notification
 :feature:payments
 :feature:profile
-:feature:qr
 :feature:receipt
-:feature:request-money
 :feature:savedcards
 :feature:send-interbank
 :feature:send-money

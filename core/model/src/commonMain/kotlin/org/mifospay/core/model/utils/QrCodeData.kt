@@ -36,6 +36,7 @@ import org.mifospay.core.model.search.AccountResult
  * @property officeId Office ID (0 for inter-bank QR)
  * @property accountTypeId Account type ID (0 for inter-bank QR)
  * @property phoneNumber Phone number for inter-bank participant lookup (null for intra-bank QR)
+ * @property accountExternalId External ID of the account for inter-bank transfers
  */
 @Serializable
 data class QrCodeData(
@@ -49,6 +50,7 @@ data class QrCodeData(
     val officeId: Long = OFFICE_ID,
     val accountTypeId: Long = ACCOUNT_TYPE_ID,
     val phoneNumber: String? = null,
+    val accountExternalId: String? = null,
 ) {
 
     /**
