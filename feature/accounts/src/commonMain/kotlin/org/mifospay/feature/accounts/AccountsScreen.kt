@@ -24,6 +24,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -275,10 +276,10 @@ private fun AccountsList(
             )
         }
 
-        items(
+        itemsIndexed(
             items = accounts,
-            key = { it.id },
-        ) { account ->
+            key = { index, account -> "${account.id}_$index" },
+        ) { index, account ->
             AccountItem(
                 account = account,
                 isDefault = defaultAccountId == account.id,
@@ -302,10 +303,10 @@ private fun AccountsList(
             )
         }
 
-        items(
+        itemsIndexed(
             items = beneficiaryList,
-            key = { it.accountNumber },
-        ) { beneficiary ->
+            key = { index, beneficiary -> "${beneficiary.accountNumber}_$index" },
+        ) { index, beneficiary ->
             BeneficiaryItem(
                 beneficiary = beneficiary,
                 onClickEdit = onClickEditBeneficiary,
