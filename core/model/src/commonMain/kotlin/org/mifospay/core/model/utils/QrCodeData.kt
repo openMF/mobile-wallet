@@ -16,31 +16,37 @@ import org.mifospay.core.model.search.AccountResult
  * Data class representing QR code data for MPay transactions.
  *
  * Supports multiple QR formats based on [type]:
- * 1. INTRA_BANK: clientId > 0, accountId > 0, phoneNumber = null
- *    Contains internal Mifos IDs for direct beneficiary addition.
+ * 1. INTRA_BANK: clientId > 0, accountId > 0
+ *    Contains internal Mifos IDs for direct transfer within same bank.
  *
- * 2. INTER_BANK: clientId = 0, accountId = 0, phoneNumber != null
- *    Contains only phone number for participant lookup to identify bank (fspId).
+ * 2. INTER_BANK: Uses accountExternalId for participant lookup
+ *    Routes to payment hub (Mojaloop) for cross-bank transfers.
  *
  * 3. BENEFICIARY: For adding a beneficiary with pre-filled data.
  *
  * 4. MERCHANT: For future merchant payment support.
  *
+ * The [fspId] field enables automatic routing:
+ * - If scanner's fspId == QR's fspId → Intra-bank transfer
+ * - If scanner's fspId != QR's fspId → Inter-bank transfer
+ *
  * @property type The type of QR code determining how it should be processed
- * @property clientId Virtual Payment Address (VPA) of the payee (0 for inter-bank QR)
+ * @property fspId Financial Service Provider ID (bank/tenant identifier) for routing
+ * @property clientId Internal client ID (0 for inter-bank QR)
  * @property clientName Payee name
  * @property accountNo Account number (empty for inter-bank QR)
  * @property amount Payment amount as a string
- * @property accountId Account ID (0 for inter-bank QR)
+ * @property accountId Internal account ID (0 for inter-bank QR)
  * @property currency Currency code
  * @property officeId Office ID (0 for inter-bank QR)
  * @property accountTypeId Account type ID (0 for inter-bank QR)
- * @property phoneNumber Phone number for inter-bank participant lookup (null for intra-bank QR)
+ * @property phoneNumber Deprecated: use accountExternalId instead
  * @property accountExternalId External ID of the account for inter-bank transfers
  */
 @Serializable
 data class QrCodeData(
     val type: QrCodeType = QrCodeType.INTRA_BANK,
+    val fspId: String? = null,
     val clientId: Long,
     val clientName: String,
     val accountNo: String,
@@ -49,6 +55,7 @@ data class QrCodeData(
     val currency: String = DEFAULT_CURRENCY,
     val officeId: Long = OFFICE_ID,
     val accountTypeId: Long = ACCOUNT_TYPE_ID,
+    @Deprecated("Use accountExternalId instead")
     val phoneNumber: String? = null,
     val accountExternalId: String? = null,
 ) {

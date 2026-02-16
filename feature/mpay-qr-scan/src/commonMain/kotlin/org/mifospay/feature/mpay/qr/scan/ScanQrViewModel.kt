@@ -18,11 +18,21 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.serialization.json.Json
 import org.mifospay.core.data.util.MpayQrCodeProcessor
+import org.mifospay.core.data.util.QrRouteResult
+import org.mifospay.core.data.util.QrTransferRouter
 import org.mifospay.core.model.beneficiary.Beneficiary
-import org.mifospay.core.model.utils.QrCodeType
-import template.core.base.platform.PlatformBuildConfig
+import org.mifospay.core.model.utils.QrCodeData
 
-class ScanQrViewModel : ViewModel() {
+/**
+ * ViewModel for QR code scanning screen.
+ *
+ * Uses [QrTransferRouter] for smart routing:
+ * - Compares FSP IDs to determine intra-bank vs inter-bank
+ * - Routes to appropriate transfer flow based on the comparison
+ */
+class ScanQrViewModel(
+    private val qrTransferRouter: QrTransferRouter,
+) : ViewModel() {
 
     private val _eventFlow = MutableStateFlow<ScanQrEvent?>(null)
     val eventFlow = _eventFlow.asSharedFlow()
@@ -85,42 +95,56 @@ class ScanQrViewModel : ViewModel() {
 
     fun onScanned(data: String): Boolean {
         return try {
+            Logger.d { "QR Raw Data: $data" }
             val qrCodeData = MpayQrCodeProcessor.decodeMpayString(data)
+
+            Logger.d { "QR Decoded - fspId: ${qrCodeData.fspId}, type: ${qrCodeData.type}, clientId: ${qrCodeData.clientId}, accountId: ${qrCodeData.accountId}" }
+
+            // Use smart routing based on FSP ID comparison
+            val routeResult = qrTransferRouter.routeQrScan(qrCodeData)
 
             _eventFlow.update {
                 ScanQrEvent.OnScanSuccess
             }
 
-            // Navigate based on QR type
-            when (qrCodeData.type) {
-                QrCodeType.INTER_BANK -> {
+            // Navigate based on routing result
+            when (routeResult) {
+                is QrRouteResult.IntraBank -> {
+                    Logger.d { "QR Route -> Intra-bank transfer" }
+                    _eventFlow.update {
+                        ScanQrEvent.OnNavigateToIntraBankTransfer(routeResult.qrData)
+                    }
+                }
+
+                is QrRouteResult.InterBank -> {
+                    Logger.d { "QR Route -> Inter-bank transfer to ${routeResult.accountExternalId}" }
                     _eventFlow.update {
                         ScanQrEvent.OnNavigateToInterbankTransfer(
-                            phoneNumber = qrCodeData.accountExternalId ?: "",
-                            recipientName = qrCodeData.clientName,
-                            amount = qrCodeData.amount,
+                            accountExternalId = routeResult.accountExternalId,
+                            recipientName = routeResult.recipientName ?: "",
+                            amount = routeResult.amount ?: "",
                         )
                     }
                 }
 
-                else -> {
+                is QrRouteResult.Error -> {
+                    Logger.w { "QR Route -> Error: ${routeResult.message}" }
                     _eventFlow.update {
-                        ScanQrEvent.OnNavigateToSendScreen(data)
+                        ScanQrEvent.ShowToast(routeResult.message)
                     }
                 }
             }
 
             true
         } catch (e: Exception) {
+            Logger.e(e) { "QR decode failed, trying fallback" }
             getQrCodeResult(data)
         }
     }
 
     private fun getQrCodeResult(data: String): Boolean {
         val trimmedData = data.trim()
-        if (PlatformBuildConfig.isDebug) {
-            Logger.d { "QR scanned: $data" }
-        }
+        Logger.d { "QR scanned (fallback parsing): $data" }
 
         if (!trimmedData.startsWith("{") || !trimmedData.endsWith("}")) {
             _eventFlow.update {
@@ -164,9 +188,9 @@ class ScanQrViewModel : ViewModel() {
 }
 
 sealed interface ScanQrEvent {
-    data class OnNavigateToSendScreen(val data: String) : ScanQrEvent
+    data class OnNavigateToIntraBankTransfer(val qrData: QrCodeData) : ScanQrEvent
     data class OnNavigateToInterbankTransfer(
-        val phoneNumber: String,
+        val accountExternalId: String,
         val recipientName: String,
         val amount: String,
     ) : ScanQrEvent

@@ -9,6 +9,7 @@
  */
 package org.mifospay.core.data.util
 
+import co.touchlab.kermit.Logger
 import io.ktor.util.decodeBase64String
 import io.ktor.util.encodeBase64
 import org.mifospay.core.model.utils.QrCodeData
@@ -20,7 +21,7 @@ import kotlin.io.encoding.ExperimentalEncodingApi
  *
  * MPay string format:
  * ```
- * mpay://pay?qt=0&ci=123&am=100&cn=John&an=ACC001&ai=456&cu=USD&oi=1&pi=2&pn=&mode=02&s=000000
+ * mpay://pay?qt=0&fsp=mifos-bank-1&ci=123&am=100&cn=John&an=ACC001&ai=456&cu=USD&oi=1&pi=2&ae=EXT123
  * ```
  *
  * Type values (qt):
@@ -28,6 +29,10 @@ import kotlin.io.encoding.ExperimentalEncodingApi
  * - qt=1 → INTER_BANK
  * - qt=2 → BENEFICIARY
  * - qt=3 → MERCHANT
+ *
+ * The fsp (FSP ID) field enables automatic routing:
+ * - If scanner's fspId == QR's fspId → Intra-bank transfer
+ * - If scanner's fspId != QR's fspId → Inter-bank transfer
  */
 @OptIn(ExperimentalEncodingApi::class)
 object MpayQrCodeProcessor {
@@ -58,14 +63,18 @@ object MpayQrCodeProcessor {
         // Validate input data
         validate(qrCodeData)
 
+        Logger.d { "QR Encode - type: ${qrCodeData.type}, fspId: ${qrCodeData.fspId}, clientId: ${qrCodeData.clientId}, accountId: ${qrCodeData.accountId}, officeId: ${qrCodeData.officeId}" }
+
         // Build MPay string based on type
         val requestPaymentString = when (qrCodeData.type) {
             QrCodeType.INTER_BANK -> {
-                // Simplified inter-bank format: only accountExternalId + optional amount/currency
+                // Simplified inter-bank format: fspId + accountExternalId + optional amount/currency
                 buildString {
                     append(MPAY_PROTOCOL)
                     append("?qt=${qrCodeData.type.ordinal}")
+                    append("&fsp=${qrCodeData.fspId ?: ""}")
                     append("&ae=${qrCodeData.accountExternalId ?: ""}")
+                    append("&cn=${qrCodeData.clientName}")
                     append("&am=${qrCodeData.amount}")
                     append("&cu=${qrCodeData.currency}")
                 }
@@ -76,6 +85,7 @@ object MpayQrCodeProcessor {
                 buildString {
                     append(MPAY_PROTOCOL)
                     append("?qt=${qrCodeData.type.ordinal}")
+                    append("&fsp=${qrCodeData.fspId ?: ""}")
                     append("&ci=${qrCodeData.clientId}")
                     append("&am=${qrCodeData.amount}")
                     append("&cn=${qrCodeData.clientName}")
@@ -84,10 +94,7 @@ object MpayQrCodeProcessor {
                     append("&cu=${qrCodeData.currency}")
                     append("&oi=${qrCodeData.officeId}")
                     append("&pi=${qrCodeData.accountTypeId}")
-                    append("&pn=${qrCodeData.phoneNumber ?: ""}")
                     append("&ae=${qrCodeData.accountExternalId ?: ""}")
-                    append("&mode=02")
-                    append("&s=000000")
                 }
             }
         }
@@ -107,6 +114,7 @@ object MpayQrCodeProcessor {
     fun decodeMpayString(encodedString: String): QrCodeData {
         // Decode the Base64 string
         val decodedString = encodedString.decodeBase64String()
+        Logger.d { "QR Decode - decodedString: $decodedString" }
 
         // Parse based on protocol (support both mpay:// and upi:// for backwards compat)
         val params = when {
@@ -114,6 +122,9 @@ object MpayQrCodeProcessor {
             decodedString.startsWith(UPI_PROTOCOL) -> parseMpayString(decodedString, UPI_PROTOCOL)
             else -> throw IllegalArgumentException("Invalid QR code format: unknown protocol")
         }
+
+        // Get FSP ID for bank routing
+        val fspId = params["fsp"]?.takeIf { it.isNotBlank() }
 
         // Get accountExternalId for inter-bank QR support
         val accountExternalId = params["ae"]?.takeIf { it.isNotBlank() }
@@ -124,10 +135,11 @@ object MpayQrCodeProcessor {
         // For inter-bank QR codes, clientId and accountId may be 0
         val clientId = params["ci"]?.toLongOrNull() ?: 0L
         val accountId = params["ai"]?.toLongOrNull() ?: 0L
+        Logger.d { "QR Decode - fspId: $fspId, clientId: $clientId, accountId: $accountId" }
 
         // Determine QR type - check qt field first, then infer from fields
         val type = params["qt"]?.toIntOrNull()?.let { QrCodeType.fromOrdinal(it) }
-            ?: inferTypeFromFields(clientId, accountId, accountExternalId)
+            ?: inferTypeFromFields(clientId, accountId, accountExternalId, fspId)
 
         // Validate: must have either internal IDs or accountExternalId for inter-bank
         val hasInternalIds = clientId > 0 && accountId > 0
@@ -140,6 +152,7 @@ object MpayQrCodeProcessor {
         // Create QrCodeData
         val requestQrData = QrCodeData(
             type = type,
+            fspId = fspId,
             clientId = clientId,
             clientName = params["cn"] ?: "",
             accountNo = params["an"] ?: "",
@@ -162,15 +175,21 @@ object MpayQrCodeProcessor {
 
     /**
      * Infers the QR type from fields when qt parameter is not present (legacy QR codes).
+     * Note: The actual intra/inter bank routing is determined by comparing fspId,
+     * not by this inferred type. This is only for legacy QR code support.
      */
     private fun inferTypeFromFields(
         clientId: Long,
         accountId: Long,
         accountExternalId: String?,
+        fspId: String?,
     ): QrCodeType {
         return when {
+            // If has internal IDs, likely intra-bank
             clientId > 0 && accountId > 0 -> QrCodeType.INTRA_BANK
-            accountExternalId != null -> QrCodeType.INTER_BANK
+            // If only has accountExternalId (no internal IDs), likely inter-bank
+            accountExternalId != null && clientId == 0L -> QrCodeType.INTER_BANK
+            // Default to intra-bank
             else -> QrCodeType.INTRA_BANK
         }
     }

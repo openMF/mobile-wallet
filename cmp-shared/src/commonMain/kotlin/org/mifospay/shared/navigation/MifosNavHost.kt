@@ -442,9 +442,16 @@ internal fun MifosNavHost(
 
         scanQrScreen(
             navigateBack = navController::popBackStack,
-            navigateToSendScreen = {
-                navController.navigateToSendMoneyScreen(
-                    requestData = it,
+            navigateToIntraBankTransfer = { qrData ->
+                navController.navigateToMakeTransferScreenV2(
+                    toOfficeId = qrData.officeId.toInt(),
+                    toClientId = qrData.clientId,
+                    toAccountTypeId = qrData.accountTypeId.toInt(),
+                    toAccountId = qrData.accountId.toInt(),
+                    amount = qrData.amount.toIntOrNull() ?: 0,
+                    toAccountName = qrData.clientName,
+                    toAccountNo = qrData.accountNo,
+                    returnDestination = "home",
                     navOptions = navOptions {
                         popUpTo(SCAN_QR_ROUTE) {
                             inclusive = true
@@ -452,9 +459,9 @@ internal fun MifosNavHost(
                     },
                 )
             },
-            navigateToInterbankTransfer = { phoneNumber, recipientName, amount ->
+            navigateToInterbankTransfer = { accountExternalId, recipientName, amount ->
                 navController.navigateToInterbankTransfer(
-                    phoneNumber = phoneNumber,
+                    phoneNumber = accountExternalId,
                     recipientName = recipientName,
                     amount = amount,
                     navOptions = navOptions {

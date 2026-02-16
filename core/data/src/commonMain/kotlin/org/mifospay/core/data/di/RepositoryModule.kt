@@ -56,6 +56,7 @@ import org.mifospay.core.data.repositoryImpl.ThirdPartyTransferRepositoryImpl
 import org.mifospay.core.data.repositoryImpl.TwoFactorAuthRepositoryImpl
 import org.mifospay.core.data.repositoryImpl.UserRepositoryImpl
 import org.mifospay.core.data.util.NetworkMonitor
+import org.mifospay.core.data.util.QrTransferRouter
 import org.mifospay.core.data.util.TimeZoneMonitor
 
 private val ioDispatcher = named(MifosDispatchers.IO.name)
@@ -96,6 +97,9 @@ val RepositoryModule = module {
     }
     single<TwoFactorAuthRepository> { TwoFactorAuthRepositoryImpl(get(), get(ioDispatcher)) }
     single<UserRepository> { UserRepositoryImpl(get(), get(ioDispatcher)) }
+
+    // QR Transfer Router for smart intra/inter-bank routing
+    single { QrTransferRouter(userPreferencesRepository = get()) }
 
     includes(platformModule)
     single<PlatformDependentDataModule> { getPlatformDataModule }

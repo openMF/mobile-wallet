@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import co.touchlab.kermit.Logger
 import io.github.alexzhirkevich.qrose.options.QrBallShape
 import io.github.alexzhirkevich.qrose.options.QrBrush
 import io.github.alexzhirkevich.qrose.options.QrCodeShape
@@ -61,7 +62,8 @@ class MpayQrViewModel(
     savedStateHandle: SavedStateHandle,
     private val ioDispatcher: CoroutineDispatcher,
 ) : BaseViewModel<MpayQrState, MpayQrEvent, MpayQrAction>(
-    initialState = savedStateHandle.getSerialized(KEY_STATE) ?: run {
+    initialState = run {
+        // Always get fresh client and account data to avoid stale savedStateHandle values
         val client = repository.client.value ?: Client(
             id = 0,
             accountNo = "",
@@ -82,12 +84,21 @@ class MpayQrViewModel(
         val defaultAccount = repository.defaultAccount.value ?: DefaultAccount.DEFAULT
         // Get the account external ID for inter-bank QR
         val accountExternalId = repository.getAccountExternalId(defaultAccount.accountId)
+        // Get the FSP ID (bank/tenant identifier) for routing
+        val fspId = repository.selectedInstance.value?.platformTenantId ?: ""
+
+        // Try to restore saved state but only use amount/currency, not client data
+        val savedState = savedStateHandle.getSerialized<MpayQrState>(KEY_STATE)
+
+        Logger.d { "MpayQrViewModel init - fspId: $fspId, client.id: ${client.id}, client.officeId: ${client.officeId}, defaultAccount.accountId: ${defaultAccount.accountId}" }
 
         MpayQrState(
             client = client,
             defaultAccount = defaultAccount,
+            fspId = fspId,
             accountExternalId = accountExternalId ?: "",
             viewState = MpayQrState.ViewState.Loading,
+            selectedPage = savedState?.selectedPage ?: 0,
         )
     },
 ) {
@@ -186,6 +197,8 @@ class MpayQrViewModel(
                 return@launch
             }
 
+            Logger.d { "QR Generate - client.id: ${state.client.id}, defaultAccount.accountId: ${state.defaultAccount.accountId}, qrData.clientId: ${state.qrData.clientId}, qrData.accountId: ${state.qrData.accountId}" }
+
             try {
                 val (intraBankData, interBankData) = withContext(ioDispatcher) {
                     Pair(
@@ -262,6 +275,12 @@ data class MpayQrState(
     val defaultAccount: DefaultAccount,
 
     /**
+     * The FSP ID (bank/tenant identifier) used for routing.
+     * When scanning, if QR's fspId matches scanner's fspId → intra-bank transfer.
+     */
+    val fspId: String = "",
+
+    /**
      * The external ID of the default account, used for inter-bank QR codes.
      * This is fetched from the saved account external IDs map in the datastore.
      */
@@ -274,10 +293,14 @@ data class MpayQrState(
     val selectedPage: Int = 0,
 
     val qrData: QrCodeData = QrCodeData(
+        fspId = fspId,
         clientId = client.id,
         clientName = client.displayName,
         accountNo = defaultAccount.accountNo,
         accountId = defaultAccount.accountId,
+        officeId = client.officeId,
+        accountTypeId = QrCodeData.ACCOUNT_TYPE_ID,
+        accountExternalId = accountExternalId,
         currency = "USD",
         amount = "",
     ),
@@ -286,13 +309,14 @@ data class MpayQrState(
 ) {
     /**
      * Computed property for inter-bank QR data.
-     * Simplified format: only contains accountExternalId for participant lookup.
+     * Simplified format: fspId + accountExternalId for participant lookup.
      */
     val interBankQrData: QrCodeData
         get() = QrCodeData(
             type = QrCodeType.INTER_BANK,
+            fspId = fspId,
             clientId = 0L,
-            clientName = "",
+            clientName = client.displayName,
             accountNo = "",
             amount = qrData.amount,
             accountId = 0L,

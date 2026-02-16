@@ -42,6 +42,7 @@ import mobile_wallet.feature.mpay_qr_scan.generated.resources.feature_qr_upload_
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.mifospay.core.designsystem.icon.MifosIcons
+import org.mifospay.core.model.utils.QrCodeData
 import org.mifospay.feature.mpay.qr.scan.components.QrActionButton
 import org.mifospay.feature.mpay.qr.scan.components.QrHelpDialog
 import org.mifospay.feature.mpay.qr.scan.components.QrProcessingOverlay
@@ -52,8 +53,8 @@ import org.mifospay.feature.mpay.qr.scan.components.QrViewfinder
 @Composable
 internal fun ScanQrCodeScreen(
     navigateBack: () -> Unit,
-    navigateToSendScreen: (String) -> Unit,
-    navigateToInterbankTransfer: (phoneNumber: String, recipientName: String, amount: String) -> Unit,
+    navigateToIntraBankTransfer: (QrCodeData) -> Unit,
+    navigateToInterbankTransfer: (accountExternalId: String, recipientName: String, amount: String) -> Unit,
     navigateToAddBeneficiaryScreen: (String) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: ScanQrViewModel = koinViewModel(),
@@ -72,14 +73,15 @@ internal fun ScanQrCodeScreen(
 
     LaunchedEffect(key1 = eventFlow) {
         when (eventFlow) {
-            is ScanQrEvent.OnNavigateToSendScreen -> {
-                navigateToSendScreen.invoke((eventFlow as ScanQrEvent.OnNavigateToSendScreen).data)
+            is ScanQrEvent.OnNavigateToIntraBankTransfer -> {
+                val event = eventFlow as ScanQrEvent.OnNavigateToIntraBankTransfer
+                navigateToIntraBankTransfer.invoke(event.qrData)
             }
 
             is ScanQrEvent.OnNavigateToInterbankTransfer -> {
                 val event = eventFlow as ScanQrEvent.OnNavigateToInterbankTransfer
                 navigateToInterbankTransfer.invoke(
-                    event.phoneNumber,
+                    event.accountExternalId,
                     event.recipientName,
                     event.amount,
                 )

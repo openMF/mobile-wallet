@@ -12,6 +12,7 @@ package org.mifospay.feature.mpay.qr.scan.navigation
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
+import org.mifospay.core.model.utils.QrCodeData
 import org.mifospay.core.ui.composableWithSlideTransitions
 import org.mifospay.feature.mpay.qr.scan.ScanQrCodeScreen
 
@@ -22,14 +23,14 @@ fun NavController.navigateToScanQr(navOptions: NavOptions? = null) =
 
 fun NavGraphBuilder.scanQrScreen(
     navigateBack: () -> Unit,
-    navigateToSendScreen: (String) -> Unit,
-    navigateToInterbankTransfer: (phoneNumber: String, recipientName: String, amount: String) -> Unit,
+    navigateToIntraBankTransfer: (QrCodeData) -> Unit,
+    navigateToInterbankTransfer: (accountExternalId: String, recipientName: String, amount: String) -> Unit,
     navigateToAddBeneficiaryScreen: (String) -> Unit,
 ) {
     composableWithSlideTransitions(route = SCAN_QR_ROUTE) {
         ScanQrCodeScreen(
             navigateBack = navigateBack,
-            navigateToSendScreen = navigateToSendScreen,
+            navigateToIntraBankTransfer = navigateToIntraBankTransfer,
             navigateToInterbankTransfer = navigateToInterbankTransfer,
             navigateToAddBeneficiaryScreen = navigateToAddBeneficiaryScreen,
         )
