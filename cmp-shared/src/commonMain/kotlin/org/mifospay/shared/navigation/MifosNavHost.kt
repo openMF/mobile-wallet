@@ -48,10 +48,10 @@ import org.mifospay.feature.kyc.navigation.kycLevel2Screen
 import org.mifospay.feature.kyc.navigation.kycLevel3Screen
 import org.mifospay.feature.kyc.navigation.navigateToKYCLevel2
 import org.mifospay.feature.kyc.navigation.navigateToKYCLevel3
-import org.mifospay.feature.make.transfer.success.navigateTransferSuccess
-import org.mifospay.feature.make.transfer.success.transferSuccessScreen
-import org.mifospay.feature.make.transfer.navigation.makeTransferScreen
-import org.mifospay.feature.make.transfer.navigation.navigateToMakeTransferScreen
+import org.mifospay.feature.transfer.intrabank.navigation.navigateToTransferConfirm
+import org.mifospay.feature.transfer.intrabank.navigation.transferConfirmScreen
+import org.mifospay.feature.transfer.intrabank.success.navigateTransferSuccess
+import org.mifospay.feature.transfer.intrabank.success.transferSuccessScreen
 import org.mifospay.feature.merchants.navigation.merchantTransferScreen
 import org.mifospay.feature.mpay.qr.navigation.mpayQrScreen
 import org.mifospay.feature.mpay.qr.navigation.navigateToMpayQrScreen
@@ -69,12 +69,12 @@ import org.mifospay.feature.profile.navigation.profileNavGraph
 import org.mifospay.feature.receipt.navigation.receiptScreen
 import org.mifospay.feature.savedcards.createOrUpdate.addEditCardScreen
 import org.mifospay.feature.savedcards.details.cardDetailRoute
-import org.mifospay.feature.send.interbank.navigation.interbankTransferScreen
-import org.mifospay.feature.send.interbank.navigation.navigateToInterbankTransfer
-import org.mifospay.feature.send.intrabank.navigation.navigateToSendIntraBankScreen
-import org.mifospay.feature.send.intrabank.navigation.sendIntraBankScreen
-import org.mifospay.feature.send.intrabank.selectScreen.navigateToSelectAccountScreen
-import org.mifospay.feature.send.intrabank.selectScreen.selectAccountScreenDestination
+import org.mifospay.feature.transfer.interbank.navigation.interbankTransferScreen
+import org.mifospay.feature.transfer.interbank.navigation.navigateToInterbankTransfer
+import org.mifospay.feature.transfer.intrabank.navigation.navigateToIntraBankHub
+import org.mifospay.feature.transfer.intrabank.navigation.intraBankHubScreen
+import org.mifospay.feature.transfer.intrabank.selectScreen.navigateToSelectAccountScreen
+import org.mifospay.feature.transfer.intrabank.selectScreen.selectAccountScreenDestination
 import org.mifospay.feature.settings.navigation.settingsScreen
 import org.mifospay.feature.standing.instruction.createOrUpdate.addEditSIScreen
 import org.mifospay.feature.standing.instruction.details.siDetailsScreen
@@ -93,7 +93,7 @@ internal fun MifosNavHost(
         TabContent(PaymentsScreenContents.SEND.name) {
             SelectTransferTypeScreen(
                 onIntraBankTransferClick = {
-                    navController.navigateToSendIntraBankScreen()
+                    navController.navigateToIntraBankHub()
                 },
                 onInterBankTransferClick = {
                     navController.navigateToInterbankTransfer()
@@ -302,7 +302,7 @@ internal fun MifosNavHost(
                 )
             },
             onNavigateToMakeTransfer = { qrData, _ ->
-                navController.navigateToMakeTransferScreen(
+                navController.navigateToTransferConfirm(
                     toOfficeId = qrData.officeId.toInt(),
                     toClientId = qrData.clientId,
                     toAccountTypeId = qrData.accountTypeId.toInt(),
@@ -331,7 +331,7 @@ internal fun MifosNavHost(
                 )
             },
             onNavigateToIntraBankTransfer = { qrData ->
-                navController.navigateToMakeTransferScreen(
+                navController.navigateToTransferConfirm(
                     toOfficeId = qrData.officeId.toInt(),
                     toClientId = qrData.clientId,
                     toAccountTypeId = qrData.accountTypeId.toInt(),
@@ -358,11 +358,11 @@ internal fun MifosNavHost(
         )
 
         selectAccountScreenDestination(
-            navigateToMakeTransferScreen = navController::navigateToMakeTransferScreen,
+            navigateToTransferConfirm = navController::navigateToTransferConfirm,
             navigateBack = navController::popBackStack,
         )
 
-        makeTransferScreen(
+        transferConfirmScreen(
             navigateBack = navController::popBackStack,
             onTransferSuccess = { returnDestination ->
                 navController.navigateTransferSuccess(
@@ -378,7 +378,7 @@ internal fun MifosNavHost(
             },
         )
 
-        sendIntraBankScreen(
+        intraBankHubScreen(
             navigateToSelectAccountScreen = {
                 navController.navigateToSelectAccountScreen()
             },
@@ -388,8 +388,8 @@ internal fun MifosNavHost(
                 )
             },
             navigateBack = navController::popBackStack,
-            navigateToMakeTransfer = { toOfficeId, toClientId, toAccountId, accountName, accountNo ->
-                navController.navigateToMakeTransferScreen(
+            navigateToTransferConfirm = { toOfficeId, toClientId, toAccountId, accountName, accountNo ->
+                navController.navigateToTransferConfirm(
                     toOfficeId = toOfficeId,
                     toClientId = toClientId,
                     // Savings account type
@@ -430,7 +430,7 @@ internal fun MifosNavHost(
         scanQrScreen(
             navigateBack = navController::popBackStack,
             navigateToIntraBankTransfer = { qrData ->
-                navController.navigateToMakeTransferScreen(
+                navController.navigateToTransferConfirm(
                     toOfficeId = qrData.officeId.toInt(),
                     toClientId = qrData.clientId,
                     toAccountTypeId = qrData.accountTypeId.toInt(),
@@ -480,7 +480,7 @@ internal fun MifosNavHost(
         )
 
         transferOptionsDialog(
-            onIntraBankTransferClick = navController::navigateToSendIntraBankScreen,
+            onIntraBankTransferClick = navController::navigateToIntraBankHub,
             onInterBankTransferClick = navController::navigateToInterbankTransfer,
             onDismiss = {
                 navController.popBackStack()
