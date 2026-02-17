@@ -31,7 +31,6 @@ import org.mifospay.feature.history.di.HistoryModule
 import org.mifospay.feature.home.di.HomeModule
 import org.mifospay.feature.invoices.di.InvoicesModule
 import org.mifospay.feature.kyc.di.KYCModule
-import org.mifospay.feature.make.transfer.di.MakeTransferModule
 import org.mifospay.feature.merchants.di.MerchantsModule
 import org.mifospay.feature.mpay.qr.di.MpayQrModule
 import org.mifospay.feature.mpay.qr.scan.di.MpayQrScanModule
@@ -40,10 +39,10 @@ import org.mifospay.feature.payments.di.PaymentsModule
 import org.mifospay.feature.profile.di.ProfileModule
 import org.mifospay.feature.receipt.di.ReceiptModule
 import org.mifospay.feature.savedcards.di.SavedCardsModule
-import org.mifospay.feature.send.interbank.di.interbankTransferModule
-import org.mifospay.feature.send.money.di.SendMoneyModule
 import org.mifospay.feature.settings.di.SettingsModule
 import org.mifospay.feature.standing.instruction.di.StandingInstructionModule
+import org.mifospay.feature.transfer.interbank.di.interbankTransferModule
+import org.mifospay.feature.transfer.intrabank.di.IntraBankModule
 import org.mifospay.feature.upi.setup.di.UpiSetupModule
 import org.mifospay.shared.MifosPayViewModel
 import org.mifospay.shared.instance.InstanceSelectorViewModel
@@ -86,9 +85,8 @@ object KoinModules {
             SavedCardsModule,
             ReceiptModule,
             StandingInstructionModule,
-            SendMoneyModule,
+            IntraBankModule,
             interbankTransferModule,
-            MakeTransferModule,
             MpayQrModule,
             MpayQrScanModule,
             FastMpayModule,

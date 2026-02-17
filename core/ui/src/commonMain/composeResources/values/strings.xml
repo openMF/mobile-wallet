@@ -39,4 +39,37 @@
     <string name="core_ui_filter_by_account">Filter By Account :</string>
     <string name="core_ui_filter_transaction_type">Transaction Type:</string>
     <string name="core_ui_filter_apply">Apply Filters</string>
+
+    <!-- HTTP Error Titles -->
+    <string name="core_ui_error_title_invalid_request">Invalid Request</string>
+    <string name="core_ui_error_title_unauthorized">Unauthorized</string>
+    <string name="core_ui_error_title_access_denied">Access Denied</string>
+    <string name="core_ui_error_title_not_found">Not Found</string>
+    <string name="core_ui_error_title_request_timeout">Request Timeout</string>
+    <string name="core_ui_error_title_conflict">Conflict</string>
+    <string name="core_ui_error_title_validation_error">Validation Error</string>
+    <string name="core_ui_error_title_too_many_requests">Too Many Requests</string>
+    <string name="core_ui_error_title_server_error">Server Error</string>
+    <string name="core_ui_error_title_bad_gateway">Bad Gateway</string>
+    <string name="core_ui_error_title_service_unavailable">Service Unavailable</string>
+    <string name="core_ui_error_title_gateway_timeout">Gateway Timeout</string>
+    <string name="core_ui_error_title_request_error">Request Error</string>
+    <string name="core_ui_error_title_generic">Error</string>
+    <string name="core_ui_error_title_network">Network Error</string>
+
+    <!-- HTTP Error Messages -->
+    <string name="core_ui_error_msg_invalid_request">The request was invalid. Please check your input and try again.</string>
+    <string name="core_ui_error_msg_unauthorized">You are not authorized. Please log in again.</string>
+    <string name="core_ui_error_msg_access_denied">You don\'t have permission to perform this action.</string>
+    <string name="core_ui_error_msg_not_found">The requested resource was not found.</string>
+    <string name="core_ui_error_msg_request_timeout">The request timed out. Please try again.</string>
+    <string name="core_ui_error_msg_conflict">There was a conflict with the current state. Please refresh and try again.</string>
+    <string name="core_ui_error_msg_validation_error">The provided data is invalid. Please check and try again.</string>
+    <string name="core_ui_error_msg_too_many_requests">Too many requests. Please wait a moment and try again.</string>
+    <string name="core_ui_error_msg_server_error">An unexpected server error occurred. Please try again later.</string>
+    <string name="core_ui_error_msg_bad_gateway">The server received an invalid response. Please try again later.</string>
+    <string name="core_ui_error_msg_service_unavailable">The service is temporarily unavailable. Please try again later.</string>
+    <string name="core_ui_error_msg_gateway_timeout">The server took too long to respond. Please try again.</string>
+    <string name="core_ui_error_msg_generic">An error occurred. Please try again.</string>
+    <string name="core_ui_error_msg_network">Please check your internet connection and try again.</string>
 </resources>

@@ -14,6 +14,7 @@ import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -21,9 +22,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.FilledTonalIconButton
-import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.ListItem
@@ -42,9 +43,12 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.launch
 import mobile_wallet.feature.accounts.generated.resources.Res
 import mobile_wallet.feature.accounts.generated.resources.feature_accounts_add
+import mobile_wallet.feature.accounts.generated.resources.feature_accounts_add_beneficiary
+import mobile_wallet.feature.accounts.generated.resources.feature_accounts_add_beneficiary_hint
 import mobile_wallet.feature.accounts.generated.resources.feature_accounts_delete_beneficiary
 import mobile_wallet.feature.accounts.generated.resources.feature_accounts_edit_beneficiary
 import mobile_wallet.feature.accounts.generated.resources.feature_accounts_error_oops
+import mobile_wallet.feature.accounts.generated.resources.feature_accounts_no_beneficiaries
 import mobile_wallet.feature.accounts.generated.resources.feature_accounts_unexpected_error_subtitle
 import org.jetbrains.compose.resources.getString
 import org.jetbrains.compose.resources.stringResource
@@ -147,22 +151,25 @@ private fun BeneficiaryListScreenContent(
                 enter = scaleIn(),
                 exit = scaleOut(),
             ) {
-                FloatingActionButton(
+                ExtendedFloatingActionButton(
                     onClick = {
                         onAction(BeneficiaryListAction.AddTPTBeneficiary)
                     },
-                ) {
-                    Icon(
-                        imageVector = MifosIcons.Add,
-                        stringResource(Res.string.feature_accounts_add),
-                    )
-                }
+                    icon = {
+                        Icon(
+                            imageVector = MifosIcons.Add,
+                            contentDescription = stringResource(Res.string.feature_accounts_add),
+                        )
+                    },
+                    text = {
+                        Text(text = stringResource(Res.string.feature_accounts_add_beneficiary))
+                    },
+                )
             }
         },
-    ) {
+    ) { paddingValues ->
         BeneficiariesList(
-            modifier = Modifier
-                .padding(it),
+            modifier = Modifier.padding(paddingValues),
             state = state,
             onAction = onAction,
         )
@@ -175,17 +182,30 @@ fun BeneficiariesList(
     onAction: (BeneficiaryListAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-            .padding(top = KptTheme.spacing.lg),
-        verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.md),
-    ) {
-        when (state) {
-            is BeneficiaryListState.ViewState.Loading -> MifosProgressIndicator()
+    when (state) {
+        is BeneficiaryListState.ViewState.Loading -> {
+            Column(
+                modifier = modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                MifosProgressIndicator()
+            }
+        }
 
-            is BeneficiaryListState.ViewState.Content -> {
-                LazyColumn {
+        is BeneficiaryListState.ViewState.Content -> {
+            if (state.beneficiaries.isEmpty()) {
+                EmptyContentScreen(
+                    title = stringResource(Res.string.feature_accounts_no_beneficiaries),
+                    subTitle = stringResource(Res.string.feature_accounts_add_beneficiary_hint),
+                    modifier = modifier.fillMaxSize(),
+                )
+            } else {
+                LazyColumn(
+                    modifier = modifier.fillMaxSize(),
+                    contentPadding = PaddingValues(KptTheme.spacing.md),
+                    verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.sm),
+                ) {
                     items(
                         items = state.beneficiaries,
                         key = { it.id },
@@ -198,15 +218,15 @@ fun BeneficiariesList(
                     }
                 }
             }
+        }
 
-            is BeneficiaryListState.ViewState.Error -> {
-                EmptyContentScreen(
-                    title = stringResource(Res.string.feature_accounts_error_oops),
-                    subTitle = stringResource(Res.string.feature_accounts_unexpected_error_subtitle),
-                    modifier = Modifier,
-                    iconTint = KptTheme.colorScheme.error,
-                )
-            }
+        is BeneficiaryListState.ViewState.Error -> {
+            EmptyContentScreen(
+                title = stringResource(Res.string.feature_accounts_error_oops),
+                subTitle = stringResource(Res.string.feature_accounts_unexpected_error_subtitle),
+                modifier = modifier.fillMaxSize(),
+                iconTint = KptTheme.colorScheme.error,
+            )
         }
     }
 }

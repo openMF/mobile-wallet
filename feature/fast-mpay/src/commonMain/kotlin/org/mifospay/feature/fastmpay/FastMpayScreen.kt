@@ -32,7 +32,7 @@ import org.mifospay.feature.fastmpay.model.QrProcessResult
  * The screen shows a brief loading indicator while processing.
  *
  * @param onNavigateToAddBeneficiary Callback for INTRA_BANK/BENEFICIARY type when beneficiary doesn't exist
- * @param onNavigateToSendMoneyV2 Callback for INTRA_BANK type when beneficiary exists (qrData, beneficiaryName)
+ * @param onNavigateToMakeTransfer Callback for INTRA_BANK type when beneficiary exists (qrData, beneficiaryName)
  * @param onNavigateToInterbankTransfer Callback for INTER_BANK type
  * @param onNavigateToIntraBankTransfer Callback for future intra-bank direct transfer
  * @param onNavigateToMerchantPayment Callback for MERCHANT type
@@ -42,7 +42,7 @@ import org.mifospay.feature.fastmpay.model.QrProcessResult
 @Composable
 fun FastMpayScreen(
     onNavigateToAddBeneficiary: (String) -> Unit,
-    onNavigateToSendMoneyV2: (QrCodeData, String) -> Unit,
+    onNavigateToMakeTransfer: (QrCodeData, String) -> Unit,
     onNavigateToInterbankTransfer: (String, String?, String?) -> Unit,
     onNavigateToIntraBankTransfer: (QrCodeData) -> Unit,
     onNavigateToMerchantPayment: (QrCodeData) -> Unit,
@@ -69,9 +69,9 @@ fun FastMpayScreen(
                 onNavigateToAddBeneficiary(r.beneficiaryData)
             }
 
-            is QrProcessResult.NavigateToSendMoneyV2 -> {
+            is QrProcessResult.NavigateToMakeTransfer -> {
                 viewModel.clearResult()
-                onNavigateToSendMoneyV2(r.qrData, r.beneficiaryName)
+                onNavigateToMakeTransfer(r.qrData, r.beneficiaryName)
             }
 
             is QrProcessResult.NavigateToInterbankTransfer -> {
@@ -106,5 +106,18 @@ fun FastMpayScreen(
         contentAlignment = Alignment.Center,
     ) {
         CircularProgressIndicator()
+    }
+}
+
+@Composable
+@org.jetbrains.compose.ui.tooling.preview.Preview
+private fun FastMpayScreenPreview() {
+    template.core.base.designsystem.KptMaterialTheme {
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center,
+        ) {
+            CircularProgressIndicator()
+        }
     }
 }

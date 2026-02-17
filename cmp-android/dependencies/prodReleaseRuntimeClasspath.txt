@@ -22,7 +22,6 @@
 :feature:home
 :feature:invoices
 :feature:kyc
-:feature:make-transfer
 :feature:merchants
 :feature:mpay-qr
 :feature:mpay-qr-scan
@@ -31,10 +30,10 @@
 :feature:profile
 :feature:receipt
 :feature:savedcards
-:feature:send-interbank
-:feature:send-money
 :feature:settings
 :feature:standing-instruction
+:feature:transfer-interbank
+:feature:transfer-intrabank
 :feature:upi-setup
 :libs:mifos-passcode
 androidx.activity:activity-compose:1.12.2

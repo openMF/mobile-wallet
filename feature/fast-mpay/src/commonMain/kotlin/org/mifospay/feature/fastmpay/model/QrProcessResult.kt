@@ -59,7 +59,7 @@ sealed interface QrProcessResult {
     data class NavigateToMerchantPayment(val qrData: QrCodeData) : QrProcessResult
 
     /**
-     * Navigate to Make Transfer V2 screen with existing beneficiary.
+     * Navigate to Make Transfer screen with existing beneficiary.
      *
      * Used when scanning an INTRA_BANK QR and the beneficiary already exists.
      * Contains all necessary data for the transfer since the QR code has
@@ -69,7 +69,7 @@ sealed interface QrProcessResult {
      * @param beneficiaryName The name of the existing beneficiary
      */
     @Serializable
-    data class NavigateToSendMoneyV2(
+    data class NavigateToMakeTransfer(
         val qrData: QrCodeData,
         val beneficiaryName: String,
     ) : QrProcessResult

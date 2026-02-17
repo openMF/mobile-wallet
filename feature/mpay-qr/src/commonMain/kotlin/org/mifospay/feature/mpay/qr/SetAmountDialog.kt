@@ -31,9 +31,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import mobile_wallet.feature.mpay_qr.generated.resources.Res
+import mobile_wallet.feature.mpay_qr.generated.resources.feature_mpay_qr_no_currency_found
 import mobile_wallet.feature.mpay_qr.generated.resources.feature_request_money_cancel
 import mobile_wallet.feature.mpay_qr.generated.resources.feature_request_money_confirm
 import mobile_wallet.feature.mpay_qr.generated.resources.feature_request_money_currency
+import mobile_wallet.feature.mpay_qr.generated.resources.feature_request_money_enter_valid_amount
 import mobile_wallet.feature.mpay_qr.generated.resources.feature_request_money_set_amount
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
@@ -75,22 +77,17 @@ internal fun SetAmountDialog(
                         style = KptTheme.typography.titleMedium,
                     )
 
-                    val amountValidator by remember(amount) {
+                    val validAmountError = stringResource(Res.string.feature_request_money_enter_valid_amount)
+                    val amountValidator by remember(amount, validAmountError) {
                         derivedStateOf {
                             when {
                                 amount.trim() == "" -> null
 
-                                amount.trim().any { it.isLetter() } -> {
-                                    "Please enter a valid amount"
-                                }
+                                amount.trim().any { it.isLetter() } -> validAmountError
 
-                                amount.trim().toDoubleOrNull() == null -> {
-                                    "Please enter a valid amount"
-                                }
+                                amount.trim().toDoubleOrNull() == null -> validAmountError
 
-                                amount.trim().toDouble() <= 0.0 -> {
-                                    "Please enter a valid amount"
-                                }
+                                amount.trim().toDouble() <= 0.0 -> validAmountError
 
                                 else -> null
                             }
@@ -147,7 +144,7 @@ internal fun SetAmountDialog(
 
                         if (filteredCurrencyList.isEmpty()) {
                             DropdownBoxItem(
-                                text = "No currency found",
+                                text = stringResource(Res.string.feature_mpay_qr_no_currency_found),
                                 onClick = {
                                     currencyToggled = false
                                 },

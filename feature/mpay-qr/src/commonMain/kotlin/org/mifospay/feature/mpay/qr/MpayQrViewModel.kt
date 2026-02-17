@@ -179,6 +179,23 @@ class MpayQrViewModel(
                 }
             }
 
+            is MpayQrAction.DownloadQrCode -> {
+                viewModelScope.launch {
+                    ShareUtils.shareFile(
+                        file = ShareFileModel(
+                            fileName = "mpay_qr_code.png",
+                            bytes = action.bytes,
+                            mime = MimeType.IMAGE,
+                        ),
+                    )
+                    sendEvent(MpayQrEvent.QrDownloaded)
+                }
+            }
+
+            is MpayQrAction.CopyToClipboard -> {
+                sendEvent(MpayQrEvent.ShowSnackbar(action.text))
+            }
+
             is MpayQrAction.Internal.GenerateQr -> generateQr()
         }
     }
@@ -379,6 +396,8 @@ data class MpayQrState(
 
 sealed interface MpayQrEvent {
     data object OnNavigateBack : MpayQrEvent
+    data object QrDownloaded : MpayQrEvent
+    data class ShowSnackbar(val message: String) : MpayQrEvent
 }
 
 sealed interface MpayQrAction {
@@ -407,6 +426,23 @@ sealed interface MpayQrAction {
             return data.contentHashCode()
         }
     }
+
+    data class DownloadQrCode(val bytes: ByteArray) : MpayQrAction {
+        override fun equals(other: Any?): Boolean {
+            if (this === other) return true
+            if (other == null || this::class != other::class) return false
+
+            other as DownloadQrCode
+
+            return bytes.contentEquals(other.bytes)
+        }
+
+        override fun hashCode(): Int {
+            return bytes.contentHashCode()
+        }
+    }
+
+    data class CopyToClipboard(val text: String) : MpayQrAction
 
     sealed interface Internal : MpayQrAction {
         data object GenerateQr : Internal

@@ -70,3 +70,13 @@ fun QrHelpDialog(
         },
     )
 }
+
+@Composable
+@org.jetbrains.compose.ui.tooling.preview.Preview
+private fun QrHelpDialogPreview() {
+    template.core.base.designsystem.KptMaterialTheme {
+        QrHelpDialog(
+            onDismiss = {},
+        )
+    }
+}

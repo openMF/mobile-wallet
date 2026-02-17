@@ -69,3 +69,35 @@ fun QrActionButton(
         )
     }
 }
+
+@Composable
+@org.jetbrains.compose.ui.tooling.preview.Preview
+private fun QrActionButtonEnabledPreview() {
+    androidx.compose.foundation.layout.Box(
+        modifier = Modifier.background(Color.Black).size(100.dp),
+        contentAlignment = Alignment.Center,
+    ) {
+        QrActionButton(
+            icon = org.mifospay.core.designsystem.icon.MifosIcons.FlashOn,
+            label = "Torch",
+            onClick = {},
+            enabled = true,
+        )
+    }
+}
+
+@Composable
+@org.jetbrains.compose.ui.tooling.preview.Preview
+private fun QrActionButtonDisabledPreview() {
+    androidx.compose.foundation.layout.Box(
+        modifier = Modifier.background(Color.Black).size(100.dp),
+        contentAlignment = Alignment.Center,
+    ) {
+        QrActionButton(
+            icon = org.mifospay.core.designsystem.icon.MifosIcons.FlashOff,
+            label = "Torch",
+            onClick = {},
+            enabled = false,
+        )
+    }
+}

@@ -9,6 +9,8 @@
  */
 package org.mifospay.feature.mpay.qr.scan.components
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
@@ -37,4 +39,14 @@ fun QrScanFooter(
             .navigationBarsPadding()
             .padding(bottom = 16.dp),
     )
+}
+
+@Composable
+@org.jetbrains.compose.ui.tooling.preview.Preview
+private fun QrScanFooterPreview() {
+    Box(
+        modifier = Modifier.fillMaxWidth().background(Color.Black),
+    ) {
+        QrScanFooter()
+    }
 }
