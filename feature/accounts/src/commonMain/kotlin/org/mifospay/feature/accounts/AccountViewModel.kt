@@ -13,6 +13,7 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
@@ -45,7 +46,7 @@ class AccountViewModel(
     private val json: Json,
 ) : BaseViewModel<AccountState, AccountEvent, AccountAction>(
     initialState = run {
-        val clientId = requireNotNull(userRepository.clientId.value)
+        val clientId = userRepository.clientId.value
         val defaultAccount = userRepository.defaultAccountId.value
 
         AccountState(
@@ -55,8 +56,13 @@ class AccountViewModel(
     },
 ) {
     val accountState = mutableStateFlow
-        .flatMapLatest {
-            repository.getAccountAndBeneficiaryList(state.clientId)
+        .flatMapLatest { currentState ->
+            val clientId = currentState.clientId
+            if (clientId != null) {
+                repository.getAccountAndBeneficiaryList(clientId)
+            } else {
+                flowOf(DataState.Error(IllegalStateException("Client ID not available")))
+            }
         }
         .mapLatest {
             when (it) {
@@ -190,7 +196,7 @@ class AccountViewModel(
 }
 
 data class AccountState(
-    val clientId: Long,
+    val clientId: Long? = null,
     val defaultAccountId: Long? = null,
     val dialogState: DialogState? = null,
 ) {

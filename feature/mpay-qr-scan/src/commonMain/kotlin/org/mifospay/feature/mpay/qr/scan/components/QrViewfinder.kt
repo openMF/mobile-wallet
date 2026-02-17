@@ -208,3 +208,11 @@ fun QrViewfinder(
         }
     }
 }
+
+@Composable
+@org.jetbrains.compose.ui.tooling.preview.Preview
+private fun QrViewfinderPreview() {
+    template.core.base.designsystem.KptMaterialTheme {
+        QrViewfinder()
+    }
+}

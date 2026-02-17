@@ -50,6 +50,8 @@
     <string name="feature_accounts_savings_account">Savings Account</string>
     <string name="feature_accounts_beneficiaries">Beneficiaries</string>
     <string name="feature_accounts_add_beneficiary">Add Beneficiary</string>
+    <string name="feature_accounts_no_beneficiaries">No Beneficiaries</string>
+    <string name="feature_accounts_add_beneficiary_hint">Tap the + button to add a beneficiary</string>
     <string name="feature_accounts_add">Add</string>
     <string name="feature_accounts_edit">Edit</string>
     <string name="feature_accounts_info">Info</string>

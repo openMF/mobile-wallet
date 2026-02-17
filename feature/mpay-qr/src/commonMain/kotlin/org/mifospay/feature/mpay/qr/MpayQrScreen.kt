@@ -40,6 +40,16 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import io.github.alexzhirkevich.qrose.ImageFormat
 import io.github.alexzhirkevich.qrose.rememberQrCodePainter
 import io.github.alexzhirkevich.qrose.toByteArray
+import mobile_wallet.feature.mpay_qr.generated.resources.Res
+import mobile_wallet.feature.mpay_qr.generated.resources.feature_mpay_qr_go_back
+import mobile_wallet.feature.mpay_qr.generated.resources.feature_mpay_qr_inter_bank
+import mobile_wallet.feature.mpay_qr.generated.resources.feature_mpay_qr_intra_bank
+import mobile_wallet.feature.mpay_qr.generated.resources.feature_mpay_qr_request_money
+import mobile_wallet.feature.mpay_qr.generated.resources.feature_mpay_qr_share
+import mobile_wallet.feature.mpay_qr.generated.resources.feature_mpay_qr_unable_to_generate
+import mobile_wallet.feature.mpay_qr.generated.resources.feature_request_money_set_amount
+import org.jetbrains.compose.resources.stringResource
+import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
 import org.mifospay.core.designsystem.component.LoadingDialogState
 import org.mifospay.core.designsystem.component.MifosButton
@@ -48,6 +58,7 @@ import org.mifospay.core.designsystem.component.MifosOutlinedButton
 import org.mifospay.core.designsystem.component.MifosScaffold
 import org.mifospay.core.ui.MifosProgressIndicator
 import org.mifospay.core.ui.utils.EventsEffect
+import template.core.base.designsystem.KptMaterialTheme
 import template.core.base.designsystem.theme.KptTheme
 
 @Composable
@@ -110,7 +121,7 @@ internal fun MpayQrScreen(
 ) {
     MifosScaffold(
         modifier = modifier,
-        topBarTitle = "Request Money",
+        topBarTitle = stringResource(Res.string.feature_mpay_qr_request_money),
         backPress = {
             onAction(MpayQrAction.NavigateBack)
         },
@@ -174,7 +185,13 @@ private fun MpayQrScreenContent(
         item {
             // Page title
             Text(
-                text = if (pagerState.currentPage == 0) "Intra-bank QR" else "Inter-bank QR",
+                text = stringResource(
+                    if (pagerState.currentPage == 0) {
+                        Res.string.feature_mpay_qr_intra_bank
+                    } else {
+                        Res.string.feature_mpay_qr_inter_bank
+                    },
+                ),
                 style = KptTheme.typography.titleMedium,
                 color = KptTheme.colorScheme.onSurface,
             )
@@ -209,9 +226,11 @@ private fun MpayQrScreenContent(
                 onClick = {
                     onAction(MpayQrAction.ShowSetAmountDialog)
                 },
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = KptTheme.spacing.md),
             ) {
-                Text(text = "Set Amount")
+                Text(text = stringResource(Res.string.feature_request_money_set_amount))
             }
         }
 
@@ -231,9 +250,11 @@ private fun MpayQrScreenContent(
                     val bytes = sharePainter.toByteArray(1024, 1024, ImageFormat.PNG)
                     onAction(MpayQrAction.ShareQrCode(bytes))
                 },
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = KptTheme.spacing.md),
             ) {
-                Text(text = "Share")
+                Text(text = stringResource(Res.string.feature_mpay_qr_share))
             }
         }
     }
@@ -253,7 +274,7 @@ private fun MpayQrErrorContent(
     ) {
         item {
             Text(
-                text = "Unable to Generate QR Code",
+                text = stringResource(Res.string.feature_mpay_qr_unable_to_generate),
                 style = KptTheme.typography.titleMedium,
                 color = KptTheme.colorScheme.error,
             )
@@ -271,9 +292,11 @@ private fun MpayQrErrorContent(
         item {
             MifosOutlinedButton(
                 onClick = onNavigateBack,
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = KptTheme.spacing.md),
             ) {
-                Text(text = "Go Back")
+                Text(text = stringResource(Res.string.feature_mpay_qr_go_back))
             }
         }
     }
@@ -328,6 +351,62 @@ private fun QrDataContent(
             painter = painter,
             contentDescription = null,
             modifier = Modifier.size(260.dp),
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun MpayQrScreenLoadingPreview() {
+    KptMaterialTheme {
+        MpayQrScreen(
+            state = MpayQrState(
+                client = org.mifospay.core.model.client.Client(
+                    id = 1,
+                    accountNo = "000000001",
+                    externalId = "",
+                    active = true,
+                    activationDate = emptyList(),
+                    firstname = "John",
+                    lastname = "Doe",
+                    displayName = "John Doe",
+                    mobileNo = "",
+                    emailAddress = "",
+                    dateOfBirth = emptyList(),
+                    isStaff = false,
+                    officeId = 1,
+                    officeName = "Head Office",
+                    savingsProductName = "",
+                ),
+                defaultAccount = org.mifospay.core.model.account.DefaultAccount(
+                    accountId = 1,
+                    accountNo = "000000001",
+                ),
+                viewState = MpayQrState.ViewState.Loading,
+            ),
+            onAction = {},
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun MpayQrScreenErrorPreview() {
+    KptMaterialTheme {
+        MpayQrErrorContent(
+            message = "No default account set",
+            onNavigateBack = {},
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun HorizontalPagerIndicatorPreview() {
+    KptMaterialTheme {
+        HorizontalPagerIndicator(
+            pageCount = 3,
+            currentPage = 1,
         )
     }
 }

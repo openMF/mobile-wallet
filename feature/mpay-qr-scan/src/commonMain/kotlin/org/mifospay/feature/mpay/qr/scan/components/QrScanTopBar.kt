@@ -9,7 +9,9 @@
  */
 package org.mifospay.feature.mpay.qr.scan.components
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -90,5 +92,18 @@ fun QrScanTopBar(
                 modifier = Modifier.size(24.dp),
             )
         }
+    }
+}
+
+@Composable
+@org.jetbrains.compose.ui.tooling.preview.Preview
+private fun QrScanTopBarPreview() {
+    Box(
+        modifier = Modifier.fillMaxWidth().background(Color.Black),
+    ) {
+        QrScanTopBar(
+            onCloseClick = {},
+            onHelpClick = {},
+        )
     }
 }

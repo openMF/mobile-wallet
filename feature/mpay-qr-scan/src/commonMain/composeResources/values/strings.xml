@@ -47,4 +47,5 @@
     <string name="feature_qr_select_qr_image">Select QR code image</string>
     <string name="feature_qr_drop_image_here">Drop image here</string>
     <string name="feature_qr_preview_image">Preview of selected image</string>
+    <string name="feature_qr_scan_valid_qr">Scan a Valid QR Code</string>
 </resources>
