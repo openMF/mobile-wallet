@@ -125,7 +125,14 @@ private fun formatAccountDisplay(accountNo: String): String {
  * Formats amount with currency symbol
  */
 private fun formatAmount(currency: String, amount: Double): String {
-    val formattedAmount = "%,.2f".format(amount)
+    val wholePart = amount.toLong()
+    val decimalPart = ((amount - wholePart) * 100).toInt()
+    val formattedWhole = wholePart.toString()
+        .reversed()
+        .chunked(3)
+        .joinToString(",")
+        .reversed()
+    val formattedAmount = "$formattedWhole.${decimalPart.toString().padStart(2, '0')}"
     return "$currency $formattedAmount"
 }
 
@@ -140,7 +147,8 @@ private fun formatDate(dateString: String): String {
             val month = parts[1].toIntOrNull() ?: return dateString
             val day = parts[2].toIntOrNull() ?: return dateString
             val monthName = getMonthShortName(month)
-            "%02d %s '%s".format(day, monthName, year)
+            val dayFormatted = day.toString().padStart(2, '0')
+            "$dayFormatted $monthName '$year"
         } else {
             dateString
         }
