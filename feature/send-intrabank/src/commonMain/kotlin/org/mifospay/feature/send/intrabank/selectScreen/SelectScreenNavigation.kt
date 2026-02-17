@@ -30,7 +30,7 @@ fun NavController.navigateToSelectAccountScreen(
 
 fun NavGraphBuilder.selectAccountScreenDestination(
     navigateBack: () -> Unit,
-    navigateToMakeTransferV2Screen: (
+    navigateToMakeTransferScreen: (
         toOfficeId: Int?,
         toClientId: Long?,
         toAccountTypeId: Int?,
@@ -44,8 +44,8 @@ fun NavGraphBuilder.selectAccountScreenDestination(
     composable<SelectAccountRoute> { backStackEntry ->
         val route = backStackEntry.toRoute<SelectAccountRoute>()
         SelectPayeeScreen(
-            navigateToMakeTransferV2Screen = { toOfficeId, toClientId, toAccountTypeId, toAccountId, amount, accountName, accountNo ->
-                navigateToMakeTransferV2Screen(toOfficeId, toClientId, toAccountTypeId, toAccountId, amount, accountName, accountNo, route.returnDestination)
+            navigateToMakeTransferScreen = { toOfficeId, toClientId, toAccountTypeId, toAccountId, amount, accountName, accountNo ->
+                navigateToMakeTransferScreen(toOfficeId, toClientId, toAccountTypeId, toAccountId, amount, accountName, accountNo, route.returnDestination)
             },
             navigateBack = navigateBack,
         )

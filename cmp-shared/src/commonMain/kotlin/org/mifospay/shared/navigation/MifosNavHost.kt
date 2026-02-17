@@ -48,11 +48,10 @@ import org.mifospay.feature.kyc.navigation.kycLevel2Screen
 import org.mifospay.feature.kyc.navigation.kycLevel3Screen
 import org.mifospay.feature.kyc.navigation.navigateToKYCLevel2
 import org.mifospay.feature.kyc.navigation.navigateToKYCLevel3
-import org.mifospay.feature.make.transfer.navigation.transferScreen
 import org.mifospay.feature.make.transfer.success.navigateTransferSuccess
 import org.mifospay.feature.make.transfer.success.transferSuccessScreen
-import org.mifospay.feature.make.transfer.v2.makeTransferScreenV2
-import org.mifospay.feature.make.transfer.v2.navigateToMakeTransferScreenV2
+import org.mifospay.feature.make.transfer.navigation.makeTransferScreen
+import org.mifospay.feature.make.transfer.navigation.navigateToMakeTransferScreen
 import org.mifospay.feature.merchants.navigation.merchantTransferScreen
 import org.mifospay.feature.mpay.qr.navigation.mpayQrScreen
 import org.mifospay.feature.mpay.qr.navigation.navigateToMpayQrScreen
@@ -302,8 +301,8 @@ internal fun MifosNavHost(
                     },
                 )
             },
-            onNavigateToSendMoneyV2 = { qrData, _ ->
-                navController.navigateToMakeTransferScreenV2(
+            onNavigateToMakeTransfer = { qrData, _ ->
+                navController.navigateToMakeTransferScreen(
                     toOfficeId = qrData.officeId.toInt(),
                     toClientId = qrData.clientId,
                     toAccountTypeId = qrData.accountTypeId.toInt(),
@@ -332,7 +331,7 @@ internal fun MifosNavHost(
                 )
             },
             onNavigateToIntraBankTransfer = { qrData ->
-                navController.navigateToMakeTransferScreenV2(
+                navController.navigateToMakeTransferScreen(
                     toOfficeId = qrData.officeId.toInt(),
                     toClientId = qrData.clientId,
                     toAccountTypeId = qrData.accountTypeId.toInt(),
@@ -359,11 +358,11 @@ internal fun MifosNavHost(
         )
 
         selectAccountScreenDestination(
-            navigateToMakeTransferV2Screen = navController::navigateToMakeTransferScreenV2,
+            navigateToMakeTransferScreen = navController::navigateToMakeTransferScreen,
             navigateBack = navController::popBackStack,
         )
 
-        makeTransferScreenV2(
+        makeTransferScreen(
             navigateBack = navController::popBackStack,
             onTransferSuccess = { returnDestination ->
                 navController.navigateTransferSuccess(
@@ -390,7 +389,7 @@ internal fun MifosNavHost(
             },
             navigateBack = navController::popBackStack,
             navigateToMakeTransfer = { toOfficeId, toClientId, toAccountId, accountName, accountNo ->
-                navController.navigateToMakeTransferScreenV2(
+                navController.navigateToMakeTransferScreen(
                     toOfficeId = toOfficeId,
                     toClientId = toClientId,
                     // Savings account type
@@ -400,21 +399,6 @@ internal fun MifosNavHost(
                     toAccountName = accountName,
                     toAccountNo = accountNo,
                     returnDestination = "home",
-                )
-            },
-        )
-
-        transferScreen(
-            navigateBack = navController::popBackStack,
-            onTransferSuccess = {
-                navController.navigateTransferSuccess(
-                    returnDestination = "home",
-                    navOptions {
-                        popUpTo(HOME_ROUTE) {
-                            inclusive = true
-                        }
-                        launchSingleTop = true
-                    },
                 )
             },
         )
@@ -446,7 +430,7 @@ internal fun MifosNavHost(
         scanQrScreen(
             navigateBack = navController::popBackStack,
             navigateToIntraBankTransfer = { qrData ->
-                navController.navigateToMakeTransferScreenV2(
+                navController.navigateToMakeTransferScreen(
                     toOfficeId = qrData.officeId.toInt(),
                     toClientId = qrData.clientId,
                     toAccountTypeId = qrData.accountTypeId.toInt(),

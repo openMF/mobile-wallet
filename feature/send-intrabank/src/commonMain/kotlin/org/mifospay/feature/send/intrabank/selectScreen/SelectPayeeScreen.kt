@@ -80,7 +80,7 @@ import template.core.base.designsystem.theme.KptTheme
 fun SelectPayeeScreen(
     modifier: Modifier = Modifier,
     navigateBack: () -> Unit,
-    navigateToMakeTransferV2Screen: (
+    navigateToMakeTransferScreen: (
         toOfficeId: Int?,
         toClientId: Long?,
         toAccountTypeId: Int?,
@@ -96,7 +96,7 @@ fun SelectPayeeScreen(
     EventsEffect(viewModel) { event ->
         when (event) {
             is SelectScreenEvent.NavigateToTransferScreen -> {
-                navigateToMakeTransferV2Screen(
+                navigateToMakeTransferScreen(
                     state.selectedAccount?.officeId,
                     state.selectedAccount?.clientId,
                     state.selectedAccount?.accountType?.id ?: 0,

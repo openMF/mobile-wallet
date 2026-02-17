@@ -34,7 +34,7 @@ class FastMpayProcessor(
      * Process QR code data and determine navigation target.
      *
      * For INTRA_BANK type, this checks if the beneficiary already exists
-     * by matching accountNumber. If found, navigates to SendMoneyV2,
+     * by matching accountNumber. If found, navigates to MakeTransfer,
      * otherwise navigates to AddBeneficiary.
      *
      * @param qrData The decoded QR code data
@@ -76,7 +76,7 @@ class FastMpayProcessor(
      * Process Intra-bank QR code.
      *
      * Checks if beneficiary already exists by matching accountNumber.
-     * If found, navigates to SendMoneyV2 with the existing beneficiary.
+     * If found, navigates to MakeTransfer with the existing beneficiary.
      * If not found, navigates to AddBeneficiary with pre-filled data.
      */
     private suspend fun processIntraBankQr(qrData: QrCodeData): QrProcessResult {
@@ -90,8 +90,8 @@ class FastMpayProcessor(
                     }
 
                     if (existingBeneficiary != null) {
-                        // Beneficiary exists -> Navigate to MakeTransferV2 directly
-                        QrProcessResult.NavigateToSendMoneyV2(
+                        // Beneficiary exists -> Navigate to MakeTransfer directly
+                        QrProcessResult.NavigateToMakeTransfer(
                             qrData = qrData,
                             beneficiaryName = existingBeneficiary.clientName,
                         )

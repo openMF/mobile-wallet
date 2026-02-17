@@ -12,9 +12,7 @@ package org.mifospay.feature.make.transfer.di
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
 import org.mifospay.feature.make.transfer.MakeTransferViewModel
-import org.mifospay.feature.make.transfer.v2.MakeTransferV2ScreenV2ViewModel
 
 val MakeTransferModule = module {
     viewModelOf(::MakeTransferViewModel)
-    viewModelOf(::MakeTransferV2ScreenV2ViewModel)
 }
