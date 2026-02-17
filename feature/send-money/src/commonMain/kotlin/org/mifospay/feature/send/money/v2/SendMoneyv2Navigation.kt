@@ -26,6 +26,13 @@ fun NavGraphBuilder.sendMoneyScreenDestination(
     navigateToSelectAccountScreen: () -> Unit,
     navigateToBeneficiary: () -> Unit,
     navigateBack: () -> Unit,
+    navigateToMakeTransfer: (
+        toOfficeId: Int,
+        toClientId: Long,
+        toAccountId: Int,
+        accountName: String,
+        accountNo: String,
+    ) -> Unit,
     showTopBar: Boolean = true,
 ) {
     composable<SendMoneyRoute> {
@@ -33,6 +40,7 @@ fun NavGraphBuilder.sendMoneyScreenDestination(
             navigateToSelectAccountScreen = navigateToSelectAccountScreen,
             navigateBack = navigateBack,
             navigateToBeneficiary = navigateToBeneficiary,
+            navigateToMakeTransfer = navigateToMakeTransfer,
             showTopBar = showTopBar,
         )
     }

@@ -74,7 +74,6 @@ import org.mifospay.feature.savedcards.details.cardDetailRoute
 import org.mifospay.feature.send.interbank.navigation.interbankTransferScreen
 import org.mifospay.feature.send.interbank.navigation.navigateToInterbankTransfer
 import org.mifospay.feature.send.money.navigation.SEND_MONEY_BASE_ROUTE
-import org.mifospay.feature.send.money.navigation.navigateToSendMoneyScreen
 import org.mifospay.feature.send.money.navigation.sendMoneyScreen
 import org.mifospay.feature.send.money.selectScreen.navigateToSelectAccountScreen
 import org.mifospay.feature.send.money.selectScreen.selectAccountScreenDestination
@@ -399,6 +398,19 @@ internal fun MifosNavHost(
                 )
             },
             navigateBack = navController::popBackStack,
+            navigateToMakeTransfer = { toOfficeId, toClientId, toAccountId, accountName, accountNo ->
+                navController.navigateToMakeTransferScreenV2(
+                    toOfficeId = toOfficeId,
+                    toClientId = toClientId,
+                    // Savings account type
+                    toAccountTypeId = 2,
+                    toAccountId = toAccountId,
+                    amount = 0,
+                    toAccountName = accountName,
+                    toAccountNo = accountNo,
+                    returnDestination = "home",
+                )
+            },
         )
 
         transferScreen(

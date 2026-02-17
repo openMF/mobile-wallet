@@ -24,6 +24,7 @@ import org.mifospay.core.data.repository.InvoiceRepository
 import org.mifospay.core.data.repository.KycLevelRepository
 import org.mifospay.core.data.repository.LocalAssetRepository
 import org.mifospay.core.data.repository.NotificationRepository
+import org.mifospay.core.data.repository.RecentPayeeRepository
 import org.mifospay.core.data.repository.RegistrationRepository
 import org.mifospay.core.data.repository.RunReportRepository
 import org.mifospay.core.data.repository.SavedCardRepository
@@ -45,6 +46,7 @@ import org.mifospay.core.data.repositoryImpl.InvoiceRepositoryImpl
 import org.mifospay.core.data.repositoryImpl.KycLevelRepositoryImpl
 import org.mifospay.core.data.repositoryImpl.LocalAssetRepositoryImpl
 import org.mifospay.core.data.repositoryImpl.NotificationRepositoryImpl
+import org.mifospay.core.data.repositoryImpl.RecentPayeeRepositoryImpl
 import org.mifospay.core.data.repositoryImpl.RegistrationRepositoryImpl
 import org.mifospay.core.data.repositoryImpl.RunReportRepositoryImpl
 import org.mifospay.core.data.repositoryImpl.SavedCardRepositoryImpl
@@ -83,6 +85,7 @@ val RepositoryModule = module {
     single<InterBankRepository> { InterBankRepositoryImpl(get(), get(ioDispatcher)) }
     single<KycLevelRepository> { KycLevelRepositoryImpl(get(), get(ioDispatcher)) }
     single<NotificationRepository> { NotificationRepositoryImpl(get(), get(ioDispatcher)) }
+    single<RecentPayeeRepository> { RecentPayeeRepositoryImpl(get(), get(ioDispatcher)) }
     single<RegistrationRepository> { RegistrationRepositoryImpl(get(), get(ioDispatcher)) }
     single<RunReportRepository> { RunReportRepositoryImpl(get(), get(ioDispatcher)) }
     single<SavedCardRepository> { SavedCardRepositoryImpl(get(), get(ioDispatcher)) }
