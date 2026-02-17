@@ -14,16 +14,20 @@ import co.touchlab.kermit.Logger
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 import org.mifospay.core.common.DataState
 import org.mifospay.core.data.repository.RecentPayeeRepository
+import org.mifospay.core.data.repository.SelfServiceRepository
 import org.mifospay.core.datastore.UserPreferencesRepository
 import org.mifospay.core.model.account.RecentPayee
+import org.mifospay.core.model.beneficiary.Beneficiary
 import org.mifospay.core.ui.utils.BaseViewModel
 
 class IntraBankHubViewModel(
     private val recentPayeeRepository: RecentPayeeRepository,
+    private val selfServiceRepository: SelfServiceRepository,
     private val userPreferencesRepository: UserPreferencesRepository,
 ) : BaseViewModel<IntraBankHubState, IntraBankHubEvent, IntraBankHubAction>(
     initialState = IntraBankHubState(),
@@ -31,6 +35,7 @@ class IntraBankHubViewModel(
 
     init {
         loadRecentPayees()
+        loadBeneficiaries()
     }
 
     override fun handleAction(action: IntraBankHubAction) {
@@ -57,6 +62,34 @@ class IntraBankHubViewModel(
                         accountNo = action.payee.accountNo,
                     ),
                 )
+            }
+
+            is IntraBankHubAction.OnPayBeneficiary -> {
+                sendEvent(
+                    IntraBankHubEvent.NavigateToTransferBeneficiary(action.beneficiary),
+                )
+            }
+
+            IntraBankHubAction.OnHistoryClicked -> {
+                sendEvent(IntraBankHubEvent.NavigateToHistory)
+            }
+
+            IntraBankHubAction.OnScanQrClicked -> {
+                sendEvent(IntraBankHubEvent.NavigateToScanQr)
+            }
+
+            IntraBankHubAction.OnRequestMoneyClicked -> {
+                sendEvent(IntraBankHubEvent.NavigateToRequestMoney)
+            }
+
+            IntraBankHubAction.OnSeeAllTransactionsClicked -> {
+                sendEvent(IntraBankHubEvent.NavigateToHistory)
+            }
+
+            is IntraBankHubAction.OnTabSelected -> {
+                mutableStateFlow.update {
+                    it.copy(selectedTab = action.tab)
+                }
             }
         }
     }
@@ -105,20 +138,72 @@ class IntraBankHubViewModel(
             .launchIn(viewModelScope)
     }
 
+    private fun loadBeneficiaries() {
+        viewModelScope.launch {
+            selfServiceRepository.getBeneficiaryList()
+                .onEach { result ->
+                    when (result) {
+                        is DataState.Loading -> {
+                            mutableStateFlow.update {
+                                it.copy(beneficiariesState = BeneficiariesState.Loading)
+                            }
+                        }
+                        is DataState.Success -> {
+                            Logger.d { "Beneficiaries: Loaded ${result.data.size} beneficiaries" }
+                            mutableStateFlow.update {
+                                it.copy(
+                                    beneficiaries = result.data,
+                                    beneficiariesState = if (result.data.isEmpty()) {
+                                        BeneficiariesState.Empty
+                                    } else {
+                                        BeneficiariesState.Success
+                                    },
+                                )
+                            }
+                        }
+                        is DataState.Error -> {
+                            Logger.e(result.exception) { "Beneficiaries: Failed to load" }
+                            mutableStateFlow.update {
+                                it.copy(beneficiariesState = BeneficiariesState.Error)
+                            }
+                        }
+                    }
+                }
+                .launchIn(viewModelScope)
+        }
+    }
+
     companion object {
         private const val RECENT_PAYEES_LIMIT = 10
     }
 }
 
+enum class PayeeTab {
+    Recents,
+    Beneficiaries,
+}
+
 @Serializable
 data class IntraBankHubState(
+    val selectedTab: PayeeTab = PayeeTab.Recents,
     @Transient
     val recentPayees: List<RecentPayee> = emptyList(),
     @Transient
     val recentPayeesState: RecentPayeesState = RecentPayeesState.Loading,
+    @Transient
+    val beneficiaries: List<Beneficiary> = emptyList(),
+    @Transient
+    val beneficiariesState: BeneficiariesState = BeneficiariesState.Loading,
 )
 
 enum class RecentPayeesState {
+    Loading,
+    Success,
+    Empty,
+    Error,
+}
+
+enum class BeneficiariesState {
     Loading,
     Success,
     Empty,
@@ -129,6 +214,9 @@ sealed interface IntraBankHubEvent {
     data object NavigateToSearchAccountSelection : IntraBankHubEvent
     data object NavigateBack : IntraBankHubEvent
     data object NavigateToBeneficiary : IntraBankHubEvent
+    data object NavigateToHistory : IntraBankHubEvent
+    data object NavigateToScanQr : IntraBankHubEvent
+    data object NavigateToRequestMoney : IntraBankHubEvent
     data class NavigateToTransfer(
         val toOfficeId: Int,
         val toClientId: Long,
@@ -136,11 +224,20 @@ sealed interface IntraBankHubEvent {
         val accountName: String,
         val accountNo: String,
     ) : IntraBankHubEvent
+    data class NavigateToTransferBeneficiary(
+        val beneficiary: Beneficiary,
+    ) : IntraBankHubEvent
 }
 
 sealed interface IntraBankHubAction {
     data object NavigateBack : IntraBankHubAction
     data object OnSearchBarClicked : IntraBankHubAction
     data object OnAddPayeeClicked : IntraBankHubAction
+    data object OnHistoryClicked : IntraBankHubAction
+    data object OnScanQrClicked : IntraBankHubAction
+    data object OnRequestMoneyClicked : IntraBankHubAction
+    data object OnSeeAllTransactionsClicked : IntraBankHubAction
+    data class OnTabSelected(val tab: PayeeTab) : IntraBankHubAction
     data class OnPayRecentPayee(val payee: RecentPayee) : IntraBankHubAction
+    data class OnPayBeneficiary(val beneficiary: Beneficiary) : IntraBankHubAction
 }

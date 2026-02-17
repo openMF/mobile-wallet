@@ -14,6 +14,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import kotlinx.serialization.Serializable
+import org.mifospay.core.model.beneficiary.Beneficiary
 import org.mifospay.feature.transfer.intrabank.hub.IntraBankHubScreen
 
 @Serializable
@@ -34,6 +35,10 @@ fun NavGraphBuilder.intraBankHubScreen(
         accountName: String,
         accountNo: String,
     ) -> Unit,
+    navigateToHistory: () -> Unit = {},
+    navigateToScanQr: () -> Unit = {},
+    navigateToRequestMoney: () -> Unit = {},
+    navigateToTransferBeneficiary: (Beneficiary) -> Unit = {},
     showTopBar: Boolean = true,
 ) {
     composable<IntraBankHubRoute> {
@@ -42,6 +47,10 @@ fun NavGraphBuilder.intraBankHubScreen(
             navigateBack = navigateBack,
             navigateToBeneficiary = navigateToBeneficiary,
             navigateToTransferConfirm = navigateToTransferConfirm,
+            navigateToHistory = navigateToHistory,
+            navigateToScanQr = navigateToScanQr,
+            navigateToRequestMoney = navigateToRequestMoney,
+            navigateToTransferBeneficiary = navigateToTransferBeneficiary,
             showTopBar = showTopBar,
         )
     }

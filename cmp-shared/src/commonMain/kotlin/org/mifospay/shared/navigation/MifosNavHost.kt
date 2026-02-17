@@ -402,6 +402,22 @@ internal fun MifosNavHost(
                     returnDestination = "home",
                 )
             },
+            navigateToHistory = navController::navigateToHistory,
+            navigateToScanQr = navController::navigateToScanQr,
+            navigateToRequestMoney = navController::navigateToMpayQrScreen,
+            navigateToTransferBeneficiary = { beneficiary ->
+                // Default office ID since beneficiary doesn't have office info
+                navController.navigateToTransferConfirm(
+                    toOfficeId = 1,
+                    toClientId = beneficiary.id,
+                    toAccountTypeId = beneficiary.accountType.id,
+                    toAccountId = beneficiary.id.toInt(),
+                    amount = 0,
+                    toAccountName = beneficiary.name,
+                    toAccountNo = beneficiary.accountNumber,
+                    returnDestination = "home",
+                )
+            },
         )
 
         transferSuccessScreen(

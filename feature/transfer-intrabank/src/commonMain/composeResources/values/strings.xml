@@ -44,8 +44,26 @@
     <string name="feature_send_money_add_payee_title">Add Payee</string>
     <string name="feature_send_money_add_payee_subtitle">Add Payee to transfer money quickly</string>
     <string name="feature_send_money_add_icon_desc">Add</string>
-    <string name="feature_send_money_recents_title">Recent</string>
+    <string name="feature_send_money_recents_title">Recents</string>
     <string name="feature_send_money_recents_icon_desc">Recents</string>
+
+    <!-- Quick Actions -->
+    <string name="feature_send_money_add_payee">Add Payee</string>
+    <string name="feature_send_money_history">History</string>
+    <string name="feature_send_money_request">Request</string>
+
+    <!-- Tabs -->
+    <string name="feature_send_money_tab_recents">Recents</string>
+    <string name="feature_send_money_tab_beneficiaries">Beneficiaries</string>
+
+    <!-- Recents Section -->
+    <string name="feature_send_money_see_all">See all transactions</string>
+    <string name="feature_send_money_no_recents">No recent transfers</string>
+    <string name="feature_send_money_no_recents_subtitle">Add a payee to start sending money</string>
+
+    <!-- Beneficiaries Section -->
+    <string name="feature_send_money_no_beneficiaries">No beneficiaries</string>
+    <string name="feature_send_money_no_beneficiaries_subtitle">Add a beneficiary to send money quickly</string>
     <string name="feature_send_money_all_accounts">All Accounts</string>
     <string name="feature_send_money_last_paid">Last paid %1$s</string>
     <string name="feature_send_money_pay_button">Pay</string>

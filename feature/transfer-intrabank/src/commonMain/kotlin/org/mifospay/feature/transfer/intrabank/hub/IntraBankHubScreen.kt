@@ -9,57 +9,47 @@
  */
 package org.mifospay.feature.transfer.intrabank.hub
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.FilterChip
+import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import mobile_wallet.feature.transfer_intrabank.generated.resources.Res
 import mobile_wallet.feature.transfer_intrabank.generated.resources.feature_select_account_placeholder
-import mobile_wallet.feature.transfer_intrabank.generated.resources.feature_send_money_add_icon_desc
-import mobile_wallet.feature.transfer_intrabank.generated.resources.feature_send_money_add_payee_subtitle
-import mobile_wallet.feature.transfer_intrabank.generated.resources.feature_send_money_add_payee_title
-import mobile_wallet.feature.transfer_intrabank.generated.resources.feature_send_money_pay_button
-import mobile_wallet.feature.transfer_intrabank.generated.resources.feature_send_money_recents_title
+import mobile_wallet.feature.transfer_intrabank.generated.resources.feature_send_money_see_all
 import mobile_wallet.feature.transfer_intrabank.generated.resources.feature_send_money_send
+import mobile_wallet.feature.transfer_intrabank.generated.resources.feature_send_money_tab_beneficiaries
+import mobile_wallet.feature.transfer_intrabank.generated.resources.feature_send_money_tab_recents
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
-import org.mifospay.core.designsystem.component.MifosOutlinedButton
 import org.mifospay.core.designsystem.component.MifosScaffold
-import org.mifospay.core.designsystem.component.MifosTextUserImage
 import org.mifospay.core.designsystem.component.MifosTopBar
-import org.mifospay.core.designsystem.icon.MifosIcons
 import org.mifospay.core.model.account.RecentPayee
+import org.mifospay.core.model.beneficiary.Beneficiary
 import org.mifospay.core.ui.MifosProgressIndicatorMini
 import org.mifospay.core.ui.SimpleSearchBar
 import org.mifospay.core.ui.utils.EventsEffect
+import org.mifospay.feature.transfer.intrabank.hub.components.BeneficiaryCard
+import org.mifospay.feature.transfer.intrabank.hub.components.EmptyBeneficiariesState
+import org.mifospay.feature.transfer.intrabank.hub.components.EmptyRecentsState
+import org.mifospay.feature.transfer.intrabank.hub.components.QuickActionsGrid
+import org.mifospay.feature.transfer.intrabank.hub.components.RecentPayeeCard
 import template.core.base.designsystem.KptMaterialTheme
 import template.core.base.designsystem.theme.KptTheme
 
@@ -76,6 +66,10 @@ fun IntraBankHubScreen(
         accountNo: String,
     ) -> Unit,
     modifier: Modifier = Modifier,
+    navigateToHistory: () -> Unit = {},
+    navigateToScanQr: () -> Unit = {},
+    navigateToRequestMoney: () -> Unit = {},
+    navigateToTransferBeneficiary: (Beneficiary) -> Unit = {},
     showTopBar: Boolean = true,
     viewModel: IntraBankHubViewModel = koinViewModel(),
 ) {
@@ -89,6 +83,12 @@ fun IntraBankHubScreen(
 
             IntraBankHubEvent.NavigateToBeneficiary -> navigateToBeneficiary()
 
+            IntraBankHubEvent.NavigateToHistory -> navigateToHistory()
+
+            IntraBankHubEvent.NavigateToScanQr -> navigateToScanQr()
+
+            IntraBankHubEvent.NavigateToRequestMoney -> navigateToRequestMoney()
+
             is IntraBankHubEvent.NavigateToTransfer -> {
                 navigateToTransferConfirm(
                     event.toOfficeId,
@@ -97,6 +97,10 @@ fun IntraBankHubScreen(
                     event.accountName,
                     event.accountNo,
                 )
+            }
+
+            is IntraBankHubEvent.NavigateToTransferBeneficiary -> {
+                navigateToTransferBeneficiary(event.beneficiary)
             }
         }
     }
@@ -137,9 +141,10 @@ private fun IntraBankHubScreenContent(
                 .fillMaxSize()
                 .padding(paddingValues)
                 .padding(horizontal = KptTheme.spacing.md),
+            verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.md),
         ) {
             item {
-                Spacer(Modifier.height(KptTheme.spacing.md))
+                Spacer(Modifier.height(KptTheme.spacing.sm))
 
                 SimpleSearchBar(
                     query = "",
@@ -150,178 +155,169 @@ private fun IntraBankHubScreenContent(
                     },
                     enabled = false,
                 )
+            }
 
-                Spacer(Modifier.height(KptTheme.spacing.md))
-
-                AddPayeeCard(
-                    onClick = {
-                        onAction(IntraBankHubAction.OnAddPayeeClicked)
-                    },
+            item {
+                QuickActionsGrid(
+                    onAddPayeeClick = { onAction(IntraBankHubAction.OnAddPayeeClicked) },
+                    onHistoryClick = { onAction(IntraBankHubAction.OnHistoryClicked) },
+                    onScanQrClick = { onAction(IntraBankHubAction.OnScanQrClicked) },
+                    onRequestMoneyClick = { onAction(IntraBankHubAction.OnRequestMoneyClicked) },
                 )
             }
 
-            // Recent Payees Section
-            when (state.recentPayeesState) {
-                RecentPayeesState.Loading -> {
-                    item {
-                        Spacer(Modifier.height(KptTheme.spacing.lg))
-                        Box(
-                            modifier = Modifier.fillMaxWidth().padding(KptTheme.spacing.lg),
-                            contentAlignment = Alignment.Center,
-                        ) {
-                            MifosProgressIndicatorMini()
+            // Tab Row
+            item {
+                PayeeTabRow(
+                    selectedTab = state.selectedTab,
+                    onTabSelected = { onAction(IntraBankHubAction.OnTabSelected(it)) },
+                )
+            }
+
+            // Content based on selected tab
+            when (state.selectedTab) {
+                PayeeTab.Recents -> {
+                    when (state.recentPayeesState) {
+                        RecentPayeesState.Loading -> {
+                            item {
+                                Box(
+                                    modifier = Modifier.fillMaxWidth().padding(KptTheme.spacing.lg),
+                                    contentAlignment = Alignment.Center,
+                                ) {
+                                    MifosProgressIndicatorMini()
+                                }
+                            }
+                        }
+
+                        RecentPayeesState.Success -> {
+                            items(state.recentPayees, key = { it.clientId }) { payee ->
+                                RecentPayeeCard(
+                                    payee = payee,
+                                    onPayClick = {
+                                        onAction(IntraBankHubAction.OnPayRecentPayee(payee))
+                                    },
+                                )
+                            }
+
+                            item {
+                                SeeAllTransactionsButton(
+                                    onClick = {
+                                        onAction(IntraBankHubAction.OnSeeAllTransactionsClicked)
+                                    },
+                                )
+                            }
+                        }
+
+                        RecentPayeesState.Empty -> {
+                            item {
+                                EmptyRecentsState(
+                                    onAddPayeeClick = {
+                                        onAction(IntraBankHubAction.OnAddPayeeClicked)
+                                    },
+                                )
+                            }
+                        }
+
+                        RecentPayeesState.Error -> {
+                            // Don't show anything on error
                         }
                     }
                 }
 
-                RecentPayeesState.Success -> {
-                    item {
-                        Spacer(Modifier.height(KptTheme.spacing.lg))
-                        RecentPayeesHeader()
-                        Spacer(Modifier.height(KptTheme.spacing.sm))
-                    }
+                PayeeTab.Beneficiaries -> {
+                    when (state.beneficiariesState) {
+                        BeneficiariesState.Loading -> {
+                            item {
+                                Box(
+                                    modifier = Modifier.fillMaxWidth().padding(KptTheme.spacing.lg),
+                                    contentAlignment = Alignment.Center,
+                                ) {
+                                    MifosProgressIndicatorMini()
+                                }
+                            }
+                        }
 
-                    items(state.recentPayees, key = { it.clientId }) { payee ->
-                        RecentPayeeItem(
-                            payee = payee,
-                            onPayClick = { onAction(IntraBankHubAction.OnPayRecentPayee(payee)) },
-                        )
+                        BeneficiariesState.Success -> {
+                            items(state.beneficiaries, key = { it.id }) { beneficiary ->
+                                BeneficiaryCard(
+                                    beneficiary = beneficiary,
+                                    onPayClick = {
+                                        onAction(IntraBankHubAction.OnPayBeneficiary(beneficiary))
+                                    },
+                                )
+                            }
+                        }
+
+                        BeneficiariesState.Empty -> {
+                            item {
+                                EmptyBeneficiariesState(
+                                    onAddPayeeClick = {
+                                        onAction(IntraBankHubAction.OnAddPayeeClicked)
+                                    },
+                                )
+                            }
+                        }
+
+                        BeneficiariesState.Error -> {
+                            // Don't show anything on error
+                        }
                     }
                 }
+            }
 
-                RecentPayeesState.Empty,
-                RecentPayeesState.Error,
-                -> {
-                    // Don't show anything when empty or error
-                }
+            item {
+                Spacer(Modifier.height(KptTheme.spacing.md))
             }
         }
     }
 }
 
 @Composable
-private fun RecentPayeesHeader(
+private fun PayeeTabRow(
+    selectedTab: PayeeTab,
+    onTabSelected: (PayeeTab) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Row(
         modifier = modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(KptTheme.spacing.sm),
     ) {
-        Icon(
-            imageVector = MifosIcons.History,
-            contentDescription = stringResource(Res.string.feature_send_money_recents_title),
-            tint = KptTheme.colorScheme.primary,
+        FilterChip(
+            selected = selectedTab == PayeeTab.Recents,
+            onClick = { onTabSelected(PayeeTab.Recents) },
+            label = { Text(stringResource(Res.string.feature_send_money_tab_recents)) },
+            colors = FilterChipDefaults.filterChipColors(
+                selectedContainerColor = KptTheme.colorScheme.primaryContainer,
+                selectedLabelColor = KptTheme.colorScheme.onPrimaryContainer,
+            ),
         )
-        Text(
-            text = stringResource(Res.string.feature_send_money_recents_title),
-            style = KptTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
+        FilterChip(
+            selected = selectedTab == PayeeTab.Beneficiaries,
+            onClick = { onTabSelected(PayeeTab.Beneficiaries) },
+            label = { Text(stringResource(Res.string.feature_send_money_tab_beneficiaries)) },
+            colors = FilterChipDefaults.filterChipColors(
+                selectedContainerColor = KptTheme.colorScheme.primaryContainer,
+                selectedLabelColor = KptTheme.colorScheme.onPrimaryContainer,
+            ),
         )
     }
 }
 
 @Composable
-fun AddPayeeCard(
-    title: String = stringResource(Res.string.feature_send_money_add_payee_title),
-    subtitle: String = stringResource(Res.string.feature_send_money_add_payee_subtitle),
+private fun SeeAllTransactionsButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Card(
-        modifier = modifier
-            .fillMaxWidth()
-            .clickable { onClick() },
-        shape = KptTheme.shapes.medium,
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.primary.copy(0.1f),
-        ),
+    Box(
+        modifier = modifier.fillMaxWidth(),
+        contentAlignment = Alignment.Center,
     ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(KptTheme.spacing.md),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Box(
-                modifier = Modifier
-                    .size(32.dp)
-                    .background(
-                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.2f),
-                        shape = CircleShape,
-                    ),
-                contentAlignment = Alignment.Center,
-            ) {
-                Icon(
-                    imageVector = MifosIcons.Add,
-                    contentDescription = stringResource(Res.string.feature_send_money_add_icon_desc),
-                    tint = MaterialTheme.colorScheme.onSurface,
-                )
-            }
-
-            Spacer(modifier = Modifier.width(KptTheme.spacing.md))
-
-            Column {
-                Text(
-                    text = title,
-                    style = KptTheme.typography.titleSmall,
-                )
-                Text(
-                    text = subtitle,
-                    style = KptTheme.typography.bodySmall,
-                )
-            }
-        }
-    }
-}
-
-@Composable
-private fun RecentPayeeItem(
-    payee: RecentPayee,
-    onPayClick: () -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .clip(KptTheme.shapes.medium)
-            .padding(horizontal = KptTheme.spacing.md, vertical = KptTheme.spacing.sm),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween,
-    ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(KptTheme.spacing.sm),
-            modifier = Modifier.weight(1f),
-        ) {
-            MifosTextUserImage(
-                text = payee.initials,
-                size = 40.dp,
+        TextButton(onClick = onClick) {
+            Text(
+                text = stringResource(Res.string.feature_send_money_see_all),
+                style = KptTheme.typography.labelLarge,
+                color = KptTheme.colorScheme.primary,
             )
-
-            Column(
-                modifier = Modifier.weight(1f),
-            ) {
-                Text(
-                    text = payee.clientName,
-                    style = KptTheme.typography.bodyLarge,
-                    maxLines = 1,
-                )
-                Text(
-                    text = "${payee.currency} ${payee.lastAmount.toInt()} • ${payee.accountNo}",
-                    style = KptTheme.typography.bodyMedium,
-                    color = KptTheme.colorScheme.onSurfaceVariant,
-                    maxLines = 1,
-                )
-            }
-        }
-
-        MifosOutlinedButton(
-            onClick = onPayClick,
-            colors = ButtonDefaults.outlinedButtonColors(
-                contentColor = KptTheme.colorScheme.primary,
-            ),
-        ) {
-            Text(stringResource(Res.string.feature_send_money_pay_button))
         }
     }
 }
@@ -345,23 +341,23 @@ private fun PreviewIntraBankHubScreenWithRecents() {
             clientId = 1,
             clientName = "John Doe",
             accountId = 101,
-            accountNo = "ACC001",
+            accountNo = "ACC0017543",
             officeId = 1,
             officeName = "HQ",
-            lastTransferDate = "2024-01-15",
-            lastAmount = 50.0,
-            currency = "USD",
+            lastTransferDate = "2026-02-07",
+            lastAmount = 63823.00,
+            currency = "₹",
         ),
         RecentPayee(
             clientId = 2,
             clientName = "Alice Smith",
             accountId = 102,
-            accountNo = "ACC002",
+            accountNo = "ACC0022696",
             officeId = 1,
             officeName = "HQ",
-            lastTransferDate = "2024-01-14",
-            lastAmount = 120.0,
-            currency = "USD",
+            lastTransferDate = "2026-01-28",
+            lastAmount = 25000.00,
+            currency = "₹",
         ),
     )
 
@@ -378,31 +374,57 @@ private fun PreviewIntraBankHubScreenWithRecents() {
 
 @Preview
 @Composable
-private fun PreviewAddPayeeCard() {
+private fun PreviewIntraBankHubScreenWithBeneficiaries() {
+    val mockBeneficiaries = listOf(
+        Beneficiary(
+            id = 1,
+            name = "John Doe",
+            officeName = "Head Office",
+            clientName = "John Doe",
+            accountType = Beneficiary.AccountType(
+                id = 2,
+                code = "SAVINGS",
+                value = "Savings",
+            ),
+            accountNumber = "ACC1234567543",
+            transferLimit = 100000,
+        ),
+        Beneficiary(
+            id = 2,
+            name = "Alice Smith",
+            officeName = "Branch Office",
+            clientName = "Alice Smith",
+            accountType = Beneficiary.AccountType(
+                id = 2,
+                code = "SAVINGS",
+                value = "Savings",
+            ),
+            accountNumber = "ACC9876543210",
+            transferLimit = 50000,
+        ),
+    )
+
     KptMaterialTheme {
-        AddPayeeCard(
-            onClick = {},
+        IntraBankHubScreenContent(
+            state = IntraBankHubState(
+                selectedTab = PayeeTab.Beneficiaries,
+                beneficiaries = mockBeneficiaries,
+                beneficiariesState = BeneficiariesState.Success,
+            ),
+            onAction = {},
         )
     }
 }
 
 @Preview
 @Composable
-private fun PreviewRecentPayeeItem() {
+private fun PreviewIntraBankHubScreenEmpty() {
     KptMaterialTheme {
-        RecentPayeeItem(
-            payee = RecentPayee(
-                clientId = 1,
-                clientName = "Alex Doe",
-                accountId = 101,
-                accountNo = "ACC1234",
-                officeId = 1,
-                officeName = "HQ",
-                lastTransferDate = "2024-01-15",
-                lastAmount = 1500.0,
-                currency = "USD",
+        IntraBankHubScreenContent(
+            state = IntraBankHubState(
+                recentPayeesState = RecentPayeesState.Empty,
             ),
-            onPayClick = {},
+            onAction = {},
         )
     }
 }
