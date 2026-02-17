@@ -29,6 +29,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -50,6 +51,7 @@ import mobile_wallet.feature.mpay_qr_scan.generated.resources.feature_qr_drag_dr
 import mobile_wallet.feature.mpay_qr_scan.generated.resources.feature_qr_drop_image_here
 import mobile_wallet.feature.mpay_qr_scan.generated.resources.feature_qr_import_description
 import mobile_wallet.feature.mpay_qr_scan.generated.resources.feature_qr_import_qr_code
+import mobile_wallet.feature.mpay_qr_scan.generated.resources.feature_qr_powered_by
 import mobile_wallet.feature.mpay_qr_scan.generated.resources.feature_qr_preview_image
 import mobile_wallet.feature.mpay_qr_scan.generated.resources.feature_qr_processing
 import mobile_wallet.feature.mpay_qr_scan.generated.resources.feature_qr_select_image
@@ -72,6 +74,7 @@ fun QrImportScreen(
     val importTitle = stringResource(Res.string.feature_qr_import_qr_code)
     val selectImageDescription = stringResource(Res.string.feature_qr_select_qr_image)
     val platformContext = LocalPlatformContext.current
+    val imageLoader = remember(platformContext) { ImageLoader(platformContext) }
 
     Box(
         modifier = modifier
@@ -159,7 +162,7 @@ fun QrImportScreen(
                                     Image(
                                         painter = rememberAsyncImagePainter(
                                             model = imagePreviewBytes,
-                                            imageLoader = ImageLoader(platformContext),
+                                            imageLoader = imageLoader,
                                         ),
                                         contentDescription = stringResource(Res.string.feature_qr_preview_image),
                                         modifier = Modifier
@@ -276,7 +279,7 @@ fun QrImportScreen(
 
             // Footer branding
             Text(
-                text = "Powered by Mifos",
+                text = stringResource(Res.string.feature_qr_powered_by),
                 fontSize = 12.sp,
                 color = KptTheme.colorScheme.onBackground.copy(alpha = 0.4f),
             )

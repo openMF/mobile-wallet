@@ -171,10 +171,11 @@ internal fun SetAmountDialog(
 
                         MifosButton(
                             onClick = {
-                                if (amountValidator == null) {
+                                if (amountValidator == null && amount.isNotBlank()) {
                                     onAction(MpayQrAction.ConfirmSetAmount)
                                 }
                             },
+                            enabled = amountValidator == null && amount.isNotBlank(),
                         ) {
                             Text(text = stringResource(Res.string.feature_request_money_confirm))
                         }

@@ -254,9 +254,16 @@ object MpayQrCodeProcessor {
         return paymentString
             .substringAfter("$protocol?")
             .split("&")
-            .associate {
-                val (key, value) = it.split("=")
-                key to value
+            .mapNotNull { param ->
+                val separatorIndex = param.indexOf('=')
+                if (separatorIndex > 0) {
+                    val key = param.substring(0, separatorIndex)
+                    val value = param.substring(separatorIndex + 1)
+                    key to value
+                } else {
+                    null
+                }
             }
+            .toMap()
     }
 }

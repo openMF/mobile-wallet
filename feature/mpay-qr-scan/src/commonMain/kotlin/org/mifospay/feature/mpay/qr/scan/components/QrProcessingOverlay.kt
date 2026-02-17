@@ -23,6 +23,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -50,6 +51,7 @@ fun QrProcessingOverlay(
     val processingText = stringResource(Res.string.feature_qr_processing)
     val previewDescription = stringResource(Res.string.feature_qr_preview_image)
     val platformContext = LocalPlatformContext.current
+    val imageLoader = remember(platformContext) { ImageLoader(platformContext) }
 
     Box(
         modifier = modifier
@@ -75,7 +77,7 @@ fun QrProcessingOverlay(
                     Image(
                         painter = rememberAsyncImagePainter(
                             model = imageBytes,
-                            imageLoader = ImageLoader(platformContext),
+                            imageLoader = imageLoader,
                         ),
                         contentDescription = previewDescription,
                         modifier = Modifier

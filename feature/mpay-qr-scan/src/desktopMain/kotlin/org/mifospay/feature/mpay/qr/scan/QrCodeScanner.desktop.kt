@@ -47,7 +47,7 @@ actual fun QrCodeScanner(
                 if (result != null) {
                     onScanned(result)
                 } else {
-                    // Clear preview on failure after a short delay
+                    // Clear preview on failure
                     imagePreviewBytes = null
                 }
             }

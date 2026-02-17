@@ -19,6 +19,7 @@ import kotlinx.coroutines.launch
 import org.mifospay.core.data.util.MpayQrCodeProcessor
 import org.mifospay.feature.fastmpay.model.QrProcessResult
 import org.mifospay.feature.fastmpay.navigation.QR_DATA_ARG
+import kotlin.coroutines.cancellation.CancellationException
 
 /**
  * ViewModel for fast MPay QR code processing.
@@ -54,6 +55,8 @@ class FastMpayViewModel(
                 val qrData = MpayQrCodeProcessor.decodeMpayString(encodedQrData)
                 val result = processor.processQrCode(qrData)
                 _resultFlow.update { result }
+            } catch (e: CancellationException) {
+                throw e
             } catch (e: Exception) {
                 _errorFlow.update { e.message ?: "Failed to process QR code" }
             } finally {

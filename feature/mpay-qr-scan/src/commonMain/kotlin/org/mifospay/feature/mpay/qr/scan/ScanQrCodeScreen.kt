@@ -158,10 +158,16 @@ fun ScanQrCodeScreenContent(
         if (file != null) {
             scope.launch {
                 onSetProcessingImage(true)
-                val imageBytes = file.readBytes()
-                onSetSelectedImageBytes(imageBytes)
-                val qrData = decodeQrFromFile(file)
-                onImageQrScanned(qrData)
+                try {
+                    val imageBytes = file.readBytes()
+                    onSetSelectedImageBytes(imageBytes)
+                    val qrData = decodeQrFromFile(file)
+                    onImageQrScanned(qrData)
+                } catch (e: Exception) {
+                    onImageQrScanned(null)
+                } finally {
+                    onSetProcessingImage(false)
+                }
             }
         }
     }

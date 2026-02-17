@@ -146,7 +146,7 @@ class ScannerCameraCoordinator(
 ) : AVCaptureMetadataOutputObjectsDelegateProtocol, NSObject() {
 
     private var previewLayer: AVCaptureVideoPreviewLayer? = null
-    lateinit var captureSession: AVCaptureSession
+    private lateinit var captureSession: AVCaptureSession
     private var captureDevice: AVCaptureDevice? = null
 
     fun isTorchAvailable(): Boolean {

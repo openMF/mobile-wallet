@@ -65,26 +65,32 @@ fun FastMpayScreen(
     LaunchedEffect(result) {
         when (val r = result) {
             is QrProcessResult.NavigateToAddBeneficiary -> {
+                viewModel.clearResult()
                 onNavigateToAddBeneficiary(r.beneficiaryData)
             }
 
             is QrProcessResult.NavigateToSendMoneyV2 -> {
+                viewModel.clearResult()
                 onNavigateToSendMoneyV2(r.qrData, r.beneficiaryName)
             }
 
             is QrProcessResult.NavigateToInterbankTransfer -> {
+                viewModel.clearResult()
                 onNavigateToInterbankTransfer(r.accountExternalId, r.recipientName, r.amount)
             }
 
             is QrProcessResult.NavigateToIntraBankTransfer -> {
+                viewModel.clearResult()
                 onNavigateToIntraBankTransfer(r.qrData)
             }
 
             is QrProcessResult.NavigateToMerchantPayment -> {
+                viewModel.clearResult()
                 onNavigateToMerchantPayment(r.qrData)
             }
 
             is QrProcessResult.Error -> {
+                viewModel.clearResult()
                 onError(r.message)
             }
 
