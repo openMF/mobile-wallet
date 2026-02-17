@@ -73,12 +73,11 @@ import org.mifospay.feature.savedcards.createOrUpdate.addEditCardScreen
 import org.mifospay.feature.savedcards.details.cardDetailRoute
 import org.mifospay.feature.send.interbank.navigation.interbankTransferScreen
 import org.mifospay.feature.send.interbank.navigation.navigateToInterbankTransfer
-import org.mifospay.feature.send.money.navigation.SEND_MONEY_BASE_ROUTE
-import org.mifospay.feature.send.money.navigation.sendMoneyScreen
-import org.mifospay.feature.send.money.selectScreen.navigateToSelectAccountScreen
-import org.mifospay.feature.send.money.selectScreen.selectAccountScreenDestination
-import org.mifospay.feature.send.money.v2.navigateToSendMoneyV2Screen
-import org.mifospay.feature.send.money.v2.sendMoneyScreenDestination
+import org.mifospay.feature.send.intrabank.navigation.SendIntraBankRoute
+import org.mifospay.feature.send.intrabank.navigation.navigateToSendIntraBankScreen
+import org.mifospay.feature.send.intrabank.navigation.sendIntraBankScreen
+import org.mifospay.feature.send.intrabank.selectScreen.navigateToSelectAccountScreen
+import org.mifospay.feature.send.intrabank.selectScreen.selectAccountScreenDestination
 import org.mifospay.feature.settings.navigation.settingsScreen
 import org.mifospay.feature.standing.instruction.createOrUpdate.addEditSIScreen
 import org.mifospay.feature.standing.instruction.details.siDetailsScreen
@@ -97,7 +96,7 @@ internal fun MifosNavHost(
         TabContent(PaymentsScreenContents.SEND.name) {
             SelectTransferTypeScreen(
                 onIntraBankTransferClick = {
-                    navController.navigateToSendMoneyV2Screen()
+                    navController.navigateToSendIntraBankScreen()
                 },
                 onInterBankTransferClick = {
                     navController.navigateToInterbankTransfer()
@@ -361,12 +360,6 @@ internal fun MifosNavHost(
             },
         )
 
-        sendMoneyScreen(
-            onBackClick = navController::popBackStack,
-            navigateToTransferScreen = navController::navigateToTransferScreen,
-            navigateToScanQrScreen = navController::navigateToScanQr,
-        )
-
         selectAccountScreenDestination(
             navigateToMakeTransferV2Screen = navController::navigateToMakeTransferScreenV2,
             navigateBack = navController::popBackStack,
@@ -380,7 +373,7 @@ internal fun MifosNavHost(
                     navOptions {
                         when (returnDestination) {
                             "payments" -> popUpTo(PAYMENTS_ROUTE) { inclusive = true }
-                            else -> popUpTo(SEND_MONEY_BASE_ROUTE) { inclusive = true }
+                            else -> popUpTo(HOME_ROUTE) { inclusive = true }
                         }
                         launchSingleTop = true
                     },
@@ -388,7 +381,7 @@ internal fun MifosNavHost(
             },
         )
 
-        sendMoneyScreenDestination(
+        sendIntraBankScreen(
             navigateToSelectAccountScreen = {
                 navController.navigateToSelectAccountScreen()
             },
@@ -419,7 +412,7 @@ internal fun MifosNavHost(
                 navController.navigateTransferSuccess(
                     returnDestination = "home",
                     navOptions {
-                        popUpTo(SEND_MONEY_BASE_ROUTE) {
+                        popUpTo(HOME_ROUTE) {
                             inclusive = true
                         }
                         launchSingleTop = true
@@ -505,7 +498,7 @@ internal fun MifosNavHost(
         )
 
         transferOptionsDialog(
-            onIntraBankTransferClick = navController::navigateToSendMoneyV2Screen,
+            onIntraBankTransferClick = navController::navigateToSendIntraBankScreen,
             onInterBankTransferClick = navController::navigateToInterbankTransfer,
             onDismiss = {
                 navController.popBackStack()

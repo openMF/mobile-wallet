@@ -41,7 +41,7 @@ import org.mifospay.feature.profile.di.ProfileModule
 import org.mifospay.feature.receipt.di.ReceiptModule
 import org.mifospay.feature.savedcards.di.SavedCardsModule
 import org.mifospay.feature.send.interbank.di.interbankTransferModule
-import org.mifospay.feature.send.money.di.SendMoneyModule
+import org.mifospay.feature.send.intrabank.di.SendIntraBankModule
 import org.mifospay.feature.settings.di.SettingsModule
 import org.mifospay.feature.standing.instruction.di.StandingInstructionModule
 import org.mifospay.feature.upi.setup.di.UpiSetupModule
@@ -86,7 +86,7 @@ object KoinModules {
             SavedCardsModule,
             ReceiptModule,
             StandingInstructionModule,
-            SendMoneyModule,
+            SendIntraBankModule,
             interbankTransferModule,
             MakeTransferModule,
             MpayQrModule,

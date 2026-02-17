@@ -50,7 +50,7 @@ kotlin {
             implementation(projects.feature.savedcards)
             implementation(projects.feature.receipt)
             implementation(projects.feature.standingInstruction)
-            implementation(projects.feature.sendMoney)
+            implementation(projects.feature.sendIntrabank)
             implementation(projects.feature.sendInterbank)
             implementation(projects.feature.makeTransfer)
             implementation(projects.feature.mpayQr)
