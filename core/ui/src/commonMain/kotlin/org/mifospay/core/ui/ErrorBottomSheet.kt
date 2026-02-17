@@ -22,7 +22,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -231,34 +230,32 @@ private fun getErrorVisuals(errorType: ErrorType): Triple<ImageVector, Color, Co
     return when (errorType) {
         ErrorType.NETWORK -> Triple(
             MifosIcons.Warning,
-            MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.2f),
-            MaterialTheme.colorScheme.error,
+            KptTheme.colorScheme.errorContainer.copy(alpha = 0.2f),
+            KptTheme.colorScheme.error,
         )
 
         ErrorType.SERVER -> Triple(
             MifosIcons.Error,
-            MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.2f),
-            MaterialTheme.colorScheme.error,
+            KptTheme.colorScheme.errorContainer.copy(alpha = 0.2f),
+            KptTheme.colorScheme.error,
         )
 
         ErrorType.CLIENT -> Triple(
             MifosIcons.Warning,
-            // Light orange
-            Color(0xFFFFF3E0),
-            // Dark orange
-            Color(0xFFE65100),
+            KptTheme.colorScheme.tertiaryContainer.copy(alpha = 0.3f),
+            KptTheme.colorScheme.tertiary,
         )
 
         ErrorType.VALIDATION -> Triple(
             MifosIcons.Info,
-            MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f),
-            MaterialTheme.colorScheme.primary,
+            KptTheme.colorScheme.primaryContainer.copy(alpha = 0.3f),
+            KptTheme.colorScheme.primary,
         )
 
         ErrorType.GENERIC -> Triple(
             MifosIcons.Error,
-            MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.2f),
-            MaterialTheme.colorScheme.error,
+            KptTheme.colorScheme.errorContainer.copy(alpha = 0.2f),
+            KptTheme.colorScheme.error,
         )
     }
 }

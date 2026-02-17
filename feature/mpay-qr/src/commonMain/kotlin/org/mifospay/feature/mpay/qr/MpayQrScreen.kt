@@ -34,7 +34,6 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import io.github.alexzhirkevich.qrose.ImageFormat
@@ -44,7 +43,7 @@ import mobile_wallet.feature.mpay_qr.generated.resources.Res
 import mobile_wallet.feature.mpay_qr.generated.resources.feature_mpay_qr_go_back
 import mobile_wallet.feature.mpay_qr.generated.resources.feature_mpay_qr_inter_bank
 import mobile_wallet.feature.mpay_qr.generated.resources.feature_mpay_qr_intra_bank
-import mobile_wallet.feature.mpay_qr.generated.resources.feature_mpay_qr_request_money
+import mobile_wallet.feature.mpay_qr.generated.resources.feature_mpay_qr_receive_money
 import mobile_wallet.feature.mpay_qr.generated.resources.feature_mpay_qr_share
 import mobile_wallet.feature.mpay_qr.generated.resources.feature_mpay_qr_unable_to_generate
 import mobile_wallet.feature.mpay_qr.generated.resources.feature_request_money_set_amount
@@ -121,7 +120,7 @@ internal fun MpayQrScreen(
 ) {
     MifosScaffold(
         modifier = modifier,
-        topBarTitle = stringResource(Res.string.feature_mpay_qr_request_money),
+        topBarTitle = stringResource(Res.string.feature_mpay_qr_receive_money),
         backPress = {
             onAction(MpayQrAction.NavigateBack)
         },
@@ -204,11 +203,16 @@ private fun MpayQrScreenContent(
                 modifier = Modifier.fillMaxWidth(),
                 key = { it },
             ) { page ->
-                val data = if (page == 0) state.intraBankData else state.interBankData
-                QrDataContent(
-                    data = data,
-                    options = state.options,
-                )
+                Box(
+                    modifier = Modifier.fillMaxWidth(),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    val data = if (page == 0) state.intraBankData else state.interBankData
+                    QrDataContent(
+                        data = data,
+                        options = state.options,
+                    )
+                }
             }
         }
 
@@ -344,7 +348,7 @@ private fun QrDataContent(
     Box(
         modifier = modifier
             .size(300.dp)
-            .background(Color.White, shape = KptTheme.shapes.large),
+            .background(KptTheme.colorScheme.surface, shape = KptTheme.shapes.large),
         contentAlignment = Alignment.Center,
     ) {
         Image(

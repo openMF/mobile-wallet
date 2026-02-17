@@ -16,7 +16,6 @@ import mobile_wallet.core.ui.generated.resources.core_ui_error_msg_conflict
 import mobile_wallet.core.ui.generated.resources.core_ui_error_msg_gateway_timeout
 import mobile_wallet.core.ui.generated.resources.core_ui_error_msg_generic
 import mobile_wallet.core.ui.generated.resources.core_ui_error_msg_invalid_request
-import mobile_wallet.core.ui.generated.resources.core_ui_error_msg_network
 import mobile_wallet.core.ui.generated.resources.core_ui_error_msg_not_found
 import mobile_wallet.core.ui.generated.resources.core_ui_error_msg_request_timeout
 import mobile_wallet.core.ui.generated.resources.core_ui_error_msg_server_error
@@ -28,9 +27,7 @@ import mobile_wallet.core.ui.generated.resources.core_ui_error_title_access_deni
 import mobile_wallet.core.ui.generated.resources.core_ui_error_title_bad_gateway
 import mobile_wallet.core.ui.generated.resources.core_ui_error_title_conflict
 import mobile_wallet.core.ui.generated.resources.core_ui_error_title_gateway_timeout
-import mobile_wallet.core.ui.generated.resources.core_ui_error_title_generic
 import mobile_wallet.core.ui.generated.resources.core_ui_error_title_invalid_request
-import mobile_wallet.core.ui.generated.resources.core_ui_error_title_network
 import mobile_wallet.core.ui.generated.resources.core_ui_error_title_not_found
 import mobile_wallet.core.ui.generated.resources.core_ui_error_title_request_error
 import mobile_wallet.core.ui.generated.resources.core_ui_error_title_request_timeout
