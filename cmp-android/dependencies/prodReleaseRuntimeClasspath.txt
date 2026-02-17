@@ -32,7 +32,7 @@
 :feature:receipt
 :feature:savedcards
 :feature:send-interbank
-:feature:send-money
+:feature:send-intrabank
 :feature:settings
 :feature:standing-instruction
 :feature:upi-setup

@@ -48,7 +48,6 @@ import org.mifospay.feature.kyc.navigation.kycLevel2Screen
 import org.mifospay.feature.kyc.navigation.kycLevel3Screen
 import org.mifospay.feature.kyc.navigation.navigateToKYCLevel2
 import org.mifospay.feature.kyc.navigation.navigateToKYCLevel3
-import org.mifospay.feature.make.transfer.navigation.navigateToTransferScreen
 import org.mifospay.feature.make.transfer.navigation.transferScreen
 import org.mifospay.feature.make.transfer.success.navigateTransferSuccess
 import org.mifospay.feature.make.transfer.success.transferSuccessScreen
@@ -73,7 +72,6 @@ import org.mifospay.feature.savedcards.createOrUpdate.addEditCardScreen
 import org.mifospay.feature.savedcards.details.cardDetailRoute
 import org.mifospay.feature.send.interbank.navigation.interbankTransferScreen
 import org.mifospay.feature.send.interbank.navigation.navigateToInterbankTransfer
-import org.mifospay.feature.send.intrabank.navigation.SendIntraBankRoute
 import org.mifospay.feature.send.intrabank.navigation.navigateToSendIntraBankScreen
 import org.mifospay.feature.send.intrabank.navigation.sendIntraBankScreen
 import org.mifospay.feature.send.intrabank.selectScreen.navigateToSelectAccountScreen

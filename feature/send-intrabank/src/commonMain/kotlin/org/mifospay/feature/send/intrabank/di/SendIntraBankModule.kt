@@ -11,12 +11,10 @@ package org.mifospay.feature.send.intrabank.di
 
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
-import org.mifospay.feature.send.intrabank.ScannerModule
 import org.mifospay.feature.send.intrabank.SendIntraBankViewModel
 import org.mifospay.feature.send.intrabank.selectScreen.SelectScreenViewModel
 
 val SendIntraBankModule = module {
-    includes(ScannerModule)
     viewModelOf(::SendIntraBankViewModel)
     viewModelOf(::SelectScreenViewModel)
 }
