@@ -38,6 +38,8 @@ interface UserPreferencesRepository {
 
     val selectedInterbankInstance: StateFlow<InterbankServer?>
 
+    val accountExternalIds: StateFlow<Map<Long, String>>
+
     suspend fun updateToken(token: String): DataState<Unit>
 
     suspend fun updateUserInfo(user: UserInfo): DataState<Unit>
@@ -51,6 +53,10 @@ interface UserPreferencesRepository {
     suspend fun updateSelectedInstance(instance: ServerInstance): DataState<Unit>
 
     suspend fun updateSelectedInterbankInstance(instance: InterbankServer): DataState<Unit>
+
+    suspend fun updateAccountExternalIds(accountExternalIds: Map<Long, String>): DataState<Unit>
+
+    fun getAccountExternalId(accountId: Long): String?
 
     suspend fun logOut(): Unit
 }

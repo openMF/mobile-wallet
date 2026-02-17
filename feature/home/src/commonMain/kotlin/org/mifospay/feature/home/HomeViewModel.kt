@@ -79,6 +79,12 @@ class HomeViewModel(
                             } else {
                                 val selected = result.data.firstOrNull()
 
+                                // Save account external IDs map
+                                val accountExternalIds = result.data
+                                    .filter { !it.externalId.isNullOrBlank() }
+                                    .associate { it.id to it.externalId!! }
+                                preferencesRepository.updateAccountExternalIds(accountExternalIds)
+
                                 if (selected != null) {
                                     mutableStateFlow.update {
                                         it.copy(

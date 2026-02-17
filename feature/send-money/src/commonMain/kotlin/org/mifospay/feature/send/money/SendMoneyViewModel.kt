@@ -38,9 +38,9 @@ import org.mifospay.core.common.StringResourceSerializer
 import org.mifospay.core.common.getSerialized
 import org.mifospay.core.common.setSerialized
 import org.mifospay.core.data.repository.AccountRepository
-import org.mifospay.core.data.util.UpiQrCodeProcessor
+import org.mifospay.core.data.util.MpayQrCodeProcessor
 import org.mifospay.core.model.search.AccountResult
-import org.mifospay.core.model.utils.PaymentQrData
+import org.mifospay.core.model.utils.QrCodeData
 import org.mifospay.core.model.utils.toAccount
 import org.mifospay.core.ui.utils.BaseViewModel
 import org.mifospay.feature.send.money.SendMoneyAction.HandleRequestData
@@ -161,7 +161,7 @@ class SendMoneyViewModel(
                 it.copy(dialogState = null)
             }
 
-            val paymentString = UpiQrCodeProcessor.encodeUpiString(state.paymentQrData)
+            val paymentString = MpayQrCodeProcessor.encodeMpayString(state.paymentQrData)
 
             sendEvent(SendMoneyEvent.NavigateToTransferScreen(paymentString))
         }
@@ -176,7 +176,7 @@ class SendMoneyViewModel(
     private fun handleRequestData(action: HandleRequestData) {
         viewModelScope.launch {
             try {
-                val requestData = UpiQrCodeProcessor.decodeUpiString(action.requestData)
+                val requestData = MpayQrCodeProcessor.decodeMpayString(action.requestData)
 
                 mutableStateFlow.update { state ->
                     state.copy(
@@ -220,8 +220,8 @@ data class SendMoneyState(
     val isProceedEnabled: Boolean
         get() = selectedAccount != null && amountIsValid
 
-    val paymentQrData: PaymentQrData
-        get() = PaymentQrData(
+    val paymentQrData: QrCodeData
+        get() = QrCodeData(
             clientId = selectedAccount?.parentId ?: 0,
             clientName = selectedAccount?.parentName ?: "",
             accountNo = selectedAccount?.entityAccountNo ?: "",

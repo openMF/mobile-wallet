@@ -10,6 +10,7 @@
 package org.mifospay.feature.send.interbank
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -37,10 +38,21 @@ fun InterbankTransferFlowScreen(
     onBackClick: () -> Unit,
     onTransferSuccess: () -> Unit,
     modifier: Modifier = Modifier,
+    initialPhoneNumber: String? = null,
+    initialAmount: String? = null,
     viewModel: InterbankTransferViewModel = koinViewModel(),
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
-    var searchQuery by remember { mutableStateOf("") }
+    var searchQuery by remember { mutableStateOf(initialPhoneNumber ?: "") }
+
+    // Pre-fill amount if provided
+    LaunchedEffect(initialAmount) {
+        initialAmount?.let { amount ->
+            if (amount.isNotBlank()) {
+                viewModel.trySendAction(InterbankTransferAction.UpdateAmount(amount))
+            }
+        }
+    }
 
     EventsEffect(viewModel) { event ->
         when (event) {

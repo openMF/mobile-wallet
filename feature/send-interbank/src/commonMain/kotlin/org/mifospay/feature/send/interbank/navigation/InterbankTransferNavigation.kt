@@ -20,13 +20,27 @@ import org.mifospay.feature.send.interbank.InterbankTransferFlowScreen
 @Serializable
 data class InterbankTransferRoute(
     val returnDestination: String = "home",
+    val phoneNumber: String? = null,
+    val recipientName: String? = null,
+    val amount: String? = null,
 )
 
 fun NavController.navigateToInterbankTransfer(
     returnDestination: String = "home",
+    phoneNumber: String? = null,
+    recipientName: String? = null,
+    amount: String? = null,
     navOptions: NavOptions? = null,
 ) {
-    this.navigate(InterbankTransferRoute(returnDestination = returnDestination), navOptions)
+    this.navigate(
+        InterbankTransferRoute(
+            returnDestination = returnDestination,
+            phoneNumber = phoneNumber,
+            recipientName = recipientName,
+            amount = amount,
+        ),
+        navOptions,
+    )
 }
 
 fun NavGraphBuilder.interbankTransferScreen(
@@ -38,6 +52,8 @@ fun NavGraphBuilder.interbankTransferScreen(
         InterbankTransferFlowScreen(
             onBackClick = onBackClick,
             onTransferSuccess = onTransferSuccess,
+            initialPhoneNumber = route.phoneNumber,
+            initialAmount = route.amount,
         )
     }
 }
