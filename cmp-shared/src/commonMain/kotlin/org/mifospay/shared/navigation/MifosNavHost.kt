@@ -364,8 +364,9 @@ internal fun MifosNavHost(
 
         transferConfirmScreen(
             navigateBack = navController::popBackStack,
-            onTransferSuccess = { returnDestination ->
+            onTransferSuccess = { transferResult, returnDestination ->
                 navController.navigateTransferSuccess(
+                    transferResult = transferResult,
                     returnDestination = returnDestination,
                     navOptions {
                         when (returnDestination) {

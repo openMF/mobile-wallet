@@ -23,6 +23,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
@@ -31,6 +33,7 @@ import androidx.compose.foundation.text.BasicText
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text.TextAutoSize
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
@@ -70,11 +73,11 @@ import mobile_wallet.feature.transfer_intrabank.generated.resources.feature_make
 import mobile_wallet.feature.transfer_intrabank.generated.resources.feature_make_transfer_review_title
 import mobile_wallet.feature.transfer_intrabank.generated.resources.feature_make_transfer_show_balance
 import mobile_wallet.feature.transfer_intrabank.generated.resources.feature_make_transfer_to_account
+import mobile_wallet.feature.transfer_intrabank.generated.resources.feature_transfer_cancel
+import mobile_wallet.feature.transfer_intrabank.generated.resources.feature_transfer_retry
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
-import org.mifospay.core.designsystem.component.BasicDialogState
-import org.mifospay.core.designsystem.component.MifosBasicDialog
 import org.mifospay.core.designsystem.component.MifosBottomSheetScaffold
 import org.mifospay.core.designsystem.component.MifosButton
 import org.mifospay.core.designsystem.component.MifosTextField
@@ -83,6 +86,8 @@ import org.mifospay.core.designsystem.icon.MifosIcons
 import org.mifospay.core.network.model.entity.templates.account.AccountOption
 import org.mifospay.core.ui.AvatarBox
 import org.mifospay.core.ui.EmptyContentScreen
+import org.mifospay.core.ui.ErrorBottomSheet
+import org.mifospay.core.ui.ErrorType
 import org.mifospay.core.ui.MifosProgressIndicator
 import org.mifospay.core.ui.MifosProgressIndicatorOverlay
 import org.mifospay.core.ui.utils.EventsEffect
@@ -92,7 +97,7 @@ import template.core.base.designsystem.theme.KptTheme
 @Composable
 internal fun TransferConfirmScreen(
     navigateBack: () -> Unit,
-    onTransferSuccess: () -> Unit,
+    onTransferSuccess: (TransferResult) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: TransferConfirmViewModel = koinViewModel(),
 ) {
@@ -101,7 +106,7 @@ internal fun TransferConfirmScreen(
     EventsEffect(viewModel) { event ->
         when (event) {
             TransferConfirmEvent.OnNavigateBack -> navigateBack.invoke()
-            TransferConfirmEvent.OnTransferSuccess -> onTransferSuccess.invoke()
+            is TransferConfirmEvent.OnTransferSuccess -> onTransferSuccess.invoke(event.transferResult)
         }
     }
 
@@ -109,6 +114,9 @@ internal fun TransferConfirmScreen(
         dialogState = state.dialogState,
         onDismissRequest = remember(viewModel) {
             { viewModel.trySendAction(TransferConfirmAction.DismissDialog) }
+        },
+        onRetry = remember(viewModel) {
+            { viewModel.trySendAction(TransferConfirmAction.RetryTransfer) }
         },
     )
 
@@ -125,18 +133,35 @@ internal fun TransferConfirmScreen(
 private fun TransferConfirmDialogs(
     dialogState: TransferConfirmState.DialogState?,
     onDismissRequest: () -> Unit,
+    onRetry: () -> Unit,
 ) {
     when (dialogState) {
-        is TransferConfirmState.DialogState.Error -> {
-            val message = when (dialogState) {
-                is TransferConfirmState.DialogState.Error.StringMessage -> dialogState.message
-                is TransferConfirmState.DialogState.Error.ResourceMessage -> stringResource(dialogState.message)
+        is TransferConfirmState.DialogState.Error.ValidationError -> {
+            ErrorBottomSheet(
+                title = stringResource(Res.string.feature_make_transfer_oops_title),
+                message = stringResource(dialogState.message),
+                errorType = ErrorType.VALIDATION,
+                onDismiss = onDismissRequest,
+                dismissButtonText = stringResource(Res.string.feature_transfer_cancel),
+            )
+        }
+
+        is TransferConfirmState.DialogState.Error.ApiError -> {
+            val error = dialogState.error
+            val errorType = when {
+                error.errorCode in 500..599 -> ErrorType.SERVER
+                error.errorCode in 400..499 -> ErrorType.CLIENT
+                error.errorCode == null && error.canRetry -> ErrorType.NETWORK
+                else -> ErrorType.GENERIC
             }
-            MifosBasicDialog(
-                visibilityState = BasicDialogState.Shown(
-                    message = message,
-                ),
-                onDismissRequest = onDismissRequest,
+
+            ErrorBottomSheet(
+                error = error,
+                errorType = errorType,
+                onDismiss = onDismissRequest,
+                onRetry = onRetry,
+                dismissButtonText = stringResource(Res.string.feature_transfer_cancel),
+                retryButtonText = stringResource(Res.string.feature_transfer_retry),
             )
         }
 
@@ -255,11 +280,24 @@ internal fun TransferConfirmScreen(
                         MifosButton(
                             onClick = { onAction(TransferConfirmAction.InitiateTransfer) },
                             modifier = Modifier.fillMaxWidth(),
-                            enabled = state.amountIsValid && state.descriptionIsValid,
+                            enabled = state.amountIsValid && state.descriptionIsValid && !state.isProcessing,
                         ) {
+                            if (state.isProcessing) {
+                                CircularProgressIndicator(
+                                    modifier = Modifier.size(20.dp),
+                                    color = MaterialTheme.colorScheme.onPrimary,
+                                    strokeWidth = 2.dp,
+                                )
+                                Spacer(modifier = Modifier.width(8.dp))
+                            }
                             Text(text = stringResource(Res.string.feature_make_transfer_continue_button))
                         }
                     }
+                }
+
+                // Show overlay when processing
+                if (state.isProcessing) {
+                    MifosProgressIndicatorOverlay()
                 }
             }
         }

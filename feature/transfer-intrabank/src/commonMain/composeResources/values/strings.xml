@@ -90,4 +90,32 @@
     <string name="feature_make_transfer_hide_balance">Hide Balance</string>
     <string name="feature_make_transfer_amount_error">Your account has insufficient balance</string>
 
+    <!-- Error dialog titles -->
+    <string name="feature_transfer_error_title">Error</string>
+    <string name="feature_transfer_error_network_title">Network Error</string>
+    <string name="feature_transfer_error_server_title">Server Error</string>
+    <string name="feature_transfer_error_invalid_request_title">Invalid Request</string>
+    <string name="feature_transfer_error_access_denied_title">Access Denied</string>
+
+    <!-- Error messages -->
+    <string name="feature_transfer_error_network">Please check your internet connection</string>
+    <string name="feature_transfer_error_server">Server error occurred. Please try again later.</string>
+    <string name="feature_transfer_error_invalid_request">Invalid request. Please check your details.</string>
+
+    <!-- Dialog buttons -->
+    <string name="feature_transfer_retry">Retry</string>
+    <string name="feature_transfer_cancel">Cancel</string>
+    <string name="feature_transfer_close">Close</string>
+
+    <!-- Success screen -->
+    <string name="feature_transfer_transaction_id">Transaction ID</string>
+    <string name="feature_transfer_copy">Copy</string>
+    <string name="feature_transfer_amount">Amount</string>
+    <string name="feature_transfer_to_account">To</string>
+    <string name="feature_transfer_from_account">From</string>
+    <string name="feature_transfer_date">Date</string>
+    <string name="feature_transfer_description">Description</string>
+    <string name="feature_transfer_back_to_home">Back to Home</string>
+    <string name="feature_transfer_transfer_completed">Transfer to %1$s completed</string>
+
 </resources>

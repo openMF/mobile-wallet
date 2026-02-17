@@ -12,7 +12,6 @@ package org.mifospay.feature.transfer.intrabank.confirm
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
-import io.ktor.client.request.invoke
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
@@ -27,15 +26,17 @@ import org.jetbrains.compose.resources.StringResource
 import org.mifospay.core.common.DataState
 import org.mifospay.core.common.DateHelper
 import org.mifospay.core.common.StringResourceSerializer
+import org.mifospay.core.common.UiError
+import org.mifospay.core.common.toUiError
 import org.mifospay.core.common.utils.capitalizeWords
 import org.mifospay.core.data.repository.ClientRepository
 import org.mifospay.core.data.repository.ThirdPartyTransferRepository
 import org.mifospay.core.network.model.entity.TPTResponse
 import org.mifospay.core.network.model.entity.payload.TransferPayload
 import org.mifospay.core.network.model.entity.templates.account.AccountOption
+import org.mifospay.core.ui.DefaultErrorMessageProvider
 import org.mifospay.core.ui.utils.BaseViewModel
 import org.mifospay.feature.transfer.intrabank.navigation.TransferConfirmRoute
-import kotlin.Int
 
 internal class TransferConfirmViewModel(
     private val repository: ThirdPartyTransferRepository,
@@ -102,10 +103,21 @@ internal class TransferConfirmViewModel(
             }
 
             is TransferConfirmAction.InitiateTransfer -> {
+                if (state.isProcessing) return
                 mutableStateFlow.update {
-                    it.copy(dialogState = TransferConfirmState.DialogState.Loading)
+                    it.copy(
+                        isProcessing = true,
+                        dialogState = null,
+                    )
                 }
                 validateTransfer()
+            }
+
+            TransferConfirmAction.RetryTransfer -> {
+                mutableStateFlow.update {
+                    it.copy(dialogState = null)
+                }
+                trySendAction(TransferConfirmAction.InitiateTransfer)
             }
 
             is TransferConfirmAction.Internal.HandleTransferResult -> handleTransferResult(action)
@@ -187,20 +199,20 @@ internal class TransferConfirmViewModel(
     }
 
     private fun validateTransfer() = when {
-        state.amount.isBlank() -> updateErrorState(Res.string.feature_make_transfer_error_empty_amount)
+        state.amount.isBlank() -> updateValidationError(Res.string.feature_make_transfer_error_empty_amount)
 
-        state.amount.toDoubleOrNull() == null -> updateErrorState(Res.string.feature_make_transfer_error_invalid_amount)
+        state.amount.toDoubleOrNull() == null -> updateValidationError(Res.string.feature_make_transfer_error_invalid_amount)
 
-        state.description.isBlank() -> updateErrorState(Res.string.feature_make_transfer_error_empty_description)
+        state.description.isBlank() -> updateValidationError(Res.string.feature_make_transfer_error_empty_description)
 
-        state.selectedAccount == null -> updateErrorState(Res.string.feature_make_transfer_error_select_account)
+        state.selectedAccount == null -> updateValidationError(Res.string.feature_make_transfer_error_select_account)
 
         state.selectedAccount?.accountId == state.toAccountId -> {
-            updateErrorState(Res.string.feature_make_transfer_error_same_account)
+            updateValidationError(Res.string.feature_make_transfer_error_same_account)
         }
 
         state.amount.toDouble() > state.selectedAccountBalance -> {
-            updateErrorState(Res.string.feature_make_transfer_error_insufficient_balance)
+            updateValidationError(Res.string.feature_make_transfer_error_insufficient_balance)
         }
 
         else -> initiateTransfer()
@@ -208,39 +220,64 @@ internal class TransferConfirmViewModel(
 
     private fun initiateTransfer() {
         viewModelScope.launch {
-            val result = repository.makeTransfer(state.transferPayload)
-
-            sendAction(TransferConfirmAction.Internal.HandleTransferResult(result))
+            repository.makeTransfer(state.transferPayload).collect { result ->
+                sendAction(TransferConfirmAction.Internal.HandleTransferResult(result))
+            }
         }
     }
 
     private fun handleTransferResult(action: TransferConfirmAction.Internal.HandleTransferResult) {
-        when (action.result) {
+        when (val result = action.result) {
             is DataState.Loading -> {
                 mutableStateFlow.update {
-                    it.copy(dialogState = TransferConfirmState.DialogState.Loading)
+                    it.copy(
+                        isProcessing = true,
+                        dialogState = null,
+                    )
                 }
             }
 
             is DataState.Error -> {
+                // Use UiError for automatic error message parsing with localized strings
+                val uiError = result.toUiError(DefaultErrorMessageProvider)
                 mutableStateFlow.update {
-                    it.copy(dialogState = TransferConfirmState.DialogState.Error.StringMessage(action.result.message))
+                    it.copy(
+                        isProcessing = false,
+                        dialogState = TransferConfirmState.DialogState.Error.ApiError(uiError),
+                    )
                 }
             }
 
             is DataState.Success -> {
+                val response = result.data
+                val transferResult = TransferResult(
+                    transactionId = response.resourceId?.toString() ?: "",
+                    amount = state.amount.toDoubleOrNull() ?: 0.0,
+                    fromAccountNo = state.selectedAccount?.accountNo ?: "",
+                    fromAccountName = state.selectedAccount?.clientName ?: "",
+                    toAccountNo = state.toAccountNo,
+                    toAccountName = state.toAccountName,
+                    transferDate = DateHelper.formattedShortDate,
+                    description = state.description.trim(),
+                )
                 mutableStateFlow.update {
-                    it.copy(dialogState = null)
+                    it.copy(
+                        isProcessing = false,
+                        dialogState = null,
+                        transferResult = transferResult,
+                    )
                 }
-
-                sendEvent(TransferConfirmEvent.OnTransferSuccess)
+                sendEvent(TransferConfirmEvent.OnTransferSuccess(transferResult))
             }
         }
     }
 
-    private fun updateErrorState(message: StringResource) {
+    private fun updateValidationError(message: StringResource) {
         mutableStateFlow.update {
-            it.copy(dialogState = TransferConfirmState.DialogState.Error.ResourceMessage(message))
+            it.copy(
+                isProcessing = false,
+                dialogState = TransferConfirmState.DialogState.Error.ValidationError(message),
+            )
         }
     }
 }
@@ -263,6 +300,8 @@ internal data class TransferConfirmState(
     val dialogState: DialogState? = null,
     val fromAccountOptions: List<AccountOption>? = emptyList(),
     val balanceMap: Map<String, Double> = emptyMap(),
+    val isProcessing: Boolean = false,
+    val transferResult: TransferResult? = null,
 ) {
     val amountIsValid: Boolean
         get() = amount.isNotEmpty() && amount.toDoubleOrNull() != null && amount.toDouble() <= selectedAccountBalance
@@ -294,14 +333,29 @@ internal data class TransferConfirmState(
 
         @Serializable
         sealed class Error : DialogState {
-            @Serializable
-            data class StringMessage(val message: String) : Error()
+            abstract val canRetry: Boolean
 
+            /**
+             * Validation error with a string resource message.
+             * Used for client-side validation errors.
+             */
             @Serializable
-            data class ResourceMessage(
+            data class ValidationError(
                 @Serializable(with = StringResourceSerializer::class)
                 val message: StringResource,
-            ) : Error()
+            ) : Error() {
+                override val canRetry: Boolean = false
+            }
+
+            /**
+             * API error that wraps [UiError] for automatic error message handling.
+             * The [UiError] contains user-friendly title, message and retry capability.
+             */
+            data class ApiError(
+                val error: UiError,
+            ) : Error() {
+                override val canRetry: Boolean = error.canRetry
+            }
         }
     }
 
@@ -313,9 +367,24 @@ internal data class TransferConfirmState(
     }
 }
 
+/**
+ * Transfer result data containing all the details of a successful transfer.
+ */
+@Serializable
+data class TransferResult(
+    val transactionId: String,
+    val amount: Double,
+    val fromAccountNo: String,
+    val fromAccountName: String,
+    val toAccountNo: String,
+    val toAccountName: String,
+    val transferDate: String,
+    val description: String,
+)
+
 internal sealed interface TransferConfirmEvent {
     data object OnNavigateBack : TransferConfirmEvent
-    data object OnTransferSuccess : TransferConfirmEvent
+    data class OnTransferSuccess(val transferResult: TransferResult) : TransferConfirmEvent
 }
 
 internal sealed interface TransferConfirmAction {
@@ -324,6 +393,8 @@ internal sealed interface TransferConfirmAction {
     data object DismissDialog : TransferConfirmAction
 
     data object InitiateTransfer : TransferConfirmAction
+
+    data object RetryTransfer : TransferConfirmAction
 
     data class AmountChanged(val amount: String) : TransferConfirmAction
 

@@ -130,6 +130,7 @@ private fun IntraBankHubScreenContent(
                 )
             }
         },
+        containerColor = KptTheme.colorScheme.background,
     ) { paddingValues ->
         LazyColumn(
             modifier = Modifier

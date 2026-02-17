@@ -15,9 +15,18 @@ import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
 import kotlinx.serialization.Serializable
+import org.mifospay.feature.transfer.intrabank.confirm.TransferResult
 
 @Serializable
 data class TransferSuccessRoute(
+    val transactionId: String = "",
+    val amount: Double = 0.0,
+    val fromAccountNo: String = "",
+    val fromAccountName: String = "",
+    val toAccountNo: String = "",
+    val toAccountName: String = "",
+    val transferDate: String = "",
+    val description: String = "",
     val returnDestination: String = "home",
 )
 
@@ -26,18 +35,40 @@ fun NavGraphBuilder.transferSuccessScreen(
 ) {
     composable<TransferSuccessRoute> { backStackEntry ->
         val route = backStackEntry.toRoute<TransferSuccessRoute>()
+        val transferResult = TransferResult(
+            transactionId = route.transactionId,
+            amount = route.amount,
+            fromAccountNo = route.fromAccountNo,
+            fromAccountName = route.fromAccountName,
+            toAccountNo = route.toAccountNo,
+            toAccountName = route.toAccountName,
+            transferDate = route.transferDate,
+            description = route.description,
+        )
         TransferSuccessScreen(
+            transferResult = transferResult,
             navigateBack = { navigateBack(route.returnDestination) },
         )
     }
 }
 
 fun NavController.navigateTransferSuccess(
+    transferResult: TransferResult,
     returnDestination: String = "home",
     navOptions: NavOptions? = null,
 ) {
     navigate(
-        TransferSuccessRoute(returnDestination = returnDestination),
+        TransferSuccessRoute(
+            transactionId = transferResult.transactionId,
+            amount = transferResult.amount,
+            fromAccountNo = transferResult.fromAccountNo,
+            fromAccountName = transferResult.fromAccountName,
+            toAccountNo = transferResult.toAccountNo,
+            toAccountName = transferResult.toAccountName,
+            transferDate = transferResult.transferDate,
+            description = transferResult.description,
+            returnDestination = returnDestination,
+        ),
         navOptions,
     )
 }

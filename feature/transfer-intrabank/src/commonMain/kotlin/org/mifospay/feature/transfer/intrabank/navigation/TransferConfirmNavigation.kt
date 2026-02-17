@@ -16,6 +16,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
 import kotlinx.serialization.Serializable
 import org.mifospay.feature.transfer.intrabank.confirm.TransferConfirmScreen
+import org.mifospay.feature.transfer.intrabank.confirm.TransferResult
 
 @Serializable
 data class TransferConfirmRoute(
@@ -57,13 +58,15 @@ fun NavController.navigateToTransferConfirm(
 
 fun NavGraphBuilder.transferConfirmScreen(
     navigateBack: () -> Unit,
-    onTransferSuccess: (String) -> Unit,
+    onTransferSuccess: (TransferResult, String) -> Unit,
 ) {
     composable<TransferConfirmRoute> { backStackEntry ->
         val route = backStackEntry.toRoute<TransferConfirmRoute>()
         TransferConfirmScreen(
             navigateBack = navigateBack,
-            onTransferSuccess = { onTransferSuccess(route.returnDestination) },
+            onTransferSuccess = { transferResult ->
+                onTransferSuccess(transferResult, route.returnDestination)
+            },
         )
     }
 }
