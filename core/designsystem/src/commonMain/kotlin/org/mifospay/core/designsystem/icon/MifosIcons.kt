@@ -26,6 +26,7 @@ import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.ContentCopy
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Description
+import androidx.compose.material.icons.filled.Download
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Error
 import androidx.compose.material.icons.filled.FilterList
@@ -151,4 +152,5 @@ object MifosIcons {
     val Transfer = Icons.Rounded.Money
     val CheckCircle = Icons.Outlined.CheckCircle
     val ArrowRight = Icons.AutoMirrored.Filled.KeyboardArrowRight
+    val Download = Icons.Filled.Download
 }

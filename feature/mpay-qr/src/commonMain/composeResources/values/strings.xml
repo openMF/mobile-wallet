@@ -36,4 +36,25 @@
     <string name="feature_mpay_qr_failed_to_generate">Failed to generate QR code</string>
     <string name="feature_mpay_qr_no_currency_found">No currency found</string>
 
+    <!-- Header -->
+    <string name="feature_mpay_qr_scan_to_pay">Scan to pay me using any payment app</string>
+
+    <!-- Account Card -->
+    <string name="feature_mpay_qr_primary">Primary</string>
+
+    <!-- QR Actions -->
+    <string name="feature_mpay_qr_share_qr">Share</string>
+    <string name="feature_mpay_qr_download_qr">Download</string>
+
+    <!-- Account IDs -->
+    <string name="feature_mpay_qr_account_ids">Account IDs</string>
+    <string name="feature_mpay_qr_account_number">Account Number</string>
+    <string name="feature_mpay_qr_external_id">External ID</string>
+    <string name="feature_mpay_qr_copy">Copy</string>
+    <string name="feature_mpay_qr_copied">Copied to clipboard</string>
+
+    <!-- QR Card -->
+    <string name="feature_mpay_qr_scan_instruction">Scan with any payment app</string>
+    <string name="feature_mpay_qr_downloaded">QR code downloaded</string>
+
 </resources>
