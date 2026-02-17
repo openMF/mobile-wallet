@@ -48,10 +48,6 @@ import org.mifospay.feature.kyc.navigation.kycLevel2Screen
 import org.mifospay.feature.kyc.navigation.kycLevel3Screen
 import org.mifospay.feature.kyc.navigation.navigateToKYCLevel2
 import org.mifospay.feature.kyc.navigation.navigateToKYCLevel3
-import org.mifospay.feature.transfer.intrabank.navigation.navigateToTransferConfirm
-import org.mifospay.feature.transfer.intrabank.navigation.transferConfirmScreen
-import org.mifospay.feature.transfer.intrabank.success.navigateTransferSuccess
-import org.mifospay.feature.transfer.intrabank.success.transferSuccessScreen
 import org.mifospay.feature.merchants.navigation.merchantTransferScreen
 import org.mifospay.feature.mpay.qr.navigation.mpayQrScreen
 import org.mifospay.feature.mpay.qr.navigation.navigateToMpayQrScreen
@@ -69,15 +65,19 @@ import org.mifospay.feature.profile.navigation.profileNavGraph
 import org.mifospay.feature.receipt.navigation.receiptScreen
 import org.mifospay.feature.savedcards.createOrUpdate.addEditCardScreen
 import org.mifospay.feature.savedcards.details.cardDetailRoute
-import org.mifospay.feature.transfer.interbank.navigation.interbankTransferScreen
-import org.mifospay.feature.transfer.interbank.navigation.navigateToInterbankTransfer
-import org.mifospay.feature.transfer.intrabank.navigation.navigateToIntraBankHub
-import org.mifospay.feature.transfer.intrabank.navigation.intraBankHubScreen
-import org.mifospay.feature.transfer.intrabank.selectScreen.navigateToSelectAccountScreen
-import org.mifospay.feature.transfer.intrabank.selectScreen.selectAccountScreenDestination
 import org.mifospay.feature.settings.navigation.settingsScreen
 import org.mifospay.feature.standing.instruction.createOrUpdate.addEditSIScreen
 import org.mifospay.feature.standing.instruction.details.siDetailsScreen
+import org.mifospay.feature.transfer.interbank.navigation.interbankTransferScreen
+import org.mifospay.feature.transfer.interbank.navigation.navigateToInterbankTransfer
+import org.mifospay.feature.transfer.intrabank.navigation.intraBankHubScreen
+import org.mifospay.feature.transfer.intrabank.navigation.navigateToIntraBankHub
+import org.mifospay.feature.transfer.intrabank.navigation.navigateToTransferConfirm
+import org.mifospay.feature.transfer.intrabank.navigation.transferConfirmScreen
+import org.mifospay.feature.transfer.intrabank.selectScreen.navigateToSelectAccountScreen
+import org.mifospay.feature.transfer.intrabank.selectScreen.selectAccountScreenDestination
+import org.mifospay.feature.transfer.intrabank.success.navigateTransferSuccess
+import org.mifospay.feature.transfer.intrabank.success.transferSuccessScreen
 import org.mifospay.feature.upi.setup.navigation.setupUpiPinScreen
 import org.mifospay.shared.ui.MifosAppState
 
