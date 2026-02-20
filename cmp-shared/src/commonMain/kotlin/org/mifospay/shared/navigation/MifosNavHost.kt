@@ -352,6 +352,9 @@ internal fun MifosNavHost(
                 // TODO: Navigate to merchant payment screen when implemented
                 navController.navigateUp()
             },
+            onNavigateBack = {
+                navController.navigateUp()
+            },
             onError = { _ ->
                 // Navigate back on error
                 navController.navigateUp()

@@ -33,7 +33,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
@@ -69,6 +68,8 @@ fun QrImportScreen(
     modifier: Modifier = Modifier,
     imagePreviewBytes: ByteArray? = null,
     isDragging: Boolean = false,
+    showHeader: Boolean = true,
+    useDarkTheme: Boolean = false,
 ) {
     val primaryColor = KptTheme.colorScheme.primary
     val importTitle = stringResource(Res.string.feature_qr_import_qr_code)
@@ -76,10 +77,18 @@ fun QrImportScreen(
     val platformContext = LocalPlatformContext.current
     val imageLoader = remember(platformContext) { ImageLoader(platformContext) }
 
+    // Colors based on theme mode - use inverse colors for dark theme
+    val backgroundColor = if (useDarkTheme) KptTheme.colorScheme.inverseSurface else KptTheme.colorScheme.background
+    val textColor = if (useDarkTheme) KptTheme.colorScheme.inverseOnSurface else KptTheme.colorScheme.onBackground
+    val secondaryTextColor = textColor.copy(alpha = if (useDarkTheme) 0.7f else 0.6f)
+    val tertiaryTextColor = textColor.copy(alpha = if (useDarkTheme) 0.5f else 0.4f)
+    val borderColor = primaryColor.copy(alpha = if (useDarkTheme) 0.5f else 0.3f)
+    val areaBackground = primaryColor.copy(alpha = if (useDarkTheme) 0.1f else 0.05f)
+
     Box(
         modifier = modifier
             .fillMaxSize()
-            .background(KptTheme.colorScheme.background)
+            .background(backgroundColor)
             .semantics { contentDescription = importTitle },
     ) {
         Column(
@@ -88,34 +97,39 @@ fun QrImportScreen(
                 .padding(24.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            Spacer(modifier = Modifier.height(48.dp))
+            if (showHeader) {
+                Spacer(modifier = Modifier.height(48.dp))
 
-            // Header
-            Icon(
-                imageVector = MifosIcons.QrCode2,
-                contentDescription = null,
-                tint = primaryColor,
-                modifier = Modifier.size(64.dp),
-            )
+                // Header
+                Icon(
+                    imageVector = MifosIcons.QrCode2,
+                    contentDescription = null,
+                    tint = primaryColor,
+                    modifier = Modifier.size(64.dp),
+                )
 
-            Spacer(modifier = Modifier.height(24.dp))
+                Spacer(modifier = Modifier.height(24.dp))
 
-            Text(
-                text = importTitle,
-                fontSize = 28.sp,
-                fontWeight = FontWeight.Bold,
-                color = KptTheme.colorScheme.onBackground,
-            )
+                Text(
+                    text = importTitle,
+                    fontSize = 28.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = textColor,
+                )
 
-            Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(8.dp))
 
-            Text(
-                text = stringResource(Res.string.feature_qr_supported_transfers),
-                fontSize = 14.sp,
-                color = KptTheme.colorScheme.onBackground.copy(alpha = 0.6f),
-            )
+                Text(
+                    text = stringResource(Res.string.feature_qr_supported_transfers),
+                    fontSize = 14.sp,
+                    color = secondaryTextColor,
+                )
 
-            Spacer(modifier = Modifier.height(48.dp))
+                Spacer(modifier = Modifier.height(48.dp))
+            } else {
+                // When header is hidden (used inside scanner screen), add top padding for toolbar
+                Spacer(modifier = Modifier.height(80.dp))
+            }
 
             // Import area with drag & drop visual feedback
             Box(
@@ -126,11 +140,7 @@ fun QrImportScreen(
                     .border(
                         border = BorderStroke(
                             width = if (isDragging) 3.dp else 2.dp,
-                            color = if (isDragging) {
-                                primaryColor
-                            } else {
-                                primaryColor.copy(alpha = 0.3f)
-                            },
+                            color = if (isDragging) primaryColor else borderColor,
                         ),
                         shape = RoundedCornerShape(16.dp),
                     )
@@ -138,7 +148,7 @@ fun QrImportScreen(
                         if (isDragging) {
                             primaryColor.copy(alpha = 0.15f)
                         } else {
-                            primaryColor.copy(alpha = 0.05f)
+                            areaBackground
                         },
                     )
                     .padding(32.dp),
@@ -156,7 +166,7 @@ fun QrImportScreen(
                                     modifier = Modifier
                                         .size(150.dp)
                                         .clip(RoundedCornerShape(12.dp))
-                                        .background(Color.White.copy(alpha = 0.1f)),
+                                        .background(KptTheme.colorScheme.surfaceVariant.copy(alpha = 0.1f)),
                                     contentAlignment = Alignment.Center,
                                 ) {
                                     Image(
@@ -185,7 +195,7 @@ fun QrImportScreen(
                             Text(
                                 text = stringResource(Res.string.feature_qr_processing),
                                 fontSize = 16.sp,
-                                color = KptTheme.colorScheme.onBackground,
+                                color = textColor,
                             )
                         }
 
@@ -212,7 +222,7 @@ fun QrImportScreen(
                             Icon(
                                 imageVector = MifosIcons.PhotoLibrary,
                                 contentDescription = null,
-                                tint = primaryColor.copy(alpha = 0.6f),
+                                tint = primaryColor.copy(alpha = if (useDarkTheme) 1f else 0.6f),
                                 modifier = Modifier.size(80.dp),
                             )
 
@@ -221,7 +231,7 @@ fun QrImportScreen(
                             Text(
                                 text = stringResource(Res.string.feature_qr_import_description),
                                 fontSize = 16.sp,
-                                color = KptTheme.colorScheme.onBackground.copy(alpha = 0.8f),
+                                color = textColor.copy(alpha = 0.8f),
                                 textAlign = TextAlign.Center,
                                 lineHeight = 24.sp,
                             )
@@ -259,7 +269,7 @@ fun QrImportScreen(
                             Text(
                                 text = stringResource(Res.string.feature_qr_drag_drop_hint),
                                 fontSize = 14.sp,
-                                color = KptTheme.colorScheme.onBackground.copy(alpha = 0.5f),
+                                color = tertiaryTextColor,
                             )
                         }
                     }
@@ -272,7 +282,7 @@ fun QrImportScreen(
             Text(
                 text = stringResource(Res.string.feature_qr_supported_formats),
                 fontSize = 12.sp,
-                color = KptTheme.colorScheme.onBackground.copy(alpha = 0.4f),
+                color = tertiaryTextColor,
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -281,7 +291,7 @@ fun QrImportScreen(
             Text(
                 text = stringResource(Res.string.feature_qr_powered_by),
                 fontSize = 12.sp,
-                color = KptTheme.colorScheme.onBackground.copy(alpha = 0.4f),
+                color = tertiaryTextColor,
             )
 
             Spacer(modifier = Modifier.height(24.dp))

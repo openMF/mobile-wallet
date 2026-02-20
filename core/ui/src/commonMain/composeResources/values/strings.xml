@@ -72,4 +72,10 @@
     <string name="core_ui_error_msg_gateway_timeout">The server took too long to respond. Please try again.</string>
     <string name="core_ui_error_msg_generic">An error occurred. Please try again.</string>
     <string name="core_ui_error_msg_network">Please check your internet connection and try again.</string>
+
+    <!-- Bank Mismatch Info -->
+    <string name="core_ui_different_bank_title">Different Bank Account</string>
+    <string name="core_ui_different_bank_message">This QR code belongs to an account at a different bank. Intra-bank transfers only work for accounts within the same bank.\n\nTo send money to this account, you can use the inter-bank transfer option if your bank supports it.</string>
+    <string name="core_ui_try_interbank">Try Inter-bank Transfer</string>
+    <string name="core_ui_cancel">Cancel</string>
 </resources>

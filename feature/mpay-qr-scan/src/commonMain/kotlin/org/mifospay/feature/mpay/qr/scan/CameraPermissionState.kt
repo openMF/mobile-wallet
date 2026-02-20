@@ -21,6 +21,10 @@ interface CameraPermissionState {
 expect fun rememberCameraPermissionState(): CameraPermissionState
 
 enum class CameraPermissionStatus {
+    /** Permission status is not yet known */
+    Unknown,
+    /** Permission has been denied */
     Denied,
+    /** Permission has been granted */
     Granted,
 }

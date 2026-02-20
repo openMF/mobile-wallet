@@ -51,5 +51,9 @@ kotlin {
             implementation(libs.zxing)
             implementation(libs.zxing.javase)
         }
+
+        jsMain.dependencies {
+            implementation(npm("html5-qrcode", "2.3.8"))
+        }
     }
 }

@@ -15,11 +15,22 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import mobile_wallet.core.ui.generated.resources.Res
+import mobile_wallet.core.ui.generated.resources.core_ui_cancel
+import mobile_wallet.core.ui.generated.resources.core_ui_different_bank_message
+import mobile_wallet.core.ui.generated.resources.core_ui_different_bank_title
+import mobile_wallet.core.ui.generated.resources.core_ui_try_interbank
+import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.mifospay.core.model.utils.QrCodeData
+import org.mifospay.core.ui.InfoBottomSheet
+import org.mifospay.core.ui.InfoType
 import org.mifospay.feature.fastmpay.model.QrProcessResult
 
 /**
@@ -36,6 +47,7 @@ import org.mifospay.feature.fastmpay.model.QrProcessResult
  * @param onNavigateToInterbankTransfer Callback for INTER_BANK type
  * @param onNavigateToIntraBankTransfer Callback for future intra-bank direct transfer
  * @param onNavigateToMerchantPayment Callback for MERCHANT type
+ * @param onNavigateBack Callback to navigate back (for cancel action)
  * @param onError Callback when processing fails
  * @param viewModel The ViewModel for processing
  */
@@ -46,12 +58,17 @@ fun FastMpayScreen(
     onNavigateToInterbankTransfer: (String, String?, String?) -> Unit,
     onNavigateToIntraBankTransfer: (QrCodeData) -> Unit,
     onNavigateToMerchantPayment: (QrCodeData) -> Unit,
+    onNavigateBack: () -> Unit,
     onError: (String) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: FastMpayViewModel = koinViewModel(),
 ) {
     val result by viewModel.resultFlow.collectAsStateWithLifecycle()
     val error by viewModel.errorFlow.collectAsStateWithLifecycle()
+
+    // State for bank mismatch bottom sheet
+    var showBankMismatchSheet by remember { mutableStateOf(false) }
+    var bankMismatchData by remember { mutableStateOf<QrProcessResult.BankMismatch?>(null) }
 
     // Handle errors
     LaunchedEffect(error) {
@@ -89,6 +106,12 @@ fun FastMpayScreen(
                 onNavigateToMerchantPayment(r.qrData)
             }
 
+            is QrProcessResult.BankMismatch -> {
+                bankMismatchData = r
+                showBankMismatchSheet = true
+                viewModel.clearResult()
+            }
+
             is QrProcessResult.Error -> {
                 viewModel.clearResult()
                 onError(r.message)
@@ -106,6 +129,39 @@ fun FastMpayScreen(
         contentAlignment = Alignment.Center,
     ) {
         CircularProgressIndicator()
+    }
+
+    // Bank mismatch info bottom sheet
+    if (showBankMismatchSheet && bankMismatchData != null) {
+        val mismatchData = bankMismatchData!!
+        InfoBottomSheet(
+            title = stringResource(Res.string.core_ui_different_bank_title),
+            message = stringResource(Res.string.core_ui_different_bank_message),
+            infoType = InfoType.WARNING,
+            onDismiss = {
+                showBankMismatchSheet = false
+                bankMismatchData = null
+            },
+            primaryActionText = stringResource(Res.string.core_ui_try_interbank),
+            onPrimaryAction = {
+                val accountExternalId = mismatchData.qrData.accountExternalId
+                if (!accountExternalId.isNullOrBlank()) {
+                    onNavigateToInterbankTransfer(
+                        accountExternalId,
+                        mismatchData.qrData.clientName.takeIf { it.isNotBlank() },
+                        mismatchData.qrData.amount.takeIf { it.isNotBlank() },
+                    )
+                } else {
+                    onError("Inter-bank transfer is not available for this QR code")
+                }
+                showBankMismatchSheet = false
+                bankMismatchData = null
+            },
+            secondaryActionText = stringResource(Res.string.core_ui_cancel),
+            onSecondaryAction = {
+                onNavigateBack()
+            },
+        )
     }
 }
 

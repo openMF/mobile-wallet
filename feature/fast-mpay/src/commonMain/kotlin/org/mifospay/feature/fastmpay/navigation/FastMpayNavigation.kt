@@ -49,6 +49,7 @@ fun NavController.navigateToFastMpay(
  * @param onNavigateToInterbankTransfer Callback for INTER_BANK type (accountExternalId, recipientName, amount)
  * @param onNavigateToIntraBankTransfer Callback for future intra-bank direct transfer
  * @param onNavigateToMerchantPayment Callback for MERCHANT type
+ * @param onNavigateBack Callback to navigate back (for cancel action on bank mismatch)
  * @param onError Callback when processing fails
  */
 fun NavGraphBuilder.fastMpayScreen(
@@ -57,6 +58,7 @@ fun NavGraphBuilder.fastMpayScreen(
     onNavigateToInterbankTransfer: (accountExternalId: String, recipientName: String?, amount: String?) -> Unit,
     onNavigateToIntraBankTransfer: (qrData: QrCodeData) -> Unit,
     onNavigateToMerchantPayment: (qrData: QrCodeData) -> Unit,
+    onNavigateBack: () -> Unit,
     onError: (message: String) -> Unit,
 ) {
     composableWithSlideTransitions(
@@ -73,6 +75,7 @@ fun NavGraphBuilder.fastMpayScreen(
             onNavigateToInterbankTransfer = onNavigateToInterbankTransfer,
             onNavigateToIntraBankTransfer = onNavigateToIntraBankTransfer,
             onNavigateToMerchantPayment = onNavigateToMerchantPayment,
+            onNavigateBack = onNavigateBack,
             onError = onError,
         )
     }

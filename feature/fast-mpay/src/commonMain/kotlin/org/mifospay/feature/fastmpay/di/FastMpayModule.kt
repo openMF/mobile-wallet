@@ -15,6 +15,11 @@ import org.mifospay.feature.fastmpay.FastMpayProcessor
 import org.mifospay.feature.fastmpay.FastMpayViewModel
 
 val FastMpayModule = module {
-    factory { FastMpayProcessor(beneficiaryRepository = get()) }
+    factory {
+        FastMpayProcessor(
+            beneficiaryRepository = get(),
+            userPreferencesRepository = get(),
+        )
+    }
     viewModelOf(::FastMpayViewModel)
 }
