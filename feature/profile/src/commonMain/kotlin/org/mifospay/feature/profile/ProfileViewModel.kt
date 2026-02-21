@@ -76,6 +76,10 @@ internal class ProfileViewModel(
             is HandleLoadClientImageResult -> handleLoadClientImageResult(action)
 
             is LoadClientImage -> loadClientImage(action)
+
+            is ProfileAction.NavigateBack -> {
+                sendEvent(ProfileEvent.OnNavigateBack)
+            }
         }
     }
 
@@ -129,6 +133,7 @@ internal sealed interface ProfileEvent {
     data object OnEditProfile : ProfileEvent
     data object OnLinkBankAccount : ProfileEvent
     data object ShowQRCode : ProfileEvent
+    data object OnNavigateBack : ProfileEvent
 }
 
 internal sealed interface ProfileAction {
@@ -142,4 +147,5 @@ internal sealed interface ProfileAction {
         data class LoadClientImage(val clientId: Long) : Internal
         data class HandleLoadClientImageResult(val result: DataState<String>) : Internal
     }
+    data object NavigateBack : ProfileAction
 }

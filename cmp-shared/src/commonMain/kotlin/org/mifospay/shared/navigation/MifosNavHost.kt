@@ -61,6 +61,7 @@ import org.mifospay.feature.payments.PaymentsScreenContents
 import org.mifospay.feature.payments.RequestScreen
 import org.mifospay.feature.payments.paymentsScreen
 import org.mifospay.feature.payments.selectTransferType.SelectTransferTypeScreen
+import org.mifospay.feature.profile.navigation.navigateToProfile
 import org.mifospay.feature.profile.navigation.profileNavGraph
 import org.mifospay.feature.receipt.navigation.receiptScreen
 import org.mifospay.feature.savedcards.createOrUpdate.addEditCardScreen
@@ -108,7 +109,6 @@ internal fun MifosNavHost(
         TabContent(PaymentsScreenContents.HISTORY.name) {
             HistoryScreen(
                 viewTransferDetail = navController::navigateToTransactionDetail,
-                showTopBar = false,
             )
         },
 //        TabContent(PaymentsScreenContents.SI.name) {
@@ -181,6 +181,7 @@ internal fun MifosNavHost(
             navigateToEditPasswordScreen = navController::navigateToEditPassword,
             navigateToFaqScreen = navController::navigateToFAQ,
             navigateToNotificationScreen = navController::navigateToNotification,
+            navigateToProfile = navController::navigateToProfile,
         )
 
         faqScreen(
@@ -194,6 +195,7 @@ internal fun MifosNavHost(
 
         profileNavGraph(
             navController = navController,
+            navigateBack = navController::navigateUp,
             onLinkBankAccount = {
                 navController.navigateToSavingAccountAddEdit(SavingsAddEditType.AddItem)
             },
@@ -202,7 +204,6 @@ internal fun MifosNavHost(
 
         historyNavigation(
             viewTransactionDetail = navController::navigateToTransactionDetail,
-            onBackClick = navController::navigateUp,
         )
 
         paymentsScreen(tabContents = paymentsTabContents)

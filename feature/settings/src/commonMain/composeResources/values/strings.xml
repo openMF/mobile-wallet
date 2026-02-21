@@ -21,6 +21,7 @@
     <string name="feature_settings_ok">OK</string>
     <string name="feature_settings_cancel">Cancel</string>
     <string name="feature_settings_log_out_title">Do you want to logout?</string>
+    <string name="feature_settings_profile">Profile</string>
     <string name="feature_settings_empty"/>
     <string name="feature_settings_yes">Yes</string>
     <string name="feature_settings_no">No</string>
