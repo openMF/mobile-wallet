@@ -17,8 +17,10 @@ import kotlinx.browser.window
 enum class WebPlatformType {
     /** Mobile browser with camera - show live camera scanner */
     MOBILE_WITH_CAMERA,
+
     /** Desktop browser with camera - show file picker (camera less convenient on desktop) */
     DESKTOP_WITH_CAMERA,
+
     /** No camera available - show file picker only */
     NO_CAMERA,
 }

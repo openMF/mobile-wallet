@@ -1,8 +1,6 @@
 import androidx.compose.ui.ExperimentalComposeUiApi
-import androidx.compose.ui.window.ComposeViewport
-import kotlinx.browser.document
+import androidx.compose.ui.window.CanvasBasedWindow
 import org.jetbrains.compose.resources.configureWebResources
-import org.jetbrains.skiko.wasm.onWasmReady
 import org.mifospay.shared.MifosPaySharedApp
 import org.mifospay.shared.di.initKoin
 
@@ -14,9 +12,10 @@ fun main() {
         resourcePathMapping { path -> "./$path" }
     }
 
-    onWasmReady {
-        ComposeViewport(document.body!!) {
-            MifosPaySharedApp()
-        }
+    CanvasBasedWindow(
+        title = "MifosWallet",
+        canvasElementId = "ComposeTarget",
+    ) {
+        MifosPaySharedApp()
     }
 }

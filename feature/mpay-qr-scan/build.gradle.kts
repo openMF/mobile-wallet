@@ -9,6 +9,7 @@
  */
 plugins {
     alias(libs.plugins.cmp.feature.convention)
+    alias(libs.plugins.mokkery)
 }
 
 android {
@@ -54,6 +55,10 @@ kotlin {
 
         jsMain.dependencies {
             implementation(npm("html5-qrcode", "2.3.8"))
+        }
+
+        commonTest.dependencies {
+            implementation(libs.turbine)
         }
     }
 }

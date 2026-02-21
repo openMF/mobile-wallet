@@ -29,6 +29,7 @@ import org.mifospay.feature.mpay.qr.scan.components.QrImportScreen
 private enum class WebScanMode {
     /** Using live camera (mobile browsers) */
     CAMERA,
+
     /** Using file picker (desktop browsers or fallback) */
     FILE_PICKER,
 }
