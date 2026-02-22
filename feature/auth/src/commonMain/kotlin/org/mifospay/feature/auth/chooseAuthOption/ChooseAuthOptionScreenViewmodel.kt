@@ -14,10 +14,10 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.mifos.authenticator.biometrics.platformAuthenticator.PlatformAuthenticationProvider
 import org.mifos.authenticator.biometrics.platformAuthenticator.RegistrationResult
-import org.mifospay.core.datastore.UserPreferencesRepository
 import org.mifospay.core.data.repository.ChooseAuthOptionRepository
-import org.mifospay.core.model.client.Client
 import org.mifospay.core.data.util.AppLockOption
+import org.mifospay.core.datastore.UserPreferencesRepository
+import org.mifospay.core.model.client.Client
 import template.core.base.ui.BaseViewModel
 
 private const val USER_ID = "mifosUser"

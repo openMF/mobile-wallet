@@ -20,6 +20,7 @@ import org.mifospay.core.data.repository.AccountRepository
 import org.mifospay.core.data.repository.AssetRepository
 import org.mifospay.core.data.repository.AuthenticationRepository
 import org.mifospay.core.data.repository.BeneficiaryRepository
+import org.mifospay.core.data.repository.ChooseAuthOptionRepository
 import org.mifospay.core.data.repository.ClientRepository
 import org.mifospay.core.data.repository.DocumentRepository
 import org.mifospay.core.data.repository.InterBankRepository
@@ -67,7 +68,6 @@ import org.mifospay.core.data.repositoryImpl.UserRepositoryImpl
 import org.mifospay.core.data.util.NetworkMonitor
 import org.mifospay.core.data.util.QrTransferRouter
 import org.mifospay.core.data.util.TimeZoneMonitor
-import org.mifospay.core.data.repository.ChooseAuthOptionRepository
 
 private val ioDispatcher = named(MifosDispatchers.IO.name)
 private val unconfined = named(MifosDispatchers.Unconfined.name)

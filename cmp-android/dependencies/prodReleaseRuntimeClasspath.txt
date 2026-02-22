@@ -1,4 +1,5 @@
 :cmp-shared
+:core-base:datastore
 :core-base:designsystem
 :core-base:network
 :core-base:platform
@@ -27,6 +28,7 @@
 :feature:mpay-qr
 :feature:mpay-qr-scan
 :feature:notification
+:feature:passcode
 :feature:payments
 :feature:profile
 :feature:receipt
