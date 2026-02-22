@@ -1,3 +1,12 @@
+/*
+ * Copyright 2026 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay.feature.auth.chooseAuthOption
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -34,7 +43,6 @@ import org.mifos.authenticator.passcode.theme.blueTint
 import org.mifospay.feature.auth.chooseAuthOption.components.AuthOptionCard
 import template.core.base.ui.EventsEffect
 
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ChooseAuthOptionScreen(
@@ -42,13 +50,12 @@ fun ChooseAuthOptionScreen(
     onBiometricsRegistrationSuccess: () -> Unit,
     onChoosePasscode: () -> Unit,
 ) {
-
     val platformAuthenticationProvider = libraryLocalPlatformAuthenticationProvider.current
 
     val state by viewModel.stateFlow.collectAsState()
 
     EventsEffect(viewModel) { event ->
-        when(event) {
+        when (event) {
             ChooseAuthOptionScreenEvents.BiometricRegistrationSuccess -> onBiometricsRegistrationSuccess()
             ChooseAuthOptionScreenEvents.OnChoosePasscode -> onChoosePasscode()
         }
@@ -91,12 +98,12 @@ fun ChooseAuthOptionScreen(
                     },
                 )
 
-                when(state.dialogBoxType) {
+                when (state.dialogBoxType) {
                     DialogBoxType.ERROR -> {
                         MessageDialogBox(
                             onDismissRequest = {
                                 viewModel.trySendAction(
-                                    ChooseAuthOptionScreenActions.DismissDialogBox
+                                    ChooseAuthOptionScreenActions.DismissDialogBox,
                                 )
                             },
                             dialogMessage = state.dialogBoxMessage,
@@ -106,7 +113,7 @@ fun ChooseAuthOptionScreen(
                         MessageDialogBox(
                             onDismissRequest = {
                                 viewModel.trySendAction(
-                                    ChooseAuthOptionScreenActions.SetupPlatformAuthenticator(platformAuthenticationProvider)
+                                    ChooseAuthOptionScreenActions.SetupPlatformAuthenticator(platformAuthenticationProvider),
                                 )
                             },
                             dialogMessage = state.dialogBoxMessage,
@@ -116,7 +123,7 @@ fun ChooseAuthOptionScreen(
                         MessageDialogBox(
                             onDismissRequest = {
                                 viewModel.trySendAction(
-                                    ChooseAuthOptionScreenActions.DismissDialogBox
+                                    ChooseAuthOptionScreenActions.DismissDialogBox,
                                 )
                             },
                             dialogMessage = state.dialogBoxMessage,
@@ -133,13 +140,13 @@ fun ChooseAuthOptionScreen(
                         whenDeviceLockSelected = {
                             platformAuthenticationProvider.updateAuthenticatorStatus()
                             viewModel.trySendAction(
-                                ChooseAuthOptionScreenActions.RegisterUserBiometrics(platformAuthenticationProvider)
+                                ChooseAuthOptionScreenActions.RegisterUserBiometrics(platformAuthenticationProvider),
                             )
                         },
                         whenPasscodeSelected = {
                             platformAuthenticationProvider.updateAuthenticatorStatus()
                             viewModel.trySendAction(
-                                ChooseAuthOptionScreenActions.OnSelectPasscode
+                                ChooseAuthOptionScreenActions.OnSelectPasscode,
                             )
                         },
                     )
@@ -153,7 +160,6 @@ fun ChooseAuthOptionScreen(
         }
     }
 }
-
 
 @Composable
 fun MessageDialogBox(

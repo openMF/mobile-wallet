@@ -1,8 +1,15 @@
+/*
+ * Copyright 2026 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay.feature.auth.chooseAuthOption
 
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.mifos.authenticator.biometrics.platformAuthenticator.PlatformAuthenticationProvider
@@ -16,15 +23,15 @@ const val DISPLAY_NAME = "XYZ"
 class ChooseAuthOptionScreenViewmodel(
     private val chooseAuthOptionRepository: ChooseAuthOptionRepository,
 ) : BaseViewModel<
-        ChooseAuthOptionScreenUiState,
-        ChooseAuthOptionScreenEvents,
-        ChooseAuthOptionScreenActions
->(ChooseAuthOptionScreenUiState()) {
+    ChooseAuthOptionScreenUiState,
+    ChooseAuthOptionScreenEvents,
+    ChooseAuthOptionScreenActions,
+    >(ChooseAuthOptionScreenUiState()) {
 
     private fun setRegistrationResultNull() {
         mutableStateFlow.update {
             it.copy(
-                registrationResult = null
+                registrationResult = null,
             )
         }
     }
@@ -44,16 +51,16 @@ class ChooseAuthOptionScreenViewmodel(
 
             mutableStateFlow.update {
                 it.copy(
-                    registrationResult = registrationResult
+                    registrationResult = registrationResult,
                 )
             }
 
-            when(registrationResult) {
+            when (registrationResult) {
                 is RegistrationResult.Error -> {
                     mutableStateFlow.update {
                         it.copy(
                             dialogBoxType = DialogBoxType.ERROR,
-                            dialogBoxMessage = registrationResult.message
+                            dialogBoxMessage = registrationResult.message,
                         )
                     }
                 }
@@ -61,7 +68,7 @@ class ChooseAuthOptionScreenViewmodel(
                     mutableStateFlow.update {
                         it.copy(
                             dialogBoxType = DialogBoxType.NOT_AVAILABLE,
-                            dialogBoxMessage = "Option Not available"
+                            dialogBoxMessage = "Option Not available",
                         )
                     }
                 }
@@ -69,7 +76,7 @@ class ChooseAuthOptionScreenViewmodel(
                     mutableStateFlow.update {
                         it.copy(
                             dialogBoxType = DialogBoxType.NOT_SET,
-                            dialogBoxMessage = "Platform authenticator not set."
+                            dialogBoxMessage = "Platform authenticator not set.",
                         )
                     }
                 }
@@ -86,7 +93,6 @@ class ChooseAuthOptionScreenViewmodel(
     private fun saveRegistrationData(registrationData: String) =
         chooseAuthOptionRepository.saveRegistrationData(registrationData)
 
-
     private fun saveAppLockOption(appLock: AppLockOption) {
         chooseAuthOptionRepository.setAuthOption(appLock)
     }
@@ -96,7 +102,7 @@ class ChooseAuthOptionScreenViewmodel(
             ChooseAuthOptionScreenActions.OnSelectDeviceLock -> {
                 mutableStateFlow.update {
                     it.copy(
-                        selectedAuthOption = AppLockOption.DeviceLock
+                        selectedAuthOption = AppLockOption.DeviceLock,
                     )
                 }
             }
@@ -118,7 +124,7 @@ class ChooseAuthOptionScreenViewmodel(
             ChooseAuthOptionScreenActions.DismissDialogBox -> {
                 mutableStateFlow.update {
                     it.copy(
-                        dialogBoxType = DialogBoxType.None
+                        dialogBoxType = DialogBoxType.None,
                     )
                 }
             }
@@ -137,21 +143,17 @@ data class ChooseAuthOptionScreenUiState(
     val selectedAuthOption: AppLockOption = AppLockOption.None,
 )
 
-
-
 sealed interface ChooseAuthOptionScreenEvents {
-    data object BiometricRegistrationSuccess: ChooseAuthOptionScreenEvents
-    data object OnChoosePasscode: ChooseAuthOptionScreenEvents
-
+    data object BiometricRegistrationSuccess : ChooseAuthOptionScreenEvents
+    data object OnChoosePasscode : ChooseAuthOptionScreenEvents
 }
 
 sealed interface ChooseAuthOptionScreenActions {
-    data class SetupPlatformAuthenticator(val platformAuthenticationProvider: PlatformAuthenticationProvider): ChooseAuthOptionScreenActions
-    data class RegisterUserBiometrics(val platformAuthenticationProvider: PlatformAuthenticationProvider): ChooseAuthOptionScreenActions
-    data object OnSelectDeviceLock: ChooseAuthOptionScreenActions
-    data object OnSelectPasscode: ChooseAuthOptionScreenActions
-    data object DismissDialogBox: ChooseAuthOptionScreenActions
-
+    data class SetupPlatformAuthenticator(val platformAuthenticationProvider: PlatformAuthenticationProvider) : ChooseAuthOptionScreenActions
+    data class RegisterUserBiometrics(val platformAuthenticationProvider: PlatformAuthenticationProvider) : ChooseAuthOptionScreenActions
+    data object OnSelectDeviceLock : ChooseAuthOptionScreenActions
+    data object OnSelectPasscode : ChooseAuthOptionScreenActions
+    data object DismissDialogBox : ChooseAuthOptionScreenActions
 }
 
 enum class DialogBoxType {
