@@ -9,15 +9,6 @@
  */
 import org.jetbrains.compose.ExperimentalComposeLibrary
 
-/*
- * Copyright 2024 Mifos Initiative
- *
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at https://mozilla.org/MPL/2.0/.
- *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
- */
 plugins {
     alias(libs.plugins.cmp.feature.convention)
     alias(libs.plugins.mokkery)
@@ -43,6 +34,8 @@ kotlin {
             implementation(compose.components.uiToolingPreview)
             implementation(libs.jb.kotlin.stdlib)
             implementation(libs.kotlin.reflect)
+            implementation(libs.mifos.authenticator.biometrics)
+            implementation(libs.mifos.authenticator.passcode)
         }
 
         androidMain.dependencies {

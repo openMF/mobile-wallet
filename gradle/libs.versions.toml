@@ -134,6 +134,9 @@ packageName = "Mifos Pay"
 packageNamespace = "org.mifospay"
 packageVersion = "1.0.0"
 
+mifosAuthenticatorPasscode="2.0.2"
+mifosAuthenticatorBiometrics="2.0.2"
+
 [libraries]
 accompanist-pager = { group = "com.google.accompanist", name = "accompanist-pager", version.ref = "accompanist" }
 accompanist-permissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanist" }
@@ -380,6 +383,9 @@ window-size = { group = "dev.chrisbanes.material3", name = "material3-window-siz
 compose-ui-test-junit4-android = { module = "androidx.compose.ui:ui-test-junit4-android", version.ref = "composeTest" }
 compose-ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest", version.ref = "composeTest" }
 core-ktx = { group = "androidx.test", name = "core-ktx", version.ref = "coreKtx" }
+
+mifos-authenticator-passcode = {group="io.github.openmf", name="mifos-authenticator-passcode", version.ref="mifosAuthenticatorPasscode"}
+mifos-authenticator-biometrics = {group="io.github.openmf", name="mifos-authenticator-biometrics", version.ref="mifosAuthenticatorBiometrics"}
 
 [bundles]
 androidx-compose-ui-test = [

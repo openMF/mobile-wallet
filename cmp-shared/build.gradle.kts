@@ -33,6 +33,9 @@ kotlin {
             implementation(compose.components.resources)
             implementation(libs.window.size)
 
+            implementation(libs.mifos.authenticator.passcode)
+            implementation(libs.mifos.authenticator.biometrics)
+
             implementation(projects.feature.auth)
             implementation(projects.libs.mifosPasscode)
             implementation(projects.feature.home)

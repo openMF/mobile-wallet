@@ -40,6 +40,10 @@ kotlin {
             implementation(compose.material3)
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
+
+            implementation(libs.mifos.authenticator.passcode)
+            implementation(libs.mifos.authenticator.biometrics)
+
             implementation(libs.jb.composeNavigation)
             implementation(libs.filekit.core)
             implementation(libs.filekit.dialogs.compose)
