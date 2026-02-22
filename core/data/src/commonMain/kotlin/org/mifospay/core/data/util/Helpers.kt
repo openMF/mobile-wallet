@@ -7,24 +7,25 @@
  *
  * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
  */
-package org.mifospay.feature.auth.chooseAuthOption.utils
+package org.mifospay.core.data.util
 
-import org.mifospay.feature.auth.chooseAuthOption.AppLockOption
+const val MIFOS_PASSCODE_VALUE = "mifos_passcode"
+const val DEVICE_AUTHENTICATION_METHOD_VALUE = "device_authentication_method"
 
 object Helpers {
 
     fun authOptionToStringMapperFunction(option: AppLockOption): String {
         return when (option) {
-            AppLockOption.MifosPasscode -> Constants.MIFOS_PASSCODE_VALUE
-            AppLockOption.DeviceLock -> Constants.DEVICE_AUTHENTICATION_METHOD_VALUE
+            AppLockOption.MifosPasscode -> MIFOS_PASSCODE_VALUE
+            AppLockOption.DeviceLock -> DEVICE_AUTHENTICATION_METHOD_VALUE
             AppLockOption.None -> ""
         }
     }
 
     fun stringToAuthOptionMapperFunction(option: String): AppLockOption {
         return when (option) {
-            Constants.MIFOS_PASSCODE_VALUE -> AppLockOption.MifosPasscode
-            Constants.DEVICE_AUTHENTICATION_METHOD_VALUE -> AppLockOption.DeviceLock
+            MIFOS_PASSCODE_VALUE -> AppLockOption.MifosPasscode
+            DEVICE_AUTHENTICATION_METHOD_VALUE -> AppLockOption.DeviceLock
             else -> AppLockOption.None
         }
     }

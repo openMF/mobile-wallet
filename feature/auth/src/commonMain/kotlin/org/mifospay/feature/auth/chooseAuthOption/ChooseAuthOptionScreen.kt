@@ -37,16 +37,18 @@ import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import org.koin.compose.viewmodel.koinViewModel
 import org.mifos.authenticator.biometrics.libraryLocalPlatformAuthenticationProvider
 import org.mifos.authenticator.passcode.components.DialogButton
 import org.mifos.authenticator.passcode.theme.blueTint
+import org.mifospay.core.data.util.AppLockOption
 import org.mifospay.feature.auth.chooseAuthOption.components.AuthOptionCard
 import template.core.base.ui.EventsEffect
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ChooseAuthOptionScreen(
-    viewModel: ChooseAuthOptionScreenViewmodel,
+    viewModel: ChooseAuthOptionScreenViewmodel = koinViewModel(),
     onBiometricsRegistrationSuccess: () -> Unit,
     onChoosePasscode: () -> Unit,
 ) {
@@ -90,7 +92,7 @@ fun ChooseAuthOptionScreen(
 
                 AuthOptionCard(
                     selected = state.selectedAuthOption == AppLockOption.MifosPasscode,
-                    title = "Use 6-digit Mifos Passcode",
+                    title = "Use 4-digit Mifos Passcode",
                     subtitle = "Use your Mifos Passcode",
                     icon = Icons.Default.People,
                     onSelect = {

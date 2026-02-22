@@ -10,8 +10,11 @@
 package org.mifospay.core.data.di
 
 import kotlinx.serialization.json.Json
+import org.koin.core.module.dsl.singleOf
 import org.koin.core.qualifier.named
+import org.koin.dsl.bind
 import org.koin.dsl.module
+import org.mifos.authenticator.passcode.PasscodeStorageAdapter
 import org.mifospay.core.common.MifosDispatchers
 import org.mifospay.core.data.repository.AccountRepository
 import org.mifospay.core.data.repository.AssetRepository
@@ -40,12 +43,14 @@ import org.mifospay.core.data.repositoryImpl.AccountRepositoryImpl
 import org.mifospay.core.data.repositoryImpl.AssetRepositoryImpl
 import org.mifospay.core.data.repositoryImpl.AuthenticationRepositoryImpl
 import org.mifospay.core.data.repositoryImpl.BeneficiaryRepositoryImpl
+import org.mifospay.core.data.repositoryImpl.ChooseAuthOptionRepositoryImpl
 import org.mifospay.core.data.repositoryImpl.ClientRepositoryImpl
 import org.mifospay.core.data.repositoryImpl.DocumentRepositoryImpl
 import org.mifospay.core.data.repositoryImpl.InterBankRepositoryImpl
 import org.mifospay.core.data.repositoryImpl.InvoiceRepositoryImpl
 import org.mifospay.core.data.repositoryImpl.KycLevelRepositoryImpl
 import org.mifospay.core.data.repositoryImpl.LocalAssetRepositoryImpl
+import org.mifospay.core.data.repositoryImpl.MifosPasscodeAdapterImpl
 import org.mifospay.core.data.repositoryImpl.NotificationRepositoryImpl
 import org.mifospay.core.data.repositoryImpl.OfficeRepositoryImpl
 import org.mifospay.core.data.repositoryImpl.RecentPayeeRepositoryImpl
@@ -62,6 +67,7 @@ import org.mifospay.core.data.repositoryImpl.UserRepositoryImpl
 import org.mifospay.core.data.util.NetworkMonitor
 import org.mifospay.core.data.util.QrTransferRouter
 import org.mifospay.core.data.util.TimeZoneMonitor
+import org.mifospay.core.data.repository.ChooseAuthOptionRepository
 
 private val ioDispatcher = named(MifosDispatchers.IO.name)
 private val unconfined = named(MifosDispatchers.Unconfined.name)
@@ -103,6 +109,9 @@ val RepositoryModule = module {
     single<TwoFactorAuthRepository> { TwoFactorAuthRepositoryImpl(get(), get(ioDispatcher)) }
     single<UserRepository> { UserRepositoryImpl(get(), get(ioDispatcher)) }
     single<OfficeRepository> { OfficeRepositoryImpl(get(), get(ioDispatcher)) }
+
+    singleOf(::MifosPasscodeAdapterImpl).bind<PasscodeStorageAdapter>()
+    singleOf(::ChooseAuthOptionRepositoryImpl).bind<ChooseAuthOptionRepository>()
 
     // QR Transfer Router for smart intra/inter-bank routing
     single { QrTransferRouter(userPreferencesRepository = get()) }

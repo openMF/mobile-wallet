@@ -24,7 +24,7 @@ import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
-import cmp.sample.shared.chooseAuthOption.DialogButton
+import org.mifospay.feature.auth.chooseAuthOption.DialogButton
 
 @Composable
 fun MessageDialogBox(

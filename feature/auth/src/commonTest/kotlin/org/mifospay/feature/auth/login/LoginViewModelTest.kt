@@ -229,7 +229,7 @@ class LoginViewModelTest {
 
         viewModel.eventFlow.test {
             // Expect NavigateToPasscodeScreen after successful login
-            assertTrue(awaitItem() is LoginEvent.NavigateToPasscodeScreen)
+            assertTrue(awaitItem() is LoginEvent.NavigateToChooseAuthOptionScreen)
         }
     }
 }

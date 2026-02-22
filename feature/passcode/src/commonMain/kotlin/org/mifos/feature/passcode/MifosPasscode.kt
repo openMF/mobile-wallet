@@ -10,14 +10,26 @@
 package org.mifos.feature.passcode
 
 import androidx.compose.runtime.Composable
+import org.koin.compose.koinInject
+import org.mifos.authenticator.passcode.PasscodeManager
+import org.mifos.authenticator.passcode.screen.PasscodeScreen
 
 @Composable
 fun MifosPasscode(
-//    passcodeManager: PasscodeManager,
     onForgotButton: () -> Unit,
     onSkipButton: () -> Unit,
     onPasscodeConfirm: () -> Unit,
     onPasscodeCreation: () -> Unit,
     onPasscodeRejected: () -> Unit,
 ) {
+    val passcodeManager: PasscodeManager = koinInject<PasscodeManager>()
+
+    PasscodeScreen(
+        passcodeManager,
+        onForgotButton,
+        onSkipButton,
+        onPasscodeConfirm,
+        onPasscodeCreation,
+        onPasscodeRejected,
+    )
 }

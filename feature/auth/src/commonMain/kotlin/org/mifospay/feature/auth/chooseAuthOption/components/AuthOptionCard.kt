@@ -36,7 +36,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import cmp.sample.shared.theme.blueTint
+import template.core.base.designsystem.theme.KptTheme
 
 @Composable
 fun AuthOptionCard(
@@ -50,7 +50,7 @@ fun AuthOptionCard(
         colors = CardDefaults.outlinedCardColors(containerColor = Color.Transparent),
         border = BorderStroke(
             width = 1.dp,
-            color = if (selected) blueTint else Color.Black,
+            color = if (selected) KptTheme.colorScheme.primary else KptTheme.colorScheme.onSurfaceVariant,
         ),
         modifier = Modifier
             .height(130.dp)
@@ -72,7 +72,7 @@ fun AuthOptionCard(
                     imageVector = if (selected) Icons.Outlined.RadioButtonChecked else Icons.Outlined.RadioButtonUnchecked,
                     contentDescription = "Radiobutton",
                     modifier = Modifier.size(25.dp),
-                    tint = if (selected) blueTint else Color.Black,
+                    tint = if (selected) KptTheme.colorScheme.primary else KptTheme.colorScheme.onSurfaceVariant,
                 )
             }
             Spacer(Modifier.height(4.dp))

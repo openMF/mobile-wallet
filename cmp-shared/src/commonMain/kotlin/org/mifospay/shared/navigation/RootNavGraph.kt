@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import org.mifos.feature.passcode.mifosRootPasscodeScreen
 import org.mifospay.core.data.util.NetworkMonitor
 import org.mifospay.core.data.util.TimeZoneMonitor
 import org.mifospay.shared.instance.InstanceSelectorScreen
@@ -45,7 +46,13 @@ internal fun RootNavGraph(
             onShowInstanceSelector = { showInstanceSelector = true },
         )
 
-        passcodeNavGraph(navHostController)
+        mifosRootPasscodeScreen(
+            onForgotButton = onClickLogout,
+            onSkipButton = navHostController::navigateToMainGraph,
+            onPasscodeConfirm = navHostController::navigateToMainGraph,
+            onPasscodeCreation = navHostController::navigateToMainGraph,
+            onPasscodeRejected = {},
+        )
 
         composable(MifosNavGraph.MAIN_GRAPH) {
             MifosApp(

@@ -7,45 +7,35 @@
  *
  * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
  */
-package org.mifospay.feature.auth.chooseAuthOption
+package org.mifospay.core.data.repositoryImpl
 
 import com.russhwolf.settings.Settings
-import org.mifospay.feature.auth.chooseAuthOption.utils.Helpers
+import org.mifospay.core.data.repository.ChooseAuthOptionRepository
+import org.mifospay.core.data.util.AppLockOption
+import org.mifospay.core.data.util.Helpers
 
 const val APP_LOCK_KEY = "auth_method"
 const val REGISTRATION_DATA = "REGISTRATION_DATA"
-
-class ChooseAuthOptionRepository(
+class ChooseAuthOptionRepositoryImpl(
     private val settings: Settings,
-) {
-
-    fun setAuthOption(option: AppLockOption) {
+) : ChooseAuthOptionRepository {
+    override fun setAuthOption(option: AppLockOption) {
         settings.putString(
             APP_LOCK_KEY,
             Helpers.authOptionToStringMapperFunction(option),
         )
     }
 
-    fun getAuthOption(): AppLockOption {
-        return Helpers.stringToAuthOptionMapperFunction(
-            settings.getString(
-                APP_LOCK_KEY,
-                "",
-            ),
+    override fun getAuthOption(): AppLockOption {
+        val option = settings.getString(
+            APP_LOCK_KEY,
+            "",
         )
+
+        return Helpers.stringToAuthOptionMapperFunction(option)
     }
 
-    fun clearAuthOption() {
-        settings.remove(APP_LOCK_KEY)
-    }
-
-    fun saveRegistrationData(registrationData: String) {
+    override fun saveBiometricRegistrationData(registrationData: String) {
         settings.putString(REGISTRATION_DATA, registrationData)
-    }
-
-    fun getRegistrationData() = settings.getString(REGISTRATION_DATA, "")
-
-    fun clearRegistrationData() {
-        settings.remove(REGISTRATION_DATA)
     }
 }

@@ -14,19 +14,67 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.mifos.authenticator.biometrics.platformAuthenticator.PlatformAuthenticationProvider
 import org.mifos.authenticator.biometrics.platformAuthenticator.RegistrationResult
+import org.mifospay.core.datastore.UserPreferencesRepository
+import org.mifospay.core.data.repository.ChooseAuthOptionRepository
+import org.mifospay.core.model.client.Client
+import org.mifospay.core.data.util.AppLockOption
 import template.core.base.ui.BaseViewModel
 
-const val USER_ID = "mifosUser"
-const val USER_EMAIL = "mifos@mifos.org"
-const val DISPLAY_NAME = "XYZ"
+private const val USER_ID = "mifosUser"
+private const val USER_EMAIL = "mifos@mifos.org"
+private const val DISPLAY_NAME = "XYZ"
 
 class ChooseAuthOptionScreenViewmodel(
+    private val userPreferencesRepository: UserPreferencesRepository,
     private val chooseAuthOptionRepository: ChooseAuthOptionRepository,
 ) : BaseViewModel<
     ChooseAuthOptionScreenUiState,
     ChooseAuthOptionScreenEvents,
     ChooseAuthOptionScreenActions,
-    >(ChooseAuthOptionScreenUiState()) {
+    >(ChooseAuthOptionScreenUiState(client = userPreferencesRepository.client.value)) {
+    override fun handleAction(action: ChooseAuthOptionScreenActions) {
+        when (action) {
+            ChooseAuthOptionScreenActions.OnSelectDeviceLock -> {
+//                mutableStateFlow.update {
+//                    it.copy(
+//                        selectedAuthOption = AppLockOption.DeviceLock,
+//                    )
+//                }
+                mutableStateFlow.update {
+                    it.copy(
+                        dialogBoxType = DialogBoxType.NOT_AVAILABLE,
+                    )
+                }
+            }
+            ChooseAuthOptionScreenActions.OnSelectPasscode -> {
+                mutableStateFlow.update {
+                    it.copy(selectedAuthOption = AppLockOption.MifosPasscode)
+                }
+                saveAppLockOption(AppLockOption.MifosPasscode)
+            }
+
+            is ChooseAuthOptionScreenActions.RegisterUserBiometrics -> {
+                registerUser(
+                    platformAuthenticationProvider = action.platformAuthenticationProvider,
+                    userID = mutableStateFlow.value.client?.id?.run { toString() } ?: USER_ID,
+                    userEmail = mutableStateFlow.value.client?.emailAddress ?: USER_EMAIL,
+                    displayName = mutableStateFlow.value.client?.displayName ?: DISPLAY_NAME,
+                )
+            }
+
+            ChooseAuthOptionScreenActions.DismissDialogBox -> {
+                mutableStateFlow.update {
+                    it.copy(
+                        dialogBoxType = DialogBoxType.None,
+                    )
+                }
+            }
+
+            is ChooseAuthOptionScreenActions.SetupPlatformAuthenticator -> {
+                action.platformAuthenticationProvider.setupPlatformAuthenticator()
+            }
+        }
+    }
 
     private fun setRegistrationResultNull() {
         mutableStateFlow.update {
@@ -38,9 +86,9 @@ class ChooseAuthOptionScreenViewmodel(
 
     private fun registerUser(
         platformAuthenticationProvider: PlatformAuthenticationProvider,
-        userID: String = "",
-        userEmail: String = "",
-        displayName: String = "",
+        userID: String,
+        userEmail: String,
+        displayName: String,
     ) {
         viewModelScope.launch {
             val registrationResult = platformAuthenticationProvider.registerUser(
@@ -91,48 +139,10 @@ class ChooseAuthOptionScreenViewmodel(
     }
 
     private fun saveRegistrationData(registrationData: String) =
-        chooseAuthOptionRepository.saveRegistrationData(registrationData)
+        chooseAuthOptionRepository.saveBiometricRegistrationData(registrationData)
 
     private fun saveAppLockOption(appLock: AppLockOption) {
         chooseAuthOptionRepository.setAuthOption(appLock)
-    }
-
-    override fun handleAction(action: ChooseAuthOptionScreenActions) {
-        when (action) {
-            ChooseAuthOptionScreenActions.OnSelectDeviceLock -> {
-                mutableStateFlow.update {
-                    it.copy(
-                        selectedAuthOption = AppLockOption.DeviceLock,
-                    )
-                }
-            }
-            ChooseAuthOptionScreenActions.OnSelectPasscode -> {
-                mutableStateFlow.update {
-                    it.copy(selectedAuthOption = AppLockOption.MifosPasscode)
-                }
-                saveAppLockOption(AppLockOption.MifosPasscode)
-            }
-            is ChooseAuthOptionScreenActions.RegisterUserBiometrics -> {
-                registerUser(
-                    platformAuthenticationProvider = action.platformAuthenticationProvider,
-                    USER_ID,
-                    USER_EMAIL,
-                    DISPLAY_NAME,
-                )
-            }
-
-            ChooseAuthOptionScreenActions.DismissDialogBox -> {
-                mutableStateFlow.update {
-                    it.copy(
-                        dialogBoxType = DialogBoxType.None,
-                    )
-                }
-            }
-
-            is ChooseAuthOptionScreenActions.SetupPlatformAuthenticator -> {
-                action.platformAuthenticationProvider.setupPlatformAuthenticator()
-            }
-        }
     }
 }
 
@@ -141,6 +151,7 @@ data class ChooseAuthOptionScreenUiState(
     val dialogBoxType: DialogBoxType = DialogBoxType.None,
     val dialogBoxMessage: String = "",
     val selectedAuthOption: AppLockOption = AppLockOption.None,
+    val client: Client? = null,
 )
 
 sealed interface ChooseAuthOptionScreenEvents {
