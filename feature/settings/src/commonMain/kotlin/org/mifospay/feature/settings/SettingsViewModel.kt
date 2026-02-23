@@ -49,6 +49,10 @@ class SettingsViewModel(
                 sendEvent(SettingsEvent.OnNavigateToFaqScreen)
             }
 
+            is SettingsAction.NavigateToProfile -> {
+                sendEvent(SettingsEvent.OnNavigateToProfile)
+            }
+
             is SettingsAction.ChangePasscode -> {
                 sendEvent(SettingsEvent.OnNavigateToChangePasscodeScreen)
             }
@@ -169,6 +173,7 @@ sealed interface SettingsEvent {
     data object OnNavigateToChangePasscodeScreen : SettingsEvent
     data object OnNavigateToLogout : SettingsEvent
     data object OnNavigateToFaqScreen : SettingsEvent
+    data object OnNavigateToProfile : SettingsEvent
     data object OnNavigateToNotificationScreen : SettingsEvent
 }
 
@@ -179,6 +184,7 @@ sealed interface SettingsAction {
     data object ChangePasscode : SettingsAction
     data object ChangePassword : SettingsAction
     data object NavigateToFaqScreen : SettingsAction
+    data object NavigateToProfile : SettingsAction
     data object NavigateToNotificationSettings : SettingsAction
     data object DismissDialog : SettingsAction
 

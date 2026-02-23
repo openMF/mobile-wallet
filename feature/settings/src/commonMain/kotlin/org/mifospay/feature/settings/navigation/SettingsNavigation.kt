@@ -28,6 +28,7 @@ fun NavGraphBuilder.settingsScreen(
     navigateToEditPasswordScreen: () -> Unit,
     navigateToFaqScreen: () -> Unit,
     navigateToNotificationScreen: () -> Unit,
+    navigateToProfile: () -> Unit,
 ) {
     composableWithSlideTransitions(route = SETTINGS_ROUTE) {
         SettingsScreenRoute(
@@ -37,6 +38,7 @@ fun NavGraphBuilder.settingsScreen(
             onChangePasscode = onChangePasscode,
             navigateToFaqScreen = navigateToFaqScreen,
             navigateToNotificationScreen = navigateToNotificationScreen,
+            navigateToProfile = navigateToProfile,
         )
     }
 }
