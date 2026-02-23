@@ -12,17 +12,17 @@
   "violenceCartoonOrFantasy": "NONE",
   "violenceRealistic": "NONE",
   "violenceRealisticProlongedGraphicOrSadistic": "NONE",
-  "gambling": false,
-  "lootBox": false,
-  "unrestrictedWebAccess": false,
-  "seventeenPlus": false,
   "advertising": false,
   "ageAssurance": false,
+  "gambling": false,
   "healthOrWellnessTopics": false,
+  "lootBox": false,
   "messagingAndChat": false,
   "parentalControls": false,
+  "unrestrictedWebAccess": false,
   "userGeneratedContent": false,
   "ageRatingOverrideV2": "NONE",
   "koreaAgeRatingOverride": "NONE",
-  "kidsAgeBand": null
+  "kidsAgeBand": null,
+  "developerAgeRatingInfoUrl": null
 }
