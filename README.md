@@ -42,9 +42,7 @@ Following recommended architecture and design patterns, the application is devel
 > To run the iOS app, you must have a macOS device with Xcode installed. Currently, the `cmp-web-wasm` app is not working as expected. We are working on it and it will be available soon.
 
 ### Demo Credentials
-- **Fineract Instance**: `venus.mifos.community`
-- **Username**: `venus`
-- **Password**: `@Venus@2025@`
+Access the Mifos Pay demo credentials on our [Jira Wiki page](https://mifosforge.jira.com/wiki/spaces/MP/pages/4537024513/Welcome+to+the+Mifos+Mobile+Apps+Community#%F0%9F%92%B8-Mifos-Wallet-(Mifos-Pay).1).
 
 ### Join Us on Slack
 Mifos boasts an active and vibrant contributor community, Please join us on [slack](https://join.slack.com/t/mifos/shared_invite/zt-2f4nr6tk3-ZJlHMi1lc0R19FFEHxdvng). Once you've joined the mifos slack community, please join the `#mobile-wallet` channel to engage with mobile-wallet development. If you encounter any difficulties joining our Slack channel, please don't hesitate to open an issue. This will allow us to assist you promptly or send you an invitation.
