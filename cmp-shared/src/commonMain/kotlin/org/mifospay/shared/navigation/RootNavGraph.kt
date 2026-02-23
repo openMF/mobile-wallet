@@ -19,8 +19,10 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import org.mifos.feature.passcode.mifosRootPasscodeScreen
+import org.mifos.feature.passcode.navigateToRootMifosPasscodeScreen
 import org.mifospay.core.data.util.NetworkMonitor
 import org.mifospay.core.data.util.TimeZoneMonitor
+import org.mifospay.feature.auth.chooseAuthOption.chooseAuthOptionScreen
 import org.mifospay.shared.instance.InstanceSelectorScreen
 import org.mifospay.shared.ui.MifosApp
 
@@ -44,6 +46,17 @@ internal fun RootNavGraph(
         loginNavGraph(
             navController = navHostController,
             onShowInstanceSelector = { showInstanceSelector = true },
+        )
+
+        chooseAuthOptionScreen(
+            onBiometricsRegistrationSuccess = {
+                navHostController.popBackStack()
+                navHostController.navigateToMainGraph()
+            },
+            onChoosePasscode = {
+                navHostController.popBackStack()
+                navHostController.navigateToRootMifosPasscodeScreen()
+            },
         )
 
         mifosRootPasscodeScreen(

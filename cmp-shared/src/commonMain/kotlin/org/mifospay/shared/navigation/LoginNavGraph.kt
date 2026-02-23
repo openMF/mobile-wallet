@@ -12,8 +12,6 @@ package org.mifospay.shared.navigation
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.navigation
-import org.mifos.feature.passcode.navigateToRootMifosPasscodeScreen
-import org.mifospay.feature.auth.chooseAuthOption.chooseAuthOptionScreen
 import org.mifospay.feature.auth.chooseAuthOption.navigateToChooseAuthOptionScreen
 import org.mifospay.feature.auth.navigation.LOGIN_ROUTE
 import org.mifospay.feature.auth.navigation.loginScreen
@@ -37,17 +35,6 @@ internal fun NavGraphBuilder.loginNavGraph(
             onNavigateToChooseAuthOptionScreen = navController::navigateToChooseAuthOptionScreen,
             onNavigateToSignupScreen = navController::navigateToSignupMethod,
             onShowInstanceSelector = onShowInstanceSelector,
-        )
-
-        chooseAuthOptionScreen(
-            onBiometricsRegistrationSuccess = {
-                navController.popBackStack()
-                navController.navigateToMainGraph()
-            },
-            onChoosePasscode = {
-                navController.popBackStack()
-                navController.navigateToRootMifosPasscodeScreen()
-            },
         )
 
         signupMethodScreen(

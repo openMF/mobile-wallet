@@ -11,6 +11,7 @@ package org.mifospay.feature.auth.di
 
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
+import org.mifospay.feature.auth.chooseAuthOption.ChooseAuthOptionScreenViewmodel
 import org.mifospay.feature.auth.login.LoginViewModel
 import org.mifospay.feature.auth.mobileVerify.MobileVerificationViewModel
 import org.mifospay.feature.auth.signup.SignupViewModel
@@ -19,4 +20,5 @@ val AuthModule = module {
     viewModelOf(::LoginViewModel)
     viewModelOf(::SignupViewModel)
     viewModelOf(::MobileVerificationViewModel)
+    viewModelOf(::ChooseAuthOptionScreenViewmodel)
 }

@@ -19,14 +19,18 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.rememberNavController
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
+import org.mifos.authenticator.biometrics.PlatformAuthenticatorLocalCompositionProvider
 import org.mifos.feature.passcode.ROOT_MIFOS_PASSCODE_ROUTE
 import org.mifospay.core.common.GlobalAuthManager
+import org.mifospay.core.data.util.AppLockOption
 import org.mifospay.core.data.util.NetworkMonitor
 import org.mifospay.core.data.util.TimeZoneMonitor
 import org.mifospay.core.designsystem.component.MifosDialogBox
 import org.mifospay.core.designsystem.theme.MifosTheme
+import org.mifospay.feature.auth.chooseAuthOption.CHOOSE_AUTH_OPTION_ROUTE
 import org.mifospay.shared.MainUiState.Success
 import org.mifospay.shared.navigation.MifosNavGraph.LOGIN_GRAPH
+import org.mifospay.shared.navigation.MifosNavGraph.MAIN_GRAPH
 import org.mifospay.shared.navigation.RootNavGraph
 
 @Composable
@@ -80,27 +84,34 @@ private fun MifosPayApp(
     val navDestination = when (uiState) {
         is MainUiState.Loading -> LOGIN_GRAPH
         is Success -> if ((uiState as Success).userData.authenticated) {
-            ROOT_MIFOS_PASSCODE_ROUTE
+            val authOption = viewModel.getAuthOption()
+            when (authOption) {
+                AppLockOption.MifosPasscode -> ROOT_MIFOS_PASSCODE_ROUTE
+                AppLockOption.DeviceLock -> MAIN_GRAPH
+                AppLockOption.None -> CHOOSE_AUTH_OPTION_ROUTE
+            }
         } else {
             LOGIN_GRAPH
         }
     }
 
-    MifosTheme {
-        RootNavGraph(
-            networkMonitor = networkMonitor,
-            timeZoneMonitor = timeZoneMonitor,
-            navHostController = navController,
-            startDestination = navDestination,
-            modifier = modifier,
-            onClickLogout = {
-                viewModel.logOut()
-                navController.navigate(LOGIN_GRAPH) {
-                    popUpTo(navController.graph.id) {
-                        inclusive = true
+    PlatformAuthenticatorLocalCompositionProvider {
+        MifosTheme {
+            RootNavGraph(
+                networkMonitor = networkMonitor,
+                timeZoneMonitor = timeZoneMonitor,
+                navHostController = navController,
+                startDestination = navDestination,
+                modifier = modifier,
+                onClickLogout = {
+                    viewModel.logOut()
+                    navController.navigate(LOGIN_GRAPH) {
+                        popUpTo(navController.graph.id) {
+                            inclusive = true
+                        }
                     }
-                }
-            },
-        )
+                },
+            )
+        }
     }
 }

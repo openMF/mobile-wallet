@@ -42,7 +42,10 @@ import mobile_wallet.feature.settings.generated.resources.outline_pin
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.resources.vectorResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
+import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
+import org.mifos.authenticator.passcode.PasscodeAction
+import org.mifos.authenticator.passcode.PasscodeManager
 import org.mifospay.core.designsystem.component.BasicDialogState
 import org.mifospay.core.designsystem.component.LoadingDialogState
 import org.mifospay.core.designsystem.component.MifosBasicDialog
@@ -62,6 +65,7 @@ internal fun SettingsScreenRoute(
     navigateToNotificationScreen: () -> Unit,
     navigateToProfile: () -> Unit,
     modifier: Modifier = Modifier,
+    passcodeManager: PasscodeManager = koinInject(),
     viewmodel: SettingsViewModel = koinViewModel(),
 ) {
     val state by viewmodel.stateFlow.collectAsStateWithLifecycle()
@@ -69,7 +73,10 @@ internal fun SettingsScreenRoute(
     EventsEffect(viewmodel) { event ->
         when (event) {
             SettingsEvent.OnNavigateBack -> backPress.invoke()
-            SettingsEvent.OnNavigateToChangePasscodeScreen -> onChangePasscode.invoke()
+            SettingsEvent.OnNavigateToChangePasscodeScreen -> {
+                passcodeManager.trySendAction(PasscodeAction.ChangePasscode)
+                onChangePasscode.invoke()
+            }
             SettingsEvent.OnNavigateToEditPasswordScreen -> onEditPassword.invoke()
             SettingsEvent.OnNavigateToFaqScreen -> navigateToFaqScreen.invoke()
             SettingsEvent.OnNavigateToLogout -> onLogout.invoke()

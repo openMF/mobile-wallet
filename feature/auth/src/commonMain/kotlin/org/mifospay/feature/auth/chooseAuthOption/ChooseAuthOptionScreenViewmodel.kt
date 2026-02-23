@@ -30,30 +30,29 @@ class ChooseAuthOptionScreenViewmodel(
 ) : BaseViewModel<
     ChooseAuthOptionScreenUiState,
     ChooseAuthOptionScreenEvents,
-    ChooseAuthOptionScreenActions,
+    ChooseAuthOptionScreenAction,
     >(ChooseAuthOptionScreenUiState(client = userPreferencesRepository.client.value)) {
-    override fun handleAction(action: ChooseAuthOptionScreenActions) {
+    override fun handleAction(action: ChooseAuthOptionScreenAction) {
         when (action) {
-            ChooseAuthOptionScreenActions.OnSelectDeviceLock -> {
+            ChooseAuthOptionScreenAction.OnSelectDeviceLock -> {
 //                mutableStateFlow.update {
 //                    it.copy(
 //                        selectedAuthOption = AppLockOption.DeviceLock,
-//                    )
-//                }
+//                    ){
+
                 mutableStateFlow.update {
                     it.copy(
                         dialogBoxType = DialogBoxType.NOT_AVAILABLE,
                     )
                 }
             }
-            ChooseAuthOptionScreenActions.OnSelectPasscode -> {
+            ChooseAuthOptionScreenAction.OnSelectPasscode -> {
                 mutableStateFlow.update {
                     it.copy(selectedAuthOption = AppLockOption.MifosPasscode)
                 }
-                saveAppLockOption(AppLockOption.MifosPasscode)
             }
 
-            is ChooseAuthOptionScreenActions.RegisterUserBiometrics -> {
+            is ChooseAuthOptionScreenAction.RegisterUserBiometrics -> {
                 registerUser(
                     platformAuthenticationProvider = action.platformAuthenticationProvider,
                     userID = mutableStateFlow.value.client?.id?.run { toString() } ?: USER_ID,
@@ -62,7 +61,7 @@ class ChooseAuthOptionScreenViewmodel(
                 )
             }
 
-            ChooseAuthOptionScreenActions.DismissDialogBox -> {
+            ChooseAuthOptionScreenAction.DismissDialogBox -> {
                 mutableStateFlow.update {
                     it.copy(
                         dialogBoxType = DialogBoxType.None,
@@ -70,8 +69,13 @@ class ChooseAuthOptionScreenViewmodel(
                 }
             }
 
-            is ChooseAuthOptionScreenActions.SetupPlatformAuthenticator -> {
+            is ChooseAuthOptionScreenAction.SetupPlatformAuthenticator -> {
                 action.platformAuthenticationProvider.setupPlatformAuthenticator()
+            }
+
+            ChooseAuthOptionScreenAction.NavigateToPasscode -> {
+                saveAppLockOption(AppLockOption.MifosPasscode)
+                sendEvent(ChooseAuthOptionScreenEvents.OnNavigateToPasscode)
             }
         }
     }
@@ -156,15 +160,16 @@ data class ChooseAuthOptionScreenUiState(
 
 sealed interface ChooseAuthOptionScreenEvents {
     data object BiometricRegistrationSuccess : ChooseAuthOptionScreenEvents
-    data object OnChoosePasscode : ChooseAuthOptionScreenEvents
+    data object OnNavigateToPasscode : ChooseAuthOptionScreenEvents
 }
 
-sealed interface ChooseAuthOptionScreenActions {
-    data class SetupPlatformAuthenticator(val platformAuthenticationProvider: PlatformAuthenticationProvider) : ChooseAuthOptionScreenActions
-    data class RegisterUserBiometrics(val platformAuthenticationProvider: PlatformAuthenticationProvider) : ChooseAuthOptionScreenActions
-    data object OnSelectDeviceLock : ChooseAuthOptionScreenActions
-    data object OnSelectPasscode : ChooseAuthOptionScreenActions
-    data object DismissDialogBox : ChooseAuthOptionScreenActions
+sealed interface ChooseAuthOptionScreenAction {
+    data class SetupPlatformAuthenticator(val platformAuthenticationProvider: PlatformAuthenticationProvider) : ChooseAuthOptionScreenAction
+    data class RegisterUserBiometrics(val platformAuthenticationProvider: PlatformAuthenticationProvider) : ChooseAuthOptionScreenAction
+    data object OnSelectDeviceLock : ChooseAuthOptionScreenAction
+    data object OnSelectPasscode : ChooseAuthOptionScreenAction
+    data object NavigateToPasscode : ChooseAuthOptionScreenAction
+    data object DismissDialogBox : ChooseAuthOptionScreenAction
 }
 
 enum class DialogBoxType {

@@ -44,13 +44,14 @@ fun NavGraphBuilder.internalPasscodeVerificationScreen(
     onForgotButton: () -> Unit,
     onPasscodeConfirm: () -> Unit,
     onPasscodeRejected: () -> Unit,
+    onPasscodeCreation: () -> Unit = {},
 ) {
     composable(route = INTERNAL_MIFOS_PASSCODE_ROUTE) {
         MifosPasscode(
             onForgotButton,
             onSkipButton = {},
             onPasscodeConfirm,
-            onPasscodeCreation = {},
+            onPasscodeCreation = onPasscodeCreation,
             onPasscodeRejected,
         )
     }

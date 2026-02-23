@@ -103,9 +103,8 @@ object KoinModules {
     }
 
     private val MifosPasscodeModule = module {
-        factory {
-            PasscodeManager(get(), MainScope())
-                .initialize()
+        single {
+            PasscodeManager(get(), MainScope()).initialize()
         }
     }
 

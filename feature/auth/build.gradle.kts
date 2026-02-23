@@ -35,8 +35,6 @@ kotlin {
             implementation(compose.components.uiToolingPreview)
             implementation(libs.jb.kotlin.stdlib)
             implementation(libs.kotlin.reflect)
-            implementation(libs.mifos.authenticator.biometrics)
-            implementation(libs.mifos.authenticator.passcode)
         }
 
         androidMain.dependencies {

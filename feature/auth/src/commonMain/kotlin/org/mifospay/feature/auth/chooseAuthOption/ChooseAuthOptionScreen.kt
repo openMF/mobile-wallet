@@ -8,6 +8,7 @@
  * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
  */
 package org.mifospay.feature.auth.chooseAuthOption
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -38,11 +39,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import org.koin.compose.viewmodel.koinViewModel
-import org.mifos.authenticator.biometrics.libraryLocalPlatformAuthenticationProvider
+import org.mifos.authenticator.biometrics.platformAuthenticationProvider
 import org.mifos.authenticator.passcode.components.DialogButton
 import org.mifos.authenticator.passcode.theme.blueTint
 import org.mifospay.core.data.util.AppLockOption
 import org.mifospay.feature.auth.chooseAuthOption.components.AuthOptionCard
+import template.core.base.designsystem.theme.KptTheme
 import template.core.base.ui.EventsEffect
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -50,16 +52,16 @@ import template.core.base.ui.EventsEffect
 fun ChooseAuthOptionScreen(
     viewModel: ChooseAuthOptionScreenViewmodel = koinViewModel(),
     onBiometricsRegistrationSuccess: () -> Unit,
-    onChoosePasscode: () -> Unit,
+    onNavigateToPasscode: () -> Unit,
 ) {
-    val platformAuthenticationProvider = libraryLocalPlatformAuthenticationProvider.current
+    val platformAuthenticationProvider = platformAuthenticationProvider.current
 
     val state by viewModel.stateFlow.collectAsState()
 
     EventsEffect(viewModel) { event ->
         when (event) {
             ChooseAuthOptionScreenEvents.BiometricRegistrationSuccess -> onBiometricsRegistrationSuccess()
-            ChooseAuthOptionScreenEvents.OnChoosePasscode -> onChoosePasscode()
+            ChooseAuthOptionScreenEvents.OnNavigateToPasscode -> onNavigateToPasscode()
         }
     }
 
@@ -84,7 +86,7 @@ fun ChooseAuthOptionScreen(
                     subtitle = "Use your existing PIN, password, pattern, face ID, or fingerprint",
                     icon = Icons.Default.Dialpad,
                     onSelect = {
-                        viewModel.trySendAction(ChooseAuthOptionScreenActions.OnSelectDeviceLock)
+                        viewModel.trySendAction(ChooseAuthOptionScreenAction.OnSelectDeviceLock)
                     },
                 )
 
@@ -96,7 +98,7 @@ fun ChooseAuthOptionScreen(
                     subtitle = "Use your Mifos Passcode",
                     icon = Icons.Default.People,
                     onSelect = {
-                        viewModel.trySendAction(ChooseAuthOptionScreenActions.OnSelectPasscode)
+                        viewModel.trySendAction(ChooseAuthOptionScreenAction.OnSelectPasscode)
                     },
                 )
 
@@ -105,7 +107,7 @@ fun ChooseAuthOptionScreen(
                         MessageDialogBox(
                             onDismissRequest = {
                                 viewModel.trySendAction(
-                                    ChooseAuthOptionScreenActions.DismissDialogBox,
+                                    ChooseAuthOptionScreenAction.DismissDialogBox,
                                 )
                             },
                             dialogMessage = state.dialogBoxMessage,
@@ -115,7 +117,7 @@ fun ChooseAuthOptionScreen(
                         MessageDialogBox(
                             onDismissRequest = {
                                 viewModel.trySendAction(
-                                    ChooseAuthOptionScreenActions.SetupPlatformAuthenticator(platformAuthenticationProvider),
+                                    ChooseAuthOptionScreenAction.SetupPlatformAuthenticator(platformAuthenticationProvider),
                                 )
                             },
                             dialogMessage = state.dialogBoxMessage,
@@ -125,7 +127,7 @@ fun ChooseAuthOptionScreen(
                         MessageDialogBox(
                             onDismissRequest = {
                                 viewModel.trySendAction(
-                                    ChooseAuthOptionScreenActions.DismissDialogBox,
+                                    ChooseAuthOptionScreenAction.DismissDialogBox,
                                 )
                             },
                             dialogMessage = state.dialogBoxMessage,
@@ -142,14 +144,12 @@ fun ChooseAuthOptionScreen(
                         whenDeviceLockSelected = {
                             platformAuthenticationProvider.updateAuthenticatorStatus()
                             viewModel.trySendAction(
-                                ChooseAuthOptionScreenActions.RegisterUserBiometrics(platformAuthenticationProvider),
+                                ChooseAuthOptionScreenAction.RegisterUserBiometrics(platformAuthenticationProvider),
                             )
                         },
                         whenPasscodeSelected = {
                             platformAuthenticationProvider.updateAuthenticatorStatus()
-                            viewModel.trySendAction(
-                                ChooseAuthOptionScreenActions.OnSelectPasscode,
-                            )
+                            viewModel.trySendAction(ChooseAuthOptionScreenAction.NavigateToPasscode)
                         },
                     )
                 },
@@ -174,6 +174,7 @@ fun MessageDialogBox(
         Box(
             modifier = modifier
                 .clip(RoundedCornerShape(16.dp))
+                .background(KptTheme.colorScheme.surface)
                 .padding(16.dp),
         ) {
             Column(

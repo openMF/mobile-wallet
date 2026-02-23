@@ -19,6 +19,7 @@ import mobile_wallet.feature.payments.generated.resources.feature_payments_reque
 import mobile_wallet.feature.payments.generated.resources.feature_payments_send
 import org.jetbrains.compose.resources.stringResource
 import org.mifos.feature.passcode.internalPasscodeVerificationScreen
+import org.mifos.feature.passcode.navigateToInternalMifosPasscodeScreen
 import org.mifospay.core.ui.utility.TabContent
 import org.mifospay.feature.accounts.AccountsScreen
 import org.mifospay.feature.accounts.savingsaccount.SavingsAddEditType
@@ -187,6 +188,9 @@ internal fun MifosNavHost(
 
                 navController.popBackStack()
             },
+            onPasscodeCreation = {
+                navController.popBackStack()
+            },
         )
 
         homeScreen(
@@ -203,7 +207,7 @@ internal fun MifosNavHost(
         settingsScreen(
             onBackPress = navController::navigateUp,
             onLogout = onClickLogout,
-            onChangePasscode = {},
+            onChangePasscode = navController::navigateToInternalMifosPasscodeScreen,
             navigateToEditPasswordScreen = navController::navigateToEditPassword,
             navigateToFaqScreen = navController::navigateToFAQ,
             navigateToNotificationScreen = navController::navigateToNotification,

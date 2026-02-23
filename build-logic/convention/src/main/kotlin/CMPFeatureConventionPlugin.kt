@@ -34,6 +34,9 @@ class CMPFeatureConventionPlugin : Plugin<Project> {
                 add("commonMainImplementation", libs.findLibrary("kotlinx.collections.immutable").get())
                 add("commonMainImplementation", libs.findLibrary("kotlinx.serialization.json").get())
 
+                add("commonMainImplementation", libs.findLibrary("mifos.authenticator.passcode").get())
+                add("commonMainImplementation", libs.findLibrary("mifos.authenticator.biometrics").get())
+
                 add("androidMainImplementation", libs.findLibrary("androidx.lifecycle.runtimeCompose").get())
                 add("androidMainImplementation", libs.findLibrary("androidx.lifecycle.viewModelCompose").get())
                 add("androidMainImplementation", libs.findLibrary("androidx.tracing.ktx").get())

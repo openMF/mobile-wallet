@@ -16,12 +16,16 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import org.mifos.authenticator.passcode.PasscodeAction
+import org.mifos.authenticator.passcode.PasscodeManager
+import org.mifospay.core.data.repository.ChooseAuthOptionRepository
+import org.mifospay.core.data.util.AppLockOption
 import org.mifospay.core.datastore.UserPreferencesRepository
 import org.mifospay.core.model.user.UserInfo
-import proto.org.mifos.library.passcode.data.PasscodeManager
 
 class MifosPayViewModel(
     private val userDataRepository: UserPreferencesRepository,
+    private val chooseAuthOptionRepository: ChooseAuthOptionRepository,
     private val passcodeManager: PasscodeManager,
 ) : ViewModel() {
     val uiState: StateFlow<MainUiState> = userDataRepository.userInfo.map {
@@ -35,8 +39,12 @@ class MifosPayViewModel(
     fun logOut() {
         viewModelScope.launch {
             userDataRepository.logOut()
-            passcodeManager.clearPasscode()
+            passcodeManager.trySendAction(PasscodeAction.LogOutErasePasscode)
         }
+    }
+
+    fun getAuthOption(): AppLockOption {
+        return chooseAuthOptionRepository.getAuthOption()
     }
 }
 

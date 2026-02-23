@@ -26,7 +26,7 @@ fun NavGraphBuilder.chooseAuthOptionScreen(
     composable(route = CHOOSE_AUTH_OPTION_ROUTE) {
         ChooseAuthOptionScreen(
             onBiometricsRegistrationSuccess = onBiometricsRegistrationSuccess,
-            onChoosePasscode = onChoosePasscode,
+            onNavigateToPasscode = onChoosePasscode,
         )
     }
 }
