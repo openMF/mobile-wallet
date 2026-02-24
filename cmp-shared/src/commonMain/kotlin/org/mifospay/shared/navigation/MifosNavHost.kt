@@ -30,6 +30,7 @@ import org.mifospay.feature.faq.navigation.faqScreen
 import org.mifospay.feature.faq.navigation.navigateToFAQ
 import org.mifospay.feature.fastmpay.navigation.FAST_MPAY_ROUTE
 import org.mifospay.feature.fastmpay.navigation.fastMpayScreen
+import org.mifospay.feature.fastmpay.navigation.navigateToFastMpay
 import org.mifospay.feature.finance.FinanceScreenContents
 import org.mifospay.feature.finance.navigation.FINANCE_ROUTE
 import org.mifospay.feature.finance.navigation.financeScreen
@@ -451,15 +452,9 @@ internal fun MifosNavHost(
         scanQrScreen(
             navigateBack = navController::popBackStack,
             navigateToIntraBankTransfer = { qrData ->
-                navController.navigateToTransferConfirm(
-                    toOfficeId = qrData.officeId.toInt(),
-                    toClientId = qrData.clientId,
-                    toAccountTypeId = qrData.accountTypeId.toInt(),
-                    toAccountId = qrData.accountId.toInt(),
-                    amount = qrData.amount.toIntOrNull() ?: 0,
-                    toAccountName = qrData.clientName,
-                    toAccountNo = qrData.accountNo,
-                    returnDestination = "home",
+                // Route through FastMpay for processing (bank mismatch, beneficiary check, etc.)
+                navController.navigateToFastMpay(
+                    qrData = qrData,
                     navOptions = navOptions {
                         popUpTo(SCAN_QR_ROUTE) {
                             inclusive = true
