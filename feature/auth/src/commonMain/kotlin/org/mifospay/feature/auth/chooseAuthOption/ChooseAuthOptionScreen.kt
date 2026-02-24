@@ -22,7 +22,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Dialpad
 import androidx.compose.material.icons.filled.People
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -33,27 +32,28 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import androidx.lifecycle.viewmodel.compose.viewModel
 import org.koin.compose.viewmodel.koinViewModel
 import org.mifos.authenticator.biometrics.platformAuthenticationProvider
+import org.mifos.authenticator.biometrics.platformAuthenticator.PlatformAuthenticationProvider
 import org.mifos.authenticator.passcode.components.DialogButton
-import org.mifos.authenticator.passcode.theme.blueTint
 import org.mifospay.core.data.util.AppLockOption
+import org.mifospay.core.designsystem.component.MifosDialogBox
 import org.mifospay.feature.auth.chooseAuthOption.components.AuthOptionCard
 import template.core.base.designsystem.theme.KptTheme
 import template.core.base.ui.EventsEffect
 
-@OptIn(ExperimentalMaterial3Api::class)
+
 @Composable
 fun ChooseAuthOptionScreen(
-    viewModel: ChooseAuthOptionScreenViewmodel = koinViewModel(),
     onBiometricsRegistrationSuccess: () -> Unit,
     onNavigateToPasscode: () -> Unit,
-) {
+    viewModel: ChooseAuthOptionScreenViewmodel = koinViewModel(),
+){
+
     val platformAuthenticationProvider = platformAuthenticationProvider.current
 
     val state by viewModel.stateFlow.collectAsState()
@@ -64,6 +64,28 @@ fun ChooseAuthOptionScreen(
             ChooseAuthOptionScreenEvents.OnNavigateToPasscode -> onNavigateToPasscode()
         }
     }
+
+    ChooseAuthScreenDialogBox(
+        screenState = state.screenState,
+        platformAuthenticationProvider = platformAuthenticationProvider,
+        onAction = viewModel::trySendAction,
+    )
+
+    ChooseAuthOptionContent(
+        state = state,
+        platformAuthenticationProvider = platformAuthenticationProvider,
+        onAction = viewModel::trySendAction,
+    )
+
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun ChooseAuthOptionContent(
+    state: ChooseAuthOptionScreenUiState,
+    platformAuthenticationProvider: PlatformAuthenticationProvider,
+    onAction: (ChooseAuthOptionScreenAction) -> Unit,
+) {
 
     Scaffold(
         topBar = {
@@ -86,7 +108,7 @@ fun ChooseAuthOptionScreen(
                     subtitle = "Use your existing PIN, password, pattern, face ID, or fingerprint",
                     icon = Icons.Default.Dialpad,
                     onSelect = {
-                        viewModel.trySendAction(ChooseAuthOptionScreenAction.OnSelectDeviceLock)
+                        onAction(ChooseAuthOptionScreenAction.OnSelectDeviceLock)
                     },
                 )
 
@@ -98,43 +120,9 @@ fun ChooseAuthOptionScreen(
                     subtitle = "Use your Mifos Passcode",
                     icon = Icons.Default.People,
                     onSelect = {
-                        viewModel.trySendAction(ChooseAuthOptionScreenAction.OnSelectPasscode)
+                        onAction(ChooseAuthOptionScreenAction.OnSelectPasscode)
                     },
                 )
-
-                when (state.dialogBoxType) {
-                    DialogBoxType.ERROR -> {
-                        MessageDialogBox(
-                            onDismissRequest = {
-                                viewModel.trySendAction(
-                                    ChooseAuthOptionScreenAction.DismissDialogBox,
-                                )
-                            },
-                            dialogMessage = state.dialogBoxMessage,
-                        )
-                    }
-                    DialogBoxType.NOT_SET -> {
-                        MessageDialogBox(
-                            onDismissRequest = {
-                                viewModel.trySendAction(
-                                    ChooseAuthOptionScreenAction.SetupPlatformAuthenticator(platformAuthenticationProvider),
-                                )
-                            },
-                            dialogMessage = state.dialogBoxMessage,
-                        )
-                    }
-                    DialogBoxType.NOT_AVAILABLE -> {
-                        MessageDialogBox(
-                            onDismissRequest = {
-                                viewModel.trySendAction(
-                                    ChooseAuthOptionScreenAction.DismissDialogBox,
-                                )
-                            },
-                            dialogMessage = state.dialogBoxMessage,
-                        )
-                    }
-                    DialogBoxType.None -> {}
-                }
             }
 
             Button(
@@ -142,12 +130,12 @@ fun ChooseAuthOptionScreen(
                     navigationHelper(
                         state.selectedAuthOption,
                         whenDeviceLockSelected = {
-                            viewModel.trySendAction(
+                            onAction(
                                 ChooseAuthOptionScreenAction.RegisterUserBiometrics(platformAuthenticationProvider),
                             )
                         },
                         whenPasscodeSelected = {
-                            viewModel.trySendAction(ChooseAuthOptionScreenAction.NavigateToPasscode)
+                            onAction(ChooseAuthOptionScreenAction.NavigateToPasscode)
                         },
                     )
                 },
@@ -161,58 +149,46 @@ fun ChooseAuthOptionScreen(
     }
 }
 
-@Composable
-fun MessageDialogBox(
-    modifier: Modifier = Modifier,
-    onDismissRequest: () -> Unit,
-    dialogMessage: String = "Coming Soon",
-    dismissButtonText: String = "OK",
-) {
-    Dialog(onDismissRequest = onDismissRequest) {
-        Box(
-            modifier = modifier
-                .clip(RoundedCornerShape(16.dp))
-                .background(KptTheme.colorScheme.background)
-                .padding(16.dp),
-        ) {
-            Column(
-                horizontalAlignment = Alignment.End,
-            ) {
-                Spacer(modifier = Modifier.height(20.dp))
-                Text(
-                    text = dialogMessage,
-                    modifier = Modifier.padding(8.dp),
-                    fontSize = 12.sp,
-                )
-                Spacer(modifier = Modifier.height(12.dp))
 
-                DialogButton(
-                    onClick = onDismissRequest,
-                    modifier = Modifier.padding(end = 8.dp),
-                    text = dismissButtonText,
-                )
-            }
+@Composable
+fun ChooseAuthScreenDialogBox(
+    screenState: ChooseAuthOptionScreenUiState.ScreenState?,
+    platformAuthenticationProvider: PlatformAuthenticationProvider,
+    onAction: (ChooseAuthOptionScreenAction) -> Unit,
+) {
+
+    when (screenState) {
+        ChooseAuthOptionScreenUiState.ScreenState.AuthenticatorNotSetup -> {
+            MifosDialogBox(
+                title = "No authentication options set",
+                message = "Setup authentication options",
+                showDialogState = true,
+                confirmButtonText = "Yes",
+                dismissButtonText = "No",
+                onConfirm = {
+                    onAction(ChooseAuthOptionScreenAction.SetupPlatformAuthenticator(platformAuthenticationProvider))
+                },
+                onDismiss = {
+                    onAction(ChooseAuthOptionScreenAction.DismissDialogBox)
+                }
+            )
         }
-    }
-}
-
-@Composable
-fun DialogButton(
-    text: String,
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    Button(
-        onClick = onClick,
-        modifier = modifier.height(36.dp),
-        colors = ButtonDefaults.buttonColors(
-            containerColor = blueTint,
-            contentColor = White,
-            disabledContainerColor = Color.DarkGray,
-            disabledContentColor = White,
-        ),
-    ) {
-        Text(text = text)
+        is ChooseAuthOptionScreenUiState.ScreenState.Error -> {
+            MifosDialogBox(
+                title = "Error",
+                showDialogState = true,
+                confirmButtonText = "",
+                dismissButtonText = "Ok",
+                message = screenState.message,
+                onConfirm = {
+                    onAction(ChooseAuthOptionScreenAction.SetupPlatformAuthenticator(platformAuthenticationProvider))
+                },
+                onDismiss = {
+                    onAction(ChooseAuthOptionScreenAction.DismissDialogBox)
+                }
+            )
+        }
+        null -> {}
     }
 }
 

@@ -60,6 +60,7 @@ class ChooseAuthOptionScreenViewmodel(
                 mutableStateFlow.update {
                     it.copy(
                         dialogBoxType = DialogBoxType.None,
+                        screenState = null
                     )
                 }
             }
@@ -107,28 +108,28 @@ class ChooseAuthOptionScreenViewmodel(
                 is RegistrationResult.Error -> {
                     mutableStateFlow.update {
                         it.copy(
-                            dialogBoxType = DialogBoxType.ERROR,
-                            dialogBoxMessage = registrationResult.message,
+                            error = registrationResult.message,
                         )
                     }
                 }
                 RegistrationResult.PlatformAuthenticatorNotAvailable -> {
                     mutableStateFlow.update {
                         it.copy(
-                            dialogBoxType = DialogBoxType.NOT_AVAILABLE,
-                            dialogBoxMessage = "Option Not available",
+                            error = "Option Not available",
                         )
                     }
                 }
                 RegistrationResult.PlatformAuthenticatorNotSet -> {
                     mutableStateFlow.update {
                         it.copy(
-                            dialogBoxType = DialogBoxType.NOT_SET,
-                            dialogBoxMessage = "Platform authenticator not set.",
+                            error = "Platform authenticator not set.",
                         )
                     }
                 }
                 is RegistrationResult.Success -> {
+                    mutableStateFlow.update {
+                        it.copy(error = null,)
+                    }
                     saveAppLockOption(AppLockOption.DeviceLock)
                     saveRegistrationData(registrationResult.message)
                     sendEvent(ChooseAuthOptionScreenEvents.BiometricRegistrationSuccess)
@@ -150,9 +151,16 @@ data class ChooseAuthOptionScreenUiState(
     val registrationResult: RegistrationResult? = null,
     val dialogBoxType: DialogBoxType = DialogBoxType.None,
     val dialogBoxMessage: String = "",
+    val error: String? = null,
+    val screenState: ScreenState? = null,
     val selectedAuthOption: AppLockOption = AppLockOption.None,
     val client: Client? = null,
-)
+) {
+    sealed interface ScreenState  {
+        data object AuthenticatorNotSetup: ScreenState
+        data class Error(val message: String) : ScreenState
+    }
+}
 
 sealed interface ChooseAuthOptionScreenEvents {
     data object BiometricRegistrationSuccess : ChooseAuthOptionScreenEvents

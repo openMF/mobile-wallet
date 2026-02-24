@@ -59,8 +59,7 @@ kotlin {
             implementation(projects.feature.merchants)
             implementation(projects.feature.upiSetup)
             implementation(projects.feature.passcode)
-            implementation(libs.mifos.authenticator.passcode)
-            implementation(libs.mifos.authenticator.biometrics)
+            implementation(projects.feature.authenticatorBiometrics)
         }
 
         desktopMain.dependencies {

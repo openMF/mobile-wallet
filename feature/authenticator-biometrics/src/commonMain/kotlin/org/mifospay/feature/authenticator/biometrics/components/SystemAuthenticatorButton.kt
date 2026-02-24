@@ -5,7 +5,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mifos-passcode-cmp/blob/development/LICENSE
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
  */
 package org.mifospay.feature.authenticator.biometrics.components
 
@@ -156,7 +156,7 @@ fun ClickableTextButton(
         enabled = enabled,
         modifier = Modifier.height(50.dp)
             .width(250.dp)
-            .clip(RoundedCornerShape(30.dp))
+            .clip(RoundedCornerShape(30.dp)),
     ) {
         Text(
             text,

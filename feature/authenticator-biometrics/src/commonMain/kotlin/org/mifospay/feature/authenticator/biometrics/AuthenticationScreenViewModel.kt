@@ -5,7 +5,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mifos-passcode-cmp/blob/development/LICENSE
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
  */
 package org.mifospay.feature.authenticator.biometrics
 
@@ -19,25 +19,24 @@ import org.mifospay.core.data.repository.ChooseAuthOptionRepository
 import org.mifospay.core.data.repository.PlatformAuthenticationDataRepository
 import org.mifospay.core.ui.utils.BaseViewModel
 
-
 class AuthenticationScreenViewModel(
     private val chooseAuthOptionRepository: ChooseAuthOptionRepository,
     private val platformAuthenticationDataRepository: PlatformAuthenticationDataRepository,
 ) : BaseViewModel<
-        AuthenticationScreenState,
-        AuthenticationScreenEvent,
-        AuthenticationScreenAction
->(AuthenticationScreenState()) {
+    AuthenticationScreenState,
+    AuthenticationScreenEvent,
+    AuthenticationScreenAction,
+    >(AuthenticationScreenState()) {
     override fun handleAction(action: AuthenticationScreenAction) {
         when (action) {
             is AuthenticationScreenAction.OnClickAuthenticate -> {
                 authenticateUser(
                     "Mifos App",
-                    action.platformAuthenticationProvider
+                    action.platformAuthenticationProvider,
                 )
             }
 
-            AuthenticationScreenAction.OkayOnUserNotRegisteredError ->{
+            AuthenticationScreenAction.OkayOnUserNotRegisteredError -> {
                 updateState {
                     it.copy(screenState = null)
                 }
@@ -62,7 +61,7 @@ class AuthenticationScreenViewModel(
             val savedData = platformAuthenticationDataRepository.getBiometricRegistrationData()
             val authResult = platformAuthenticationProvider.onAuthenticatorClick(appName, savedData)
 
-            when(authResult) {
+            when (authResult) {
                 is AuthenticationResult.Error -> {
                     updateState {
                         it.copy(
@@ -73,7 +72,7 @@ class AuthenticationScreenViewModel(
                 AuthenticationResult.Success -> {
                     updateState {
                         it.copy(
-                            screenState = null
+                            screenState = null,
                         )
                     }
                     sendEvent(AuthenticationScreenEvent.OnAuthenticationSuccess)
@@ -100,34 +99,30 @@ class AuthenticationScreenViewModel(
             update(it)
         }
     }
-
-
 }
 
 data class AuthenticationScreenState(
     val authenticatorStatus: Set<PlatformAuthenticatorStatus> = emptySet(),
     val screenState: ScreenState? = null,
-){
+) {
     sealed interface ScreenState {
-        data class Error(val message: String): ScreenState
-        data class UserNotRegistered(val message: String): ScreenState
-        data object Loading: ScreenState
+        data class Error(val message: String) : ScreenState
+        data class UserNotRegistered(val message: String) : ScreenState
+        data object Loading : ScreenState
     }
 }
 
 sealed interface AuthenticationScreenAction {
-    data class OnClickAuthenticate(val platformAuthenticationProvider: PlatformAuthenticationProvider): AuthenticationScreenAction
-    data object OkayOnUserNotRegisteredError: AuthenticationScreenAction
-    data object AuthenticatorStatusNotSetup: AuthenticationScreenAction
-    data object OnDismissDialog: AuthenticationScreenAction
+    data class OnClickAuthenticate(val platformAuthenticationProvider: PlatformAuthenticationProvider) : AuthenticationScreenAction
+    data object OkayOnUserNotRegisteredError : AuthenticationScreenAction
+    data object AuthenticatorStatusNotSetup : AuthenticationScreenAction
+    data object OnDismissDialog : AuthenticationScreenAction
 }
 
 sealed interface AuthenticationScreenEvent {
-    data object OnAuthenticationSuccess: AuthenticationScreenEvent
-    data object OnForceLogout: AuthenticationScreenEvent
+    data object OnAuthenticationSuccess : AuthenticationScreenEvent
+    data object OnForceLogout : AuthenticationScreenEvent
 }
-
-
 
 enum class DialogBoxType {
     ERROR,

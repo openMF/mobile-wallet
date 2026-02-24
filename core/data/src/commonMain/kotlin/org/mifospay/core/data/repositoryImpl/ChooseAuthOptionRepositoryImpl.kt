@@ -19,7 +19,7 @@ const val APP_LOCK_KEY = "auth_method"
 
 class ChooseAuthOptionRepositoryImpl(
     private val settings: Settings,
-    private val platformAuthenticationDataRepository: PlatformAuthenticationDataRepository
+    private val platformAuthenticationDataRepository: PlatformAuthenticationDataRepository,
 ) : ChooseAuthOptionRepository {
     override fun setAuthOption(option: AppLockOption) {
         settings.putString(

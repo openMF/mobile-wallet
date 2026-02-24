@@ -5,7 +5,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mifos-passcode-cmp/blob/development/LICENSE
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
  */
 package org.mifospay.feature.authenticator.biometrics
 
@@ -32,7 +32,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import org.mifospay.feature.authenticator.biometrics.components.SystemAuthenticatorButton
 import org.koin.compose.viewmodel.koinViewModel
 import org.mifos.authenticator.biometrics.platformAuthenticationProvider
 import org.mifos.authenticator.biometrics.platformAuthenticator.PlatformAuthenticatorStatus
@@ -42,19 +41,19 @@ import org.mifos.authenticator.passcode.components.MifosIcon
 import org.mifospay.core.designsystem.component.MifosDialogBox
 import org.mifospay.core.ui.MifosProgressIndicatorOverlay
 import org.mifospay.core.ui.utils.EventsEffect
+import org.mifospay.feature.authenticator.biometrics.components.SystemAuthenticatorButton
 import template.core.base.designsystem.theme.KptTheme
-
 
 @Composable
 fun AuthenticationScreen(
     onAuthenticationSuccess: () -> Unit,
-    onForcedLogOut:() -> Unit,
+    onForcedLogOut: () -> Unit,
     viewModel: AuthenticationScreenViewModel = koinViewModel(),
-){
+) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
 
-    EventsEffect(viewModel){event ->
-        when(event) {
+    EventsEffect(viewModel) { event ->
+        when (event) {
             AuthenticationScreenEvent.OnAuthenticationSuccess -> onAuthenticationSuccess()
             AuthenticationScreenEvent.OnForceLogout -> onForcedLogOut()
         }
@@ -62,10 +61,10 @@ fun AuthenticationScreen(
 
     AuthenticationContent(
         state = state,
-        onAction = viewModel::trySendAction
+        onAction = viewModel::trySendAction,
     )
-
 }
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AuthenticationContent(
@@ -94,7 +93,7 @@ fun AuthenticationContent(
 
         AuthenticationScreenDialogBox(
             state.screenState,
-            onAction
+            onAction,
         )
 
         SystemAuthenticatorButton(
@@ -105,7 +104,6 @@ fun AuthenticationContent(
             authenticatorStatus = authenticatorStatus,
         )
     }
-
 }
 
 @Composable
@@ -113,7 +111,7 @@ fun AuthenticationScreenDialogBox(
     screenState: AuthenticationScreenState.ScreenState?,
     onAction: (AuthenticationScreenAction) -> Unit,
 ) {
-    when(screenState) {
+    when (screenState) {
         is AuthenticationScreenState.ScreenState.Error -> {
             MifosDialogBox(
                 title = "Error",
