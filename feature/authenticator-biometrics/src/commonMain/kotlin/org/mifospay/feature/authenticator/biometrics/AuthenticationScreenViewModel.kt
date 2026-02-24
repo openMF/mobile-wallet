@@ -68,7 +68,7 @@ class AuthenticationScreenViewModel(
                 }
                 AuthenticationResult.Success -> {
                     updateState {
-                        it.copy(screenState = null,)
+                        it.copy(screenState = null)
                     }
                     sendEvent(AuthenticationScreenEvent.OnAuthenticationSuccess)
                 }
@@ -117,4 +117,3 @@ sealed interface AuthenticationScreenEvent {
     data object OnAuthenticationSuccess : AuthenticationScreenEvent
     data object OnForceLogout : AuthenticationScreenEvent
 }
-

@@ -69,8 +69,11 @@ internal fun RootNavGraph(
         )
 
         platformAuthenticator(
-            onAuthenticationSuccess = navHostController::navigateToMainGraph,
-            onForcedLogOut = onClickLogout
+            onAuthenticationSuccess = {
+                navHostController.popBackStack()
+                navHostController.navigateToMainGraph()
+            },
+            onForcedLogOut = onClickLogout,
         )
 
         composable(MifosNavGraph.MAIN_GRAPH) {

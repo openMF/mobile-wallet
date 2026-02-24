@@ -9,41 +9,28 @@
  */
 package org.mifospay.feature.authenticator.biometrics
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.koin.compose.viewmodel.koinViewModel
 import org.mifos.authenticator.biometrics.platformAuthenticationProvider
 import org.mifos.authenticator.biometrics.platformAuthenticator.PlatformAuthenticatorStatus
 import org.mifos.authenticator.biometrics.platformAvailableAuthenticationOption
-import org.mifos.authenticator.passcode.components.DialogButton
 import org.mifos.authenticator.passcode.components.MifosIcon
 import org.mifospay.core.designsystem.component.MifosDialogBox
-import org.mifospay.core.ui.MifosProgressIndicator
-import org.mifospay.core.ui.MifosProgressIndicatorOverlay
 import org.mifospay.core.ui.utils.EventsEffect
 import org.mifospay.feature.authenticator.biometrics.components.SystemAuthenticatorButton
-import template.core.base.designsystem.theme.KptTheme
 
 @Composable
 fun AuthenticationScreen(

@@ -154,7 +154,7 @@ private fun SettingsScreenContent(
                 },
             )
 
-            if(isChangePasscodeVisible){
+            if (isChangePasscodeVisible) {
                 SettingsCardItem(
                     title = stringResource(Res.string.feature_settings_change_passcode),
                     icon = vectorResource(Res.drawable.outline_pin),

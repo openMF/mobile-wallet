@@ -37,7 +37,7 @@ class SettingsViewModel(
         SettingsState(
             client = client,
             dialogState = null,
-            isChangePasscodeVisible = chooseAuthOptionRepository.getAuthOption() == AppLockOption.MifosPasscode
+            isChangePasscodeVisible = chooseAuthOptionRepository.getAuthOption() == AppLockOption.MifosPasscode,
         )
     },
 ) {

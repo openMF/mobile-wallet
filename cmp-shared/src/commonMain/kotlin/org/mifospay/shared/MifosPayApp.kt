@@ -27,11 +27,9 @@ import org.mifospay.core.data.util.NetworkMonitor
 import org.mifospay.core.data.util.TimeZoneMonitor
 import org.mifospay.core.designsystem.component.MifosDialogBox
 import org.mifospay.core.designsystem.theme.MifosTheme
-import org.mifospay.feature.auth.chooseAuthOption.CHOOSE_AUTH_OPTION_ROUTE
 import org.mifospay.feature.authenticator.biometrics.PLATFORM_AUTHENTICATOR_ROUTE
 import org.mifospay.shared.MainUiState.Success
 import org.mifospay.shared.navigation.MifosNavGraph.LOGIN_GRAPH
-import org.mifospay.shared.navigation.MifosNavGraph.MAIN_GRAPH
 import org.mifospay.shared.navigation.RootNavGraph
 
 @Composable
