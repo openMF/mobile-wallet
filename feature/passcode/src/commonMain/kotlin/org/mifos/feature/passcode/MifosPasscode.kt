@@ -12,7 +12,6 @@ package org.mifos.feature.passcode
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.dp
-import io.ktor.http.headers
 import org.koin.compose.koinInject
 import org.mifos.authenticator.passcode.PasscodeManager
 import org.mifos.authenticator.passcode.screen.PasscodeAppearanceConfig
@@ -46,13 +45,13 @@ fun MifosPasscode(
         onPasscodeRejected,
         appearanceConfig = PasscodeAppearanceConfig(
             backgroundColor = KptTheme.colorScheme.background,
-            headerTextStyle = KptTheme.typography.headlineMedium
+            headerTextStyle = KptTheme.typography.headlineMedium,
         ),
         logoConfig = PasscodeLogoConfig(),
         dotConfig = PasscodeDotConfig(
             dotColor = KptTheme.colorScheme.primary,
             inactiveDotColor = KptTheme.colorScheme.onBackground,
-            visiblePasscodeTextStyle = KptTheme.typography.headlineSmall
+            visiblePasscodeTextStyle = KptTheme.typography.headlineSmall,
         ),
         keyConfig = PasscodeKeyConfig(
             shouldShuffleKeys = true,
@@ -65,24 +64,24 @@ fun MifosPasscode(
         ),
         buttonConfig = PasscodeButtonConfig(
             skipButtonTextStyle = KptTheme.typography.labelLarge,
-            forgotButtonTextStyle = KptTheme.typography.labelLarge
+            forgotButtonTextStyle = KptTheme.typography.labelLarge,
         ),
         switchConfig = PasscodeSwitchConfig(
             switchTabColor = blueTint,
             switchEnabledColor = KptTheme.colorScheme.surfaceContainerHighest,
             switchEnabledTextColor = KptTheme.colorScheme.onSurface,
             switchDisabledTextColor = KptTheme.colorScheme.surface,
-            switchTextStyle = null
+            switchTextStyle = null,
         ),
         toolbarConfig = PasscodeToolbarConfig(
             toolbarIndicatorActiveColor = KptTheme.colorScheme.primary,
-            toolbarIndicatorInactiveColor = KptTheme.colorScheme.surfaceContainerHighest
+            toolbarIndicatorInactiveColor = KptTheme.colorScheme.surfaceContainerHighest,
         ),
         dialogConfig = PasscodeDialogConfig(
             dialogContainerColor = KptTheme.colorScheme.surface,
             dialogTitleColor = KptTheme.colorScheme.onSurface,
             dialogButtonTextColor = KptTheme.colorScheme.onSurface,
-            dialogShape = null
+            dialogShape = null,
         ),
     )
 }

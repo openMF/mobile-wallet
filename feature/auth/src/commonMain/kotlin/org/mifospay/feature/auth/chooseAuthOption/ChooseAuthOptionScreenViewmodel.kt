@@ -60,7 +60,7 @@ class ChooseAuthOptionScreenViewmodel(
                 mutableStateFlow.update {
                     it.copy(
                         dialogBoxType = DialogBoxType.None,
-                        screenState = null
+                        screenState = null,
                     )
                 }
             }
@@ -128,7 +128,7 @@ class ChooseAuthOptionScreenViewmodel(
                 }
                 is RegistrationResult.Success -> {
                     mutableStateFlow.update {
-                        it.copy(error = null,)
+                        it.copy(error = null)
                     }
                     saveAppLockOption(AppLockOption.DeviceLock)
                     saveRegistrationData(registrationResult.message)
@@ -156,8 +156,8 @@ data class ChooseAuthOptionScreenUiState(
     val selectedAuthOption: AppLockOption = AppLockOption.None,
     val client: Client? = null,
 ) {
-    sealed interface ScreenState  {
-        data object AuthenticatorNotSetup: ScreenState
+    sealed interface ScreenState {
+        data object AuthenticatorNotSetup : ScreenState
         data class Error(val message: String) : ScreenState
     }
 }
