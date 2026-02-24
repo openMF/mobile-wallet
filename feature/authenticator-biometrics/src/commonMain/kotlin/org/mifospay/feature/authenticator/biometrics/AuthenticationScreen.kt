@@ -39,6 +39,7 @@ import org.mifos.authenticator.biometrics.platformAvailableAuthenticationOption
 import org.mifos.authenticator.passcode.components.DialogButton
 import org.mifos.authenticator.passcode.components.MifosIcon
 import org.mifospay.core.designsystem.component.MifosDialogBox
+import org.mifospay.core.ui.MifosProgressIndicator
 import org.mifospay.core.ui.MifosProgressIndicatorOverlay
 import org.mifospay.core.ui.utils.EventsEffect
 import org.mifospay.feature.authenticator.biometrics.components.SystemAuthenticatorButton
@@ -83,9 +84,7 @@ fun AuthenticationContent(
     }
 
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(White),
+        modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.SpaceEvenly,
     ) {
@@ -95,6 +94,13 @@ fun AuthenticationContent(
             state.screenState,
             onAction,
         )
+
+//        LaunchedEffect(Unit) {
+//            if(authenticatorStatus.contains(PlatformAuthenticatorStatus.BIOMETRICS_SET)){
+//                onAction(AuthenticationScreenAction.OnClickAuthenticate(platformAuthenticationProvider))
+//            }
+//        }
+        Spacer(Modifier.height(100.dp))
 
         SystemAuthenticatorButton(
             onClick = {
@@ -127,9 +133,6 @@ fun AuthenticationScreenDialogBox(
                 message = screenState.message,
             )
         }
-        AuthenticationScreenState.ScreenState.Loading -> {
-            MifosProgressIndicatorOverlay()
-        }
         is AuthenticationScreenState.ScreenState.UserNotRegistered -> {
             MifosDialogBox(
                 title = "Error",
@@ -146,40 +149,5 @@ fun AuthenticationScreenDialogBox(
             )
         }
         null -> {}
-    }
-}
-
-@Composable
-fun MessageDialogBox(
-    modifier: Modifier = Modifier,
-    onDismissRequest: () -> Unit,
-    dialogMessage: String = "Coming Soon",
-    dismissButtonText: String = "OK",
-) {
-    Dialog(onDismissRequest = onDismissRequest) {
-        Box(
-            modifier = modifier
-                .clip(RoundedCornerShape(16.dp))
-                .background(KptTheme.colorScheme.background)
-                .padding(16.dp),
-        ) {
-            Column(
-                horizontalAlignment = Alignment.End,
-            ) {
-                Spacer(modifier = Modifier.height(20.dp))
-                Text(
-                    text = dialogMessage,
-                    modifier = Modifier.padding(8.dp),
-                    fontSize = 12.sp,
-                )
-                Spacer(modifier = Modifier.height(12.dp))
-
-                DialogButton(
-                    onClick = onDismissRequest,
-                    modifier = Modifier.padding(end = 8.dp),
-                    text = dismissButtonText,
-                )
-            }
-        }
     }
 }

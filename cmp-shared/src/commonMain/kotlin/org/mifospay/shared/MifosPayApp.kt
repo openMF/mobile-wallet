@@ -28,6 +28,7 @@ import org.mifospay.core.data.util.TimeZoneMonitor
 import org.mifospay.core.designsystem.component.MifosDialogBox
 import org.mifospay.core.designsystem.theme.MifosTheme
 import org.mifospay.feature.auth.chooseAuthOption.CHOOSE_AUTH_OPTION_ROUTE
+import org.mifospay.feature.authenticator.biometrics.PLATFORM_AUTHENTICATOR_ROUTE
 import org.mifospay.shared.MainUiState.Success
 import org.mifospay.shared.navigation.MifosNavGraph.LOGIN_GRAPH
 import org.mifospay.shared.navigation.MifosNavGraph.MAIN_GRAPH
@@ -87,8 +88,11 @@ private fun MifosPayApp(
             val authOption = viewModel.getAuthOption()
             when (authOption) {
                 AppLockOption.MifosPasscode -> ROOT_MIFOS_PASSCODE_ROUTE
-                AppLockOption.DeviceLock -> MAIN_GRAPH
-                AppLockOption.None -> CHOOSE_AUTH_OPTION_ROUTE
+                AppLockOption.DeviceLock -> PLATFORM_AUTHENTICATOR_ROUTE
+                AppLockOption.None -> {
+                    viewModel.logOut()
+                    LOGIN_GRAPH
+                }
             }
         } else {
             LOGIN_GRAPH

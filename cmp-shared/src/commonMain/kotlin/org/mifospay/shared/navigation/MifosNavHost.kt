@@ -31,6 +31,7 @@ import org.mifospay.feature.beneficiary.addupdatebeneficiary.BeneficiaryAddEditT
 import org.mifospay.feature.beneficiary.addupdatebeneficiary.addEditBeneficiaryScreen
 import org.mifospay.feature.beneficiary.addupdatebeneficiary.navigateToBeneficiaryAddEdit
 import org.mifospay.feature.beneficiary.list.BeneficiaryListScreen
+import org.mifospay.feature.authenticator.biometrics.platformAuthenticator
 import org.mifospay.feature.editpassword.navigation.editPasswordScreen
 import org.mifospay.feature.editpassword.navigation.navigateToEditPassword
 import org.mifospay.feature.faq.navigation.faqScreen

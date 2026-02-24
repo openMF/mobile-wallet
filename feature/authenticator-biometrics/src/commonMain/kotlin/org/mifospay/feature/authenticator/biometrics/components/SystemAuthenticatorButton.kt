@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -59,7 +60,7 @@ fun SystemAuthenticatorButton(
                                 platformAuthOptions.contains(PlatformAuthOptions.Fingerprint)
                             )
                     ) {
-                        ClickableTextButton(
+                        AuthenticateButton(
                             onClick = onClick,
                             text = "Use Biometrics",
                         )
@@ -127,7 +128,7 @@ fun SystemAuthenticatorButton(
                     authenticatorStatus.contains(PlatformAuthenticatorStatus.BIOMETRICS_SET) ||
                     authenticatorStatus.contains(PlatformAuthenticatorStatus.DEVICE_CREDENTIAL_SET)
                 ) {
-                    ClickableTextButton(
+                    AuthenticateButton(
                         onClick = onClick,
                         text = "Authenticate using Windows Hello",
                     )
@@ -146,21 +147,16 @@ fun SystemAuthenticatorButton(
 }
 
 @Composable
-fun ClickableTextButton(
+fun AuthenticateButton(
     onClick: () -> Unit,
-    enabled: Boolean = true,
     text: String,
 ) {
-    TextButton(
+    Button(
         onClick = onClick,
-        enabled = enabled,
         modifier = Modifier.height(50.dp)
             .width(250.dp)
-            .clip(RoundedCornerShape(30.dp)),
+            .clip(RoundedCornerShape(50)),
     ) {
-        Text(
-            text,
-            color = Color.White,
-        )
+        Text(text)
     }
 }

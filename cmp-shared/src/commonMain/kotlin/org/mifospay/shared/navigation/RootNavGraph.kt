@@ -23,6 +23,7 @@ import org.mifos.feature.passcode.navigateToRootMifosPasscodeScreen
 import org.mifospay.core.data.util.NetworkMonitor
 import org.mifospay.core.data.util.TimeZoneMonitor
 import org.mifospay.feature.auth.chooseAuthOption.chooseAuthOptionScreen
+import org.mifospay.feature.authenticator.biometrics.platformAuthenticator
 import org.mifospay.shared.instance.InstanceSelectorScreen
 import org.mifospay.shared.ui.MifosApp
 
@@ -65,6 +66,11 @@ internal fun RootNavGraph(
             onPasscodeConfirm = navHostController::navigateToMainGraph,
             onPasscodeCreation = navHostController::navigateToMainGraph,
             onPasscodeRejected = {},
+        )
+
+        platformAuthenticator(
+            onAuthenticationSuccess = navHostController::navigateToMainGraph,
+            onForcedLogOut = onClickLogout
         )
 
         composable(MifosNavGraph.MAIN_GRAPH) {

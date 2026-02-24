@@ -19,22 +19,25 @@ import mobile_wallet.feature.settings.generated.resources.feature_settings_empty
 import mobile_wallet.feature.settings.generated.resources.feature_settings_log_out_title
 import org.jetbrains.compose.resources.StringResource
 import org.mifospay.core.common.DataState
+import org.mifospay.core.data.repository.ChooseAuthOptionRepository
 import org.mifospay.core.data.repository.SavingsAccountRepository
+import org.mifospay.core.data.util.AppLockOption
 import org.mifospay.core.datastore.UserPreferencesRepository
 import org.mifospay.core.model.client.Client
 import org.mifospay.core.ui.utils.BaseViewModel
 import org.mifospay.feature.settings.SettingsAction.Internal.DisableAccountResult
 
 class SettingsViewModel(
+    private val chooseAuthOptionRepository: ChooseAuthOptionRepository,
     private val userPreferencesRepository: UserPreferencesRepository,
     private val repository: SavingsAccountRepository,
 ) : BaseViewModel<SettingsState, SettingsEvent, SettingsAction>(
     initialState = run {
         val client = requireNotNull(userPreferencesRepository.client.value)
-
         SettingsState(
             client = client,
             dialogState = null,
+            isChangePasscodeVisible = chooseAuthOptionRepository.getAuthOption() == AppLockOption.MifosPasscode
         )
     },
 ) {
@@ -149,6 +152,7 @@ class SettingsViewModel(
 data class SettingsState(
     val client: Client,
     val dialogState: DialogState? = null,
+    val isChangePasscodeVisible: Boolean = false,
 )
 
 sealed interface DialogState {

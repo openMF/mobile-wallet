@@ -95,6 +95,7 @@ internal fun SettingsScreenRoute(
 
         SettingsScreenContent(
             modifier = Modifier,
+            isChangePasscodeVisible = state.isChangePasscodeVisible,
             onAction = viewmodel::trySendAction,
         )
     }
@@ -103,6 +104,7 @@ internal fun SettingsScreenRoute(
 @Composable
 private fun SettingsScreenContent(
     modifier: Modifier = Modifier,
+    isChangePasscodeVisible: Boolean = false,
     onAction: (SettingsAction) -> Unit,
 ) {
     MifosScaffold(
@@ -152,13 +154,15 @@ private fun SettingsScreenContent(
                 },
             )
 
-            SettingsCardItem(
-                title = stringResource(Res.string.feature_settings_change_passcode),
-                icon = vectorResource(Res.drawable.outline_pin),
-                onClick = {
-                    onAction(SettingsAction.ChangePasscode)
-                },
-            )
+            if(isChangePasscodeVisible){
+                SettingsCardItem(
+                    title = stringResource(Res.string.feature_settings_change_passcode),
+                    icon = vectorResource(Res.drawable.outline_pin),
+                    onClick = {
+                        onAction(SettingsAction.ChangePasscode)
+                    },
+                )
+            }
 
             SettingsCardItem(
                 title = stringResource(Res.string.feature_settings_log_out),

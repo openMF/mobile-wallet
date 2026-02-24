@@ -27,6 +27,7 @@ import org.mifospay.core.network.di.NetworkModule
 import org.mifospay.feature.accounts.di.AccountsModule
 import org.mifospay.feature.auth.di.AuthModule
 import org.mifospay.feature.beneficiary.di.BeneficiaryModule
+import org.mifospay.feature.authenticator.biometrics.AuthenticatorBiometricsModule
 import org.mifospay.feature.editpassword.di.EditPasswordModule
 import org.mifospay.feature.faq.di.FaqModule
 import org.mifospay.feature.fastmpay.di.FastMpayModule
@@ -96,6 +97,7 @@ object KoinModules {
             FastMpayModule,
             MerchantsModule,
             UpiSetupModule,
+            AuthenticatorBiometricsModule,
         )
     }
     private val LibraryModule = module {

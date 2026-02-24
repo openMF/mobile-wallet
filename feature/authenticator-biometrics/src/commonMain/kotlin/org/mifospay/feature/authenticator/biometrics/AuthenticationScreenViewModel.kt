@@ -54,9 +54,6 @@ class AuthenticationScreenViewModel(
 
     private fun authenticateUser(appName: String, platformAuthenticationProvider: PlatformAuthenticationProvider) {
         viewModelScope.launch {
-            updateState {
-                it.copy(screenState = AuthenticationScreenState.ScreenState.Loading)
-            }
             platformAuthenticationProvider.updateAuthenticatorStatus()
             val savedData = platformAuthenticationDataRepository.getBiometricRegistrationData()
             val authResult = platformAuthenticationProvider.onAuthenticatorClick(appName, savedData)
@@ -71,9 +68,7 @@ class AuthenticationScreenViewModel(
                 }
                 AuthenticationResult.Success -> {
                     updateState {
-                        it.copy(
-                            screenState = null,
-                        )
+                        it.copy(screenState = null,)
                     }
                     sendEvent(AuthenticationScreenEvent.OnAuthenticationSuccess)
                 }
@@ -108,7 +103,6 @@ data class AuthenticationScreenState(
     sealed interface ScreenState {
         data class Error(val message: String) : ScreenState
         data class UserNotRegistered(val message: String) : ScreenState
-        data object Loading : ScreenState
     }
 }
 
@@ -124,9 +118,3 @@ sealed interface AuthenticationScreenEvent {
     data object OnForceLogout : AuthenticationScreenEvent
 }
 
-enum class DialogBoxType {
-    ERROR,
-    NOT_SET,
-    NOT_AVAILABLE,
-    None,
-}
