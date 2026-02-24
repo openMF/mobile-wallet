@@ -142,13 +142,11 @@ fun ChooseAuthOptionScreen(
                     navigationHelper(
                         state.selectedAuthOption,
                         whenDeviceLockSelected = {
-                            platformAuthenticationProvider.updateAuthenticatorStatus()
                             viewModel.trySendAction(
                                 ChooseAuthOptionScreenAction.RegisterUserBiometrics(platformAuthenticationProvider),
                             )
                         },
                         whenPasscodeSelected = {
-                            platformAuthenticationProvider.updateAuthenticatorStatus()
                             viewModel.trySendAction(ChooseAuthOptionScreenAction.NavigateToPasscode)
                         },
                     )
@@ -174,7 +172,7 @@ fun MessageDialogBox(
         Box(
             modifier = modifier
                 .clip(RoundedCornerShape(16.dp))
-                .background(KptTheme.colorScheme.surface)
+                .background(KptTheme.colorScheme.background)
                 .padding(16.dp),
         ) {
             Column(

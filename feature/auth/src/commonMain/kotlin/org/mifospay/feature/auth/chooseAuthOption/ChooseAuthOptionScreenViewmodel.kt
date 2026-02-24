@@ -35,14 +35,9 @@ class ChooseAuthOptionScreenViewmodel(
     override fun handleAction(action: ChooseAuthOptionScreenAction) {
         when (action) {
             ChooseAuthOptionScreenAction.OnSelectDeviceLock -> {
-//                mutableStateFlow.update {
-//                    it.copy(
-//                        selectedAuthOption = AppLockOption.DeviceLock,
-//                    ){
-
                 mutableStateFlow.update {
                     it.copy(
-                        dialogBoxType = DialogBoxType.NOT_AVAILABLE,
+                        selectedAuthOption = AppLockOption.DeviceLock,
                     )
                 }
             }
@@ -95,6 +90,7 @@ class ChooseAuthOptionScreenViewmodel(
         displayName: String,
     ) {
         viewModelScope.launch {
+            platformAuthenticationProvider.updateAuthenticatorStatus()
             val registrationResult = platformAuthenticationProvider.registerUser(
                 userID,
                 userEmail,

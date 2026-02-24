@@ -86,5 +86,6 @@ include(":feature:mpay-qr")
 include(":feature:mpay-qr-scan")
 include(":feature:fast-mpay")
 include(":feature:passcode")
+include(":feature:authenticator-biometrics")
 
 include(":libs:mifos-passcode")
