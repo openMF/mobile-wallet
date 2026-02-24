@@ -7,14 +7,12 @@
  *
  * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
  */
-package org.mifospay.feature.settings.di
+package org.mifospay.feature.onboarding.language.di
 
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
-import org.mifospay.feature.language.LanguageViewModel
-import org.mifospay.feature.settings.SettingsViewModel
+import org.mifospay.feature.onboarding.language.OnboardingLanguageViewModel
 
-val SettingsModule = module {
-    viewModelOf(::SettingsViewModel)
-    viewModelOf(::LanguageViewModel)
+val onboardingLanguageModule = module {
+    viewModelOf(::OnboardingLanguageViewModel)
 }

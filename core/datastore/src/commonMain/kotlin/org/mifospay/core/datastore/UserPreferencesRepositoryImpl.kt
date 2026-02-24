@@ -18,6 +18,7 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import org.mifospay.core.common.DataState
+import org.mifospay.core.model.LanguageConfig
 import org.mifospay.core.model.account.DefaultAccount
 import org.mifospay.core.model.client.Client
 import org.mifospay.core.model.client.UpdatedClient
@@ -88,6 +89,20 @@ class UserPreferencesRepositoryImpl(
             started = SharingStarted.Eagerly,
         )
 
+    override val language: StateFlow<LanguageConfig>
+        get() = preferenceManager.language.stateIn(
+            scope = unconfinedScope,
+            initialValue = LanguageConfig.DEFAULT,
+            started = SharingStarted.Eagerly,
+        )
+
+    override val showOnboarding: StateFlow<Boolean>
+        get() = preferenceManager.showOnboarding.stateIn(
+            scope = unconfinedScope,
+            initialValue = true,
+            started = SharingStarted.Eagerly,
+        )
+
     override suspend fun updateDefaultAccount(account: DefaultAccount): DataState<Unit> {
         return try {
             val result = preferenceManager.updateDefaultAccount(account)
@@ -153,6 +168,14 @@ class UserPreferencesRepositoryImpl(
         } catch (e: Exception) {
             DataState.Error(e)
         }
+    }
+
+    override suspend fun setLanguage(language: LanguageConfig) {
+        preferenceManager.setLanguage(language)
+    }
+
+    override suspend fun setShowOnboarding(showOnboarding: Boolean) {
+        preferenceManager.setShowOnboarding(showOnboarding)
     }
 
     override suspend fun logOut() {

@@ -46,6 +46,8 @@ import org.mifospay.feature.kyc.navigation.kycLevel2Screen
 import org.mifospay.feature.kyc.navigation.kycLevel3Screen
 import org.mifospay.feature.kyc.navigation.navigateToKYCLevel2
 import org.mifospay.feature.kyc.navigation.navigateToKYCLevel3
+import org.mifospay.feature.language.navigation.languageDestination
+import org.mifospay.feature.language.navigation.navigateToLanguage
 import org.mifospay.feature.make.transfer.navigation.navigateToTransferScreen
 import org.mifospay.feature.make.transfer.navigation.transferScreen
 import org.mifospay.feature.make.transfer.success.navigateTransferSuccess
@@ -184,6 +186,11 @@ internal fun MifosNavHost(
             navigateToEditPasswordScreen = navController::navigateToEditPassword,
             navigateToFaqScreen = navController::navigateToFAQ,
             navigateToNotificationScreen = navController::navigateToNotification,
+            navigateToLanguageScreen = navController::navigateToLanguage,
+        )
+
+        languageDestination(
+            onBackPress = navController::navigateUp,
         )
 
         faqScreen(

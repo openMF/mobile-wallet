@@ -10,12 +10,14 @@
 package org.mifospay
 
 import android.os.Bundle
-import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.core.os.LocaleListCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.Lifecycle
@@ -35,7 +37,7 @@ import org.mifospay.shared.MainUiState
 import org.mifospay.shared.MifosPaySharedApp
 import org.mifospay.shared.MifosPayViewModel
 
-class MainActivity : ComponentActivity() {
+class MainActivity : AppCompatActivity() {
     private val networkMonitor: NetworkMonitor by inject()
     private val timeZoneMonitor: TimeZoneMonitor by inject()
     private val viewModel: MifosPayViewModel by viewModel()
@@ -57,7 +59,18 @@ class MainActivity : ComponentActivity() {
         lifecycleScope.launch {
             lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiState
-                    .onEach { uiState = it }
+                    .onEach { state ->
+                        uiState = state
+                        if (state is MainUiState.Success) {
+                            val languageTag = state.language.localName
+                            val appLocale: LocaleListCompat = if (languageTag.isNullOrBlank()) {
+                                LocaleListCompat.getEmptyLocaleList()
+                            } else {
+                                LocaleListCompat.forLanguageTags(languageTag)
+                            }
+                            AppCompatDelegate.setApplicationLocales(appLocale)
+                        }
+                    }
                     .collect()
             }
         }

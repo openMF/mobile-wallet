@@ -12,6 +12,7 @@ package org.mifospay.core.datastore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 import org.mifospay.core.common.DataState
+import org.mifospay.core.model.LanguageConfig
 import org.mifospay.core.model.account.DefaultAccount
 import org.mifospay.core.model.client.Client
 import org.mifospay.core.model.client.UpdatedClient
@@ -38,6 +39,10 @@ interface UserPreferencesRepository {
 
     val selectedInterbankInstance: StateFlow<InterbankServer?>
 
+    val language: StateFlow<LanguageConfig>
+
+    val showOnboarding: StateFlow<Boolean>
+
     suspend fun updateToken(token: String): DataState<Unit>
 
     suspend fun updateUserInfo(user: UserInfo): DataState<Unit>
@@ -51,6 +56,10 @@ interface UserPreferencesRepository {
     suspend fun updateSelectedInstance(instance: ServerInstance): DataState<Unit>
 
     suspend fun updateSelectedInterbankInstance(instance: InterbankServer): DataState<Unit>
+
+    suspend fun setLanguage(language: LanguageConfig)
+
+    suspend fun setShowOnboarding(showOnboarding: Boolean)
 
     suspend fun logOut(): Unit
 }

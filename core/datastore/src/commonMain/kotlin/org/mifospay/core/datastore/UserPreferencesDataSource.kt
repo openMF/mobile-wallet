@@ -24,6 +24,7 @@ import kotlinx.serialization.ExperimentalSerializationApi
 import org.mifospay.core.datastore.UserPreferencesDataSource.Companion.DEFAULT_ACCOUNT
 import org.mifospay.core.datastore.model.ClientPreferences
 import org.mifospay.core.datastore.model.UserInfoPreferences
+import org.mifospay.core.model.LanguageConfig
 import org.mifospay.core.model.account.DefaultAccount
 import org.mifospay.core.model.client.Client
 import org.mifospay.core.model.client.UpdatedClient
@@ -35,6 +36,8 @@ private const val USER_INFO_KEY = "userInfo"
 private const val CLIENT_INFO_KEY = "clientInfo"
 private const val SELECTED_INSTANCE_KEY = "selectedInstance"
 private const val SELECTED_INTERBANK_INSTANCE_KEY = "selectedInterbankInstance"
+private const val LANGUAGE_KEY = "language"
+private const val SHOW_ONBOARDING_KEY = "showOnboarding"
 
 @OptIn(ExperimentalSerializationApi::class)
 class UserPreferencesDataSource(
@@ -88,6 +91,24 @@ class UserPreferencesDataSource(
         ),
     )
 
+    private val _language = MutableStateFlow(
+        settings.decodeValue(
+            key = LANGUAGE_KEY,
+            serializer = LanguageConfig.serializer(),
+            defaultValue = settings.decodeValueOrNull(
+                key = LANGUAGE_KEY,
+                serializer = LanguageConfig.serializer(),
+            ) ?: LanguageConfig.DEFAULT,
+        ),
+    )
+
+    private val _showOnboarding = MutableStateFlow(
+        settings.getBoolean(
+            key = SHOW_ONBOARDING_KEY,
+            defaultValue = true,
+        ),
+    )
+
     val token = _userInfo.map {
         it.base64EncodedAuthenticationKey
     }
@@ -102,6 +123,10 @@ class UserPreferencesDataSource(
     val selectedInstance = _selectedInstance
 
     val selectedInterbankInstance = _selectedInterbankInstance
+
+    val language = _language
+
+    val showOnboarding = _showOnboarding
 
     suspend fun updateClientInfo(client: Client) {
         withContext(dispatcher) {
@@ -174,6 +199,20 @@ class UserPreferencesDataSource(
         }
     }
 
+    suspend fun setLanguage(language: LanguageConfig) {
+        withContext(dispatcher) {
+            settings.putLanguage(language)
+            _language.value = language
+        }
+    }
+
+    suspend fun setShowOnboarding(showOnboarding: Boolean) {
+        withContext(dispatcher) {
+            settings.putBoolean(SHOW_ONBOARDING_KEY, showOnboarding)
+            _showOnboarding.value = showOnboarding
+        }
+    }
+
     suspend fun clearInfo() {
         withContext(dispatcher) {
             settings.clear()
@@ -223,5 +262,13 @@ private fun Settings.putSelectedInterbankInstance(instance: InterbankServer) {
         key = SELECTED_INTERBANK_INSTANCE_KEY,
         serializer = InterbankServer.serializer(),
         value = instance,
+    )
+}
+
+private fun Settings.putLanguage(language: LanguageConfig) {
+    encodeValue(
+        key = LANGUAGE_KEY,
+        serializer = LanguageConfig.serializer(),
+        value = language,
     )
 }

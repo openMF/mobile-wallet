@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copyright 2026 Mifos Initiative
+
+    This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+    If a copy of the MPL was not distributed with this file,
+    You can obtain one at https://mozilla.org/MPL/2.0/.
+
+    See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+-->
+<resources>
+    <string name="feature_settings_alert_disable_account">هل أنت متأكد أنك تريد تعطيل الحساب؟</string>
+    <string name="feature_settings_notification_settings">إعدادات الإشعارات</string>
+    <string name="feature_settings_faq">الأسئلة الشائعة</string>
+    <string name="feature_settings_settings">الإعدادات</string>
+    <string name="feature_settings_change_password">تغيير كلمة المرور</string>
+    <string name="feature_settings_change_passcode">تغيير رمز المرور</string>
+    <string name="feature_settings_log_out">تسجيل الخروج</string>
+    <string name="feature_settings_disable_account">تعطيل الحساب</string>
+    <string name="feature_settings_alert_disable_account_desc">سيؤدي هذا إلى حذف جميع المعلومات المتعلقة بحسابك</string>
+    <string name="feature_settings_ok">موافق</string>
+    <string name="feature_settings_cancel">إلغاء</string>
+    <string name="feature_settings_log_out_title">هل تريد تسجيل الخروج؟</string>
+    <string name="feature_settings_empty"/>
+    <string name="feature_settings_yes">نعم</string>
+    <string name="feature_settings_no">لا</string>
+    <string name="feature_settings_change_language">تغيير اللغة</string>
+    <string name="feature_settings_language">اللغة</string>
+    <string name="feature_onboarding_choose_your_app_language">اختر لغة التطبيق</string>
+    <string name="feature_onboarding_chosen_language_can_be_changed_later_in_the_settings">يمكن تغيير اللغة المختارة لاحقاً في الإعدادات</string>
+    <string name="feature_onboarding_submit">تأكيد</string>
+</resources>

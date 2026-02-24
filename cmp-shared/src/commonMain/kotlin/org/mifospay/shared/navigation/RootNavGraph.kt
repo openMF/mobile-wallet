@@ -20,6 +20,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import org.mifospay.core.data.util.NetworkMonitor
 import org.mifospay.core.data.util.TimeZoneMonitor
+import org.mifospay.feature.onboarding.language.navigation.ONBOARDING_LANGUAGE_ROUTE
+import org.mifospay.feature.onboarding.language.navigation.onboardingLanguageScreen
 import org.mifospay.shared.instance.InstanceSelectorScreen
 import org.mifospay.shared.ui.MifosApp
 
@@ -43,6 +45,16 @@ internal fun RootNavGraph(
         loginNavGraph(
             navController = navHostController,
             onShowInstanceSelector = { showInstanceSelector = true },
+        )
+
+        onboardingLanguageScreen(
+            onNavigateToNext = {
+                navHostController.navigate(MifosNavGraph.LOGIN_GRAPH) {
+                    popUpTo(ONBOARDING_LANGUAGE_ROUTE) {
+                        inclusive = true
+                    }
+                }
+            },
         )
 
         passcodeNavGraph(navHostController)

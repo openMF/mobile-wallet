@@ -86,3 +86,4 @@ include(":feature:upi-setup")
 include(":feature:qr")
 
 include(":libs:mifos-passcode")
+include(":feature:onboarding-language")

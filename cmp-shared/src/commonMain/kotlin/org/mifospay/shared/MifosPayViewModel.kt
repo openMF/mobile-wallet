@@ -13,10 +13,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import org.mifospay.core.datastore.UserPreferencesRepository
+import org.mifospay.core.model.LanguageConfig
 import org.mifospay.core.model.user.UserInfo
 import proto.org.mifos.library.passcode.data.PasscodeManager
 
@@ -24,8 +25,12 @@ class MifosPayViewModel(
     private val userDataRepository: UserPreferencesRepository,
     private val passcodeManager: PasscodeManager,
 ) : ViewModel() {
-    val uiState: StateFlow<MainUiState> = userDataRepository.userInfo.map {
-        MainUiState.Success(it)
+    val uiState: StateFlow<MainUiState> = combine(
+        userDataRepository.userInfo,
+        userDataRepository.language,
+        userDataRepository.showOnboarding,
+    ) { userInfo, language, showOnboarding ->
+        MainUiState.Success(userInfo, language, showOnboarding)
     }.stateIn(
         scope = viewModelScope,
         initialValue = MainUiState.Loading,
@@ -42,5 +47,9 @@ class MifosPayViewModel(
 
 sealed interface MainUiState {
     data object Loading : MainUiState
-    data class Success(val userData: UserInfo) : MainUiState
+    data class Success(
+        val userData: UserInfo,
+        val language: LanguageConfig,
+        val showOnboarding: Boolean,
+    ) : MainUiState
 }

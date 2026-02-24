@@ -33,6 +33,7 @@ import org.mifospay.feature.kyc.di.KYCModule
 import org.mifospay.feature.make.transfer.di.MakeTransferModule
 import org.mifospay.feature.merchants.di.MerchantsModule
 import org.mifospay.feature.notification.di.NotificationModule
+import org.mifospay.feature.onboarding.language.di.onboardingLanguageModule
 import org.mifospay.feature.payments.di.PaymentsModule
 import org.mifospay.feature.profile.di.ProfileModule
 import org.mifospay.feature.qr.di.QrModule
@@ -92,6 +93,7 @@ object KoinModules {
             QrModule,
             MerchantsModule,
             UpiSetupModule,
+            onboardingLanguageModule,
         )
     }
     private val LibraryModule = module {

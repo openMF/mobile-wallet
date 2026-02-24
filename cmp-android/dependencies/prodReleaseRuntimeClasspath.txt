@@ -24,6 +24,7 @@
 :feature:make-transfer
 :feature:merchants
 :feature:notification
+:feature:onboarding-language
 :feature:payments
 :feature:profile
 :feature:qr

@@ -12,7 +12,7 @@ plugins {
 }
 
 android {
-    namespace = "org.mifospay.feature.settings"
+    namespace = "org.mifospay.feature.onboarding.language"
 }
 
 kotlin {
@@ -26,7 +26,10 @@ kotlin {
 
             implementation(libs.koin.compose.viewmodel)
             implementation(libs.koin.compose)
+            implementation(projects.core.model)
             implementation(projects.core.datastore)
+            implementation(projects.core.designsystem)
+            implementation(projects.core.ui)
             implementation(projects.coreBase.designsystem)
         }
     }
