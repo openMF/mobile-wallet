@@ -63,6 +63,7 @@ cmp-shared/cmp-shared.podspec
 
 # Kotlin
 .kotlin
+kotlin-js-store/
 
 # Android Studio captures folder
 captures/
