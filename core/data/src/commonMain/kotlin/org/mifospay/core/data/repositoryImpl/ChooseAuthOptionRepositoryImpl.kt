@@ -11,13 +11,15 @@ package org.mifospay.core.data.repositoryImpl
 
 import com.russhwolf.settings.Settings
 import org.mifospay.core.data.repository.ChooseAuthOptionRepository
+import org.mifospay.core.data.repository.PlatformAuthenticationDataRepository
 import org.mifospay.core.data.util.AppLockOption
 import org.mifospay.core.data.util.Helpers
 
 const val APP_LOCK_KEY = "auth_method"
-const val REGISTRATION_DATA = "REGISTRATION_DATA"
+
 class ChooseAuthOptionRepositoryImpl(
     private val settings: Settings,
+    private val platformAuthenticationDataRepository: PlatformAuthenticationDataRepository
 ) : ChooseAuthOptionRepository {
     override fun setAuthOption(option: AppLockOption) {
         settings.putString(
@@ -35,7 +37,11 @@ class ChooseAuthOptionRepositoryImpl(
         return Helpers.stringToAuthOptionMapperFunction(option)
     }
 
+    override fun removeAuthOption() {
+        settings.remove(APP_LOCK_KEY)
+    }
+
     override fun saveBiometricRegistrationData(registrationData: String) {
-        settings.putString(REGISTRATION_DATA, registrationData)
+        platformAuthenticationDataRepository.saveBiometricRegistrationData(registrationData)
     }
 }

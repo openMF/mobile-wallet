@@ -16,5 +16,7 @@ interface ChooseAuthOptionRepository {
 
     fun getAuthOption(): AppLockOption
 
+    fun removeAuthOption()
+
     fun saveBiometricRegistrationData(registrationData: String)
 }
