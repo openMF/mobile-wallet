@@ -63,6 +63,12 @@ class AccompanistPermissionWrapper(
 
 /**
  * Original source: https://github.com/kalinjul/EasyQRScan
+ *
+ * Maps Accompanist's PermissionStatus to our CameraPermissionStatus.
+ * When shouldShowRationale is false and status is Denied, it could mean:
+ * 1. Permission was never requested (first time) - treat as Unknown
+ * 2. Permission was denied with "Don't ask again" - treat as Denied
+ * We treat both cases the same way and let the permission request flow handle it.
  */
 @OptIn(ExperimentalPermissionsApi::class)
 private fun PermissionStatus.toCameraPermissionStatus(): CameraPermissionStatus {

@@ -103,11 +103,8 @@ class ScanQrViewModel(
             // Use smart routing based on FSP ID comparison
             val routeResult = qrTransferRouter.routeQrScan(qrCodeData)
 
-            _eventFlow.update {
-                ScanQrEvent.OnScanSuccess
-            }
-
-            // Navigate based on routing result
+            // Navigate based on routing result (don't emit OnScanSuccess before navigation
+            // to avoid StateFlow conflation issues)
             when (routeResult) {
                 is QrRouteResult.IntraBank -> {
                     Logger.d { "QR Route -> Intra-bank transfer" }
