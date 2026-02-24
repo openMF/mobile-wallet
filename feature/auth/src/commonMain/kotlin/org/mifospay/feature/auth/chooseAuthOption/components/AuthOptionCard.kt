@@ -36,6 +36,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import mobile_wallet.feature.auth.generated.resources.Res
+import mobile_wallet.feature.auth.generated.resources.feature_auth_radiobutton
+import org.jetbrains.compose.resources.stringResource
 import template.core.base.designsystem.theme.KptTheme
 
 @Composable
@@ -70,7 +73,7 @@ fun AuthOptionCard(
                 Text(text = title, fontSize = 18.sp)
                 Icon(
                     imageVector = if (selected) Icons.Outlined.RadioButtonChecked else Icons.Outlined.RadioButtonUnchecked,
-                    contentDescription = "Radiobutton",
+                    contentDescription = stringResource(Res.string.feature_auth_radiobutton),
                     modifier = Modifier.size(25.dp),
                     tint = if (selected) KptTheme.colorScheme.primary else KptTheme.colorScheme.onSurfaceVariant,
                 )

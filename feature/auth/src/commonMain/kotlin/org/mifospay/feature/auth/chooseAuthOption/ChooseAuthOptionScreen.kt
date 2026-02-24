@@ -7,7 +7,6 @@
  *
  * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
  */
-
 package org.mifospay.feature.auth.chooseAuthOption
 
 import androidx.compose.foundation.layout.Arrangement
@@ -33,6 +32,20 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import mobile_wallet.feature.auth.generated.resources.Res
+import mobile_wallet.feature.auth.generated.resources.feature_auth_continue
+import mobile_wallet.feature.auth.generated.resources.feature_auth_device_lock_subtitle
+import mobile_wallet.feature.auth.generated.resources.feature_auth_enable_app_lock
+import mobile_wallet.feature.auth.generated.resources.feature_auth_error
+import mobile_wallet.feature.auth.generated.resources.feature_auth_mifos_passcode_subtitle
+import mobile_wallet.feature.auth.generated.resources.feature_auth_no
+import mobile_wallet.feature.auth.generated.resources.feature_auth_no_authentication_options_set
+import mobile_wallet.feature.auth.generated.resources.feature_auth_ok
+import mobile_wallet.feature.auth.generated.resources.feature_auth_setup_authentication_options
+import mobile_wallet.feature.auth.generated.resources.feature_auth_use_mifos_passcode
+import mobile_wallet.feature.auth.generated.resources.feature_auth_use_your_device_lock
+import mobile_wallet.feature.auth.generated.resources.feature_auth_yes
+import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.mifos.authenticator.biometrics.platformAuthenticationProvider
 import org.mifos.authenticator.biometrics.platformAuthenticator.PlatformAuthenticationProvider
@@ -81,7 +94,7 @@ fun ChooseAuthOptionContent(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Enable app lock", fontSize = 24.sp) },
+                title = { Text(stringResource(Res.string.feature_auth_enable_app_lock), fontSize = 24.sp) },
             )
         },
     ) {
@@ -95,8 +108,8 @@ fun ChooseAuthOptionContent(
             Column {
                 AuthOptionCard(
                     selected = state.selectedAuthOption == AppLockOption.DeviceLock,
-                    title = "Use your device lock",
-                    subtitle = "Use your existing PIN, password, pattern, face ID, or fingerprint",
+                    title = stringResource(Res.string.feature_auth_use_your_device_lock),
+                    subtitle = stringResource(Res.string.feature_auth_device_lock_subtitle),
                     icon = Icons.Default.Dialpad,
                     onSelect = {
                         onAction(ChooseAuthOptionScreenAction.OnSelectDeviceLock)
@@ -107,8 +120,8 @@ fun ChooseAuthOptionContent(
 
                 AuthOptionCard(
                     selected = state.selectedAuthOption == AppLockOption.MifosPasscode,
-                    title = "Use 4-digit Mifos Passcode",
-                    subtitle = "Use your Mifos Passcode",
+                    title = stringResource(Res.string.feature_auth_use_mifos_passcode),
+                    subtitle = stringResource(Res.string.feature_auth_mifos_passcode_subtitle),
                     icon = Icons.Default.People,
                     onSelect = {
                         onAction(ChooseAuthOptionScreenAction.OnSelectPasscode)
@@ -134,7 +147,7 @@ fun ChooseAuthOptionContent(
                 shape = RoundedCornerShape(50.dp),
                 enabled = state.selectedAuthOption != AppLockOption.None,
             ) {
-                Text("Continue")
+                Text(stringResource(Res.string.feature_auth_continue))
             }
         }
     }
@@ -149,11 +162,11 @@ fun ChooseAuthScreenDialogBox(
     when (screenState) {
         ChooseAuthOptionScreenUiState.ScreenState.AuthenticatorNotSetup -> {
             MifosDialogBox(
-                title = "No authentication options set",
-                message = "Setup authentication options",
+                title = stringResource(Res.string.feature_auth_no_authentication_options_set),
+                message = stringResource(Res.string.feature_auth_setup_authentication_options),
                 showDialogState = true,
-                confirmButtonText = "Yes",
-                dismissButtonText = "No",
+                confirmButtonText = stringResource(Res.string.feature_auth_yes),
+                dismissButtonText = stringResource(Res.string.feature_auth_no),
                 onConfirm = {
                     onAction(ChooseAuthOptionScreenAction.SetupPlatformAuthenticator(platformAuthenticationProvider))
                 },
@@ -164,10 +177,10 @@ fun ChooseAuthScreenDialogBox(
         }
         is ChooseAuthOptionScreenUiState.ScreenState.Error -> {
             MifosDialogBox(
-                title = "Error",
+                title = stringResource(Res.string.feature_auth_error),
                 showDialogState = true,
                 confirmButtonText = "",
-                dismissButtonText = "Ok",
+                dismissButtonText = stringResource(Res.string.feature_auth_ok),
                 message = screenState.message,
                 onConfirm = {
                     onAction(ChooseAuthOptionScreenAction.SetupPlatformAuthenticator(platformAuthenticationProvider))

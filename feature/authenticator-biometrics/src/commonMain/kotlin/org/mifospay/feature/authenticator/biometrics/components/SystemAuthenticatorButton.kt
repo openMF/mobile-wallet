@@ -28,9 +28,15 @@ import androidx.compose.ui.unit.dp
 import mobile_wallet.feature.authenticator_biometrics.generated.resources.Res
 import mobile_wallet.feature.authenticator_biometrics.generated.resources.eye_scanner
 import mobile_wallet.feature.authenticator_biometrics.generated.resources.face_scan
+import mobile_wallet.feature.authenticator_biometrics.generated.resources.feature_authenticator_biometrics_authenticate_windows_hello
+import mobile_wallet.feature.authenticator_biometrics.generated.resources.feature_authenticator_biometrics_fingerprint_icon
+import mobile_wallet.feature.authenticator_biometrics.generated.resources.feature_authenticator_biometrics_set_up_authentication_option
+import mobile_wallet.feature.authenticator_biometrics.generated.resources.feature_authenticator_biometrics_unsupported_platform
+import mobile_wallet.feature.authenticator_biometrics.generated.resources.feature_authenticator_biometrics_use_biometrics
 import mobile_wallet.feature.authenticator_biometrics.generated.resources.fingerprint
 import mobile_wallet.feature.authenticator_biometrics.generated.resources.keypad
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 import org.mifos.authenticator.biometrics.Platform
 import org.mifos.authenticator.biometrics.getPlatform
 import org.mifos.authenticator.biometrics.platformAuthenticator.PlatformAuthOptions
@@ -60,33 +66,33 @@ fun SystemAuthenticatorButton(
                     ) {
                         AuthenticateButton(
                             onClick = onClick,
-                            text = "Use Biometrics",
+                            text = stringResource(Res.string.feature_authenticator_biometrics_use_biometrics),
                         )
                     } else if (platformAuthOptions.contains(PlatformAuthOptions.Fingerprint)) {
                         Image(
                             painter = painterResource(Res.drawable.fingerprint),
-                            contentDescription = "Fingerprint icon",
+                            contentDescription = stringResource(Res.string.feature_authenticator_biometrics_fingerprint_icon),
                             modifier = Modifier.size(50.dp)
                                 .clickable { onClick() },
                         )
                     } else if (platformAuthOptions.contains(PlatformAuthOptions.FaceId)) {
                         Image(
                             painter = painterResource(Res.drawable.face_scan),
-                            contentDescription = "Fingerprint icon",
+                            contentDescription = stringResource(Res.string.feature_authenticator_biometrics_fingerprint_icon),
                             modifier = Modifier.size(50.dp)
                                 .clickable { onClick() },
                         )
                     } else if (platformAuthOptions.contains(PlatformAuthOptions.Iris)) {
                         Image(
                             painter = painterResource(Res.drawable.eye_scanner),
-                            contentDescription = "Fingerprint icon",
+                            contentDescription = stringResource(Res.string.feature_authenticator_biometrics_fingerprint_icon),
                             modifier = Modifier.size(50.dp)
                                 .clickable { onClick() },
                         )
                     } else if (platformAuthOptions.contains(PlatformAuthOptions.UserCredential)) {
                         Image(
                             painter = painterResource(Res.drawable.keypad),
-                            contentDescription = "Fingerprint icon",
+                            contentDescription = stringResource(Res.string.feature_authenticator_biometrics_fingerprint_icon),
                             modifier = Modifier.size(50.dp)
                                 .clickable { onClick() },
                         )
@@ -94,31 +100,31 @@ fun SystemAuthenticatorButton(
                 } else if (authenticatorStatus.contains(PlatformAuthenticatorStatus.DEVICE_CREDENTIAL_SET)) {
                     Image(
                         painter = painterResource(Res.drawable.keypad),
-                        contentDescription = "Fingerprint icon",
+                        contentDescription = stringResource(Res.string.feature_authenticator_biometrics_fingerprint_icon),
                         modifier = Modifier.size(50.dp)
                             .clickable { onClick() },
                     )
                 } else {
-                    Text("Set up Authentication Option")
+                    Text(stringResource(Res.string.feature_authenticator_biometrics_set_up_authentication_option))
                 }
             }
             Platform.IOS -> {
                 if (authenticatorStatus.contains(PlatformAuthenticatorStatus.BIOMETRICS_SET)) {
                     Image(
                         painter = painterResource(Res.drawable.face_scan),
-                        contentDescription = "Fingerprint icon",
+                        contentDescription = stringResource(Res.string.feature_authenticator_biometrics_fingerprint_icon),
                         modifier = Modifier.size(40.dp)
                             .clickable { onClick() },
                     )
                 } else if (authenticatorStatus.contains(PlatformAuthenticatorStatus.DEVICE_CREDENTIAL_SET)) {
                     Image(
                         painter = painterResource(Res.drawable.keypad),
-                        contentDescription = "Fingerprint icon",
+                        contentDescription = stringResource(Res.string.feature_authenticator_biometrics_fingerprint_icon),
                         modifier = Modifier.size(40.dp)
                             .clickable { onClick() },
                     )
                 } else {
-                    Text("Set up Authentication Option")
+                    Text(stringResource(Res.string.feature_authenticator_biometrics_set_up_authentication_option))
                 }
             }
             Platform.JVM -> {
@@ -128,17 +134,17 @@ fun SystemAuthenticatorButton(
                 ) {
                     AuthenticateButton(
                         onClick = onClick,
-                        text = "Authenticate using Windows Hello",
+                        text = stringResource(Res.string.feature_authenticator_biometrics_authenticate_windows_hello),
                     )
                 } else {
-                    Text("Unsupported platform")
+                    Text(stringResource(Res.string.feature_authenticator_biometrics_unsupported_platform))
                 }
             }
             Platform.JS -> {
-                Text("Unsupported platform")
+                Text(stringResource(Res.string.feature_authenticator_biometrics_unsupported_platform))
             }
             Platform.WASMJS -> {
-                Text("Unsupported platform")
+                Text(stringResource(Res.string.feature_authenticator_biometrics_unsupported_platform))
             }
         }
     }
