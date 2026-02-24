@@ -16,6 +16,7 @@
 :feature:accounts
 :feature:auth
 :feature:beneficiary
+:feature:authenticator-biometrics
 :feature:editpassword
 :feature:faq
 :feature:fast-mpay
