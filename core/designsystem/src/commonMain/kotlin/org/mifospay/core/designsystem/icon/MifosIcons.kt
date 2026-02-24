@@ -26,6 +26,7 @@ import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.ContentCopy
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Description
+import androidx.compose.material.icons.filled.Download
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Error
 import androidx.compose.material.icons.filled.FilterList
@@ -69,6 +70,7 @@ import androidx.compose.material.icons.rounded.AccountBalanceWallet
 import androidx.compose.material.icons.rounded.AccountCircle
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.Contacts
+import androidx.compose.material.icons.rounded.History
 import androidx.compose.material.icons.rounded.Home
 import androidx.compose.material.icons.rounded.Info
 import androidx.compose.material.icons.rounded.Money
@@ -144,6 +146,7 @@ object MifosIcons {
     val RadioButtonUnchecked = Icons.Default.RadioButtonUnchecked
     val RadioButtonChecked = Icons.Filled.RadioButtonChecked
     val History = Icons.Default.History
+    val HistoryBoarder = Icons.Rounded.History
     val Filter = Icons.Default.FilterList
     val OpenInNew = Icons.AutoMirrored.Filled.OpenInNew
     val Warning = Icons.Default.Warning
@@ -153,4 +156,5 @@ object MifosIcons {
     val CheckCircle = Icons.Outlined.CheckCircle
     val ArrowRight = Icons.AutoMirrored.Filled.KeyboardArrowRight
     val Language = Icons.Default.Language
+    val Download = Icons.Filled.Download
 }

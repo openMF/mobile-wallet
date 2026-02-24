@@ -12,23 +12,26 @@ package org.mifospay.feature.profile.navigation
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
-import androidx.navigation.compose.navigation
-import org.mifospay.core.ui.composableWithPushTransitions
+import androidx.navigation.navigation
+import org.mifospay.core.ui.composableWithSlideTransitions
 import org.mifospay.feature.profile.ProfileScreen
 
 private const val PROFILE_NAVIGATION = "profile_navigation"
 const val PROFILE_ROUTE = "profile_route"
 
-fun NavController.navigateToProfile(navOptions: NavOptions) =
-    navigate(PROFILE_NAVIGATION, navOptions)
+fun NavController.navigateToProfile(navOptions: NavOptions? = null) {
+    this.navigate(PROFILE_ROUTE, navOptions)
+}
 
-internal fun NavGraphBuilder.profileScreen(
+fun NavGraphBuilder.profileScreen(
+    navigateBack: () -> Unit,
     onEditProfile: () -> Unit,
     onLinkBankAccount: () -> Unit,
     showQrCode: () -> Unit,
 ) {
-    composableWithPushTransitions(route = PROFILE_ROUTE) {
+    composableWithSlideTransitions(route = PROFILE_ROUTE) {
         ProfileScreen(
+            navigateBack = navigateBack,
             onEditProfile = onEditProfile,
             onLinkBackAccount = onLinkBankAccount,
             showQrCode = showQrCode,
@@ -38,6 +41,7 @@ internal fun NavGraphBuilder.profileScreen(
 
 fun NavGraphBuilder.profileNavGraph(
     navController: NavController,
+    navigateBack: () -> Unit,
     onLinkBankAccount: () -> Unit,
     showQrCode: () -> Unit,
 ) {
@@ -46,6 +50,7 @@ fun NavGraphBuilder.profileNavGraph(
         startDestination = PROFILE_ROUTE,
     ) {
         profileScreen(
+            navigateBack = navigateBack,
             onEditProfile = navController::navigateToEditProfile,
             onLinkBankAccount = onLinkBankAccount,
             showQrCode = showQrCode,

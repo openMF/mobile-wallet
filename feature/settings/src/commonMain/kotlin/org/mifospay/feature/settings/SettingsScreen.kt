@@ -35,6 +35,7 @@ import mobile_wallet.feature.settings.generated.resources.feature_settings_chang
 import mobile_wallet.feature.settings.generated.resources.feature_settings_disable_account
 import mobile_wallet.feature.settings.generated.resources.feature_settings_faq
 import mobile_wallet.feature.settings.generated.resources.feature_settings_log_out
+import mobile_wallet.feature.settings.generated.resources.feature_settings_profile
 import mobile_wallet.feature.settings.generated.resources.feature_settings_settings
 import mobile_wallet.feature.settings.generated.resources.outline_logout
 import mobile_wallet.feature.settings.generated.resources.outline_password
@@ -61,6 +62,7 @@ internal fun SettingsScreenRoute(
     navigateToFaqScreen: () -> Unit,
     navigateToNotificationScreen: () -> Unit,
     navigateToLanguageScreen: () -> Unit,
+    navigateToProfile: () -> Unit,
     modifier: Modifier = Modifier,
     viewmodel: SettingsViewModel = koinViewModel(),
 ) {
@@ -73,6 +75,7 @@ internal fun SettingsScreenRoute(
             SettingsEvent.OnNavigateToEditPasswordScreen -> onEditPassword.invoke()
             SettingsEvent.OnNavigateToFaqScreen -> navigateToFaqScreen.invoke()
             SettingsEvent.OnNavigateToLogout -> onLogout.invoke()
+            SettingsEvent.OnNavigateToProfile -> navigateToProfile.invoke()
             SettingsEvent.OnNavigateToNotificationScreen -> navigateToNotificationScreen.invoke()
             SettingsEvent.OnNavigateToLanguageScreen -> navigateToLanguageScreen.invoke()
         }
@@ -126,6 +129,14 @@ private fun SettingsScreenContent(
                 icon = MifosIcons.OutlinedInfo,
                 onClick = {
                     onAction(SettingsAction.NavigateToFaqScreen)
+                },
+            )
+
+            SettingsCardItem(
+                title = stringResource(Res.string.feature_settings_profile),
+                icon = MifosIcons.Profile,
+                onClick = {
+                    onAction(SettingsAction.NavigateToProfile)
                 },
             )
 

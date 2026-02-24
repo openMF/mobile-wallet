@@ -1,0 +1,81 @@
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
+package org.mifospay.feature.fastmpay
+
+import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
+import org.mifospay.core.data.util.MpayQrCodeProcessor
+import org.mifospay.feature.fastmpay.model.QrProcessResult
+import org.mifospay.feature.fastmpay.navigation.QR_DATA_ARG
+import kotlin.coroutines.cancellation.CancellationException
+
+/**
+ * ViewModel for fast MPay QR code processing.
+ *
+ * Receives encoded QR data from navigation, decodes it,
+ * processes it using [FastMpayProcessor], and emits the navigation result.
+ */
+class FastMpayViewModel(
+    savedStateHandle: SavedStateHandle,
+    private val processor: FastMpayProcessor,
+) : ViewModel() {
+
+    private val _resultFlow = MutableStateFlow<QrProcessResult?>(null)
+    val resultFlow = _resultFlow.asStateFlow()
+
+    private val _errorFlow = MutableStateFlow<String?>(null)
+    val errorFlow = _errorFlow.asStateFlow()
+
+    private val _isLoading = MutableStateFlow(true)
+    val isLoading = _isLoading.asStateFlow()
+
+    init {
+        val encodedQrData = savedStateHandle.get<String>(QR_DATA_ARG)
+
+        viewModelScope.launch {
+            if (encodedQrData == null) {
+                _errorFlow.update { "QR data is missing" }
+                _isLoading.update { false }
+                return@launch
+            }
+
+            try {
+                val qrData = MpayQrCodeProcessor.decodeMpayString(encodedQrData)
+                val result = processor.processQrCode(qrData)
+                _resultFlow.update { result }
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: Exception) {
+                _errorFlow.update { e.message ?: "Failed to process QR code" }
+            } finally {
+                _isLoading.update { false }
+            }
+        }
+    }
+
+    /**
+     * Clear the result to reset state.
+     */
+    fun clearResult() {
+        _resultFlow.update { null }
+    }
+
+    /**
+     * Clear the error to reset state.
+     */
+    fun clearError() {
+        _errorFlow.update { null }
+    }
+}

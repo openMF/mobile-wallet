@@ -29,6 +29,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import mobile_wallet.feature.profile.generated.resources.Res
+import mobile_wallet.feature.profile.generated.resources.feature_profile
 import mobile_wallet.feature.profile.generated.resources.feature_profile_personal_qr_code
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
@@ -48,6 +49,7 @@ import template.core.base.designsystem.theme.KptTheme
 
 @Composable
 internal fun ProfileScreen(
+    navigateBack: () -> Unit,
     onEditProfile: () -> Unit,
     onLinkBackAccount: () -> Unit,
     showQrCode: () -> Unit,
@@ -62,6 +64,7 @@ internal fun ProfileScreen(
             ProfileEvent.OnEditProfile -> onEditProfile.invoke()
             ProfileEvent.OnLinkBankAccount -> onLinkBackAccount.invoke()
             ProfileEvent.ShowQRCode -> showQrCode.invoke()
+            is ProfileEvent.OnNavigateBack -> navigateBack.invoke()
         }
     }
 
@@ -91,9 +94,14 @@ internal fun ProfileScreenContent(
 ) {
     MifosScaffold(
         modifier = modifier,
-    ) {
+        topBarTitle = stringResource(Res.string.feature_profile),
+        backPress = {
+            onAction(ProfileAction.NavigateBack)
+        },
+        containerColor = KptTheme.colorScheme.background,
+    ) { paddingValues ->
         Box(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier.fillMaxSize().padding(paddingValues),
             contentAlignment = Alignment.Center,
         ) {
             when (clientState) {

@@ -29,6 +29,7 @@ fun NavGraphBuilder.settingsScreen(
     navigateToFaqScreen: () -> Unit,
     navigateToNotificationScreen: () -> Unit,
     navigateToLanguageScreen: () -> Unit,
+    navigateToProfile: () -> Unit,
 ) {
     composableWithSlideTransitions(route = SETTINGS_ROUTE) {
         SettingsScreenRoute(
@@ -39,6 +40,7 @@ fun NavGraphBuilder.settingsScreen(
             navigateToFaqScreen = navigateToFaqScreen,
             navigateToNotificationScreen = navigateToNotificationScreen,
             navigateToLanguageScreen = navigateToLanguageScreen,
+            navigateToProfile = navigateToProfile,
         )
     }
 }

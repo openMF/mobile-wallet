@@ -103,6 +103,13 @@ class UserPreferencesRepositoryImpl(
             started = SharingStarted.Eagerly,
         )
 
+    override val accountExternalIds: StateFlow<Map<Long, String>>
+        get() = preferenceManager.accountExternalIds.stateIn(
+            scope = unconfinedScope,
+            initialValue = emptyMap(),
+            started = SharingStarted.Eagerly,
+        )
+
     override suspend fun updateDefaultAccount(account: DefaultAccount): DataState<Unit> {
         return try {
             val result = preferenceManager.updateDefaultAccount(account)
@@ -129,6 +136,19 @@ class UserPreferencesRepositoryImpl(
         } catch (e: Exception) {
             DataState.Error(e)
         }
+    }
+
+    override suspend fun updateAccountExternalIds(accountExternalIds: Map<Long, String>): DataState<Unit> {
+        return try {
+            preferenceManager.updateAccountExternalIds(accountExternalIds)
+            DataState.Success(Unit)
+        } catch (e: Exception) {
+            DataState.Error(e)
+        }
+    }
+
+    override fun getAccountExternalId(accountId: Long): String? {
+        return preferenceManager.getAccountExternalId(accountId)
     }
 
     override suspend fun updateToken(token: String): DataState<Unit> {

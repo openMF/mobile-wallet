@@ -159,4 +159,8 @@ fun setupDefaultHttpClient(
     install(ContentNegotiation) {
         json(jsonConfig)
     }
+
+    // Enable response validation to throw exceptions for non-2xx responses
+    // This allows proper error handling with ClientRequestException (4xx) and ServerResponseException (5xx)
+    expectSuccess = true
 }

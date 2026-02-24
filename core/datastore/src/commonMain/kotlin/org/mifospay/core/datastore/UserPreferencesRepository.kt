@@ -43,6 +43,8 @@ interface UserPreferencesRepository {
 
     val showOnboarding: StateFlow<Boolean>
 
+    val accountExternalIds: StateFlow<Map<Long, String>>
+
     suspend fun updateToken(token: String): DataState<Unit>
 
     suspend fun updateUserInfo(user: UserInfo): DataState<Unit>
@@ -60,6 +62,10 @@ interface UserPreferencesRepository {
     suspend fun setLanguage(language: LanguageConfig)
 
     suspend fun setShowOnboarding(showOnboarding: Boolean)
+
+    suspend fun updateAccountExternalIds(accountExternalIds: Map<Long, String>): DataState<Unit>
+
+    fun getAccountExternalId(accountId: Long): String?
 
     suspend fun logOut(): Unit
 }

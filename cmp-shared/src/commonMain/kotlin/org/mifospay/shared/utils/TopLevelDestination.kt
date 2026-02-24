@@ -13,9 +13,10 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import mobile_wallet.cmp_shared.generated.resources.Res
 import mobile_wallet.cmp_shared.generated.resources.app_name
 import mobile_wallet.cmp_shared.generated.resources.finance
+import mobile_wallet.cmp_shared.generated.resources.history
 import mobile_wallet.cmp_shared.generated.resources.home
 import mobile_wallet.cmp_shared.generated.resources.payments
-import mobile_wallet.cmp_shared.generated.resources.profile
+import mobile_wallet.cmp_shared.generated.resources.transaction_history
 import org.jetbrains.compose.resources.StringResource
 import org.mifospay.core.designsystem.icon.MifosIcons
 
@@ -49,10 +50,10 @@ internal enum class TopLevelDestination(
         iconText = Res.string.finance,
         titleText = Res.string.finance,
     ),
-    PROFILE(
-        selectedIcon = MifosIcons.Profile,
-        unselectedIcon = MifosIcons.ProfileBoarder,
-        iconText = Res.string.profile,
-        titleText = Res.string.profile,
+    HISTORY(
+        selectedIcon = MifosIcons.History,
+        unselectedIcon = MifosIcons.HistoryBoarder,
+        iconText = Res.string.history,
+        titleText = Res.string.transaction_history,
     ),
 }
