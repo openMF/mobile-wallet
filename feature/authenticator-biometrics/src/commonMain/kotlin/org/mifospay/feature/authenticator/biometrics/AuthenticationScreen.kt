@@ -23,11 +23,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import org.koin.compose.viewmodel.koinViewModel
 import mobile_wallet.feature.authenticator_biometrics.generated.resources.Res
 import mobile_wallet.feature.authenticator_biometrics.generated.resources.feature_authenticator_biometrics_error
 import mobile_wallet.feature.authenticator_biometrics.generated.resources.feature_authenticator_biometrics_ok
 import org.jetbrains.compose.resources.stringResource
+import org.koin.compose.viewmodel.koinViewModel
 import org.mifos.authenticator.biometrics.platformAuthenticationProvider
 import org.mifos.authenticator.biometrics.platformAuthenticator.PlatformAuthenticatorStatus
 import org.mifos.authenticator.biometrics.platformAvailableAuthenticationOption

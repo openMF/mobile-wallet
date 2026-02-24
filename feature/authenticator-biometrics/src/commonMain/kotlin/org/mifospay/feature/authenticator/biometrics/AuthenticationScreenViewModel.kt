@@ -31,7 +31,7 @@ class AuthenticationScreenViewModel(
         when (action) {
             is AuthenticationScreenAction.OnClickAuthenticate -> {
                 authenticateUser(
-                    "Mifos App",
+                    "Mifos Pay",
                     action.platformAuthenticationProvider,
                 )
             }
