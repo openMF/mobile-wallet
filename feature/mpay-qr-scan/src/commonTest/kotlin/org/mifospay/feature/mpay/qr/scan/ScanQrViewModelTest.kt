@@ -10,20 +10,27 @@
 package org.mifospay.feature.mpay.qr.scan
 
 import app.cash.turbine.test
-import dev.mokkery.answering.returns
-import dev.mokkery.every
-import dev.mokkery.mock
+import io.ktor.util.encodeBase64
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
-import org.mifospay.core.data.util.QrRouteResult
+import org.mifospay.core.common.DataState
 import org.mifospay.core.data.util.QrTransferRouter
-import org.mifospay.core.model.utils.QrCodeData
-import org.mifospay.core.model.utils.QrType
+import org.mifospay.core.datastore.UserPreferencesRepository
+import org.mifospay.core.model.account.DefaultAccount
+import org.mifospay.core.model.client.Client
+import org.mifospay.core.model.client.UpdatedClient
+import org.mifospay.core.model.instance.InterbankServer
+import org.mifospay.core.model.instance.ServerInstance
+import org.mifospay.core.model.user.UserInfo
 import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test
@@ -47,12 +54,15 @@ import kotlin.test.assertTrue
 class ScanQrViewModelTest {
 
     private val testDispatcher = StandardTestDispatcher()
-    private val qrTransferRouter: QrTransferRouter = mock()
+    private lateinit var fakeUserPreferencesRepository: FakeUserPreferencesRepository
+    private lateinit var qrTransferRouter: QrTransferRouter
     private lateinit var viewModel: ScanQrViewModel
 
     @BeforeTest
     fun setUp() {
         Dispatchers.setMain(testDispatcher)
+        fakeUserPreferencesRepository = FakeUserPreferencesRepository()
+        qrTransferRouter = QrTransferRouter(fakeUserPreferencesRepository)
         viewModel = ScanQrViewModel(
             qrTransferRouter = qrTransferRouter,
         )
@@ -191,10 +201,16 @@ class ScanQrViewModelTest {
 
         viewModel.eventFlow.test {
             viewModel.onImageQrScanned(null)
-            advanceUntilIdle()
 
-            val event = awaitItem()
-            assertIs<ScanQrEvent.OnNoQrFound>(event)
+            // Keep awaiting items until we find the expected event
+            var foundEvent: ScanQrEvent? = null
+            while (foundEvent == null) {
+                val item = awaitItem()
+                if (item is ScanQrEvent.OnNoQrFound) {
+                    foundEvent = item
+                }
+            }
+            assertIs<ScanQrEvent.OnNoQrFound>(foundEvent)
         }
 
         assertFalse(viewModel.isProcessingImage.value)
@@ -207,62 +223,71 @@ class ScanQrViewModelTest {
 
     @Test
     fun givenIntraBankQr_whenOnScanned_thenNavigateToIntraBankTransfer() = runTest {
-        val qrData = QrCodeData(
-            fspId = "mifos-bank",
-            type = QrType.INTRA_BANK,
-            clientId = 123L,
-            accountId = 456L,
+        // Set up the fake repository to return matching fspId
+        fakeUserPreferencesRepository.setSelectedInstance(
+            ServerInstance(
+                endpoint = "test.com",
+                protocol = "https://",
+                path = "/api/v1",
+                platformTenantId = "mifos-bank",
+                label = "Test Bank",
+            ),
         )
 
-        every {
-            qrTransferRouter.routeQrScan(qrData)
-        } returns QrRouteResult.IntraBank(qrData)
+        // Create a proper Base64 encoded QR code
+        // Format: mpay://pay?qt=0&fsp=mifos-bank&ci=123&am=100&cn=John&an=ACC001&ai=456&cu=USD&oi=1&pi=2
+        val qrString = "mpay://pay?qt=0&fsp=mifos-bank&ci=123&am=100&cn=John&an=ACC001&ai=456&cu=USD&oi=1&pi=2"
+        val encodedQr = qrString.encodeBase64()
 
         viewModel.eventFlow.test {
-            val result = viewModel.onScanned(
-                "MPAY:mifos-bank:INTRA_BANK:123:456",
-            )
-            advanceUntilIdle()
+            val result = viewModel.onScanned(encodedQr)
 
             assertTrue(result)
-            // Skip OnScanSuccess and check for navigation event
-            skipItems(1)
-            val event = awaitItem()
-            assertIs<ScanQrEvent.OnNavigateToIntraBankTransfer>(event)
-            assertEquals(qrData, event.qrData)
+            // Find the navigation event (skip null and OnScanSuccess)
+            var foundEvent: ScanQrEvent.OnNavigateToIntraBankTransfer? = null
+            while (foundEvent == null) {
+                val item = awaitItem()
+                if (item is ScanQrEvent.OnNavigateToIntraBankTransfer) {
+                    foundEvent = item
+                }
+            }
+            assertEquals(123L, foundEvent.qrData.clientId)
+            assertEquals(456L, foundEvent.qrData.accountId)
         }
     }
 
     @Test
     fun givenInterBankQr_whenOnScanned_thenNavigateToInterBankTransfer() = runTest {
-        val qrData = QrCodeData(
-            fspId = "other-bank",
-            type = QrType.INTER_BANK,
-            accountExternalId = "ACC123",
-            recipientName = "John Doe",
+        // Set up the fake repository with different fspId
+        fakeUserPreferencesRepository.setSelectedInstance(
+            ServerInstance(
+                endpoint = "mybank.com",
+                protocol = "https://",
+                path = "/api/v1",
+                platformTenantId = "my-bank",
+                label = "My Bank",
+            ),
         )
 
-        every {
-            qrTransferRouter.routeQrScan(qrData)
-        } returns QrRouteResult.InterBank(
-            accountExternalId = "ACC123",
-            recipientName = "John Doe",
-            amount = "100",
-        )
+        // Create a proper Base64 encoded inter-bank QR code
+        // Format: mpay://pay?qt=1&fsp=other-bank&ae=ACC123&cn=John Doe&am=100&cu=USD
+        val qrString = "mpay://pay?qt=1&fsp=other-bank&ae=ACC123&cn=John Doe&am=100&cu=USD"
+        val encodedQr = qrString.encodeBase64()
 
         viewModel.eventFlow.test {
-            val result = viewModel.onScanned(
-                "MPAY:other-bank:INTER_BANK:::ACC123:John Doe",
-            )
-            advanceUntilIdle()
+            val result = viewModel.onScanned(encodedQr)
 
             assertTrue(result)
-            // Skip OnScanSuccess
-            skipItems(1)
-            val event = awaitItem()
-            assertIs<ScanQrEvent.OnNavigateToInterbankTransfer>(event)
-            assertEquals("ACC123", event.accountExternalId)
-            assertEquals("John Doe", event.recipientName)
+            // Find the navigation event (skip null and OnScanSuccess)
+            var foundEvent: ScanQrEvent.OnNavigateToInterbankTransfer? = null
+            while (foundEvent == null) {
+                val item = awaitItem()
+                if (item is ScanQrEvent.OnNavigateToInterbankTransfer) {
+                    foundEvent = item
+                }
+            }
+            assertEquals("ACC123", foundEvent.accountExternalId)
+            assertEquals("John Doe", foundEvent.recipientName)
         }
     }
 
@@ -270,14 +295,68 @@ class ScanQrViewModelTest {
     fun givenInvalidQrCode_whenOnScanned_thenShowErrorToast() = runTest {
         viewModel.eventFlow.test {
             val result = viewModel.onScanned("invalid-qr-data")
-            advanceUntilIdle()
 
             assertFalse(result)
-            val event = awaitItem()
-            assertIs<ScanQrEvent.ShowToast>(event)
-            assertEquals("Scan a Valid QR Code", event.message)
+            // Find the ShowToast event (skip null)
+            var foundEvent: ScanQrEvent.ShowToast? = null
+            while (foundEvent == null) {
+                val item = awaitItem()
+                if (item is ScanQrEvent.ShowToast) {
+                    foundEvent = item
+                }
+            }
+            assertEquals("Scan a Valid QR Code", foundEvent.message)
         }
     }
 
     // endregion
+}
+
+/**
+ * Fake implementation of [UserPreferencesRepository] for testing.
+ */
+private class FakeUserPreferencesRepository : UserPreferencesRepository {
+    private val _selectedInstance = MutableStateFlow<ServerInstance?>(null)
+
+    override val selectedInstance: StateFlow<ServerInstance?> = _selectedInstance
+
+    fun setSelectedInstance(instance: ServerInstance?) {
+        _selectedInstance.value = instance
+    }
+
+    // Minimal implementations for interface compliance
+    override val userInfo: Flow<UserInfo> = flowOf(
+        UserInfo(
+            username = "",
+            userId = 0L,
+            base64EncodedAuthenticationKey = "",
+            authenticated = false,
+            officeId = 0,
+            officeName = "",
+            roles = emptyList(),
+            permissions = emptyList(),
+            clients = emptyList(),
+            shouldRenewPassword = false,
+            isTwoFactorAuthenticationRequired = false,
+        ),
+    )
+    override val token: StateFlow<String?> = MutableStateFlow(null)
+    override val client: StateFlow<Client?> = MutableStateFlow(null)
+    override val clientId: StateFlow<Long?> = MutableStateFlow(null)
+    override val authToken: String? = null
+    override val defaultAccount: StateFlow<DefaultAccount?> = MutableStateFlow(null)
+    override val defaultAccountId: StateFlow<Long?> = MutableStateFlow(null)
+    override val selectedInterbankInstance: StateFlow<InterbankServer?> = MutableStateFlow(null)
+    override val accountExternalIds: StateFlow<Map<Long, String>> = MutableStateFlow(emptyMap())
+
+    override suspend fun updateToken(token: String): DataState<Unit> = DataState.Success(Unit)
+    override suspend fun updateUserInfo(user: UserInfo): DataState<Unit> = DataState.Success(Unit)
+    override suspend fun updateClientInfo(client: Client): DataState<Unit> = DataState.Success(Unit)
+    override suspend fun updateClientProfile(client: UpdatedClient): DataState<Unit> = DataState.Success(Unit)
+    override suspend fun updateDefaultAccount(account: DefaultAccount): DataState<Unit> = DataState.Success(Unit)
+    override suspend fun updateSelectedInstance(instance: ServerInstance): DataState<Unit> = DataState.Success(Unit)
+    override suspend fun updateSelectedInterbankInstance(instance: InterbankServer): DataState<Unit> = DataState.Success(Unit)
+    override suspend fun updateAccountExternalIds(accountExternalIds: Map<Long, String>): DataState<Unit> = DataState.Success(Unit)
+    override fun getAccountExternalId(accountId: Long): String? = null
+    override suspend fun logOut() {}
 }
