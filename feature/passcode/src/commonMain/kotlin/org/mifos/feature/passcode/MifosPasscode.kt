@@ -67,7 +67,7 @@ fun MifosPasscode(
             forgotButtonTextStyle = KptTheme.typography.labelLarge,
         ),
         switchConfig = PasscodeSwitchConfig(
-            switchTabColor = blueTint,
+            switchTabColor = KptTheme.colorScheme.primary,
             switchEnabledColor = KptTheme.colorScheme.surfaceContainerHighest,
             switchEnabledTextColor = KptTheme.colorScheme.onSurface,
             switchDisabledTextColor = KptTheme.colorScheme.surface,

@@ -9,6 +9,7 @@
  */
 package org.mifospay.feature.authenticator.biometrics
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -35,6 +36,7 @@ import org.mifos.authenticator.passcode.components.MifosIcon
 import org.mifospay.core.designsystem.component.MifosDialogBox
 import org.mifospay.core.ui.utils.EventsEffect
 import org.mifospay.feature.authenticator.biometrics.components.SystemAuthenticatorButton
+import template.core.base.designsystem.theme.KptTheme
 
 @Composable
 fun AuthenticationScreen(
@@ -75,7 +77,8 @@ fun AuthenticationContent(
     }
 
     Column(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier.fillMaxSize()
+            .background(KptTheme.colorScheme.background),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.SpaceEvenly,
     ) {
