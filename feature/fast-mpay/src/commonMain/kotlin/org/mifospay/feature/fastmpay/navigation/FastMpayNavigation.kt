@@ -14,6 +14,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
+import io.ktor.http.encodeURLPathPart
 import org.mifospay.core.data.util.MpayQrCodeProcessor
 import org.mifospay.core.model.utils.QrCodeData
 import org.mifospay.core.ui.composableWithSlideTransitions
@@ -35,8 +36,10 @@ fun NavController.navigateToFastMpay(
     navOptions: NavOptions? = null,
 ) {
     val encodedData = MpayQrCodeProcessor.encodeMpayString(qrData)
+    // URL-encode the Base64 string to handle special characters (+, /, =)
+    val urlSafeData = encodedData.encodeURLPathPart()
     navigate(
-        route = "$FAST_MPAY_ROUTE_BASE/$encodedData",
+        route = "$FAST_MPAY_ROUTE_BASE/$urlSafeData",
         navOptions = navOptions,
     )
 }

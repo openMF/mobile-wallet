@@ -94,23 +94,29 @@ class ScanQrViewModel(
     }
 
     fun onScanned(data: String): Boolean {
+        Logger.d { "========== QR SCAN START ==========" }
+        Logger.d { "QR Raw Data length: ${data.length}" }
+        Logger.d { "QR Raw Data (first 100 chars): ${data.take(100)}" }
+        Logger.d { "QR Raw Data (last 50 chars): ${data.takeLast(50)}" }
+
         return try {
-            Logger.d { "QR Raw Data: $data" }
             val qrCodeData = MpayQrCodeProcessor.decodeMpayString(data)
 
-            Logger.d { "QR Decoded - fspId: ${qrCodeData.fspId}, type: ${qrCodeData.type}, clientId: ${qrCodeData.clientId}, accountId: ${qrCodeData.accountId}" }
+            Logger.d { "QR Decoded SUCCESS - fspId: ${qrCodeData.fspId}, type: ${qrCodeData.type}, clientId: ${qrCodeData.clientId}, accountId: ${qrCodeData.accountId}" }
 
             // Use smart routing based on FSP ID comparison
             val routeResult = qrTransferRouter.routeQrScan(qrCodeData)
+            Logger.d { "QR Route result: $routeResult" }
 
             // Navigate based on routing result (don't emit OnScanSuccess before navigation
             // to avoid StateFlow conflation issues)
             when (routeResult) {
                 is QrRouteResult.IntraBank -> {
-                    Logger.d { "QR Route -> Intra-bank transfer" }
+                    Logger.d { "QR Route -> Intra-bank transfer, emitting event..." }
                     _eventFlow.update {
                         ScanQrEvent.OnNavigateToIntraBankTransfer(routeResult.qrData)
                     }
+                    Logger.d { "QR Route -> Event emitted: OnNavigateToIntraBankTransfer" }
                 }
 
                 is QrRouteResult.InterBank -> {
@@ -122,6 +128,7 @@ class ScanQrViewModel(
                             amount = routeResult.amount ?: "",
                         )
                     }
+                    Logger.d { "QR Route -> Event emitted: OnNavigateToInterbankTransfer" }
                 }
 
                 is QrRouteResult.Error -> {
@@ -132,9 +139,12 @@ class ScanQrViewModel(
                 }
             }
 
+            Logger.d { "========== QR SCAN SUCCESS ==========" }
             true
         } catch (e: Exception) {
-            Logger.e(e) { "QR decode failed, trying fallback" }
+            Logger.e(e) { "QR decode FAILED with exception: ${e.message}" }
+            Logger.e { "Exception type: ${e::class.simpleName}" }
+            Logger.e { "Stack trace: ${e.stackTraceToString().take(500)}" }
             getQrCodeResult(data)
         }
     }

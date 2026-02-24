@@ -369,12 +369,19 @@ data class MpayQrState(
                     frame = QrFrameShape.roundCorners(0.2f),
                 )
 
+            /**
+             * QR code colors optimized for maximum scannability.
+             * Uses high-contrast black on white for data pixels to ensure
+             * reliable scanning across all devices and camera types.
+             * The corner elements (ball/frame) use a branded blue color
+             * for visual appeal while maintaining scannability.
+             */
             private val colors: QrColors
                 get() = QrColors(
                     light = QrBrush.solid(Color(0xFFFFFFFF)),
-                    dark = QrBrush.solid(Color(0xFF0673BA)),
-                    ball = QrBrush.solid(Color(0xFF6e6e6e)),
-                    frame = QrBrush.solid(Color(0xFF6e6e6e)),
+                    dark = QrBrush.solid(Color(0xFF000000)),
+                    ball = QrBrush.solid(Color(0xFF0673BA)),
+                    frame = QrBrush.solid(Color(0xFF0673BA)),
                 )
 
             val options: QrOptions
