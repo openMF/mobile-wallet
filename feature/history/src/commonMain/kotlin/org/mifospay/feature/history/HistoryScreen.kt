@@ -44,11 +44,9 @@ import mobile_wallet.feature.history.generated.resources.feature_history_header_
 import mobile_wallet.feature.history.generated.resources.feature_history_header_all
 import mobile_wallet.feature.history.generated.resources.feature_history_header_credit
 import mobile_wallet.feature.history.generated.resources.feature_history_header_debit
-import mobile_wallet.feature.history.generated.resources.feature_history_title
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.mifospay.core.designsystem.component.MifosScaffold
-import org.mifospay.core.designsystem.component.MifosTopBar
 import org.mifospay.core.designsystem.icon.MifosIcons
 import org.mifospay.core.model.savingsaccount.TransactionType
 import org.mifospay.core.ui.EmptyContentScreen
@@ -63,8 +61,6 @@ fun HistoryScreen(
     viewTransferDetail: (Long) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: HistoryViewModel = koinViewModel(),
-    showTopBar: Boolean = true,
-    onBackClick: (() -> Unit)? = null,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
 
@@ -82,8 +78,6 @@ fun HistoryScreen(
         onAction = remember(viewModel) {
             { action -> viewModel.trySendAction(action) }
         },
-        showTopBar = showTopBar,
-        onBackClick = onBackClick,
     )
 }
 
@@ -92,19 +86,9 @@ internal fun HistoryScreenContent(
     state: HistoryState,
     modifier: Modifier = Modifier,
     onAction: (HistoryAction) -> Unit,
-    showTopBar: Boolean = true,
-    onBackClick: (() -> Unit)? = null,
 ) {
     MifosScaffold(
         modifier = modifier.fillMaxSize(),
-        topBar = {
-            if (showTopBar && onBackClick != null) {
-                MifosTopBar(
-                    topBarTitle = stringResource(Res.string.feature_history_title),
-                    backPress = onBackClick,
-                )
-            }
-        },
     ) { paddingValues ->
         when (state.viewState) {
             is HistoryState.ViewState.Loading -> MifosProgressIndicator()

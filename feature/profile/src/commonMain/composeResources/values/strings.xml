@@ -9,6 +9,7 @@
     See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
 -->
 <resources>
+    <string name="feature_profile">Profile</string>
     <string name="feature_profile_email">E-mail</string>
     <string name="feature_profile_vpa">VPA</string>
     <string name="feature_profile_mobile">Mobile number</string>
