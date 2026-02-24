@@ -7,6 +7,6 @@ require File.join(project_dir, 'fastlane-config', 'project_config')
 json_key_file(FastlaneConfig::ProjectConfig::ANDROID[:play_store_json_key])
 package_name(FastlaneConfig::ProjectConfig.android_package_name)
 
-# iOS configuration
+# iOS configuration  
 apple_id(FastlaneConfig::ProjectConfig::IOS[:app_identifier])
-team_id(FastlaneConfig::ProjectConfig::IOS_SHARED[:team_id])
+team_id(FastlaneConfig::ProjectConfig::IOS[:team_id])

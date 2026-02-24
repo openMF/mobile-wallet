@@ -69,7 +69,7 @@ on:
   push:
     branches: [ dev, development ]
   pull_request:
-    branches: [ dev, development ]
+    branches: [ dev, development ]  # Runs on pushes to dev branch
 
 # Concurrency settings to prevent multiple simultaneous workflow runs
 concurrency:
@@ -82,8 +82,7 @@ permissions:
 jobs:
   pr_checks:
     name: PR Checks
-    uses: openMF/mifos-x-actionhub/.github/workflows/pr-check.yaml@v1.0.10
-    secrets: inherit
+    uses: openMF/mifos-x-actionhub/.github/workflows/pr-check.yaml@v1.0.11
     with:
       android_package_name: 'cmp-android' # <-- Change Your Android Package Name
       desktop_package_name: 'cmp-desktop' # <-- Change Your Desktop Package Name

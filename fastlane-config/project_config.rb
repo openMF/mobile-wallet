@@ -73,10 +73,13 @@ module FastlaneConfig
       metadata_path: "./fastlane/metadata",
       age_rating_config_path: "./fastlane/age_rating.json",
 
+      # Primary locale — must match App Store Connect primary language
+      primary_locale: "en-US",
+
       # Version configuration (fallback only - actual version read from version.txt)
       # The versionFile gradle task generates version.txt from project.version
       # Fastlane lanes read version.txt to sync iOS version with Android
-      version_number: "1.1.0"  # Fallback if version.txt is not available
+      version_number: "1.0.0"  # Fallback if version.txt is not available
     }
 
     # ============================================================================

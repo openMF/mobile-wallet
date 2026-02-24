@@ -22,6 +22,7 @@ module FastlaneConfig
       version_number: ProjectConfig::IOS[:version_number],
       metadata_path: ProjectConfig::IOS[:metadata_path],
       app_rating_config_path: ProjectConfig::IOS[:age_rating_config_path],
+      primary_locale: ProjectConfig::IOS[:primary_locale],
 
       # Shared (from IOS_SHARED)
       team_id: ProjectConfig::IOS_SHARED[:team_id],
