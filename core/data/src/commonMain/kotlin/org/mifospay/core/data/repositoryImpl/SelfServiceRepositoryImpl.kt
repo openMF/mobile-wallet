@@ -35,6 +35,7 @@ import org.mifospay.core.data.mapper.toModelAccountType
 import org.mifospay.core.data.mapper.toTransactionList
 import org.mifospay.core.data.repository.SelfServiceRepository
 import org.mifospay.core.data.util.Constants
+import org.mifospay.core.data.util.parseMifosError
 import org.mifospay.core.model.account.Account
 import org.mifospay.core.model.account.AccountContent
 import org.mifospay.core.model.account.AccountsWithTransactions
@@ -186,7 +187,7 @@ class SelfServiceRepositoryImpl(
             .map { entity -> entity.savingsAccounts.filter { it.status.active } }
             .map { it.toAccount() }
             .flowOn(dispatcher)
-            .asDataStateFlow()
+            .asDataStateFlow(parseMifosError)
     }
 
     override fun getActiveAccountsWithAccountTransferTemplate(

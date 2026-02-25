@@ -16,7 +16,6 @@ import kotlinx.serialization.Serializable
 import mobile_wallet.feature.home.generated.resources.Res
 import mobile_wallet.feature.home.generated.resources.feature_home_account_error
 import mobile_wallet.feature.home.generated.resources.feature_home_account_success
-import mobile_wallet.feature.home.generated.resources.feature_home_no_account
 import org.jetbrains.compose.resources.StringResource
 import org.mifospay.core.common.DataState
 import org.mifospay.core.data.repository.SelfServiceRepository
@@ -55,7 +54,9 @@ class HomeViewModel(
                             mutableStateFlow.update {
                                 it.copy(
                                     isRefreshing = false,
-                                    viewState = ViewState.Error(Res.string.feature_home_no_account),
+                                    viewState = ViewState.Error(
+                                        result.message ?: "Failed to load accounts",
+                                    ),
                                 )
                             }
                         }
@@ -364,7 +365,7 @@ data class HomeState(
 sealed interface ViewState {
     data object Loading : ViewState
 
-    data class Error(val message: StringResource) : ViewState
+    data class Error(val message: String) : ViewState
 
     data object Content : ViewState
 
