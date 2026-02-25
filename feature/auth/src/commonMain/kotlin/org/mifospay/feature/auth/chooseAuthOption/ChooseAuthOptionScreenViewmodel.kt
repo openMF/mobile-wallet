@@ -21,8 +21,8 @@ import org.mifospay.core.model.client.Client
 import template.core.base.ui.BaseViewModel
 
 private const val USER_ID = "mifosUser"
-private const val USER_EMAIL = "mifos@mifos.org"
-private const val DISPLAY_NAME = "XYZ"
+private const val USER_EMAIL = "mifospay@mifos.org"
+private const val DISPLAY_NAME = "Mifos Pay User"
 
 class ChooseAuthOptionScreenViewmodel(
     private val userPreferencesRepository: UserPreferencesRepository,
