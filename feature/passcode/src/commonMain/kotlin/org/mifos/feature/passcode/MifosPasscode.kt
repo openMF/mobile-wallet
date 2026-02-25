@@ -29,6 +29,7 @@ fun MifosPasscode(
     onForgotButton: () -> Unit,
     onPasscodeConfirm: () -> Unit,
     onPasscodeCreation: () -> Unit,
+    onPasscodeRejected: () -> Unit,
 ) {
     val passcodeManager: PasscodeManager = koinInject<PasscodeManager>()
 
@@ -37,7 +38,7 @@ fun MifosPasscode(
         onForgotButton,
         onPasscodeConfirm,
         onPasscodeCreation,
-        {},
+        onPasscodeRejected,
         appearanceConfig = PasscodeAppearanceConfig(
             backgroundColor = KptTheme.colorScheme.background,
             headerTextStyle = KptTheme.typography.headlineMedium,

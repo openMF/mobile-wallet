@@ -64,7 +64,6 @@ internal fun RootNavGraph(
             onForgotButton = onClickLogout,
             onPasscodeConfirm = navHostController::navigateToMainGraph,
             onPasscodeCreation = navHostController::navigateToMainGraph,
-            onPasscodeRejected = {},
         )
 
         platformAuthenticator(
