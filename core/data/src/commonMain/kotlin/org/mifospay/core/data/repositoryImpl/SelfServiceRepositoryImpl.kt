@@ -35,6 +35,7 @@ import org.mifospay.core.data.mapper.toModelAccountType
 import org.mifospay.core.data.mapper.toTransactionList
 import org.mifospay.core.data.repository.SelfServiceRepository
 import org.mifospay.core.data.util.Constants
+import org.mifospay.core.data.util.parseMifosError
 import org.mifospay.core.model.account.Account
 import org.mifospay.core.model.account.AccountContent
 import org.mifospay.core.model.account.AccountsWithTransactions
@@ -108,7 +109,7 @@ class SelfServiceRepositoryImpl(
         return apiManager.clientsApi
             .getAccounts(clientId, Constants.SAVINGS)
             .map { it.toAccount() }
-            .asDataStateFlow().flowOn(dispatcher)
+            .asDataStateFlow(parseMifosError).flowOn(dispatcher)
     }
 
     override fun getAccountAndBeneficiaryList(clientId: Long): Flow<DataState<AccountContent>> {
@@ -153,7 +154,7 @@ class SelfServiceRepositoryImpl(
 
         return accounts.combine(transactions) { accountList, transaction ->
             AccountsWithTransactions(accountList, transaction)
-        }.asDataStateFlow()
+        }.asDataStateFlow(parseMifosError)
     }
 
     override fun getActiveAccountsWithTransactionsPerAccount(
@@ -175,7 +176,7 @@ class SelfServiceRepositoryImpl(
             combine(flows) { pairs ->
                 pairs.toMap()
             }
-        }.asDataStateFlow()
+        }.asDataStateFlow(parseMifosError)
     }
 
     override fun getActiveAccounts(
@@ -186,7 +187,7 @@ class SelfServiceRepositoryImpl(
             .map { entity -> entity.savingsAccounts.filter { it.status.active } }
             .map { it.toAccount() }
             .flowOn(dispatcher)
-            .asDataStateFlow()
+            .asDataStateFlow(parseMifosError)
     }
 
     override fun getActiveAccountsWithAccountTransferTemplate(
@@ -219,7 +220,7 @@ class SelfServiceRepositoryImpl(
                         )
                     }
                 }
-        }.asDataStateFlow()
+        }.asDataStateFlow(parseMifosError)
     }
 
     override fun getTransactions(accountId: List<Long>, limit: Int?): Flow<List<Transaction>> {
@@ -245,7 +246,7 @@ class SelfServiceRepositoryImpl(
                 }
             }
             .flowOn(dispatcher)
-            .asDataStateFlow()
+            .asDataStateFlow(parseMifosError)
     }
 
     override fun getAccountsTransactions(
@@ -264,11 +265,11 @@ class SelfServiceRepositoryImpl(
                         .filter { transactions -> transactions.isNotEmpty() }
                 }
             }
-            .asDataStateFlow()
+            .asDataStateFlow(parseMifosError)
     }
 
     override fun getBeneficiaryList(): Flow<DataState<List<Beneficiary>>> {
-        return apiManager.beneficiaryApi.beneficiaryList().asDataStateFlow().flowOn(dispatcher)
+        return apiManager.beneficiaryApi.beneficiaryList().asDataStateFlow(parseMifosError).flowOn(dispatcher)
     }
 
     override suspend fun createBeneficiary(

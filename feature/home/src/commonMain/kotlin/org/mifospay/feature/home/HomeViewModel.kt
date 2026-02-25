@@ -16,8 +16,9 @@ import kotlinx.serialization.Serializable
 import mobile_wallet.feature.home.generated.resources.Res
 import mobile_wallet.feature.home.generated.resources.feature_home_account_error
 import mobile_wallet.feature.home.generated.resources.feature_home_account_success
-import mobile_wallet.feature.home.generated.resources.feature_home_no_account
+import mobile_wallet.feature.home.generated.resources.feature_home_failed_to_load_accounts
 import org.jetbrains.compose.resources.StringResource
+import org.jetbrains.compose.resources.getString
 import org.mifospay.core.common.DataState
 import org.mifospay.core.data.repository.SelfServiceRepository
 import org.mifospay.core.datastore.UserPreferencesRepository
@@ -52,10 +53,13 @@ class HomeViewModel(
                 .collect { result ->
                     when (result) {
                         is DataState.Error -> {
+                            val errorMessage = result.exception.message
+                                ?.takeIf { it != "null" && it.isNotBlank() }
+                                ?: getString(Res.string.feature_home_failed_to_load_accounts)
                             mutableStateFlow.update {
                                 it.copy(
                                     isRefreshing = false,
-                                    viewState = ViewState.Error(Res.string.feature_home_no_account),
+                                    viewState = ViewState.Error(errorMessage),
                                 )
                             }
                         }
@@ -364,7 +368,7 @@ data class HomeState(
 sealed interface ViewState {
     data object Loading : ViewState
 
-    data class Error(val message: StringResource) : ViewState
+    data class Error(val message: String) : ViewState
 
     data object Content : ViewState
 
