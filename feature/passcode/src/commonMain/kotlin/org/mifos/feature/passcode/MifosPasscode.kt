@@ -22,14 +22,11 @@ import org.mifos.authenticator.passcode.screen.PasscodeKeyConfig
 import org.mifos.authenticator.passcode.screen.PasscodeLogoConfig
 import org.mifos.authenticator.passcode.screen.PasscodeScreen
 import org.mifos.authenticator.passcode.screen.PasscodeSwitchConfig
-import org.mifos.authenticator.passcode.screen.PasscodeToolbarConfig
-import org.mifos.authenticator.passcode.theme.blueTint
 import template.core.base.designsystem.theme.KptTheme
 
 @Composable
 fun MifosPasscode(
     onForgotButton: () -> Unit,
-    onSkipButton: () -> Unit,
     onPasscodeConfirm: () -> Unit,
     onPasscodeCreation: () -> Unit,
     onPasscodeRejected: () -> Unit,
@@ -39,7 +36,6 @@ fun MifosPasscode(
     PasscodeScreen(
         passcodeManager,
         onForgotButton,
-        onSkipButton,
         onPasscodeConfirm,
         onPasscodeCreation,
         onPasscodeRejected,
@@ -72,10 +68,6 @@ fun MifosPasscode(
             switchEnabledTextColor = KptTheme.colorScheme.onSurface,
             switchDisabledTextColor = KptTheme.colorScheme.surface,
             switchTextStyle = null,
-        ),
-        toolbarConfig = PasscodeToolbarConfig(
-            toolbarIndicatorActiveColor = KptTheme.colorScheme.primary,
-            toolbarIndicatorInactiveColor = KptTheme.colorScheme.surfaceContainerHighest,
         ),
         dialogConfig = PasscodeDialogConfig(
             dialogContainerColor = KptTheme.colorScheme.surface,

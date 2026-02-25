@@ -19,6 +19,7 @@ import kotlinx.coroutines.launch
 import org.mifos.authenticator.passcode.PasscodeAction
 import org.mifos.authenticator.passcode.PasscodeManager
 import org.mifospay.core.data.repository.ChooseAuthOptionRepository
+import org.mifospay.core.data.repository.PlatformAuthenticationDataRepository
 import org.mifospay.core.data.util.AppLockOption
 import org.mifospay.core.datastore.UserPreferencesRepository
 import org.mifospay.core.model.user.UserInfo
@@ -26,6 +27,7 @@ import org.mifospay.core.model.user.UserInfo
 class MifosPayViewModel(
     private val userDataRepository: UserPreferencesRepository,
     private val chooseAuthOptionRepository: ChooseAuthOptionRepository,
+    private val authenticationDataRepository: PlatformAuthenticationDataRepository,
     private val passcodeManager: PasscodeManager,
 ) : ViewModel() {
     val uiState: StateFlow<MainUiState> = userDataRepository.userInfo.map {
@@ -39,6 +41,8 @@ class MifosPayViewModel(
     fun logOut() {
         viewModelScope.launch {
             userDataRepository.logOut()
+            chooseAuthOptionRepository.removeAuthOption()
+            authenticationDataRepository.clearBiometricRegistrationData()
             passcodeManager.trySendAction(PasscodeAction.LogOutErasePasscode)
         }
     }

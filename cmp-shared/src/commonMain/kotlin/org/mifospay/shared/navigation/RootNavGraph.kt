@@ -62,7 +62,6 @@ internal fun RootNavGraph(
 
         mifosRootPasscodeScreen(
             onForgotButton = onClickLogout,
-            onSkipButton = navHostController::navigateToMainGraph,
             onPasscodeConfirm = navHostController::navigateToMainGraph,
             onPasscodeCreation = navHostController::navigateToMainGraph,
             onPasscodeRejected = {},
