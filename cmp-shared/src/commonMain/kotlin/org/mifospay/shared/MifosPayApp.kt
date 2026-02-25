@@ -60,8 +60,6 @@ private fun MifosPayApp(
         }
     }
 
-
-
     if (showErrorDialog.value) {
         MifosDialogBox(
             title = "Unauthorized User",
