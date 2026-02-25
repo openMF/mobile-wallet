@@ -88,10 +88,10 @@
     <string name="feature_auth_mifos_passcode_subtitle">Use your Mifos Passcode</string>
     <string name="feature_auth_continue">Continue</string>
     <string name="feature_auth_no_authentication_options_set">No authentication options set</string>
-    <string name="feature_auth_setup_authentication_options">Setup authentication options</string>
+    <string name="feature_auth_setup_authentication_options">Set Up authentication options</string>
     <string name="feature_auth_yes">Yes</string>
     <string name="feature_auth_no">No</string>
     <string name="feature_auth_error">Error</string>
-    <string name="feature_auth_ok">Ok</string>
-    <string name="feature_auth_radiobutton">Radiobutton</string>
+    <string name="feature_auth_ok">OK</string>
+    <string name="feature_auth_radiobutton">Radio Button</string>
 </resources>

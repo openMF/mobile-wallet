@@ -59,7 +59,6 @@ class ChooseAuthOptionScreenViewmodel(
             ChooseAuthOptionScreenAction.DismissDialogBox -> {
                 mutableStateFlow.update {
                     it.copy(
-                        dialogBoxType = DialogBoxType.None,
                         screenState = null,
                     )
                 }
@@ -108,27 +107,27 @@ class ChooseAuthOptionScreenViewmodel(
                 is RegistrationResult.Error -> {
                     mutableStateFlow.update {
                         it.copy(
-                            error = registrationResult.message,
+                            screenState = ChooseAuthOptionScreenUiState.ScreenState.Error(registrationResult.message),
                         )
                     }
                 }
                 RegistrationResult.PlatformAuthenticatorNotAvailable -> {
                     mutableStateFlow.update {
                         it.copy(
-                            error = "Option Not available",
+                            screenState = ChooseAuthOptionScreenUiState.ScreenState.Error("Option not available"),
                         )
                     }
                 }
                 RegistrationResult.PlatformAuthenticatorNotSet -> {
                     mutableStateFlow.update {
                         it.copy(
-                            error = "Platform authenticator not set.",
+                            screenState = ChooseAuthOptionScreenUiState.ScreenState.AuthenticatorNotSetup,
                         )
                     }
                 }
                 is RegistrationResult.Success -> {
                     mutableStateFlow.update {
-                        it.copy(error = null)
+                        it.copy(screenState = null)
                     }
                     saveAppLockOption(AppLockOption.DeviceLock)
                     saveRegistrationData(registrationResult.message)
@@ -149,9 +148,6 @@ class ChooseAuthOptionScreenViewmodel(
 
 data class ChooseAuthOptionScreenUiState(
     val registrationResult: RegistrationResult? = null,
-    val dialogBoxType: DialogBoxType = DialogBoxType.None,
-    val dialogBoxMessage: String = "",
-    val error: String? = null,
     val screenState: ScreenState? = null,
     val selectedAuthOption: AppLockOption = AppLockOption.None,
     val client: Client? = null,
@@ -174,11 +170,4 @@ sealed interface ChooseAuthOptionScreenAction {
     data object OnSelectPasscode : ChooseAuthOptionScreenAction
     data object NavigateToPasscode : ChooseAuthOptionScreenAction
     data object DismissDialogBox : ChooseAuthOptionScreenAction
-}
-
-enum class DialogBoxType {
-    ERROR,
-    NOT_SET,
-    NOT_AVAILABLE,
-    None,
 }

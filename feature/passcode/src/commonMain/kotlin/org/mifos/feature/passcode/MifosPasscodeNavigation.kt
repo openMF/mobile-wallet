@@ -27,21 +27,18 @@ fun NavGraphBuilder.mifosRootPasscodeScreen(
     onForgotButton: () -> Unit,
     onPasscodeConfirm: () -> Unit,
     onPasscodeCreation: () -> Unit,
-    onPasscodeRejected: () -> Unit,
 ) {
     composable(route = ROOT_MIFOS_PASSCODE_ROUTE) {
         MifosPasscode(
             onForgotButton,
             onPasscodeConfirm,
             onPasscodeCreation,
-            onPasscodeRejected,
         )
     }
 }
 fun NavGraphBuilder.internalPasscodeVerificationScreen(
     onForgotButton: () -> Unit,
     onPasscodeConfirm: () -> Unit,
-    onPasscodeRejected: () -> Unit,
     onPasscodeCreation: () -> Unit = {},
 ) {
     composable(route = INTERNAL_MIFOS_PASSCODE_ROUTE) {
@@ -49,7 +46,6 @@ fun NavGraphBuilder.internalPasscodeVerificationScreen(
             onForgotButton,
             onPasscodeConfirm,
             onPasscodeCreation = onPasscodeCreation,
-            onPasscodeRejected,
         )
     }
 }

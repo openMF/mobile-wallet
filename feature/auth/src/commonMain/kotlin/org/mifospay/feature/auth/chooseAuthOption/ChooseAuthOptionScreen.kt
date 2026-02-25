@@ -179,11 +179,11 @@ fun ChooseAuthScreenDialogBox(
             MifosDialogBox(
                 title = stringResource(Res.string.feature_auth_error),
                 showDialogState = true,
-                confirmButtonText = "",
-                dismissButtonText = stringResource(Res.string.feature_auth_ok),
+                confirmButtonText = stringResource(Res.string.feature_auth_ok),
+                dismissButtonText = null,
                 message = screenState.message,
                 onConfirm = {
-                    onAction(ChooseAuthOptionScreenAction.SetupPlatformAuthenticator(platformAuthenticationProvider))
+                    onAction(ChooseAuthOptionScreenAction.DismissDialogBox)
                 },
                 onDismiss = {
                     onAction(ChooseAuthOptionScreenAction.DismissDialogBox)

@@ -70,7 +70,7 @@ fun AuthenticationContent(
     val platformAuthenticationProvider = platformAuthenticationProvider.current
     val authenticatorStatus by platformAuthenticationProvider.authenticatorStatus.collectAsStateWithLifecycle()
 
-    LaunchedEffect(Unit) {
+    LaunchedEffect(authenticatorStatus) {
         if (authenticatorStatus.contains(PlatformAuthenticatorStatus.NOT_SETUP)) {
             onAction(AuthenticationScreenAction.AuthenticatorStatusNotSetup)
         }
@@ -89,11 +89,6 @@ fun AuthenticationContent(
             onAction,
         )
 
-//        LaunchedEffect(Unit) {
-//            if(authenticatorStatus.contains(PlatformAuthenticatorStatus.BIOMETRICS_SET)){
-//                onAction(AuthenticationScreenAction.OnClickAuthenticate(platformAuthenticationProvider))
-//            }
-//        }
         Spacer(Modifier.height(100.dp))
 
         SystemAuthenticatorButton(
@@ -116,8 +111,8 @@ fun AuthenticationScreenDialogBox(
             MifosDialogBox(
                 title = stringResource(Res.string.feature_authenticator_biometrics_error),
                 showDialogState = true,
-                confirmButtonText = "",
-                dismissButtonText = stringResource(Res.string.feature_authenticator_biometrics_ok),
+                confirmButtonText = stringResource(Res.string.feature_authenticator_biometrics_ok),
+                dismissButtonText = null,
                 onConfirm = {
                     onAction(AuthenticationScreenAction.OnDismissDialog)
                 },
@@ -131,8 +126,8 @@ fun AuthenticationScreenDialogBox(
             MifosDialogBox(
                 title = stringResource(Res.string.feature_authenticator_biometrics_error),
                 showDialogState = true,
-                confirmButtonText = "",
-                dismissButtonText = stringResource(Res.string.feature_authenticator_biometrics_ok),
+                confirmButtonText = stringResource(Res.string.feature_authenticator_biometrics_ok),
+                dismissButtonText = "",
                 onConfirm = {
                     onAction(AuthenticationScreenAction.OkayOnUserNotRegisteredError)
                 },

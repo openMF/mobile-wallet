@@ -26,10 +26,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import mobile_wallet.feature.authenticator_biometrics.generated.resources.Res
-import mobile_wallet.feature.authenticator_biometrics.generated.resources.eye_scanner
 import mobile_wallet.feature.authenticator_biometrics.generated.resources.face_scan
 import mobile_wallet.feature.authenticator_biometrics.generated.resources.feature_authenticator_biometrics_authenticate_windows_hello
 import mobile_wallet.feature.authenticator_biometrics.generated.resources.feature_authenticator_biometrics_fingerprint_icon
+import mobile_wallet.feature.authenticator_biometrics.generated.resources.feature_authenticator_biometrics_keypad_icon
+import mobile_wallet.feature.authenticator_biometrics.generated.resources.feature_authenticator_biometrics_facescan_icon
 import mobile_wallet.feature.authenticator_biometrics.generated.resources.feature_authenticator_biometrics_set_up_authentication_option
 import mobile_wallet.feature.authenticator_biometrics.generated.resources.feature_authenticator_biometrics_unsupported_platform
 import mobile_wallet.feature.authenticator_biometrics.generated.resources.feature_authenticator_biometrics_use_biometrics
@@ -78,21 +79,14 @@ fun SystemAuthenticatorButton(
                     } else if (platformAuthOptions.contains(PlatformAuthOptions.FaceId)) {
                         Image(
                             painter = painterResource(Res.drawable.face_scan),
-                            contentDescription = stringResource(Res.string.feature_authenticator_biometrics_fingerprint_icon),
-                            modifier = Modifier.size(50.dp)
-                                .clickable { onClick() },
-                        )
-                    } else if (platformAuthOptions.contains(PlatformAuthOptions.Iris)) {
-                        Image(
-                            painter = painterResource(Res.drawable.eye_scanner),
-                            contentDescription = stringResource(Res.string.feature_authenticator_biometrics_fingerprint_icon),
+                            contentDescription = stringResource(Res.string.feature_authenticator_biometrics_facescan_icon),
                             modifier = Modifier.size(50.dp)
                                 .clickable { onClick() },
                         )
                     } else if (platformAuthOptions.contains(PlatformAuthOptions.UserCredential)) {
                         Image(
                             painter = painterResource(Res.drawable.keypad),
-                            contentDescription = stringResource(Res.string.feature_authenticator_biometrics_fingerprint_icon),
+                            contentDescription = stringResource(Res.string.feature_authenticator_biometrics_keypad_icon),
                             modifier = Modifier.size(50.dp)
                                 .clickable { onClick() },
                         )
@@ -100,7 +94,7 @@ fun SystemAuthenticatorButton(
                 } else if (authenticatorStatus.contains(PlatformAuthenticatorStatus.DEVICE_CREDENTIAL_SET)) {
                     Image(
                         painter = painterResource(Res.drawable.keypad),
-                        contentDescription = stringResource(Res.string.feature_authenticator_biometrics_fingerprint_icon),
+                        contentDescription = stringResource(Res.string.feature_authenticator_biometrics_keypad_icon),
                         modifier = Modifier.size(50.dp)
                             .clickable { onClick() },
                     )
@@ -112,14 +106,14 @@ fun SystemAuthenticatorButton(
                 if (authenticatorStatus.contains(PlatformAuthenticatorStatus.BIOMETRICS_SET)) {
                     Image(
                         painter = painterResource(Res.drawable.face_scan),
-                        contentDescription = stringResource(Res.string.feature_authenticator_biometrics_fingerprint_icon),
+                        contentDescription = stringResource(Res.string.feature_authenticator_biometrics_facescan_icon),
                         modifier = Modifier.size(40.dp)
                             .clickable { onClick() },
                     )
                 } else if (authenticatorStatus.contains(PlatformAuthenticatorStatus.DEVICE_CREDENTIAL_SET)) {
                     Image(
                         painter = painterResource(Res.drawable.keypad),
-                        contentDescription = stringResource(Res.string.feature_authenticator_biometrics_fingerprint_icon),
+                        contentDescription = stringResource(Res.string.feature_authenticator_biometrics_keypad_icon),
                         modifier = Modifier.size(40.dp)
                             .clickable { onClick() },
                     )

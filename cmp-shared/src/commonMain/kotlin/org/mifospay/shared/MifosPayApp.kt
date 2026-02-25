@@ -60,6 +60,8 @@ private fun MifosPayApp(
         }
     }
 
+
+
     if (showErrorDialog.value) {
         MifosDialogBox(
             title = "Unauthorized User",
@@ -80,17 +82,46 @@ private fun MifosPayApp(
         )
     }
 
+//    val navDestination = when (uiState) {
+//        is MainUiState.Loading -> LOGIN_GRAPH
+//        is Success -> if ((uiState as Success).userData.authenticated) {
+//            val authOption = viewModel.getAuthOption()
+//            when (authOption) {
+//                AppLockOption.MifosPasscode -> ROOT_MIFOS_PASSCODE_ROUTE
+//                AppLockOption.DeviceLock -> PLATFORM_AUTHENTICATOR_ROUTE
+//                AppLockOption.None -> {
+//                    viewModel.logOut()
+//                    LOGIN_GRAPH
+//                }
+//            }
+//        } else {
+//            LOGIN_GRAPH
+//        }
+//    }
+    val authOption = remember(uiState) {
+        if (uiState is Success && (uiState as Success).userData.authenticated) {
+            viewModel.getAuthOption()
+        } else {
+            null
+        }
+    }
+
+    LaunchedEffect(authOption) {
+        if (authOption == AppLockOption.None) {
+            viewModel.logOut()
+            navController.navigate(LOGIN_GRAPH) {
+                popUpTo(navController.graph.id) { inclusive = true }
+            }
+        }
+    }
+
     val navDestination = when (uiState) {
         is MainUiState.Loading -> LOGIN_GRAPH
         is Success -> if ((uiState as Success).userData.authenticated) {
-            val authOption = viewModel.getAuthOption()
             when (authOption) {
                 AppLockOption.MifosPasscode -> ROOT_MIFOS_PASSCODE_ROUTE
                 AppLockOption.DeviceLock -> PLATFORM_AUTHENTICATOR_ROUTE
-                AppLockOption.None -> {
-                    viewModel.logOut()
-                    LOGIN_GRAPH
-                }
+                else -> LOGIN_GRAPH
             }
         } else {
             LOGIN_GRAPH
