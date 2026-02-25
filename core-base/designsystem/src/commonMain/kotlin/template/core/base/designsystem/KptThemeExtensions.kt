@@ -351,6 +351,9 @@ fun ColorScheme.toKptColorScheme(): KptColorScheme = KptColorSchemeImpl(
     surfaceContainerHighest = this.surfaceContainerHighest,
     surfaceContainerLow = this.surfaceContainerLow,
     surfaceContainerLowest = this.surfaceContainerLowest,
+    // Always use fixed colors for QR code scannability
+    qrBackground = Color(0xFFFFFFFF),
+    qrForeground = Color(0xFF000000),
 )
 
 /**

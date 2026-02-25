@@ -10,7 +10,6 @@
 package org.mifospay.feature.mpay.qr
 
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import co.touchlab.kermit.Logger
@@ -27,7 +26,6 @@ import io.github.alexzhirkevich.qrose.options.QrOptions
 import io.github.alexzhirkevich.qrose.options.QrPixelShape
 import io.github.alexzhirkevich.qrose.options.QrShapes
 import io.github.alexzhirkevich.qrose.options.circle
-import io.github.alexzhirkevich.qrose.options.roundCorners
 import io.github.alexzhirkevich.qrose.options.solid
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.SharingStarted
@@ -55,6 +53,7 @@ import org.mifospay.core.ui.utils.BaseViewModel
 import org.mifospay.core.ui.utils.MimeType
 import org.mifospay.core.ui.utils.ShareFileModel
 import org.mifospay.core.ui.utils.ShareUtils
+import template.core.base.designsystem.theme.KptTheme
 
 class MpayQrViewModel(
     localRepository: LocalAssetRepository,
@@ -363,25 +362,24 @@ data class MpayQrState(
             private val shapes: QrShapes
                 get() = QrShapes(
                     code = QrCodeShape.Default,
-                    lightPixel = QrPixelShape.circle(),
-                    darkPixel = QrPixelShape.circle(),
-                    ball = QrBallShape.roundCorners(0.2f),
-                    frame = QrFrameShape.roundCorners(0.2f),
+                    lightPixel = QrPixelShape.Default,
+                    darkPixel = QrPixelShape.Default,
+                    ball = QrBallShape.Default,
+                    frame = QrFrameShape.Default,
                 )
 
             /**
              * QR code colors optimized for maximum scannability.
-             * Uses high-contrast black on white for data pixels to ensure
-             * reliable scanning across all devices and camera types.
-             * The corner elements (ball/frame) use a branded blue color
-             * for visual appeal while maintaining scannability.
+             * Uses pure black on white for all elements to ensure
+             * fastest and most reliable scanning across all devices.
              */
             private val colors: QrColors
+                @Composable
                 get() = QrColors(
-                    light = QrBrush.solid(Color(0xFFFFFFFF)),
-                    dark = QrBrush.solid(Color(0xFF000000)),
-                    ball = QrBrush.solid(Color(0xFF0673BA)),
-                    frame = QrBrush.solid(Color(0xFF0673BA)),
+                    light = QrBrush.solid(KptTheme.colorScheme.qrBackground),
+                    dark = QrBrush.solid(KptTheme.colorScheme.qrForeground),
+                    ball = QrBrush.solid(KptTheme.colorScheme.qrForeground),
+                    frame = QrBrush.solid(KptTheme.colorScheme.qrForeground),
                 )
 
             val options: QrOptions

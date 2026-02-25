@@ -28,7 +28,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import io.github.alexzhirkevich.qrose.options.QrOptions
@@ -95,12 +94,12 @@ internal fun QrCodeCard(
         ) {
             QrTypeBadge(qrType = qrType)
 
-            // QR code with explicit white background for scannability in dark mode
+            // QR code with explicit light background for scannability in dark mode
             // Standard QR codes require dark data on light background for reliable scanning
             Box(
                 modifier = Modifier
                     .clip(RoundedCornerShape(KptTheme.spacing.md))
-                    .background(Color.White)
+                    .background(KptTheme.colorScheme.qrBackground)
                     .padding(KptTheme.spacing.md),
                 contentAlignment = Alignment.Center,
             ) {
@@ -161,13 +160,13 @@ private fun QrTypeBadge(
 private fun MifosLogoOverlay(
     modifier: Modifier = Modifier,
 ) {
-    // Use explicit white background for logo to match QR code background
+    // Use QR background color for logo to match QR code background
     // This ensures consistent appearance in both light and dark modes
     Box(
         modifier = modifier
             .size(LogoOverlaySize)
             .clip(CircleShape)
-            .background(Color.White)
+            .background(KptTheme.colorScheme.qrBackground)
             .border(
                 width = KptTheme.spacing.xs / 2,
                 color = KptTheme.colorScheme.primary,

@@ -9,9 +9,7 @@
  */
 package org.mifospay.feature.transfer.interbank
 
-import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.todayIn
 import kotlinx.serialization.Serializable
@@ -50,7 +48,7 @@ class InterbankTransferViewModel(
 ) {
 
     init {
-        viewModelScope.launch {
+        launchIO {
             loadFromAccounts()
         }
     }
@@ -227,13 +225,13 @@ class InterbankTransferViewModel(
             return
         }
 
-        viewModelScope.launch {
+        launchIO {
             mutableStateFlow.update {
                 it.copy(isProcessing = true)
             }
 
             // Build InterBank transfer request from participantInfo and selected account
-            val participantInfo = state.selectedParticipantInfo ?: return@launch
+            val participantInfo = state.selectedParticipantInfo ?: return@launchIO
             val transferRequest = InterBankTransferRequest(
                 homeTransactionId = Uuid.random().toString(),
                 from = Party(
@@ -292,7 +290,7 @@ class InterbankTransferViewModel(
             return
         }
 
-        viewModelScope.launch {
+        launchIO {
             mutableStateFlow.update {
                 it.copy(searchRecipientState = InterbankTransferState.SearchRecipientState.Loading)
             }
