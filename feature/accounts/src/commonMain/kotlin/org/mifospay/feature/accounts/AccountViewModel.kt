@@ -17,7 +17,6 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import mobile_wallet.feature.accounts.generated.resources.Res
@@ -106,7 +105,7 @@ class AccountViewModel(
             }
 
             is AccountAction.EditBeneficiary -> {
-                viewModelScope.launch {
+                launchIO {
                     val beneficiary = json.encodeToString<Beneficiary>(action.beneficiary)
                     sendEvent(
                         AccountEvent.OnAddOrEditTPTBeneficiary(
@@ -145,7 +144,7 @@ class AccountViewModel(
     }
 
     private fun handleSetDefaultAccount(action: AccountAction.SetDefaultAccount) {
-        viewModelScope.launch {
+        launchIO {
             userRepository.updateDefaultAccount(
                 DefaultAccount(
                     accountId = action.accountId,
@@ -161,7 +160,7 @@ class AccountViewModel(
     private fun handleDeleteBeneficiary(action: DeleteBeneficiary) {
         mutableStateFlow.update { it.copy(dialogState = AccountState.DialogState.Loading) }
 
-        viewModelScope.launch {
+        launchIO {
             val result = repository.deleteBeneficiary(action.beneficiaryId)
 
             sendAction(BeneficiaryDeleteResultReceived(result))

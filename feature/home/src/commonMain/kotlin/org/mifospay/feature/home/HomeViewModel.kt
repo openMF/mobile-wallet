@@ -9,11 +9,9 @@
  */
 package org.mifospay.feature.home
 
-import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 import mobile_wallet.feature.home.generated.resources.Res
 import mobile_wallet.feature.home.generated.resources.feature_home_account_error
@@ -49,7 +47,7 @@ class HomeViewModel(
 ) {
 
     fun getAccounts() {
-        viewModelScope.launch {
+        launchIO {
             repository.getActiveAccounts(state.client.id)
                 .collect { result ->
                     when (result) {
@@ -128,7 +126,7 @@ class HomeViewModel(
             loadTransactionsJob?.cancel()
 
             // launch a new job
-            loadTransactionsJob = viewModelScope.launch {
+            loadTransactionsJob = launchIO {
                 repository.getTransactions(
                     account.id,
                     TRANSACTION_LIMIT,
@@ -215,7 +213,7 @@ class HomeViewModel(
             }
 
             is HomeAction.MarkAsDefault -> {
-                viewModelScope.launch {
+                launchIO {
                     val result = preferencesRepository.updateDefaultAccount(
                         DefaultAccount(
                             accountId = action.accountId,

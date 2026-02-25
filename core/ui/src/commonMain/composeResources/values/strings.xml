@@ -72,4 +72,20 @@
     <string name="core_ui_error_msg_gateway_timeout">The server took too long to respond. Please try again.</string>
     <string name="core_ui_error_msg_generic">An error occurred. Please try again.</string>
     <string name="core_ui_error_msg_network">Please check your internet connection and try again.</string>
+
+    <!-- Bank Mismatch Info -->
+    <string name="core_ui_different_bank_title">Different Bank Account</string>
+    <string name="core_ui_different_bank_message">This QR code belongs to an account at a different bank. Intra-bank transfers only work for accounts within the same bank.\n\nTo send money to this account, you can use the inter-bank transfer option if your bank supports it.</string>
+    <string name="core_ui_try_interbank">Try Inter-bank Transfer</string>
+    <string name="core_ui_cancel">Cancel</string>
+
+    <!-- Missing External ID Info -->
+    <string name="core_ui_interbank_unavailable_title">Inter-bank Transfer Unavailable</string>
+    <string name="core_ui_interbank_unavailable_message">Inter-bank transfer is not available for this account. The recipient\'s account external ID is missing.\n\nPlease ask the recipient to connect their phone number to their account to enable inter-bank transfers.</string>
+    <string name="core_ui_understood">Understood</string>
+
+    <!-- QR Amount Confirmation -->
+    <string name="core_ui_confirm_qr_amount_title">Confirm Payment Amount</string>
+    <string name="core_ui_confirm_qr_amount_message">This QR code contains a pre-filled amount of %1$s %2$s.\n\nPlease verify this is the correct amount before proceeding with the payment.</string>
+    <string name="core_ui_proceed_payment">Proceed with Payment</string>
 </resources>

@@ -15,6 +15,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import platform.AVFoundation.AVAuthorizationStatusAuthorized
+import platform.AVFoundation.AVAuthorizationStatusNotDetermined
 import platform.AVFoundation.AVCaptureDevice
 import platform.AVFoundation.AVMediaTypeVideo
 import platform.AVFoundation.authorizationStatusForMediaType
@@ -60,9 +61,9 @@ class IosMutableCameraPermissionState : MutableCameraPermissionState() {
  */
 fun getCameraPermissionStatus(): CameraPermissionStatus {
     val authorizationStatus = AVCaptureDevice.authorizationStatusForMediaType(AVMediaTypeVideo)
-    return if (authorizationStatus == AVAuthorizationStatusAuthorized) {
-        CameraPermissionStatus.Granted
-    } else {
-        CameraPermissionStatus.Denied
+    return when (authorizationStatus) {
+        AVAuthorizationStatusAuthorized -> CameraPermissionStatus.Granted
+        AVAuthorizationStatusNotDetermined -> CameraPermissionStatus.Unknown
+        else -> CameraPermissionStatus.Denied
     }
 }

@@ -23,6 +23,17 @@ import io.github.vinceglb.filekit.readBytes
 import kotlinx.coroutines.launch
 import org.mifospay.feature.mpay.qr.scan.components.QrImportScreen
 
+/**
+ * Scan mode for web platform.
+ */
+private enum class WebScanMode {
+    /** Using live camera (mobile browsers) */
+    CAMERA,
+
+    /** Using file picker (desktop browsers or fallback) */
+    FILE_PICKER,
+}
+
 @Composable
 actual fun QrCodeScanner(
     types: List<CodeType>,
@@ -31,6 +42,18 @@ actual fun QrCodeScanner(
     onTorchAvailabilityChanged: (Boolean) -> Unit,
     onScanned: (String) -> Boolean,
 ) {
+    val platformType = remember { WebPlatformDetection.detectPlatformType() }
+    var scanMode by remember {
+        mutableStateOf(
+            when (platformType) {
+                WebPlatformType.MOBILE_WITH_CAMERA -> WebScanMode.CAMERA
+                WebPlatformType.DESKTOP_WITH_CAMERA,
+                WebPlatformType.NO_CAMERA,
+                -> WebScanMode.FILE_PICKER
+            },
+        )
+    }
+
     var isProcessing by remember { mutableStateOf(false) }
     var imagePreviewBytes by remember { mutableStateOf<ByteArray?>(null) }
     val scope = rememberCoroutineScope()
@@ -54,13 +77,29 @@ actual fun QrCodeScanner(
     }
 
     LaunchedEffect(Unit) {
+        // Torch is not available on web
         onTorchAvailabilityChanged(false)
     }
 
-    QrImportScreen(
-        isProcessing = isProcessing,
-        onSelectImage = { imagePicker.launch() },
-        modifier = modifier,
-        imagePreviewBytes = imagePreviewBytes,
-    )
+    when (scanMode) {
+        WebScanMode.CAMERA -> {
+            WebCameraScanner(
+                onScanned = onScanned,
+                onFallbackToFilePicker = {
+                    scanMode = WebScanMode.FILE_PICKER
+                    imagePicker.launch()
+                },
+                modifier = modifier,
+            )
+        }
+
+        WebScanMode.FILE_PICKER -> {
+            QrImportScreen(
+                isProcessing = isProcessing,
+                onSelectImage = { imagePicker.launch() },
+                modifier = modifier,
+                imagePreviewBytes = imagePreviewBytes,
+            )
+        }
+    }
 }

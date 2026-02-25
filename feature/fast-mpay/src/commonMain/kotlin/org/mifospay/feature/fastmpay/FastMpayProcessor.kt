@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.serialization.json.Json
 import org.mifospay.core.common.DataState
 import org.mifospay.core.data.repository.BeneficiaryRepository
+import org.mifospay.core.datastore.UserPreferencesRepository
 import org.mifospay.core.model.beneficiary.Beneficiary
 import org.mifospay.core.model.utils.QrCodeData
 import org.mifospay.core.model.utils.QrCodeType
@@ -25,9 +26,11 @@ import org.mifospay.feature.fastmpay.model.QrProcessResult
  * based on [QrCodeData.type].
  *
  * @param beneficiaryRepository Repository for checking existing beneficiaries
+ * @param userPreferencesRepository Repository for user preferences including current FSP
  */
 class FastMpayProcessor(
     private val beneficiaryRepository: BeneficiaryRepository,
+    private val userPreferencesRepository: UserPreferencesRepository,
 ) {
 
     /**
@@ -75,11 +78,27 @@ class FastMpayProcessor(
     /**
      * Process Intra-bank QR code.
      *
-     * Checks if beneficiary already exists by matching accountNumber.
+     * First checks if the QR code belongs to the same bank (FSP).
+     * If different bank, returns BankMismatch result.
+     * If same bank, checks if beneficiary already exists by matching accountNumber.
      * If found, navigates to MakeTransfer with the existing beneficiary.
      * If not found, navigates to AddBeneficiary with pre-filled data.
      */
     private suspend fun processIntraBankQr(qrData: QrCodeData): QrProcessResult {
+        // Check for bank mismatch first
+        val currentFspId = userPreferencesRepository.selectedInstance.value?.platformTenantId
+        val qrFspId = qrData.fspId
+
+        if (qrFspId != null && currentFspId != null &&
+            !qrFspId.equals(currentFspId, ignoreCase = true)
+        ) {
+            return QrProcessResult.BankMismatch(
+                qrData = qrData,
+                currentBankId = currentFspId,
+                qrBankId = qrFspId,
+            )
+        }
+
         return try {
             val beneficiaryResult = beneficiaryRepository.getBeneficiaryList().first()
 
