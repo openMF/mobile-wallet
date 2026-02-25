@@ -13,7 +13,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.IO
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.SendChannel
@@ -103,14 +102,16 @@ abstract class BaseViewModel<S, E, A>(
     }
 
     /**
-     * Launches a coroutine on [Dispatchers.IO] for network or database operations.
+     * Launches a coroutine on [Dispatchers.Default] for network or database operations.
      * Use this instead of `viewModelScope.launch` for any I/O-bound work to avoid
      * blocking the main thread and causing UI freezes.
      *
-     * @param block The suspending block to execute on the IO dispatcher.
+     * Note: Uses Default dispatcher for multiplatform compatibility (IO is not available on JS).
+     *
+     * @param block The suspending block to execute on the background dispatcher.
      * @return The [Job] representing the coroutine.
      */
     protected fun launchIO(block: suspend CoroutineScope.() -> Unit): Job {
-        return viewModelScope.launch(Dispatchers.IO, block = block)
+        return viewModelScope.launch(Dispatchers.Default, block = block)
     }
 }

@@ -13,7 +13,6 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.IO
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -46,7 +45,7 @@ class FastMpayViewModel(
     init {
         val encodedQrData = savedStateHandle.get<String>(QR_DATA_ARG)
 
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(Dispatchers.Default) {
             if (encodedQrData == null) {
                 _errorFlow.update { "QR data is missing" }
                 _isLoading.update { false }
