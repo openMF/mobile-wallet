@@ -81,4 +81,22 @@ sealed interface QrProcessResult {
      */
     @Serializable
     data class Error(val message: String) : QrProcessResult
+
+    /**
+     * Bank mismatch detected - QR belongs to a different bank.
+     *
+     * Used when scanning an INTRA_BANK QR code that belongs to a different
+     * financial service provider (bank). The user should be informed and
+     * offered the option to try inter-bank transfer instead.
+     *
+     * @param qrData The original QR code data
+     * @param currentBankId The user's current bank/FSP ID
+     * @param qrBankId The bank/FSP ID from the QR code
+     */
+    @Serializable
+    data class BankMismatch(
+        val qrData: QrCodeData,
+        val currentBankId: String,
+        val qrBankId: String,
+    ) : QrProcessResult
 }

@@ -11,6 +11,11 @@ package org.mifospay.feature.mpay.qr.scan
 
 import androidx.compose.runtime.Composable
 
+/**
+ * WasmJS implementation of camera permission state.
+ *
+ * Returns Granted status since we use file picker on WasmJS.
+ */
 @Composable
 actual fun rememberCameraPermissionState(): CameraPermissionState {
     return object : CameraPermissionState {
@@ -18,11 +23,11 @@ actual fun rememberCameraPermissionState(): CameraPermissionState {
             get() = CameraPermissionStatus.Granted
 
         override fun requestCameraPermission() {
-            println("Camera permission requested isn't supported on web yet.")
+            // Not supported on WasmJS - using file picker instead
         }
 
         override fun goToSettings() {
-            println("Go to settings isn't supported on web yet.")
+            // Not supported on WasmJS
         }
     }
 }

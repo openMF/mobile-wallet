@@ -112,8 +112,28 @@ object MpayQrCodeProcessor {
      * @throws IllegalArgumentException for invalid encoded string
      */
     fun decodeMpayString(encodedString: String): QrCodeData {
+        Logger.d { "QR Decode START - raw input length: ${encodedString.length}" }
+        Logger.d { "QR Decode - raw input (first 80): ${encodedString.take(80)}" }
+
+        // Normalize the input: trim whitespace and handle platform differences
+        // Some QR scanners may add whitespace or newlines
+        val normalizedInput = encodedString.trim()
+            .replace("\n", "")
+            .replace("\r", "")
+            .replace(" ", "")
+
+        Logger.d { "QR Decode - normalized length: ${normalizedInput.length}" }
+        Logger.d { "QR Decode - normalized (first 80): ${normalizedInput.take(80)}" }
+
         // Decode the Base64 string
-        val decodedString = encodedString.decodeBase64String()
+        val decodedString = try {
+            normalizedInput.decodeBase64String()
+        } catch (e: Exception) {
+            Logger.e { "QR Decode - Base64 decode FAILED: ${e.message}" }
+            Logger.e { "QR Decode - Attempting without normalization..." }
+            // Try original input as fallback
+            encodedString.trim().decodeBase64String()
+        }
         Logger.d { "QR Decode - decodedString: $decodedString" }
 
         // Parse based on protocol (support both mpay:// and upi:// for backwards compat)

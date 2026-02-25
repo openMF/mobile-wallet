@@ -9,6 +9,9 @@
  */
 package org.mifospay.feature.transfer.interbank.screens
 
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -25,12 +28,15 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -107,13 +113,31 @@ fun TransferSuccessScreen(
             verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.lg),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            // Success Icon
+            // Success Icon with Animation
             item {
+                var animationPlayed by remember { mutableStateOf(false) }
+
+                LaunchedEffect(Unit) {
+                    animationPlayed = true
+                }
+
+                val scale by animateFloatAsState(
+                    targetValue = if (animationPlayed) 1f else 0f,
+                    animationSpec = spring(
+                        dampingRatio = Spring.DampingRatioMediumBouncy,
+                        stiffness = Spring.StiffnessLow,
+                    ),
+                    label = "successIconScale",
+                )
+
+                val successGreen = Color(0xFF4CAF50)
+
                 Box(
                     modifier = Modifier
                         .size(100.dp)
+                        .scale(scale)
                         .background(
-                            color = KptTheme.colorScheme.primary.copy(alpha = 0.1f),
+                            color = successGreen.copy(alpha = 0.1f),
                             shape = KptTheme.shapes.large,
                         ),
                     contentAlignment = Alignment.Center,
@@ -122,7 +146,7 @@ fun TransferSuccessScreen(
                         imageVector = MifosIcons.Check,
                         contentDescription = stringResource(Res.string.feature_send_interbank_success),
                         modifier = Modifier.size(56.dp),
-                        tint = KptTheme.colorScheme.primary,
+                        tint = successGreen,
                     )
                 }
             }

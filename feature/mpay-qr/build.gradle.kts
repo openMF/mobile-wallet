@@ -26,6 +26,10 @@ kotlin {
             implementation(libs.coil.kt.compose)
             implementation(libs.qrose)
         }
+
+        commonTest.dependencies {
+            implementation(libs.turbine)
+        }
     }
 }
 

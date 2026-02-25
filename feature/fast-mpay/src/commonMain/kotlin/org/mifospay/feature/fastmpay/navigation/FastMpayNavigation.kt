@@ -14,6 +14,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
+import io.ktor.http.encodeURLPathPart
 import org.mifospay.core.data.util.MpayQrCodeProcessor
 import org.mifospay.core.model.utils.QrCodeData
 import org.mifospay.core.ui.composableWithSlideTransitions
@@ -35,8 +36,10 @@ fun NavController.navigateToFastMpay(
     navOptions: NavOptions? = null,
 ) {
     val encodedData = MpayQrCodeProcessor.encodeMpayString(qrData)
+    // URL-encode the Base64 string to handle special characters (+, /, =)
+    val urlSafeData = encodedData.encodeURLPathPart()
     navigate(
-        route = "$FAST_MPAY_ROUTE_BASE/$encodedData",
+        route = "$FAST_MPAY_ROUTE_BASE/$urlSafeData",
         navOptions = navOptions,
     )
 }
@@ -49,6 +52,7 @@ fun NavController.navigateToFastMpay(
  * @param onNavigateToInterbankTransfer Callback for INTER_BANK type (accountExternalId, recipientName, amount)
  * @param onNavigateToIntraBankTransfer Callback for future intra-bank direct transfer
  * @param onNavigateToMerchantPayment Callback for MERCHANT type
+ * @param onNavigateBack Callback to navigate back (for cancel action on bank mismatch)
  * @param onError Callback when processing fails
  */
 fun NavGraphBuilder.fastMpayScreen(
@@ -57,6 +61,7 @@ fun NavGraphBuilder.fastMpayScreen(
     onNavigateToInterbankTransfer: (accountExternalId: String, recipientName: String?, amount: String?) -> Unit,
     onNavigateToIntraBankTransfer: (qrData: QrCodeData) -> Unit,
     onNavigateToMerchantPayment: (qrData: QrCodeData) -> Unit,
+    onNavigateBack: () -> Unit,
     onError: (message: String) -> Unit,
 ) {
     composableWithSlideTransitions(
@@ -73,6 +78,7 @@ fun NavGraphBuilder.fastMpayScreen(
             onNavigateToInterbankTransfer = onNavigateToInterbankTransfer,
             onNavigateToIntraBankTransfer = onNavigateToIntraBankTransfer,
             onNavigateToMerchantPayment = onNavigateToMerchantPayment,
+            onNavigateBack = onNavigateBack,
             onError = onError,
         )
     }

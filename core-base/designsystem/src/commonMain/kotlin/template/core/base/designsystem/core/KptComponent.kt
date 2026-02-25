@@ -132,6 +132,18 @@ interface KptColorScheme {
     val surfaceContainerHighest: Color
     val surfaceContainerLow: Color
     val surfaceContainerLowest: Color
+
+    /**
+     * Background color for QR codes. Always light (white) to ensure
+     * scannability regardless of theme mode.
+     */
+    val qrBackground: Color
+
+    /**
+     * Foreground/data color for QR codes. Always dark (black) to ensure
+     * scannability regardless of theme mode.
+     */
+    val qrForeground: Color
 }
 
 @Stable

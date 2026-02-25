@@ -15,11 +15,28 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import mobile_wallet.core.ui.generated.resources.Res
+import mobile_wallet.core.ui.generated.resources.core_ui_cancel
+import mobile_wallet.core.ui.generated.resources.core_ui_confirm_qr_amount_message
+import mobile_wallet.core.ui.generated.resources.core_ui_confirm_qr_amount_title
+import mobile_wallet.core.ui.generated.resources.core_ui_different_bank_message
+import mobile_wallet.core.ui.generated.resources.core_ui_different_bank_title
+import mobile_wallet.core.ui.generated.resources.core_ui_interbank_unavailable_message
+import mobile_wallet.core.ui.generated.resources.core_ui_interbank_unavailable_title
+import mobile_wallet.core.ui.generated.resources.core_ui_proceed_payment
+import mobile_wallet.core.ui.generated.resources.core_ui_try_interbank
+import mobile_wallet.core.ui.generated.resources.core_ui_understood
+import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.mifospay.core.model.utils.QrCodeData
+import org.mifospay.core.ui.InfoBottomSheet
+import org.mifospay.core.ui.InfoType
 import org.mifospay.feature.fastmpay.model.QrProcessResult
 
 /**
@@ -36,6 +53,7 @@ import org.mifospay.feature.fastmpay.model.QrProcessResult
  * @param onNavigateToInterbankTransfer Callback for INTER_BANK type
  * @param onNavigateToIntraBankTransfer Callback for future intra-bank direct transfer
  * @param onNavigateToMerchantPayment Callback for MERCHANT type
+ * @param onNavigateBack Callback to navigate back (for cancel action)
  * @param onError Callback when processing fails
  * @param viewModel The ViewModel for processing
  */
@@ -46,6 +64,7 @@ fun FastMpayScreen(
     onNavigateToInterbankTransfer: (String, String?, String?) -> Unit,
     onNavigateToIntraBankTransfer: (QrCodeData) -> Unit,
     onNavigateToMerchantPayment: (QrCodeData) -> Unit,
+    onNavigateBack: () -> Unit,
     onError: (String) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: FastMpayViewModel = koinViewModel(),
@@ -53,12 +72,30 @@ fun FastMpayScreen(
     val result by viewModel.resultFlow.collectAsStateWithLifecycle()
     val error by viewModel.errorFlow.collectAsStateWithLifecycle()
 
+    // State for bank mismatch bottom sheet
+    var showBankMismatchSheet by remember { mutableStateOf(false) }
+    var bankMismatchData by remember { mutableStateOf<QrProcessResult.BankMismatch?>(null) }
+
+    // State for external ID missing bottom sheet
+    var showExternalIdMissingSheet by remember { mutableStateOf(false) }
+
+    // State for amount confirmation dialog
+    var showAmountConfirmation by remember { mutableStateOf(false) }
+    var pendingAmountConfirmation by remember {
+        mutableStateOf<PendingAmountConfirmation?>(null)
+    }
+
     // Handle errors
     LaunchedEffect(error) {
         error?.let { message ->
             onError(message)
             viewModel.clearError()
         }
+    }
+
+    // Helper function to check if QR data has a pre-filled amount
+    fun hasPrefilledAmount(qrData: QrCodeData): Boolean {
+        return qrData.amount.isNotBlank() && qrData.amount != "0" && qrData.amount != "0.0"
     }
 
     // Navigate based on result
@@ -71,22 +108,65 @@ fun FastMpayScreen(
 
             is QrProcessResult.NavigateToMakeTransfer -> {
                 viewModel.clearResult()
-                onNavigateToMakeTransfer(r.qrData, r.beneficiaryName)
+                // Check if QR has pre-filled amount - show confirmation
+                if (hasPrefilledAmount(r.qrData)) {
+                    pendingAmountConfirmation = PendingAmountConfirmation.MakeTransfer(
+                        qrData = r.qrData,
+                        beneficiaryName = r.beneficiaryName,
+                    )
+                    showAmountConfirmation = true
+                } else {
+                    onNavigateToMakeTransfer(r.qrData, r.beneficiaryName)
+                }
             }
 
             is QrProcessResult.NavigateToInterbankTransfer -> {
                 viewModel.clearResult()
-                onNavigateToInterbankTransfer(r.accountExternalId, r.recipientName, r.amount)
+                // Check if QR has pre-filled amount - show confirmation
+                if (!r.amount.isNullOrBlank() && r.amount != "0" && r.amount != "0.0") {
+                    // Default currency for display when not available from QR
+                    pendingAmountConfirmation = PendingAmountConfirmation.InterbankTransfer(
+                        accountExternalId = r.accountExternalId,
+                        recipientName = r.recipientName,
+                        amount = r.amount,
+                        currency = "USD",
+                    )
+                    showAmountConfirmation = true
+                } else {
+                    onNavigateToInterbankTransfer(r.accountExternalId, r.recipientName, r.amount)
+                }
             }
 
             is QrProcessResult.NavigateToIntraBankTransfer -> {
                 viewModel.clearResult()
-                onNavigateToIntraBankTransfer(r.qrData)
+                // Check if QR has pre-filled amount - show confirmation
+                if (hasPrefilledAmount(r.qrData)) {
+                    pendingAmountConfirmation = PendingAmountConfirmation.IntraBankTransfer(
+                        qrData = r.qrData,
+                    )
+                    showAmountConfirmation = true
+                } else {
+                    onNavigateToIntraBankTransfer(r.qrData)
+                }
             }
 
             is QrProcessResult.NavigateToMerchantPayment -> {
                 viewModel.clearResult()
-                onNavigateToMerchantPayment(r.qrData)
+                // Check if QR has pre-filled amount - show confirmation
+                if (hasPrefilledAmount(r.qrData)) {
+                    pendingAmountConfirmation = PendingAmountConfirmation.MerchantPayment(
+                        qrData = r.qrData,
+                    )
+                    showAmountConfirmation = true
+                } else {
+                    onNavigateToMerchantPayment(r.qrData)
+                }
+            }
+
+            is QrProcessResult.BankMismatch -> {
+                bankMismatchData = r
+                showBankMismatchSheet = true
+                viewModel.clearResult()
             }
 
             is QrProcessResult.Error -> {
@@ -107,6 +187,137 @@ fun FastMpayScreen(
     ) {
         CircularProgressIndicator()
     }
+
+    // Bank mismatch info bottom sheet
+    if (showBankMismatchSheet && bankMismatchData != null) {
+        val mismatchData = bankMismatchData!!
+        InfoBottomSheet(
+            title = stringResource(Res.string.core_ui_different_bank_title),
+            message = stringResource(Res.string.core_ui_different_bank_message),
+            infoType = InfoType.WARNING,
+            onDismiss = {
+                showBankMismatchSheet = false
+                bankMismatchData = null
+            },
+            primaryActionText = stringResource(Res.string.core_ui_try_interbank),
+            onPrimaryAction = {
+                val accountExternalId = mismatchData.qrData.accountExternalId
+                if (!accountExternalId.isNullOrBlank()) {
+                    onNavigateToInterbankTransfer(
+                        accountExternalId,
+                        mismatchData.qrData.clientName.takeIf { it.isNotBlank() },
+                        mismatchData.qrData.amount.takeIf { it.isNotBlank() },
+                    )
+                    showBankMismatchSheet = false
+                    bankMismatchData = null
+                } else {
+                    showBankMismatchSheet = false
+                    bankMismatchData = null
+                    showExternalIdMissingSheet = true
+                }
+            },
+            secondaryActionText = stringResource(Res.string.core_ui_cancel),
+            onSecondaryAction = {
+                onNavigateBack()
+            },
+        )
+    }
+
+    // External ID missing info bottom sheet
+    if (showExternalIdMissingSheet) {
+        InfoBottomSheet(
+            title = stringResource(Res.string.core_ui_interbank_unavailable_title),
+            message = stringResource(Res.string.core_ui_interbank_unavailable_message),
+            infoType = InfoType.INFO,
+            onDismiss = {
+                showExternalIdMissingSheet = false
+                onNavigateBack()
+            },
+            secondaryActionText = stringResource(Res.string.core_ui_understood),
+            onSecondaryAction = {
+                onNavigateBack()
+            },
+        )
+    }
+
+    // Amount confirmation bottom sheet
+    if (showAmountConfirmation && pendingAmountConfirmation != null) {
+        val pending = pendingAmountConfirmation!!
+        val (amount, currency) = when (pending) {
+            is PendingAmountConfirmation.MakeTransfer -> {
+                pending.qrData.amount to pending.qrData.currency
+            }
+            is PendingAmountConfirmation.InterbankTransfer -> {
+                (pending.amount ?: "0") to pending.currency
+            }
+            is PendingAmountConfirmation.IntraBankTransfer -> {
+                pending.qrData.amount to pending.qrData.currency
+            }
+            is PendingAmountConfirmation.MerchantPayment -> {
+                pending.qrData.amount to pending.qrData.currency
+            }
+        }
+
+        InfoBottomSheet(
+            title = stringResource(Res.string.core_ui_confirm_qr_amount_title),
+            message = stringResource(Res.string.core_ui_confirm_qr_amount_message, currency, amount),
+            infoType = InfoType.WARNING,
+            onDismiss = {
+                showAmountConfirmation = false
+                pendingAmountConfirmation = null
+                onNavigateBack()
+            },
+            primaryActionText = stringResource(Res.string.core_ui_proceed_payment),
+            onPrimaryAction = {
+                showAmountConfirmation = false
+                when (val p = pendingAmountConfirmation) {
+                    is PendingAmountConfirmation.MakeTransfer -> {
+                        onNavigateToMakeTransfer(p.qrData, p.beneficiaryName)
+                    }
+                    is PendingAmountConfirmation.InterbankTransfer -> {
+                        onNavigateToInterbankTransfer(p.accountExternalId, p.recipientName, p.amount)
+                    }
+                    is PendingAmountConfirmation.IntraBankTransfer -> {
+                        onNavigateToIntraBankTransfer(p.qrData)
+                    }
+                    is PendingAmountConfirmation.MerchantPayment -> {
+                        onNavigateToMerchantPayment(p.qrData)
+                    }
+                    null -> {}
+                }
+                pendingAmountConfirmation = null
+            },
+            secondaryActionText = stringResource(Res.string.core_ui_cancel),
+            onSecondaryAction = {
+                onNavigateBack()
+            },
+        )
+    }
+}
+
+/**
+ * Sealed interface representing pending navigation actions that require amount confirmation.
+ */
+private sealed interface PendingAmountConfirmation {
+    data class MakeTransfer(
+        val qrData: QrCodeData,
+        val beneficiaryName: String,
+    ) : PendingAmountConfirmation
+
+    data class InterbankTransfer(
+        val accountExternalId: String,
+        val recipientName: String?,
+        val amount: String?,
+        val currency: String,
+    ) : PendingAmountConfirmation
+
+    data class IntraBankTransfer(
+        val qrData: QrCodeData,
+    ) : PendingAmountConfirmation
+
+    data class MerchantPayment(
+        val qrData: QrCodeData,
+    ) : PendingAmountConfirmation
 }
 
 @Composable

@@ -44,20 +44,29 @@ fun QrScannerWithPermissions(
     val permissionState = rememberCameraPermissionState()
 
     LaunchedEffect(Unit) {
-        if (permissionState.status == CameraPermissionStatus.Denied) {
+        if (permissionState.status == CameraPermissionStatus.Unknown ||
+            permissionState.status == CameraPermissionStatus.Denied
+        ) {
             permissionState.requestCameraPermission()
         }
     }
 
-    if (permissionState.status == CameraPermissionStatus.Granted) {
-        QrCodeScanner(
-            types = types,
-            modifier = modifier.fillMaxSize(),
-            isTorchEnabled = isTorchEnabled,
-            onTorchAvailabilityChanged = onTorchAvailabilityChanged,
-            onScanned = onScanned,
-        )
-    } else {
-        permissionDeniedContent(permissionState, onUploadQr)
+    when (permissionState.status) {
+        CameraPermissionStatus.Granted -> {
+            QrCodeScanner(
+                types = types,
+                modifier = modifier.fillMaxSize(),
+                isTorchEnabled = isTorchEnabled,
+                onTorchAvailabilityChanged = onTorchAvailabilityChanged,
+                onScanned = onScanned,
+            )
+        }
+        CameraPermissionStatus.Denied -> {
+            permissionDeniedContent(permissionState, onUploadQr)
+        }
+        CameraPermissionStatus.Unknown -> {
+            // Show nothing while permission is being requested
+            // The UI will recompose when status changes
+        }
     }
 }

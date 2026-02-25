@@ -48,4 +48,14 @@
     <string name="feature_qr_drop_image_here">Drop image here</string>
     <string name="feature_qr_preview_image">Preview of selected image</string>
     <string name="feature_qr_scan_valid_qr">Scan a Valid QR Code</string>
+
+    <!-- Web Camera Scanner -->
+    <string name="feature_qr_initializing_camera">Initializing camera...</string>
+    <string name="feature_qr_position_qr_code">Position the QR code within the frame</string>
+    <string name="feature_qr_camera_view_active">Camera view active</string>
+    <string name="feature_qr_select_from_gallery">Select from Gallery</string>
+    <string name="feature_qr_camera_access_denied">Camera Access Denied</string>
+    <string name="feature_qr_camera_denied_message">Please allow camera access in your browser settings to scan QR codes, or use the file picker option.</string>
+    <string name="feature_qr_camera_error">Camera Error</string>
+    <string name="feature_qr_camera_settings_hint">Camera settings: Please go to your browser settings to manage camera permissions.</string>
 </resources>

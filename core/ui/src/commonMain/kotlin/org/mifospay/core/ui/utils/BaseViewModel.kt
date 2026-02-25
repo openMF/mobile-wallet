@@ -11,6 +11,9 @@ package org.mifospay.core.ui.utils
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.SendChannel
 import kotlinx.coroutines.flow.Flow
@@ -96,5 +99,19 @@ abstract class BaseViewModel<S, E, A>(
      */
     protected fun sendEvent(event: E) {
         viewModelScope.launch { eventChannel.send(event) }
+    }
+
+    /**
+     * Launches a coroutine on [Dispatchers.Default] for network or database operations.
+     * Use this instead of `viewModelScope.launch` for any I/O-bound work to avoid
+     * blocking the main thread and causing UI freezes.
+     *
+     * Note: Uses Default dispatcher for multiplatform compatibility (IO is not available on JS).
+     *
+     * @param block The suspending block to execute on the background dispatcher.
+     * @return The [Job] representing the coroutine.
+     */
+    protected fun launchIO(block: suspend CoroutineScope.() -> Unit): Job {
+        return viewModelScope.launch(Dispatchers.Default, block = block)
     }
 }

@@ -23,6 +23,12 @@ import io.github.vinceglb.filekit.readBytes
 import kotlinx.coroutines.launch
 import org.mifospay.feature.mpay.qr.scan.components.QrImportScreen
 
+/**
+ * WasmJS implementation of QrCodeScanner.
+ *
+ * Uses file-based QR import only due to WasmJS interop limitations
+ * with the html5-qrcode library.
+ */
 @Composable
 actual fun QrCodeScanner(
     types: List<CodeType>,
@@ -54,13 +60,17 @@ actual fun QrCodeScanner(
     }
 
     LaunchedEffect(Unit) {
+        // Torch is not available on web
         onTorchAvailabilityChanged(false)
     }
 
+    // Header is shown by QrScanTopBar in parent, use dark theme to match scanner
     QrImportScreen(
         isProcessing = isProcessing,
         onSelectImage = { imagePicker.launch() },
         modifier = modifier,
         imagePreviewBytes = imagePreviewBytes,
+        showHeader = false,
+        useDarkTheme = true,
     )
 }

@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Surface
@@ -93,7 +94,13 @@ internal fun QrCodeCard(
         ) {
             QrTypeBadge(qrType = qrType)
 
+            // QR code with explicit light background for scannability in dark mode
+            // Standard QR codes require dark data on light background for reliable scanning
             Box(
+                modifier = Modifier
+                    .clip(RoundedCornerShape(KptTheme.spacing.md))
+                    .background(KptTheme.colorScheme.qrBackground)
+                    .padding(KptTheme.spacing.md),
                 contentAlignment = Alignment.Center,
             ) {
                 Image(
@@ -153,11 +160,13 @@ private fun QrTypeBadge(
 private fun MifosLogoOverlay(
     modifier: Modifier = Modifier,
 ) {
+    // Use QR background color for logo to match QR code background
+    // This ensures consistent appearance in both light and dark modes
     Box(
         modifier = modifier
             .size(LogoOverlaySize)
             .clip(CircleShape)
-            .background(KptTheme.colorScheme.surface)
+            .background(KptTheme.colorScheme.qrBackground)
             .border(
                 width = KptTheme.spacing.xs / 2,
                 color = KptTheme.colorScheme.primary,

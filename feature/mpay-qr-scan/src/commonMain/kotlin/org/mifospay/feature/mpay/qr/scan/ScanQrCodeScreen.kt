@@ -151,6 +151,9 @@ fun ScanQrCodeScreenContent(
     var isTorchAvailable by remember { mutableStateOf(false) }
     val scope = rememberCoroutineScope()
 
+    // Check if we're on web desktop - if so, only show file picker UI
+    val isWebDesktop = WebPlatform.isWebDesktop
+
     // FileKit image picker launcher
     val imagePicker = rememberFilePickerLauncher(
         type = FileKitType.Image,
@@ -177,7 +180,8 @@ fun ScanQrCodeScreenContent(
             .fillMaxSize()
             .background(Color.Black),
     ) {
-        // Camera preview (full screen)
+        // Camera preview / QR Scanner (full screen)
+        // On web desktop, this shows file picker UI; on mobile/native, shows camera
         QrScannerWithPermissions(
             types = listOf(CodeType.QR),
             modifier = Modifier.fillMaxSize(),
@@ -189,45 +193,48 @@ fun ScanQrCodeScreenContent(
             onUploadQr = { imagePicker.launch() },
         )
 
-        // Viewfinder overlay with animation
-        QrViewfinder(
-            modifier = Modifier.fillMaxSize(),
-        )
+        // Only show scanner-specific overlays on non-web-desktop platforms
+        if (!isWebDesktop) {
+            // Viewfinder overlay with animation
+            QrViewfinder(
+                modifier = Modifier.fillMaxSize(),
+            )
 
-        // Top bar (top aligned)
+            // Action buttons and footer (bottom aligned)
+            Column(
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .padding(bottom = 32.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(24.dp),
+            ) {
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(48.dp),
+                ) {
+                    QrActionButton(
+                        icon = MifosIcons.PhotoLibrary,
+                        label = stringResource(Res.string.feature_qr_upload_qr),
+                        onClick = { imagePicker.launch() },
+                    )
+
+                    QrActionButton(
+                        icon = if (isTorchEnabled) MifosIcons.FlashOn else MifosIcons.FlashOff,
+                        label = stringResource(Res.string.feature_qr_torch),
+                        onClick = onToggleTorch,
+                        enabled = isTorchAvailable,
+                    )
+                }
+
+                QrScanFooter()
+            }
+        }
+
+        // Top bar - always show for consistent navigation
         QrScanTopBar(
             onCloseClick = navigateBack,
             onHelpClick = onShowHelpDialog,
             modifier = Modifier.align(Alignment.TopCenter),
         )
-
-        // Action buttons and footer (bottom aligned)
-        Column(
-            modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .padding(bottom = 32.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(24.dp),
-        ) {
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(48.dp),
-            ) {
-                QrActionButton(
-                    icon = MifosIcons.PhotoLibrary,
-                    label = stringResource(Res.string.feature_qr_upload_qr),
-                    onClick = { imagePicker.launch() },
-                )
-
-                QrActionButton(
-                    icon = if (isTorchEnabled) MifosIcons.FlashOn else MifosIcons.FlashOff,
-                    label = stringResource(Res.string.feature_qr_torch),
-                    onClick = onToggleTorch,
-                    enabled = isTorchAvailable,
-                )
-            }
-
-            QrScanFooter()
-        }
 
         // Processing overlay
         if (isProcessingImage) {
@@ -242,7 +249,7 @@ fun ScanQrCodeScreenContent(
             hostState = snackbarHostState,
             modifier = Modifier
                 .align(Alignment.BottomCenter)
-                .padding(bottom = 120.dp),
+                .padding(bottom = if (isWebDesktop) 32.dp else 120.dp),
         )
 
         // Help dialog
