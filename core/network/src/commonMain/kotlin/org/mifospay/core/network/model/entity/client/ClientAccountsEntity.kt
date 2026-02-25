@@ -16,7 +16,7 @@ import org.mifospay.core.model.savingsaccount.SavingAccountEntity
 data class ClientAccountsEntity(
     var savingsAccounts: List<SavingAccountEntity> = emptyList(),
     val groupLoanIndividualMonitoringAccounts: List<String?> = emptyList(),
-    val guarantorAccounts: List<Long> = emptyList(),
+    val guarantorAccounts: List<GuarantorAccountEntity> = emptyList(),
 ) {
 
     fun withSavingsAccounts(savingsAccounts: List<SavingAccountEntity>): ClientAccountsEntity {
