@@ -29,7 +29,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import mobile_wallet.feature.settings.generated.resources.Res
-import mobile_wallet.feature.settings.generated.resources.feature_settings_change_language
 import mobile_wallet.feature.settings.generated.resources.feature_settings_change_passcode
 import mobile_wallet.feature.settings.generated.resources.feature_settings_change_password
 import mobile_wallet.feature.settings.generated.resources.feature_settings_disable_account
@@ -61,7 +60,6 @@ internal fun SettingsScreenRoute(
     onChangePasscode: () -> Unit,
     navigateToFaqScreen: () -> Unit,
     navigateToNotificationScreen: () -> Unit,
-    navigateToLanguageScreen: () -> Unit,
     navigateToProfile: () -> Unit,
     modifier: Modifier = Modifier,
     viewmodel: SettingsViewModel = koinViewModel(),
@@ -77,7 +75,6 @@ internal fun SettingsScreenRoute(
             SettingsEvent.OnNavigateToLogout -> onLogout.invoke()
             SettingsEvent.OnNavigateToProfile -> navigateToProfile.invoke()
             SettingsEvent.OnNavigateToNotificationScreen -> navigateToNotificationScreen.invoke()
-            SettingsEvent.OnNavigateToLanguageScreen -> navigateToLanguageScreen.invoke()
         }
     }
 
@@ -153,14 +150,6 @@ private fun SettingsScreenContent(
                 icon = vectorResource(Res.drawable.outline_pin),
                 onClick = {
                     onAction(SettingsAction.ChangePasscode)
-                },
-            )
-
-            SettingsCardItem(
-                title = stringResource(Res.string.feature_settings_change_language),
-                icon = MifosIcons.Language,
-                onClick = {
-                    onAction(SettingsAction.ChangeLanguage)
                 },
             )
 

@@ -26,8 +26,6 @@ kotlin {
 
             implementation(libs.koin.compose.viewmodel)
             implementation(libs.koin.compose)
-            implementation(projects.core.datastore)
-            implementation(projects.coreBase.designsystem)
         }
     }
 }

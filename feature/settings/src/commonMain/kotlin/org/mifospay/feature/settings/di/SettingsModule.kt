@@ -11,10 +11,8 @@ package org.mifospay.feature.settings.di
 
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
-import org.mifospay.feature.language.LanguageViewModel
 import org.mifospay.feature.settings.SettingsViewModel
 
 val SettingsModule = module {
     viewModelOf(::SettingsViewModel)
-    viewModelOf(::LanguageViewModel)
 }

@@ -65,10 +65,6 @@ class SettingsViewModel(
                 sendEvent(SettingsEvent.OnNavigateToNotificationScreen)
             }
 
-            is SettingsAction.ChangeLanguage -> {
-                sendEvent(SettingsEvent.OnNavigateToLanguageScreen)
-            }
-
             is SettingsAction.DismissDialog -> {
                 mutableStateFlow.update {
                     it.copy(dialogState = null)
@@ -179,7 +175,6 @@ sealed interface SettingsEvent {
     data object OnNavigateToFaqScreen : SettingsEvent
     data object OnNavigateToProfile : SettingsEvent
     data object OnNavigateToNotificationScreen : SettingsEvent
-    data object OnNavigateToLanguageScreen : SettingsEvent
 }
 
 sealed interface SettingsAction {
@@ -191,7 +186,6 @@ sealed interface SettingsAction {
     data object NavigateToFaqScreen : SettingsAction
     data object NavigateToProfile : SettingsAction
     data object NavigateToNotificationSettings : SettingsAction
-    data object ChangeLanguage : SettingsAction
     data object DismissDialog : SettingsAction
 
     sealed interface Internal : SettingsAction {

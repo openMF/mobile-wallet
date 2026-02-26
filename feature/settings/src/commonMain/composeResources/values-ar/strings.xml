@@ -25,7 +25,4 @@
     <string name="feature_settings_empty"/>
     <string name="feature_settings_yes">نعم</string>
     <string name="feature_settings_no">لا</string>
-    <string name="feature_settings_change_language">تغيير اللغة</string>
-    <string name="feature_settings_language">اللغة</string>
-    <string name="feature_settings_error_saving_settings">فشل في حفظ الإعدادات</string>
 </resources>
