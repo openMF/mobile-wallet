@@ -53,8 +53,8 @@ class LanguageViewModel(
 
     private fun handleSetLanguage(action: LanguageAction.SetLanguage) {
         viewModelScope.launch {
-            userPreferencesRepository.setLanguage(action.languageConfig)
             sendEvent(LanguageEvent.NavigateBack)
+            userPreferencesRepository.setLanguage(action.languageConfig)
         }
     }
 
