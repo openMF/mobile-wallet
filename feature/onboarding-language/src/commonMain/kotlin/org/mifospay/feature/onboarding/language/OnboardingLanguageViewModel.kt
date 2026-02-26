@@ -10,16 +10,15 @@
 package org.mifospay.feature.onboarding.language
 
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import mobile_wallet.feature.onboarding_language.generated.resources.Res
 import mobile_wallet.feature.onboarding_language.generated.resources.feature_onboarding_error_saving_settings
 import org.jetbrains.compose.resources.StringResource
+import org.mifospay.core.common.DataState
 import org.mifospay.core.datastore.UserPreferencesRepository
 import org.mifospay.core.model.LanguageConfig
 import org.mifospay.core.ui.utils.BaseViewModel
@@ -57,15 +56,21 @@ class OnboardingLanguageViewModel(
 
     private fun handleSetLanguage(action: OnboardingLanguageAction.SetLanguage) {
         viewModelScope.launch {
-            try {
-                sendEvent(OnboardingLanguageEvent.NavigateToNext)
+            val onboardingResult = userPreferencesRepository.setShowOnboarding(false)
+            val langResult = userPreferencesRepository.setLanguage(action.languageConfig)
 
-                withContext(NonCancellable) {
-                    userPreferencesRepository.setLanguage(action.languageConfig)
-                    userPreferencesRepository.setShowOnboarding(false)
+            when {
+                langResult is DataState.Error -> {
+                    mutableStateFlow.update {
+                        it.copy(error = Res.string.feature_onboarding_error_saving_settings)
+                    }
                 }
-            } catch (e: Exception) {
-                mutableStateFlow.update { it.copy(error = Res.string.feature_onboarding_error_saving_settings) }
+                onboardingResult is DataState.Error -> {
+                    mutableStateFlow.update {
+                        it.copy(error = Res.string.feature_onboarding_error_saving_settings)
+                    }
+                }
+                else -> sendEvent(OnboardingLanguageEvent.NavigateToNext)
             }
         }
     }

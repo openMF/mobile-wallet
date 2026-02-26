@@ -190,12 +190,22 @@ class UserPreferencesRepositoryImpl(
         }
     }
 
-    override suspend fun setLanguage(language: LanguageConfig) {
-        preferenceManager.setLanguage(language)
+    override suspend fun setLanguage(language: LanguageConfig): DataState<Unit> {
+        return try {
+            preferenceManager.setLanguage(language)
+            DataState.Success(Unit)
+        } catch (e: Exception) {
+            DataState.Error(e)
+        }
     }
 
-    override suspend fun setShowOnboarding(showOnboarding: Boolean) {
-        preferenceManager.setShowOnboarding(showOnboarding)
+    override suspend fun setShowOnboarding(showOnboarding: Boolean): DataState<Unit> {
+        return try {
+            preferenceManager.setShowOnboarding(showOnboarding)
+            DataState.Success(Unit)
+        } catch (e: Exception) {
+            DataState.Error(e)
+        }
     }
 
     override suspend fun logOut() {

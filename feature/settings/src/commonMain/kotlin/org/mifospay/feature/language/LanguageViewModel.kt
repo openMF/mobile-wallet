@@ -10,16 +10,15 @@
 package org.mifospay.feature.language
 
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import mobile_wallet.feature.settings.generated.resources.Res
 import mobile_wallet.feature.settings.generated.resources.feature_settings_error_saving_settings
 import org.jetbrains.compose.resources.StringResource
+import org.mifospay.core.common.DataState
 import org.mifospay.core.datastore.UserPreferencesRepository
 import org.mifospay.core.model.LanguageConfig
 import org.mifospay.core.ui.utils.BaseViewModel
@@ -59,14 +58,16 @@ class LanguageViewModel(
 
     private fun handleSetLanguage(action: LanguageAction.SetLanguage) {
         viewModelScope.launch {
-            try {
-                sendEvent(LanguageEvent.NavigateBack)
+            val result = userPreferencesRepository.setLanguage(action.languageConfig)
 
-                withContext(NonCancellable) {
-                    userPreferencesRepository.setLanguage(action.languageConfig)
+            when (result) {
+                is DataState.Success -> sendEvent(LanguageEvent.NavigateBack)
+                is DataState.Error -> {
+                    mutableStateFlow.update {
+                        it.copy(error = Res.string.feature_settings_error_saving_settings)
+                    }
                 }
-            } catch (e: Exception) {
-                mutableStateFlow.update { it.copy(error = Res.string.feature_settings_error_saving_settings) }
+                is DataState.Loading -> Unit
             }
         }
     }

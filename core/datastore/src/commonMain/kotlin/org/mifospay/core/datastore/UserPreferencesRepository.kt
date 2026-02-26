@@ -59,9 +59,9 @@ interface UserPreferencesRepository {
 
     suspend fun updateSelectedInterbankInstance(instance: InterbankServer): DataState<Unit>
 
-    suspend fun setLanguage(language: LanguageConfig)
+    suspend fun setLanguage(language: LanguageConfig): DataState<Unit>
 
-    suspend fun setShowOnboarding(showOnboarding: Boolean)
+    suspend fun setShowOnboarding(showOnboarding: Boolean): DataState<Unit>
 
     suspend fun updateAccountExternalIds(accountExternalIds: Map<Long, String>): DataState<Unit>
 
