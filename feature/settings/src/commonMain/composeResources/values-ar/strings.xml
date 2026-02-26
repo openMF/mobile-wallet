@@ -21,12 +21,12 @@
     <string name="feature_settings_ok">موافق</string>
     <string name="feature_settings_cancel">إلغاء</string>
     <string name="feature_settings_log_out_title">هل تريد تسجيل الخروج؟</string>
+    <string name="feature_settings_profile">الملف الشخصي</string>
     <string name="feature_settings_empty"/>
     <string name="feature_settings_yes">نعم</string>
     <string name="feature_settings_no">لا</string>
     <string name="feature_settings_change_language">تغيير اللغة</string>
     <string name="feature_settings_language">اللغة</string>
     <string name="feature_onboarding_choose_your_app_language">اختر لغة التطبيق</string>
-    <string name="feature_onboarding_chosen_language_can_be_changed_later_in_the_settings">يمكن تغيير اللغة المختارة لاحقاً في الإعدادات</string>
     <string name="feature_onboarding_submit">تأكيد</string>
 </resources>

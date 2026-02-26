@@ -12,4 +12,5 @@
     <string name="feature_onboarding_choose_your_app_language">اختر لغة التطبيق</string>
     <string name="feature_onboarding_chosen_language_can_be_changed_later_in_the_settings">يمكنك تغيير اللغة لاحقاً من الإعدادات</string>
     <string name="feature_onboarding_submit">تأكيد</string>
+    <string name="feature_onboarding_error_saving_settings">فشل حفظ الإعدادات. يرجى المحاولة مرة أخرى.</string>
 </resources>

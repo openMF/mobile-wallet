@@ -238,7 +238,22 @@ class UserPreferencesDataSource(
 
     suspend fun clearInfo() {
         withContext(dispatcher) {
+            val currentLanguage = _language.value
+            val currentShowOnboarding = _showOnboarding.value
+            val currentSelectedInstance = _selectedInstance.value
+            val currentSelectedInterbankInstance = _selectedInterbankInstance.value
+
             settings.clear()
+
+            settings.putLanguage(currentLanguage)
+            settings.putBoolean(SHOW_ONBOARDING_KEY, currentShowOnboarding)
+            currentSelectedInstance?.let { settings.putSelectedInstance(it) }
+            currentSelectedInterbankInstance?.let { settings.putSelectedInterbankInstance(it) }
+
+            _userInfo.value = UserInfoPreferences.DEFAULT
+            _clientInfo.value = ClientPreferences.DEFAULT
+            _defaultAccount.value = DefaultAccount.DEFAULT
+            _accountExternalIds.value = emptyMap()
         }
     }
 

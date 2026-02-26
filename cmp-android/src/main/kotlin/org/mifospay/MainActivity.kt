@@ -63,12 +63,26 @@ class MainActivity : AppCompatActivity() {
                         uiState = state
                         if (state is MainUiState.Success) {
                             val languageTag = state.language.localName
-                            val appLocale: LocaleListCompat = if (languageTag.isNullOrBlank()) {
-                                LocaleListCompat.getEmptyLocaleList()
+                            val currentAppLocales = AppCompatDelegate.getApplicationLocales()
+
+                            // Only set locales if the requested language is different from the current app locales
+                            val isRequestedDefault = languageTag.isNullOrBlank()
+                            val isCurrentDefault = currentAppLocales.isEmpty
+
+                            val shouldUpdate = if (isRequestedDefault) {
+                                !isCurrentDefault
                             } else {
-                                LocaleListCompat.forLanguageTags(languageTag)
+                                languageTag != currentAppLocales.toLanguageTags()
                             }
-                            AppCompatDelegate.setApplicationLocales(appLocale)
+
+                            if (shouldUpdate) {
+                                val appLocale: LocaleListCompat = if (isRequestedDefault) {
+                                    LocaleListCompat.getEmptyLocaleList()
+                                } else {
+                                    LocaleListCompat.forLanguageTags(languageTag)
+                                }
+                                AppCompatDelegate.setApplicationLocales(appLocale)
+                            }
                         }
                     }
                     .collect()

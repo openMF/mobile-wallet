@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 Mifos Initiative
+ * Copyright 2026 Mifos Initiative
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -22,12 +22,12 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.RadioButton
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -75,17 +75,26 @@ fun OnboardingLanguageScreen(
     modifier: Modifier = Modifier,
     onAction: (OnboardingLanguageAction) -> Unit,
 ) {
-    var selectedLanguage by rememberSaveable { mutableStateOf(uiState.currentLanguage) }
+    val snackbarHostState = remember { SnackbarHostState() }
+    val errorMessage = uiState.error?.let { stringResource(it) }
+
+    LaunchedEffect(errorMessage) {
+        errorMessage?.let {
+            snackbarHostState.showSnackbar(it)
+            onAction(OnboardingLanguageAction.DismissError)
+        }
+    }
 
     MifosScaffold(
         modifier = modifier,
         containerColor = KptTheme.colorScheme.background,
+        snackbarHostState = snackbarHostState,
         bottomBar = {
             MifosButton(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(KptTheme.spacing.md),
-                onClick = { onAction(OnboardingLanguageAction.SetLanguage(selectedLanguage)) },
+                onClick = { onAction(OnboardingLanguageAction.SetLanguage(uiState.selectedLanguage)) },
                 text = { Text(text = stringResource(Res.string.feature_onboarding_submit)) },
             )
         },
@@ -121,8 +130,8 @@ fun OnboardingLanguageScreen(
                 items(LanguageConfig.entries) { language ->
                     LanguageSelectionItem(
                         language = language,
-                        isSelected = selectedLanguage == language,
-                        onSelect = { selectedLanguage = it },
+                        isSelected = uiState.selectedLanguage == language,
+                        onSelect = { onAction(OnboardingLanguageAction.LanguageSelected(it)) },
                     )
                 }
             }
