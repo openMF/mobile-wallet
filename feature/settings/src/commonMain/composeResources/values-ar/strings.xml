@@ -27,7 +27,5 @@
     <string name="feature_settings_no">لا</string>
     <string name="feature_settings_change_language">تغيير اللغة</string>
     <string name="feature_settings_language">اللغة</string>
-    <string name="feature_onboarding_choose_your_app_language">اختر لغة التطبيق</string>
-    <string name="feature_onboarding_submit">تأكيد</string>
     <string name="feature_settings_error_saving_settings">فشل في حفظ الإعدادات</string>
 </resources>
