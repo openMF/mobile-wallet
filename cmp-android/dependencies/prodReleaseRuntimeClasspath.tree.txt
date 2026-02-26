@@ -2390,9 +2390,7 @@
 |    |    +--- org.jetbrains.compose.foundation:foundation:1.9.3 (*)
 |    |    +--- org.jetbrains.compose.material3:material3:1.9.0-beta03 (*)
 |    |    +--- org.jetbrains.compose.components:components-resources:1.9.3 (*)
-|    |    +--- org.jetbrains.compose.components:components-ui-tooling-preview:1.9.3 (*)
-|    |    +--- project :core:datastore (*)
-|    |    \--- project :core-base:designsystem (*)
+|    |    \--- org.jetbrains.compose.components:components-ui-tooling-preview:1.9.3 (*)
 |    +--- project :feature:faq
 |    |    +--- androidx.lifecycle:lifecycle-runtime-compose:2.9.2 -> 2.9.4 (*)
 |    |    +--- androidx.lifecycle:lifecycle-viewmodel-compose:2.9.2 -> 2.9.4 (*)
