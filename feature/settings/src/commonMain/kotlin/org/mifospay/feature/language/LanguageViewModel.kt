@@ -10,11 +10,16 @@
 package org.mifospay.feature.language
 
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import mobile_wallet.feature.settings.generated.resources.Res
+import mobile_wallet.feature.settings.generated.resources.feature_settings_error_saving_settings
+import org.jetbrains.compose.resources.StringResource
 import org.mifospay.core.datastore.UserPreferencesRepository
 import org.mifospay.core.model.LanguageConfig
 import org.mifospay.core.ui.utils.BaseViewModel
@@ -40,21 +45,29 @@ class LanguageViewModel(
             is LanguageAction.LanguageSelected -> handleLanguageSelection(action.language)
             is LanguageAction.SetLanguage -> handleSetLanguage(action)
             is LanguageAction.Internal.LoadLanguage -> handleLoadLanguage(action)
+            is LanguageAction.DismissError -> {
+                mutableStateFlow.update { it.copy(error = null) }
+            }
         }
     }
 
     private fun handleLanguageSelection(language: LanguageConfig) {
-        viewModelScope.launch {
-            mutableStateFlow.update {
-                it.copy(selectedLanguage = language)
-            }
+        mutableStateFlow.update {
+            it.copy(selectedLanguage = language)
         }
     }
 
     private fun handleSetLanguage(action: LanguageAction.SetLanguage) {
         viewModelScope.launch {
-            sendEvent(LanguageEvent.NavigateBack)
-            userPreferencesRepository.setLanguage(action.languageConfig)
+            try {
+                sendEvent(LanguageEvent.NavigateBack)
+
+                withContext(NonCancellable) {
+                    userPreferencesRepository.setLanguage(action.languageConfig)
+                }
+            } catch (e: Exception) {
+                mutableStateFlow.update { it.copy(error = Res.string.feature_settings_error_saving_settings) }
+            }
         }
     }
 
@@ -62,7 +75,11 @@ class LanguageViewModel(
         mutableStateFlow.update {
             it.copy(
                 currentLanguage = action.language,
-                selectedLanguage = action.language,
+                selectedLanguage = if (it.selectedLanguage == LanguageConfig.DEFAULT) {
+                    action.language
+                } else {
+                    it.selectedLanguage
+                },
             )
         }
     }
@@ -71,6 +88,7 @@ class LanguageViewModel(
 data class LanguageState(
     val selectedLanguage: LanguageConfig,
     val currentLanguage: LanguageConfig,
+    val error: StringResource? = null,
 )
 
 sealed interface LanguageEvent {
@@ -81,6 +99,7 @@ sealed interface LanguageAction {
     data object OnNavigateBack : LanguageAction
     data class LanguageSelected(val language: LanguageConfig) : LanguageAction
     data class SetLanguage(val languageConfig: LanguageConfig) : LanguageAction
+    data object DismissError : LanguageAction
 
     sealed interface Internal : LanguageAction {
         data class LoadLanguage(val language: LanguageConfig) : Internal

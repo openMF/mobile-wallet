@@ -10,11 +10,13 @@
 package org.mifospay.feature.onboarding.language
 
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import mobile_wallet.feature.onboarding_language.generated.resources.Res
 import mobile_wallet.feature.onboarding_language.generated.resources.feature_onboarding_error_saving_settings
 import org.jetbrains.compose.resources.StringResource
@@ -56,9 +58,12 @@ class OnboardingLanguageViewModel(
     private fun handleSetLanguage(action: OnboardingLanguageAction.SetLanguage) {
         viewModelScope.launch {
             try {
-                userPreferencesRepository.setLanguage(action.languageConfig)
-                userPreferencesRepository.setShowOnboarding(false)
                 sendEvent(OnboardingLanguageEvent.NavigateToNext)
+
+                withContext(NonCancellable) {
+                    userPreferencesRepository.setLanguage(action.languageConfig)
+                    userPreferencesRepository.setShowOnboarding(false)
+                }
             } catch (e: Exception) {
                 mutableStateFlow.update { it.copy(error = Res.string.feature_onboarding_error_saving_settings) }
             }
@@ -69,7 +74,11 @@ class OnboardingLanguageViewModel(
         mutableStateFlow.update {
             it.copy(
                 currentLanguage = action.language,
-                selectedLanguage = action.language,
+                selectedLanguage = if (it.selectedLanguage == LanguageConfig.DEFAULT) {
+                    action.language
+                } else {
+                    it.selectedLanguage
+                },
             )
         }
     }
