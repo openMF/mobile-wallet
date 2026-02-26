@@ -65,7 +65,6 @@ class MainActivity : AppCompatActivity() {
                             val languageTag = state.language.localName
                             val currentAppLocales = AppCompatDelegate.getApplicationLocales()
 
-                            // Only set locales if the requested language is different from the current app locales
                             val isRequestedDefault = languageTag.isNullOrBlank()
                             val isCurrentDefault = currentAppLocales.isEmpty
 
