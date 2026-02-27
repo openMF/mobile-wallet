@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copyright 2024 Mifos Initiative
+
+    This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+    If a copy of the MPL was not distributed with this file,
+    You can obtain one at https://mozilla.org/MPL/2.0/.
+
+    See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+-->
+<resources>
+    <!-- Payments Tab Labels -->
+    <string name="feature_payments_vpa">वर्चुअल पेमेंट एड्रेस (VPA)</string>
+    <string name="feature_payments_mobile_number">मोबाइल नंबर</string>
+    <string name="feature_payments_receive">प्राप्त करें</string>
+    <string name="feature_payments_show_code">कोड दिखाएं</string>
+    <string name="feature_payments_send">भेजें</string>
+    <string name="feature_payments_request">अनुरोध करें</string>
+    <string name="feature_payments_history">इतिहास</string>
+    <string name="feature_payments_select_transfer_type_header">आप यह ट्रांसफ़र\nकैसे करना चाहेंगे?</string>
+    <string name="feature_payments_select_transfer_type_subtitle">नीचे एक ट्रांसफ़र तरीका चुनें</string>
+    <string name="feature_payments_intra_bank_transfer_title">इंट्रा-बैंक ट्रांसफ़र</string>
+    <string name="feature_payments_intra_bank_transfer_description">इस बैंक के खातों के बीच धनराशि स्थानांतरित करें।</string>
+    <string name="feature_payments_inter_bank_transfer_title">इंटर-बैंक ट्रांसफ़र</string>
+    <string name="feature_payments_inter_bank_transfer_description">विभिन्न बैंकों के खातों में धनराशि भेजें।</string>
+    <string name="feature_payments_transfer_options_title">ट्रांसफ़र विकल्प</string>
+</resources>
