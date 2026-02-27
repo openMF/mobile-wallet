@@ -13,7 +13,7 @@
     <string name="feature_payments_vpa">Anwani ya Malipo ya Mtandaoni (VPA)</string>
     <string name="feature_payments_mobile_number">Nambari ya Simu</string>
     <string name="feature_payments_receive">Pokea</string>
-    <string name="feature_payments_show_code">Onyesha kodi</string>
+    <string name="feature_payments_show_code">Onyesha msimbo</string>
     <string name="feature_payments_send">Tuma</string>
     <string name="feature_payments_request">Omba</string>
     <string name="feature_payments_history">Historia</string>
