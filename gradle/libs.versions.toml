@@ -134,8 +134,8 @@ packageName = "Mifos Pay"
 packageNamespace = "org.mifospay"
 packageVersion = "1.0.0"
 
-mifosAuthenticatorPasscode="2.0.4"
-mifosAuthenticatorBiometrics="2.0.3"
+mifosAuthenticatorPasscode="2.0.5"
+mifosAuthenticatorBiometrics="2.0.4"
 
 [libraries]
 accompanist-pager = { group = "com.google.accompanist", name = "accompanist-pager", version.ref = "accompanist" }
