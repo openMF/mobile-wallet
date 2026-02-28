@@ -27,7 +27,7 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
-import androidx.compose.material3.MenuAnchorType
+import androidx.compose.material3.ExposedDropdownMenuAnchorType
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
@@ -67,6 +67,7 @@ import org.mifospay.core.designsystem.component.MifosButton
 import org.mifospay.core.designsystem.component.MifosLoadingDialog
 import org.mifospay.core.designsystem.component.MifosScaffold
 import org.mifospay.core.designsystem.component.MifosTextField
+import org.mifospay.core.model.office.Office
 import org.mifospay.core.model.utils.Locale
 import org.mifospay.core.model.utils.filterLocales
 import org.mifospay.core.ui.MifosDivider
@@ -85,6 +86,7 @@ internal fun AddEditBeneficiaryScreen(
 
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val localeList by viewModel.filteredLocalList.collectAsStateWithLifecycle()
+    val officeList by viewModel.officeList.collectAsStateWithLifecycle()
 
     EventsEffect(viewModel) { event ->
         when (event) {
@@ -110,6 +112,7 @@ internal fun AddEditBeneficiaryScreen(
     AddEditBeneficiaryScreenContent(
         state = state,
         localeList = localeList,
+        officeList = officeList,
         snackbarHostState = snackbarHostState,
         modifier = modifier,
         onAction = remember(viewModel) {
@@ -123,6 +126,7 @@ internal fun AddEditBeneficiaryScreen(
 internal fun AddEditBeneficiaryScreenContent(
     state: AEBState,
     localeList: List<Locale>,
+    officeList: List<Office>,
     snackbarHostState: SnackbarHostState,
     modifier: Modifier = Modifier,
     onAction: (AEBAction) -> Unit,
@@ -215,7 +219,7 @@ internal fun AddEditBeneficiaryScreenContent(
                             .onGloballyPositioned { coordinates ->
                                 textFieldSize = coordinates.size.toSize()
                             }
-                            .menuAnchor(MenuAnchorType.PrimaryNotEditable),
+                            .menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable),
                     )
 
                     DropdownMenu(
@@ -257,14 +261,28 @@ internal fun AddEditBeneficiaryScreenContent(
             }
 
             item {
-                MifosTextField(
+                val filteredOfficeList by remember(officeList, state.officeName) {
+                    derivedStateOf {
+                        officeList.filter { office ->
+                            office.name.contains(state.officeName, ignoreCase = true)
+                        }
+                    }
+                }
+
+                MifosDropdownMenu(
                     label = stringResource(Res.string.feature_accounts_beneficiary_office_name),
-                    value = state.officeName,
-                    showClearIcon = false,
-                    readOnly = true,
-                    onValueChange = {
-                        onAction(AEBAction.ChangeOfficeName(it))
+                    selectedValue = state.officeName,
+                    items = filteredOfficeList,
+                    onItemSelected = { office ->
+                        onAction(AEBAction.ChangeOfficeName(office.name))
                     },
+                    onValueChange = { value ->
+                        onAction(AEBAction.ChangeOfficeName(value))
+                    },
+                    onClearClick = {
+                        onAction(AEBAction.ChangeOfficeName(""))
+                    },
+                    itemToString = { office -> office.name },
                 )
             }
 
@@ -336,5 +354,87 @@ private fun BeneficiaryDialogs(
         )
 
         null -> Unit
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+internal fun <T> MifosDropdownMenu(
+    label: String,
+    selectedValue: String,
+    items: List<T>,
+    onItemSelected: (T) -> Unit,
+    onValueChange: (String) -> Unit,
+    onClearClick: () -> Unit,
+    itemToString: (T) -> String,
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true,
+) {
+    var textFieldSize by remember { mutableStateOf(Size.Zero) }
+    var expanded by remember { mutableStateOf(false) }
+
+    ExposedDropdownMenuBox(
+        expanded = expanded && items.isNotEmpty(),
+        onExpandedChange = {
+            if (enabled) {
+                expanded = !expanded
+            }
+        },
+        modifier = modifier,
+    ) {
+        MifosTextField(
+            label = label,
+            value = selectedValue,
+            onValueChange = {
+                expanded = true
+                onValueChange(it)
+            },
+            onClickClearIcon = onClearClick,
+            trailingIcon = {
+                ExposedDropdownMenuDefaults.TrailingIcon(
+                    expanded = expanded,
+                )
+            },
+            enabled = enabled,
+            modifier = Modifier
+                .fillMaxWidth()
+                .onGloballyPositioned { coordinates ->
+                    textFieldSize = coordinates.size.toSize()
+                }
+                .menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable),
+        )
+
+        DropdownMenu(
+            expanded = expanded && items.isNotEmpty(),
+            onDismissRequest = {
+                expanded = false
+            },
+            properties = PopupProperties(
+                focusable = false,
+                dismissOnBackPress = true,
+                dismissOnClickOutside = true,
+                clippingEnabled = true,
+            ),
+            modifier = Modifier
+                .width(with(LocalDensity.current) { textFieldSize.width.toDp() })
+                .heightIn(max = 200.dp),
+        ) {
+            items.forEachIndexed { index, item ->
+                DropdownMenuItem(
+                    modifier = Modifier.fillMaxWidth(),
+                    onClick = {
+                        onItemSelected(item)
+                        expanded = false
+                    },
+                    text = {
+                        Text(text = itemToString(item))
+                    },
+                )
+
+                if (index != items.size - 1) {
+                    MifosDivider()
+                }
+            }
+        }
     }
 }

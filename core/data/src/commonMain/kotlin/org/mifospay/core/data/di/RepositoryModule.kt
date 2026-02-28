@@ -24,6 +24,7 @@ import org.mifospay.core.data.repository.InvoiceRepository
 import org.mifospay.core.data.repository.KycLevelRepository
 import org.mifospay.core.data.repository.LocalAssetRepository
 import org.mifospay.core.data.repository.NotificationRepository
+import org.mifospay.core.data.repository.OfficeRepository
 import org.mifospay.core.data.repository.RecentPayeeRepository
 import org.mifospay.core.data.repository.RegistrationRepository
 import org.mifospay.core.data.repository.RunReportRepository
@@ -46,6 +47,7 @@ import org.mifospay.core.data.repositoryImpl.InvoiceRepositoryImpl
 import org.mifospay.core.data.repositoryImpl.KycLevelRepositoryImpl
 import org.mifospay.core.data.repositoryImpl.LocalAssetRepositoryImpl
 import org.mifospay.core.data.repositoryImpl.NotificationRepositoryImpl
+import org.mifospay.core.data.repositoryImpl.OfficeRepositoryImpl
 import org.mifospay.core.data.repositoryImpl.RecentPayeeRepositoryImpl
 import org.mifospay.core.data.repositoryImpl.RegistrationRepositoryImpl
 import org.mifospay.core.data.repositoryImpl.RunReportRepositoryImpl
@@ -100,6 +102,7 @@ val RepositoryModule = module {
     }
     single<TwoFactorAuthRepository> { TwoFactorAuthRepositoryImpl(get(), get(ioDispatcher)) }
     single<UserRepository> { UserRepositoryImpl(get(), get(ioDispatcher)) }
+    single<OfficeRepository> { OfficeRepositoryImpl(get(), get(ioDispatcher)) }
 
     // QR Transfer Router for smart intra/inter-bank routing
     single { QrTransferRouter(userPreferencesRepository = get()) }

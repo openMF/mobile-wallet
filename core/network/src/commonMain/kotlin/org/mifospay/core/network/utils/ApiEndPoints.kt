@@ -27,4 +27,5 @@ object ApiEndPoints {
     const val RUN_REPORT = "runreports"
     const val USER = "users"
     const val STANDING_INSTRUCTION = "standinginstructions"
+    const val OFFICES = "offices"
 }
