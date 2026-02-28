@@ -3238,7 +3238,6 @@
 |    |    +--- org.jetbrains.compose.material3:material3:1.9.0-beta03 (*)
 |    |    +--- org.jetbrains.compose.components:components-resources:1.9.3 (*)
 |    |    +--- org.jetbrains.compose.components:components-ui-tooling-preview:1.9.3 (*)
-|    |    +--- project :core:model (*)
 |    |    +--- project :core:datastore (*)
 |    |    \--- project :core-base:designsystem (*)
 |    \--- org.jetbrains.kotlin:kotlin-parcelize-runtime:2.2.21 (*)
