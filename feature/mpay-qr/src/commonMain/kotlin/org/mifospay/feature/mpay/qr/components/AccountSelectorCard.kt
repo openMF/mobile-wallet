@@ -11,6 +11,7 @@ package org.mifospay.feature.mpay.qr.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -51,6 +52,7 @@ import template.core.base.designsystem.theme.KptTheme
  * - Office/bank name
  * - Masked account number
  * - "Primary" badge with checkmark
+ * - Dropdown indicator when multiple accounts available
  */
 @Composable
 internal fun AccountSelectorCard(
@@ -58,9 +60,19 @@ internal fun AccountSelectorCard(
     account: DefaultAccount,
     isPrimary: Boolean,
     modifier: Modifier = Modifier,
+    hasMultipleAccounts: Boolean = false,
+    onClick: (() -> Unit)? = null,
 ) {
     Card(
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier
+            .fillMaxWidth()
+            .then(
+                if (onClick != null && hasMultipleAccounts) {
+                    Modifier.clickable { onClick() }
+                } else {
+                    Modifier
+                },
+            ),
         colors = CardDefaults.cardColors(
             containerColor = KptTheme.colorScheme.surfaceContainerLow,
         ),
@@ -134,6 +146,16 @@ internal fun AccountSelectorCard(
                     style = KptTheme.typography.bodySmall,
                     fontWeight = FontWeight.Medium,
                     color = KptTheme.colorScheme.primary,
+                )
+            }
+
+            // Dropdown indicator when multiple accounts available
+            if (hasMultipleAccounts) {
+                Icon(
+                    imageVector = MifosIcons.KeyboardArrowDown,
+                    contentDescription = "Select account",
+                    modifier = Modifier.size(KptTheme.spacing.lg),
+                    tint = KptTheme.colorScheme.onSurfaceVariant,
                 )
             }
 
