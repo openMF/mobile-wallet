@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copyright 2024 Mifos Initiative
+
+    This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+    If a copy of the MPL was not distributed with this file,
+    You can obtain one at https://mozilla.org/MPL/2.0/.
+
+    See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+-->
+<resources>
+    <!-- Payments Tab Labels -->
+    <string name="feature_payments_vpa">Dirección de Pago Virtual (VPA)</string>
+    <string name="feature_payments_mobile_number">Número de teléfono</string>
+    <string name="feature_payments_receive">Recibir</string>
+    <string name="feature_payments_show_code">Mostrar código</string>
+    <string name="feature_payments_send">Enviar</string>
+    <string name="feature_payments_request">Solicitar</string>
+    <string name="feature_payments_history">Historial</string>
+    <string name="feature_payments_select_transfer_type_header">¿Cómo le gustaría realizar\nesta transferencia?</string>
+    <string name="feature_payments_select_transfer_type_subtitle">Elija un método de transferencia a continuación</string>
+    <string name="feature_payments_intra_bank_transfer_title">Transferencia intrabancaria</string>
+    <string name="feature_payments_intra_bank_transfer_description">Mueva fondos entre cuentas dentro de este banco.</string>
+    <string name="feature_payments_inter_bank_transfer_title">Transferencia interbancaria</string>
+    <string name="feature_payments_inter_bank_transfer_description">Envíe fondos a cuentas en diferentes bancos.</string>
+    <string name="feature_payments_transfer_options_title">Opciones de transferencia</string>
+</resources>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copyright 2024 Mifos Initiative
+
+    This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+    If a copy of the MPL was not distributed with this file,
+    You can obtain one at https://mozilla.org/MPL/2.0/.
+
+    See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+-->
+<resources>
+    <!-- Payments Tab Labels -->
+    <string name="feature_payments_vpa">Alamat Pembayaran Virtual (VPA)</string>
+    <string name="feature_payments_mobile_number">Nomor Ponsel</string>
+    <string name="feature_payments_receive">Terima</string>
+    <string name="feature_payments_show_code">Tampilkan kode</string>
+    <string name="feature_payments_send">Kirim</string>
+    <string name="feature_payments_request">Minta</string>
+    <string name="feature_payments_history">Riwayat</string>
+    <string name="feature_payments_select_transfer_type_header">Bagaimana Anda ingin melakukan transfer ini?</string>
+    <string name="feature_payments_select_transfer_type_subtitle">Pilih metode transfer di bawah</string>
+    <string name="feature_payments_intra_bank_transfer_title">Transfer Intrabank</string>
+    <string name="feature_payments_intra_bank_transfer_description">Pindahkan dana antar rekening di dalam bank ini.</string>
+    <string name="feature_payments_inter_bank_transfer_title">Transfer Antarbank</string>
+    <string name="feature_payments_inter_bank_transfer_description">Kirim dana ke rekening di bank yang berbeda.</string>
+    <string name="feature_payments_transfer_options_title">Opsi Transfer</string>
+</resources>

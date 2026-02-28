@@ -13,6 +13,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.navOptions
+import mobile_wallet.feature.payments.generated.resources.Res
+import mobile_wallet.feature.payments.generated.resources.feature_payments_history
+import mobile_wallet.feature.payments.generated.resources.feature_payments_request
+import mobile_wallet.feature.payments.generated.resources.feature_payments_send
+import org.jetbrains.compose.resources.stringResource
 import org.mifospay.core.ui.utility.TabContent
 import org.mifospay.feature.accounts.AccountsScreen
 import org.mifospay.feature.accounts.beneficiary.BeneficiaryAddEditType
@@ -58,7 +63,6 @@ import org.mifospay.feature.mpay.qr.scan.navigation.scanQrScreen
 import org.mifospay.feature.notification.navigateToNotification
 import org.mifospay.feature.notification.notificationScreen
 import org.mifospay.feature.payments.PAYMENTS_ROUTE
-import org.mifospay.feature.payments.PaymentsScreenContents
 import org.mifospay.feature.payments.RequestScreen
 import org.mifospay.feature.payments.paymentsScreen
 import org.mifospay.feature.payments.selectTransferType.SelectTransferTypeScreen
@@ -92,7 +96,7 @@ internal fun MifosNavHost(
     val navController = appState.navController
 
     val paymentsTabContents = listOf(
-        TabContent(PaymentsScreenContents.SEND.name) {
+        TabContent(stringResource(Res.string.feature_payments_send)) {
             SelectTransferTypeScreen(
                 onIntraBankTransferClick = {
                     navController.navigateToIntraBankHub()
@@ -102,12 +106,12 @@ internal fun MifosNavHost(
                 },
             )
         },
-        TabContent(PaymentsScreenContents.REQUEST.name) {
+        TabContent(stringResource(Res.string.feature_payments_request)) {
             RequestScreen(
                 showQr = navController::navigateToMpayQrScreen,
             )
         },
-        TabContent(PaymentsScreenContents.HISTORY.name) {
+        TabContent(stringResource(Res.string.feature_payments_history)) {
             HistoryScreen(
                 viewTransferDetail = navController::navigateToTransactionDetail,
             )
