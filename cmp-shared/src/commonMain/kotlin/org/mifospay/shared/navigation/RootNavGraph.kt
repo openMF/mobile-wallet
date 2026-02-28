@@ -18,12 +18,14 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import org.mifos.feature.passcode.mifosReAuthPasscodeScreen
 import org.mifos.feature.passcode.mifosRootPasscodeScreen
 import org.mifos.feature.passcode.navigateToRootMifosPasscodeScreen
 import org.mifospay.core.data.util.NetworkMonitor
 import org.mifospay.core.data.util.TimeZoneMonitor
 import org.mifospay.feature.auth.chooseAuthOption.chooseAuthOptionScreen
 import org.mifospay.feature.authenticator.biometrics.platformAuthenticator
+import org.mifospay.feature.authenticator.biometrics.reAuthPlatformAuthenticator
 import org.mifospay.shared.instance.InstanceSelectorScreen
 import org.mifospay.shared.ui.MifosApp
 
@@ -66,12 +68,26 @@ internal fun RootNavGraph(
             onPasscodeCreation = navHostController::navigateToMainGraph,
         )
 
+        mifosReAuthPasscodeScreen(
+            onForgotButton = onClickLogout,
+            onPasscodeConfirm = {
+                navHostController.popBackStack()
+            },
+        )
+
         platformAuthenticator(
             onAuthenticationSuccess = {
                 navHostController.popBackStack()
                 navHostController.navigateToMainGraph()
             },
             onForcedLogOut = onClickLogout,
+        )
+
+        reAuthPlatformAuthenticator(
+            onAuthenticationSuccess = {
+                navHostController.popBackStack()
+            },
+            onForcedLogOut = onClickLogout
         )
 
         composable(MifosNavGraph.MAIN_GRAPH) {

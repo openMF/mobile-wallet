@@ -15,15 +15,30 @@ import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 
 const val PLATFORM_AUTHENTICATOR_ROUTE = "platform_authenticator_route"
+const val RE_AUTH_PLATFORM_AUTHENTICATOR_ROUTE = "re_auth_platform_authenticator_route"
 
 fun NavController.navigateToPlatformAuthenticator(navOptions: NavOptions? = null) =
     navigate(PLATFORM_AUTHENTICATOR_ROUTE, navOptions)
+fun NavController.navigateToReAuthPlatformAuthenticator(navOptions: NavOptions? = null) =
+    navigate(RE_AUTH_PLATFORM_AUTHENTICATOR_ROUTE, navOptions)
 
 fun NavGraphBuilder.platformAuthenticator(
     onAuthenticationSuccess: () -> Unit,
     onForcedLogOut: () -> Unit,
 ) {
     composable(route = PLATFORM_AUTHENTICATOR_ROUTE) {
+        AuthenticationScreen(
+            onAuthenticationSuccess,
+            onForcedLogOut,
+        )
+    }
+}
+
+fun NavGraphBuilder.reAuthPlatformAuthenticator(
+    onAuthenticationSuccess: () -> Unit,
+    onForcedLogOut: () -> Unit,
+) {
+    composable(route = RE_AUTH_PLATFORM_AUTHENTICATOR_ROUTE) {
         AuthenticationScreen(
             onAuthenticationSuccess,
             onForcedLogOut,
