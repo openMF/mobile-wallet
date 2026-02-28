@@ -13,6 +13,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
@@ -38,17 +39,21 @@ import org.mifospay.core.common.DataState
 import org.mifospay.core.common.getSerialized
 import org.mifospay.core.common.setSerialized
 import org.mifospay.core.data.repository.LocalAssetRepository
+import org.mifospay.core.data.repository.OfficeRepository
 import org.mifospay.core.data.repository.SelfServiceRepository
 import org.mifospay.core.model.beneficiary.Beneficiary
 import org.mifospay.core.model.beneficiary.BeneficiaryPayload
 import org.mifospay.core.model.beneficiary.BeneficiaryUpdatePayload
+import org.mifospay.core.model.office.Office
 import org.mifospay.core.ui.utils.BaseViewModel
 import org.mifospay.feature.accounts.beneficiary.AEBAction.Internal.HandleBeneficiaryAddEditResult
+import org.mifospay.feature.accounts.beneficiary.AEBState.Companion.DEFAULT_OFFICE
 import org.mifospay.feature.accounts.beneficiary.AEBState.DialogState.Error
 
 internal class AddEditBeneficiaryViewModel(
     private val localAssetRepository: LocalAssetRepository,
     private val repository: SelfServiceRepository,
+    private val officeRepository: OfficeRepository,
     private val json: Json,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<AEBState, AEBEvent, AEBAction>(
@@ -91,6 +96,19 @@ internal class AddEditBeneficiaryViewModel(
         initialValue = emptyList(),
         started = SharingStarted.WhileSubscribed(5_000),
     )
+
+    val officeList = officeRepository.getOffices()
+        .mapLatest { dataState ->
+            when (dataState) {
+                is DataState.Success -> dataState.data.ifEmpty { listOf(DEFAULT_OFFICE) }
+                else -> listOf(DEFAULT_OFFICE)
+            }
+        }
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5_000),
+            initialValue = listOf(DEFAULT_OFFICE),
+        )
 
     init {
         stateFlow
@@ -267,7 +285,7 @@ internal data class AEBState(
     val accountNumber: String,
     val transferLimit: Int,
     val locale: String = "en_US",
-    val officeName: String = OFFICE_NAME,
+    val officeName: String = DEFAULT_OFFICE.name,
     val accountType: Int = SAVINGS_ACC_ID,
     val beneficiaryId: Long? = null,
     @Transient
@@ -307,7 +325,7 @@ internal data class AEBState(
 
     companion object {
         const val SAVINGS_ACC_ID = 2
-        const val OFFICE_NAME = "Head Office"
+        val DEFAULT_OFFICE = Office(id = 1, name = "Head Office", nameDecorated = "Head Office")
     }
 }
 
