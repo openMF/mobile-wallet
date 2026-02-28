@@ -11,7 +11,11 @@ package org.mifos.feature.passcode
 
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.unit.dp
+import androidx.navigationevent.NavigationEventInfo
+import androidx.navigationevent.compose.NavigationBackHandler
+import androidx.navigationevent.compose.rememberNavigationEventState
 import org.koin.compose.koinInject
 import org.mifos.authenticator.passcode.PasscodeManager
 import org.mifos.authenticator.passcode.screen.PasscodeAppearanceConfig
@@ -24,6 +28,9 @@ import org.mifos.authenticator.passcode.screen.PasscodeScreen
 import org.mifos.authenticator.passcode.screen.PasscodeSwitchConfig
 import template.core.base.designsystem.theme.KptTheme
 
+internal object CurrentInfo : NavigationEventInfo()
+
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun MifosPasscode(
     onForgotButton: () -> Unit,
@@ -31,6 +38,16 @@ fun MifosPasscode(
     onPasscodeCreation: () -> Unit,
     onPasscodeRejected: () -> Unit,
 ) {
+    val navEventState = rememberNavigationEventState(
+        currentInfo = CurrentInfo,
+    )
+    NavigationBackHandler(
+        state = navEventState,
+        isBackEnabled = true,
+        onBackCancelled = { },
+        onBackCompleted = { },
+    )
+
     val passcodeManager: PasscodeManager = koinInject<PasscodeManager>()
 
     PasscodeScreen(

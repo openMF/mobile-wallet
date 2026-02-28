@@ -11,14 +11,11 @@ package org.mifospay.shared
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import org.mifos.authenticator.biometrics.platformAuthenticator.AuthenticationResult
-import org.mifos.authenticator.biometrics.platformAuthenticator.PlatformAuthenticationProvider
 import org.mifos.authenticator.passcode.PasscodeAction
 import org.mifos.authenticator.passcode.PasscodeManager
 import org.mifospay.core.data.repository.ChooseAuthOptionRepository
@@ -53,7 +50,6 @@ class MifosPayViewModel(
     fun getAuthOption(): AppLockOption {
         return chooseAuthOptionRepository.getAuthOption()
     }
-
 }
 
 sealed interface MainUiState {

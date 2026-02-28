@@ -9,7 +9,6 @@
  */
 package org.mifospay.shared
 
-import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -27,10 +26,7 @@ import co.touchlab.kermit.Logger
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 import org.mifos.authenticator.biometrics.PlatformAuthenticatorLocalCompositionProvider
-import org.mifos.authenticator.biometrics.platformAuthenticationProvider
-import org.mifos.authenticator.passcode.screen.PasscodeScreen
 import org.mifos.feature.passcode.MifosPasscode
-import org.mifos.feature.passcode.RE_AUTH_MIFOS_PASSCODE_ROUTE
 import org.mifos.feature.passcode.ROOT_MIFOS_PASSCODE_ROUTE
 import org.mifos.feature.passcode.navigateToReAuthMifosPasscodeScreen
 import org.mifospay.core.common.GlobalAuthManager
@@ -40,7 +36,6 @@ import org.mifospay.core.data.util.TimeZoneMonitor
 import org.mifospay.core.designsystem.component.MifosDialogBox
 import org.mifospay.core.designsystem.theme.MifosTheme
 import org.mifospay.feature.authenticator.biometrics.PLATFORM_AUTHENTICATOR_ROUTE
-import org.mifospay.feature.authenticator.biometrics.navigateToPlatformAuthenticator
 import org.mifospay.feature.authenticator.biometrics.navigateToReAuthPlatformAuthenticator
 import org.mifospay.shared.MainUiState.Success
 import org.mifospay.shared.navigation.MifosNavGraph.LOGIN_GRAPH
@@ -55,7 +50,6 @@ fun MifosPaySharedApp(
     timeZoneMonitor: TimeZoneMonitor = koinInject(),
 ) {
     PlatformAuthenticatorLocalCompositionProvider {
-
         MifosPayApp(modifier, networkMonitor, timeZoneMonitor)
     }
 }
@@ -138,13 +132,14 @@ private fun MifosPayApp(
 
     DisposableEffect(lifeCycleObserver) {
         val observer = LifecycleEventObserver { _, event ->
-            when(event) {
+            when (event) {
                 Lifecycle.Event.ON_START -> {}
                 Lifecycle.Event.ON_RESUME -> {
                     val inactiveTime = Clock.System.now().toEpochMilliseconds() - onStopTime.value
-                    Logger.a { "inactiveTime: ${inactiveTime/1000}s" }
-                    if(inactiveTime > lockTimeOut) {
-                        when(authOption){
+                    Logger.a { "inactiveTime: ${inactiveTime / 1000}s" }
+                    if (inactiveTime > lockTimeOut) {
+                        val authOpt = viewModel.getAuthOption()
+                        when (authOpt) {
                             AppLockOption.MifosPasscode -> {
                                 navController.navigateToReAuthMifosPasscodeScreen()
                             }
@@ -154,7 +149,7 @@ private fun MifosPayApp(
                             else -> {}
                         }
                     }
-                    onStopTime.value = Long.MAX_VALUE;
+                    onStopTime.value = Long.MAX_VALUE
                 }
                 Lifecycle.Event.ON_PAUSE -> {}
                 Lifecycle.Event.ON_STOP -> {
@@ -166,8 +161,6 @@ private fun MifosPayApp(
         }
         lifeCycleObserver.addObserver(observer)
         onDispose { lifeCycleObserver.removeObserver(observer) }
-
-
     }
 
     MifosTheme {
@@ -187,6 +180,4 @@ private fun MifosPayApp(
             },
         )
     }
-
 }
-

@@ -33,8 +33,6 @@ kotlin {
             implementation(compose.components.resources)
             implementation(libs.window.size)
 
-            implementation(libs.androidx.lifecycle.process)
-
             implementation(projects.feature.auth)
             implementation(projects.libs.mifosPasscode)
             implementation(projects.feature.home)

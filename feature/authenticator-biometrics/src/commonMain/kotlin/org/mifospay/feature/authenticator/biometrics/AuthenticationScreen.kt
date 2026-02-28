@@ -21,9 +21,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigationevent.NavigationEventInfo
+import androidx.navigationevent.compose.NavigationBackHandler
+import androidx.navigationevent.compose.rememberNavigationEventState
 import mobile_wallet.feature.authenticator_biometrics.generated.resources.Res
 import mobile_wallet.feature.authenticator_biometrics.generated.resources.feature_authenticator_biometrics_error
 import mobile_wallet.feature.authenticator_biometrics.generated.resources.feature_authenticator_biometrics_ok
@@ -38,12 +42,25 @@ import org.mifospay.core.ui.utils.EventsEffect
 import org.mifospay.feature.authenticator.biometrics.components.SystemAuthenticatorButton
 import template.core.base.designsystem.theme.KptTheme
 
+internal object CurrentInfo : NavigationEventInfo()
+
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun AuthenticationScreen(
     onAuthenticationSuccess: () -> Unit,
     onForcedLogOut: () -> Unit,
     viewModel: AuthenticationScreenViewModel = koinViewModel(),
 ) {
+    val navEventState = rememberNavigationEventState(
+        currentInfo = CurrentInfo,
+    )
+    NavigationBackHandler(
+        state = navEventState,
+        isBackEnabled = true,
+        onBackCancelled = { },
+        onBackCompleted = { },
+    )
+
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
 
     EventsEffect(viewModel) { event ->

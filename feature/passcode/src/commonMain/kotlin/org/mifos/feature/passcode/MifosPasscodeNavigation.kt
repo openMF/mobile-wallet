@@ -33,7 +33,6 @@ fun NavGraphBuilder.mifosRootPasscodeScreen(
     onPasscodeConfirm: () -> Unit,
     onPasscodeCreation: () -> Unit,
 ) {
-
     composable(route = ROOT_MIFOS_PASSCODE_ROUTE) {
         MifosPasscode(
             onForgotButton,

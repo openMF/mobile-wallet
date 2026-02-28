@@ -87,7 +87,7 @@ internal fun RootNavGraph(
             onAuthenticationSuccess = {
                 navHostController.popBackStack()
             },
-            onForcedLogOut = onClickLogout
+            onForcedLogOut = onClickLogout,
         )
 
         composable(MifosNavGraph.MAIN_GRAPH) {
