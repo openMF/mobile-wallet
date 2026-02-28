@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copyright 2024 Mifos Initiative
+
+    This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+    If a copy of the MPL was not distributed with this file,
+    You can obtain one at https://mozilla.org/MPL/2.0/.
+
+    See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+-->
+<resources>
+    <!-- Payments Tab Labels -->
+    <string name="feature_payments_vpa">ভার্চুয়াল পেমেন্ট ঠিকানা (VPA)</string>
+    <string name="feature_payments_mobile_number">মোবাইল নম্বর</string>
+    <string name="feature_payments_receive">গ্রহণ করুন</string>
+    <string name="feature_payments_show_code">কোড দেখান</string>
+    <string name="feature_payments_send">পাঠান</string>
+    <string name="feature_payments_request">অনুরোধ করুন</string>
+    <string name="feature_payments_history">ইতিহাস</string>
+    <string name="feature_payments_select_transfer_type_header">আপনি কীভাবে এই\nস্থানান্তরটি করতে চান?</string>
+    <string name="feature_payments_select_transfer_type_subtitle">নিচের একটি স্থানান্তর পদ্ধতি বেছে নিন</string>
+    <string name="feature_payments_intra_bank_transfer_title">আন্তঃ-ব্যাংক স্থানান্তর (একই ব্যাংক)</string>
+    <string name="feature_payments_intra_bank_transfer_description">এই ব্যাংকের ভিতরের অ্যাকাউন্টগুলির মধ্যে তহবিল সরান।</string>
+    <string name="feature_payments_inter_bank_transfer_title">আন্তঃ-ব্যাংক স্থানান্তর (অন্য ব্যাংক)</string>
+    <string name="feature_payments_inter_bank_transfer_description">বিভিন্ন ব্যাংকের অ্যাকাউন্টে তহবিল পাঠান।</string>
+    <string name="feature_payments_transfer_options_title">স্থানান্তরের বিকল্পগুলি</string>
+</resources>

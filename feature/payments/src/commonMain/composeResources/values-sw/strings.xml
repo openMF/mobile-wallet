@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copyright 2024 Mifos Initiative
+
+    This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+    If a copy of the MPL was not distributed with this file,
+    You can obtain one at https://mozilla.org/MPL/2.0/.
+
+    See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+-->
+<resources>
+    <!-- Payments Tab Labels -->
+    <string name="feature_payments_vpa">Anwani ya Malipo ya Mtandaoni (VPA)</string>
+    <string name="feature_payments_mobile_number">Nambari ya Simu</string>
+    <string name="feature_payments_receive">Pokea</string>
+    <string name="feature_payments_show_code">Onyesha msimbo</string>
+    <string name="feature_payments_send">Tuma</string>
+    <string name="feature_payments_request">Omba</string>
+    <string name="feature_payments_history">Historia</string>
+    <string name="feature_payments_select_transfer_type_header">Ungependa kufanya\nuhamisho huu vipi?</string>
+    <string name="feature_payments_select_transfer_type_subtitle">Chagua njia ya uhamisho hapa chini</string>
+    <string name="feature_payments_intra_bank_transfer_title">Uhamisho Ndani ya Benki</string>
+    <string name="feature_payments_intra_bank_transfer_description">Hamisha fedha kati ya akaunti ndani ya benki hii.</string>
+    <string name="feature_payments_inter_bank_transfer_title">Uhamisho Kati ya Benki</string>
+    <string name="feature_payments_inter_bank_transfer_description">Tuma fedha kwenye akaunti katika benki tofauti.</string>
+    <string name="feature_payments_transfer_options_title">Chaguzi za Uhamisho</string>
+</resources>
