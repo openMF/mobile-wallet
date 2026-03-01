@@ -24,6 +24,7 @@ import org.mifospay.core.network.di.LocalModule
 import org.mifospay.core.network.di.NetworkModule
 import org.mifospay.feature.accounts.di.AccountsModule
 import org.mifospay.feature.auth.di.AuthModule
+import org.mifospay.feature.beneficiary.di.BeneficiaryModule
 import org.mifospay.feature.editpassword.di.EditPasswordModule
 import org.mifospay.feature.faq.di.FaqModule
 import org.mifospay.feature.fastmpay.di.FastMpayModule
@@ -79,6 +80,7 @@ object KoinModules {
             HistoryModule,
             PaymentsModule,
             AccountsModule,
+            BeneficiaryModule,
             InvoicesModule,
             KYCModule,
             NotificationModule,
