@@ -35,8 +35,8 @@ import org.mifospay.core.ui.utils.BaseViewModel
 import org.mifospay.feature.accounts.AccountAction.Internal.BeneficiaryDeleteResultReceived
 import org.mifospay.feature.accounts.AccountAction.Internal.DeleteBeneficiary
 import org.mifospay.feature.accounts.AccountEvent.OnAddEditSavingsAccount
-import org.mifospay.feature.accounts.beneficiary.BeneficiaryAddEditType
 import org.mifospay.feature.accounts.savingsaccount.SavingsAddEditType
+import org.mifospay.feature.beneficiary.BeneficiaryAddEditType
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class AccountViewModel(
@@ -101,7 +101,7 @@ class AccountViewModel(
             }
 
             is AccountAction.AddTPTBeneficiary -> {
-                sendEvent(AccountEvent.OnAddOrEditTPTBeneficiary(BeneficiaryAddEditType.AddItem))
+                sendEvent(AccountEvent.OnAddOrEditTPTBeneficiary(BeneficiaryAddEditType.AddItem()))
             }
 
             is AccountAction.EditBeneficiary -> {

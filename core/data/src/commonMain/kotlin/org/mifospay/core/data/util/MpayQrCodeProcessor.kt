@@ -93,6 +93,7 @@ object MpayQrCodeProcessor {
                     append("&ai=${qrCodeData.accountId}")
                     append("&cu=${qrCodeData.currency}")
                     append("&oi=${qrCodeData.officeId}")
+                    append("&on=${qrCodeData.officeName}")
                     append("&pi=${qrCodeData.accountTypeId}")
                     append("&ae=${qrCodeData.accountExternalId ?: ""}")
                 }
@@ -180,6 +181,7 @@ object MpayQrCodeProcessor {
             accountId = accountId,
             currency = params["cu"] ?: QrCodeData.DEFAULT_CURRENCY,
             officeId = params["oi"]?.toLongOrNull() ?: QrCodeData.OFFICE_ID,
+            officeName = params["on"] ?: "",
             accountTypeId = params["pi"]?.toLongOrNull() ?: QrCodeData.ACCOUNT_TYPE_ID,
             phoneNumber = phoneNumber,
             accountExternalId = accountExternalId,

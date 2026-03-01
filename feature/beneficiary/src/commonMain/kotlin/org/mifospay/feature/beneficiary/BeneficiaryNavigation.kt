@@ -7,7 +7,7 @@
  *
  * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
  */
-package org.mifospay.feature.accounts.beneficiary
+package org.mifospay.feature.beneficiary
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.NavController
@@ -19,7 +19,7 @@ import org.mifospay.core.ui.composableWithSlideTransitions
 
 private const val ADD_TYPE: String = "add_beneficiary"
 private const val EDIT_TYPE: String = "edit_beneficiary"
-private const val EDIT_ITEM_ID: String = "beneficiary_edit_id"
+private const val BENEFICIARY_DATA: String = "beneficiary_data"
 
 private const val ADD_EDIT_ITEM_PREFIX: String = "beneficiary_add_edit_item"
 private const val ADD_EDIT_ITEM_TYPE: String = "beneficiary_add_edit_type"
@@ -27,15 +27,21 @@ private const val ADD_EDIT_ITEM_TYPE: String = "beneficiary_add_edit_type"
 private const val ADD_EDIT_ITEM_ROUTE: String =
     ADD_EDIT_ITEM_PREFIX +
         "/{$ADD_EDIT_ITEM_TYPE}" +
-        "?$EDIT_ITEM_ID={$EDIT_ITEM_ID}"
+        "?$BENEFICIARY_DATA={$BENEFICIARY_DATA}"
 
 data class BeneficiaryAddEditArgs(
     val addEditType: BeneficiaryAddEditType,
 ) {
     constructor(savedStateHandle: SavedStateHandle) : this(
         addEditType = when (requireNotNull(savedStateHandle[ADD_EDIT_ITEM_TYPE])) {
-            ADD_TYPE -> BeneficiaryAddEditType.AddItem
-            EDIT_TYPE -> BeneficiaryAddEditType.EditItem(requireNotNull(savedStateHandle[EDIT_ITEM_ID]))
+            ADD_TYPE -> {
+                val beneficiaryData: String? = savedStateHandle[BENEFICIARY_DATA]
+                val data = beneficiaryData?.takeIf { it != "null" }
+                BeneficiaryAddEditType.AddItem(data)
+            }
+            EDIT_TYPE -> BeneficiaryAddEditType.EditItem(
+                requireNotNull(savedStateHandle[BENEFICIARY_DATA]),
+            )
             else -> throw IllegalStateException("Unknown BeneficiaryAddEditType.")
         },
     )
@@ -64,7 +70,7 @@ fun NavController.navigateToBeneficiaryAddEdit(
 ) {
     navigate(
         route = "$ADD_EDIT_ITEM_PREFIX/${addEditType.toTypeString()}" +
-            "?$EDIT_ITEM_ID=${addEditType.toIdOrNull()}",
+            "?$BENEFICIARY_DATA=${addEditType.toDataOrNull()}",
         navOptions = navOptions,
     )
 }
@@ -75,8 +81,8 @@ private fun BeneficiaryAddEditType.toTypeString(): String =
         is BeneficiaryAddEditType.EditItem -> EDIT_TYPE
     }
 
-private fun BeneficiaryAddEditType.toIdOrNull(): String? =
+private fun BeneficiaryAddEditType.toDataOrNull(): String? =
     when (this) {
-        is BeneficiaryAddEditType.AddItem -> null
+        is BeneficiaryAddEditType.AddItem -> beneficiary
         is BeneficiaryAddEditType.EditItem -> beneficiary
     }

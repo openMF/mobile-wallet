@@ -19,6 +19,7 @@ val FastMpayModule = module {
         FastMpayProcessor(
             beneficiaryRepository = get(),
             userPreferencesRepository = get(),
+            officeRepository = get(),
         )
     }
     viewModelOf(::FastMpayViewModel)

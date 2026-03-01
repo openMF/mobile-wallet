@@ -1,0 +1,37 @@
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
+package org.mifospay.feature.beneficiary
+
+import kotlinx.serialization.Serializable
+
+@Serializable
+sealed class BeneficiaryAddEditType {
+
+    /**
+     * Add a new beneficiary.
+     * - If [beneficiary] is null: empty form (manual add)
+     * - If [beneficiary] is non-null: pre-filled form (QR scan add)
+     *
+     * Shows "Add Beneficiary" title and "Save" button, calls POST API.
+     */
+    @Serializable
+    data class AddItem(
+        val beneficiary: String? = null,
+    ) : BeneficiaryAddEditType()
+
+    /**
+     * Edit an existing beneficiary.
+     * Shows "Update Beneficiary" title and "Update" button, calls PUT API.
+     */
+    @Serializable
+    data class EditItem(
+        val beneficiary: String,
+    ) : BeneficiaryAddEditType()
+}

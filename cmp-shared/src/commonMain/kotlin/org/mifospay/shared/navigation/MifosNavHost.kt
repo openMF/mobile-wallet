@@ -20,15 +20,15 @@ import mobile_wallet.feature.payments.generated.resources.feature_payments_send
 import org.jetbrains.compose.resources.stringResource
 import org.mifospay.core.ui.utility.TabContent
 import org.mifospay.feature.accounts.AccountsScreen
-import org.mifospay.feature.accounts.beneficiary.BeneficiaryAddEditType
-import org.mifospay.feature.accounts.beneficiary.addEditBeneficiaryScreen
-import org.mifospay.feature.accounts.beneficiary.navigateToBeneficiaryAddEdit
-import org.mifospay.feature.accounts.benficiaryList.BeneficiaryListScreen
 import org.mifospay.feature.accounts.savingsaccount.SavingsAddEditType
 import org.mifospay.feature.accounts.savingsaccount.addEditSavingAccountScreen
 import org.mifospay.feature.accounts.savingsaccount.details.navigateToSavingAccountDetails
 import org.mifospay.feature.accounts.savingsaccount.details.savingAccountDetailRoute
 import org.mifospay.feature.accounts.savingsaccount.navigateToSavingAccountAddEdit
+import org.mifospay.feature.beneficiary.BeneficiaryAddEditType
+import org.mifospay.feature.beneficiary.addEditBeneficiaryScreen
+import org.mifospay.feature.beneficiary.list.BeneficiaryListScreen
+import org.mifospay.feature.beneficiary.navigateToBeneficiaryAddEdit
 import org.mifospay.feature.editpassword.navigation.editPasswordScreen
 import org.mifospay.feature.editpassword.navigation.navigateToEditPassword
 import org.mifospay.feature.faq.navigation.faqScreen
@@ -299,7 +299,7 @@ internal fun MifosNavHost(
         fastMpayScreen(
             onNavigateToAddBeneficiary = { beneficiaryData ->
                 navController.navigateToBeneficiaryAddEdit(
-                    BeneficiaryAddEditType.EditItem(beneficiaryData),
+                    BeneficiaryAddEditType.AddItem(beneficiaryData),
                     navOptions = navOptions {
                         popUpTo(FAST_MPAY_ROUTE) {
                             inclusive = true
@@ -394,7 +394,7 @@ internal fun MifosNavHost(
             },
             navigateToBeneficiary = {
                 navController.navigateToBeneficiaryAddEdit(
-                    BeneficiaryAddEditType.AddItem,
+                    BeneficiaryAddEditType.AddItem(),
                 )
             },
             navigateBack = navController::popBackStack,
@@ -480,7 +480,7 @@ internal fun MifosNavHost(
             },
             navigateToAddBeneficiaryScreen = {
                 navController.navigateToBeneficiaryAddEdit(
-                    BeneficiaryAddEditType.EditItem(it),
+                    BeneficiaryAddEditType.AddItem(it),
                     navOptions = navOptions {
                         popUpTo(SCAN_QR_ROUTE) {
                             inclusive = true
