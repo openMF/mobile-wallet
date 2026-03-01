@@ -73,7 +73,12 @@ class FastMpayProcessor(
                 // Beneficiary: Pre-fill beneficiary form
                 val officeName = resolveOfficeName(qrData)
                 val beneficiaryJson = convertToBeneficiaryJson(qrData, officeName)
-                QrProcessResult.NavigateToAddBeneficiary(beneficiaryJson)
+                val qrDataJson = Json.encodeToString(QrCodeData.serializer(), qrData)
+                QrProcessResult.NavigateToAddBeneficiary(
+                    beneficiaryData = beneficiaryJson,
+                    sourceQrType = QrCodeType.BENEFICIARY,
+                    sourceQrData = qrDataJson,
+                )
             }
 
             QrCodeType.MERCHANT -> {
@@ -111,7 +116,9 @@ class FastMpayProcessor(
         val officeName = resolveOfficeName(qrData)
 
         return try {
-            val beneficiaryResult = beneficiaryRepository.getBeneficiaryList().first()
+            // Skip Loading state and get the actual result (Success or Error)
+            val beneficiaryResult = beneficiaryRepository.getBeneficiaryList()
+                .first { it !is DataState.Loading }
 
             when (beneficiaryResult) {
                 is DataState.Success -> {
@@ -128,26 +135,46 @@ class FastMpayProcessor(
                     } else {
                         // Beneficiary doesn't exist -> Navigate to AddBeneficiary
                         val beneficiaryJson = convertToBeneficiaryJson(qrData, officeName)
-                        QrProcessResult.NavigateToAddBeneficiary(beneficiaryJson)
+                        val qrDataJson = Json.encodeToString(QrCodeData.serializer(), qrData)
+                        QrProcessResult.NavigateToAddBeneficiary(
+                            beneficiaryData = beneficiaryJson,
+                            sourceQrType = QrCodeType.INTRA_BANK,
+                            sourceQrData = qrDataJson,
+                        )
                     }
                 }
 
                 is DataState.Error -> {
                     // On error, fallback to add beneficiary flow
                     val beneficiaryJson = convertToBeneficiaryJson(qrData, officeName)
-                    QrProcessResult.NavigateToAddBeneficiary(beneficiaryJson)
+                    val qrDataJson = Json.encodeToString(QrCodeData.serializer(), qrData)
+                    QrProcessResult.NavigateToAddBeneficiary(
+                        beneficiaryData = beneficiaryJson,
+                        sourceQrType = QrCodeType.INTRA_BANK,
+                        sourceQrData = qrDataJson,
+                    )
                 }
 
                 is DataState.Loading -> {
-                    // Should not happen since we use .first()
+                    // Should not happen since we filter out Loading state
                     val beneficiaryJson = convertToBeneficiaryJson(qrData, officeName)
-                    QrProcessResult.NavigateToAddBeneficiary(beneficiaryJson)
+                    val qrDataJson = Json.encodeToString(QrCodeData.serializer(), qrData)
+                    QrProcessResult.NavigateToAddBeneficiary(
+                        beneficiaryData = beneficiaryJson,
+                        sourceQrType = QrCodeType.INTRA_BANK,
+                        sourceQrData = qrDataJson,
+                    )
                 }
             }
         } catch (e: Exception) {
             // On exception, fallback to add beneficiary flow
             val beneficiaryJson = convertToBeneficiaryJson(qrData, officeName)
-            QrProcessResult.NavigateToAddBeneficiary(beneficiaryJson)
+            val qrDataJson = Json.encodeToString(QrCodeData.serializer(), qrData)
+            QrProcessResult.NavigateToAddBeneficiary(
+                beneficiaryData = beneficiaryJson,
+                sourceQrType = QrCodeType.INTRA_BANK,
+                sourceQrData = qrDataJson,
+            )
         }
     }
 
@@ -168,7 +195,9 @@ class FastMpayProcessor(
 
         // Fallback: resolve from officeId (backward compatibility with old QR codes)
         return try {
-            val result = officeRepository.getOffices().first()
+            // Skip Loading state and get the actual result
+            val result = officeRepository.getOffices()
+                .first { it !is DataState.Loading }
             when (result) {
                 is DataState.Success -> {
                     result.data.find { it.id == qrData.officeId }?.name

@@ -7,7 +7,7 @@
  *
  * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
  */
-package org.mifospay.feature.beneficiary
+package org.mifospay.feature.beneficiary.addupdatebeneficiary
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
@@ -46,10 +46,12 @@ import org.mifospay.core.model.beneficiary.Beneficiary
 import org.mifospay.core.model.beneficiary.BeneficiaryPayload
 import org.mifospay.core.model.beneficiary.BeneficiaryUpdatePayload
 import org.mifospay.core.model.office.Office
+import org.mifospay.core.model.utils.QrCodeData
+import org.mifospay.core.model.utils.QrCodeType
 import org.mifospay.core.ui.utils.BaseViewModel
-import org.mifospay.feature.beneficiary.AEBAction.Internal.HandleBeneficiaryAddEditResult
-import org.mifospay.feature.beneficiary.AEBState.Companion.DEFAULT_OFFICE
-import org.mifospay.feature.beneficiary.AEBState.DialogState.Error
+import org.mifospay.feature.beneficiary.addupdatebeneficiary.AEBAction.Internal.HandleBeneficiaryAddEditResult
+import org.mifospay.feature.beneficiary.addupdatebeneficiary.AEBState.Companion.DEFAULT_OFFICE
+import org.mifospay.feature.beneficiary.addupdatebeneficiary.AEBState.DialogState.Error
 
 @OptIn(ExperimentalCoroutinesApi::class)
 internal class AddEditBeneficiaryViewModel(
@@ -62,6 +64,15 @@ internal class AddEditBeneficiaryViewModel(
     initialState = savedStateHandle.getSerialized(ADD_EDIT_BENEFICIARY_KEY) ?: run {
         when (val addEditType = BeneficiaryAddEditArgs(savedStateHandle).addEditType) {
             is BeneficiaryAddEditType.AddItem -> {
+                // Parse sourceQrData if available (for post-add navigation)
+                val sourceQrData = addEditType.sourceQrData?.let { qrDataJson ->
+                    try {
+                        json.decodeFromString(QrCodeData.serializer(), qrDataJson)
+                    } catch (e: Exception) {
+                        null
+                    }
+                }
+
                 if (addEditType.beneficiary != null) {
                     // Pre-filled from QR scan
                     val beneficiary = json.decodeFromString(
@@ -75,6 +86,8 @@ internal class AddEditBeneficiaryViewModel(
                         officeName = beneficiary.officeName,
                         officeId = beneficiary.officeId,
                         addEditType = addEditType,
+                        sourceQrType = addEditType.sourceQrType,
+                        sourceQrData = sourceQrData,
                     )
                 } else {
                     // Empty form for manual add
@@ -83,6 +96,8 @@ internal class AddEditBeneficiaryViewModel(
                         accountNumber = "",
                         transferLimit = 0,
                         addEditType = addEditType,
+                        sourceQrType = addEditType.sourceQrType,
+                        sourceQrData = sourceQrData,
                     )
                 }
             }
@@ -295,7 +310,7 @@ internal class AddEditBeneficiaryViewModel(
             }
 
             is DataState.Error -> {
-                val message = action.result.exception.message.toString()
+                val message = extractMifosErrorMessage(action.result.exception)
                 mutableStateFlow.update {
                     it.copy(dialogState = Error.StringMessage(message))
                 }
@@ -306,8 +321,62 @@ internal class AddEditBeneficiaryViewModel(
                     it.copy(dialogState = null)
                 }
                 sendEvent(AEBEvent.ShowToast(action.result.data))
-                sendEvent(AEBEvent.NavigateBack)
+
+                // Navigate based on source QR type and QR data
+                val qrData = state.sourceQrData
+                when (state.sourceQrType) {
+                    QrCodeType.INTRA_BANK -> {
+                        if (qrData != null) {
+                            // Use full QR data for navigation to TransferConfirm
+                            sendEvent(
+                                AEBEvent.NavigateToIntraBankTransfer(
+                                    officeId = qrData.officeId.toInt(),
+                                    clientId = qrData.clientId,
+                                    accountTypeId = qrData.accountTypeId.toInt(),
+                                    accountId = qrData.accountId.toInt(),
+                                    amount = qrData.amount.toIntOrNull() ?: 0,
+                                    accountName = qrData.clientName,
+                                    accountNo = qrData.accountNo,
+                                ),
+                            )
+                        } else {
+                            // Fallback: no QR data available, go back
+                            sendEvent(AEBEvent.NavigateBack)
+                        }
+                    }
+                    QrCodeType.INTER_BANK -> {
+                        sendEvent(
+                            AEBEvent.NavigateToInterbankTransfer(
+                                accountNumber = state.accountNumber,
+                                recipientName = state.name,
+                            ),
+                        )
+                    }
+                    else -> {
+                        // No QR source or other types - just go back
+                        sendEvent(AEBEvent.NavigateBack)
+                    }
+                }
             }
+        }
+    }
+
+    /**
+     * Extract readable error message from MifosError JSON structure.
+     *
+     * Server errors come as JSON: {"defaultUserMessage":"...", ...}
+     * This extracts the user-friendly message instead of showing raw JSON.
+     */
+    private fun extractMifosErrorMessage(exception: Throwable): String {
+        val rawMessage = exception.message ?: return "Unknown error"
+
+        // Try to parse MifosError JSON structure
+        return try {
+            // Pattern: {"defaultUserMessage":"...", ...}
+            val regex = """"defaultUserMessage"\s*:\s*"([^"]+)"""".toRegex()
+            regex.find(rawMessage)?.groupValues?.get(1) ?: rawMessage
+        } catch (e: Exception) {
+            rawMessage
         }
     }
 }
@@ -323,6 +392,8 @@ internal data class AEBState(
     val officeId: Long? = null,
     val accountType: Int = SAVINGS_ACC_ID,
     val beneficiaryId: Long? = null,
+    val sourceQrType: QrCodeType? = null,
+    val sourceQrData: QrCodeData? = null,
     @Transient
     val dialogState: DialogState? = null,
 ) {
@@ -368,6 +439,29 @@ internal sealed interface AEBEvent {
     data object NavigateBack : AEBEvent
     data object NavigateToQr : AEBEvent
     data class ShowToast(val message: String) : AEBEvent
+
+    /**
+     * Navigate to intra-bank transfer screen after successfully adding beneficiary from QR scan.
+     * Contains all QR data needed for navigating to TransferConfirm screen.
+     */
+    data class NavigateToIntraBankTransfer(
+        val officeId: Int,
+        val clientId: Long,
+        val accountTypeId: Int,
+        val accountId: Int,
+        val amount: Int,
+        val accountName: String,
+        val accountNo: String,
+    ) : AEBEvent
+
+    /**
+     * Navigate to inter-bank transfer screen after successfully adding beneficiary from QR scan.
+     * Contains phone number/external ID for participant lookup.
+     */
+    data class NavigateToInterbankTransfer(
+        val accountNumber: String,
+        val recipientName: String,
+    ) : AEBEvent
 }
 
 internal sealed interface AEBAction {

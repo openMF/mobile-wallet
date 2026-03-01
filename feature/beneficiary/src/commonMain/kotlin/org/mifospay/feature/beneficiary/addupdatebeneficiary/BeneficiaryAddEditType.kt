@@ -7,9 +7,10 @@
  *
  * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
  */
-package org.mifospay.feature.beneficiary
+package org.mifospay.feature.beneficiary.addupdatebeneficiary
 
 import kotlinx.serialization.Serializable
+import org.mifospay.core.model.utils.QrCodeType
 
 @Serializable
 sealed class BeneficiaryAddEditType {
@@ -18,12 +19,16 @@ sealed class BeneficiaryAddEditType {
      * Add a new beneficiary.
      * - If [beneficiary] is null: empty form (manual add)
      * - If [beneficiary] is non-null: pre-filled form (QR scan add)
+     * - If [sourceQrType] is non-null: came from QR scan, navigate to transfer after success
+     * - If [sourceQrData] is non-null: contains full QR data for post-add navigation
      *
      * Shows "Add Beneficiary" title and "Save" button, calls POST API.
      */
     @Serializable
     data class AddItem(
         val beneficiary: String? = null,
+        val sourceQrType: QrCodeType? = null,
+        val sourceQrData: String? = null,
     ) : BeneficiaryAddEditType()
 
     /**

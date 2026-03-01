@@ -11,10 +11,12 @@ package org.mifospay.feature.beneficiary.di
 
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
-import org.mifospay.feature.beneficiary.AddEditBeneficiaryViewModel
+import org.mifospay.feature.beneficiary.addupdatebeneficiary.AddEditBeneficiaryViewModel
+import org.mifospay.feature.beneficiary.deletebeneficiary.DeleteBeneficiaryViewModel
 import org.mifospay.feature.beneficiary.list.BeneficiaryListViewModel
 
 val BeneficiaryModule = module {
     viewModelOf(::AddEditBeneficiaryViewModel)
     viewModelOf(::BeneficiaryListViewModel)
+    viewModelOf(::DeleteBeneficiaryViewModel)
 }

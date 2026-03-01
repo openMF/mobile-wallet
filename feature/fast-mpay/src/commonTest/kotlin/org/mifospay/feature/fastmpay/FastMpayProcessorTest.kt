@@ -148,6 +148,7 @@ class FastMpayProcessorTest {
             // Then
             assertIs<QrProcessResult.NavigateToAddBeneficiary>(result)
             assertNotNull(result.beneficiaryData)
+            assertEquals(QrCodeType.INTRA_BANK, result.sourceQrType)
         }
 
     @Test
@@ -218,6 +219,7 @@ class FastMpayProcessorTest {
 
         // Then - Should not be BankMismatch since FSP IDs match (case-insensitive)
         assertIs<QrProcessResult.NavigateToAddBeneficiary>(result)
+        assertEquals(QrCodeType.INTRA_BANK, result.sourceQrType)
     }
 
     @Test
@@ -252,6 +254,7 @@ class FastMpayProcessorTest {
 
         // Then - Should not be BankMismatch when QR has no FSP ID
         assertIs<QrProcessResult.NavigateToAddBeneficiary>(result)
+        assertEquals(QrCodeType.INTRA_BANK, result.sourceQrType)
     }
 
     @Test
@@ -286,6 +289,7 @@ class FastMpayProcessorTest {
 
         // Then - On error, should fallback to add beneficiary
         assertIs<QrProcessResult.NavigateToAddBeneficiary>(result)
+        assertEquals(QrCodeType.INTRA_BANK, result.sourceQrType)
     }
 
     // endregion
@@ -415,6 +419,7 @@ class FastMpayProcessorTest {
         // Then
         assertIs<QrProcessResult.NavigateToAddBeneficiary>(result)
         assertNotNull(result.beneficiaryData)
+        assertEquals(QrCodeType.BENEFICIARY, result.sourceQrType)
     }
 
     // endregion
@@ -462,6 +467,7 @@ class FastMpayProcessorTest {
         assertIs<QrProcessResult.NavigateToAddBeneficiary>(result)
         val beneficiary = Json.decodeFromString<Beneficiary>(result.beneficiaryData)
         assertEquals("Lagos Branch", beneficiary.officeName)
+        assertEquals(QrCodeType.INTRA_BANK, result.sourceQrType)
     }
 
     @Test
@@ -499,6 +505,7 @@ class FastMpayProcessorTest {
         assertIs<QrProcessResult.NavigateToAddBeneficiary>(result)
         val beneficiary = Json.decodeFromString<Beneficiary>(result.beneficiaryData)
         assertEquals("Head Office", beneficiary.officeName)
+        assertEquals(QrCodeType.INTRA_BANK, result.sourceQrType)
     }
 
     @Test
@@ -539,6 +546,7 @@ class FastMpayProcessorTest {
         assertIs<QrProcessResult.NavigateToAddBeneficiary>(result)
         val beneficiary = Json.decodeFromString<Beneficiary>(result.beneficiaryData)
         assertEquals("Head Office", beneficiary.officeName)
+        assertEquals(QrCodeType.INTRA_BANK, result.sourceQrType)
     }
 
     // endregion

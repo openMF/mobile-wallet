@@ -13,6 +13,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -33,6 +34,7 @@ import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -54,8 +56,6 @@ import org.jetbrains.compose.resources.getString
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
-import org.mifospay.core.designsystem.component.BasicDialogState
-import org.mifospay.core.designsystem.component.MifosBasicDialog
 import org.mifospay.core.designsystem.component.MifosScaffold
 import org.mifospay.core.designsystem.icon.MifosIcons
 import org.mifospay.core.designsystem.theme.MifosTheme
@@ -63,8 +63,12 @@ import org.mifospay.core.model.beneficiary.Beneficiary
 import org.mifospay.core.ui.AvatarBox
 import org.mifospay.core.ui.EmptyContentScreen
 import org.mifospay.core.ui.MifosProgressIndicator
+import org.mifospay.core.ui.MifosProgressIndicatorOverlay
 import org.mifospay.core.ui.utils.EventsEffect
-import org.mifospay.feature.beneficiary.BeneficiaryAddEditType
+import org.mifospay.feature.beneficiary.addupdatebeneficiary.BeneficiaryAddEditType
+import org.mifospay.feature.beneficiary.deletebeneficiary.DeleteBeneficiaryBottomSheet
+import org.mifospay.feature.beneficiary.deletebeneficiary.DeleteBeneficiaryState
+import org.mifospay.feature.beneficiary.deletebeneficiary.DeleteBeneficiaryViewModel
 import template.core.base.designsystem.theme.KptTheme
 
 @Composable
@@ -72,12 +76,21 @@ fun BeneficiaryListScreen(
     onAddOrEditBeneficiary: (BeneficiaryAddEditType) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: BeneficiaryListViewModel = koinViewModel(),
+    deleteViewModel: DeleteBeneficiaryViewModel = koinViewModel(),
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
 
-    val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val accountState by viewModel.accountState.collectAsStateWithLifecycle()
+    val deleteState by deleteViewModel.state.collectAsStateWithLifecycle()
+
+    // Observe delete success and trigger list refresh
+    LaunchedEffect(deleteState.deleteSuccessful) {
+        if (deleteState.deleteSuccessful) {
+            viewModel.refreshBeneficiaryList()
+            deleteViewModel.consumeDeleteSuccess()
+        }
+    }
 
     EventsEffect(viewModel) { event ->
         when (event) {
@@ -91,46 +104,33 @@ fun BeneficiaryListScreen(
         }
     }
 
-    BeneficiaryListDialog(
-        dialogState = state.dialogState,
-        onAction = remember(viewModel) {
-            { viewModel.trySendAction(BeneficiaryListAction.DismissDialog) }
+    // Delete beneficiary bottom sheet - managed by separate ViewModel
+    DeleteBeneficiaryBottomSheet(
+        dialogState = deleteState.dialogState,
+        onConfirmDelete = remember(deleteViewModel) {
+            { beneficiaryId -> deleteViewModel.confirmDelete(beneficiaryId) }
+        },
+        onDismiss = remember(deleteViewModel) {
+            { deleteViewModel.dismissDialog() }
         },
     )
 
-    BeneficiaryListScreenContent(
-        state = accountState,
-        onAction = remember(viewModel) {
-            { viewModel.trySendAction(it) }
-        },
-        snackbarHostState = snackbarHostState,
-        modifier = modifier,
-    )
-}
-
-@Composable
-private fun BeneficiaryListDialog(
-    dialogState: BeneficiaryListState.DialogState?,
-    onAction: (BeneficiaryListAction) -> Unit,
-) {
-    when (dialogState) {
-        is BeneficiaryListState.DialogState.DeleteBeneficiary -> MifosBasicDialog(
-            visibilityState = BasicDialogState.Shown(
-                title = stringResource(dialogState.title),
-                message = stringResource(dialogState.message),
-            ),
-            onConfirm = dialogState.onConfirm,
-            onDismissRequest = { onAction(BeneficiaryListAction.DismissDialog) },
+    Box(modifier = modifier.fillMaxSize()) {
+        BeneficiaryListScreenContent(
+            state = accountState,
+            onAction = remember(viewModel) {
+                { viewModel.trySendAction(it) }
+            },
+            onDeleteBeneficiary = remember(deleteViewModel) {
+                { id, name -> deleteViewModel.showDeleteConfirmation(id, name) }
+            },
+            snackbarHostState = snackbarHostState,
         )
 
-        is BeneficiaryListState.DialogState.Error -> MifosBasicDialog(
-            visibilityState = BasicDialogState.Shown(
-                message = dialogState.message,
-            ),
-            onDismissRequest = { onAction(BeneficiaryListAction.DismissDialog) },
-        )
-
-        else -> Unit
+        // Show overlay progress indicator over the list when deleting
+        if (deleteState.dialogState is DeleteBeneficiaryState.DialogState.Deleting) {
+            MifosProgressIndicatorOverlay()
+        }
     }
 }
 
@@ -138,6 +138,7 @@ private fun BeneficiaryListDialog(
 private fun BeneficiaryListScreenContent(
     state: BeneficiaryListState.ViewState,
     onAction: (BeneficiaryListAction) -> Unit,
+    onDeleteBeneficiary: (Long, String) -> Unit,
     snackbarHostState: SnackbarHostState,
     modifier: Modifier = Modifier,
 ) {
@@ -172,6 +173,7 @@ private fun BeneficiaryListScreenContent(
             modifier = Modifier.padding(paddingValues),
             state = state,
             onAction = onAction,
+            onDeleteBeneficiary = onDeleteBeneficiary,
         )
     }
 }
@@ -180,6 +182,7 @@ private fun BeneficiaryListScreenContent(
 fun BeneficiariesList(
     state: BeneficiaryListState.ViewState,
     onAction: (BeneficiaryListAction) -> Unit,
+    onDeleteBeneficiary: (Long, String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     when (state) {
@@ -213,7 +216,7 @@ fun BeneficiariesList(
                         BeneficiaryItem(
                             beneficiary = beneficiary,
                             onClickEdit = { onAction(BeneficiaryListAction.EditBeneficiary(it)) },
-                            onClickDelete = { onAction(BeneficiaryListAction.DeleteBeneficiary(it)) },
+                            onClickDelete = onDeleteBeneficiary,
                         )
                     }
                 }
@@ -236,7 +239,7 @@ fun BeneficiaryItem(
     beneficiary: Beneficiary,
     modifier: Modifier = Modifier,
     onClickEdit: (Beneficiary) -> Unit,
-    onClickDelete: (Long) -> Unit,
+    onClickDelete: (Long, String) -> Unit,
 ) {
     OutlinedCard(
         modifier = modifier.fillMaxWidth(),
@@ -282,7 +285,7 @@ fun BeneficiaryItem(
 
                     FilledTonalIconButton(
                         onClick = {
-                            onClickDelete(beneficiary.id)
+                            onClickDelete(beneficiary.id, beneficiary.name)
                         },
                         colors = IconButtonDefaults.filledTonalIconButtonColors(
                             containerColor = KptTheme.colorScheme.errorContainer,
@@ -310,8 +313,9 @@ fun PreviewBeneficiaryListScreen() {
         BeneficiaryListScreenContent(
             state = BeneficiaryListState.ViewState.Loading,
             onAction = { },
-            modifier = Modifier,
+            onDeleteBeneficiary = { _, _ -> },
             snackbarHostState = remember { SnackbarHostState() },
+            modifier = Modifier,
         )
     }
 }

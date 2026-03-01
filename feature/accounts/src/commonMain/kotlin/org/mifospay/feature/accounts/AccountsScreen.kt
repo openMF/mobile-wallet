@@ -89,7 +89,7 @@ import org.mifospay.core.ui.RevealSwipe
 import org.mifospay.core.ui.rememberRevealState
 import org.mifospay.core.ui.utils.EventsEffect
 import org.mifospay.feature.accounts.savingsaccount.SavingsAddEditType
-import org.mifospay.feature.beneficiary.BeneficiaryAddEditType
+import org.mifospay.feature.beneficiary.addupdatebeneficiary.BeneficiaryAddEditType
 import template.core.base.designsystem.theme.KptTheme
 
 @Composable

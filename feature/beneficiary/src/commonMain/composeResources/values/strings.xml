@@ -26,6 +26,14 @@
     <string name="feature_beneficiary_added">Beneficiary added</string>
     <string name="feature_beneficiary_updated">Beneficiary updated</string>
 
+    <!-- Delete Beneficiary Bottom Sheet -->
+    <string name="feature_beneficiary_delete_confirmation_message">Are you sure you want to delete \"%1$s\"? This action cannot be undone.</string>
+    <string name="feature_beneficiary_cancel">Cancel</string>
+    <string name="feature_beneficiary_delete">Delete</string>
+    <string name="feature_beneficiary_deleting">Deleting beneficiary…</string>
+    <string name="feature_beneficiary_delete_failed">Delete Failed</string>
+    <string name="feature_beneficiary_ok">OK</string>
+
     <!-- AddEditBeneficiaryScreen -->
     <string name="feature_beneficiary_nickname">Nickname</string>
     <string name="feature_beneficiary_account_no">Account No</string>

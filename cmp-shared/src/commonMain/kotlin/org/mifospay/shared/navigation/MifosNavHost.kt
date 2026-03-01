@@ -25,10 +25,10 @@ import org.mifospay.feature.accounts.savingsaccount.addEditSavingAccountScreen
 import org.mifospay.feature.accounts.savingsaccount.details.navigateToSavingAccountDetails
 import org.mifospay.feature.accounts.savingsaccount.details.savingAccountDetailRoute
 import org.mifospay.feature.accounts.savingsaccount.navigateToSavingAccountAddEdit
-import org.mifospay.feature.beneficiary.BeneficiaryAddEditType
-import org.mifospay.feature.beneficiary.addEditBeneficiaryScreen
+import org.mifospay.feature.beneficiary.addupdatebeneficiary.BeneficiaryAddEditType
+import org.mifospay.feature.beneficiary.addupdatebeneficiary.addEditBeneficiaryScreen
+import org.mifospay.feature.beneficiary.addupdatebeneficiary.navigateToBeneficiaryAddEdit
 import org.mifospay.feature.beneficiary.list.BeneficiaryListScreen
-import org.mifospay.feature.beneficiary.navigateToBeneficiaryAddEdit
 import org.mifospay.feature.editpassword.navigation.editPasswordScreen
 import org.mifospay.feature.editpassword.navigation.navigateToEditPassword
 import org.mifospay.feature.faq.navigation.faqScreen
@@ -227,6 +227,27 @@ internal fun MifosNavHost(
         addEditBeneficiaryScreen(
             navigateBack = navController::navigateUp,
             navigateToQrReaderScreen = navController::navigateToScanQr,
+            navigateToIntraBankTransfer = { officeId, clientId, accountTypeId, accountId, amount, accountName, accountNo ->
+                // Navigate to transfer confirm with full QR data
+                navController.navigateToTransferConfirm(
+                    toOfficeId = officeId,
+                    toClientId = clientId,
+                    toAccountTypeId = accountTypeId,
+                    toAccountId = accountId,
+                    amount = amount,
+                    toAccountName = accountName,
+                    toAccountNo = accountNo,
+                    returnDestination = "home",
+                )
+            },
+            navigateToInterbankTransfer = { accountNumber, recipientName ->
+                // Navigate to interbank transfer with pre-filled data
+                navController.navigateToInterbankTransfer(
+                    phoneNumber = accountNumber,
+                    recipientName = recipientName,
+                    amount = "",
+                )
+            },
         )
 
         savingAccountDetailRoute(
@@ -297,9 +318,13 @@ internal fun MifosNavHost(
         )
 
         fastMpayScreen(
-            onNavigateToAddBeneficiary = { beneficiaryData ->
+            onNavigateToAddBeneficiary = { beneficiaryData, sourceQrType, sourceQrData ->
                 navController.navigateToBeneficiaryAddEdit(
-                    BeneficiaryAddEditType.AddItem(beneficiaryData),
+                    BeneficiaryAddEditType.AddItem(
+                        beneficiary = beneficiaryData,
+                        sourceQrType = sourceQrType,
+                        sourceQrData = sourceQrData,
+                    ),
                     navOptions = navOptions {
                         popUpTo(FAST_MPAY_ROUTE) {
                             inclusive = true

@@ -11,24 +11,20 @@ package org.mifospay.feature.beneficiary.list
 
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
-import mobile_wallet.feature.beneficiary.generated.resources.Res
-import mobile_wallet.feature.beneficiary.generated.resources.delete_beneficiary_subtitle
-import mobile_wallet.feature.beneficiary.generated.resources.delete_beneficiary_title
-import mobile_wallet.feature.beneficiary.generated.resources.feature_beneficiary_deleted
 import org.jetbrains.compose.resources.StringResource
 import org.mifospay.core.common.DataState
 import org.mifospay.core.data.repository.SelfServiceRepository
 import org.mifospay.core.datastore.UserPreferencesRepository
 import org.mifospay.core.model.beneficiary.Beneficiary
 import org.mifospay.core.ui.utils.BaseViewModel
-import org.mifospay.feature.beneficiary.BeneficiaryAddEditType
+import org.mifospay.feature.beneficiary.addupdatebeneficiary.BeneficiaryAddEditType
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class BeneficiaryListViewModel(
@@ -46,7 +42,15 @@ class BeneficiaryListViewModel(
         )
     },
 ) {
-    val accountState = mutableStateFlow
+    /**
+     * Explicit refresh trigger - only emits when refresh is explicitly requested.
+     * This prevents unwanted refreshes when showing bottom sheets.
+     */
+    private val refreshTrigger = MutableSharedFlow<Unit>(replay = 1).apply {
+        tryEmit(Unit)
+    }
+
+    val accountState = refreshTrigger
         .flatMapLatest {
             repository.getBeneficiaryList()
         }
@@ -84,85 +88,25 @@ class BeneficiaryListViewModel(
                 }
             }
 
-            is BeneficiaryListAction.DeleteBeneficiary -> {
-                mutableStateFlow.update {
-                    it.copy(
-                        dialogState = BeneficiaryListState.DialogState.DeleteBeneficiary(
-                            title = Res.string.delete_beneficiary_title,
-                            message = Res.string.delete_beneficiary_subtitle,
-                            onConfirm = {
-                                trySendAction(BeneficiaryListAction.Internal.DeleteBeneficiary(action.beneficiaryId))
-                            },
-                        ),
-                    )
-                }
+            is BeneficiaryListAction.RefreshList -> {
+                refreshTrigger.tryEmit(Unit)
             }
-
-            is BeneficiaryListAction.DismissDialog -> {
-                mutableStateFlow.update {
-                    it.copy(dialogState = null)
-                }
-            }
-
-            is BeneficiaryListAction.Internal.BeneficiaryDeleteResultReceived ->
-                handleBeneficiaryDeleteResult(action)
-
-            is BeneficiaryListAction.Internal.DeleteBeneficiary -> handleDeleteBeneficiary(action)
         }
     }
 
-    private fun handleDeleteBeneficiary(action: BeneficiaryListAction.Internal.DeleteBeneficiary) {
-        mutableStateFlow.update { it.copy(dialogState = BeneficiaryListState.DialogState.Loading) }
-
-        viewModelScope.launch {
-            val result = repository.deleteBeneficiary(action.beneficiaryId)
-
-            sendAction(BeneficiaryListAction.Internal.BeneficiaryDeleteResultReceived(result))
-        }
-    }
-
-    private fun handleBeneficiaryDeleteResult(action: BeneficiaryListAction.Internal.BeneficiaryDeleteResultReceived) {
-        when (action.result) {
-            is DataState.Success -> {
-                mutableStateFlow.update {
-                    it.copy(dialogState = null)
-                }
-
-                sendEvent(BeneficiaryListEvent.ShowToast(Res.string.feature_beneficiary_deleted))
-            }
-
-            is DataState.Error -> {
-                val message = action.result.exception.message.toString()
-
-                mutableStateFlow.update {
-                    it.copy(dialogState = BeneficiaryListState.DialogState.Error(message))
-                }
-            }
-
-            DataState.Loading -> {
-                mutableStateFlow.update {
-                    it.copy(dialogState = BeneficiaryListState.DialogState.Loading)
-                }
-            }
-        }
+    /**
+     * Refreshes the beneficiary list.
+     * Called after successful delete from DeleteBeneficiaryViewModel.
+     */
+    fun refreshBeneficiaryList() {
+        refreshTrigger.tryEmit(Unit)
     }
 }
 
 data class BeneficiaryListState(
     val clientId: Long,
     val defaultAccountId: Long? = null,
-    val dialogState: DialogState? = null,
 ) {
-    sealed interface DialogState {
-        data object Loading : DialogState
-        data class Error(val message: String) : DialogState
-        data class DeleteBeneficiary(
-            val title: StringResource,
-            val message: StringResource,
-            val onConfirm: () -> Unit,
-        ) : DialogState
-    }
-
     sealed interface ViewState {
         val hasFab: Boolean
 
@@ -196,12 +140,5 @@ sealed interface BeneficiaryListEvent {
 sealed interface BeneficiaryListAction {
     data object AddTPTBeneficiary : BeneficiaryListAction
     data class EditBeneficiary(val beneficiary: Beneficiary) : BeneficiaryListAction
-    data class DeleteBeneficiary(val beneficiaryId: Long) : BeneficiaryListAction
-
-    data object DismissDialog : BeneficiaryListAction
-
-    sealed interface Internal : BeneficiaryListAction {
-        data class DeleteBeneficiary(val beneficiaryId: Long) : Internal
-        data class BeneficiaryDeleteResultReceived(val result: DataState<String>) : Internal
-    }
+    data object RefreshList : BeneficiaryListAction
 }

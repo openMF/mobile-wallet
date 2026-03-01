@@ -36,7 +36,7 @@ import org.mifospay.feature.accounts.AccountAction.Internal.BeneficiaryDeleteRes
 import org.mifospay.feature.accounts.AccountAction.Internal.DeleteBeneficiary
 import org.mifospay.feature.accounts.AccountEvent.OnAddEditSavingsAccount
 import org.mifospay.feature.accounts.savingsaccount.SavingsAddEditType
-import org.mifospay.feature.beneficiary.BeneficiaryAddEditType
+import org.mifospay.feature.beneficiary.addupdatebeneficiary.BeneficiaryAddEditType
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class AccountViewModel(
