@@ -14,6 +14,11 @@
     <string name="feature_payments_receive">Receive</string>
     <string name="feature_payments_show_code">Show code</string>
 
+    <!-- Payments Tab Labels -->
+    <string name="feature_payments_send">Send</string>
+    <string name="feature_payments_request">Request</string>
+    <string name="feature_payments_history">History</string>
+
     <!-- Select Transfer Type Screen -->
     <string name="feature_payments_select_transfer_type_header">How would you like to make\nthis transfer?</string>
     <string name="feature_payments_select_transfer_type_subtitle">Choose a transfer method below</string>

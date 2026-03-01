@@ -13,16 +13,12 @@ import kotlinx.serialization.json.Json
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
 import org.mifospay.feature.accounts.AccountViewModel
-import org.mifospay.feature.accounts.beneficiary.AddEditBeneficiaryViewModel
-import org.mifospay.feature.accounts.benficiaryList.BeneficiaryListViewModel
 import org.mifospay.feature.accounts.savingsaccount.AddEditSavingViewModel
 import org.mifospay.feature.accounts.savingsaccount.details.SavingAccountDetailViewModel
 
 val AccountsModule = module {
     single<Json> { Json { ignoreUnknownKeys = true } }
     viewModelOf(::AccountViewModel)
-    viewModelOf(::AddEditBeneficiaryViewModel)
     viewModelOf(::SavingAccountDetailViewModel)
     viewModelOf(::AddEditSavingViewModel)
-    viewModelOf(::BeneficiaryListViewModel)
 }

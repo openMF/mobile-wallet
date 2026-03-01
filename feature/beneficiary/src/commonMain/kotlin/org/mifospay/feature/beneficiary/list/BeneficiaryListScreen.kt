@@ -7,7 +7,7 @@
  *
  * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
  */
-package org.mifospay.feature.accounts.benficiaryList
+package org.mifospay.feature.beneficiary.list
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.scaleIn
@@ -41,15 +41,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.launch
-import mobile_wallet.feature.accounts.generated.resources.Res
-import mobile_wallet.feature.accounts.generated.resources.feature_accounts_add
-import mobile_wallet.feature.accounts.generated.resources.feature_accounts_add_beneficiary
-import mobile_wallet.feature.accounts.generated.resources.feature_accounts_add_beneficiary_hint
-import mobile_wallet.feature.accounts.generated.resources.feature_accounts_delete_beneficiary
-import mobile_wallet.feature.accounts.generated.resources.feature_accounts_edit_beneficiary
-import mobile_wallet.feature.accounts.generated.resources.feature_accounts_error_oops
-import mobile_wallet.feature.accounts.generated.resources.feature_accounts_no_beneficiaries
-import mobile_wallet.feature.accounts.generated.resources.feature_accounts_unexpected_error_subtitle
+import mobile_wallet.feature.beneficiary.generated.resources.Res
+import mobile_wallet.feature.beneficiary.generated.resources.feature_beneficiary_add
+import mobile_wallet.feature.beneficiary.generated.resources.feature_beneficiary_add_beneficiary
+import mobile_wallet.feature.beneficiary.generated.resources.feature_beneficiary_add_beneficiary_hint
+import mobile_wallet.feature.beneficiary.generated.resources.feature_beneficiary_delete_beneficiary
+import mobile_wallet.feature.beneficiary.generated.resources.feature_beneficiary_edit_beneficiary
+import mobile_wallet.feature.beneficiary.generated.resources.feature_beneficiary_error_oops
+import mobile_wallet.feature.beneficiary.generated.resources.feature_beneficiary_no_beneficiaries
+import mobile_wallet.feature.beneficiary.generated.resources.feature_beneficiary_unexpected_error_subtitle
 import org.jetbrains.compose.resources.getString
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
@@ -64,7 +64,7 @@ import org.mifospay.core.ui.AvatarBox
 import org.mifospay.core.ui.EmptyContentScreen
 import org.mifospay.core.ui.MifosProgressIndicator
 import org.mifospay.core.ui.utils.EventsEffect
-import org.mifospay.feature.accounts.beneficiary.BeneficiaryAddEditType
+import org.mifospay.feature.beneficiary.BeneficiaryAddEditType
 import template.core.base.designsystem.theme.KptTheme
 
 @Composable
@@ -158,11 +158,11 @@ private fun BeneficiaryListScreenContent(
                     icon = {
                         Icon(
                             imageVector = MifosIcons.Add,
-                            contentDescription = stringResource(Res.string.feature_accounts_add),
+                            contentDescription = stringResource(Res.string.feature_beneficiary_add),
                         )
                     },
                     text = {
-                        Text(text = stringResource(Res.string.feature_accounts_add_beneficiary))
+                        Text(text = stringResource(Res.string.feature_beneficiary_add_beneficiary))
                     },
                 )
             }
@@ -196,8 +196,8 @@ fun BeneficiariesList(
         is BeneficiaryListState.ViewState.Content -> {
             if (state.beneficiaries.isEmpty()) {
                 EmptyContentScreen(
-                    title = stringResource(Res.string.feature_accounts_no_beneficiaries),
-                    subTitle = stringResource(Res.string.feature_accounts_add_beneficiary_hint),
+                    title = stringResource(Res.string.feature_beneficiary_no_beneficiaries),
+                    subTitle = stringResource(Res.string.feature_beneficiary_add_beneficiary_hint),
                     modifier = modifier.fillMaxSize(),
                 )
             } else {
@@ -222,8 +222,8 @@ fun BeneficiariesList(
 
         is BeneficiaryListState.ViewState.Error -> {
             EmptyContentScreen(
-                title = stringResource(Res.string.feature_accounts_error_oops),
-                subTitle = stringResource(Res.string.feature_accounts_unexpected_error_subtitle),
+                title = stringResource(Res.string.feature_beneficiary_error_oops),
+                subTitle = stringResource(Res.string.feature_beneficiary_unexpected_error_subtitle),
                 modifier = modifier.fillMaxSize(),
                 iconTint = KptTheme.colorScheme.error,
             )
@@ -276,7 +276,7 @@ fun BeneficiaryItem(
                     ) {
                         Icon(
                             imageVector = MifosIcons.Edit2,
-                            contentDescription = stringResource(Res.string.feature_accounts_edit_beneficiary),
+                            contentDescription = stringResource(Res.string.feature_beneficiary_edit_beneficiary),
                         )
                     }
 
@@ -291,7 +291,7 @@ fun BeneficiaryItem(
                     ) {
                         Icon(
                             imageVector = MifosIcons.OutlinedDelete,
-                            contentDescription = stringResource(Res.string.feature_accounts_delete_beneficiary),
+                            contentDescription = stringResource(Res.string.feature_beneficiary_delete_beneficiary),
                         )
                     }
                 }

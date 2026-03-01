@@ -7,7 +7,7 @@
  *
  * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
  */
-package org.mifospay.feature.accounts.benficiaryList
+package org.mifospay.feature.beneficiary.list
 
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -18,17 +18,17 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
-import mobile_wallet.feature.accounts.generated.resources.Res
-import mobile_wallet.feature.accounts.generated.resources.delete_beneficiary_subtitle
-import mobile_wallet.feature.accounts.generated.resources.delete_beneficiary_title
-import mobile_wallet.feature.accounts.generated.resources.feature_accounts_beneficiary_deleted
+import mobile_wallet.feature.beneficiary.generated.resources.Res
+import mobile_wallet.feature.beneficiary.generated.resources.delete_beneficiary_subtitle
+import mobile_wallet.feature.beneficiary.generated.resources.delete_beneficiary_title
+import mobile_wallet.feature.beneficiary.generated.resources.feature_beneficiary_deleted
 import org.jetbrains.compose.resources.StringResource
 import org.mifospay.core.common.DataState
 import org.mifospay.core.data.repository.SelfServiceRepository
 import org.mifospay.core.datastore.UserPreferencesRepository
 import org.mifospay.core.model.beneficiary.Beneficiary
 import org.mifospay.core.ui.utils.BaseViewModel
-import org.mifospay.feature.accounts.beneficiary.BeneficiaryAddEditType
+import org.mifospay.feature.beneficiary.BeneficiaryAddEditType
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class BeneficiaryListViewModel(
@@ -70,7 +70,7 @@ class BeneficiaryListViewModel(
     override fun handleAction(action: BeneficiaryListAction) {
         when (action) {
             is BeneficiaryListAction.AddTPTBeneficiary -> {
-                sendEvent(BeneficiaryListEvent.OnAddOrEditTPTBeneficiary(BeneficiaryAddEditType.AddItem))
+                sendEvent(BeneficiaryListEvent.OnAddOrEditTPTBeneficiary(BeneficiaryAddEditType.AddItem()))
             }
 
             is BeneficiaryListAction.EditBeneficiary -> {
@@ -91,7 +91,7 @@ class BeneficiaryListViewModel(
                             title = Res.string.delete_beneficiary_title,
                             message = Res.string.delete_beneficiary_subtitle,
                             onConfirm = {
-                                trySendAction(BeneficiaryListAction.DeleteBeneficiary(action.beneficiaryId))
+                                trySendAction(BeneficiaryListAction.Internal.DeleteBeneficiary(action.beneficiaryId))
                             },
                         ),
                     )
@@ -128,7 +128,7 @@ class BeneficiaryListViewModel(
                     it.copy(dialogState = null)
                 }
 
-                sendEvent(BeneficiaryListEvent.ShowToast(Res.string.feature_accounts_beneficiary_deleted))
+                sendEvent(BeneficiaryListEvent.ShowToast(Res.string.feature_beneficiary_deleted))
             }
 
             is DataState.Error -> {

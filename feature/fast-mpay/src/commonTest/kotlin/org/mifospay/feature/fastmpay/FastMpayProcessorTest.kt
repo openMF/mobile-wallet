@@ -15,8 +15,10 @@ import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
+import kotlinx.serialization.json.Json
 import org.mifospay.core.model.beneficiary.Beneficiary
 import org.mifospay.core.model.instance.ServerInstance
+import org.mifospay.core.model.office.Office
 import org.mifospay.core.model.utils.QrCodeData
 import org.mifospay.core.model.utils.QrCodeType
 import org.mifospay.feature.fastmpay.model.QrProcessResult
@@ -26,6 +28,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertIs
 import kotlin.test.assertNotNull
+import kotlin.test.assertTrue
 
 /**
  * Unit tests for [FastMpayProcessor].
@@ -45,6 +48,7 @@ class FastMpayProcessorTest {
     private val testDispatcher = StandardTestDispatcher()
     private lateinit var fakeBeneficiaryRepository: FakeBeneficiaryRepository
     private lateinit var fakeUserPreferencesRepository: FakeUserPreferencesRepository
+    private lateinit var fakeOfficeRepository: FakeOfficeRepository
     private lateinit var processor: FastMpayProcessor
 
     @BeforeTest
@@ -52,9 +56,11 @@ class FastMpayProcessorTest {
         Dispatchers.setMain(testDispatcher)
         fakeBeneficiaryRepository = FakeBeneficiaryRepository()
         fakeUserPreferencesRepository = FakeUserPreferencesRepository()
+        fakeOfficeRepository = FakeOfficeRepository()
         processor = FastMpayProcessor(
             beneficiaryRepository = fakeBeneficiaryRepository,
             userPreferencesRepository = fakeUserPreferencesRepository,
+            officeRepository = fakeOfficeRepository,
         )
     }
 
@@ -410,6 +416,130 @@ class FastMpayProcessorTest {
         // Then
         assertIs<QrProcessResult.NavigateToAddBeneficiary>(result)
         assertNotNull(result.beneficiaryData)
+    }
+
+    // endregion
+
+    // region Office Name Resolution Tests
+
+    @Test
+    fun givenIntraBankQrWithOfficeId_whenProcess_thenResolvesOfficeName() = runTest {
+        // Given
+        fakeBeneficiaryRepository.setBeneficiaryList(emptyList())
+        fakeOfficeRepository.setOfficeList(
+            listOf(
+                Office(id = 1, name = "Head Office"),
+                Office(id = 5, name = "Lagos Branch"),
+            ),
+        )
+        fakeUserPreferencesRepository.setSelectedInstance(
+            ServerInstance(
+                endpoint = "test.com",
+                protocol = "https://",
+                path = "/api/v1",
+                platformTenantId = "mifos-bank",
+                label = "Test Bank",
+            ),
+        )
+
+        val qrData = QrCodeData(
+            type = QrCodeType.INTRA_BANK,
+            fspId = "mifos-bank",
+            clientId = 123L,
+            clientName = "John Doe",
+            accountNo = "ACC001",
+            accountId = 456L,
+            // Lagos Branch
+            officeId = 5,
+            accountTypeId = 2,
+            currency = "USD",
+            amount = "",
+        )
+
+        // When
+        val result = processor.processQrCode(qrData)
+
+        // Then
+        assertIs<QrProcessResult.NavigateToAddBeneficiary>(result)
+        val beneficiary = Json.decodeFromString<Beneficiary>(result.beneficiaryData)
+        assertEquals("Lagos Branch", beneficiary.officeName)
+    }
+
+    @Test
+    fun givenOfficeApiError_whenProcess_thenFallbackToDefaultOfficeName() = runTest {
+        // Given
+        fakeBeneficiaryRepository.setBeneficiaryList(emptyList())
+        fakeOfficeRepository.setShouldReturnError(true)
+        fakeUserPreferencesRepository.setSelectedInstance(
+            ServerInstance(
+                endpoint = "test.com",
+                protocol = "https://",
+                path = "/api/v1",
+                platformTenantId = "mifos-bank",
+                label = "Test Bank",
+            ),
+        )
+
+        val qrData = QrCodeData(
+            type = QrCodeType.INTRA_BANK,
+            fspId = "mifos-bank",
+            clientId = 123L,
+            clientName = "John Doe",
+            accountNo = "ACC001",
+            accountId = 456L,
+            officeId = 5,
+            accountTypeId = 2,
+            currency = "USD",
+            amount = "",
+        )
+
+        // When
+        val result = processor.processQrCode(qrData)
+
+        // Then
+        assertIs<QrProcessResult.NavigateToAddBeneficiary>(result)
+        val beneficiary = Json.decodeFromString<Beneficiary>(result.beneficiaryData)
+        assertEquals("Head Office", beneficiary.officeName)
+    }
+
+    @Test
+    fun givenOfficeIdNotFound_whenProcess_thenFallbackToDefaultOfficeName() = runTest {
+        // Given
+        fakeBeneficiaryRepository.setBeneficiaryList(emptyList())
+        fakeOfficeRepository.setOfficeList(
+            listOf(Office(id = 1, name = "Head Office")),
+        )
+        fakeUserPreferencesRepository.setSelectedInstance(
+            ServerInstance(
+                endpoint = "test.com",
+                protocol = "https://",
+                path = "/api/v1",
+                platformTenantId = "mifos-bank",
+                label = "Test Bank",
+            ),
+        )
+
+        val qrData = QrCodeData(
+            type = QrCodeType.INTRA_BANK,
+            fspId = "mifos-bank",
+            clientId = 123L,
+            clientName = "John Doe",
+            accountNo = "ACC001",
+            accountId = 456L,
+            // Non-existent office ID
+            officeId = 999,
+            accountTypeId = 2,
+            currency = "USD",
+            amount = "",
+        )
+
+        // When
+        val result = processor.processQrCode(qrData)
+
+        // Then
+        assertIs<QrProcessResult.NavigateToAddBeneficiary>(result)
+        val beneficiary = Json.decodeFromString<Beneficiary>(result.beneficiaryData)
+        assertEquals("Head Office", beneficiary.officeName)
     }
 
     // endregion

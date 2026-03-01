@@ -39,6 +39,7 @@ import org.mifospay.core.model.search.AccountResult
  * @property accountId Internal account ID (0 for inter-bank QR)
  * @property currency Currency code
  * @property officeId Office ID (0 for inter-bank QR)
+ * @property officeName Office name for beneficiary creation
  * @property accountTypeId Account type ID (0 for inter-bank QR)
  * @property phoneNumber Deprecated: use accountExternalId instead
  * @property accountExternalId External ID of the account for inter-bank transfers
@@ -54,6 +55,7 @@ data class QrCodeData(
     val accountId: Long,
     val currency: String = DEFAULT_CURRENCY,
     val officeId: Long = OFFICE_ID,
+    val officeName: String = "",
     val accountTypeId: Long = ACCOUNT_TYPE_ID,
     @Deprecated("Use accountExternalId instead")
     val phoneNumber: String? = null,

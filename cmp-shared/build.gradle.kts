@@ -44,6 +44,7 @@ kotlin {
             implementation(projects.feature.payments)
             implementation(projects.feature.finance)
             implementation(projects.feature.accounts)
+            implementation(projects.feature.beneficiary)
             implementation(projects.feature.invoices)
             implementation(projects.feature.kyc)
             implementation(projects.feature.notification)
