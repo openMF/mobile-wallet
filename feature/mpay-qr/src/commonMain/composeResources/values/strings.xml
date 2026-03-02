@@ -57,4 +57,14 @@
     <string name="feature_mpay_qr_scan_instruction">Scan with any payment app</string>
     <string name="feature_mpay_qr_downloaded">QR code downloaded</string>
 
+    <!-- Inter-Bank QR Placeholder -->
+    <string name="feature_mpay_qr_inter_bank_unavailable">Inter-Bank QR Not Available</string>
+    <string name="feature_mpay_qr_external_id_required">Your account doesn\'t have an external ID configured. Contact your bank to enable inter-bank transfers.</string>
+
+    <!-- Account Picker -->
+    <string name="feature_mpay_qr_select_account">Select Account</string>
+    <string name="feature_mpay_qr_has_external_id">Inter-bank enabled</string>
+    <string name="feature_mpay_qr_no_external_id">Inter-bank not available</string>
+    <string name="feature_mpay_qr_account_selected">Account selected</string>
+
 </resources>

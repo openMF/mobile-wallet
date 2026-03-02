@@ -40,11 +40,14 @@ import kotlinx.serialization.Transient
 import mobile_wallet.feature.mpay_qr.generated.resources.Res
 import mobile_wallet.feature.mpay_qr.generated.resources.logo
 import org.jetbrains.compose.resources.painterResource
+import org.mifospay.core.common.DataState
 import org.mifospay.core.common.getSerialized
 import org.mifospay.core.common.setSerialized
+import org.mifospay.core.data.repository.AccountRepository
 import org.mifospay.core.data.repository.LocalAssetRepository
 import org.mifospay.core.data.util.MpayQrCodeProcessor
 import org.mifospay.core.datastore.UserPreferencesRepository
+import org.mifospay.core.model.account.Account
 import org.mifospay.core.model.account.DefaultAccount
 import org.mifospay.core.model.client.Client
 import org.mifospay.core.model.utils.QrCodeData
@@ -58,6 +61,7 @@ import template.core.base.designsystem.theme.KptTheme
 class MpayQrViewModel(
     localRepository: LocalAssetRepository,
     repository: UserPreferencesRepository,
+    private val accountRepository: AccountRepository,
     savedStateHandle: SavedStateHandle,
     private val ioDispatcher: CoroutineDispatcher,
 ) : BaseViewModel<MpayQrState, MpayQrEvent, MpayQrAction>(
@@ -117,8 +121,40 @@ class MpayQrViewModel(
             savedStateHandle.setSerialized(key = KEY_STATE, value = it)
         }.launchIn(viewModelScope)
 
+        loadAccounts()
+    }
+
+    private fun loadAccounts() {
         viewModelScope.launch {
-            sendAction(MpayQrAction.Internal.GenerateQr)
+            accountRepository.getSelfAccounts(state.client.id)
+                .collect { result ->
+                    when (result) {
+                        is DataState.Success -> {
+                            val accounts = result.data
+                            val defaultAcc = accounts.find { it.id == state.defaultAccount.accountId }
+                                ?: accounts.firstOrNull()
+
+                            mutableStateFlow.update {
+                                it.copy(
+                                    accounts = accounts,
+                                    selectedAccount = defaultAcc,
+                                    accountExternalId = defaultAcc?.externalId ?: "",
+                                )
+                            }
+                            sendAction(MpayQrAction.Internal.GenerateQr)
+                        }
+
+                        is DataState.Error -> {
+                            Logger.e { "Failed to load accounts: ${result.exception.message}" }
+                            // Still generate QR with default account
+                            sendAction(MpayQrAction.Internal.GenerateQr)
+                        }
+
+                        is DataState.Loading -> {
+                            // Loading state handled by viewState
+                        }
+                    }
+                }
         }
     }
 
@@ -195,6 +231,25 @@ class MpayQrViewModel(
                 sendEvent(MpayQrEvent.ShowSnackbar(action.text))
             }
 
+            is MpayQrAction.ShowAccountPicker -> {
+                mutableStateFlow.update { it.copy(isAccountPickerVisible = true) }
+            }
+
+            is MpayQrAction.DismissAccountPicker -> {
+                mutableStateFlow.update { it.copy(isAccountPickerVisible = false) }
+            }
+
+            is MpayQrAction.SelectAccount -> {
+                mutableStateFlow.update {
+                    it.copy(
+                        selectedAccount = action.account,
+                        accountExternalId = action.account.externalId ?: "",
+                        isAccountPickerVisible = false,
+                    )
+                }
+                generateQr() // Regenerate QR for new account
+            }
+
             is MpayQrAction.Internal.GenerateQr -> generateQr()
         }
     }
@@ -215,41 +270,49 @@ class MpayQrViewModel(
 
             Logger.d { "QR Generate - client.id: ${state.client.id}, defaultAccount.accountId: ${state.defaultAccount.accountId}, qrData.clientId: ${state.qrData.clientId}, qrData.accountId: ${state.qrData.accountId}" }
 
-            try {
-                val (intraBankData, interBankData) = withContext(ioDispatcher) {
-                    Pair(
-                        MpayQrCodeProcessor.encodeMpayString(state.qrData),
-                        MpayQrCodeProcessor.encodeMpayString(state.interBankQrData),
-                    )
-                }
+            // Generate Intra-Bank QR (always works with internal IDs)
+            val intraBankData = withContext(ioDispatcher) {
+                MpayQrCodeProcessor.encodeMpayString(state.qrData)
+            }
 
-                mutableStateFlow.update {
-                    it.copy(
-                        viewState = MpayQrState.ViewState.Content(
-                            intraBankData = intraBankData,
-                            interBankData = interBankData,
-                        ),
-                    )
+            // Try to generate Inter-Bank QR (requires external ID)
+            val (interBankData, interBankReason) = withContext(ioDispatcher) {
+                if (state.accountExternalId.isBlank()) {
+                    // No external ID - return null with reason
+                    null to "External ID not configured. Contact your bank to enable inter-bank transfers."
+                } else {
+                    try {
+                        MpayQrCodeProcessor.encodeMpayString(state.interBankQrData) to null
+                    } catch (e: IllegalArgumentException) {
+                        null to (e.message ?: "Failed to generate inter-bank QR code")
+                    }
                 }
-            } catch (e: IllegalArgumentException) {
-                mutableStateFlow.update {
-                    it.copy(
-                        viewState = MpayQrState.ViewState.Error(
-                            e.message ?: "Failed to generate QR code",
-                        ),
-                    )
-                }
+            }
+
+            mutableStateFlow.update {
+                it.copy(
+                    viewState = MpayQrState.ViewState.Content(
+                        intraBankData = intraBankData,
+                        interBankData = interBankData,
+                        interBankUnavailableReason = interBankReason,
+                    ),
+                )
             }
         }
     }
 
     private fun initiateSetAmount() {
         viewModelScope.launch {
-            val (intraBankData, interBankData) = withContext(ioDispatcher) {
-                Pair(
-                    MpayQrCodeProcessor.encodeMpayString(state.qrData),
-                    MpayQrCodeProcessor.encodeMpayString(state.interBankQrData),
-                )
+            val intraBankData = withContext(ioDispatcher) {
+                MpayQrCodeProcessor.encodeMpayString(state.qrData)
+            }
+
+            val interBankData = if (state.accountExternalId.isNotBlank()) {
+                withContext(ioDispatcher) {
+                    MpayQrCodeProcessor.encodeMpayString(state.interBankQrData)
+                }
+            } else {
+                null
             }
 
             updateContent {
@@ -291,14 +354,33 @@ data class MpayQrState(
     val defaultAccount: DefaultAccount,
 
     /**
+     * All accounts available for the user. Loaded from AccountRepository.
+     */
+    @Transient
+    val accounts: List<Account> = emptyList(),
+
+    /**
+     * Currently selected account for QR generation.
+     * Defaults to the default account on initial load.
+     */
+    @Transient
+    val selectedAccount: Account? = null,
+
+    /**
+     * Whether the account picker bottom sheet is visible.
+     */
+    @Transient
+    val isAccountPickerVisible: Boolean = false,
+
+    /**
      * The FSP ID (bank/tenant identifier) used for routing.
      * When scanning, if QR's fspId matches scanner's fspId → intra-bank transfer.
      */
     val fspId: String = "",
 
     /**
-     * The external ID of the default account, used for inter-bank QR codes.
-     * This is fetched from the saved account external IDs map in the datastore.
+     * The external ID of the selected account, used for inter-bank QR codes.
+     * Updated when a new account is selected.
      */
     val accountExternalId: String = "",
 
@@ -312,17 +394,24 @@ data class MpayQrState(
         fspId = fspId,
         clientId = client.id,
         clientName = client.displayName,
-        accountNo = defaultAccount.accountNo,
-        accountId = defaultAccount.accountId,
-        officeId = client.officeId,
+        accountNo = selectedAccount?.number ?: defaultAccount.accountNo,
+        accountId = selectedAccount?.id ?: defaultAccount.accountId,
+        officeId = selectedAccount?.officeId?.toLong() ?: client.officeId.toLong(),
+        officeName = selectedAccount?.officeName ?: client.officeName,
         accountTypeId = QrCodeData.ACCOUNT_TYPE_ID,
-        accountExternalId = accountExternalId,
+        accountExternalId = selectedAccount?.externalId ?: accountExternalId,
         currency = "USD",
         amount = "",
     ),
     @Transient
     val dialogState: DialogState? = null,
 ) {
+    /**
+     * The currently active external ID, prioritizing selectedAccount over the stored accountExternalId.
+     */
+    val currentExternalId: String
+        get() = selectedAccount?.externalId ?: accountExternalId
+
     /**
      * Computed property for inter-bank QR data.
      * Simplified format: fspId + accountExternalId for participant lookup.
@@ -337,7 +426,7 @@ data class MpayQrState(
             amount = qrData.amount,
             accountId = 0L,
             currency = qrData.currency,
-            accountExternalId = accountExternalId,
+            accountExternalId = currentExternalId,
         )
 
     sealed interface ViewState {
@@ -347,7 +436,8 @@ data class MpayQrState(
 
         data class Content(
             val intraBankData: String,
-            val interBankData: String,
+            val interBankData: String?,
+            val interBankUnavailableReason: String? = null,
         ) : ViewState {
 
             private val logo: QrLogo
@@ -410,6 +500,11 @@ sealed interface MpayQrAction {
     data object NavigateBack : MpayQrAction
     data object ShowSetAmountDialog : MpayQrAction
     data object DismissDialog : MpayQrAction
+
+    // Account picker actions
+    data object ShowAccountPicker : MpayQrAction
+    data object DismissAccountPicker : MpayQrAction
+    data class SelectAccount(val account: Account) : MpayQrAction
 
     data class AmountChanged(val amount: String) : MpayQrAction
     data class CurrencyChanged(val currency: String) : MpayQrAction

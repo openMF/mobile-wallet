@@ -11,6 +11,7 @@ package org.mifospay.feature.fastmpay.model
 
 import kotlinx.serialization.Serializable
 import org.mifospay.core.model.utils.QrCodeData
+import org.mifospay.core.model.utils.QrCodeType
 
 /**
  * Sealed interface representing the result of processing a QR code.
@@ -24,9 +25,15 @@ sealed interface QrProcessResult {
      * Navigate to Add Beneficiary screen with pre-filled data.
      *
      * @param beneficiaryData JSON-encoded beneficiary data for pre-filling the form
+     * @param sourceQrType The QR type that triggered this navigation (for post-add routing)
+     * @param sourceQrData JSON-encoded QrCodeData for post-add navigation to transfer screen
      */
     @Serializable
-    data class NavigateToAddBeneficiary(val beneficiaryData: String) : QrProcessResult
+    data class NavigateToAddBeneficiary(
+        val beneficiaryData: String,
+        val sourceQrType: QrCodeType,
+        val sourceQrData: String,
+    ) : QrProcessResult
 
     /**
      * Navigate to Inter-bank Transfer screen.

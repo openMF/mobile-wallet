@@ -7,10 +7,11 @@
  *
  * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
  */
-package org.mifospay.feature.accounts.beneficiary
+package org.mifospay.feature.beneficiary.addupdatebeneficiary
 
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -22,12 +23,15 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuAnchorType
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
-import androidx.compose.material3.MenuAnchorType
+import androidx.compose.material3.Icon
+import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
@@ -49,15 +53,15 @@ import androidx.compose.ui.unit.toSize
 import androidx.compose.ui.window.PopupProperties
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.launch
-import mobile_wallet.feature.accounts.generated.resources.Res
-import mobile_wallet.feature.accounts.generated.resources.feature_accounts_beneficiary_account_no
-import mobile_wallet.feature.accounts.generated.resources.feature_accounts_beneficiary_account_type
-import mobile_wallet.feature.accounts.generated.resources.feature_accounts_beneficiary_locale
-import mobile_wallet.feature.accounts.generated.resources.feature_accounts_beneficiary_nickname
-import mobile_wallet.feature.accounts.generated.resources.feature_accounts_beneficiary_office_name
-import mobile_wallet.feature.accounts.generated.resources.feature_accounts_beneficiary_transfer_limit
-import mobile_wallet.feature.accounts.generated.resources.scan_qr_code
-import mobile_wallet.feature.accounts.generated.resources.skip_the_form
+import mobile_wallet.feature.beneficiary.generated.resources.Res
+import mobile_wallet.feature.beneficiary.generated.resources.feature_beneficiary_account_no
+import mobile_wallet.feature.beneficiary.generated.resources.feature_beneficiary_account_type
+import mobile_wallet.feature.beneficiary.generated.resources.feature_beneficiary_locale
+import mobile_wallet.feature.beneficiary.generated.resources.feature_beneficiary_nickname
+import mobile_wallet.feature.beneficiary.generated.resources.feature_beneficiary_office_name
+import mobile_wallet.feature.beneficiary.generated.resources.feature_beneficiary_transfer_limit
+import mobile_wallet.feature.beneficiary.generated.resources.scan_qr_code
+import mobile_wallet.feature.beneficiary.generated.resources.skip_the_form
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.mifospay.core.designsystem.component.BasicDialogState
@@ -67,6 +71,8 @@ import org.mifospay.core.designsystem.component.MifosButton
 import org.mifospay.core.designsystem.component.MifosLoadingDialog
 import org.mifospay.core.designsystem.component.MifosScaffold
 import org.mifospay.core.designsystem.component.MifosTextField
+import org.mifospay.core.designsystem.icon.MifosIcons
+import org.mifospay.core.model.office.Office
 import org.mifospay.core.model.utils.Locale
 import org.mifospay.core.model.utils.filterLocales
 import org.mifospay.core.ui.MifosDivider
@@ -77,6 +83,16 @@ import template.core.base.designsystem.theme.KptTheme
 internal fun AddEditBeneficiaryScreen(
     navigateBack: () -> Unit,
     navigateToQrReaderScreen: () -> Unit,
+    navigateToIntraBankTransfer: (
+        officeId: Int,
+        clientId: Long,
+        accountTypeId: Int,
+        accountId: Int,
+        amount: Int,
+        accountName: String,
+        accountNo: String,
+    ) -> Unit,
+    navigateToInterbankTransfer: (accountNumber: String, recipientName: String) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: AddEditBeneficiaryViewModel = koinViewModel(),
 ) {
@@ -85,6 +101,7 @@ internal fun AddEditBeneficiaryScreen(
 
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val localeList by viewModel.filteredLocalList.collectAsStateWithLifecycle()
+    val officeList by viewModel.officeList.collectAsStateWithLifecycle()
 
     EventsEffect(viewModel) { event ->
         when (event) {
@@ -96,6 +113,22 @@ internal fun AddEditBeneficiaryScreen(
                 scope.launch {
                     snackbarHostState.showSnackbar(event.message)
                 }
+            }
+
+            is AEBEvent.NavigateToIntraBankTransfer -> {
+                navigateToIntraBankTransfer(
+                    event.officeId,
+                    event.clientId,
+                    event.accountTypeId,
+                    event.accountId,
+                    event.amount,
+                    event.accountName,
+                    event.accountNo,
+                )
+            }
+
+            is AEBEvent.NavigateToInterbankTransfer -> {
+                navigateToInterbankTransfer(event.accountNumber, event.recipientName)
             }
         }
     }
@@ -110,6 +143,7 @@ internal fun AddEditBeneficiaryScreen(
     AddEditBeneficiaryScreenContent(
         state = state,
         localeList = localeList,
+        officeList = officeList,
         snackbarHostState = snackbarHostState,
         modifier = modifier,
         onAction = remember(viewModel) {
@@ -123,6 +157,7 @@ internal fun AddEditBeneficiaryScreen(
 internal fun AddEditBeneficiaryScreenContent(
     state: AEBState,
     localeList: List<Locale>,
+    officeList: List<Office>,
     snackbarHostState: SnackbarHostState,
     modifier: Modifier = Modifier,
     onAction: (AEBAction) -> Unit,
@@ -142,7 +177,7 @@ internal fun AddEditBeneficiaryScreenContent(
         ) {
             item {
                 MifosTextField(
-                    label = stringResource(Res.string.feature_accounts_beneficiary_nickname),
+                    label = stringResource(Res.string.feature_beneficiary_nickname),
                     value = state.name,
                     onValueChange = {
                         onAction(AEBAction.ChangeName(it))
@@ -152,7 +187,7 @@ internal fun AddEditBeneficiaryScreenContent(
 
             item {
                 MifosTextField(
-                    label = stringResource(Res.string.feature_accounts_beneficiary_account_no),
+                    label = stringResource(Res.string.feature_beneficiary_account_no),
                     value = state.accountNumber,
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Number,
@@ -165,7 +200,7 @@ internal fun AddEditBeneficiaryScreenContent(
 
             item {
                 MifosTextField(
-                    label = stringResource(Res.string.feature_accounts_beneficiary_transfer_limit),
+                    label = stringResource(Res.string.feature_beneficiary_transfer_limit),
                     value = state.transferLimit.toString(),
                     onValueChange = {
                         onAction(AEBAction.ChangeTransferLimit(it))
@@ -196,7 +231,7 @@ internal fun AddEditBeneficiaryScreenContent(
                     },
                 ) {
                     MifosTextField(
-                        label = stringResource(Res.string.feature_accounts_beneficiary_locale),
+                        label = stringResource(Res.string.feature_beneficiary_locale),
                         value = state.locale,
                         onValueChange = {
                             localeToggled = true
@@ -215,7 +250,7 @@ internal fun AddEditBeneficiaryScreenContent(
                             .onGloballyPositioned { coordinates ->
                                 textFieldSize = coordinates.size.toSize()
                             }
-                            .menuAnchor(MenuAnchorType.PrimaryNotEditable),
+                            .menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable),
                     )
 
                     DropdownMenu(
@@ -257,20 +292,34 @@ internal fun AddEditBeneficiaryScreenContent(
             }
 
             item {
-                MifosTextField(
-                    label = stringResource(Res.string.feature_accounts_beneficiary_office_name),
-                    value = state.officeName,
-                    showClearIcon = false,
-                    readOnly = true,
-                    onValueChange = {
-                        onAction(AEBAction.ChangeOfficeName(it))
+                val filteredOfficeList by remember(officeList, state.officeName) {
+                    derivedStateOf {
+                        officeList.filter { office ->
+                            office.name.contains(state.officeName, ignoreCase = true)
+                        }
+                    }
+                }
+
+                MifosDropdownMenu(
+                    label = stringResource(Res.string.feature_beneficiary_office_name),
+                    selectedValue = state.officeName,
+                    items = filteredOfficeList,
+                    onItemSelected = { office ->
+                        onAction(AEBAction.ChangeOfficeName(office.name))
                     },
+                    onValueChange = { value ->
+                        onAction(AEBAction.ChangeOfficeName(value))
+                    },
+                    onClearClick = {
+                        onAction(AEBAction.ChangeOfficeName(""))
+                    },
+                    itemToString = { office -> office.name },
                 )
             }
 
             item {
                 MifosTextField(
-                    label = stringResource(Res.string.feature_accounts_beneficiary_account_type),
+                    label = stringResource(Res.string.feature_beneficiary_account_type),
                     value = stringResource(state.accountTypeName),
                     readOnly = true,
                     showClearIcon = false,
@@ -293,18 +342,40 @@ internal fun AddEditBeneficiaryScreenContent(
 
                 Spacer(modifier = Modifier.height(KptTheme.spacing.md))
 
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(KptTheme.spacing.sm),
+                OutlinedCard(
+                    onClick = { onAction(AEBAction.OnQrScanClicked) },
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = CardDefaults.outlinedCardColors(
+                        containerColor = KptTheme.colorScheme.surfaceVariant,
+                    ),
+                    border = BorderStroke(1.dp, KptTheme.colorScheme.primary),
                 ) {
-                    Text(
-                        text = stringResource(Res.string.skip_the_form),
-                    )
-
-                    Text(
-                        text = stringResource(Res.string.scan_qr_code),
+                    Row(
                         modifier = Modifier
-                            .clickable { onAction(AEBAction.OnQrScanClicked) },
-                    )
+                            .fillMaxWidth()
+                            .padding(KptTheme.spacing.md),
+                        horizontalArrangement = Arrangement.Center,
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Icon(
+                            imageVector = MifosIcons.Scan,
+                            contentDescription = null,
+                            tint = KptTheme.colorScheme.primary,
+                        )
+                        Spacer(modifier = Modifier.width(KptTheme.spacing.sm))
+                        Column {
+                            Text(
+                                text = stringResource(Res.string.scan_qr_code),
+                                style = KptTheme.typography.titleMedium,
+                                color = KptTheme.colorScheme.primary,
+                            )
+                            Text(
+                                text = stringResource(Res.string.skip_the_form),
+                                style = KptTheme.typography.bodySmall,
+                                color = KptTheme.colorScheme.onSurfaceVariant,
+                            )
+                        }
+                    }
                 }
             }
         }
@@ -336,5 +407,87 @@ private fun BeneficiaryDialogs(
         )
 
         null -> Unit
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+internal fun <T> MifosDropdownMenu(
+    label: String,
+    selectedValue: String,
+    items: List<T>,
+    onItemSelected: (T) -> Unit,
+    onValueChange: (String) -> Unit,
+    onClearClick: () -> Unit,
+    itemToString: (T) -> String,
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true,
+) {
+    var textFieldSize by remember { mutableStateOf(Size.Zero) }
+    var expanded by remember { mutableStateOf(false) }
+
+    ExposedDropdownMenuBox(
+        expanded = expanded && items.isNotEmpty(),
+        onExpandedChange = {
+            if (enabled) {
+                expanded = !expanded
+            }
+        },
+        modifier = modifier,
+    ) {
+        MifosTextField(
+            label = label,
+            value = selectedValue,
+            onValueChange = {
+                expanded = true
+                onValueChange(it)
+            },
+            onClickClearIcon = onClearClick,
+            trailingIcon = {
+                ExposedDropdownMenuDefaults.TrailingIcon(
+                    expanded = expanded,
+                )
+            },
+            enabled = enabled,
+            modifier = Modifier
+                .fillMaxWidth()
+                .onGloballyPositioned { coordinates ->
+                    textFieldSize = coordinates.size.toSize()
+                }
+                .menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable),
+        )
+
+        DropdownMenu(
+            expanded = expanded && items.isNotEmpty(),
+            onDismissRequest = {
+                expanded = false
+            },
+            properties = PopupProperties(
+                focusable = false,
+                dismissOnBackPress = true,
+                dismissOnClickOutside = true,
+                clippingEnabled = true,
+            ),
+            modifier = Modifier
+                .width(with(LocalDensity.current) { textFieldSize.width.toDp() })
+                .heightIn(max = 200.dp),
+        ) {
+            items.forEachIndexed { index, item ->
+                DropdownMenuItem(
+                    modifier = Modifier.fillMaxWidth(),
+                    onClick = {
+                        onItemSelected(item)
+                        expanded = false
+                    },
+                    text = {
+                        Text(text = itemToString(item))
+                    },
+                )
+
+                if (index != items.size - 1) {
+                    MifosDivider()
+                }
+            }
+        }
     }
 }

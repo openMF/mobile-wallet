@@ -50,6 +50,7 @@ import io.github.alexzhirkevich.qrose.toByteArray
 import mobile_wallet.feature.mpay_qr.generated.resources.Res
 import mobile_wallet.feature.mpay_qr.generated.resources.feature_mpay_qr_copied
 import mobile_wallet.feature.mpay_qr.generated.resources.feature_mpay_qr_downloaded
+import mobile_wallet.feature.mpay_qr.generated.resources.feature_mpay_qr_external_id_required
 import mobile_wallet.feature.mpay_qr.generated.resources.feature_mpay_qr_go_back
 import mobile_wallet.feature.mpay_qr.generated.resources.feature_mpay_qr_receive_money
 import mobile_wallet.feature.mpay_qr.generated.resources.feature_mpay_qr_scan_to_pay
@@ -68,7 +69,9 @@ import org.mifospay.core.model.client.Client
 import org.mifospay.core.ui.MifosProgressIndicator
 import org.mifospay.core.ui.utils.EventsEffect
 import org.mifospay.feature.mpay.qr.components.AccountIdSection
+import org.mifospay.feature.mpay.qr.components.AccountPickerBottomSheet
 import org.mifospay.feature.mpay.qr.components.AccountSelectorCard
+import org.mifospay.feature.mpay.qr.components.InterBankPlaceholder
 import org.mifospay.feature.mpay.qr.components.QrActionButtons
 import org.mifospay.feature.mpay.qr.components.QrCodeCard
 import org.mifospay.feature.mpay.qr.components.QrType
@@ -217,6 +220,20 @@ private fun MpayQrScreenContent(
         }
     }
 
+    // Account Picker Bottom Sheet
+    if (state.isAccountPickerVisible) {
+        AccountPickerBottomSheet(
+            accounts = state.accounts,
+            selectedAccount = state.selectedAccount,
+            onAccountSelected = { account ->
+                onAction(MpayQrAction.SelectAccount(account))
+            },
+            onDismiss = {
+                onAction(MpayQrAction.DismissAccountPicker)
+            },
+        )
+    }
+
     LazyColumn(
         modifier = modifier.fillMaxSize(),
         state = lazyListState,
@@ -239,8 +256,18 @@ private fun MpayQrScreenContent(
         item {
             AccountSelectorCard(
                 client = state.client,
-                account = state.defaultAccount,
-                isPrimary = true,
+                account = state.selectedAccount?.let { account ->
+                    DefaultAccount(
+                        accountId = account.id,
+                        accountNo = account.number,
+                    )
+                } ?: state.defaultAccount,
+                isPrimary = state.selectedAccount?.id == state.defaultAccount.accountId ||
+                    state.selectedAccount == null,
+                hasMultipleAccounts = state.accounts.size > 1,
+                onClick = {
+                    onAction(MpayQrAction.ShowAccountPicker)
+                },
             )
         }
 
@@ -255,15 +282,34 @@ private fun MpayQrScreenContent(
                     modifier = Modifier.fillMaxWidth(),
                     contentAlignment = Alignment.Center,
                 ) {
-                    val data = if (page == 0) contentState.intraBankData else contentState.interBankData
-                    val qrType = if (page == 0) QrType.INTRA_BANK else QrType.INTER_BANK
-
-                    QrCodeCard(
-                        data = data,
-                        options = contentState.options,
-                        qrType = qrType,
-                        modifier = Modifier.padding(horizontal = KptTheme.spacing.sm),
-                    )
+                    when (page) {
+                        0 -> {
+                            // Intra-Bank - always show QR
+                            QrCodeCard(
+                                data = contentState.intraBankData,
+                                options = contentState.options,
+                                qrType = QrType.INTRA_BANK,
+                                modifier = Modifier.padding(horizontal = KptTheme.spacing.sm),
+                            )
+                        }
+                        1 -> {
+                            // Inter-Bank - show QR or placeholder
+                            if (contentState.interBankData != null) {
+                                QrCodeCard(
+                                    data = contentState.interBankData,
+                                    options = contentState.options,
+                                    qrType = QrType.INTER_BANK,
+                                    modifier = Modifier.padding(horizontal = KptTheme.spacing.sm),
+                                )
+                            } else {
+                                InterBankPlaceholder(
+                                    reason = contentState.interBankUnavailableReason
+                                        ?: stringResource(Res.string.feature_mpay_qr_external_id_required),
+                                    modifier = Modifier.padding(horizontal = KptTheme.spacing.sm),
+                                )
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -291,38 +337,46 @@ private fun MpayQrScreenContent(
 
         // Share and Download buttons
         item {
-            val currentData = if (pagerState.currentPage == 0) {
-                contentState.intraBankData
-            } else {
-                contentState.interBankData
+            val currentData = when {
+                pagerState.currentPage == 0 -> contentState.intraBankData
+                contentState.interBankData != null -> contentState.interBankData
+                else -> null
             }
-            val qrPainter = rememberQrCodePainter(
-                data = currentData,
-                options = contentState.options,
-            )
 
-            QrActionButtons(
-                onShareClick = {
-                    val bytes = qrPainter.toByteArray(1024, 1024, ImageFormat.PNG)
-                    onAction(MpayQrAction.ShareQrCode(bytes))
-                },
-                onDownloadClick = {
-                    val bytes = qrPainter.toByteArray(1024, 1024, ImageFormat.PNG)
-                    onAction(MpayQrAction.DownloadQrCode(bytes))
-                },
-            )
+            if (currentData != null) {
+                val qrPainter = rememberQrCodePainter(
+                    data = currentData,
+                    options = contentState.options,
+                )
+
+                QrActionButtons(
+                    onShareClick = {
+                        val bytes = qrPainter.toByteArray(1024, 1024, ImageFormat.PNG)
+                        onAction(MpayQrAction.ShareQrCode(bytes))
+                    },
+                    onDownloadClick = {
+                        val bytes = qrPainter.toByteArray(1024, 1024, ImageFormat.PNG)
+                        onAction(MpayQrAction.DownloadQrCode(bytes))
+                    },
+                )
+            }
         }
 
         // Account IDs section
         item {
+            val accountNo = state.selectedAccount?.number ?: state.defaultAccount.accountNo
+            val externalId = state.selectedAccount?.externalId ?: state.accountExternalId
+
             AccountIdSection(
-                accountNumber = state.defaultAccount.accountNo,
-                externalId = state.accountExternalId.ifBlank { null },
+                accountNumber = accountNo,
+                externalId = externalId.ifBlank { null },
                 onCopyAccountNumber = {
-                    onAction(MpayQrAction.CopyToClipboard(state.defaultAccount.accountNo))
+                    onAction(MpayQrAction.CopyToClipboard(accountNo))
                 },
                 onCopyExternalId = {
-                    onAction(MpayQrAction.CopyToClipboard(state.accountExternalId))
+                    if (externalId.isNotBlank()) {
+                        onAction(MpayQrAction.CopyToClipboard(externalId))
+                    }
                 },
             )
         }

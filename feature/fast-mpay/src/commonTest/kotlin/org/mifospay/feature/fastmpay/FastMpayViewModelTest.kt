@@ -46,6 +46,7 @@ class FastMpayViewModelTest {
     private val testDispatcher = StandardTestDispatcher()
     private lateinit var fakeBeneficiaryRepository: FakeBeneficiaryRepository
     private lateinit var fakeUserPreferencesRepository: FakeUserPreferencesRepository
+    private lateinit var fakeOfficeRepository: FakeOfficeRepository
     private lateinit var processor: FastMpayProcessor
 
     @BeforeTest
@@ -53,9 +54,11 @@ class FastMpayViewModelTest {
         Dispatchers.setMain(testDispatcher)
         fakeBeneficiaryRepository = FakeBeneficiaryRepository()
         fakeUserPreferencesRepository = FakeUserPreferencesRepository()
+        fakeOfficeRepository = FakeOfficeRepository()
         processor = FastMpayProcessor(
             beneficiaryRepository = fakeBeneficiaryRepository,
             userPreferencesRepository = fakeUserPreferencesRepository,
+            officeRepository = fakeOfficeRepository,
         )
     }
 

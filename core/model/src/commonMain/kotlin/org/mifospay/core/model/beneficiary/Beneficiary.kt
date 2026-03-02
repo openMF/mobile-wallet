@@ -23,6 +23,7 @@ data class Beneficiary(
     val accountType: AccountType,
     val accountNumber: String,
     val transferLimit: Int = 0,
+    val officeId: Long? = null,
 ) : Parcelable {
 
     @Serializable
