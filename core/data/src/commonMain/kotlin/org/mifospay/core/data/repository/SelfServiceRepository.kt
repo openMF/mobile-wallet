@@ -13,7 +13,6 @@ import kotlinx.coroutines.flow.Flow
 import org.mifospay.core.common.DataState
 import org.mifospay.core.model.account.Account
 import org.mifospay.core.model.account.AccountContent
-import org.mifospay.core.model.account.AccountsWithTransactions
 import org.mifospay.core.model.beneficiary.Beneficiary
 import org.mifospay.core.model.beneficiary.BeneficiaryPayload
 import org.mifospay.core.model.beneficiary.BeneficiaryUpdatePayload
@@ -42,11 +41,6 @@ interface SelfServiceRepository {
     fun getSelfAccounts(clientId: Long): Flow<DataState<List<Account>>>
 
     fun getBeneficiaryList(): Flow<DataState<List<Beneficiary>>>
-
-    fun getActiveAccountsWithTransactions(
-        clientId: Long,
-        limit: Int,
-    ): Flow<DataState<AccountsWithTransactions>>
 
     fun getActiveAccountsWithTransactionsPerAccount(
         clientId: Long,
