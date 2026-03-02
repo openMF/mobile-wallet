@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.serialization.json.Json
 import org.mifospay.core.common.DataState
 import org.mifospay.core.data.repository.BeneficiaryRepository
+import org.mifospay.core.data.repository.OfficeRepository
 import org.mifospay.core.datastore.UserPreferencesRepository
 import org.mifospay.core.model.beneficiary.Beneficiary
 import org.mifospay.core.model.utils.QrCodeData
@@ -27,11 +28,17 @@ import org.mifospay.feature.fastmpay.model.QrProcessResult
  *
  * @param beneficiaryRepository Repository for checking existing beneficiaries
  * @param userPreferencesRepository Repository for user preferences including current FSP
+ * @param officeRepository Repository for resolving office names from IDs
  */
 class FastMpayProcessor(
     private val beneficiaryRepository: BeneficiaryRepository,
     private val userPreferencesRepository: UserPreferencesRepository,
+    private val officeRepository: OfficeRepository,
 ) {
+
+    companion object {
+        const val DEFAULT_OFFICE_NAME = "Head Office"
+    }
 
     /**
      * Process QR code data and determine navigation target.
@@ -64,8 +71,14 @@ class FastMpayProcessor(
 
             QrCodeType.BENEFICIARY -> {
                 // Beneficiary: Pre-fill beneficiary form
-                val beneficiaryJson = convertToBeneficiaryJson(qrData)
-                QrProcessResult.NavigateToAddBeneficiary(beneficiaryJson)
+                val officeName = resolveOfficeName(qrData)
+                val beneficiaryJson = convertToBeneficiaryJson(qrData, officeName)
+                val qrDataJson = Json.encodeToString(QrCodeData.serializer(), qrData)
+                QrProcessResult.NavigateToAddBeneficiary(
+                    beneficiaryData = beneficiaryJson,
+                    sourceQrType = QrCodeType.BENEFICIARY,
+                    sourceQrData = qrDataJson,
+                )
             }
 
             QrCodeType.MERCHANT -> {
@@ -99,8 +112,13 @@ class FastMpayProcessor(
             )
         }
 
+        // Resolve office name early for beneficiary creation
+        val officeName = resolveOfficeName(qrData)
+
         return try {
-            val beneficiaryResult = beneficiaryRepository.getBeneficiaryList().first()
+            // Skip Loading state and get the actual result (Success or Error)
+            val beneficiaryResult = beneficiaryRepository.getBeneficiaryList()
+                .first { it !is DataState.Loading }
 
             when (beneficiaryResult) {
                 is DataState.Success -> {
@@ -116,34 +134,89 @@ class FastMpayProcessor(
                         )
                     } else {
                         // Beneficiary doesn't exist -> Navigate to AddBeneficiary
-                        val beneficiaryJson = convertToBeneficiaryJson(qrData)
-                        QrProcessResult.NavigateToAddBeneficiary(beneficiaryJson)
+                        val beneficiaryJson = convertToBeneficiaryJson(qrData, officeName)
+                        val qrDataJson = Json.encodeToString(QrCodeData.serializer(), qrData)
+                        QrProcessResult.NavigateToAddBeneficiary(
+                            beneficiaryData = beneficiaryJson,
+                            sourceQrType = QrCodeType.INTRA_BANK,
+                            sourceQrData = qrDataJson,
+                        )
                     }
                 }
 
                 is DataState.Error -> {
                     // On error, fallback to add beneficiary flow
-                    val beneficiaryJson = convertToBeneficiaryJson(qrData)
-                    QrProcessResult.NavigateToAddBeneficiary(beneficiaryJson)
+                    val beneficiaryJson = convertToBeneficiaryJson(qrData, officeName)
+                    val qrDataJson = Json.encodeToString(QrCodeData.serializer(), qrData)
+                    QrProcessResult.NavigateToAddBeneficiary(
+                        beneficiaryData = beneficiaryJson,
+                        sourceQrType = QrCodeType.INTRA_BANK,
+                        sourceQrData = qrDataJson,
+                    )
                 }
 
                 is DataState.Loading -> {
-                    // Should not happen since we use .first()
-                    val beneficiaryJson = convertToBeneficiaryJson(qrData)
-                    QrProcessResult.NavigateToAddBeneficiary(beneficiaryJson)
+                    // Should not happen since we filter out Loading state
+                    val beneficiaryJson = convertToBeneficiaryJson(qrData, officeName)
+                    val qrDataJson = Json.encodeToString(QrCodeData.serializer(), qrData)
+                    QrProcessResult.NavigateToAddBeneficiary(
+                        beneficiaryData = beneficiaryJson,
+                        sourceQrType = QrCodeType.INTRA_BANK,
+                        sourceQrData = qrDataJson,
+                    )
                 }
             }
         } catch (e: Exception) {
             // On exception, fallback to add beneficiary flow
-            val beneficiaryJson = convertToBeneficiaryJson(qrData)
-            QrProcessResult.NavigateToAddBeneficiary(beneficiaryJson)
+            val beneficiaryJson = convertToBeneficiaryJson(qrData, officeName)
+            val qrDataJson = Json.encodeToString(QrCodeData.serializer(), qrData)
+            QrProcessResult.NavigateToAddBeneficiary(
+                beneficiaryData = beneficiaryJson,
+                sourceQrType = QrCodeType.INTRA_BANK,
+                sourceQrData = qrDataJson,
+            )
+        }
+    }
+
+    /**
+     * Resolves office name from QR data.
+     *
+     * Uses officeName directly from QR if available (new QR format).
+     * Falls back to looking up by officeId for backward compatibility (old QR format).
+     *
+     * @param qrData The QR code data containing office info
+     * @return The office name from QR, or resolved from officeId, or [DEFAULT_OFFICE_NAME]
+     */
+    private suspend fun resolveOfficeName(qrData: QrCodeData): String {
+        // Use officeName directly if available (new QR format)
+        if (qrData.officeName.isNotBlank()) {
+            return qrData.officeName
+        }
+
+        // Fallback: resolve from officeId (backward compatibility with old QR codes)
+        return try {
+            // Skip Loading state and get the actual result
+            val result = officeRepository.getOffices()
+                .first { it !is DataState.Loading }
+            when (result) {
+                is DataState.Success -> {
+                    result.data.find { it.id == qrData.officeId }?.name
+                        ?: DEFAULT_OFFICE_NAME
+                }
+                else -> DEFAULT_OFFICE_NAME
+            }
+        } catch (e: Exception) {
+            DEFAULT_OFFICE_NAME
         }
     }
 
     /**
      * Converts QrCodeData to Beneficiary JSON string.
+     *
+     * @param qrData The QR code data containing beneficiary info
+     * @param officeName The resolved office name (from API lookup)
      */
-    private fun convertToBeneficiaryJson(qrData: QrCodeData): String {
+    private fun convertToBeneficiaryJson(qrData: QrCodeData, officeName: String): String {
         val beneficiary = Beneficiary(
             name = qrData.clientName,
             clientName = qrData.clientName,
@@ -153,7 +226,8 @@ class FastMpayProcessor(
                 code = "savings",
                 value = "Savings",
             ),
-            officeName = "Head Office",
+            officeName = officeName,
+            officeId = qrData.officeId,
             transferLimit = 0,
         )
         return Json.encodeToString(Beneficiary.serializer(), beneficiary)

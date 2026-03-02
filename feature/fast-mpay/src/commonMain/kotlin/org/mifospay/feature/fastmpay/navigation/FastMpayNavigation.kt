@@ -17,6 +17,7 @@ import androidx.navigation.navArgument
 import io.ktor.http.encodeURLPathPart
 import org.mifospay.core.data.util.MpayQrCodeProcessor
 import org.mifospay.core.model.utils.QrCodeData
+import org.mifospay.core.model.utils.QrCodeType
 import org.mifospay.core.ui.composableWithSlideTransitions
 import org.mifospay.feature.fastmpay.FastMpayScreen
 
@@ -48,6 +49,7 @@ fun NavController.navigateToFastMpay(
  * Registers the Fast MPay screen in the navigation graph.
  *
  * @param onNavigateToAddBeneficiary Callback for INTRA_BANK/BENEFICIARY type when beneficiary doesn't exist
+ *        (beneficiaryData, sourceQrType, sourceQrData)
  * @param onNavigateToMakeTransfer Callback for INTRA_BANK type when beneficiary exists (qrData, beneficiaryName)
  * @param onNavigateToInterbankTransfer Callback for INTER_BANK type (accountExternalId, recipientName, amount)
  * @param onNavigateToIntraBankTransfer Callback for future intra-bank direct transfer
@@ -56,7 +58,7 @@ fun NavController.navigateToFastMpay(
  * @param onError Callback when processing fails
  */
 fun NavGraphBuilder.fastMpayScreen(
-    onNavigateToAddBeneficiary: (beneficiaryData: String) -> Unit,
+    onNavigateToAddBeneficiary: (beneficiaryData: String, sourceQrType: QrCodeType, sourceQrData: String) -> Unit,
     onNavigateToMakeTransfer: (qrData: QrCodeData, beneficiaryName: String) -> Unit,
     onNavigateToInterbankTransfer: (accountExternalId: String, recipientName: String?, amount: String?) -> Unit,
     onNavigateToIntraBankTransfer: (qrData: QrCodeData) -> Unit,

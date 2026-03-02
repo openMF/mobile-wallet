@@ -9,6 +9,9 @@
  */
 package org.mifospay.core.data.repositoryImpl
 
+import io.ktor.client.plugins.ClientRequestException
+import io.ktor.client.plugins.ServerResponseException
+import io.ktor.client.statement.bodyAsText
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
@@ -25,8 +28,11 @@ import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.scan
 import kotlinx.coroutines.flow.zip
 import kotlinx.coroutines.withContext
+import kotlinx.io.IOException
 import org.mifospay.core.common.DataState
 import org.mifospay.core.common.DateHelper
+import org.mifospay.core.common.HttpStatusException
+import org.mifospay.core.common.NetworkException
 import org.mifospay.core.common.asDataStateFlow
 import org.mifospay.core.common.combineResultsWith
 import org.mifospay.core.data.mapper.toAccount
@@ -308,6 +314,26 @@ class SelfServiceRepositoryImpl(
             }
 
             DataState.Success("Beneficiary deleted successfully")
+        } catch (e: ClientRequestException) {
+            val status = e.response.status.value
+            val responseBody = try {
+                e.response.bodyAsText()
+            } catch (_: Exception) {
+                ""
+            }
+            val userMessage = parseMifosError(responseBody, status)
+            DataState.Error(HttpStatusException(status, userMessage, e.message))
+        } catch (e: ServerResponseException) {
+            val status = e.response.status.value
+            val responseBody = try {
+                e.response.bodyAsText()
+            } catch (_: Exception) {
+                ""
+            }
+            val userMessage = parseMifosError(responseBody, status)
+            DataState.Error(HttpStatusException(status, userMessage, e.message))
+        } catch (e: IOException) {
+            DataState.Error(NetworkException("Network unavailable. Please check your connection."))
         } catch (e: Exception) {
             DataState.Error(e)
         }

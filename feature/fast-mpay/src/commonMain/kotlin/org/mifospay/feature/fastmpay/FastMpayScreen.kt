@@ -35,6 +35,7 @@ import mobile_wallet.core.ui.generated.resources.core_ui_understood
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.mifospay.core.model.utils.QrCodeData
+import org.mifospay.core.model.utils.QrCodeType
 import org.mifospay.core.ui.InfoBottomSheet
 import org.mifospay.core.ui.InfoType
 import org.mifospay.feature.fastmpay.model.QrProcessResult
@@ -59,7 +60,7 @@ import org.mifospay.feature.fastmpay.model.QrProcessResult
  */
 @Composable
 fun FastMpayScreen(
-    onNavigateToAddBeneficiary: (String) -> Unit,
+    onNavigateToAddBeneficiary: (beneficiaryData: String, sourceQrType: QrCodeType, sourceQrData: String) -> Unit,
     onNavigateToMakeTransfer: (QrCodeData, String) -> Unit,
     onNavigateToInterbankTransfer: (String, String?, String?) -> Unit,
     onNavigateToIntraBankTransfer: (QrCodeData) -> Unit,
@@ -103,7 +104,7 @@ fun FastMpayScreen(
         when (val r = result) {
             is QrProcessResult.NavigateToAddBeneficiary -> {
                 viewModel.clearResult()
-                onNavigateToAddBeneficiary(r.beneficiaryData)
+                onNavigateToAddBeneficiary(r.beneficiaryData, r.sourceQrType, r.sourceQrData)
             }
 
             is QrProcessResult.NavigateToMakeTransfer -> {

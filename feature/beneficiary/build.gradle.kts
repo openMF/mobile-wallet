@@ -12,13 +12,12 @@ plugins {
 }
 
 android {
-    namespace = "org.mifospay.feature.accounts"
+    namespace = "org.mifospay.feature.beneficiary"
 }
 
 kotlin {
     sourceSets {
         commonMain.dependencies {
-            implementation(projects.feature.beneficiary)
             implementation(compose.ui)
             implementation(compose.foundation)
             implementation(compose.material3)

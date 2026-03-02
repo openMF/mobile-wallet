@@ -397,6 +397,7 @@ data class MpayQrState(
         accountNo = selectedAccount?.number ?: defaultAccount.accountNo,
         accountId = selectedAccount?.id ?: defaultAccount.accountId,
         officeId = selectedAccount?.officeId?.toLong() ?: client.officeId.toLong(),
+        officeName = selectedAccount?.officeName ?: client.officeName,
         accountTypeId = QrCodeData.ACCOUNT_TYPE_ID,
         accountExternalId = selectedAccount?.externalId ?: accountExternalId,
         currency = "USD",

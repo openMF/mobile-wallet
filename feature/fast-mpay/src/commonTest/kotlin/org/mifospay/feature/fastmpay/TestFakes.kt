@@ -15,6 +15,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.flowOf
 import org.mifospay.core.common.DataState
 import org.mifospay.core.data.repository.BeneficiaryRepository
+import org.mifospay.core.data.repository.OfficeRepository
 import org.mifospay.core.datastore.UserPreferencesRepository
 import org.mifospay.core.model.account.DefaultAccount
 import org.mifospay.core.model.beneficiary.Beneficiary
@@ -24,8 +25,36 @@ import org.mifospay.core.model.client.Client
 import org.mifospay.core.model.client.UpdatedClient
 import org.mifospay.core.model.instance.InterbankServer
 import org.mifospay.core.model.instance.ServerInstance
+import org.mifospay.core.model.office.Office
 import org.mifospay.core.model.user.UserInfo
 import org.mifospay.core.network.model.entity.templates.beneficiary.BeneficiaryTemplate
+
+/**
+ * Fake implementation of [OfficeRepository] for testing.
+ */
+internal class FakeOfficeRepository : OfficeRepository {
+    private var officeList: List<Office> = listOf(
+        Office(id = 1, name = "Head Office"),
+        Office(id = 5, name = "Lagos Branch"),
+    )
+    private var shouldReturnError = false
+
+    fun setOfficeList(list: List<Office>) {
+        officeList = list
+    }
+
+    fun setShouldReturnError(error: Boolean) {
+        shouldReturnError = error
+    }
+
+    override fun getOffices(): Flow<DataState<List<Office>>> {
+        return if (shouldReturnError) {
+            flowOf(DataState.Error(Throwable("Network error")))
+        } else {
+            flowOf(DataState.Success(officeList))
+        }
+    }
+}
 
 /**
  * Fake implementation of [BeneficiaryRepository] for testing.
