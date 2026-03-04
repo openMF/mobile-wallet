@@ -74,7 +74,7 @@ Occasionally, merge conflicts may arise when your pull request is being reviewed
 To learn how to resolve merge conflicts, please refer to the [Solving Merge Conflicts](https://github.com/openMF/mifos-pay/wiki/Solving-Merge-Conflicts) guide.
 
 ### Conclusion
-By following these contribution guidelines, you're all set to start contributing to the Mifos Pay (Mifos Pay) project. We appreciate your efforts and look forward to your valuable contributions. Happy coding!
+By following these contribution guidelines, you're all set to start contributing to the Mifos Pay project. We appreciate your efforts and look forward to your valuable contributions. Happy coding!
 
 ### Instructions to Get the Latest APK
 
