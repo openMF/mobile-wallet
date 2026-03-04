@@ -2,8 +2,8 @@
 
 <div align="center">
 
-# Mobile Wallet
-Mobile Wallet is a Kotlin Multiplatform(KMP) based project built on top of Apache <a href='https://github.com/openMF/mobile-wallet/wiki/Fineract-backend'>Fineract</a> API.
+# Mifos Pay
+Mifos Pay is a Kotlin Multiplatform(KMP) based project built on top of Apache <a href='https://github.com/openMF/mobile-wallet/wiki/Fineract-backend'>Fineract</a> API.
 Following recommended architecture and design patterns, the application is developed using the latest technologies and frameworks/libraries, such as Jetpack Compose, Ktor, Ktorfit, and Koin. It is designed to be cross-platform, supporting Android, iOS, Desktop, and Web platforms.
 
 ![Kotlin](https://img.shields.io/badge/Kotlin-7f52ff?style=flat-square&logo=kotlin&logoColor=white)
@@ -25,7 +25,7 @@ Following recommended architecture and design patterns, the application is devel
 
 > \[!Note]
 > **We're moving towards to Jira for issue tracking. Please use [Jira](https://mifosforge.jira.com/jira/software/c/projects/MW/boards/66) for issue tracking.**
-> **And Join our [slack](https://join.slack.com/t/mifos/shared_invite/zt-2wvi9t82t-DuSBdqdQVOY9fsqsLjkKPA) community channel `mobile-wallet` to discuss all things about Mobile Wallet development. Please keep discussions focused and avoid cross-posting across channels.**
+> **And Join our [slack](https://join.slack.com/t/mifos/shared_invite/zt-2wvi9t82t-DuSBdqdQVOY9fsqsLjkKPA) community channel `mobile-wallet` to discuss all things about Mifos Pay development. Please keep discussions focused and avoid cross-posting across channels.**
 > **Please join our daily Mobile Stand-Up on [Zoom](https://us02web.zoom.us/meeting/register/xV5scn0XQpGXM5aUDFmUIA).**
 
 <div align="center"><a name="readme-top"></a></div>
@@ -48,7 +48,7 @@ Access the Mifos Pay demo credentials on our [Jira Wiki page](https://mifosforge
 Mifos boasts an active and vibrant contributor community, Please join us on [slack](https://join.slack.com/t/mifos/shared_invite/zt-2f4nr6tk3-ZJlHMi1lc0R19FFEHxdvng). Once you've joined the mifos slack community, please join the `#mobile-wallet` channel to engage with mobile-wallet development. If you encounter any difficulties joining our Slack channel, please don't hesitate to open an issue. This will allow us to assist you promptly or send you an invitation.
 
 ### How to Contribute
-Thank you for your interest in contributing to the Mobile Wallet project by Mifos! We welcome all contributions and encourage you to follow these guidelines to ensure a smooth and efficient collaboration process.
+Thank you for your interest in contributing to the Mifos Pay project by Mifos! We welcome all contributions and encourage you to follow these guidelines to ensure a smooth and efficient collaboration process.
 
 - Sign the [Contribution License Agreement](https://mifos.org/about-us/financial-legal/mifos-contributor-agreement/).
 - Always follow the [code of conduct](https://mifos.org/resources/community/code-of-conduct/) - this is important to us. We are proud to be open, tolerant and providing a positive environment.
@@ -74,7 +74,7 @@ Occasionally, merge conflicts may arise when your pull request is being reviewed
 To learn how to resolve merge conflicts, please refer to the [Solving Merge Conflicts](https://github.com/openMF/mobile-wallet/wiki/Solving-Merge-Conflicts) guide.
 
 ### Conclusion
-By following these contribution guidelines, you're all set to start contributing to the Mobile Wallet (Mifos Pay) project. We appreciate your efforts and look forward to your valuable contributions. Happy coding!
+By following these contribution guidelines, you're all set to start contributing to the Mifos Pay (Mifos Pay) project. We appreciate your efforts and look forward to your valuable contributions. Happy coding!
 
 ### Instructions to Get the Latest APK
 
@@ -88,7 +88,7 @@ To know more about the project details and architecture guidelines, visit our [W
 Special thanks to the incredible code contributors who continue to drive this project forward.
 
 <a href="https://github.com/openMF/mobile-wallet/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=openMF/mobile-wallet"  alt="mobile wallet contributors"/>
+  <img src="https://contrib.rocks/image?repo=openMF/mobile-wallet"  alt="Mifos Pay contributors"/>
 </a>
 
 <div align="right">
