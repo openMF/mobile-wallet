@@ -2,8 +2,8 @@
 
 <div align="center">
 
-# Mobile Wallet
-Mobile Wallet is a Kotlin Multiplatform(KMP) based project built on top of Apache <a href='https://github.com/openMF/mobile-wallet/wiki/Fineract-backend'>Fineract</a> API.
+# Mifos Pay
+Mifos Pay is a Kotlin Multiplatform(KMP) based project built on top of Apache <a href='https://github.com/openMF/mifos-pay/wiki/Fineract-backend'>Fineract</a> API.
 Following recommended architecture and design patterns, the application is developed using the latest technologies and frameworks/libraries, such as Jetpack Compose, Ktor, Ktorfit, and Koin. It is designed to be cross-platform, supporting Android, iOS, Desktop, and Web platforms.
 
 ![Kotlin](https://img.shields.io/badge/Kotlin-7f52ff?style=flat-square&logo=kotlin&logoColor=white)
@@ -16,7 +16,7 @@ Following recommended architecture and design patterns, the application is devel
 ![badge-js](http://img.shields.io/badge/platform-web-FDD835.svg?style=flat)
 
 
-[![PR Checks](https://github.com/openMF/mobile-wallet/actions/workflows/pr-check.yml/badge.svg)](https://github.com/openMF/mobile-wallet/actions/workflows/pr-check.yml)
+[![PR Checks](https://github.com/openMF/mifos-pay/actions/workflows/pr-check.yml/badge.svg)](https://github.com/openMF/mifos-pay/actions/workflows/pr-check.yml)
 [![Slack](https://img.shields.io/badge/Slack-4A154B?style=flat-square&logo=slack&logoColor=white)](https://join.slack.com/t/mifos/shared_invite/zt-2wvi9t82t-DuSBdqdQVOY9fsqsLjkKPA)
 [![Jira](https://img.shields.io/badge/jira-%230A0FFF.svg?style=flat-square&logo=jira&logoColor=white)](https://mifosforge.jira.com/jira/software/c/projects/MW/boards/66)
 [![Zoom](https://img.shields.io/badge/Zoom-2D8CFF?style=flat-square&logo=zoom&logoColor=white)](https://us02web.zoom.us/meeting/register/xV5scn0XQpGXM5aUDFmUIA)
@@ -25,7 +25,7 @@ Following recommended architecture and design patterns, the application is devel
 
 > \[!Note]
 > **We're moving towards to Jira for issue tracking. Please use [Jira](https://mifosforge.jira.com/jira/software/c/projects/MW/boards/66) for issue tracking.**
-> **And Join our [slack](https://join.slack.com/t/mifos/shared_invite/zt-2wvi9t82t-DuSBdqdQVOY9fsqsLjkKPA) community channel `mobile-wallet` to discuss all things about Mobile Wallet development. Please keep discussions focused and avoid cross-posting across channels.**
+> **And Join our [slack](https://join.slack.com/t/mifos/shared_invite/zt-2wvi9t82t-DuSBdqdQVOY9fsqsLjkKPA) community channel `mifos-pay` to discuss all things about Mifos Pay development. Please keep discussions focused and avoid cross-posting across channels.**
 > **Please join our daily Mobile Stand-Up on [Zoom](https://us02web.zoom.us/meeting/register/xV5scn0XQpGXM5aUDFmUIA).**
 
 <div align="center"><a name="readme-top"></a></div>
@@ -45,50 +45,50 @@ Following recommended architecture and design patterns, the application is devel
 Access the Mifos Pay demo credentials on our [Jira Wiki page](https://mifosforge.jira.com/wiki/spaces/MP/pages/4537024513/Welcome+to+the+Mifos+Mobile+Apps+Community#%F0%9F%92%B8-Mifos-Wallet-(Mifos-Pay).1).
 
 ### Join Us on Slack
-Mifos boasts an active and vibrant contributor community, Please join us on [slack](https://join.slack.com/t/mifos/shared_invite/zt-2f4nr6tk3-ZJlHMi1lc0R19FFEHxdvng). Once you've joined the mifos slack community, please join the `#mobile-wallet` channel to engage with mobile-wallet development. If you encounter any difficulties joining our Slack channel, please don't hesitate to open an issue. This will allow us to assist you promptly or send you an invitation.
+Mifos boasts an active and vibrant contributor community, Please join us on [slack](https://join.slack.com/t/mifos/shared_invite/zt-2f4nr6tk3-ZJlHMi1lc0R19FFEHxdvng). Once you've joined the mifos slack community, please join the `#mifos-pay` channel to engage with mifos-pay development. If you encounter any difficulties joining our Slack channel, please don't hesitate to open an issue. This will allow us to assist you promptly or send you an invitation.
 
 ### How to Contribute
-Thank you for your interest in contributing to the Mobile Wallet project by Mifos! We welcome all contributions and encourage you to follow these guidelines to ensure a smooth and efficient collaboration process.
+Thank you for your interest in contributing to the Mifos Pay project by Mifos! We welcome all contributions and encourage you to follow these guidelines to ensure a smooth and efficient collaboration process.
 
 - Sign the [Contribution License Agreement](https://mifos.org/about-us/financial-legal/mifos-contributor-agreement/).
 - Always follow the [code of conduct](https://mifos.org/resources/community/code-of-conduct/) - this is important to us. We are proud to be open, tolerant and providing a positive environment.
 
-The issues should be raised via the GitHub issue tracker. For Issue tracker guidelines please click <a href="https://github.com/openMF/mobile-wallet/blob/master/.github/CONTRIBUTING.md#issue-tracker">here</a>. All fixes should be proposed via pull requests. For pull request guidelines please click <a href="https://github.com/openMF/mobile-wallet/blob/master/.github/CONTRIBUTING.md#pull-requests">here</a>. For commit style guidelines please click <a href="https://github.com/openMF/mobile-wallet/wiki/Commit-style-guide">here</a>.
+The issues should be raised via the GitHub issue tracker. For Issue tracker guidelines please click <a href="https://github.com/openMF/mifos-pay/blob/master/.github/CONTRIBUTING.md#issue-tracker">here</a>. All fixes should be proposed via pull requests. For pull request guidelines please click <a href="https://github.com/openMF/mifos-pay/blob/master/.github/CONTRIBUTING.md#pull-requests">here</a>. For commit style guidelines please click <a href="https://github.com/openMF/mifos-pay/wiki/Commit-style-guide">here</a>.
 
 ### Branch Policy
 For development purposes, always pull from the **dev** branch, as all contributions and updates are merged into this branch. Upon completion of development, changes are subsequently merged into the **master** branch, which represents the stable and bug-free version of the code.
 
 ### Development Setup
-Please refer to the  [Development Setup Guide](https://github.com/openMF/mobile-wallet/wiki/Set-up-an-environment) for detailed instructions on configuring the development environment.
+Please refer to the  [Development Setup Guide](https://github.com/openMF/mifos-pay/wiki/Set-up-an-environment) for detailed instructions on configuring the development environment.
 
 ### Committing Your Changes
 After making changes in your local repository, you will need to commit them to your GitHub repository.
-If you are unfamiliar with the process of committing changes, please refer to the [Committing Your Changes](https://github.com/openMF/mobile-wallet/wiki/Committing-Your-Changes) guide.
+If you are unfamiliar with the process of committing changes, please refer to the [Committing Your Changes](https://github.com/openMF/mifos-pay/wiki/Committing-Your-Changes) guide.
 
 ### Squashing Your Commits
 To ensure a clean and organized Git history, contributors are encouraged to squash their commits before merging.  
-Instructions on how to squash commits can be found in the [Squashing Your Commits](https://github.com/openMF/mobile-wallet/wiki/Squashing-Your-Commits) guide.
+Instructions on how to squash commits can be found in the [Squashing Your Commits](https://github.com/openMF/mifos-pay/wiki/Squashing-Your-Commits) guide.
 
 ### Resolving Merge Conflicts
 Occasionally, merge conflicts may arise when your pull request is being reviewed. These conflicts need to be resolved manually.  
-To learn how to resolve merge conflicts, please refer to the [Solving Merge Conflicts](https://github.com/openMF/mobile-wallet/wiki/Solving-Merge-Conflicts) guide.
+To learn how to resolve merge conflicts, please refer to the [Solving Merge Conflicts](https://github.com/openMF/mifos-pay/wiki/Solving-Merge-Conflicts) guide.
 
 ### Conclusion
-By following these contribution guidelines, you're all set to start contributing to the Mobile Wallet (Mifos Pay) project. We appreciate your efforts and look forward to your valuable contributions. Happy coding!
+By following these contribution guidelines, you're all set to start contributing to the Mifos Pay project. We appreciate your efforts and look forward to your valuable contributions. Happy coding!
 
 ### Instructions to Get the Latest APK
 
-To download the latest APK navigate to the latest release [here](https://github.com/openMF/mobile-wallet/releases), and download the APK file from the assets section.
+To download the latest APK navigate to the latest release [here](https://github.com/openMF/mifos-pay/releases), and download the APK file from the assets section.
 
 ### Wiki
-To know more about the project details and architecture guidelines, visit our [Wiki](https://github.com/openMF/mobile-wallet/wiki).
+To know more about the project details and architecture guidelines, visit our [Wiki](https://github.com/openMF/mifos-pay/wiki).
 
 ### Contributors
 
 Special thanks to the incredible code contributors who continue to drive this project forward.
 
-<a href="https://github.com/openMF/mobile-wallet/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=openMF/mobile-wallet"  alt="mobile wallet contributors"/>
+<a href="https://github.com/openMF/mifos-pay/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=openMF/mifos-pay"  alt="Mifos Pay contributors"/>
 </a>
 
 <div align="right">
