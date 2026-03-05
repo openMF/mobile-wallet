@@ -92,6 +92,7 @@ interface KptThemeProvider {
     val shapes: KptShapes
     val spacing: KptSpacing
     val elevation: KptElevation
+    val strokes: KptStrokes
 }
 
 @Stable
@@ -192,6 +193,14 @@ interface KptElevation {
     val level3: Dp
     val level4: Dp
     val level5: Dp
+}
+
+@Stable
+interface KptStrokes {
+    val dpPoint5: Dp
+    val thin: Dp
+    val dp2: Dp
+    val dp5: Dp
 }
 
 interface ComponentRenderer<T : KptComponent> {
