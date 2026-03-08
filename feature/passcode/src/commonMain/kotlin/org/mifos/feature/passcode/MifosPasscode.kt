@@ -99,7 +99,7 @@ fun MifosPasscode(
         val observer = LifecycleEventObserver { _, event ->
             when (event) {
                 Lifecycle.Event.ON_START -> {
-                    if(state.passcodeStep==PasscodeStep.Enter) appLockRepository.lockApp()
+                    if (state.passcodeStep == PasscodeStep.Enter) appLockRepository.lockApp()
                 }
 
                 Lifecycle.Event.ON_RESUME -> {
