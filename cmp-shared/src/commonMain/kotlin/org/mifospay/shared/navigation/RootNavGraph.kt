@@ -81,7 +81,7 @@ internal fun RootNavGraph(
                 navHostController.popBackStack()
                 navHostController.navigateToMainGraph()
             },
-            onSkipBiometricSetup =  {
+            onSkipBiometricSetup = {
                 navHostController.popBackStack()
                 navHostController.navigateToMainGraph()
             },
