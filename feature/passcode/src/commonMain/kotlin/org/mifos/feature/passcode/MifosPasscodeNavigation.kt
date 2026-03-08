@@ -48,13 +48,11 @@ fun NavGraphBuilder.mifosRootPasscodeScreen(
 fun NavGraphBuilder.mifosReAuthPasscodeScreen(
     onForgotButton: () -> Unit,
     onAuthenticationSuccess: () -> Unit,
-    onPasscodeRejected: () -> Unit = {},
 ) {
     composable(route = RE_AUTH_MIFOS_PASSCODE_ROUTE) {
         MifosPasscode(
             onForgotButton = onForgotButton,
             onAuthenticationSuccess = onAuthenticationSuccess,
-            onPasscodeRejected = onPasscodeRejected,
             onPasscodeCreation = {},
         )
     }

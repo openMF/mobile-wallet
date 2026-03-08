@@ -99,7 +99,7 @@ fun MifosPasscode(
         val observer = LifecycleEventObserver { _, event ->
             when (event) {
                 Lifecycle.Event.ON_START -> {
-                    appLockRepository.lockApp()
+                    if(state.passcodeStep==PasscodeStep.Enter) appLockRepository.lockApp()
                 }
 
                 Lifecycle.Event.ON_RESUME -> {
@@ -144,32 +144,30 @@ fun MifosPasscode(
         onDispose { lifeCycleObserver.removeObserver(observer) }
     }
 
-    AnimatedVisibility(showDialogBox) {
-        MifosDialogBox(
-            title = stringResource(Res.string.feature_authenticator_error),
-            showDialogState = showDialogBox,
-            confirmButtonText = stringResource(Res.string.feature_authenticator_ok),
-            dismissButtonText = null,
-            onConfirm = {
-                showDialogBox = false
-                dialogMessage = null
-                when (dialogBoxType) {
-                    DialogBoxType.UserBiometricsNotRegistered -> {
-                        passcodeManager.trySendAction(PasscodeAction.BiometricUserNotRegistered)
-                        showBiometricsKeyButton = false
-                    }
-                    else -> {}
+    MifosDialogBox(
+        title = stringResource(Res.string.feature_authenticator_error),
+        showDialogState = showDialogBox,
+        confirmButtonText = stringResource(Res.string.feature_authenticator_ok),
+        dismissButtonText = null,
+        onConfirm = {
+            showDialogBox = false
+            dialogMessage = null
+            when (dialogBoxType) {
+                DialogBoxType.UserBiometricsNotRegistered -> {
+                    passcodeManager.trySendAction(PasscodeAction.BiometricUserNotRegistered)
+                    showBiometricsKeyButton = false
                 }
-                dialogBoxType = DialogBoxType.None
-            },
-            onDismiss = {
-                showDialogBox = false
-                dialogMessage = null
-                dialogBoxType = DialogBoxType.None
-            },
-            message = dialogMessage,
-        )
-    }
+                else -> {}
+            }
+            dialogBoxType = DialogBoxType.None
+        },
+        onDismiss = {
+            showDialogBox = false
+            dialogMessage = null
+            dialogBoxType = DialogBoxType.None
+        },
+        message = dialogMessage,
+    )
 
     PasscodeScreen(
         passcodeManager = passcodeManager,
