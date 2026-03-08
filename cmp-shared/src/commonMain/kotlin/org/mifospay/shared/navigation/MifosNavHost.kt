@@ -18,7 +18,8 @@ import mobile_wallet.feature.payments.generated.resources.feature_payments_histo
 import mobile_wallet.feature.payments.generated.resources.feature_payments_request
 import mobile_wallet.feature.payments.generated.resources.feature_payments_send
 import org.jetbrains.compose.resources.stringResource
-import org.mifos.feature.passcode.internalPasscodeVerificationScreen
+import org.mifos.feature.passcode.INTERNAL_MIFOS_PASSCODE_ROUTE
+import org.mifos.feature.passcode.mifosPasscodeScreen
 import org.mifos.feature.passcode.navigateToInternalMifosPasscodeScreen
 import org.mifospay.core.ui.utility.TabContent
 import org.mifospay.feature.accounts.AccountsScreen
@@ -172,20 +173,19 @@ internal fun MifosNavHost(
         navController = navController,
         modifier = modifier,
     ) {
-        internalPasscodeVerificationScreen(
+        mifosPasscodeScreen(
+            route = INTERNAL_MIFOS_PASSCODE_ROUTE,
             onForgotButton = onClickLogout,
             onAuthenticationSuccess = {
                 navController.previousBackStackEntry
                     ?.savedStateHandle
                     ?.set(AUTHENTICATION_VERIFICATION_KEY, true)
-
                 navController.popBackStack()
             },
             onPasscodeRejected = {
                 navController.previousBackStackEntry
                     ?.savedStateHandle
                     ?.set(AUTHENTICATION_VERIFICATION_KEY, false)
-
                 navController.popBackStack()
             },
             onPasscodeChanged = {
