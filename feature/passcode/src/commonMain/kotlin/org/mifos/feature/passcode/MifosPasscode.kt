@@ -187,7 +187,7 @@ fun MifosPasscode(
         },
         onPasscodeChanged = onPasscodeChanged,
         onPasscodeRejected = {
-            if(state.passcodeStep == PasscodeStep.Enter) {
+            if (state.passcodeStep == PasscodeStep.Enter) {
                 onPasscodeRejected()
             }
         },
