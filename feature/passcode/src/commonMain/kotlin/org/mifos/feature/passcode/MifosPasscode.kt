@@ -186,7 +186,11 @@ fun MifosPasscode(
             onPasscodeCreation()
         },
         onPasscodeChanged = onPasscodeChanged,
-        onPasscodeRejected = onPasscodeRejected,
+        onPasscodeRejected = {
+            if(state.passcodeStep == PasscodeStep.Enter) {
+                onPasscodeRejected()
+            }
+        },
         appearanceConfig = PasscodeAppearanceConfig(
             backgroundColor = KptTheme.colorScheme.background,
             headerTextStyle = KptTheme.typography.headlineMedium,

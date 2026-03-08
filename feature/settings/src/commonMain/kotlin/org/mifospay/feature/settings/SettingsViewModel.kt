@@ -133,6 +133,7 @@ class SettingsViewModel(
             is DisableAccountResult -> handleDisableAccountResult(action)
             is SettingsAction.ToggleSystemAuth -> {
                 if (state.isBiometricsRegistered) {
+                    passcodeManager.trySendAction(PasscodeAction.DisableBiometrics)
                     sendEvent(SettingsEvent.NavigateToPasscodeScreen)
                     handlePasscodeVerification()
                 } else {
