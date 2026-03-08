@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigationevent.NavigationEventInfo
 import androidx.navigationevent.compose.NavigationBackHandler
 import androidx.navigationevent.compose.rememberNavigationEventState
@@ -40,6 +41,7 @@ import org.mifos.authenticator.biometrics.platformAuthenticator.PlatformAuthenti
 import org.mifos.authenticator.biometrics.platformAvailableAuthenticationOption
 import org.mifos.authenticator.passcode.PasscodeAction
 import org.mifos.authenticator.passcode.PasscodeManager
+import org.mifos.authenticator.passcode.PasscodeStep
 import org.mifos.authenticator.passcode.PasscodeStorageAdapter
 import org.mifos.authenticator.passcode.screen.PasscodeAppearanceConfig
 import org.mifos.authenticator.passcode.screen.PasscodeButtonConfig
@@ -67,6 +69,8 @@ fun MifosPasscode(
     passcodeStorageAdapter: PasscodeStorageAdapter = koinInject(),
 ) {
     val passcodeManager: PasscodeManager = koinInject<PasscodeManager>()
+    val state by passcodeManager.state.collectAsStateWithLifecycle()
+
     val systemAuthProvider = platformAuthenticationProvider.current
     val systemAvailableAuthOption = platformAvailableAuthenticationOption.current
     val coroutineScope = rememberCoroutineScope()
@@ -77,7 +81,7 @@ fun MifosPasscode(
     var dialogBoxType by remember { mutableStateOf(DialogBoxType.None) }
     var showDialogBox by remember { mutableStateOf(false) }
     var dialogMessage by remember { mutableStateOf<String?>(null) }
-    var hideBiometricsKeyButton by remember { mutableStateOf(false) }
+    var showBiometricsKeyButton by remember { mutableStateOf(true) }
 
     val navEventState = rememberNavigationEventState(
         currentInfo = MifosPasscodeCurrentInfo,
@@ -89,17 +93,20 @@ fun MifosPasscode(
         onBackCompleted = { },
     )
 
-    if (biometricsStatus.contains(PlatformAuthenticatorStatus.BIOMETRICS_SET)) {
-        val lifeCycleObserver = LocalLifecycleOwner.current.lifecycle
+    val lifeCycleObserver = LocalLifecycleOwner.current.lifecycle
 
-        DisposableEffect(lifeCycleObserver) {
-            val observer = LifecycleEventObserver { _, event ->
-                when (event) {
-                    Lifecycle.Event.ON_START -> {
-                        appLockRepository.lockApp()
-                    }
+    DisposableEffect(lifeCycleObserver) {
+        val observer = LifecycleEventObserver { _, event ->
+            when (event) {
+                Lifecycle.Event.ON_START -> {
+                    appLockRepository.lockApp()
+                }
 
-                    Lifecycle.Event.ON_RESUME -> {
+                Lifecycle.Event.ON_RESUME -> {
+                    if (
+                        biometricsStatus.contains(PlatformAuthenticatorStatus.BIOMETRICS_SET) &&
+                        state.passcodeStep == PasscodeStep.Enter
+                    ) {
                         coroutineScope.launch {
                             val result =
                                 passcodeStorageAdapter.loadRegistrationData()?.let { data ->
@@ -129,39 +136,40 @@ fun MifosPasscode(
                             }
                         }
                     }
-
-                    else -> {}
-                }
-            }
-            lifeCycleObserver.addObserver(observer)
-            onDispose { lifeCycleObserver.removeObserver(observer) }
-        }
-    }
-
-    MifosDialogBox(
-        title = stringResource(Res.string.feature_authenticator_error),
-        showDialogState = showDialogBox,
-        confirmButtonText = stringResource(Res.string.feature_authenticator_ok),
-        dismissButtonText = null,
-        onConfirm = {
-            showDialogBox = false
-            dialogMessage = null
-            when (dialogBoxType) {
-                DialogBoxType.UserBiometricsNotRegistered -> {
-                    passcodeManager.trySendAction(PasscodeAction.BiometricUserNotRegistered)
-                    hideBiometricsKeyButton = true
                 }
                 else -> {}
             }
-            dialogBoxType = DialogBoxType.None
-        },
-        onDismiss = {
-            showDialogBox = false
-            dialogMessage = null
-            dialogBoxType = DialogBoxType.None
-        },
-        message = dialogMessage,
-    )
+        }
+        lifeCycleObserver.addObserver(observer)
+        onDispose { lifeCycleObserver.removeObserver(observer) }
+    }
+
+    AnimatedVisibility(showDialogBox) {
+        MifosDialogBox(
+            title = stringResource(Res.string.feature_authenticator_error),
+            showDialogState = showDialogBox,
+            confirmButtonText = stringResource(Res.string.feature_authenticator_ok),
+            dismissButtonText = null,
+            onConfirm = {
+                showDialogBox = false
+                dialogMessage = null
+                when (dialogBoxType) {
+                    DialogBoxType.UserBiometricsNotRegistered -> {
+                        passcodeManager.trySendAction(PasscodeAction.BiometricUserNotRegistered)
+                        showBiometricsKeyButton = false
+                    }
+                    else -> {}
+                }
+                dialogBoxType = DialogBoxType.None
+            },
+            onDismiss = {
+                showDialogBox = false
+                dialogMessage = null
+                dialogBoxType = DialogBoxType.None
+            },
+            message = dialogMessage,
+        )
+    }
 
     PasscodeScreen(
         passcodeManager = passcodeManager,
@@ -175,7 +183,10 @@ fun MifosPasscode(
             appLockRepository.unlockApp()
             onAuthenticationSuccess()
         },
-        onPasscodeCreation = onPasscodeCreation,
+        onPasscodeCreation = {
+            appLockRepository.unlockApp()
+            onPasscodeCreation()
+        },
         onPasscodeChanged = onPasscodeChanged,
         onPasscodeRejected = onPasscodeRejected,
         appearanceConfig = PasscodeAppearanceConfig(
@@ -189,7 +200,7 @@ fun MifosPasscode(
             visiblePasscodeTextStyle = KptTheme.typography.headlineSmall,
         ),
         biometricButton = { modifier ->
-            AnimatedVisibility(hideBiometricsKeyButton) {
+            AnimatedVisibility(showBiometricsKeyButton) {
                 BiometricsKey(
                     modifier = modifier,
                     passcodeManager = passcodeManager,

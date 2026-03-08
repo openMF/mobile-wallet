@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -36,11 +37,13 @@ import mobile_wallet.feature.passcode.generated.resources.feature_authenticator_
 import mobile_wallet.feature.passcode.generated.resources.feature_authenticator_error
 import mobile_wallet.feature.passcode.generated.resources.feature_authenticator_ok
 import org.jetbrains.compose.resources.stringResource
+import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
 import org.mifos.authenticator.biometrics.platformAuthenticationProvider
 import org.mifos.authenticator.passcode.components.MifosIcon
 import org.mifospay.core.designsystem.component.MifosDialogBox
 import org.mifospay.core.designsystem.component.MifosScaffold
+import org.mifospay.core.designsystem.theme.MifosTheme
 import org.mifospay.core.ui.utils.EventsEffect
 import template.core.base.designsystem.theme.KptTheme
 
@@ -75,17 +78,37 @@ fun BiometricSetupScreen(
         }
     }
 
+    BiometricSetupContent(
+        state = state,
+        onSetupBiometrics = {
+            viewModel.trySendAction(
+                BiometricSetupScreenAction.ClickSetupBiometric(platformAuthenticationProvider),
+            )
+        },
+        onSkipBiometricSetup = {
+            viewModel.trySendAction(BiometricSetupScreenAction.ClickSkipBiometric)
+        },
+        onDismissErrorDialog = {
+            viewModel.trySendAction(BiometricSetupScreenAction.DismissErrorDialog)
+        },
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+internal fun BiometricSetupContent(
+    state: BiometricSetupScreenState,
+    onSetupBiometrics: () -> Unit,
+    onSkipBiometricSetup: () -> Unit,
+    onDismissErrorDialog: () -> Unit,
+) {
     MifosDialogBox(
         title = stringResource(Res.string.feature_authenticator_error),
         showDialogState = state.error != null,
         confirmButtonText = stringResource(Res.string.feature_authenticator_ok),
         dismissButtonText = null,
-        onConfirm = {
-            viewModel.trySendAction(BiometricSetupScreenAction.DismissErrorDialog)
-        },
-        onDismiss = {
-            viewModel.trySendAction(BiometricSetupScreenAction.DismissErrorDialog)
-        },
+        onConfirm = onDismissErrorDialog,
+        onDismiss = onDismissErrorDialog,
         message = state.error,
     )
 
@@ -120,27 +143,34 @@ fun BiometricSetupScreen(
             Spacer(Modifier.height(48.dp))
 
             Button(
-                onClick = {
-                    viewModel.trySendAction(
-                        BiometricSetupScreenAction.ClickSetupBiometric(platformAuthenticationProvider),
-                    )
-                },
-                modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(50.dp),
+                onClick = onSetupBiometrics,
+                modifier = Modifier.width(200.dp),
+                shape = RoundedCornerShape(20),
             ) {
-                Text("Setup Biometrics", color = KptTheme.colorScheme.inverseSurface)
+                Text("Setup Biometrics", color = KptTheme.colorScheme.onPrimary)
             }
 
             Spacer(Modifier.height(16.dp))
 
             TextButton(
-                onClick = {
-                    viewModel.trySendAction(BiometricSetupScreenAction.ClickSkipBiometric)
-                },
+                onClick = onSkipBiometricSetup,
                 modifier = Modifier.fillMaxWidth(),
             ) {
                 Text("Skip for Now")
             }
         }
+    }
+}
+
+@Preview
+@Composable
+private fun BiometricSetupScreenPreview() {
+    MifosTheme {
+        BiometricSetupContent(
+            state = BiometricSetupScreenState(),
+            onSetupBiometrics = {},
+            onSkipBiometricSetup = {},
+            onDismissErrorDialog = {},
+        )
     }
 }

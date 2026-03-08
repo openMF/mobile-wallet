@@ -14,6 +14,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Face
 import androidx.compose.material.icons.filled.Fingerprint
 import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material3.CardDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -45,6 +46,7 @@ fun BiometricsKey(
     passcodeStorageAdapter: PasscodeStorageAdapter = koinInject(),
 ) {
     val authOptions by systemAvailableAuthOption.currentAuthOption.collectAsStateWithLifecycle()
+    val state by passcodeManager.state.collectAsStateWithLifecycle()
 
     val passcodeKeyConfig = PasscodeKeyConfig(
         shouldShuffleKeys = true,
@@ -56,39 +58,48 @@ fun BiometricsKey(
         keySize = 60.dp,
     )
 
-    val icon: ImageVector = when {
-        authOptions.contains(PlatformAuthOptions.Fingerprint) -> Icons.Default.Fingerprint
-        authOptions.contains(PlatformAuthOptions.FaceId) -> Icons.Default.Face
-        else -> Icons.Default.Lock
-    }
+    if (state.isBiometricEnabled) {
+        val icon: ImageVector = when {
+            authOptions.contains(PlatformAuthOptions.Fingerprint) -> Icons.Default.Fingerprint
+            authOptions.contains(PlatformAuthOptions.FaceId) -> Icons.Default.Face
+            else -> Icons.Default.Lock
+        }
 
-    PasscodeKey(
-        modifier = modifier,
-        keyIcon = icon,
-        onClick = {
-            coroutineScope.launch {
-                val result = systemAuthProvider.onAuthenticatorClick(
-                    "Mifos Pay",
-                    passcodeStorageAdapter.loadRegistrationData() ?: "",
-                )
-                when (result) {
-                    is AuthenticationResult.Success -> {
-                        passcodeManager.trySendAction(PasscodeAction.BiometricUnlockSuccess)
-                    }
-                    is AuthenticationResult.Error -> {
-                        passcodeManager.trySendAction(PasscodeAction.BiometricUnlockFailure(result.message))
-                    }
-                    is AuthenticationResult.UserNotRegistered -> {
-                        passcodeManager.trySendAction(PasscodeAction.BiometricUserNotRegistered)
-                        onUserNotRegistered()
+        PasscodeKey(
+            modifier = modifier,
+            keyIcon = icon,
+            onClick = {
+                coroutineScope.launch {
+                    val result = systemAuthProvider.onAuthenticatorClick(
+                        "Mifos Pay",
+                        passcodeStorageAdapter.loadRegistrationData() ?: "",
+                    )
+                    when (result) {
+                        is AuthenticationResult.Success -> {
+                            passcodeManager.trySendAction(PasscodeAction.BiometricUnlockSuccess)
+                        }
+
+                        is AuthenticationResult.Error -> {
+                            passcodeManager.trySendAction(
+                                PasscodeAction.BiometricUnlockFailure(
+                                    result.message,
+                                ),
+                            )
+                        }
+
+                        is AuthenticationResult.UserNotRegistered -> {
+                            onUserNotRegistered()
+                        }
                     }
                 }
-            }
-        },
-//            keyColor = passcodeKeyConfig.keyColor,
-//            shape = passcodeKeyConfig.keyShape,
-//            elevation = passcodeKeyConfig.keyElevation?: CardDefaults.elevatedCardElevation(defaultElevation = 2.dp),
-//            containerColor = passcodeKeyConfig.keyContainerColor,
-//            size = passcodeKeyConfig.keySize,
-    )
+            },
+            keyColor = passcodeKeyConfig.keyColor,
+            shape = passcodeKeyConfig.keyShape,
+            elevation = passcodeKeyConfig.keyElevation ?: CardDefaults.elevatedCardElevation(
+                defaultElevation = 2.dp,
+            ),
+            containerColor = passcodeKeyConfig.keyContainerColor,
+            size = passcodeKeyConfig.keySize,
+        )
+    }
 }

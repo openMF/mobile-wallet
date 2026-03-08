@@ -73,6 +73,15 @@ private fun MifosPayApp(
         }
     }
 
+    LaunchedEffect(Unit) {
+        if (
+            (uiState as Success).userData.authenticated &&
+            !viewModel.isPasscodeCreated()
+        ) {
+            viewModel.logOut()
+        }
+    }
+
     if (showErrorDialog.value) {
         MifosDialogBox(
             title = "Unauthorized User",

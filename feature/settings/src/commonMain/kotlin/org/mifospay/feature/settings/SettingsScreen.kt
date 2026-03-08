@@ -32,8 +32,8 @@ import mobile_wallet.feature.settings.generated.resources.Res
 import mobile_wallet.feature.settings.generated.resources.feature_settings_change_passcode
 import mobile_wallet.feature.settings.generated.resources.feature_settings_change_password
 import mobile_wallet.feature.settings.generated.resources.feature_settings_disable_account
-import mobile_wallet.feature.settings.generated.resources.feature_settings_disable_system_authentication
-import mobile_wallet.feature.settings.generated.resources.feature_settings_enable_system_authentication
+import mobile_wallet.feature.settings.generated.resources.feature_settings_disable_biometrics
+import mobile_wallet.feature.settings.generated.resources.feature_settings_enable_biometrics
 import mobile_wallet.feature.settings.generated.resources.feature_settings_faq
 import mobile_wallet.feature.settings.generated.resources.feature_settings_log_out
 import mobile_wallet.feature.settings.generated.resources.feature_settings_profile
@@ -160,12 +160,13 @@ private fun SettingsScreenContent(
                     onAction(SettingsAction.ChangePasscode)
                 },
             )
+
             if (!authenticatorStatus.contains(PlatformAuthenticatorStatus.BIOMETRICS_NOT_AVAILABLE)) {
                 SettingsCardItem(
                     title = if (isSystemAuthenticationEnabled) {
-                        stringResource(Res.string.feature_settings_disable_system_authentication)
+                        stringResource(Res.string.feature_settings_disable_biometrics)
                     } else {
-                        stringResource(Res.string.feature_settings_enable_system_authentication)
+                        stringResource(Res.string.feature_settings_enable_biometrics)
                     },
                     icon = MifosIcons.Fingerprint,
                     onClick = {

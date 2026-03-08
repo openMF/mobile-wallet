@@ -14,6 +14,7 @@ import org.mifos.authenticator.passcode.PasscodeStorageAdapter
 
 const val MIFOS_PASSCODE = "org.mifospay.mifos.passcode"
 const val REGISTRATION_DATA_KEY = "org.mifospay.mifos.registration_data"
+const val BIOMETRIC_REGISTERED_KEY = "org.mifospay.mifos.biometric_registered"
 
 class MifosPasscodeAdapterImpl(
     private val settings: Settings,
@@ -33,18 +34,17 @@ class MifosPasscodeAdapterImpl(
     }
 
     override fun saveRegistrationData(registrationData: String) {
+        settings.putBoolean(BIOMETRIC_REGISTERED_KEY, true)
         settings.putString(REGISTRATION_DATA_KEY, registrationData)
     }
 
     override fun loadRegistrationData(): String? {
-        val registrationData = settings.getString(REGISTRATION_DATA_KEY, "")
-        return when (registrationData.isBlank()) {
-            true -> null
-            false -> registrationData
-        }
+        if (!settings.getBoolean(BIOMETRIC_REGISTERED_KEY, false)) return null
+        return settings.getString(REGISTRATION_DATA_KEY, "")
     }
 
     override fun deleteRegistrationData() {
+        settings.remove(BIOMETRIC_REGISTERED_KEY)
         settings.remove(REGISTRATION_DATA_KEY)
     }
 }

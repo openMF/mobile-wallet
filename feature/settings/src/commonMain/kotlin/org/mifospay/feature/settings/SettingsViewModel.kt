@@ -17,10 +17,10 @@ import kotlinx.coroutines.launch
 import mobile_wallet.feature.settings.generated.resources.Res
 import mobile_wallet.feature.settings.generated.resources.feature_settings_alert_disable_account
 import mobile_wallet.feature.settings.generated.resources.feature_settings_alert_disable_account_desc
+import mobile_wallet.feature.settings.generated.resources.feature_settings_biometrics_not_available
+import mobile_wallet.feature.settings.generated.resources.feature_settings_biometrics_not_set
 import mobile_wallet.feature.settings.generated.resources.feature_settings_empty
 import mobile_wallet.feature.settings.generated.resources.feature_settings_log_out_title
-import mobile_wallet.feature.settings.generated.resources.feature_settings_system_auth_option_not_available
-import mobile_wallet.feature.settings.generated.resources.feature_settings_system_auth_option_not_set
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.getString
 import org.mifos.authenticator.biometrics.platformAuthenticator.PlatformAuthenticationProvider
@@ -48,10 +48,20 @@ class SettingsViewModel(
         SettingsState(
             client = client,
             dialogState = null,
-            isBiometricsRegistered = passcodeStorageAdapter.loadRegistrationData() != null,
+            isBiometricsRegistered = passcodeManager.state.value.isBiometricEnabled,
         )
     },
 ) {
+
+    init {
+        viewModelScope.launch {
+            passcodeManager.state.collect { passcodeState ->
+                mutableStateFlow.update {
+                    it.copy(isBiometricsRegistered = passcodeState.isBiometricEnabled)
+                }
+            }
+        }
+    }
 
     val authenticationSuccess: MutableStateFlow<Boolean?> =
         savedStateHandle.getMutableStateFlow(AUTHENTICATION_VERIFICATION_KEY, null)
@@ -145,6 +155,7 @@ class SettingsViewModel(
             authenticationSuccess.collect { result ->
                 when (result) {
                     true -> {
+                        passcodeManager.trySendAction(PasscodeAction.DeleteBiometricRegistration)
                         mutableStateFlow.update {
                             it.copy(
                                 isBiometricsRegistered = false,
@@ -179,31 +190,24 @@ class SettingsViewModel(
             when (result) {
                 is RegistrationResult.Success -> {
                     passcodeManager.trySendAction(PasscodeAction.SaveBiometricRegistration(result.message))
-                    mutableStateFlow.update {
-                        it.copy(
-                            isBiometricsRegistered = true,
-                        )
-                    }
                 }
                 RegistrationResult.PlatformAuthenticatorNotSet -> {
                     mutableStateFlow.update {
                         it.copy(
                             dialogState = DialogState.Error(
-                                message = getString(Res.string.feature_settings_system_auth_option_not_set),
+                                message = getString(Res.string.feature_settings_biometrics_not_set),
                             ),
                         )
                     }
-                    passcodeManager.trySendAction(PasscodeAction.BiometricUserNotRegistered)
                 }
                 RegistrationResult.PlatformAuthenticatorNotAvailable -> {
                     mutableStateFlow.update {
                         it.copy(
                             dialogState = DialogState.Error(
-                                message = getString(Res.string.feature_settings_system_auth_option_not_available),
+                                message = getString(Res.string.feature_settings_biometrics_not_available),
                             ),
                         )
                     }
-                    passcodeManager.trySendAction(PasscodeAction.BiometricUserNotRegistered)
                 }
                 is RegistrationResult.Error -> {
                     mutableStateFlow.update {

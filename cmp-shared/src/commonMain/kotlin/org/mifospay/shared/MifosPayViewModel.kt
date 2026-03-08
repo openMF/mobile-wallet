@@ -18,6 +18,7 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import org.mifos.authenticator.passcode.PasscodeAction
 import org.mifos.authenticator.passcode.PasscodeManager
+import org.mifos.authenticator.passcode.PasscodeStorageAdapter
 import org.mifospay.core.data.repository.AppLockRepository
 import org.mifospay.core.datastore.UserPreferencesRepository
 import org.mifospay.core.model.user.UserInfo
@@ -26,6 +27,7 @@ class MifosPayViewModel(
     private val userDataRepository: UserPreferencesRepository,
     private val passcodeManager: PasscodeManager,
     private val appLockRepository: AppLockRepository,
+    private val passcodeStorageAdapter: PasscodeStorageAdapter,
 ) : ViewModel() {
     val uiState: StateFlow<MainUiState> = userDataRepository.userInfo.map {
         MainUiState.Success(it)
@@ -34,6 +36,10 @@ class MifosPayViewModel(
         initialValue = MainUiState.Loading,
         started = SharingStarted.WhileSubscribed(5_000),
     )
+
+    fun isPasscodeCreated(): Boolean {
+        return !passcodeStorageAdapter.loadPasscode().isNullOrBlank()
+    }
 
     fun logOut() {
         viewModelScope.launch {
