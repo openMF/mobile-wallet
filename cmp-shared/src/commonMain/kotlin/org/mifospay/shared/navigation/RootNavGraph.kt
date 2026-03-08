@@ -15,17 +15,18 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import org.mifos.authenticator.biometrics.platformAuthenticationProvider
+import org.mifos.authenticator.biometrics.platformAuthenticator.PlatformAuthenticatorStatus
+import org.mifos.feature.passcode.biometricSetupScreen
 import org.mifos.feature.passcode.mifosReAuthPasscodeScreen
 import org.mifos.feature.passcode.mifosRootPasscodeScreen
-import org.mifos.feature.passcode.navigateToRootMifosPasscodeScreen
+import org.mifos.feature.passcode.navigateToBiometricSetupScreen
 import org.mifospay.core.data.util.NetworkMonitor
 import org.mifospay.core.data.util.TimeZoneMonitor
-import org.mifospay.feature.auth.chooseAuthOption.chooseAuthOptionScreen
-import org.mifospay.feature.authenticator.biometrics.platformAuthenticator
-import org.mifospay.feature.authenticator.biometrics.reAuthPlatformAuthenticator
 import org.mifospay.shared.instance.InstanceSelectorScreen
 import org.mifospay.shared.ui.MifosApp
 
@@ -40,6 +41,12 @@ internal fun RootNavGraph(
 ) {
     var showInstanceSelector by remember { mutableStateOf(false) }
 
+    val systemAuthProvider = platformAuthenticationProvider.current
+    val authenticatorStatus by systemAuthProvider.authenticatorStatus.collectAsStateWithLifecycle()
+
+    val isBiometricsAvailable =
+        authenticatorStatus.contains(PlatformAuthenticatorStatus.BIOMETRICS_SET)
+
     NavHost(
         navController = navHostController,
         startDestination = startDestination,
@@ -51,43 +58,28 @@ internal fun RootNavGraph(
             onShowInstanceSelector = { showInstanceSelector = true },
         )
 
-        chooseAuthOptionScreen(
-            onBiometricsRegistrationSuccess = {
-                navHostController.popBackStack()
-                navHostController.navigateToMainGraph()
-            },
-            onChoosePasscode = {
-                navHostController.popBackStack()
-                navHostController.navigateToRootMifosPasscodeScreen()
+        mifosRootPasscodeScreen(
+            onForgotButton = onClickLogout,
+            onAuthenticationSuccess = navHostController::navigateToMainGraph,
+            onPasscodeCreation = {
+                if (isBiometricsAvailable) {
+                    navHostController.navigateToBiometricSetupScreen()
+                } else {
+                    navHostController.navigateToMainGraph()
+                }
             },
         )
 
-        mifosRootPasscodeScreen(
-            onForgotButton = onClickLogout,
-            onPasscodeConfirm = navHostController::navigateToMainGraph,
-            onPasscodeCreation = navHostController::navigateToMainGraph,
+        biometricSetupScreen(
+            onBiometricsRegistrationSuccess = navHostController::navigateToMainGraph,
+            onSkipBiometricSetup = navHostController::navigateToMainGraph,
         )
 
         mifosReAuthPasscodeScreen(
             onForgotButton = onClickLogout,
-            onPasscodeConfirm = {
-                navHostController.popBackStack()
-            },
-        )
-
-        platformAuthenticator(
-            onAuthenticationSuccess = {
-                navHostController.popBackStack()
-                navHostController.navigateToMainGraph()
-            },
-            onForcedLogOut = onClickLogout,
-        )
-
-        reAuthPlatformAuthenticator(
             onAuthenticationSuccess = {
                 navHostController.popBackStack()
             },
-            onForcedLogOut = onClickLogout,
         )
 
         composable(MifosNavGraph.MAIN_GRAPH) {

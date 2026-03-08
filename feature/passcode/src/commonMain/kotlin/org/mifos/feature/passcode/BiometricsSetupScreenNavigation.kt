@@ -7,26 +7,28 @@
  *
  * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
  */
-package org.mifospay.feature.auth.chooseAuthOption
+package org.mifos.feature.passcode
 
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 
-const val CHOOSE_AUTH_OPTION_ROUTE = "choose_authentication_option_route"
+const val BIOMETRIC_SETUP_ROUTE = "biometrics_setup_route"
 
-fun NavController.navigateToChooseAuthOptionScreen(navOptions: NavOptions? = null) =
-    navigate(CHOOSE_AUTH_OPTION_ROUTE, navOptions)
+fun NavController.navigateToBiometricSetupScreen(navOptions: NavOptions? = null) =
+    navigate(BIOMETRIC_SETUP_ROUTE, navOptions)
 
-fun NavGraphBuilder.chooseAuthOptionScreen(
+@OptIn(ExperimentalComposeUiApi::class)
+fun NavGraphBuilder.biometricSetupScreen(
     onBiometricsRegistrationSuccess: () -> Unit,
-    onChoosePasscode: () -> Unit,
+    onSkipBiometricSetup: () -> Unit,
 ) {
-    composable(route = CHOOSE_AUTH_OPTION_ROUTE) {
-        ChooseAuthOptionScreen(
-            onBiometricsRegistrationSuccess = onBiometricsRegistrationSuccess,
-            onNavigateToPasscode = onChoosePasscode,
+    composable(route = BIOMETRIC_SETUP_ROUTE) {
+        BiometricSetupScreen(
+            onBiometricsRegistrationSuccess,
+            onSkipBiometricSetup,
         )
     }
 }

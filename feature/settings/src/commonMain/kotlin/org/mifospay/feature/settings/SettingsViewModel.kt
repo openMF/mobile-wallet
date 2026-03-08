@@ -9,7 +9,9 @@
  */
 package org.mifospay.feature.settings
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import mobile_wallet.feature.settings.generated.resources.Res
@@ -17,30 +19,42 @@ import mobile_wallet.feature.settings.generated.resources.feature_settings_alert
 import mobile_wallet.feature.settings.generated.resources.feature_settings_alert_disable_account_desc
 import mobile_wallet.feature.settings.generated.resources.feature_settings_empty
 import mobile_wallet.feature.settings.generated.resources.feature_settings_log_out_title
+import mobile_wallet.feature.settings.generated.resources.feature_settings_system_auth_option_not_available
+import mobile_wallet.feature.settings.generated.resources.feature_settings_system_auth_option_not_set
 import org.jetbrains.compose.resources.StringResource
+import org.jetbrains.compose.resources.getString
+import org.mifos.authenticator.biometrics.platformAuthenticator.PlatformAuthenticationProvider
+import org.mifos.authenticator.biometrics.platformAuthenticator.RegistrationResult
+import org.mifos.authenticator.passcode.PasscodeAction
+import org.mifos.authenticator.passcode.PasscodeManager
+import org.mifos.authenticator.passcode.PasscodeStorageAdapter
 import org.mifospay.core.common.DataState
-import org.mifospay.core.data.repository.ChooseAuthOptionRepository
 import org.mifospay.core.data.repository.SavingsAccountRepository
-import org.mifospay.core.data.util.AppLockOption
 import org.mifospay.core.datastore.UserPreferencesRepository
 import org.mifospay.core.model.client.Client
+import org.mifospay.core.ui.utils.AuthenticationUtils.AUTHENTICATION_VERIFICATION_KEY
 import org.mifospay.core.ui.utils.BaseViewModel
 import org.mifospay.feature.settings.SettingsAction.Internal.DisableAccountResult
 
 class SettingsViewModel(
-    private val chooseAuthOptionRepository: ChooseAuthOptionRepository,
     private val userPreferencesRepository: UserPreferencesRepository,
     private val repository: SavingsAccountRepository,
+    private val passcodeManager: PasscodeManager,
+    private val passcodeStorageAdapter: PasscodeStorageAdapter,
+    private val savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<SettingsState, SettingsEvent, SettingsAction>(
     initialState = run {
         val client = requireNotNull(userPreferencesRepository.client.value)
         SettingsState(
             client = client,
             dialogState = null,
-            isChangePasscodeVisible = chooseAuthOptionRepository.getAuthOption() == AppLockOption.MifosPasscode,
+            isBiometricsRegistered = passcodeStorageAdapter.loadRegistrationData() != null,
         )
     },
 ) {
+
+    val authenticationSuccess: MutableStateFlow<Boolean?> =
+        savedStateHandle.getMutableStateFlow(AUTHENTICATION_VERIFICATION_KEY, null)
 
     override fun handleAction(action: SettingsAction) {
         when (action) {
@@ -57,7 +71,8 @@ class SettingsViewModel(
             }
 
             is SettingsAction.ChangePasscode -> {
-                sendEvent(SettingsEvent.OnNavigateToChangePasscodeScreen)
+                passcodeManager.trySendAction(PasscodeAction.ChangePasscode)
+                sendEvent(SettingsEvent.NavigateToPasscodeScreen)
             }
 
             is SettingsAction.ChangePassword -> {
@@ -106,6 +121,98 @@ class SettingsViewModel(
             is SettingsAction.Internal.DisableAccount -> handleDisableAccount()
 
             is DisableAccountResult -> handleDisableAccountResult(action)
+            is SettingsAction.ToggleSystemAuth -> {
+                if (state.isBiometricsRegistered) {
+                    sendEvent(SettingsEvent.NavigateToPasscodeScreen)
+                    handlePasscodeVerification()
+                } else {
+                    handleBiometricsAuthRegistration(action.systemAuthProvider)
+                }
+            }
+
+            SettingsAction.BiometricsNotAvailable -> {
+                mutableStateFlow.update {
+                    it.copy(
+                        dialogState = DialogState.Error("Biometrics not enabled in settings"),
+                    )
+                }
+            }
+        }
+    }
+
+    private fun handlePasscodeVerification() {
+        viewModelScope.launch {
+            authenticationSuccess.collect { result ->
+                when (result) {
+                    true -> {
+                        mutableStateFlow.update {
+                            it.copy(
+                                isBiometricsRegistered = false,
+                            )
+                        }
+                        savedStateHandle.remove<Boolean?>(AUTHENTICATION_VERIFICATION_KEY)
+                        authenticationSuccess.value = null
+                    }
+                    false -> {
+                        mutableStateFlow.update {
+                            it.copy(isBiometricsRegistered = true)
+                        }
+                        savedStateHandle.remove<Boolean?>(AUTHENTICATION_VERIFICATION_KEY)
+                        authenticationSuccess.value = null
+                    }
+                    null -> {}
+                }
+            }
+        }
+    }
+
+    private fun handleBiometricsAuthRegistration(
+        systemAuthProvider: PlatformAuthenticationProvider,
+    ) {
+        viewModelScope.launch {
+            val result = systemAuthProvider.registerUser(
+                userName = mutableStateFlow.value.client.id.toString(),
+                emailId = mutableStateFlow.value.client.emailAddress,
+                displayName = mutableStateFlow.value.client.displayName,
+            )
+
+            when (result) {
+                is RegistrationResult.Success -> {
+                    passcodeManager.trySendAction(PasscodeAction.SaveBiometricRegistration(result.message))
+                    mutableStateFlow.update {
+                        it.copy(
+                            isBiometricsRegistered = true,
+                        )
+                    }
+                }
+                RegistrationResult.PlatformAuthenticatorNotSet -> {
+                    mutableStateFlow.update {
+                        it.copy(
+                            dialogState = DialogState.Error(
+                                message = getString(Res.string.feature_settings_system_auth_option_not_set),
+                            ),
+                        )
+                    }
+                    passcodeManager.trySendAction(PasscodeAction.BiometricUserNotRegistered)
+                }
+                RegistrationResult.PlatformAuthenticatorNotAvailable -> {
+                    mutableStateFlow.update {
+                        it.copy(
+                            dialogState = DialogState.Error(
+                                message = getString(Res.string.feature_settings_system_auth_option_not_available),
+                            ),
+                        )
+                    }
+                    passcodeManager.trySendAction(PasscodeAction.BiometricUserNotRegistered)
+                }
+                is RegistrationResult.Error -> {
+                    mutableStateFlow.update {
+                        it.copy(
+                            dialogState = DialogState.Error(message = result.message),
+                        )
+                    }
+                }
+            }
         }
     }
 
@@ -152,7 +259,7 @@ class SettingsViewModel(
 data class SettingsState(
     val client: Client,
     val dialogState: DialogState? = null,
-    val isChangePasscodeVisible: Boolean = false,
+    val isBiometricsRegistered: Boolean = false,
 )
 
 sealed interface DialogState {
@@ -174,7 +281,7 @@ sealed interface DialogState {
 sealed interface SettingsEvent {
     data object OnNavigateBack : SettingsEvent
     data object OnNavigateToEditPasswordScreen : SettingsEvent
-    data object OnNavigateToChangePasscodeScreen : SettingsEvent
+    data object NavigateToPasscodeScreen : SettingsEvent
     data object OnNavigateToLogout : SettingsEvent
     data object OnNavigateToFaqScreen : SettingsEvent
     data object OnNavigateToProfile : SettingsEvent
@@ -185,6 +292,10 @@ sealed interface SettingsAction {
     data object NavigateBack : SettingsAction
     data object Logout : SettingsAction
     data object DisableAccount : SettingsAction
+    data object BiometricsNotAvailable : SettingsAction
+    data class ToggleSystemAuth(
+        val systemAuthProvider: PlatformAuthenticationProvider,
+    ) : SettingsAction
     data object ChangePasscode : SettingsAction
     data object ChangePassword : SettingsAction
     data object NavigateToFaqScreen : SettingsAction

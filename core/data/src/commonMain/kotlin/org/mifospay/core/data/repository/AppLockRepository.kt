@@ -9,11 +9,13 @@
  */
 package org.mifospay.core.data.repository
 
-interface PlatformAuthenticationDataRepository {
+interface AppLockRepository {
 
-    fun saveBiometricRegistrationData(registrationData: String)
+    fun lockApp()
 
-    fun getBiometricRegistrationData(): String
+    fun unlockApp()
 
-    fun clearBiometricRegistrationData()
+    fun deleteLock()
+
+    fun isAppLocked(): Boolean
 }

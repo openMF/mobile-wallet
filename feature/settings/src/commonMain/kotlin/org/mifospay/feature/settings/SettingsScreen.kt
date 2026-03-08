@@ -32,6 +32,8 @@ import mobile_wallet.feature.settings.generated.resources.Res
 import mobile_wallet.feature.settings.generated.resources.feature_settings_change_passcode
 import mobile_wallet.feature.settings.generated.resources.feature_settings_change_password
 import mobile_wallet.feature.settings.generated.resources.feature_settings_disable_account
+import mobile_wallet.feature.settings.generated.resources.feature_settings_disable_system_authentication
+import mobile_wallet.feature.settings.generated.resources.feature_settings_enable_system_authentication
 import mobile_wallet.feature.settings.generated.resources.feature_settings_faq
 import mobile_wallet.feature.settings.generated.resources.feature_settings_log_out
 import mobile_wallet.feature.settings.generated.resources.feature_settings_profile
@@ -42,10 +44,9 @@ import mobile_wallet.feature.settings.generated.resources.outline_pin
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.resources.vectorResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
-import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
-import org.mifos.authenticator.passcode.PasscodeAction
-import org.mifos.authenticator.passcode.PasscodeManager
+import org.mifos.authenticator.biometrics.platformAuthenticationProvider
+import org.mifos.authenticator.biometrics.platformAuthenticator.PlatformAuthenticatorStatus
 import org.mifospay.core.designsystem.component.BasicDialogState
 import org.mifospay.core.designsystem.component.LoadingDialogState
 import org.mifospay.core.designsystem.component.MifosBasicDialog
@@ -60,12 +61,11 @@ internal fun SettingsScreenRoute(
     backPress: () -> Unit,
     onEditPassword: () -> Unit,
     onLogout: () -> Unit,
-    onChangePasscode: () -> Unit,
+    navigateToPasscodeScreen: () -> Unit,
     navigateToFaqScreen: () -> Unit,
     navigateToNotificationScreen: () -> Unit,
     navigateToProfile: () -> Unit,
     modifier: Modifier = Modifier,
-    passcodeManager: PasscodeManager = koinInject(),
     viewmodel: SettingsViewModel = koinViewModel(),
 ) {
     val state by viewmodel.stateFlow.collectAsStateWithLifecycle()
@@ -73,10 +73,7 @@ internal fun SettingsScreenRoute(
     EventsEffect(viewmodel) { event ->
         when (event) {
             SettingsEvent.OnNavigateBack -> backPress.invoke()
-            SettingsEvent.OnNavigateToChangePasscodeScreen -> {
-                passcodeManager.trySendAction(PasscodeAction.ChangePasscode)
-                onChangePasscode.invoke()
-            }
+            SettingsEvent.NavigateToPasscodeScreen -> navigateToPasscodeScreen()
             SettingsEvent.OnNavigateToEditPasswordScreen -> onEditPassword.invoke()
             SettingsEvent.OnNavigateToFaqScreen -> navigateToFaqScreen.invoke()
             SettingsEvent.OnNavigateToLogout -> onLogout.invoke()
@@ -94,8 +91,7 @@ internal fun SettingsScreenRoute(
         )
 
         SettingsScreenContent(
-            modifier = Modifier,
-            isChangePasscodeVisible = state.isChangePasscodeVisible,
+            isSystemAuthenticationEnabled = state.isBiometricsRegistered,
             onAction = viewmodel::trySendAction,
         )
     }
@@ -103,10 +99,13 @@ internal fun SettingsScreenRoute(
 
 @Composable
 private fun SettingsScreenContent(
+    isSystemAuthenticationEnabled: Boolean,
     modifier: Modifier = Modifier,
-    isChangePasscodeVisible: Boolean = false,
     onAction: (SettingsAction) -> Unit,
 ) {
+    val authProvider = platformAuthenticationProvider.current
+    val authenticatorStatus by authProvider.authenticatorStatus.collectAsStateWithLifecycle()
+
     MifosScaffold(
         modifier = modifier,
         topBarTitle = stringResource(Res.string.feature_settings_settings),
@@ -154,12 +153,27 @@ private fun SettingsScreenContent(
                 },
             )
 
-            if (isChangePasscodeVisible) {
+            SettingsCardItem(
+                title = stringResource(Res.string.feature_settings_change_passcode),
+                icon = vectorResource(Res.drawable.outline_pin),
+                onClick = {
+                    onAction(SettingsAction.ChangePasscode)
+                },
+            )
+            if (!authenticatorStatus.contains(PlatformAuthenticatorStatus.BIOMETRICS_NOT_AVAILABLE)) {
                 SettingsCardItem(
-                    title = stringResource(Res.string.feature_settings_change_passcode),
-                    icon = vectorResource(Res.drawable.outline_pin),
+                    title = if (isSystemAuthenticationEnabled) {
+                        stringResource(Res.string.feature_settings_disable_system_authentication)
+                    } else {
+                        stringResource(Res.string.feature_settings_enable_system_authentication)
+                    },
+                    icon = MifosIcons.Fingerprint,
                     onClick = {
-                        onAction(SettingsAction.ChangePasscode)
+                        if (authenticatorStatus.contains(PlatformAuthenticatorStatus.BIOMETRICS_SET)) {
+                            onAction(SettingsAction.ToggleSystemAuth(authProvider))
+                        } else {
+                            onAction(SettingsAction.BiometricsNotAvailable)
+                        }
                     },
                 )
             }
@@ -262,5 +276,6 @@ private fun SettingsDialogs(
 private fun SettingsScreenPreview() {
     SettingsScreenContent(
         onAction = {},
+        isSystemAuthenticationEnabled = true,
     )
 }

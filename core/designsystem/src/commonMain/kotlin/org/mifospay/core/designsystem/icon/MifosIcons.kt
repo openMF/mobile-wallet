@@ -30,6 +30,7 @@ import androidx.compose.material.icons.filled.Download
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Error
 import androidx.compose.material.icons.filled.FilterList
+import androidx.compose.material.icons.filled.Fingerprint
 import androidx.compose.material.icons.filled.FlashOff
 import androidx.compose.material.icons.filled.FlashOn
 import androidx.compose.material.icons.filled.History
@@ -85,6 +86,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
  * Mifos icons. Material icons are [ImageVector]s, custom icons are drawable resource IDs.
  */
 object MifosIcons {
+    val Fingerprint = Icons.Default.Fingerprint
     val OutlinedInfo = Icons.Outlined.Info
     val OutlinedLock = Icons.Outlined.Lock
     val OutlinedNotifications = Icons.Outlined.Notifications

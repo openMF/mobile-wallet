@@ -24,7 +24,7 @@ fun NavController.navigateToSettings(navOptions: NavOptions? = null) {
 fun NavGraphBuilder.settingsScreen(
     onBackPress: () -> Unit,
     onLogout: () -> Unit,
-    onChangePasscode: () -> Unit,
+    navigateToPasscodeScreen: () -> Unit,
     navigateToEditPasswordScreen: () -> Unit,
     navigateToFaqScreen: () -> Unit,
     navigateToNotificationScreen: () -> Unit,
@@ -35,7 +35,7 @@ fun NavGraphBuilder.settingsScreen(
             backPress = onBackPress,
             onEditPassword = navigateToEditPasswordScreen,
             onLogout = onLogout,
-            onChangePasscode = onChangePasscode,
+            navigateToPasscodeScreen = navigateToPasscodeScreen,
             navigateToFaqScreen = navigateToFaqScreen,
             navigateToNotificationScreen = navigateToNotificationScreen,
             navigateToProfile = navigateToProfile,

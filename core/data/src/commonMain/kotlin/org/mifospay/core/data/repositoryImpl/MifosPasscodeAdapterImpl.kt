@@ -11,13 +11,12 @@ package org.mifospay.core.data.repositoryImpl
 
 import com.russhwolf.settings.Settings
 import org.mifos.authenticator.passcode.PasscodeStorageAdapter
-import org.mifospay.core.data.repository.ChooseAuthOptionRepository
 
 const val MIFOS_PASSCODE = "org.mifospay.mifos.passcode"
+const val REGISTRATION_DATA_KEY = "org.mifospay.mifos.registration_data"
 
 class MifosPasscodeAdapterImpl(
     private val settings: Settings,
-    private val chooseAuthOptionRepository: ChooseAuthOptionRepository,
 ) : PasscodeStorageAdapter {
     override fun savePasscode(passcode: String) {
         settings.putString(MIFOS_PASSCODE, passcode)
@@ -31,6 +30,21 @@ class MifosPasscodeAdapterImpl(
 
     override fun deletePasscode() {
         settings.remove(MIFOS_PASSCODE)
-        chooseAuthOptionRepository.removeAuthOption()
+    }
+
+    override fun saveRegistrationData(registrationData: String) {
+        settings.putString(REGISTRATION_DATA_KEY, registrationData)
+    }
+
+    override fun loadRegistrationData(): String? {
+        val registrationData = settings.getString(REGISTRATION_DATA_KEY, "")
+        return when (registrationData.isBlank()) {
+            true -> null
+            false -> registrationData
+        }
+    }
+
+    override fun deleteRegistrationData() {
+        settings.remove(REGISTRATION_DATA_KEY)
     }
 }

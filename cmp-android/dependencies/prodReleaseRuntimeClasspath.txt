@@ -15,8 +15,8 @@
 :core:ui
 :feature:accounts
 :feature:auth
-:feature:beneficiary
 :feature:authenticator-biometrics
+:feature:beneficiary
 :feature:editpassword
 :feature:faq
 :feature:fast-mpay

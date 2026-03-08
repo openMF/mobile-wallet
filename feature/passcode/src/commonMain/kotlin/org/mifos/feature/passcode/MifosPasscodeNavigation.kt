@@ -21,6 +21,7 @@ const val INTERNAL_MIFOS_PASSCODE_ROUTE = "internal_mifos_passcode_route"
 
 fun NavController.navigateToRootMifosPasscodeScreen(navOptions: NavOptions? = null) =
     navigate(ROOT_MIFOS_PASSCODE_ROUTE, navOptions)
+
 fun NavController.navigateToReAuthMifosPasscodeScreen(navOptions: NavOptions? = null) =
     navigate(RE_AUTH_MIFOS_PASSCODE_ROUTE, navOptions)
 
@@ -29,45 +30,49 @@ fun NavController.navigateToInternalMifosPasscodeScreen(navOptions: NavOptions? 
 
 @OptIn(ExperimentalComposeUiApi::class)
 fun NavGraphBuilder.mifosRootPasscodeScreen(
+    onAuthenticationSuccess: () -> Unit,
     onForgotButton: () -> Unit,
-    onPasscodeConfirm: () -> Unit,
     onPasscodeCreation: () -> Unit,
 ) {
     composable(route = ROOT_MIFOS_PASSCODE_ROUTE) {
         MifosPasscode(
-            onForgotButton,
-            onPasscodeConfirm,
-            onPasscodeCreation,
-        ) {}
+            onForgotButton = onForgotButton,
+            onAuthenticationSuccess = onAuthenticationSuccess,
+            onPasscodeCreation = onPasscodeCreation,
+            onPasscodeRejected = {},
+        )
     }
 }
 
 @OptIn(ExperimentalComposeUiApi::class)
 fun NavGraphBuilder.mifosReAuthPasscodeScreen(
     onForgotButton: () -> Unit,
-    onPasscodeConfirm: () -> Unit,
+    onAuthenticationSuccess: () -> Unit,
+    onPasscodeRejected: () -> Unit = {},
 ) {
     composable(route = RE_AUTH_MIFOS_PASSCODE_ROUTE) {
         MifosPasscode(
-            onForgotButton,
-            onPasscodeConfirm,
-            { },
-        ) {}
+            onForgotButton = onForgotButton,
+            onAuthenticationSuccess = onAuthenticationSuccess,
+            onPasscodeRejected = onPasscodeRejected,
+            onPasscodeCreation = {},
+        )
     }
 }
 
 fun NavGraphBuilder.internalPasscodeVerificationScreen(
     onForgotButton: () -> Unit,
-    onPasscodeConfirm: () -> Unit,
-    onPasscodeCreation: () -> Unit,
+    onAuthenticationSuccess: () -> Unit,
+    onPasscodeChanged: () -> Unit,
     onPasscodeRejected: () -> Unit,
 ) {
     composable(route = INTERNAL_MIFOS_PASSCODE_ROUTE) {
         MifosPasscode(
-            onForgotButton,
-            onPasscodeConfirm,
-            onPasscodeCreation,
-            onPasscodeRejected,
+            onForgotButton = onForgotButton,
+            onAuthenticationSuccess = onAuthenticationSuccess,
+            onPasscodeRejected = onPasscodeRejected,
+            onPasscodeChanged = onPasscodeChanged,
+            onPasscodeCreation = {},
         )
     }
 }

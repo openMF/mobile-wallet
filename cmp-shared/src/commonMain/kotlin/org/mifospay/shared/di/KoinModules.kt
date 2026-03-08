@@ -16,7 +16,7 @@ import org.koin.dsl.KoinAppDeclaration
 import org.koin.dsl.koinApplication
 import org.koin.dsl.module
 import org.mifos.authenticator.passcode.PasscodeManager
-import org.mifos.library.passcode.di.PasscodeModule
+import org.mifos.feature.passcode.MifosAuthenticatorModule
 import org.mifospay.core.common.di.DispatchersModule
 import org.mifospay.core.common.di.stringProviderModule
 import org.mifospay.core.data.di.RepositoryModule
@@ -27,7 +27,6 @@ import org.mifospay.core.network.di.NetworkModule
 import org.mifospay.feature.accounts.di.AccountsModule
 import org.mifospay.feature.auth.di.AuthModule
 import org.mifospay.feature.beneficiary.di.BeneficiaryModule
-import org.mifospay.feature.authenticator.biometrics.AuthenticatorBiometricsModule
 import org.mifospay.feature.editpassword.di.EditPasswordModule
 import org.mifospay.feature.faq.di.FaqModule
 import org.mifospay.feature.fastmpay.di.FastMpayModule
@@ -97,11 +96,8 @@ object KoinModules {
             FastMpayModule,
             MerchantsModule,
             UpiSetupModule,
-            AuthenticatorBiometricsModule,
+            MifosAuthenticatorModule,
         )
-    }
-    private val LibraryModule = module {
-        includes(PasscodeModule)
     }
 
     private val MifosPasscodeModule = module {
@@ -118,7 +114,6 @@ object KoinModules {
         networkModules,
         featureModules,
         sharedModule,
-        LibraryModule,
         MifosPasscodeModule,
     )
 }

@@ -7,16 +7,11 @@
  *
  * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
  */
-package org.mifospay.core.data.repository
+package org.mifospay.core.ui.utils
 
-import org.mifospay.core.data.util.AppLockOption
-
-interface ChooseAuthOptionRepository {
-    fun setAuthOption(option: AppLockOption)
-
-    fun getAuthOption(): AppLockOption
-
-    fun removeAuthOption()
-
-    fun saveBiometricRegistrationData(registrationData: String)
+object AuthenticationUtils {
+    const val AUTHENTICATION_VERIFICATION_KEY = "org.mifospay.mifos.authentication.verification.key"
+    const val DEFAULT_USER_ID = "mifosUser"
+    const val DEFAULT_USER_EMAIL = "mifospay@mifos.org"
+    const val DEFAULT_DISPLAY_NAME = "Mifos Pay User"
 }

@@ -31,7 +31,6 @@ import org.mifospay.feature.beneficiary.addupdatebeneficiary.BeneficiaryAddEditT
 import org.mifospay.feature.beneficiary.addupdatebeneficiary.addEditBeneficiaryScreen
 import org.mifospay.feature.beneficiary.addupdatebeneficiary.navigateToBeneficiaryAddEdit
 import org.mifospay.feature.beneficiary.list.BeneficiaryListScreen
-import org.mifospay.feature.authenticator.biometrics.platformAuthenticator
 import org.mifospay.feature.editpassword.navigation.editPasswordScreen
 import org.mifospay.feature.editpassword.navigation.navigateToEditPassword
 import org.mifospay.feature.faq.navigation.faqScreen
@@ -90,7 +89,7 @@ import org.mifospay.feature.transfer.intrabank.success.transferSuccessScreen
 import org.mifospay.feature.upi.setup.navigation.setupUpiPinScreen
 import org.mifospay.shared.ui.MifosAppState
 
-const val PASSCODE_VERIFICATION_KEY = "passcode_verification_success"
+const val AUTHENTICATION_VERIFICATION_KEY = "org.mifospay.mifos.authentication_verification_success"
 
 @Composable
 internal fun MifosNavHost(
@@ -175,21 +174,21 @@ internal fun MifosNavHost(
     ) {
         internalPasscodeVerificationScreen(
             onForgotButton = onClickLogout,
-            onPasscodeConfirm = {
+            onAuthenticationSuccess = {
                 navController.previousBackStackEntry
                     ?.savedStateHandle
-                    ?.set(PASSCODE_VERIFICATION_KEY, true)
+                    ?.set(AUTHENTICATION_VERIFICATION_KEY, true)
 
                 navController.popBackStack()
             },
             onPasscodeRejected = {
                 navController.previousBackStackEntry
                     ?.savedStateHandle
-                    ?.set(PASSCODE_VERIFICATION_KEY, false)
+                    ?.set(AUTHENTICATION_VERIFICATION_KEY, false)
 
                 navController.popBackStack()
             },
-            onPasscodeCreation = {
+            onPasscodeChanged = {
                 navController.popBackStack()
             },
         )
@@ -208,7 +207,7 @@ internal fun MifosNavHost(
         settingsScreen(
             onBackPress = navController::navigateUp,
             onLogout = onClickLogout,
-            onChangePasscode = navController::navigateToInternalMifosPasscodeScreen,
+            navigateToPasscodeScreen = navController::navigateToInternalMifosPasscodeScreen,
             navigateToEditPasswordScreen = navController::navigateToEditPassword,
             navigateToFaqScreen = navController::navigateToFAQ,
             navigateToNotificationScreen = navController::navigateToNotification,

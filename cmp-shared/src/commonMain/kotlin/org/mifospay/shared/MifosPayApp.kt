@@ -20,23 +20,18 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.rememberNavController
 import co.touchlab.kermit.Logger
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 import org.mifos.authenticator.biometrics.PlatformAuthenticatorLocalCompositionProvider
-import org.mifos.feature.passcode.MifosPasscode
 import org.mifos.feature.passcode.ROOT_MIFOS_PASSCODE_ROUTE
 import org.mifos.feature.passcode.navigateToReAuthMifosPasscodeScreen
 import org.mifospay.core.common.GlobalAuthManager
-import org.mifospay.core.data.util.AppLockOption
 import org.mifospay.core.data.util.NetworkMonitor
 import org.mifospay.core.data.util.TimeZoneMonitor
 import org.mifospay.core.designsystem.component.MifosDialogBox
 import org.mifospay.core.designsystem.theme.MifosTheme
-import org.mifospay.feature.authenticator.biometrics.PLATFORM_AUTHENTICATOR_ROUTE
-import org.mifospay.feature.authenticator.biometrics.navigateToReAuthPlatformAuthenticator
 import org.mifospay.shared.MainUiState.Success
 import org.mifospay.shared.navigation.MifosNavGraph.LOGIN_GRAPH
 import org.mifospay.shared.navigation.RootNavGraph
@@ -98,31 +93,10 @@ private fun MifosPayApp(
         )
     }
 
-    val authOption = remember(uiState) {
-        if (uiState is Success && (uiState as Success).userData.authenticated) {
-            viewModel.getAuthOption()
-        } else {
-            null
-        }
-    }
-
-    LaunchedEffect(authOption) {
-        if (authOption == AppLockOption.None) {
-            viewModel.logOut()
-            navController.navigate(LOGIN_GRAPH) {
-                popUpTo(navController.graph.id) { inclusive = true }
-            }
-        }
-    }
-
     val navDestination = when (uiState) {
         is MainUiState.Loading -> LOGIN_GRAPH
         is Success -> if ((uiState as Success).userData.authenticated) {
-            when (authOption) {
-                AppLockOption.MifosPasscode -> ROOT_MIFOS_PASSCODE_ROUTE
-                AppLockOption.DeviceLock -> PLATFORM_AUTHENTICATOR_ROUTE
-                else -> LOGIN_GRAPH
-            }
+            ROOT_MIFOS_PASSCODE_ROUTE
         } else {
             LOGIN_GRAPH
         }
@@ -133,29 +107,17 @@ private fun MifosPayApp(
     DisposableEffect(lifeCycleObserver) {
         val observer = LifecycleEventObserver { _, event ->
             when (event) {
-                Lifecycle.Event.ON_START -> {}
                 Lifecycle.Event.ON_RESUME -> {
                     val inactiveTime = Clock.System.now().toEpochMilliseconds() - onStopTime.value
                     Logger.a { "inactiveTime: ${inactiveTime / 1000}s" }
-                    if (inactiveTime > lockTimeOut) {
-                        val authOpt = viewModel.getAuthOption()
-                        when (authOpt) {
-                            AppLockOption.MifosPasscode -> {
-                                navController.navigateToReAuthMifosPasscodeScreen()
-                            }
-                            AppLockOption.DeviceLock -> {
-                                navController.navigateToReAuthPlatformAuthenticator()
-                            }
-                            else -> {}
-                        }
+                    if (inactiveTime > lockTimeOut && viewModel.isAppUnlocked()) {
+                        navController.navigateToReAuthMifosPasscodeScreen()
                     }
                     onStopTime.value = Long.MAX_VALUE
                 }
-                Lifecycle.Event.ON_PAUSE -> {}
                 Lifecycle.Event.ON_STOP -> {
                     onStopTime.value = Clock.System.now().toEpochMilliseconds()
                 }
-                Lifecycle.Event.ON_DESTROY -> {}
                 else -> {}
             }
         }

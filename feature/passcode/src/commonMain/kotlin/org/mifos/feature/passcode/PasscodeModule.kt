@@ -7,11 +7,11 @@
  *
  * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
  */
-package org.mifospay.feature.authenticator.biometrics
+package org.mifos.feature.passcode
 
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
 
-val AuthenticatorBiometricsModule = module {
-    viewModelOf(::AuthenticationScreenViewModel)
+val MifosAuthenticatorModule = module {
+    viewModelOf(::BiometricSetupScreenViewmodel)
 }

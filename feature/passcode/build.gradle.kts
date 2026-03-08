@@ -22,6 +22,7 @@ kotlin {
             implementation(projects.core.data)
             implementation(projects.coreBase.datastore)
             implementation(compose.material3)
+            implementation(compose.materialIconsExtended)
             implementation(compose.foundation)
             implementation(compose.ui)
             implementation(compose.components.resources)

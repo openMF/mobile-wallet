@@ -17,10 +17,10 @@ import org.koin.dsl.module
 import org.mifos.authenticator.passcode.PasscodeStorageAdapter
 import org.mifospay.core.common.MifosDispatchers
 import org.mifospay.core.data.repository.AccountRepository
+import org.mifospay.core.data.repository.AppLockRepository
 import org.mifospay.core.data.repository.AssetRepository
 import org.mifospay.core.data.repository.AuthenticationRepository
 import org.mifospay.core.data.repository.BeneficiaryRepository
-import org.mifospay.core.data.repository.ChooseAuthOptionRepository
 import org.mifospay.core.data.repository.ClientRepository
 import org.mifospay.core.data.repository.DocumentRepository
 import org.mifospay.core.data.repository.InterBankRepository
@@ -29,7 +29,6 @@ import org.mifospay.core.data.repository.KycLevelRepository
 import org.mifospay.core.data.repository.LocalAssetRepository
 import org.mifospay.core.data.repository.NotificationRepository
 import org.mifospay.core.data.repository.OfficeRepository
-import org.mifospay.core.data.repository.PlatformAuthenticationDataRepository
 import org.mifospay.core.data.repository.RecentPayeeRepository
 import org.mifospay.core.data.repository.RegistrationRepository
 import org.mifospay.core.data.repository.RunReportRepository
@@ -42,10 +41,10 @@ import org.mifospay.core.data.repository.ThirdPartyTransferRepository
 import org.mifospay.core.data.repository.TwoFactorAuthRepository
 import org.mifospay.core.data.repository.UserRepository
 import org.mifospay.core.data.repositoryImpl.AccountRepositoryImpl
+import org.mifospay.core.data.repositoryImpl.AppLockRepositoryImpl
 import org.mifospay.core.data.repositoryImpl.AssetRepositoryImpl
 import org.mifospay.core.data.repositoryImpl.AuthenticationRepositoryImpl
 import org.mifospay.core.data.repositoryImpl.BeneficiaryRepositoryImpl
-import org.mifospay.core.data.repositoryImpl.ChooseAuthOptionRepositoryImpl
 import org.mifospay.core.data.repositoryImpl.ClientRepositoryImpl
 import org.mifospay.core.data.repositoryImpl.DocumentRepositoryImpl
 import org.mifospay.core.data.repositoryImpl.InterBankRepositoryImpl
@@ -55,7 +54,6 @@ import org.mifospay.core.data.repositoryImpl.LocalAssetRepositoryImpl
 import org.mifospay.core.data.repositoryImpl.MifosPasscodeAdapterImpl
 import org.mifospay.core.data.repositoryImpl.NotificationRepositoryImpl
 import org.mifospay.core.data.repositoryImpl.OfficeRepositoryImpl
-import org.mifospay.core.data.repositoryImpl.PlatformAuthenticationDataRepositoryImpl
 import org.mifospay.core.data.repositoryImpl.RecentPayeeRepositoryImpl
 import org.mifospay.core.data.repositoryImpl.RegistrationRepositoryImpl
 import org.mifospay.core.data.repositoryImpl.RunReportRepositoryImpl
@@ -113,8 +111,7 @@ val RepositoryModule = module {
     single<OfficeRepository> { OfficeRepositoryImpl(get(), get(ioDispatcher)) }
 
     singleOf(::MifosPasscodeAdapterImpl).bind<PasscodeStorageAdapter>()
-    singleOf(::ChooseAuthOptionRepositoryImpl).bind<ChooseAuthOptionRepository>()
-    singleOf(::PlatformAuthenticationDataRepositoryImpl).bind<PlatformAuthenticationDataRepository>()
+    singleOf(::AppLockRepositoryImpl).bind<AppLockRepository>()
 
     // QR Transfer Router for smart intra/inter-bank routing
     single { QrTransferRouter(userPreferencesRepository = get()) }
