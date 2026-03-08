@@ -62,8 +62,12 @@ internal fun RootNavGraph(
         mifosPasscodeScreen(
             route = ROOT_MIFOS_PASSCODE_ROUTE,
             onForgotButton = onClickLogout,
-            onAuthenticationSuccess = navHostController::navigateToMainGraph,
+            onAuthenticationSuccess = {
+                navHostController.popBackStack()
+                navHostController.navigateToMainGraph()
+            },
             onPasscodeCreation = {
+                navHostController.popBackStack()
                 if (isBiometricsAvailable) {
                     navHostController.navigateToBiometricSetupScreen()
                 } else {
@@ -73,13 +77,22 @@ internal fun RootNavGraph(
         )
 
         biometricSetupScreen(
-            onBiometricsRegistrationSuccess = navHostController::navigateToMainGraph,
-            onSkipBiometricSetup = navHostController::navigateToMainGraph,
+            onBiometricsRegistrationSuccess = {
+                navHostController.popBackStack()
+                navHostController.navigateToMainGraph()
+            },
+            onSkipBiometricSetup =  {
+                navHostController.popBackStack()
+                navHostController.navigateToMainGraph()
+            },
         )
 
         mifosPasscodeScreen(
             route = RE_AUTH_MIFOS_PASSCODE_ROUTE,
-            onForgotButton = onClickLogout,
+            onForgotButton = {
+                navHostController.popBackStack()
+                onClickLogout()
+            },
             onAuthenticationSuccess = { navHostController.popBackStack() },
         )
 

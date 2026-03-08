@@ -36,6 +36,7 @@ fun NavGraphBuilder.mifosPasscodeScreen(
     onPasscodeCreation: () -> Unit = {},
     onPasscodeRejected: () -> Unit = {},
     onPasscodeChanged: () -> Unit = {},
+    onDisableBiometrics: () -> Unit = {},
 ) {
     composable(route = route) {
         MifosPasscode(
@@ -44,6 +45,7 @@ fun NavGraphBuilder.mifosPasscodeScreen(
             onPasscodeCreation = onPasscodeCreation,
             onPasscodeRejected = onPasscodeRejected,
             onPasscodeChanged = onPasscodeChanged,
+            onDisableBiometrics = onDisableBiometrics,
         )
     }
 }

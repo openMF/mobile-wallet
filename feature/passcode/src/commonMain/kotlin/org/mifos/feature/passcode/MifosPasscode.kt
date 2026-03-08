@@ -13,12 +13,8 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
@@ -28,21 +24,16 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigationevent.NavigationEventInfo
 import androidx.navigationevent.compose.NavigationBackHandler
 import androidx.navigationevent.compose.rememberNavigationEventState
-import kotlinx.coroutines.launch
 import mobile_wallet.feature.passcode.generated.resources.Res
 import mobile_wallet.feature.passcode.generated.resources.feature_authenticator_error
 import mobile_wallet.feature.passcode.generated.resources.feature_authenticator_ok
 import mobile_wallet.feature.passcode.generated.resources.feature_authenticator_user_not_registered_error_message
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.koinInject
+import org.koin.compose.viewmodel.koinViewModel
 import org.mifos.authenticator.biometrics.platformAuthenticationProvider
-import org.mifos.authenticator.biometrics.platformAuthenticator.AuthenticationResult
-import org.mifos.authenticator.biometrics.platformAuthenticator.PlatformAuthenticatorStatus
 import org.mifos.authenticator.biometrics.platformAvailableAuthenticationOption
-import org.mifos.authenticator.passcode.PasscodeAction
 import org.mifos.authenticator.passcode.PasscodeManager
-import org.mifos.authenticator.passcode.PasscodeStep
-import org.mifos.authenticator.passcode.PasscodeStorageAdapter
 import org.mifos.authenticator.passcode.screen.PasscodeAppearanceConfig
 import org.mifos.authenticator.passcode.screen.PasscodeButtonConfig
 import org.mifos.authenticator.passcode.screen.PasscodeDialogConfig
@@ -51,7 +42,6 @@ import org.mifos.authenticator.passcode.screen.PasscodeKeyConfig
 import org.mifos.authenticator.passcode.screen.PasscodeLogoConfig
 import org.mifos.authenticator.passcode.screen.PasscodeScreen
 import org.mifos.authenticator.passcode.screen.PasscodeSwitchConfig
-import org.mifospay.core.data.repository.AppLockRepository
 import org.mifospay.core.designsystem.component.MifosDialogBox
 import template.core.base.designsystem.theme.KptTheme
 
@@ -65,23 +55,16 @@ fun MifosPasscode(
     onPasscodeCreation: () -> Unit = {},
     onPasscodeRejected: () -> Unit = {},
     onPasscodeChanged: () -> Unit = {},
-    appLockRepository: AppLockRepository = koinInject(),
-    passcodeStorageAdapter: PasscodeStorageAdapter = koinInject(),
+    onDisableBiometrics: () -> Unit = {},
+    viewModel: MifosPasscodeViewModel = koinViewModel(),
 ) {
+    val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val passcodeManager: PasscodeManager = koinInject<PasscodeManager>()
-    val state by passcodeManager.state.collectAsStateWithLifecycle()
 
     val systemAuthProvider = platformAuthenticationProvider.current
     val systemAvailableAuthOption = platformAvailableAuthenticationOption.current
-    val coroutineScope = rememberCoroutineScope()
-
-    val biometricsStatus by systemAuthProvider.authenticatorStatus.collectAsState()
 
     val userNotRegisteredErrorMessage = stringResource(Res.string.feature_authenticator_user_not_registered_error_message)
-    var dialogBoxType by remember { mutableStateOf(DialogBoxType.None) }
-    var showDialogBox by remember { mutableStateOf(false) }
-    var dialogMessage by remember { mutableStateOf<String?>(null) }
-    var showBiometricsKeyButton by remember { mutableStateOf(true) }
 
     val navEventState = rememberNavigationEventState(
         currentInfo = MifosPasscodeCurrentInfo,
@@ -93,103 +76,84 @@ fun MifosPasscode(
         onBackCompleted = { },
     )
 
-    val lifeCycleObserver = LocalLifecycleOwner.current.lifecycle
+    LaunchedEffect(Unit) {
+        viewModel.eventFlow.collect { event ->
+            when (event) {
+                MifosPasscodeEvent.OnAuthenticationSuccess -> onAuthenticationSuccess()
+                MifosPasscodeEvent.OnForgotButton -> onForgotButton()
+                MifosPasscodeEvent.OnPasscodeCreation -> onPasscodeCreation()
+                MifosPasscodeEvent.OnPasscodeRejected -> onPasscodeRejected()
+                MifosPasscodeEvent.OnPasscodeChanged -> onPasscodeChanged()
+                MifosPasscodeEvent.OnDisableBiometrics -> onDisableBiometrics()
+            }
+        }
+    }
 
-    DisposableEffect(lifeCycleObserver) {
+    val lifeCycleOwner = LocalLifecycleOwner.current
+    DisposableEffect(lifeCycleOwner) {
         val observer = LifecycleEventObserver { _, event ->
             when (event) {
                 Lifecycle.Event.ON_START -> {
-                    if (state.passcodeStep == PasscodeStep.Enter) appLockRepository.lockApp()
+                    viewModel.trySendAction(MifosPasscodeAction.OnStart)
                 }
 
                 Lifecycle.Event.ON_RESUME -> {
-                    if (
-                        biometricsStatus.contains(PlatformAuthenticatorStatus.BIOMETRICS_SET) &&
-                        state.passcodeStep == PasscodeStep.Enter
-                    ) {
-                        coroutineScope.launch {
-                            val result =
-                                passcodeStorageAdapter.loadRegistrationData()?.let { data ->
-                                    systemAuthProvider.onAuthenticatorClick(
-                                        appName = "Mifos Pay",
-                                        savedRegistrationData = data,
-                                    )
-                                }
-                            when (result) {
-                                is AuthenticationResult.Error -> {
-                                    dialogBoxType = DialogBoxType.BiometricError
-                                    showDialogBox = true
-                                    dialogMessage = result.message
-                                }
-
-                                AuthenticationResult.Success -> {
-                                    passcodeManager.trySendAction(PasscodeAction.BiometricUnlockSuccess)
-                                }
-
-                                AuthenticationResult.UserNotRegistered -> {
-                                    dialogBoxType = DialogBoxType.UserBiometricsNotRegistered
-                                    showDialogBox = true
-                                    dialogMessage = userNotRegisteredErrorMessage
-                                }
-
-                                null -> {}
-                            }
-                        }
-                    }
+                    viewModel.trySendAction(
+                        MifosPasscodeAction.OnResume(
+                            systemAuthProvider = systemAuthProvider,
+                        ),
+                    )
                 }
                 else -> {}
             }
         }
-        lifeCycleObserver.addObserver(observer)
-        onDispose { lifeCycleObserver.removeObserver(observer) }
+        lifeCycleOwner.lifecycle.addObserver(observer)
+        onDispose { lifeCycleOwner.lifecycle.removeObserver(observer) }
     }
 
     MifosDialogBox(
         title = stringResource(Res.string.feature_authenticator_error),
-        showDialogState = showDialogBox,
+        showDialogState = state.dialogState != null,
         confirmButtonText = stringResource(Res.string.feature_authenticator_ok),
         dismissButtonText = null,
         onConfirm = {
-            showDialogBox = false
-            dialogMessage = null
-            when (dialogBoxType) {
-                DialogBoxType.UserBiometricsNotRegistered -> {
-                    passcodeManager.trySendAction(PasscodeAction.BiometricUserNotRegistered)
-                    showBiometricsKeyButton = false
+            when (val dialogState = state.dialogState) {
+                is PasscodeDialogState.UserNotRegistered -> {
                 }
-                else -> {}
+                else -> viewModel.trySendAction(MifosPasscodeAction.DismissDialog)
             }
-            dialogBoxType = DialogBoxType.None
         },
         onDismiss = {
-            showDialogBox = false
-            dialogMessage = null
-            dialogBoxType = DialogBoxType.None
+            viewModel.trySendAction(MifosPasscodeAction.DismissDialog)
         },
-        message = dialogMessage,
+        message = when (val dialogState = state.dialogState) {
+            is PasscodeDialogState.Error -> dialogState.message
+            is PasscodeDialogState.UserNotRegistered -> dialogState.message
+            null -> null
+        },
     )
 
     PasscodeScreen(
         passcodeManager = passcodeManager,
         onForgotButton = {
-            appLockRepository.unlockApp()
-            onForgotButton()
+            viewModel.trySendAction(MifosPasscodeAction.ForgotPasscode)
         },
         // onPasscodeConfirm will be renamed to onAuthenticationSuccess in next update to the passcode library.
         // It is the commonCallBack function for successful biometrics and passcode authentication.
         onPasscodeConfirm = {
-            appLockRepository.unlockApp()
-            onAuthenticationSuccess()
+            viewModel.trySendAction(MifosPasscodeAction.AuthenticationSuccess)
         },
         onPasscodeCreation = {
-            appLockRepository.unlockApp()
-            onPasscodeCreation()
+            viewModel.trySendAction(MifosPasscodeAction.PasscodeCreation)
         },
-        onPasscodeChanged = onPasscodeChanged,
+        onPasscodeChanged = {
+            viewModel.trySendAction(MifosPasscodeAction.PasscodeChanged)
+        },
         onPasscodeRejected = {
-            if (state.passcodeStep == PasscodeStep.Enter) {
-                onPasscodeRejected()
-            }
+            viewModel.trySendAction(MifosPasscodeAction.PasscodeRejected)
+        },
+        onDisableBiometrics = {
+            viewModel.trySendAction(MifosPasscodeAction.DisableBiometrics)
         },
         appearanceConfig = PasscodeAppearanceConfig(
             backgroundColor = KptTheme.colorScheme.background,
@@ -202,25 +166,22 @@ fun MifosPasscode(
             visiblePasscodeTextStyle = KptTheme.typography.headlineSmall,
         ),
         biometricButton = { modifier ->
-            AnimatedVisibility(showBiometricsKeyButton) {
+            AnimatedVisibility(state.showBiometricsKeyButton) {
                 BiometricsKey(
                     modifier = modifier,
-                    passcodeManager = passcodeManager,
-                    coroutineScope = coroutineScope,
-                    onUserNotRegistered = {
-                        dialogBoxType = DialogBoxType.UserBiometricsNotRegistered
-                        showDialogBox = true
-                        dialogMessage = userNotRegisteredErrorMessage
-                    },
-                    systemAuthProvider = systemAuthProvider,
                     systemAvailableAuthOption = systemAvailableAuthOption,
+                    onAuthenticatorClick = {
+                        viewModel.trySendAction(
+                            MifosPasscodeAction.OnAuthenticatorClick(
+                                systemAuthProvider = systemAuthProvider,
+                            ),
+                        )
+                    },
                 )
             }
         },
         onBiometricError = {
-            dialogBoxType = DialogBoxType.BiometricError
-            showDialogBox = true
-            dialogMessage = it
+            viewModel.trySendAction(MifosPasscodeAction.BiometricError(it.toString()))
         },
         keyConfig = PasscodeKeyConfig(
             shouldShuffleKeys = true,
@@ -249,10 +210,4 @@ fun MifosPasscode(
             dialogShape = null,
         ),
     )
-}
-
-enum class DialogBoxType {
-    UserBiometricsNotRegistered,
-    BiometricError,
-    None,
 }

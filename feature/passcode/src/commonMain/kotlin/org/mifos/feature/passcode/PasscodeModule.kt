@@ -14,4 +14,5 @@ import org.koin.dsl.module
 
 val MifosAuthenticatorModule = module {
     viewModelOf(::BiometricSetupScreenViewmodel)
+    viewModelOf(::MifosPasscodeViewModel)
 }

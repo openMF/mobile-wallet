@@ -21,32 +21,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
-import org.koin.compose.koinInject
-import org.mifos.authenticator.biometrics.platformAuthenticator.AuthenticationResult
 import org.mifos.authenticator.biometrics.platformAuthenticator.PlatformAuthOptions
-import org.mifos.authenticator.biometrics.platformAuthenticator.PlatformAuthenticationProvider
 import org.mifos.authenticator.biometrics.platformAuthenticator.PlatformAvailableAuthenticationOption
-import org.mifos.authenticator.passcode.PasscodeAction
-import org.mifos.authenticator.passcode.PasscodeManager
-import org.mifos.authenticator.passcode.PasscodeStorageAdapter
 import org.mifos.authenticator.passcode.components.PasscodeKey
 import org.mifos.authenticator.passcode.screen.PasscodeKeyConfig
 import template.core.base.designsystem.theme.KptTheme
 
 @Composable
 fun BiometricsKey(
-    passcodeManager: PasscodeManager,
-    systemAuthProvider: PlatformAuthenticationProvider,
     systemAvailableAuthOption: PlatformAvailableAuthenticationOption,
-    coroutineScope: CoroutineScope,
-    onUserNotRegistered: () -> Unit,
     modifier: Modifier = Modifier,
-    passcodeStorageAdapter: PasscodeStorageAdapter = koinInject(),
+    onAuthenticatorClick: () -> Unit,
 ) {
     val authOptions by systemAvailableAuthOption.currentAuthOption.collectAsStateWithLifecycle()
-    val state by passcodeManager.state.collectAsStateWithLifecycle()
 
     val passcodeKeyConfig = PasscodeKeyConfig(
         shouldShuffleKeys = true,
@@ -58,48 +45,24 @@ fun BiometricsKey(
         keySize = 60.dp,
     )
 
-    if (state.isBiometricEnabled) {
-        val icon: ImageVector = when {
-            authOptions.contains(PlatformAuthOptions.Fingerprint) -> Icons.Default.Fingerprint
-            authOptions.contains(PlatformAuthOptions.FaceId) -> Icons.Default.Face
-            else -> Icons.Default.Lock
-        }
-
-        PasscodeKey(
-            modifier = modifier,
-            keyIcon = icon,
-            onClick = {
-                coroutineScope.launch {
-                    val result = systemAuthProvider.onAuthenticatorClick(
-                        "Mifos Pay",
-                        passcodeStorageAdapter.loadRegistrationData() ?: "",
-                    )
-                    when (result) {
-                        is AuthenticationResult.Success -> {
-                            passcodeManager.trySendAction(PasscodeAction.BiometricUnlockSuccess)
-                        }
-
-                        is AuthenticationResult.Error -> {
-                            passcodeManager.trySendAction(
-                                PasscodeAction.BiometricUnlockFailure(
-                                    result.message,
-                                ),
-                            )
-                        }
-
-                        is AuthenticationResult.UserNotRegistered -> {
-                            onUserNotRegistered()
-                        }
-                    }
-                }
-            },
-            keyColor = passcodeKeyConfig.keyColor,
-            shape = passcodeKeyConfig.keyShape,
-            elevation = passcodeKeyConfig.keyElevation ?: CardDefaults.elevatedCardElevation(
-                defaultElevation = 2.dp,
-            ),
-            containerColor = passcodeKeyConfig.keyContainerColor,
-            size = passcodeKeyConfig.keySize,
-        )
+    val icon: ImageVector = when {
+        authOptions.contains(PlatformAuthOptions.Fingerprint) -> Icons.Default.Fingerprint
+        authOptions.contains(PlatformAuthOptions.FaceId) -> Icons.Default.Face
+        else -> Icons.Default.Lock
     }
+
+    PasscodeKey(
+        modifier = modifier,
+        keyIcon = icon,
+        onClick = {
+            onAuthenticatorClick()
+        },
+        keyColor = passcodeKeyConfig.keyColor,
+        shape = passcodeKeyConfig.keyShape,
+        elevation = passcodeKeyConfig.keyElevation ?: CardDefaults.elevatedCardElevation(
+            defaultElevation = 2.dp,
+        ),
+        containerColor = passcodeKeyConfig.keyContainerColor,
+        size = passcodeKeyConfig.keySize,
+    )
 }

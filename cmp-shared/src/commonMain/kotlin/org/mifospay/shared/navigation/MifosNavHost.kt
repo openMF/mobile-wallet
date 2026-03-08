@@ -191,6 +191,9 @@ internal fun MifosNavHost(
             onPasscodeChanged = {
                 navController.popBackStack()
             },
+            onDisableBiometrics = {
+                navController.popBackStack()
+            },
         )
 
         homeScreen(
