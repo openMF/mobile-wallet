@@ -32,6 +32,8 @@ import mobile_wallet.feature.settings.generated.resources.Res
 import mobile_wallet.feature.settings.generated.resources.feature_settings_change_passcode
 import mobile_wallet.feature.settings.generated.resources.feature_settings_change_password
 import mobile_wallet.feature.settings.generated.resources.feature_settings_disable_account
+import mobile_wallet.feature.settings.generated.resources.feature_settings_disable_biometrics
+import mobile_wallet.feature.settings.generated.resources.feature_settings_enable_biometrics
 import mobile_wallet.feature.settings.generated.resources.feature_settings_faq
 import mobile_wallet.feature.settings.generated.resources.feature_settings_log_out
 import mobile_wallet.feature.settings.generated.resources.feature_settings_profile
@@ -43,6 +45,8 @@ import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.resources.vectorResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
+import org.mifos.authenticator.biometrics.platformAuthenticationProvider
+import org.mifos.authenticator.biometrics.platformAuthenticator.PlatformAuthenticatorStatus
 import org.mifospay.core.designsystem.component.BasicDialogState
 import org.mifospay.core.designsystem.component.LoadingDialogState
 import org.mifospay.core.designsystem.component.MifosBasicDialog
@@ -57,7 +61,7 @@ internal fun SettingsScreenRoute(
     backPress: () -> Unit,
     onEditPassword: () -> Unit,
     onLogout: () -> Unit,
-    onChangePasscode: () -> Unit,
+    navigateToPasscodeScreen: () -> Unit,
     navigateToFaqScreen: () -> Unit,
     navigateToNotificationScreen: () -> Unit,
     navigateToProfile: () -> Unit,
@@ -69,7 +73,7 @@ internal fun SettingsScreenRoute(
     EventsEffect(viewmodel) { event ->
         when (event) {
             SettingsEvent.OnNavigateBack -> backPress.invoke()
-            SettingsEvent.OnNavigateToChangePasscodeScreen -> onChangePasscode.invoke()
+            SettingsEvent.NavigateToPasscodeScreen -> navigateToPasscodeScreen()
             SettingsEvent.OnNavigateToEditPasswordScreen -> onEditPassword.invoke()
             SettingsEvent.OnNavigateToFaqScreen -> navigateToFaqScreen.invoke()
             SettingsEvent.OnNavigateToLogout -> onLogout.invoke()
@@ -87,7 +91,7 @@ internal fun SettingsScreenRoute(
         )
 
         SettingsScreenContent(
-            modifier = Modifier,
+            isSystemAuthenticationEnabled = state.isBiometricsRegistered,
             onAction = viewmodel::trySendAction,
         )
     }
@@ -95,9 +99,13 @@ internal fun SettingsScreenRoute(
 
 @Composable
 private fun SettingsScreenContent(
+    isSystemAuthenticationEnabled: Boolean,
     modifier: Modifier = Modifier,
     onAction: (SettingsAction) -> Unit,
 ) {
+    val authProvider = platformAuthenticationProvider.current
+    val authenticatorStatus by authProvider.authenticatorStatus.collectAsStateWithLifecycle()
+
     MifosScaffold(
         modifier = modifier,
         topBarTitle = stringResource(Res.string.feature_settings_settings),
@@ -152,6 +160,24 @@ private fun SettingsScreenContent(
                     onAction(SettingsAction.ChangePasscode)
                 },
             )
+
+            if (!authenticatorStatus.contains(PlatformAuthenticatorStatus.BIOMETRICS_NOT_AVAILABLE)) {
+                SettingsCardItem(
+                    title = if (isSystemAuthenticationEnabled) {
+                        stringResource(Res.string.feature_settings_disable_biometrics)
+                    } else {
+                        stringResource(Res.string.feature_settings_enable_biometrics)
+                    },
+                    icon = MifosIcons.Fingerprint,
+                    onClick = {
+                        if (authenticatorStatus.contains(PlatformAuthenticatorStatus.BIOMETRICS_SET)) {
+                            onAction(SettingsAction.ToggleSystemAuth(authProvider))
+                        } else {
+                            onAction(SettingsAction.BiometricsNotAvailable)
+                        }
+                    },
+                )
+            }
 
             SettingsCardItem(
                 title = stringResource(Res.string.feature_settings_log_out),
@@ -251,5 +277,6 @@ private fun SettingsDialogs(
 private fun SettingsScreenPreview() {
     SettingsScreenContent(
         onAction = {},
+        isSystemAuthenticationEnabled = true,
     )
 }

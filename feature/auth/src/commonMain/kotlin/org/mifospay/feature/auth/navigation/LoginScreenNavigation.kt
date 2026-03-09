@@ -20,7 +20,7 @@ const val LOGIN_ROUTE = "login_route"
 
 fun NavGraphBuilder.loginScreen(
     onNavigateBack: () -> Unit,
-    onNavigateToPasscodeScreen: () -> Unit,
+    navigateToMifosPasscodeScreen: () -> Unit,
     onNavigateToSignupScreen: () -> Unit,
     onShowInstanceSelector: () -> Unit,
 ) {
@@ -35,7 +35,7 @@ fun NavGraphBuilder.loginScreen(
     ) {
         LoginScreen(
             onNavigateBack = onNavigateBack,
-            navigateToPasscodeScreen = onNavigateToPasscodeScreen,
+            navigateToMifosPasscodeScreen = navigateToMifosPasscodeScreen,
             navigateToSignupScreen = onNavigateToSignupScreen,
             onShowInstanceSelector = onShowInstanceSelector,
         )

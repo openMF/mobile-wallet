@@ -11,37 +11,33 @@ package org.mifospay.shared.navigation
 
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
-import androidx.navigation.NavGraphBuilder
 import androidx.navigation.navOptions
-import androidx.navigation.navigation
-import org.mifos.library.passcode.PASSCODE_SCREEN
-import org.mifos.library.passcode.passcodeRoute
 
-internal fun NavGraphBuilder.passcodeNavGraph(navController: NavController) {
-    navigation(
-        route = MifosNavGraph.PASSCODE_GRAPH,
-        startDestination = PASSCODE_SCREEN,
-    ) {
-        passcodeRoute(
-            onForgotButton = {
-                navController.popBackStack()
-                navController.navigateToMainGraph()
-            },
-            onSkipButton = {
-                navController.popBackStack()
-                navController.navigateToMainGraph()
-            },
-            onPasscodeConfirm = {
-                navController.popBackStack()
-                navController.navigateToMainGraph()
-            },
-            onPasscodeRejected = {
-                navController.popBackStack()
-                navController.navigateToMainGraph()
-            },
-        )
-    }
-}
+// internal fun NavGraphBuilder.passcodeNavGraph(navController: NavController) {
+//    navigation(
+//        route = MifosNavGraph.PASSCODE_GRAPH,
+//        startDestination = PASSCODE_SCREEN,
+//    ) {
+//        passcodeRoute(
+//            onForgotButton = {
+//                navController.popBackStack()
+//                navController.navigateToMainGraph()
+//            },
+//            onSkipButton = {
+//                navController.popBackStack()
+//                navController.navigateToMainGraph()
+//            },
+//            onPasscodeConfirm = {
+//                navController.popBackStack()
+//                navController.navigateToMainGraph()
+//            },
+//            onPasscodeRejected = {
+//                navController.popBackStack()
+//                navController.navigateToMainGraph()
+//            },
+//        )
+//    }
+// }
 
 fun NavController.navigateToMainGraph() {
     val options = navOptions {

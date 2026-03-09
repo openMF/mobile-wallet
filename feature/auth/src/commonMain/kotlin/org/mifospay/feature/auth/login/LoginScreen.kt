@@ -61,7 +61,7 @@ import template.core.base.ui.detectMultiTapGesture
 @Composable
 internal fun LoginScreen(
     onNavigateBack: () -> Unit,
-    navigateToPasscodeScreen: () -> Unit,
+    navigateToMifosPasscodeScreen: () -> Unit,
     navigateToSignupScreen: () -> Unit,
     onShowInstanceSelector: () -> Unit,
     modifier: Modifier = Modifier,
@@ -76,7 +76,7 @@ internal fun LoginScreen(
         when (event) {
             is LoginEvent.NavigateBack -> onNavigateBack.invoke()
             is LoginEvent.NavigateToSignup -> navigateToSignupScreen.invoke()
-            is LoginEvent.NavigateToPasscodeScreen -> navigateToPasscodeScreen.invoke()
+            is LoginEvent.NavigateToMifosPasscodeScreen -> navigateToMifosPasscodeScreen()
             is LoginEvent.ShowToast -> {
                 scope.launch {
                     snackbarHostState.showSnackbar(event.message)
