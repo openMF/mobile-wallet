@@ -109,8 +109,12 @@ internal class TransferConfirmViewModel(
             }
 
             is TransferConfirmAction.InitiateTransfer -> {
+                if (state.isProcessing) return
                 mutableStateFlow.update {
-                    it.copy(dialogState = null)
+                    it.copy(
+                        isProcessing = true,
+                        dialogState = null,
+                    )
                 }
                 validateTransfer()
             }
@@ -231,32 +235,33 @@ internal class TransferConfirmViewModel(
                     handleTransfer()
                 },
                 onFailed = {
-                    mutableStateFlow.update {
-                        it.copy(
-                            dialogState = TransferConfirmState.DialogState
-                                .Error.ValidationError(Res.string.feature_make_transfer_user_verification_failed),
-                        )
-                    }
+                    updateValidationError(Res.string.feature_make_transfer_user_verification_failed)
                 },
             )
         }
     }
 
     private suspend fun handleTransfer() {
+        mutableStateFlow.update {
+            it.copy(dialogState = TransferConfirmState.DialogState.Loading)
+        }
         repository.makeTransfer(state.transferPayload).collect { result ->
             when (result) {
                 is DataState.Loading -> {
                     mutableStateFlow.update {
                         it.copy(
-                            dialogState = TransferConfirmState.DialogState.Loading,
+                            isProcessing = true,
+                            dialogState = null,
                         )
                     }
                 }
 
                 is DataState.Error -> {
+                    // Use UiError for automatic error message parsing with localized strings
                     val uiError = result.toUiError(DefaultErrorMessageProvider)
                     mutableStateFlow.update {
                         it.copy(
+                            isProcessing = false,
                             dialogState = TransferConfirmState.DialogState.Error.ApiError(uiError),
                         )
                     }
@@ -276,6 +281,7 @@ internal class TransferConfirmViewModel(
                     )
                     mutableStateFlow.update {
                         it.copy(
+                            isProcessing = false,
                             dialogState = null,
                             transferResult = transferResult,
                         )
@@ -286,25 +292,23 @@ internal class TransferConfirmViewModel(
         }
     }
 
-    private fun handleUserVerification(
+    private suspend fun handleUserVerification(
         onSuccess: suspend () -> Unit,
         onFailed: suspend () -> Unit,
     ) {
-        viewModelScope.launch {
-            mutableStateFlow.update { it.copy(userVerificationResult = null) }
+        mutableStateFlow.update { it.copy(userVerificationResult = null) }
 
-            sendEvent(TransferConfirmEvent.NavigateForPasscodeVerification)
+        sendEvent(TransferConfirmEvent.NavigateForPasscodeVerification)
 
-            val result = stateFlow
-                .map { it.userVerificationResult }
-                .filter { it != null }
-                .first()
+        val result = stateFlow
+            .map { it.userVerificationResult }
+            .filter { it != null }
+            .first()
 
-            when (result) {
-                true -> onSuccess()
-                false -> onFailed()
-                null -> {}
-            }
+        when (result) {
+            true -> onSuccess()
+            false -> onFailed()
+            null -> {}
         }
     }
 
@@ -329,12 +333,13 @@ internal data class TransferConfirmState(
 
     val showBottomSheet: Boolean = false,
     val state: State = State.Loading,
-    val description: String = " ",
+    val description: String = "",
     val selectedAccount: AccountOption? = null,
     val selectedAccountBalance: Double = 0.0,
     val dialogState: DialogState? = null,
     val fromAccountOptions: List<AccountOption>? = emptyList(),
     val balanceMap: Map<String, Double> = emptyMap(),
+    val isProcessing: Boolean = false,
     val transferResult: TransferResult? = null,
     val userVerificationResult: Boolean? = null,
 ) {

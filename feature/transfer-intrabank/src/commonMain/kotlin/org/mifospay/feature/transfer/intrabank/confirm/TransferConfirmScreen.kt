@@ -23,6 +23,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
@@ -32,6 +33,7 @@ import androidx.compose.foundation.text.BasicText
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text.TextAutoSize
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
@@ -104,10 +106,6 @@ internal fun TransferConfirmScreen(
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
 
-    // `entryStateHandle` is the NavBackStackEntry's savedStateHandle — the exact object
-    // written to by navController.previousBackStackEntry?.savedStateHandle?.set(...).
-    // The ViewModel's own savedStateHandle is a separate instance that does not receive
-    // those external updates via getMutableStateFlow, so we bridge it here.
     val authResult by entryStateHandle
         .getStateFlow<Boolean?>(INTRA_BANK_TRANSFER_VERIFICATION_KEY, null)
         .collectAsStateWithLifecycle()
@@ -299,26 +297,25 @@ internal fun TransferConfirmScreen(
                         MifosButton(
                             onClick = { onAction(TransferConfirmAction.InitiateTransfer) },
                             modifier = Modifier.fillMaxWidth(),
-                            enabled = state.amountIsValid && state.descriptionIsValid &&
-                                state.dialogState != TransferConfirmState.DialogState.Loading,
+                            enabled = state.amountIsValid && state.descriptionIsValid && !state.isProcessing,
                         ) {
-//                            if (state.isProcessing) {
-//                                CircularProgressIndicator(
-//                                    modifier = Modifier.size(20.dp),
-//                                    color = MaterialTheme.colorScheme.onPrimary,
-//                                    strokeWidth = 2.dp,
-//                                )
-//                                Spacer(modifier = Modifier.width(8.dp))
-//                            }
+                            if (state.isProcessing) {
+                                CircularProgressIndicator(
+                                    modifier = Modifier.size(20.dp),
+                                    color = MaterialTheme.colorScheme.onPrimary,
+                                    strokeWidth = 2.dp,
+                                )
+                                Spacer(modifier = Modifier.width(8.dp))
+                            }
                             Text(text = stringResource(Res.string.feature_make_transfer_continue_button))
                         }
                     }
                 }
 
                 // Show overlay when processing
-//                if (state.isProcessing) {
-//                    MifosProgressIndicatorOverlay()
-//                }
+                if (state.isProcessing) {
+                    MifosProgressIndicatorOverlay()
+                }
             }
         }
     }
