@@ -239,7 +239,7 @@ internal class TransferConfirmViewModel(
                         it.copy(
                             isProcessing = false,
                             dialogState = TransferConfirmState.DialogState
-                                .Error.ValidationError(Res.string.feature_make_transfer_user_verification_failed)
+                                .Error.ValidationError(Res.string.feature_make_transfer_user_verification_failed),
                         )
                     }
                 },
