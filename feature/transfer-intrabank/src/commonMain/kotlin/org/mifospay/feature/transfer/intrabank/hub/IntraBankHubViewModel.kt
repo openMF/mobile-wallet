@@ -9,10 +9,8 @@
  */
 package org.mifospay.feature.transfer.intrabank.hub
 
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import co.touchlab.kermit.Logger
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
@@ -27,7 +25,6 @@ import org.mifospay.core.model.account.RecentPayee
 import org.mifospay.core.model.beneficiary.Beneficiary
 import org.mifospay.core.ui.utils.BaseViewModel
 
-
 class IntraBankHubViewModel(
     private val recentPayeeRepository: RecentPayeeRepository,
     private val selfServiceRepository: SelfServiceRepository,
@@ -35,7 +32,6 @@ class IntraBankHubViewModel(
 ) : BaseViewModel<IntraBankHubState, IntraBankHubEvent, IntraBankHubAction>(
     initialState = IntraBankHubState(),
 ) {
-
 
     init {
         loadRecentPayees()
@@ -97,8 +93,6 @@ class IntraBankHubViewModel(
             }
         }
     }
-
-
 
     private fun loadRecentPayees() {
         val accountId = userPreferencesRepository.defaultAccountId.value

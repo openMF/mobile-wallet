@@ -9,7 +9,11 @@
  */
 package org.mifospay.feature.transfer.interbank
 
+import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.todayIn
 import kotlinx.serialization.Serializable
@@ -32,6 +36,9 @@ import kotlin.time.ExperimentalTime
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
+
+const val INTER_BANK_TRANSFER_VERIFICATION_KEY = "inter-banking_transfer_verification_key"
+
 /**
  * ViewModel for managing interbank transfer flow
  * Handles all stages: account selection, recipient search, transfer details, preview, and confirmation
@@ -40,6 +47,7 @@ class InterbankTransferViewModel(
     private val selfServiceRepository: SelfServiceRepository,
     private val interBankRepository: InterBankRepository,
     private val preferencesRepository: UserPreferencesRepository,
+    private val savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<InterbankTransferState, InterbankTransferEvent, InterbankTransferAction>(
     initialState = run {
         val client = requireNotNull(preferencesRepository.client.value)

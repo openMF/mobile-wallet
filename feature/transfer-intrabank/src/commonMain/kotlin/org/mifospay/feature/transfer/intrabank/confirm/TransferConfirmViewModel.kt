@@ -12,9 +12,9 @@ package org.mifospay.feature.transfer.intrabank.confirm
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
@@ -35,20 +35,18 @@ import org.mifospay.core.common.toUiError
 import org.mifospay.core.common.utils.capitalizeWords
 import org.mifospay.core.data.repository.ClientRepository
 import org.mifospay.core.data.repository.ThirdPartyTransferRepository
-import org.mifospay.core.network.model.entity.TPTResponse
 import org.mifospay.core.network.model.entity.payload.TransferPayload
 import org.mifospay.core.network.model.entity.templates.account.AccountOption
 import org.mifospay.core.ui.DefaultErrorMessageProvider
 import org.mifospay.core.ui.utils.BaseViewModel
 import org.mifospay.feature.transfer.intrabank.navigation.TransferConfirmRoute
 
-
 const val INTRA_BANK_TRANSFER_VERIFICATION_KEY = "intra-banking_transfer_verification_key"
 
 internal class TransferConfirmViewModel(
     private val repository: ThirdPartyTransferRepository,
     private val clientRepo: ClientRepository,
-    private val savedStateHandle: SavedStateHandle,
+    savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<TransferConfirmState, TransferConfirmEvent, TransferConfirmAction>(
     initialState = run {
         val route = savedStateHandle.toRoute<TransferConfirmRoute>()
@@ -63,9 +61,6 @@ internal class TransferConfirmViewModel(
         )
     },
 ) {
-
-    val authenticationResult: MutableStateFlow<Boolean?> =
-        savedStateHandle.getMutableStateFlow<Boolean?>(INTRA_BANK_TRANSFER_VERIFICATION_KEY, null)
 
     init {
         viewModelScope.launch {
@@ -114,11 +109,8 @@ internal class TransferConfirmViewModel(
             }
 
             is TransferConfirmAction.InitiateTransfer -> {
-//                if (state.isProcessing) return
                 mutableStateFlow.update {
-                    it.copy(
-                        dialogState = null,
-                    )
+                    it.copy(dialogState = null)
                 }
                 validateTransfer()
             }
@@ -130,8 +122,6 @@ internal class TransferConfirmViewModel(
                 trySendAction(TransferConfirmAction.InitiateTransfer)
             }
 
-//            is TransferConfirmAction.Internal.HandleTransferResult -> handleTransferResult(action)
-
             TransferConfirmAction.CloseBottomSheet -> {
                 mutableStateFlow.update {
                     it.copy(showBottomSheet = false)
@@ -141,6 +131,12 @@ internal class TransferConfirmViewModel(
             TransferConfirmAction.OpenBottomSheet -> {
                 mutableStateFlow.update {
                     it.copy(showBottomSheet = true)
+                }
+            }
+
+            is TransferConfirmAction.UpdateUserVerificationResult -> {
+                mutableStateFlow.update {
+                    it.copy(userVerificationResult = action.result)
                 }
             }
         }
@@ -241,7 +237,7 @@ internal class TransferConfirmViewModel(
                                 .Error.ValidationError(Res.string.feature_make_transfer_user_verification_failed),
                         )
                     }
-                }
+                },
             )
         }
     }
@@ -252,13 +248,12 @@ internal class TransferConfirmViewModel(
                 is DataState.Loading -> {
                     mutableStateFlow.update {
                         it.copy(
-                            dialogState = null,
+                            dialogState = TransferConfirmState.DialogState.Loading,
                         )
                     }
                 }
 
                 is DataState.Error -> {
-                    // Use UiError for automatic error message parsing with localized strings
                     val uiError = result.toUiError(DefaultErrorMessageProvider)
                     mutableStateFlow.update {
                         it.copy(
@@ -291,26 +286,23 @@ internal class TransferConfirmViewModel(
         }
     }
 
-
     private fun handleUserVerification(
-        onSuccess: suspend ()-> Unit,
-        onFailed: suspend ()-> Unit,
+        onSuccess: suspend () -> Unit,
+        onFailed: suspend () -> Unit,
     ) {
         viewModelScope.launch {
-            authenticationResult.value = null
-            savedStateHandle.set<Boolean?>(INTRA_BANK_TRANSFER_VERIFICATION_KEY, null)
+            mutableStateFlow.update { it.copy(userVerificationResult = null) }
 
             sendEvent(TransferConfirmEvent.NavigateForPasscodeVerification)
 
-            val result = authenticationResult.filter { it != null }.first()
+            val result = stateFlow
+                .map { it.userVerificationResult }
+                .filter { it != null }
+                .first()
 
-            when(result) {
-                true -> {
-                    onSuccess()
-                }
-                false -> {
-                    onFailed()
-                }
+            when (result) {
+                true -> onSuccess()
+                false -> onFailed()
                 null -> {}
             }
         }
@@ -344,6 +336,7 @@ internal data class TransferConfirmState(
     val fromAccountOptions: List<AccountOption>? = emptyList(),
     val balanceMap: Map<String, Double> = emptyMap(),
     val transferResult: TransferResult? = null,
+    val userVerificationResult: Boolean? = null,
 ) {
     val amountIsValid: Boolean
         get() = amount.isNotEmpty() && amount.toDoubleOrNull() != null && amount.toDouble() <= selectedAccountBalance
@@ -432,19 +425,13 @@ internal sealed interface TransferConfirmEvent {
 
 internal sealed interface TransferConfirmAction {
     data object NavigateBack : TransferConfirmAction
-
     data object DismissDialog : TransferConfirmAction
-
     data object InitiateTransfer : TransferConfirmAction
-
     data object RetryTransfer : TransferConfirmAction
-
     data class AmountChanged(val amount: String) : TransferConfirmAction
-
     data class DescriptionChanged(val desc: String) : TransferConfirmAction
-
     data class SelectAccount(val account: AccountOption?) : TransferConfirmAction
-
     data object OpenBottomSheet : TransferConfirmAction
     data object CloseBottomSheet : TransferConfirmAction
+    data class UpdateUserVerificationResult(val result: Boolean) : TransferConfirmAction
 }

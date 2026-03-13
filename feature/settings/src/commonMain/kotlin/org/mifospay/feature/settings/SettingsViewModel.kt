@@ -34,7 +34,6 @@ import org.mifospay.core.model.client.Client
 import org.mifospay.core.ui.utils.BaseViewModel
 import org.mifospay.feature.settings.SettingsAction.Internal.DisableAccountResult
 
-
 const val DISABLE_BIOMETRICS_VERIFICATION_KEY = "org.mifospay.mifos.authentication.verification.key"
 
 class SettingsViewModel(

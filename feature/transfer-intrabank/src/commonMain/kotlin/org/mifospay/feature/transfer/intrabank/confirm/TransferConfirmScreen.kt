@@ -23,7 +23,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
@@ -33,7 +32,6 @@ import androidx.compose.foundation.text.BasicText
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text.TextAutoSize
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
@@ -117,7 +115,7 @@ internal fun TransferConfirmScreen(
     LaunchedEffect(authResult) {
         authResult?.let { result ->
             entryStateHandle.remove<Boolean>(INTRA_BANK_TRANSFER_VERIFICATION_KEY)
-            viewModel.authenticationResult.value = result
+            viewModel.trySendAction(TransferConfirmAction.UpdateUserVerificationResult(result))
         }
     }
 
@@ -301,8 +299,8 @@ internal fun TransferConfirmScreen(
                         MifosButton(
                             onClick = { onAction(TransferConfirmAction.InitiateTransfer) },
                             modifier = Modifier.fillMaxWidth(),
-                            enabled = state.amountIsValid && state.descriptionIsValid
-                                    && state.dialogState != TransferConfirmState.DialogState.Loading,
+                            enabled = state.amountIsValid && state.descriptionIsValid &&
+                                state.dialogState != TransferConfirmState.DialogState.Loading,
                         ) {
 //                            if (state.isProcessing) {
 //                                CircularProgressIndicator(

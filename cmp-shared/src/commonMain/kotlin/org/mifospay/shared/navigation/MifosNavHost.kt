@@ -441,9 +441,9 @@ internal fun MifosNavHost(
                     },
                 )
             },
-            navigateForPasscodeVerification = { verificationKey->
+            navigateForPasscodeVerification = { verificationKey ->
                 navController.navigateToInternalMifosPasscodeScreen(verificationKey)
-            }
+            },
         )
 
         intraBankHubScreen(
