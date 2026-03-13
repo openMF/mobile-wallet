@@ -235,7 +235,13 @@ internal class TransferConfirmViewModel(
                     handleTransfer()
                 },
                 onFailed = {
-                    updateValidationError(Res.string.feature_make_transfer_user_verification_failed)
+                    mutableStateFlow.update {
+                        it.copy(
+                            isProcessing = false,
+                            dialogState = TransferConfirmState.DialogState
+                                .Error.ValidationError(Res.string.feature_make_transfer_user_verification_failed)
+                        )
+                    }
                 },
             )
         }
