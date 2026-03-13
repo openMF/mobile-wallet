@@ -10,7 +10,6 @@
 package org.mifospay.core.ui.utils
 
 object AuthenticationUtils {
-    const val AUTHENTICATION_VERIFICATION_KEY = "org.mifospay.mifos.authentication.verification.key"
     const val DEFAULT_USER_ID = "mifosUser"
     const val DEFAULT_USER_EMAIL = "mifospay@mifos.org"
     const val DEFAULT_DISPLAY_NAME = "Mifos Pay User"

@@ -98,6 +98,7 @@ import template.core.base.designsystem.theme.KptTheme
 internal fun TransferConfirmScreen(
     navigateBack: () -> Unit,
     onTransferSuccess: (TransferResult) -> Unit,
+    navigateForPasscodeVerification: (String) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: TransferConfirmViewModel = koinViewModel(),
 ) {
@@ -107,6 +108,9 @@ internal fun TransferConfirmScreen(
         when (event) {
             TransferConfirmEvent.OnNavigateBack -> navigateBack.invoke()
             is TransferConfirmEvent.OnTransferSuccess -> onTransferSuccess.invoke(event.transferResult)
+            TransferConfirmEvent.NavigateForPasscodeVerification -> {
+                navigateForPasscodeVerification(INTRA_BANK_TRANSFER_VERIFICATION_KEY)
+            }
         }
     }
 
@@ -280,25 +284,26 @@ internal fun TransferConfirmScreen(
                         MifosButton(
                             onClick = { onAction(TransferConfirmAction.InitiateTransfer) },
                             modifier = Modifier.fillMaxWidth(),
-                            enabled = state.amountIsValid && state.descriptionIsValid && !state.isProcessing,
+                            enabled = state.amountIsValid && state.descriptionIsValid
+                                    && state.dialogState != TransferConfirmState.DialogState.Loading,
                         ) {
-                            if (state.isProcessing) {
-                                CircularProgressIndicator(
-                                    modifier = Modifier.size(20.dp),
-                                    color = MaterialTheme.colorScheme.onPrimary,
-                                    strokeWidth = 2.dp,
-                                )
-                                Spacer(modifier = Modifier.width(8.dp))
-                            }
+//                            if (state.isProcessing) {
+//                                CircularProgressIndicator(
+//                                    modifier = Modifier.size(20.dp),
+//                                    color = MaterialTheme.colorScheme.onPrimary,
+//                                    strokeWidth = 2.dp,
+//                                )
+//                                Spacer(modifier = Modifier.width(8.dp))
+//                            }
                             Text(text = stringResource(Res.string.feature_make_transfer_continue_button))
                         }
                     }
                 }
 
                 // Show overlay when processing
-                if (state.isProcessing) {
-                    MifosProgressIndicatorOverlay()
-                }
+//                if (state.isProcessing) {
+//                    MifosProgressIndicatorOverlay()
+//                }
             }
         }
     }

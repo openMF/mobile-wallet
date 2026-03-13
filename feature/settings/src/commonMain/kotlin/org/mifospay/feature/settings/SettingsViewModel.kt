@@ -27,20 +27,20 @@ import org.mifos.authenticator.biometrics.platformAuthenticator.PlatformAuthenti
 import org.mifos.authenticator.biometrics.platformAuthenticator.RegistrationResult
 import org.mifos.authenticator.passcode.PasscodeAction
 import org.mifos.authenticator.passcode.PasscodeManager
-import org.mifos.authenticator.passcode.PasscodeStorageAdapter
 import org.mifospay.core.common.DataState
 import org.mifospay.core.data.repository.SavingsAccountRepository
 import org.mifospay.core.datastore.UserPreferencesRepository
 import org.mifospay.core.model.client.Client
-import org.mifospay.core.ui.utils.AuthenticationUtils.AUTHENTICATION_VERIFICATION_KEY
 import org.mifospay.core.ui.utils.BaseViewModel
 import org.mifospay.feature.settings.SettingsAction.Internal.DisableAccountResult
+
+
+const val DISABLE_BIOMETRICS_VERIFICATION_KEY = "org.mifospay.mifos.authentication.verification.key"
 
 class SettingsViewModel(
     private val userPreferencesRepository: UserPreferencesRepository,
     private val repository: SavingsAccountRepository,
     private val passcodeManager: PasscodeManager,
-    private val passcodeStorageAdapter: PasscodeStorageAdapter,
     private val savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<SettingsState, SettingsEvent, SettingsAction>(
     initialState = run {
@@ -64,7 +64,7 @@ class SettingsViewModel(
     }
 
     val authenticationSuccess: MutableStateFlow<Boolean?> =
-        savedStateHandle.getMutableStateFlow(AUTHENTICATION_VERIFICATION_KEY, null)
+        savedStateHandle.getMutableStateFlow(DISABLE_BIOMETRICS_VERIFICATION_KEY, null)
 
     override fun handleAction(action: SettingsAction) {
         when (action) {
@@ -162,14 +162,14 @@ class SettingsViewModel(
                                 isBiometricsRegistered = false,
                             )
                         }
-                        savedStateHandle.remove<Boolean?>(AUTHENTICATION_VERIFICATION_KEY)
+                        savedStateHandle.remove<Boolean?>(DISABLE_BIOMETRICS_VERIFICATION_KEY)
                         authenticationSuccess.value = null
                     }
                     false -> {
                         mutableStateFlow.update {
                             it.copy(isBiometricsRegistered = true)
                         }
-                        savedStateHandle.remove<Boolean?>(AUTHENTICATION_VERIFICATION_KEY)
+                        savedStateHandle.remove<Boolean?>(DISABLE_BIOMETRICS_VERIFICATION_KEY)
                         authenticationSuccess.value = null
                     }
                     null -> {}
