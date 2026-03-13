@@ -225,10 +225,28 @@ internal class TransferConfirmViewModel(
             updateValidationError(Res.string.feature_make_transfer_error_insufficient_balance)
         }
 
-        else -> handleUserVerification()
+        else -> initiateTransfer()
     }
 
-    private suspend fun initiateTransfer() {
+    private fun initiateTransfer() {
+        viewModelScope.launch {
+            handleUserVerification(
+                onSuccess = {
+                    handleTransfer()
+                },
+                onFailed = {
+                    mutableStateFlow.update {
+                        it.copy(
+                            dialogState = TransferConfirmState.DialogState
+                                .Error.ValidationError(Res.string.feature_make_transfer_user_verification_failed),
+                        )
+                    }
+                }
+            )
+        }
+    }
+
+    private suspend fun handleTransfer() {
         repository.makeTransfer(state.transferPayload).collect { result ->
             when (result) {
                 is DataState.Loading -> {
@@ -271,10 +289,13 @@ internal class TransferConfirmViewModel(
                 }
             }
         }
-
     }
 
-    private fun handleUserVerification() {
+
+    private fun handleUserVerification(
+        onSuccess: suspend ()-> Unit,
+        onFailed: suspend ()-> Unit,
+    ) {
         viewModelScope.launch {
             authenticationResult.value = null
             savedStateHandle.set<Boolean?>(INTRA_BANK_TRANSFER_VERIFICATION_KEY, null)
@@ -283,18 +304,12 @@ internal class TransferConfirmViewModel(
 
             val result = authenticationResult.filter { it != null }.first()
 
-            when(result){
+            when(result) {
                 true -> {
-                    initiateTransfer()
+                    onSuccess()
                 }
                 false -> {
-                    mutableStateFlow.update {
-                        it.copy(
-                            dialogState = TransferConfirmState.DialogState.Error.ValidationError(
-                                Res.string.feature_make_transfer_user_verification_failed
-                            ),
-                        )
-                    }
+                    onFailed()
                 }
                 null -> {}
             }

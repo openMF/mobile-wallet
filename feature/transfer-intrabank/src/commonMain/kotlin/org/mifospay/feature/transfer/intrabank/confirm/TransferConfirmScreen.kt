@@ -58,6 +58,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import mobile_wallet.feature.transfer_intrabank.generated.resources.Res
 import mobile_wallet.feature.transfer_intrabank.generated.resources.feature_make_transfer_amount
@@ -99,10 +100,26 @@ internal fun TransferConfirmScreen(
     navigateBack: () -> Unit,
     onTransferSuccess: (TransferResult) -> Unit,
     navigateForPasscodeVerification: (String) -> Unit,
+    entryStateHandle: SavedStateHandle,
     modifier: Modifier = Modifier,
     viewModel: TransferConfirmViewModel = koinViewModel(),
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
+
+    // `entryStateHandle` is the NavBackStackEntry's savedStateHandle — the exact object
+    // written to by navController.previousBackStackEntry?.savedStateHandle?.set(...).
+    // The ViewModel's own savedStateHandle is a separate instance that does not receive
+    // those external updates via getMutableStateFlow, so we bridge it here.
+    val authResult by entryStateHandle
+        .getStateFlow<Boolean?>(INTRA_BANK_TRANSFER_VERIFICATION_KEY, null)
+        .collectAsStateWithLifecycle()
+
+    LaunchedEffect(authResult) {
+        authResult?.let { result ->
+            entryStateHandle.remove<Boolean>(INTRA_BANK_TRANSFER_VERIFICATION_KEY)
+            viewModel.authenticationResult.value = result
+        }
+    }
 
     EventsEffect(viewModel) { event ->
         when (event) {
