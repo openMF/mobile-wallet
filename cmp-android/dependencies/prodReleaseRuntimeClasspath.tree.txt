@@ -3048,6 +3048,7 @@
 |    |    +--- org.jetbrains.kotlinx:kotlinx-serialization-json:1.9.0 (*)
 |    |    +--- io.github.openmf:mifos-authenticator-passcode:2.0.6 (*)
 |    |    +--- io.github.openmf:mifos-authenticator-biometrics:2.0.4 (*)
+|    |    +--- project :core-base:ui (*)
 |    |    +--- org.jetbrains.compose.ui:ui:1.9.3 -> 1.10.1 (*)
 |    |    +--- org.jetbrains.compose.foundation:foundation:1.9.3 -> 1.10.0 (*)
 |    |    +--- org.jetbrains.compose.material3:material3:1.9.0-beta03 -> 1.9.0 (*)
@@ -3121,6 +3122,7 @@
 |    |         +--- org.jetbrains.kotlinx:kotlinx-serialization-json:1.9.0 (*)
 |    |         +--- io.github.openmf:mifos-authenticator-passcode:2.0.6 (*)
 |    |         +--- io.github.openmf:mifos-authenticator-biometrics:2.0.4 (*)
+|    |         +--- project :core-base:ui (*)
 |    |         +--- project :core-base:datastore
 |    |         |    +--- org.jetbrains.kotlin:kotlin-stdlib:2.2.21 (*)
 |    |         |    +--- io.insert-koin:koin-bom:4.1.1 (*)
