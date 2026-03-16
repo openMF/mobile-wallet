@@ -13,10 +13,11 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
-import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import template.core.base.ui.composableWithSlideTransitions
+import template.core.base.ui.composableWithStayTransitions
 
 // Kept as constants so they can be used as startDestination strings in NavHost
 const val ROOT_MIFOS_PASSCODE_ROUTE = "root_mifos_passcode_route"
@@ -55,7 +56,7 @@ fun NavGraphBuilder.rootMifosPasscodeScreen(
     onPasscodeChanged: () -> Unit = {},
     onDisableBiometrics: () -> Unit = {},
 ) {
-    composable<RootPasscodeRoute> {
+    composableWithStayTransitions<RootPasscodeRoute> {
         MifosPasscode(
             onForgotButton = onForgotButton,
             onAuthenticationSuccess = onAuthenticationSuccess,
@@ -75,7 +76,7 @@ fun NavGraphBuilder.reAuthMifosPasscodeScreen(
     onPasscodeChanged: () -> Unit = {},
     onDisableBiometrics: () -> Unit = {},
 ) {
-    composable<ReAuthPasscodeRoute> {
+    composableWithSlideTransitions<ReAuthPasscodeRoute> {
         MifosPasscode(
             onForgotButton = onForgotButton,
             onAuthenticationSuccess = onAuthenticationSuccess,
@@ -95,7 +96,7 @@ fun NavGraphBuilder.internalMifosPasscodeScreen(
     onPasscodeChanged: () -> Unit = {},
     onDisableBiometrics: () -> Unit = {},
 ) {
-    composable<InternalPasscodeRoute> { backStackEntry ->
+    composableWithSlideTransitions<InternalPasscodeRoute> { backStackEntry ->
         val verificationKey = backStackEntry.toRoute<InternalPasscodeRoute>().verificationKey
         MifosPasscode(
             onForgotButton = onForgotButton,
