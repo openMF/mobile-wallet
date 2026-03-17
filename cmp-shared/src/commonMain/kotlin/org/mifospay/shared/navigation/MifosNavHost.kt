@@ -13,6 +13,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.navOptions
+import mobile_wallet.cmp_shared.generated.resources.Res as SharedRes
+import mobile_wallet.cmp_shared.generated.resources.feature_finance_accounts
+import mobile_wallet.cmp_shared.generated.resources.feature_finance_beneficiaries
 import mobile_wallet.feature.payments.generated.resources.Res
 import mobile_wallet.feature.payments.generated.resources.feature_payments_history
 import mobile_wallet.feature.payments.generated.resources.feature_payments_request
@@ -136,7 +139,7 @@ internal fun MifosNavHost(
 
 //    TODO Cards and Merchants are not using self api
     val tabContents = listOf(
-        TabContent(FinanceScreenContents.ACCOUNTS.name) {
+        TabContent(stringResource(SharedRes.string.feature_finance_accounts)) {
             AccountsScreen(
                 onAddEditSavingsAccount = navController::navigateToSavingAccountAddEdit,
                 onViewSavingAccountDetails = navController::navigateToSavingAccountDetails,
@@ -144,7 +147,7 @@ internal fun MifosNavHost(
             )
         },
 
-        TabContent(FinanceScreenContents.BENEFICIARIES.name) {
+        TabContent(stringResource(SharedRes.string.feature_finance_beneficiaries)) {
             BeneficiaryListScreen(
                 onAddOrEditBeneficiary = navController::navigateToBeneficiaryAddEdit,
             )
