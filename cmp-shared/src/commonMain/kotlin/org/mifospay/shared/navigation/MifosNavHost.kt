@@ -42,7 +42,6 @@ import org.mifospay.feature.faq.navigation.navigateToFAQ
 import org.mifospay.feature.fastmpay.navigation.FAST_MPAY_ROUTE
 import org.mifospay.feature.fastmpay.navigation.fastMpayScreen
 import org.mifospay.feature.fastmpay.navigation.navigateToFastMpay
-import org.mifospay.feature.finance.FinanceScreenContents
 import org.mifospay.feature.finance.navigation.FINANCE_ROUTE
 import org.mifospay.feature.finance.navigation.financeScreen
 import org.mifospay.feature.history.HistoryScreen
