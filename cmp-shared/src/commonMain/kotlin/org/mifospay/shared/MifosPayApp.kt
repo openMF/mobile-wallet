@@ -73,7 +73,7 @@ private fun MifosPayApp(
         }
     }
 
-    LaunchedEffect(uiState) {
+    LaunchedEffect(Unit) {
         val state = uiState
         if (
             state is Success &&
