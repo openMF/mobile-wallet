@@ -13,7 +13,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.navOptions
-import mobile_wallet.cmp_shared.generated.resources.Res as SharedRes
 import mobile_wallet.cmp_shared.generated.resources.feature_finance_accounts
 import mobile_wallet.cmp_shared.generated.resources.feature_finance_beneficiaries
 import mobile_wallet.feature.payments.generated.resources.Res
@@ -91,6 +90,7 @@ import org.mifospay.feature.transfer.intrabank.success.navigateTransferSuccess
 import org.mifospay.feature.transfer.intrabank.success.transferSuccessScreen
 import org.mifospay.feature.upi.setup.navigation.setupUpiPinScreen
 import org.mifospay.shared.ui.MifosAppState
+import mobile_wallet.cmp_shared.generated.resources.Res as SharedRes
 
 const val AUTHENTICATION_VERIFICATION_KEY = "org.mifospay.mifos.authentication_verification_success"
 
