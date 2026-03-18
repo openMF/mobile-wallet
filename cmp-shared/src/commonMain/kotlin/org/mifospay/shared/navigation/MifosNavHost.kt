@@ -18,8 +18,10 @@ import mobile_wallet.feature.payments.generated.resources.feature_payments_histo
 import mobile_wallet.feature.payments.generated.resources.feature_payments_request
 import mobile_wallet.feature.payments.generated.resources.feature_payments_send
 import org.jetbrains.compose.resources.stringResource
+import org.koin.compose.koinInject
 import org.mifos.feature.passcode.internalMifosPasscodeScreen
 import org.mifos.feature.passcode.navigateToInternalMifosPasscodeScreen
+import org.mifospay.core.data.repository.UserVerificationRepository
 import org.mifospay.core.ui.utility.TabContent
 import org.mifospay.feature.accounts.AccountsScreen
 import org.mifospay.feature.accounts.savingsaccount.SavingsAddEditType
@@ -98,6 +100,7 @@ internal fun MifosNavHost(
     modifier: Modifier = Modifier,
 ) {
     val navController = appState.navController
+    val userVerificationRepository = koinInject<UserVerificationRepository>()
 
     val paymentsTabContents = listOf(
         TabContent(stringResource(Res.string.feature_payments_send)) {
@@ -175,6 +178,7 @@ internal fun MifosNavHost(
         internalMifosPasscodeScreen(
             onForgotButton = onClickLogout,
             onAuthenticationSuccess = { verificationKey ->
+                userVerificationRepository.recordVerification()
                 verificationKey?.let {
                     navController.previousBackStackEntry
                         ?.savedStateHandle

@@ -35,6 +35,7 @@ import org.mifospay.core.common.toUiError
 import org.mifospay.core.common.utils.capitalizeWords
 import org.mifospay.core.data.repository.ClientRepository
 import org.mifospay.core.data.repository.ThirdPartyTransferRepository
+import org.mifospay.core.data.repository.UserVerificationRepository
 import org.mifospay.core.network.model.entity.payload.TransferPayload
 import org.mifospay.core.network.model.entity.templates.account.AccountOption
 import org.mifospay.core.ui.DefaultErrorMessageProvider
@@ -46,6 +47,7 @@ const val INTRA_BANK_TRANSFER_VERIFICATION_KEY = "intra-banking_transfer_verific
 internal class TransferConfirmViewModel(
     private val repository: ThirdPartyTransferRepository,
     private val clientRepo: ClientRepository,
+    private val userVerificationRepository: UserVerificationRepository,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<TransferConfirmState, TransferConfirmEvent, TransferConfirmAction>(
     initialState = run {
@@ -232,7 +234,17 @@ internal class TransferConfirmViewModel(
         viewModelScope.launch {
             handleUserVerification(
                 onSuccess = {
-                    handleTransfer()
+                    if (userVerificationRepository.consumeVerification()) {
+                        handleTransfer()
+                    } else {
+                        mutableStateFlow.update {
+                            it.copy(
+                                isProcessing = false,
+                                dialogState = TransferConfirmState.DialogState
+                                    .Error.ValidationError(Res.string.feature_make_transfer_user_verification_failed),
+                            )
+                        }
+                    }
                 },
                 onFailed = {
                     mutableStateFlow.update {

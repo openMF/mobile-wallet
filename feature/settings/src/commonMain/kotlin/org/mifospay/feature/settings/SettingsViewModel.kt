@@ -29,6 +29,7 @@ import org.mifos.authenticator.passcode.PasscodeAction
 import org.mifos.authenticator.passcode.PasscodeManager
 import org.mifospay.core.common.DataState
 import org.mifospay.core.data.repository.SavingsAccountRepository
+import org.mifospay.core.data.repository.UserVerificationRepository
 import org.mifospay.core.datastore.UserPreferencesRepository
 import org.mifospay.core.model.client.Client
 import org.mifospay.core.ui.utils.BaseViewModel
@@ -40,6 +41,7 @@ class SettingsViewModel(
     private val userPreferencesRepository: UserPreferencesRepository,
     private val repository: SavingsAccountRepository,
     private val passcodeManager: PasscodeManager,
+    private val userVerificationRepository: UserVerificationRepository,
     private val savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<SettingsState, SettingsEvent, SettingsAction>(
     initialState = run {
@@ -155,11 +157,13 @@ class SettingsViewModel(
             authenticationSuccess.collect { result ->
                 when (result) {
                     true -> {
-                        passcodeManager.trySendAction(PasscodeAction.DeleteBiometricRegistration)
-                        mutableStateFlow.update {
-                            it.copy(
-                                isBiometricsRegistered = false,
-                            )
+                        if (userVerificationRepository.consumeVerification()) {
+                            passcodeManager.trySendAction(PasscodeAction.DeleteBiometricRegistration)
+                            mutableStateFlow.update {
+                                it.copy(
+                                    isBiometricsRegistered = false,
+                                )
+                            }
                         }
                         savedStateHandle.remove<Boolean?>(DISABLE_BIOMETRICS_VERIFICATION_KEY)
                         authenticationSuccess.value = null
