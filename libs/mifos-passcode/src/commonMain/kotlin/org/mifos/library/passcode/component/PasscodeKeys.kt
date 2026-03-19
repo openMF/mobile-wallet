@@ -31,6 +31,9 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import mobile_wallet.libs.mifos_passcode.generated.resources.Res
+import mobile_wallet.libs.mifos_passcode.generated.resources.library_mifos_passcode_delete_passcode
+import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.mifos.library.passcode.theme.PasscodeKeyButtonStyle
 import org.mifos.library.passcode.theme.blueTint
@@ -111,7 +114,7 @@ internal fun PasscodeKeys(
             PasscodeKey(
                 modifier = Modifier.weight(weight = 1.0F),
                 keyIcon = Icons.Default.Delete,
-                keyIconContentDescription = "Delete Passcode Key Button",
+                keyIconContentDescription = stringResource(Res.string.library_mifos_passcode_delete_passcode),
                 onClick = {
                     deleteKey()
                 },

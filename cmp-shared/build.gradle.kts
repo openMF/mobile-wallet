@@ -59,6 +59,7 @@ kotlin {
             implementation(projects.feature.merchants)
             implementation(projects.feature.upiSetup)
             implementation(projects.feature.onboardingLanguage)
+            implementation(projects.feature.passcode)
         }
 
         desktopMain.dependencies {

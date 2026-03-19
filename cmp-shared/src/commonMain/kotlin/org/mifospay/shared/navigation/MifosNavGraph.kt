@@ -12,6 +12,5 @@ package org.mifospay.shared.navigation
 internal object MifosNavGraph {
     const val ROOT_GRAPH = "root_graph"
     const val LOGIN_GRAPH = "login_graph"
-    const val PASSCODE_GRAPH = "passcode_graph"
     const val MAIN_GRAPH = "main_graph"
 }

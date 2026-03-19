@@ -18,6 +18,9 @@ import mobile_wallet.feature.payments.generated.resources.feature_payments_histo
 import mobile_wallet.feature.payments.generated.resources.feature_payments_request
 import mobile_wallet.feature.payments.generated.resources.feature_payments_send
 import org.jetbrains.compose.resources.stringResource
+import org.mifos.feature.passcode.INTERNAL_MIFOS_PASSCODE_ROUTE
+import org.mifos.feature.passcode.mifosPasscodeScreen
+import org.mifos.feature.passcode.navigateToInternalMifosPasscodeScreen
 import org.mifospay.core.ui.utility.TabContent
 import org.mifospay.feature.accounts.AccountsScreen
 import org.mifospay.feature.accounts.savingsaccount.SavingsAddEditType
@@ -86,6 +89,8 @@ import org.mifospay.feature.transfer.intrabank.success.navigateTransferSuccess
 import org.mifospay.feature.transfer.intrabank.success.transferSuccessScreen
 import org.mifospay.feature.upi.setup.navigation.setupUpiPinScreen
 import org.mifospay.shared.ui.MifosAppState
+
+const val AUTHENTICATION_VERIFICATION_KEY = "org.mifospay.mifos.authentication_verification_success"
 
 @Composable
 internal fun MifosNavHost(
@@ -168,6 +173,29 @@ internal fun MifosNavHost(
         navController = navController,
         modifier = modifier,
     ) {
+        mifosPasscodeScreen(
+            route = INTERNAL_MIFOS_PASSCODE_ROUTE,
+            onForgotButton = onClickLogout,
+            onAuthenticationSuccess = {
+                navController.previousBackStackEntry
+                    ?.savedStateHandle
+                    ?.set(AUTHENTICATION_VERIFICATION_KEY, true)
+                navController.popBackStack()
+            },
+            onPasscodeRejected = {
+                navController.previousBackStackEntry
+                    ?.savedStateHandle
+                    ?.set(AUTHENTICATION_VERIFICATION_KEY, false)
+                navController.popBackStack()
+            },
+            onPasscodeChanged = {
+                navController.popBackStack()
+            },
+            onDisableBiometrics = {
+                navController.popBackStack()
+            },
+        )
+
         homeScreen(
             onNavigateBack = navController::popBackStack,
             onRequest = {
@@ -182,7 +210,7 @@ internal fun MifosNavHost(
         settingsScreen(
             onBackPress = navController::navigateUp,
             onLogout = onClickLogout,
-            onChangePasscode = {},
+            navigateToPasscodeScreen = navController::navigateToInternalMifosPasscodeScreen,
             navigateToEditPasswordScreen = navController::navigateToEditPassword,
             navigateToFaqScreen = navController::navigateToFAQ,
             navigateToNotificationScreen = navController::navigateToNotification,
