@@ -11,7 +11,7 @@
 <resources>
     <string name="feature_auth_login">Ingia</string>
     <string name="feature_auth_welcome_back">Karibu tena!</string>
-    <string name="feature_auth_sign_up">Jisajili.</string>
+    <string name="feature_auth_sign_up">Jisajili</string>
     <string name="feature_auth_password">Nenosiri</string>
     <string name="feature_auth_username">Jina la Mtumiaji</string>
     <string name="feature_auth_logging_in">Inaingia…</string>
