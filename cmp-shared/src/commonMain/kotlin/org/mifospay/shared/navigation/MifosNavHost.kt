@@ -20,9 +20,10 @@ import mobile_wallet.feature.payments.generated.resources.feature_payments_histo
 import mobile_wallet.feature.payments.generated.resources.feature_payments_request
 import mobile_wallet.feature.payments.generated.resources.feature_payments_send
 import org.jetbrains.compose.resources.stringResource
-import org.mifos.feature.passcode.INTERNAL_MIFOS_PASSCODE_ROUTE
-import org.mifos.feature.passcode.mifosPasscodeScreen
+import org.koin.compose.koinInject
+import org.mifos.feature.passcode.internalMifosPasscodeScreen
 import org.mifos.feature.passcode.navigateToInternalMifosPasscodeScreen
+import org.mifospay.core.data.repository.UserVerificationRepository
 import org.mifospay.core.ui.utility.TabContent
 import org.mifospay.feature.accounts.AccountsScreen
 import org.mifospay.feature.accounts.savingsaccount.SavingsAddEditType
@@ -101,6 +102,7 @@ internal fun MifosNavHost(
     modifier: Modifier = Modifier,
 ) {
     val navController = appState.navController
+    val userVerificationRepository = koinInject<UserVerificationRepository>()
 
     val paymentsTabContents = listOf(
         TabContent(stringResource(Res.string.feature_payments_send)) {
@@ -175,19 +177,23 @@ internal fun MifosNavHost(
         navController = navController,
         modifier = modifier,
     ) {
-        mifosPasscodeScreen(
-            route = INTERNAL_MIFOS_PASSCODE_ROUTE,
+        internalMifosPasscodeScreen(
             onForgotButton = onClickLogout,
-            onAuthenticationSuccess = {
-                navController.previousBackStackEntry
-                    ?.savedStateHandle
-                    ?.set(AUTHENTICATION_VERIFICATION_KEY, true)
+            onAuthenticationSuccess = { verificationKey ->
+                userVerificationRepository.recordVerification()
+                verificationKey?.let {
+                    navController.previousBackStackEntry
+                        ?.savedStateHandle
+                        ?.set(it, true)
+                }
                 navController.popBackStack()
             },
-            onPasscodeRejected = {
-                navController.previousBackStackEntry
-                    ?.savedStateHandle
-                    ?.set(AUTHENTICATION_VERIFICATION_KEY, false)
+            onAuthenticationFailed = { verificationKey ->
+                verificationKey?.let {
+                    navController.previousBackStackEntry
+                        ?.savedStateHandle
+                        ?.set(it, false)
+                }
                 navController.popBackStack()
             },
             onPasscodeChanged = {
@@ -440,6 +446,9 @@ internal fun MifosNavHost(
                         launchSingleTop = true
                     },
                 )
+            },
+            navigateForPasscodeVerification = { verificationKey ->
+                navController.navigateToInternalMifosPasscodeScreen(verificationKey)
             },
         )
 

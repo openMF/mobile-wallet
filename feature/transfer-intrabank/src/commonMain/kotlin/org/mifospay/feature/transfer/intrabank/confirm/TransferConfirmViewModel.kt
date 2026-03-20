@@ -12,6 +12,9 @@ package org.mifospay.feature.transfer.intrabank.confirm
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
@@ -22,6 +25,7 @@ import mobile_wallet.feature.transfer_intrabank.generated.resources.feature_make
 import mobile_wallet.feature.transfer_intrabank.generated.resources.feature_make_transfer_error_invalid_amount
 import mobile_wallet.feature.transfer_intrabank.generated.resources.feature_make_transfer_error_same_account
 import mobile_wallet.feature.transfer_intrabank.generated.resources.feature_make_transfer_error_select_account
+import mobile_wallet.feature.transfer_intrabank.generated.resources.feature_make_transfer_user_verification_failed
 import org.jetbrains.compose.resources.StringResource
 import org.mifospay.core.common.DataState
 import org.mifospay.core.common.DateHelper
@@ -31,16 +35,19 @@ import org.mifospay.core.common.toUiError
 import org.mifospay.core.common.utils.capitalizeWords
 import org.mifospay.core.data.repository.ClientRepository
 import org.mifospay.core.data.repository.ThirdPartyTransferRepository
-import org.mifospay.core.network.model.entity.TPTResponse
+import org.mifospay.core.data.repository.UserVerificationRepository
 import org.mifospay.core.network.model.entity.payload.TransferPayload
 import org.mifospay.core.network.model.entity.templates.account.AccountOption
 import org.mifospay.core.ui.DefaultErrorMessageProvider
 import org.mifospay.core.ui.utils.BaseViewModel
 import org.mifospay.feature.transfer.intrabank.navigation.TransferConfirmRoute
 
+const val INTRA_BANK_TRANSFER_VERIFICATION_KEY = "intra-banking_transfer_verification_key"
+
 internal class TransferConfirmViewModel(
     private val repository: ThirdPartyTransferRepository,
     private val clientRepo: ClientRepository,
+    private val userVerificationRepository: UserVerificationRepository,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<TransferConfirmState, TransferConfirmEvent, TransferConfirmAction>(
     initialState = run {
@@ -62,6 +69,7 @@ internal class TransferConfirmViewModel(
             getFromAccounts()
         }
     }
+
     override fun handleAction(action: TransferConfirmAction) {
         when (action) {
             TransferConfirmAction.NavigateBack -> {
@@ -120,8 +128,6 @@ internal class TransferConfirmViewModel(
                 trySendAction(TransferConfirmAction.InitiateTransfer)
             }
 
-            is TransferConfirmAction.Internal.HandleTransferResult -> handleTransferResult(action)
-
             TransferConfirmAction.CloseBottomSheet -> {
                 mutableStateFlow.update {
                     it.copy(showBottomSheet = false)
@@ -131,6 +137,15 @@ internal class TransferConfirmViewModel(
             TransferConfirmAction.OpenBottomSheet -> {
                 mutableStateFlow.update {
                     it.copy(showBottomSheet = true)
+                }
+            }
+
+            is TransferConfirmAction.UpdateUserVerificationResult -> {
+                mutableStateFlow.update {
+                    it.copy(
+                        userVerificationResult = action.result,
+                        isAwaitingPasscodeVerification = false,
+                    )
                 }
             }
         }
@@ -220,62 +235,112 @@ internal class TransferConfirmViewModel(
 
     private fun initiateTransfer() {
         viewModelScope.launch {
-            repository.makeTransfer(state.transferPayload).collect { result ->
-                sendAction(TransferConfirmAction.Internal.HandleTransferResult(result))
+            handleUserVerification(
+                onSuccess = {
+                    if (userVerificationRepository.consumeVerification()) {
+                        handleTransfer()
+                    } else {
+                        mutableStateFlow.update {
+                            it.copy(
+                                isProcessing = false,
+                                dialogState = TransferConfirmState.DialogState
+                                    .Error.ValidationError(Res.string.feature_make_transfer_user_verification_failed),
+                            )
+                        }
+                    }
+                },
+                onFailed = {
+                    mutableStateFlow.update {
+                        it.copy(
+                            isProcessing = false,
+                            dialogState = TransferConfirmState.DialogState
+                                .Error.ValidationError(Res.string.feature_make_transfer_user_verification_failed),
+                        )
+                    }
+                },
+            )
+        }
+    }
+
+    private suspend fun handleTransfer() {
+        mutableStateFlow.update {
+            it.copy(dialogState = TransferConfirmState.DialogState.Loading)
+        }
+        repository.makeTransfer(state.transferPayload).collect { result ->
+            when (result) {
+                is DataState.Loading -> {
+                    mutableStateFlow.update {
+                        it.copy(
+                            isProcessing = true,
+                            dialogState = null,
+                        )
+                    }
+                }
+
+                is DataState.Error -> {
+                    // Use UiError for automatic error message parsing with localized strings
+                    val uiError = result.toUiError(DefaultErrorMessageProvider)
+                    mutableStateFlow.update {
+                        it.copy(
+                            isProcessing = false,
+                            dialogState = TransferConfirmState.DialogState.Error.ApiError(uiError),
+                        )
+                    }
+                }
+
+                is DataState.Success -> {
+                    val response = result.data
+                    val transferResult = TransferResult(
+                        transactionId = response.resourceId ?: "",
+                        amount = state.amount.toDoubleOrNull() ?: 0.0,
+                        fromAccountNo = state.selectedAccount?.accountNo ?: "",
+                        fromAccountName = state.selectedAccount?.clientName ?: "",
+                        toAccountNo = state.toAccountNo,
+                        toAccountName = state.toAccountName,
+                        transferDate = DateHelper.formattedShortDate,
+                        description = state.description.trim(),
+                    )
+                    mutableStateFlow.update {
+                        it.copy(
+                            isProcessing = false,
+                            dialogState = null,
+                            transferResult = transferResult,
+                        )
+                    }
+                    sendEvent(TransferConfirmEvent.OnTransferSuccess(transferResult))
+                }
             }
         }
     }
 
-    private fun handleTransferResult(action: TransferConfirmAction.Internal.HandleTransferResult) {
-        when (val result = action.result) {
-            is DataState.Loading -> {
-                mutableStateFlow.update {
-                    it.copy(
-                        isProcessing = true,
-                        dialogState = null,
-                    )
-                }
-            }
+    private suspend fun handleUserVerification(
+        onSuccess: suspend () -> Unit,
+        onFailed: suspend () -> Unit,
+    ) {
+        mutableStateFlow.update {
+            it.copy(
+                userVerificationResult = null,
+                isAwaitingPasscodeVerification = true,
+            )
+        }
 
-            is DataState.Error -> {
-                // Use UiError for automatic error message parsing with localized strings
-                val uiError = result.toUiError(DefaultErrorMessageProvider)
-                mutableStateFlow.update {
-                    it.copy(
-                        isProcessing = false,
-                        dialogState = TransferConfirmState.DialogState.Error.ApiError(uiError),
-                    )
-                }
-            }
+        sendEvent(TransferConfirmEvent.NavigateForPasscodeVerification)
 
-            is DataState.Success -> {
-                val response = result.data
-                val transferResult = TransferResult(
-                    transactionId = response.resourceId?.toString() ?: "",
-                    amount = state.amount.toDoubleOrNull() ?: 0.0,
-                    fromAccountNo = state.selectedAccount?.accountNo ?: "",
-                    fromAccountName = state.selectedAccount?.clientName ?: "",
-                    toAccountNo = state.toAccountNo,
-                    toAccountName = state.toAccountName,
-                    transferDate = DateHelper.formattedShortDate,
-                    description = state.description.trim(),
-                )
-                mutableStateFlow.update {
-                    it.copy(
-                        isProcessing = false,
-                        dialogState = null,
-                        transferResult = transferResult,
-                    )
-                }
-                sendEvent(TransferConfirmEvent.OnTransferSuccess(transferResult))
-            }
+        val result = stateFlow
+            .map { it.userVerificationResult }
+            .filter { it != null }
+            .first()
+
+        when (result) {
+            true -> onSuccess()
+            false -> onFailed()
+            null -> {}
         }
     }
 
     private fun updateValidationError(message: StringResource) {
         mutableStateFlow.update {
             it.copy(
-                isProcessing = false,
                 dialogState = TransferConfirmState.DialogState.Error.ValidationError(message),
             )
         }
@@ -294,14 +359,16 @@ internal data class TransferConfirmState(
 
     val showBottomSheet: Boolean = false,
     val state: State = State.Loading,
-    val description: String = " ",
+    val description: String = "",
     val selectedAccount: AccountOption? = null,
     val selectedAccountBalance: Double = 0.0,
     val dialogState: DialogState? = null,
     val fromAccountOptions: List<AccountOption>? = emptyList(),
     val balanceMap: Map<String, Double> = emptyMap(),
     val isProcessing: Boolean = false,
+    val isAwaitingPasscodeVerification: Boolean = false,
     val transferResult: TransferResult? = null,
+    val userVerificationResult: Boolean? = null,
 ) {
     val amountIsValid: Boolean
         get() = amount.isNotEmpty() && amount.toDoubleOrNull() != null && amount.toDouble() <= selectedAccountBalance
@@ -384,28 +451,19 @@ data class TransferResult(
 
 internal sealed interface TransferConfirmEvent {
     data object OnNavigateBack : TransferConfirmEvent
+    data object NavigateForPasscodeVerification : TransferConfirmEvent
     data class OnTransferSuccess(val transferResult: TransferResult) : TransferConfirmEvent
 }
 
 internal sealed interface TransferConfirmAction {
     data object NavigateBack : TransferConfirmAction
-
     data object DismissDialog : TransferConfirmAction
-
     data object InitiateTransfer : TransferConfirmAction
-
     data object RetryTransfer : TransferConfirmAction
-
     data class AmountChanged(val amount: String) : TransferConfirmAction
-
     data class DescriptionChanged(val desc: String) : TransferConfirmAction
-
     data class SelectAccount(val account: AccountOption?) : TransferConfirmAction
-
-    sealed interface Internal : TransferConfirmAction {
-        data class HandleTransferResult(val result: DataState<TPTResponse>) : Internal
-    }
-
     data object OpenBottomSheet : TransferConfirmAction
     data object CloseBottomSheet : TransferConfirmAction
+    data class UpdateUserVerificationResult(val result: Boolean) : TransferConfirmAction
 }
