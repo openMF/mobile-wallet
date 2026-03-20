@@ -14,7 +14,7 @@
     <string name="feature_history_transaction_date">लेन-देन की तारीख : </string>
     <string name="feature_history_other">अन्य</string>
     <string name="feature_history_pan_id">पैन आईडी</string>
-    <string name="feature_history_view_Receipt">रसीद देखें</string>
+    <string name="feature_history_view_receipt">रसीद देखें</string>
     <string name="feature_history_error_oops">उफ़!</string>
     <string name="feature_history_empty">आपका लेन-देन इतिहास खाली है</string>
     <string name="feature_history_empty_filter">चयनित फ़िल्टर के लिए आपका लेन-देन इतिहास खाली है</string>
