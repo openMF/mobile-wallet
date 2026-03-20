@@ -123,7 +123,7 @@ internal fun TransferConfirmScreen(
     val lifecycleOwner = LocalLifecycleOwner.current
     LaunchedEffect(lifecycleOwner) {
         lifecycleOwner.repeatOnLifecycle(Lifecycle.State.RESUMED) {
-            if (state.isProcessing && authResult == null) {
+            if (authResult == null && state.isAwaitingPasscodeVerification) {
                 viewModel.trySendAction(
                     TransferConfirmAction.UpdateUserVerificationResult(false),
                 )

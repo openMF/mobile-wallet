@@ -142,7 +142,10 @@ internal class TransferConfirmViewModel(
 
             is TransferConfirmAction.UpdateUserVerificationResult -> {
                 mutableStateFlow.update {
-                    it.copy(userVerificationResult = action.result)
+                    it.copy(
+                        userVerificationResult = action.result,
+                        isAwaitingPasscodeVerification = false,
+                    )
                 }
             }
         }
@@ -314,7 +317,12 @@ internal class TransferConfirmViewModel(
         onSuccess: suspend () -> Unit,
         onFailed: suspend () -> Unit,
     ) {
-        mutableStateFlow.update { it.copy(userVerificationResult = null) }
+        mutableStateFlow.update {
+            it.copy(
+                userVerificationResult = null,
+                isAwaitingPasscodeVerification = true,
+            )
+        }
 
         sendEvent(TransferConfirmEvent.NavigateForPasscodeVerification)
 
@@ -358,6 +366,7 @@ internal data class TransferConfirmState(
     val fromAccountOptions: List<AccountOption>? = emptyList(),
     val balanceMap: Map<String, Double> = emptyMap(),
     val isProcessing: Boolean = false,
+    val isAwaitingPasscodeVerification: Boolean = false,
     val transferResult: TransferResult? = null,
     val userVerificationResult: Boolean? = null,
 ) {
