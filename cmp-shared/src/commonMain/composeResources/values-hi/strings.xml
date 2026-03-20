@@ -24,8 +24,8 @@
     <string name="interbank_server">इंटरबैंक सर्वर</string>
     <string name="no_interbank_servers">कोई इंटरबैंक सर्वर उपलब्ध नहीं है</string>
     <string name="default_string">डिफ़ॉल्ट</string>
-    <string name="tenant_value">टेनेंट: %1$d</string>
-    <string name="error_message">त्रुटि: %1$d</string>
+    <string name="tenant_value">टेनेंट: %1$s</string>
+    <string name="error_message">त्रुटि: %1$s</string>
 
     <!-- Finance Tab Labels -->
     <string name="feature_finance_accounts">खाते</string>
