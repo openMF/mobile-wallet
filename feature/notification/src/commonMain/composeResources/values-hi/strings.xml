@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copyright 2024 Mifos Initiative
+
+    This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+    If a copy of the MPL was not distributed with this file,
+    You can obtain one at https://mozilla.org/MPL/2.0/.
+
+    See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+-->
+<resources>
+    <string name="feature_notification_notifications">सूचनाएं</string>
+    <string name="feature_notification_error_oops">ओह!</string>
+    <string name="feature_notification_unexpected_error_subtitle">एक अप्रत्याशित त्रुटि हुई। कृपया पुनः प्रयास करें।</string>
+    <string name="feature_notification_loading">लोड हो रहा है</string>
+    <string name="feature_notification_nothing_to_notify">सूचित करने के लिए कुछ नहीं</string>
+    <string name="feature_notification_there_is_nothing_to_show">दिखाने के लिए कुछ नहीं है</string>
+</resources>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copyright 2024 Mifos Initiative
+
+    This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+    If a copy of the MPL was not distributed with this file,
+    You can obtain one at https://mozilla.org/MPL/2.0/.
+
+    See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+-->
+<resources>
+    <string name="feature_settings_alert_disable_account">Apakah Anda yakin ingin menonaktifkan akun?</string>
+    <string name="feature_settings_notification_settings">Pengaturan Notifikasi</string>
+    <string name="feature_settings_faq">FAQ</string>
+    <string name="feature_settings_settings">Pengaturan</string>
+    <string name="feature_settings_change_password">Ubah Kata Sandi</string>
+    <string name="feature_settings_change_passcode">Ubah Kode Akses</string>
+    <string name="feature_settings_enable_biometrics">Aktifkan Biometrik</string>
+    <string name="feature_settings_disable_biometrics">Nonaktifkan Biometrik</string>
+    <string name="feature_settings_biometrics_not_set">Biometrik belum diatur di perangkat ini</string>
+    <string name="feature_settings_biometrics_not_available">Biometrik tidak tersedia di perangkat ini</string>
+    <string name="feature_settings_log_out">Keluar</string>
+    <string name="feature_settings_disable_account">Nonaktifkan Akun</string>
+    <string name="feature_settings_alert_disable_account_desc">Ini akan menghapus semua informasi tentang akun Anda</string>
+    <string name="feature_settings_ok">OK</string>
+    <string name="feature_settings_cancel">Batal</string>
+    <string name="feature_settings_log_out_title">Apakah Anda ingin keluar?</string>
+    <string name="feature_settings_profile">Profil</string>
+    <string name="feature_settings_empty"></string>
+    <string name="feature_settings_yes">Ya</string>
+    <string name="feature_settings_no">Tidak</string>
+</resources>

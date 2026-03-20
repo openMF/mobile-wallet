@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copyright 2024 Mifos Initiative
+
+    This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+    If a copy of the MPL was not distributed with this file,
+    You can obtain one at https://mozilla.org/MPL/2.0/.
+
+    See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+-->
+<resources>
+    <string name="feature_home_loading">Memuat</string>
+    <string name="start_sending_your_money_tax_free">Mulai kirim uang bebas pajak!</string>
+    <string name="feature_home_desc">Mifos Pay adalah tempat terbaik bagi pengguna untuk menerima dan mengirim uang. Mulai menabung sekarang!</string>
+    <string name="feature_home_wallet_balance">Saldo Dompet</string>
+    <string name="feature_home_view_more">Lihat Lebih Banyak</string>
+    <string name="feature_home_mark_default">Tandai sebagai Default</string>
+    <string name="feature_home_request">Terima</string>
+    <string name="feature_home_request_money">Minta Uang</string>
+    <string name="feature_home_send">Kirim</string>
+    <string name="feature_home_send_money">Kirim Uang</string>
+    <string name="feature_home_account_type">Jenis akun</string>
+    <string name="home_filter_transactions">Filter Transaksi</string>
+    <string name="home_transaction_history">Riwayat Transaksi</string>
+    <string name="home_see_all">Lihat Semua</string>
+    <string name="home_no_transactions_found">Tidak ada transaksi yang cocok dengan filter yang dipilih</string>
+    <string name="feature_home_account_success">Akun ditandai sebagai default</string>
+    <string name="feature_home_account_error">Gagal menandai akun sebagai default</string>
+    <string name="feature_home_no_account">Tidak ada akun yang ditemukan</string>
+    <string name="feature_home_failed_to_load_accounts">Gagal memuat akun. Silakan coba lagi.</string>
+    <string name="feature_home_account_number">No. Akun: %1$s</string>
+</resources>

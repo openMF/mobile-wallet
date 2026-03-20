@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copyright 2024 Mifos Initiative
+
+    This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+    If a copy of the MPL was not distributed with this file,
+    You can obtain one at https://mozilla.org/MPL/2.0/.
+
+    See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+-->
+<resources>
+    <string name="feature_history_title">ইতিহাস</string>
+    <string name="feature_history_transaction_id">লেনদেন আইডি : </string>
+    <string name="feature_history_transaction_date">লেনদেনের তারিখ : </string>
+    <string name="feature_history_other">অন্যান্য</string>
+    <string name="feature_history_pan_id">প্যান আইডি</string>
+    <string name="feature_history_view_Receipt">রসিদ দেখুন</string>
+    <string name="feature_history_error_oops">উফ!</string>
+    <string name="feature_history_empty">আপনার লেনদেনের ইতিহাস খালি</string>
+    <string name="feature_history_empty_filter">নির্বাচিত ফিল্টারের জন্য আপনার লেনদেনের ইতিহাস খালি</string>
+    <string name="feature_history_error">একটি অপ্রত্যাশিত ত্রুটি ঘটেছে। আবার চেষ্টা করুন.</string>
+    <string name="feature_history_all">সব</string>
+    <string name="feature_history_credits">ক্রেডিট</string>
+    <string name="feature_history_debits">ডেবিট</string>
+    <string name="feature_history_loading">লোড হচ্ছে</string>
+    <string name="feature_history_no_account">কোনো অ্যাকাউন্ট পাওয়া যায়নি</string>
+    <string name="feature_history_no_transactions_found">কোনো লেনদেন পাওয়া যায়নি</string>
+    <string name="feature_history_specific_transactions_history">নির্দিষ্ট লেনদেনের ইতিহাস</string>
+    <string name="feature_history_transaction_details">লেনদেনের বিবরণ</string>
+    <string name="feature_history_share">শেয়ার করুন</string>
+    <string name="feature_history_paid_to">প্রদান করা হয়েছে</string>
+    <string name="feature_history_debited_from">ডেবিট করা হয়েছে</string>
+    <string name="feature_history_error_fallback">ত্রুটি</string>
+    <string name="feature_history_description">স্থানান্তর বিবরণ :</string>
+    <string name="feature_history_select_account">অ্যাকাউন্ট নির্বাচন করুন</string>
+    <string name="feature_history_account_number">অ্যাকাউন্ট নম্বর: %1$s</string>
+    <string name="feature_history_account_balance">ব্যালেন্স: %1$s %2$s</string>
+    <string name="feature_history_header_account">অ্যাকাউন্ট: %1$s</string>
+    <string name="feature_history_header_all">সব লেনদেন</string>
+    <string name="feature_history_header_debit">ডেবিট লেনদেন</string>
+    <string name="feature_history_header_credit">ক্রেডিট লেনদেন</string>
+    <string name="feature_history_filter_content_desc">ফিল্টার</string>
+    <string name="feature_history_filter_title">লেনদেন ফিল্টার করুন</string>
+    <string name="feature_history_filter_clear_all">সব মুছুন</string>
+    <string name="feature_history_filter_by_account">অ্যাকাউন্ট অনুযায়ী ফিল্টার করুন :</string>
+    <string name="feature_history_filter_transaction_type">লেনদেনের ধরন:</string>
+    <string name="feature_history_filter_apply">ফিল্টার প্রয়োগ করুন</string>
+</resources>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copyright 2024 Mifos Initiative
+
+    This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+    If a copy of the MPL was not distributed with this file,
+    You can obtain one at https://mozilla.org/MPL/2.0/.
+
+    See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+-->
+<resources>
+    <string name="feature_settings_alert_disable_account">Tem certeza que deseja desativar a conta?</string>
+    <string name="feature_settings_notification_settings">Configurações de notificação</string>
+    <string name="feature_settings_faq">Perguntas frequentes</string>
+    <string name="feature_settings_settings">Configurações</string>
+    <string name="feature_settings_change_password">Alterar senha</string>
+    <string name="feature_settings_change_passcode">Alterar código de acesso</string>
+    <string name="feature_settings_enable_biometrics">Ativar biometria</string>
+    <string name="feature_settings_disable_biometrics">Desativar biometria</string>
+    <string name="feature_settings_biometrics_not_set">Biometria não configurada neste dispositivo</string>
+    <string name="feature_settings_biometrics_not_available">Biometria não disponível neste dispositivo</string>
+    <string name="feature_settings_log_out">Sair</string>
+    <string name="feature_settings_disable_account">Desativar conta</string>
+    <string name="feature_settings_alert_disable_account_desc">Isso excluirá todas as informações sobre sua conta</string>
+    <string name="feature_settings_ok">OK</string>
+    <string name="feature_settings_cancel">Cancelar</string>
+    <string name="feature_settings_log_out_title">Deseja sair?</string>
+    <string name="feature_settings_profile">Perfil</string>
+    <string name="feature_settings_empty"></string>
+    <string name="feature_settings_yes">Sim</string>
+    <string name="feature_settings_no">Não</string>
+</resources>

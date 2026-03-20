@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copyright 2024 Mifos Initiative
+
+    This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+    If a copy of the MPL was not distributed with this file,
+    You can obtain one at https://mozilla.org/MPL/2.0/.
+
+    See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+-->
+<resources>
+    <string name="feature_settings_alert_disable_account">¿Estás seguro de que deseas deshabilitar la cuenta?</string>
+    <string name="feature_settings_notification_settings">Configuración de notificaciones</string>
+    <string name="feature_settings_faq">Preguntas frecuentes</string>
+    <string name="feature_settings_settings">Configuración</string>
+    <string name="feature_settings_change_password">Cambiar contraseña</string>
+    <string name="feature_settings_change_passcode">Cambiar código de acceso</string>
+    <string name="feature_settings_enable_biometrics">Activar biometría</string>
+    <string name="feature_settings_disable_biometrics">Desactivar biometría</string>
+    <string name="feature_settings_biometrics_not_set">La biometría no está configurada en este dispositivo</string>
+    <string name="feature_settings_biometrics_not_available">La biometría no está disponible en este dispositivo</string>
+    <string name="feature_settings_log_out">Cerrar sesión</string>
+    <string name="feature_settings_disable_account">Deshabilitar cuenta</string>
+    <string name="feature_settings_alert_disable_account_desc">Esto eliminará toda la información de tu cuenta</string>
+    <string name="feature_settings_ok">Aceptar</string>
+    <string name="feature_settings_cancel">Cancelar</string>
+    <string name="feature_settings_log_out_title">¿Deseas cerrar sesión?</string>
+    <string name="feature_settings_profile">Perfil</string>
+    <string name="feature_settings_empty"></string>
+    <string name="feature_settings_yes">Sí</string>
+    <string name="feature_settings_no">No</string>
+</resources>

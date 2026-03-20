@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copyright 2024 Mifos Initiative
+
+    This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+    If a copy of the MPL was not distributed with this file,
+    You can obtain one at https://mozilla.org/MPL/2.0/.
+
+    See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+-->
+<resources>
+    <string name="feature_notification_notifications">الإشعارات</string>
+    <string name="feature_notification_error_oops">عذرًا!</string>
+    <string name="feature_notification_unexpected_error_subtitle">حدث خطأ غير متوقع. يرجى المحاولة مجددًا.</string>
+    <string name="feature_notification_loading">جارٍ التحميل</string>
+    <string name="feature_notification_nothing_to_notify">لا يوجد إشعارات</string>
+    <string name="feature_notification_there_is_nothing_to_show">لا يوجد شيء لعرضه</string>
+</resources>

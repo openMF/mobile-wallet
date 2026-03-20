@@ -9,6 +9,24 @@
     See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
 -->
 <resources>
+    <string name="app_name">Mifos Pay</string>
+    <string name="home">Início</string>
+    <string name="payments">Pagamentos</string>
+    <string name="finance">Finanças</string>
+    <string name="history">Histórico</string>
+    <string name="transaction_history">Histórico de transações</string>
+    <string name="settings">Configurações</string>
+    <string name="not_connected">⚠️ Você não está conectado à internet</string>
+    <string name="faq">Perguntas frequentes</string>
+    <string name="update">Atualizar</string>
+    <string name="select_instance">Selecionar instância</string>
+    <string name="main_server">Servidor principal</string>
+    <string name="interbank_server">Servidor interbancário</string>
+    <string name="no_interbank_servers">Nenhum servidor interbancário disponível</string>
+    <string name="default_string">Padrão</string>
+    <string name="tenant_value">Tenant: %1$d</string>
+    <string name="error_message">Erro: %1$d</string>
+
     <!-- Finance Tab Labels -->
     <string name="feature_finance_accounts">Contas</string>
     <string name="feature_finance_beneficiaries">Beneficiários</string>

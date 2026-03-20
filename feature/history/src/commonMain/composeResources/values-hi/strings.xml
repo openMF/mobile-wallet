@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copyright 2024 Mifos Initiative
+
+    This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+    If a copy of the MPL was not distributed with this file,
+    You can obtain one at https://mozilla.org/MPL/2.0/.
+
+    See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+-->
+<resources>
+    <string name="feature_history_title">इतिहास</string>
+    <string name="feature_history_transaction_id">लेन-देन आईडी : </string>
+    <string name="feature_history_transaction_date">लेन-देन की तारीख : </string>
+    <string name="feature_history_other">अन्य</string>
+    <string name="feature_history_pan_id">पैन आईडी</string>
+    <string name="feature_history_view_Receipt">रसीद देखें</string>
+    <string name="feature_history_error_oops">उफ़!</string>
+    <string name="feature_history_empty">आपका लेन-देन इतिहास खाली है</string>
+    <string name="feature_history_empty_filter">चयनित फ़िल्टर के लिए आपका लेन-देन इतिहास खाली है</string>
+    <string name="feature_history_error">एक अप्रत्याशित त्रुटि हुई। कृपया पुन: प्रयास करें।</string>
+    <string name="feature_history_all">सभी</string>
+    <string name="feature_history_credits">क्रेडिट</string>
+    <string name="feature_history_debits">डेबिट</string>
+    <string name="feature_history_loading">लोड हो रहा है</string>
+    <string name="feature_history_no_account">कोई खाता नहीं मिला</string>
+    <string name="feature_history_no_transactions_found">कोई लेन-देन नहीं मिला</string>
+    <string name="feature_history_specific_transactions_history">विशिष्ट लेन-देन इतिहास</string>
+    <string name="feature_history_transaction_details">लेन-देन विवरण</string>
+    <string name="feature_history_share">शेयर करें</string>
+    <string name="feature_history_paid_to">भुगतान किया गया</string>
+    <string name="feature_history_debited_from">से डेबिट किया गया</string>
+    <string name="feature_history_error_fallback">त्रुटि</string>
+    <string name="feature_history_description">ट्रांसफर विवरण :</string>
+    <string name="feature_history_select_account">खाता चुनें</string>
+    <string name="feature_history_account_number">खाता संख्या: %1$s</string>
+    <string name="feature_history_account_balance">बैलेंस: %1$s %2$s</string>
+    <string name="feature_history_header_account">खाता: %1$s</string>
+    <string name="feature_history_header_all">सभी लेन-देन</string>
+    <string name="feature_history_header_debit">डेबिट लेन-देन</string>
+    <string name="feature_history_header_credit">क्रेडिट लेन-देन</string>
+    <string name="feature_history_filter_content_desc">फ़िल्टर</string>
+    <string name="feature_history_filter_title">लेन-देन फ़िल्टर करें</string>
+    <string name="feature_history_filter_clear_all">सभी साफ़ करें</string>
+    <string name="feature_history_filter_by_account">खाते के अनुसार फ़िल्टर करें :</string>
+    <string name="feature_history_filter_transaction_type">लेन-देन का प्रकार:</string>
+    <string name="feature_history_filter_apply">फ़िल्टर लागू करें</string>
+</resources>

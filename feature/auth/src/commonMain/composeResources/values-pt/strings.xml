@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copyright 2024 Mifos Initiative
+
+    This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+    If a copy of the MPL was not distributed with this file,
+    You can obtain one at https://mozilla.org/MPL/2.0/.
+
+    See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+-->
+<resources>
+    <string name="feature_auth_login">Entrar</string>
+    <string name="feature_auth_welcome_back">Bem-vindo de volta!</string>
+    <string name="feature_auth_sign_up">Cadastre-se.</string>
+    <string name="feature_auth_password">Senha</string>
+    <string name="feature_auth_username">Nome de usuário</string>
+    <string name="feature_auth_logging_in">Entrando…</string>
+    <string name="feature_auth_create_an_account">Criar uma conta</string>
+    <string name="feature_auth_sign_up_as_merchant">Cadastrar como comerciante</string>
+    <string name="feature_auth_sign_up_as_customer">Cadastrar como cliente</string>
+    <string name="feature_auth_or">ou</string>
+    <string name="feature_auth_google_account">Facilitar meu cadastro com a Conta Google</string>
+    <string name="feature_auth_validate_email">Insira um endereço de e-mail válido</string>
+    <string name="feature_auth_all_fields_are_mandatory">Todos os campos são obrigatórios, exceto a Linha de Endereço 2.</string>
+    <string name="feature_auth_complete_your_registration">Conclua seu cadastro</string>
+    <string name="feature_auth_first_name">Nome</string>
+    <string name="feature_auth_last_name">Sobrenome</string>
+    <string name="feature_auth_email">E-mail</string>
+    <string name="feature_auth_confirm_password">Confirmar senha</string>
+    <string name="feature_auth_name_of_business">Nome do negócio</string>
+    <string name="feature_auth_address_line_1">Linha de Endereço 1</string>
+    <string name="feature_auth_address_line_2">Linha de Endereço 2 (opcional)</string>
+    <string name="feature_auth_pin_code">CEP</string>
+    <string name="feature_auth_state">Estado</string>
+    <string name="feature_auth_country">País</string>
+    <string name="feature_auth_mobile_no">Número de celular</string>
+    <string name="feature_auth_phone_number">Número de telefone</string>
+    <string name="feature_auth_complete">Concluir</string>
+    <string name="feature_auth_password_strength">Força da senha:</string>
+    <string name="feature_auth_password_requirements">Certifique-se de que a senha contenha:\n- Pelo menos uma letra maiúscula\n- Pelo menos uma letra minúscula\n- Pelo menos um dígito\n- Pelo menos um caractere especial\n- Sem espaços ou repetição consecutiva</string>
+    <string name="feature_auth_enter_mobile_number">Inserir número de celular</string>
+    <string name="feature_auth_enter_otp">Inserir OTP</string>
+    <string name="feature_auth_enter_mobile_number_description">Deve estar ativo no seu dispositivo e vinculado à sua conta bancária.</string>
+    <string name="feature_auth_enter_otp_received">Insira o OTP recebido no seu dispositivo registrado</string>
+    <string name="feature_auth_verify_phone">Verificar telefone</string>
+    <string name="feature_auth_verify_otp">Verificar OTP</string>
+    <string name="feature_auth_error_select_savings_account">Selecione uma conta poupança.</string>
+    <string name="feature_auth_error_first_name_required">Insira seu nome.</string>
+    <string name="feature_auth_error_last_name_required">Insira seu sobrenome.</string>
+    <string name="feature_auth_error_username_required">Insira seu nome de usuário.</string>
+    <string name="feature_auth_error_email_required">Insira seu e-mail.</string>
+    <string name="feature_auth_error_email_invalid">Insira um e-mail válido.</string>
+    <string name="feature_auth_error_mobile_required">Insira seu número de celular.</string>
+    <string name="feature_auth_error_mobile_invalid">O número de celular deve ter 10 dígitos.</string>
+    <string name="feature_auth_error_password_required">O campo de senha não pode estar vazio.</string>
+    <string name="feature_auth_error_password_invalid">Sua senha não atende aos requisitos.</string>
+    <string name="feature_auth_error_confirm_password_required">O campo de confirmação de senha não pode estar vazio.</string>
+    <string name="feature_auth_error_passwords_mismatch">As senhas não coincidem.</string>
+    <string name="feature_auth_error_address_line1_required">Insira a linha de endereço 1.</string>
+    <string name="feature_auth_error_pincode_required">Insira seu CEP.</string>
+    <string name="feature_auth_error_country_required">Insira seu país.</string>
+    <string name="feature_auth_error_state_required">Insira seu estado.</string>
+    <string name="feature_auth_error_field_already_exists">%1$s já existe.</string>
+    <string name="feature_auth_error_check_uniqueness_failed">Não foi possível verificar se %1$s é único. Tente novamente mais tarde.</string>
+    <string name="feature_auth_registration_successful">Cadastro realizado com sucesso.</string>
+    <string name="feature_auth_connected_to">Conectado a: %1$s</string>
+    <string name="feature_auth_enable_app_lock">Ativar bloqueio do app</string>
+    <string name="feature_auth_use_your_device_lock">Usar bloqueio do dispositivo</string>
+    <string name="feature_auth_device_lock_subtitle">Use seu PIN, senha, padrão, Face ID ou impressão digital existentes</string>
+    <string name="feature_auth_use_mifos_passcode">Usar código Mifos de 4 dígitos</string>
+    <string name="feature_auth_mifos_passcode_subtitle">Use seu código de acesso Mifos</string>
+    <string name="feature_auth_continue">Continuar</string>
+    <string name="feature_auth_no_authentication_options_set">Nenhuma opção de autenticação definida</string>
+    <string name="feature_auth_setup_authentication_options">Configurar opções de autenticação</string>
+    <string name="feature_auth_yes">Sim</string>
+    <string name="feature_auth_no">Não</string>
+    <string name="feature_auth_error">Erro</string>
+    <string name="feature_auth_ok">OK</string>
+    <string name="feature_auth_radiobutton">Botão de opção</string>
+</resources>
