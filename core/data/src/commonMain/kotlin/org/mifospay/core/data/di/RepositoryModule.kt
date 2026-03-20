@@ -40,6 +40,7 @@ import org.mifospay.core.data.repository.StandingInstructionRepository
 import org.mifospay.core.data.repository.ThirdPartyTransferRepository
 import org.mifospay.core.data.repository.TwoFactorAuthRepository
 import org.mifospay.core.data.repository.UserRepository
+import org.mifospay.core.data.repository.UserVerificationRepository
 import org.mifospay.core.data.repositoryImpl.AccountRepositoryImpl
 import org.mifospay.core.data.repositoryImpl.AppLockRepositoryImpl
 import org.mifospay.core.data.repositoryImpl.AssetRepositoryImpl
@@ -65,6 +66,7 @@ import org.mifospay.core.data.repositoryImpl.StandingInstructionRepositoryImpl
 import org.mifospay.core.data.repositoryImpl.ThirdPartyTransferRepositoryImpl
 import org.mifospay.core.data.repositoryImpl.TwoFactorAuthRepositoryImpl
 import org.mifospay.core.data.repositoryImpl.UserRepositoryImpl
+import org.mifospay.core.data.repositoryImpl.UserVerificationRepositoryImpl
 import org.mifospay.core.data.util.NetworkMonitor
 import org.mifospay.core.data.util.QrTransferRouter
 import org.mifospay.core.data.util.TimeZoneMonitor
@@ -112,6 +114,7 @@ val RepositoryModule = module {
 
     singleOf(::MifosPasscodeAdapterImpl).bind<PasscodeStorageAdapter>()
     singleOf(::AppLockRepositoryImpl).bind<AppLockRepository>()
+    singleOf(::UserVerificationRepositoryImpl).bind<UserVerificationRepository>()
 
     // QR Transfer Router for smart intra/inter-bank routing
     single { QrTransferRouter(userPreferencesRepository = get()) }
