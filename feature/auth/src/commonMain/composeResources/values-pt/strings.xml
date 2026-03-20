@@ -11,7 +11,7 @@
 <resources>
     <string name="feature_auth_login">Entrar</string>
     <string name="feature_auth_welcome_back">Bem-vindo de volta!</string>
-    <string name="feature_auth_sign_up">Cadastre-se.</string>
+    <string name="feature_auth_sign_up">Cadastre-se</string>
     <string name="feature_auth_password">Senha</string>
     <string name="feature_auth_username">Nome de usuário</string>
     <string name="feature_auth_logging_in">Entrando…</string>
