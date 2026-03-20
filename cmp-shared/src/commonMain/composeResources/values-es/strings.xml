@@ -24,8 +24,8 @@
     <string name="interbank_server">Servidor interbancario</string>
     <string name="no_interbank_servers">No hay servidores interbancarios disponibles</string>
     <string name="default_string">Predeterminado</string>
-    <string name="tenant_value">Tenant: %1$d</string>
-    <string name="error_message">Error: %1$d</string>
+    <string name="tenant_value">Tenant: %1$s</string>
+    <string name="error_message">Error: %1$s</string>
 
     <!-- Finance Tab Labels -->
     <string name="feature_finance_accounts">Cuentas</string>
