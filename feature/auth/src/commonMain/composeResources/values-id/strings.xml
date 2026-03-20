@@ -11,7 +11,7 @@
 <resources>
     <string name="feature_auth_login">Masuk</string>
     <string name="feature_auth_welcome_back">Selamat datang kembali!</string>
-    <string name="feature_auth_sign_up">Daftar.</string>
+    <string name="feature_auth_sign_up">Daftar</string>
     <string name="feature_auth_password">Kata Sandi</string>
     <string name="feature_auth_username">Nama Pengguna</string>
     <string name="feature_auth_logging_in">Sedang masuk…</string>
