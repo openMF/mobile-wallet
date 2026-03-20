@@ -107,6 +107,7 @@
     <string name="feature_make_transfer_show_balance">Show Balance</string>
     <string name="feature_make_transfer_hide_balance">Hide Balance</string>
     <string name="feature_make_transfer_amount_error">Your account has insufficient balance</string>
+    <string name="feature_make_transfer_user_verification_failed">User verification failed</string>
 
     <!-- Error dialog titles -->
     <string name="feature_transfer_error_title">Error</string>

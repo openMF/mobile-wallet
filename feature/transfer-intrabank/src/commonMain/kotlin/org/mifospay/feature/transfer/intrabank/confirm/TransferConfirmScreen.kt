@@ -58,7 +58,11 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.repeatOnLifecycle
 import mobile_wallet.feature.transfer_intrabank.generated.resources.Res
 import mobile_wallet.feature.transfer_intrabank.generated.resources.feature_make_transfer_amount
 import mobile_wallet.feature.transfer_intrabank.generated.resources.feature_make_transfer_amount_error
@@ -98,15 +102,42 @@ import template.core.base.designsystem.theme.KptTheme
 internal fun TransferConfirmScreen(
     navigateBack: () -> Unit,
     onTransferSuccess: (TransferResult) -> Unit,
+    navigateForPasscodeVerification: (String) -> Unit,
+    entryStateHandle: SavedStateHandle,
     modifier: Modifier = Modifier,
     viewModel: TransferConfirmViewModel = koinViewModel(),
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
 
+    val authResult by entryStateHandle
+        .getStateFlow<Boolean?>(INTRA_BANK_TRANSFER_VERIFICATION_KEY, null)
+        .collectAsStateWithLifecycle()
+
+    LaunchedEffect(authResult) {
+        authResult?.let { result ->
+            entryStateHandle.remove<Boolean>(INTRA_BANK_TRANSFER_VERIFICATION_KEY)
+            viewModel.trySendAction(TransferConfirmAction.UpdateUserVerificationResult(result))
+        }
+    }
+
+    val lifecycleOwner = LocalLifecycleOwner.current
+    LaunchedEffect(lifecycleOwner) {
+        lifecycleOwner.repeatOnLifecycle(Lifecycle.State.RESUMED) {
+            if (authResult == null && state.isAwaitingPasscodeVerification) {
+                viewModel.trySendAction(
+                    TransferConfirmAction.UpdateUserVerificationResult(false),
+                )
+            }
+        }
+    }
+
     EventsEffect(viewModel) { event ->
         when (event) {
             TransferConfirmEvent.OnNavigateBack -> navigateBack.invoke()
             is TransferConfirmEvent.OnTransferSuccess -> onTransferSuccess.invoke(event.transferResult)
+            TransferConfirmEvent.NavigateForPasscodeVerification -> {
+                navigateForPasscodeVerification(INTRA_BANK_TRANSFER_VERIFICATION_KEY)
+            }
         }
     }
 
