@@ -24,8 +24,8 @@
     <string name="interbank_server">خادم بين البنوك</string>
     <string name="no_interbank_servers">لا توجد خوادم بين البنوك متاحة</string>
     <string name="default_string">افتراضي</string>
-    <string name="tenant_value">المستأجر: %1$d</string>
-    <string name="error_message">خطأ: %1$d</string>
+    <string name="tenant_value">المستأجر: %1$s</string>
+    <string name="error_message">خطأ: %1$s</string>
 
     <!-- Finance Tab Labels -->
     <string name="feature_finance_accounts">الحسابات</string>
