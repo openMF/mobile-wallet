@@ -12,11 +12,11 @@ package org.mifospay.feature.transfer.intrabank.navigation
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
-import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
 import kotlinx.serialization.Serializable
 import org.mifospay.feature.transfer.intrabank.confirm.TransferConfirmScreen
 import org.mifospay.feature.transfer.intrabank.confirm.TransferResult
+import template.core.base.ui.composableWithSlideTransitions
 
 @Serializable
 data class TransferConfirmRoute(
@@ -59,14 +59,17 @@ fun NavController.navigateToTransferConfirm(
 fun NavGraphBuilder.transferConfirmScreen(
     navigateBack: () -> Unit,
     onTransferSuccess: (TransferResult, String) -> Unit,
+    navigateForPasscodeVerification: (String) -> Unit,
 ) {
-    composable<TransferConfirmRoute> { backStackEntry ->
+    composableWithSlideTransitions<TransferConfirmRoute> { backStackEntry ->
         val route = backStackEntry.toRoute<TransferConfirmRoute>()
         TransferConfirmScreen(
             navigateBack = navigateBack,
             onTransferSuccess = { transferResult ->
                 onTransferSuccess(transferResult, route.returnDestination)
             },
+            navigateForPasscodeVerification = navigateForPasscodeVerification,
+            entryStateHandle = backStackEntry.savedStateHandle,
         )
     }
 }

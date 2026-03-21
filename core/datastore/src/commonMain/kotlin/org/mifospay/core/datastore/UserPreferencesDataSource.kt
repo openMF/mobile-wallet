@@ -40,7 +40,7 @@ private const val SELECTED_INSTANCE_KEY = "selectedInstance"
 private const val SELECTED_INTERBANK_INSTANCE_KEY = "selectedInterbankInstance"
 private const val ACCOUNT_EXTERNAL_IDS_KEY = "accountExternalIds"
 private const val LANGUAGE_KEY = "language"
-private const val SHOW_ONBOARDING_KEY = "showOnboarding"
+private const val SHOW_LANGUAGE_SCREEN_KEY = "showLanguageScreen"
 
 @OptIn(ExperimentalSerializationApi::class)
 class UserPreferencesDataSource(
@@ -105,9 +105,9 @@ class UserPreferencesDataSource(
         ),
     )
 
-    private val _showOnboarding = MutableStateFlow(
+    private val _showLanguageScreen = MutableStateFlow(
         settings.getBoolean(
-            key = SHOW_ONBOARDING_KEY,
+            key = SHOW_LANGUAGE_SCREEN_KEY,
             defaultValue = true,
         ),
     )
@@ -136,7 +136,7 @@ class UserPreferencesDataSource(
 
     val language = _language
 
-    val showOnboarding = _showOnboarding
+    val showLanguageScreen = _showLanguageScreen
 
     val accountExternalIds = _accountExternalIds
 
@@ -218,10 +218,10 @@ class UserPreferencesDataSource(
         }
     }
 
-    suspend fun setShowOnboarding(showOnboarding: Boolean) {
+    suspend fun setShowLanguageScreen(showLanguageScreen: Boolean) {
         withContext(dispatcher) {
-            settings.putBoolean(SHOW_ONBOARDING_KEY, showOnboarding)
-            _showOnboarding.value = showOnboarding
+            settings.putBoolean(SHOW_LANGUAGE_SCREEN_KEY, showLanguageScreen)
+            _showLanguageScreen.value = showLanguageScreen
         }
     }
 
@@ -239,12 +239,12 @@ class UserPreferencesDataSource(
     suspend fun clearInfo() {
         withContext(dispatcher) {
             val currentLanguage = _language.value
-            val currentShowOnboarding = _showOnboarding.value
+            val currentShowLanguageScreen = _showLanguageScreen.value
 
             settings.clear()
 
             settings.putLanguage(currentLanguage)
-            settings.putBoolean(SHOW_ONBOARDING_KEY, currentShowOnboarding)
+            settings.putBoolean(SHOW_LANGUAGE_SCREEN_KEY, currentShowLanguageScreen)
 
             _userInfo.value = UserInfoPreferences.DEFAULT
             _clientInfo.value = ClientPreferences.DEFAULT

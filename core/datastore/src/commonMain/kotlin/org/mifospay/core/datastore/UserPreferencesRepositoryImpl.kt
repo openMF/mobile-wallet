@@ -96,8 +96,8 @@ class UserPreferencesRepositoryImpl(
             started = SharingStarted.Eagerly,
         )
 
-    override val showOnboarding: StateFlow<Boolean>
-        get() = preferenceManager.showOnboarding.stateIn(
+    override val showLanguageScreen: StateFlow<Boolean>
+        get() = preferenceManager.showLanguageScreen.stateIn(
             scope = unconfinedScope,
             initialValue = true,
             started = SharingStarted.Eagerly,
@@ -199,9 +199,9 @@ class UserPreferencesRepositoryImpl(
         }
     }
 
-    override suspend fun setShowOnboarding(showOnboarding: Boolean): DataState<Unit> {
+    override suspend fun setShowLanguageScreen(showLanguageScreen: Boolean): DataState<Unit> {
         return try {
-            preferenceManager.setShowOnboarding(showOnboarding)
+            preferenceManager.setShowLanguageScreen(showLanguageScreen)
             DataState.Success(Unit)
         } catch (e: Exception) {
             DataState.Error(e)

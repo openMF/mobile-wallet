@@ -27,7 +27,6 @@ import androidx.navigationevent.compose.rememberNavigationEventState
 import mobile_wallet.feature.passcode.generated.resources.Res
 import mobile_wallet.feature.passcode.generated.resources.feature_authenticator_error
 import mobile_wallet.feature.passcode.generated.resources.feature_authenticator_ok
-import mobile_wallet.feature.passcode.generated.resources.feature_authenticator_user_not_registered_error_message
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
@@ -53,7 +52,7 @@ fun MifosPasscode(
     onAuthenticationSuccess: () -> Unit,
     onForgotButton: () -> Unit = {},
     onPasscodeCreation: () -> Unit = {},
-    onPasscodeRejected: () -> Unit = {},
+    onAuthenticationFailed: () -> Unit = {},
     onPasscodeChanged: () -> Unit = {},
     onDisableBiometrics: () -> Unit = {},
     viewModel: MifosPasscodeViewModel = koinViewModel(),
@@ -63,8 +62,6 @@ fun MifosPasscode(
 
     val systemAuthProvider = platformAuthenticationProvider.current
     val systemAvailableAuthOption = platformAvailableAuthenticationOption.current
-
-    val userNotRegisteredErrorMessage = stringResource(Res.string.feature_authenticator_user_not_registered_error_message)
 
     val navEventState = rememberNavigationEventState(
         currentInfo = MifosPasscodeCurrentInfo,
@@ -82,7 +79,7 @@ fun MifosPasscode(
                 MifosPasscodeEvent.OnAuthenticationSuccess -> onAuthenticationSuccess()
                 MifosPasscodeEvent.OnForgotButton -> onForgotButton()
                 MifosPasscodeEvent.OnPasscodeCreation -> onPasscodeCreation()
-                MifosPasscodeEvent.OnPasscodeRejected -> onPasscodeRejected()
+                MifosPasscodeEvent.OnPasscodeRejected -> onAuthenticationFailed()
                 MifosPasscodeEvent.OnPasscodeChanged -> onPasscodeChanged()
                 MifosPasscodeEvent.OnDisableBiometrics -> onDisableBiometrics()
             }
@@ -149,6 +146,8 @@ fun MifosPasscode(
         onPasscodeChanged = {
             viewModel.trySendAction(MifosPasscodeAction.PasscodeChanged)
         },
+        // onPasscodeRejected will be renamed to onAuthenticationFailed in next update to the passcode library.
+        // It is the commonCallBack function for failed biometrics and passcode authentication.
         onPasscodeRejected = {
             viewModel.trySendAction(MifosPasscodeAction.PasscodeRejected)
         },

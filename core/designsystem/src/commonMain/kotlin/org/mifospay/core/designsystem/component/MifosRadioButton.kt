@@ -44,6 +44,7 @@ import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.mifospay.core.designsystem.theme.MifosTheme
 import template.core.base.designsystem.theme.KptTheme
@@ -83,7 +84,7 @@ fun MifosRadioButton(
         fontWeight = FontWeight.SemiBold,
     ),
     unselectedTextStyle: TextStyle = KptTheme.typography.titleSmall,
-    borderWidth: Dp = KptTheme.strokes.thin,
+    borderWidth: Dp = 1.dp,
     animationDurationMs: Int = 200,
 ) {
     // Animated colors for smooth transitions

@@ -33,9 +33,9 @@ class MifosPayViewModel(
     val uiState: StateFlow<MainUiState> = combine(
         userDataRepository.userInfo,
         userDataRepository.language,
-        userDataRepository.showOnboarding,
-    ) { userInfo, language, showOnboarding ->
-        MainUiState.Success(userInfo, language, showOnboarding)
+        userDataRepository.showLanguageScreen,
+    ) { userInfo, language, showLanguageScreen ->
+        MainUiState.Success(userInfo, language, showLanguageScreen)
     }.stateIn(
         scope = viewModelScope,
         initialValue = MainUiState.Loading,
@@ -63,6 +63,6 @@ sealed interface MainUiState {
     data class Success(
         val userData: UserInfo,
         val language: LanguageConfig,
-        val showOnboarding: Boolean,
+        val showLanguageScreen: Boolean,
     ) : MainUiState
 }

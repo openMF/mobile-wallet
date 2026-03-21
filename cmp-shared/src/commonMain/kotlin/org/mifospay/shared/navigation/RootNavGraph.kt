@@ -21,11 +21,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import org.mifos.authenticator.biometrics.platformAuthenticationProvider
 import org.mifos.authenticator.biometrics.platformAuthenticator.PlatformAuthenticatorStatus
-import org.mifos.feature.passcode.RE_AUTH_MIFOS_PASSCODE_ROUTE
-import org.mifos.feature.passcode.ROOT_MIFOS_PASSCODE_ROUTE
 import org.mifos.feature.passcode.biometricSetupScreen
-import org.mifos.feature.passcode.mifosPasscodeScreen
 import org.mifos.feature.passcode.navigateToBiometricSetupScreen
+import org.mifos.feature.passcode.reAuthMifosPasscodeScreen
+import org.mifos.feature.passcode.rootMifosPasscodeScreen
 import org.mifospay.core.data.util.NetworkMonitor
 import org.mifospay.core.data.util.TimeZoneMonitor
 import org.mifospay.feature.onboarding.language.navigation.ONBOARDING_LANGUAGE_ROUTE
@@ -71,8 +70,7 @@ internal fun RootNavGraph(
             },
         )
 
-        mifosPasscodeScreen(
-            route = ROOT_MIFOS_PASSCODE_ROUTE,
+        rootMifosPasscodeScreen(
             onForgotButton = onClickLogout,
             onAuthenticationSuccess = {
                 navHostController.popBackStack()
@@ -99,8 +97,7 @@ internal fun RootNavGraph(
             },
         )
 
-        mifosPasscodeScreen(
-            route = RE_AUTH_MIFOS_PASSCODE_ROUTE,
+        reAuthMifosPasscodeScreen(
             onForgotButton = {
                 navHostController.popBackStack()
                 onClickLogout()

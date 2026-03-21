@@ -105,7 +105,7 @@ private fun MifosPayApp(
 
     val navDestination = when (uiState) {
         is MainUiState.Loading -> LOGIN_GRAPH
-        is Success -> if ((uiState as Success).showOnboarding) {
+        is Success -> if ((uiState as Success).showLanguageScreen) {
             ONBOARDING_LANGUAGE_ROUTE
         } else if ((uiState as Success).userData.authenticated) {
             ROOT_MIFOS_PASSCODE_ROUTE

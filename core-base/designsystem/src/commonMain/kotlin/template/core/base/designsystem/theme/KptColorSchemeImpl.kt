@@ -25,7 +25,6 @@ import template.core.base.designsystem.core.KptColorScheme
 import template.core.base.designsystem.core.KptElevation
 import template.core.base.designsystem.core.KptShapes
 import template.core.base.designsystem.core.KptSpacing
-import template.core.base.designsystem.core.KptStrokes
 import template.core.base.designsystem.core.KptThemeProvider
 import template.core.base.designsystem.core.KptTypography
 
@@ -195,21 +194,12 @@ data class KptElevationImpl(
 ) : KptElevation
 
 @Immutable
-data class KptStrokesImpl(
-    override val dpPoint5: Dp = 0.5.dp,
-    override val thin: Dp = 1.dp,
-    override val dp2: Dp = 2.dp,
-    override val dp5: Dp = 5.dp,
-) : KptStrokes
-
-@Immutable
 data class KptThemeProviderImpl(
     override val colors: KptColorScheme = KptColorSchemeImpl(),
     override val typography: KptTypography = KptTypographyImpl(),
     override val shapes: KptShapes = KptShapesImpl(),
     override val spacing: KptSpacing = KptSpacingImpl(),
     override val elevation: KptElevation = KptElevationImpl(),
-    override val strokes: KptStrokes = KptStrokesImpl(),
 ) : KptThemeProvider
 
 val LocalKptColors = staticCompositionLocalOf<KptColorScheme> { KptColorSchemeImpl() }
@@ -217,7 +207,6 @@ val LocalKptTypography = staticCompositionLocalOf<KptTypography> { KptTypography
 val LocalKptShapes = staticCompositionLocalOf<KptShapes> { KptShapesImpl() }
 val LocalKptSpacing = staticCompositionLocalOf<KptSpacing> { KptSpacingImpl() }
 val LocalKptElevation = staticCompositionLocalOf<KptElevation> { KptElevationImpl() }
-val LocalKptStrokes = staticCompositionLocalOf<KptStrokes> { KptStrokesImpl() }
 
 @ComponentDsl
 class KptThemeBuilder {
@@ -226,7 +215,6 @@ class KptThemeBuilder {
     private var shapes: KptShapes = KptShapesImpl()
     private var spacing: KptSpacing = KptSpacingImpl()
     private var elevation: KptElevation = KptElevationImpl()
-    private var strokes: KptStrokes = KptStrokesImpl()
 
     fun colors(block: KptColorSchemeBuilder.() -> Unit) {
         colors = KptColorSchemeBuilder().apply(block).build()
@@ -248,17 +236,12 @@ class KptThemeBuilder {
         elevation = KptElevationBuilder().apply(block).build()
     }
 
-    fun strokes(block: KptStrokesBuilder.() -> Unit) {
-        strokes = KptStrokesBuilder().apply(block).build()
-    }
-
     fun build(): KptThemeProvider = KptThemeProviderImpl(
         colors = colors,
         typography = typography,
         shapes = shapes,
         spacing = spacing,
         elevation = elevation,
-        strokes = strokes,
     )
 }
 
@@ -413,21 +396,6 @@ class KptElevationBuilder {
     )
 }
 
-@ComponentDsl
-class KptStrokesBuilder {
-    var dpPoint5: Dp = 0.5.dp
-    var thin: Dp = 1.dp
-    var dp2: Dp = 2.dp
-    var dp5: Dp = 5.dp
-
-    fun build(): KptStrokes = KptStrokesImpl(
-        dpPoint5 = dpPoint5,
-        thin = thin,
-        dp2 = dp2,
-        dp5 = dp5,
-    )
-}
-
 object KptTheme {
     val colorScheme: KptColorScheme
         @Composable get() = LocalKptColors.current
@@ -443,9 +411,6 @@ object KptTheme {
 
     val elevation: KptElevation
         @Composable get() = LocalKptElevation.current
-
-    val strokes: KptStrokes
-        @Composable get() = LocalKptStrokes.current
 }
 
 fun kptTheme(block: KptThemeBuilder.() -> Unit): KptThemeProvider {

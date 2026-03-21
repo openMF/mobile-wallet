@@ -56,16 +56,16 @@ class OnboardingLanguageViewModel(
 
     private fun handleSetLanguage(action: OnboardingLanguageAction.SetLanguage) {
         viewModelScope.launch {
-            val onboardingResult = userPreferencesRepository.setShowOnboarding(false)
-            val langResult = userPreferencesRepository.setLanguage(action.languageConfig)
+            val showLanguageScreenResult = userPreferencesRepository.setShowLanguageScreen(false)
+            val saveLanguageResult = userPreferencesRepository.setLanguage(action.languageConfig)
 
             when {
-                langResult is DataState.Error -> {
+                saveLanguageResult is DataState.Error -> {
                     mutableStateFlow.update {
                         it.copy(error = Res.string.feature_onboarding_error_saving_settings)
                     }
                 }
-                onboardingResult is DataState.Error -> {
+                showLanguageScreenResult is DataState.Error -> {
                     mutableStateFlow.update {
                         it.copy(error = Res.string.feature_onboarding_error_saving_settings)
                     }

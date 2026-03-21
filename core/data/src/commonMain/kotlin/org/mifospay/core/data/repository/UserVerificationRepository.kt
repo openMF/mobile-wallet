@@ -7,10 +7,9 @@
  *
  * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
  */
-package org.mifospay.core.ui.utils
+package org.mifospay.core.data.repository
 
-object AuthenticationUtils {
-    const val DEFAULT_USER_ID = "mifosUser"
-    const val DEFAULT_USER_EMAIL = "mifospay@mifos.org"
-    const val DEFAULT_DISPLAY_NAME = "Mifos Pay User"
+interface UserVerificationRepository {
+    fun recordVerification()
+    fun consumeVerification(): Boolean
 }
