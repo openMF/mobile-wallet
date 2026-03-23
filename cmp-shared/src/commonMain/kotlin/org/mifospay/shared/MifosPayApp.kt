@@ -15,6 +15,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
@@ -44,9 +45,10 @@ fun MifosPaySharedApp(
     modifier: Modifier = Modifier,
     networkMonitor: NetworkMonitor = koinInject(),
     timeZoneMonitor: TimeZoneMonitor = koinInject(),
+    onLanguageChange: (String) -> Unit = {},
 ) {
     PlatformAuthenticatorLocalCompositionProvider {
-        MifosPayApp(modifier, networkMonitor, timeZoneMonitor)
+        MifosPayApp(modifier, networkMonitor, timeZoneMonitor, onLanguageChange = onLanguageChange)
     }
 }
 
@@ -57,6 +59,7 @@ private fun MifosPayApp(
     networkMonitor: NetworkMonitor,
     timeZoneMonitor: TimeZoneMonitor,
     viewModel: MifosPayViewModel = koinViewModel(),
+    onLanguageChange: (String) -> Unit = {},
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val navController = rememberNavController()
@@ -74,12 +77,21 @@ private fun MifosPayApp(
         }
     }
 
-    LaunchedEffect(Unit) {
-        if (
-            (uiState as Success).userData.authenticated &&
-            !viewModel.isPasscodeCreated()
-        ) {
-            viewModel.logOut()
+    var hasCheckedPasscodeOnStartup by remember { mutableStateOf(false) }
+
+    LaunchedEffect(uiState) {
+        val state = uiState
+        if (state is Success) {
+            val langCode = state.language.localName
+            if (!langCode.isNullOrEmpty()) {
+                onLanguageChange(langCode)
+            }
+            if (!hasCheckedPasscodeOnStartup) {
+                hasCheckedPasscodeOnStartup = true
+                if (state.userData.authenticated && !viewModel.isPasscodeCreated()) {
+                    viewModel.logOut()
+                }
+            }
         }
     }
 
