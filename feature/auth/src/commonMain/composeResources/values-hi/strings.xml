@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copyright 2024 Mifos Initiative
+
+    This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+    If a copy of the MPL was not distributed with this file,
+    You can obtain one at https://mozilla.org/MPL/2.0/.
+
+    See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+-->
+<resources>
+    <string name="feature_auth_login">लॉगिन</string>
+    <string name="feature_auth_welcome_back">वापस स्वागत है!</string>
+    <string name="feature_auth_sign_up">साइन अप करें।</string>
+    <string name="feature_auth_password">पासवर्ड</string>
+    <string name="feature_auth_username">उपयोगकर्ता नाम</string>
+    <string name="feature_auth_logging_in">लॉगिन हो रहा है…</string>
+    <string name="feature_auth_create_an_account">एक खाता बनाएं</string>
+    <string name="feature_auth_sign_up_as_merchant">व्यापारी के रूप में साइन अप करें</string>
+    <string name="feature_auth_sign_up_as_customer">ग्राहक के रूप में साइन अप करें</string>
+    <string name="feature_auth_or">या</string>
+    <string name="feature_auth_google_account">Google खाते से साइन-अप आसान बनाएं</string>
+    <string name="feature_auth_validate_email">कृपया एक वैध ईमेल पता दर्ज करें</string>
+    <string name="feature_auth_all_fields_are_mandatory">पता पंक्ति 2 को छोड़कर सभी फ़ील्ड अनिवार्य हैं।</string>
+    <string name="feature_auth_complete_your_registration">अपना पंजीकरण पूरा करें</string>
+    <string name="feature_auth_first_name">पहला नाम</string>
+    <string name="feature_auth_last_name">अंतिम नाम</string>
+    <string name="feature_auth_email">ई-मेल</string>
+    <string name="feature_auth_confirm_password">पासवर्ड की पुष्टि करें</string>
+    <string name="feature_auth_name_of_business">व्यवसाय का नाम</string>
+    <string name="feature_auth_address_line_1">पता पंक्ति 1</string>
+    <string name="feature_auth_address_line_2">पता पंक्ति 2 (वैकल्पिक)</string>
+    <string name="feature_auth_pin_code">पिन कोड</string>
+    <string name="feature_auth_state">राज्य</string>
+    <string name="feature_auth_country">देश</string>
+    <string name="feature_auth_mobile_no">मोबाइल नंबर</string>
+    <string name="feature_auth_phone_number">फ़ोन नंबर</string>
+    <string name="feature_auth_complete">पूर्ण</string>
+    <string name="feature_auth_password_strength">पासवर्ड की मज़बूती:</string>
+    <string name="feature_auth_password_requirements">कृपया सुनिश्चित करें कि पासवर्ड में हो:\n- कम से कम एक बड़ा अक्षर\n- कम से कम एक छोटा अक्षर\n- कम से कम एक संख्या\n- कम से कम एक विशेष अक्षर\n- कोई स्थान या लगातार दोहराव नहीं</string>
+    <string name="feature_auth_enter_mobile_number">मोबाइल नंबर दर्ज करें</string>
+    <string name="feature_auth_enter_otp">OTP दर्ज करें</string>
+    <string name="feature_auth_enter_mobile_number_description">यह आपके डिवाइस पर सक्रिय और आपके बैंक खाते से जुड़ा होना चाहिए।</string>
+    <string name="feature_auth_enter_otp_received">अपने पंजीकृत डिवाइस पर प्राप्त OTP दर्ज करें</string>
+    <string name="feature_auth_verify_phone">फ़ोन सत्यापित करें</string>
+    <string name="feature_auth_verify_otp">OTP सत्यापित करें</string>
+    <string name="feature_auth_error_select_savings_account">कृपया एक बचत खाता चुनें।</string>
+    <string name="feature_auth_error_first_name_required">कृपया अपना पहला नाम दर्ज करें।</string>
+    <string name="feature_auth_error_last_name_required">कृपया अपना अंतिम नाम दर्ज करें।</string>
+    <string name="feature_auth_error_username_required">कृपया अपना उपयोगकर्ता नाम दर्ज करें।</string>
+    <string name="feature_auth_error_email_required">कृपया अपना ईमेल दर्ज करें।</string>
+    <string name="feature_auth_error_email_invalid">कृपया एक वैध ईमेल दर्ज करें।</string>
+    <string name="feature_auth_error_mobile_required">कृपया अपना मोबाइल नंबर दर्ज करें।</string>
+    <string name="feature_auth_error_mobile_invalid">मोबाइल नंबर 10 अंकों का होना चाहिए।</string>
+    <string name="feature_auth_error_password_required">पासवर्ड फ़ील्ड खाली नहीं हो सकता।</string>
+    <string name="feature_auth_error_password_invalid">आपका पासवर्ड आवश्यकताओं को पूरा नहीं करता।</string>
+    <string name="feature_auth_error_confirm_password_required">पासवर्ड पुष्टि फ़ील्ड खाली नहीं हो सकती।</string>
+    <string name="feature_auth_error_passwords_mismatch">पासवर्ड मेल नहीं खाते।</string>
+    <string name="feature_auth_error_address_line1_required">कृपया पता पंक्ति 1 दर्ज करें।</string>
+    <string name="feature_auth_error_pincode_required">कृपया अपना पिन कोड दर्ज करें।</string>
+    <string name="feature_auth_error_country_required">कृपया अपना देश दर्ज करें।</string>
+    <string name="feature_auth_error_state_required">कृपया अपना राज्य दर्ज करें।</string>
+    <string name="feature_auth_error_field_already_exists">%1$s पहले से मौजूद है।</string>
+    <string name="feature_auth_error_check_uniqueness_failed">यह जाँचना संभव नहीं कि %1$s अद्वितीय है। कृपया बाद में पुनः प्रयास करें।</string>
+    <string name="feature_auth_registration_successful">पंजीकरण सफल।</string>
+    <string name="feature_auth_connected_to">इससे जुड़ा: %1$s</string>
+    <string name="feature_auth_enable_app_lock">ऐप लॉक सक्षम करें</string>
+    <string name="feature_auth_use_your_device_lock">अपने डिवाइस लॉक का उपयोग करें</string>
+    <string name="feature_auth_device_lock_subtitle">अपना मौजूदा PIN, पासवर्ड, पैटर्न, फेस ID या फिंगरप्रिंट उपयोग करें</string>
+    <string name="feature_auth_use_mifos_passcode">4-अंकीय Mifos पासकोड उपयोग करें</string>
+    <string name="feature_auth_mifos_passcode_subtitle">अपना Mifos पासकोड उपयोग करें</string>
+    <string name="feature_auth_continue">जारी रखें</string>
+    <string name="feature_auth_no_authentication_options_set">कोई प्रमाणीकरण विकल्प सेट नहीं है</string>
+    <string name="feature_auth_setup_authentication_options">प्रमाणीकरण विकल्प सेट करें</string>
+    <string name="feature_auth_yes">हाँ</string>
+    <string name="feature_auth_no">नहीं</string>
+    <string name="feature_auth_error">त्रुटि</string>
+    <string name="feature_auth_ok">ठीक है</string>
+    <string name="feature_auth_radiobutton">रेडियो बटन</string>
+</resources>

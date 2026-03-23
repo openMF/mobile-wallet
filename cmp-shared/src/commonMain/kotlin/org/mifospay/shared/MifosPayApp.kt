@@ -74,8 +74,10 @@ private fun MifosPayApp(
     }
 
     LaunchedEffect(Unit) {
+        val state = uiState
         if (
-            (uiState as Success).userData.authenticated &&
+            state is Success &&
+            state.userData.authenticated &&
             !viewModel.isPasscodeCreated()
         ) {
             viewModel.logOut()

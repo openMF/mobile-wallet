@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copyright 2024 Mifos Initiative
+
+    This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+    If a copy of the MPL was not distributed with this file,
+    You can obtain one at https://mozilla.org/MPL/2.0/.
+
+    See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+-->
+<resources>
+    <string name="feature_history_title">Historique</string>
+    <string name="feature_history_transaction_id">ID de transaction : </string>
+    <string name="feature_history_transaction_date">Date de transaction : </string>
+    <string name="feature_history_other">Autre</string>
+    <string name="feature_history_pan_id">ID PAN</string>
+    <string name="feature_history_view_Receipt">Voir le reçu</string>
+    <string name="feature_history_error_oops">Oups !</string>
+    <string name="feature_history_empty">Votre historique de transactions est vide</string>
+    <string name="feature_history_empty_filter">Votre historique de transactions est vide pour les filtres sélectionnés</string>
+    <string name="feature_history_error">Une erreur inattendue s\'est produite. Veuillez réessayer.</string>
+    <string name="feature_history_all">Tout</string>
+    <string name="feature_history_credits">Crédits</string>
+    <string name="feature_history_debits">Débits</string>
+    <string name="feature_history_loading">Chargement</string>
+    <string name="feature_history_no_account">Aucun compte trouvé</string>
+    <string name="feature_history_no_transactions_found">Aucune transaction trouvée</string>
+    <string name="feature_history_specific_transactions_history">Historique des transactions spécifiques</string>
+    <string name="feature_history_transaction_details">Détails de la transaction</string>
+    <string name="feature_history_share">Partager</string>
+    <string name="feature_history_paid_to">Payé à</string>
+    <string name="feature_history_debited_from">Débité de</string>
+    <string name="feature_history_error_fallback">Erreur</string>
+    <string name="feature_history_description">Description du transfert :</string>
+    <string name="feature_history_select_account">Sélectionner un compte</string>
+    <string name="feature_history_account_number">N° de compte : %1$s</string>
+    <string name="feature_history_account_balance">Solde : %1$s %2$s</string>
+    <string name="feature_history_header_account">Compte : %1$s</string>
+    <string name="feature_history_header_all">Toutes les transactions</string>
+    <string name="feature_history_header_debit">Transactions de débit</string>
+    <string name="feature_history_header_credit">Transactions de crédit</string>
+    <string name="feature_history_filter_content_desc">Filtrer</string>
+    <string name="feature_history_filter_title">Filtrer les transactions</string>
+    <string name="feature_history_filter_clear_all">Tout effacer</string>
+    <string name="feature_history_filter_by_account">Filtrer par compte :</string>
+    <string name="feature_history_filter_transaction_type">Type de transaction :</string>
+    <string name="feature_history_filter_apply">Appliquer les filtres</string>
+</resources>

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copyright 2024 Mifos Initiative
+
+    This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+    If a copy of the MPL was not distributed with this file,
+    You can obtain one at https://mozilla.org/MPL/2.0/.
+
+    See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+-->
+<resources>
+    <string name="feature_auth_login">লগইন</string>
+    <string name="feature_auth_welcome_back">স্বাগতম!</string>
+    <string name="feature_auth_sign_up">নিবন্ধন করুন।</string>
+    <string name="feature_auth_password">পাসওয়ার্ড</string>
+    <string name="feature_auth_username">ব্যবহারকারীর নাম</string>
+    <string name="feature_auth_logging_in">লগইন হচ্ছে…</string>
+    <string name="feature_auth_create_an_account">একটি অ্যাকাউন্ট তৈরি করুন</string>
+    <string name="feature_auth_sign_up_as_merchant">মার্চেন্ট হিসেবে নিবন্ধন করুন</string>
+    <string name="feature_auth_sign_up_as_customer">গ্রাহক হিসেবে নিবন্ধন করুন</string>
+    <string name="feature_auth_or">বা</string>
+    <string name="feature_auth_google_account">Google অ্যাকাউন্ট দিয়ে নিবন্ধন সহজ করুন</string>
+    <string name="feature_auth_validate_email">একটি বৈধ ইমেইল ঠিকানা দিন</string>
+    <string name="feature_auth_all_fields_are_mandatory">ঠিকানা লাইন 2 ছাড়া সমস্ত ক্ষেত্র বাধ্যতামূলক।</string>
+    <string name="feature_auth_complete_your_registration">নিবন্ধন সম্পন্ন করুন</string>
+    <string name="feature_auth_first_name">প্রথম নাম</string>
+    <string name="feature_auth_last_name">শেষ নাম</string>
+    <string name="feature_auth_email">ই-মেইল</string>
+    <string name="feature_auth_confirm_password">পাসওয়ার্ড নিশ্চিত করুন</string>
+    <string name="feature_auth_name_of_business">ব্যবসার নাম</string>
+    <string name="feature_auth_address_line_1">ঠিকানা লাইন ১</string>
+    <string name="feature_auth_address_line_2">ঠিকানা লাইন ২ (ঐচ্ছিক)</string>
+    <string name="feature_auth_pin_code">পিন কোড</string>
+    <string name="feature_auth_state">রাজ্য</string>
+    <string name="feature_auth_country">দেশ</string>
+    <string name="feature_auth_mobile_no">মোবাইল নম্বর</string>
+    <string name="feature_auth_phone_number">ফোন নম্বর</string>
+    <string name="feature_auth_complete">সম্পন্ন</string>
+    <string name="feature_auth_password_strength">পাসওয়ার্ডের শক্তি:</string>
+    <string name="feature_auth_password_requirements">পাসওয়ার্ডে নিশ্চিত করুন:\n- কমপক্ষে একটি বড় হাতের অক্ষর\n- কমপক্ষে একটি ছোট হাতের অক্ষর\n- কমপক্ষে একটি সংখ্যা\n- কমপক্ষে একটি বিশেষ অক্ষর\n- কোনো স্থান বা ক্রমাগত পুনরাবৃত্তি নেই</string>
+    <string name="feature_auth_enter_mobile_number">মোবাইল নম্বর দিন</string>
+    <string name="feature_auth_enter_otp">OTP দিন</string>
+    <string name="feature_auth_enter_mobile_number_description">এটি আপনার ডিভাইসে সক্রিয় থাকতে হবে এবং আপনার ব্যাংক অ্যাকাউন্টের সাথে যুক্ত থাকতে হবে।</string>
+    <string name="feature_auth_enter_otp_received">নিবন্ধিত ডিভাইসে প্রাপ্ত OTP দিন</string>
+    <string name="feature_auth_verify_phone">ফোন যাচাই করুন</string>
+    <string name="feature_auth_verify_otp">OTP যাচাই করুন</string>
+    <string name="feature_auth_error_select_savings_account">একটি সঞ্চয় অ্যাকাউন্ট নির্বাচন করুন।</string>
+    <string name="feature_auth_error_first_name_required">আপনার প্রথম নাম দিন।</string>
+    <string name="feature_auth_error_last_name_required">আপনার শেষ নাম দিন।</string>
+    <string name="feature_auth_error_username_required">আপনার ব্যবহারকারীর নাম দিন।</string>
+    <string name="feature_auth_error_email_required">আপনার ইমেইল দিন।</string>
+    <string name="feature_auth_error_email_invalid">একটি বৈধ ইমেইল দিন।</string>
+    <string name="feature_auth_error_mobile_required">আপনার মোবাইল নম্বর দিন।</string>
+    <string name="feature_auth_error_mobile_invalid">মোবাইল নম্বর ১০ সংখ্যার হতে হবে।</string>
+    <string name="feature_auth_error_password_required">পাসওয়ার্ড ক্ষেত্র খালি রাখা যাবে না।</string>
+    <string name="feature_auth_error_password_invalid">আপনার পাসওয়ার্ড প্রয়োজনীয়তা পূরণ করে না।</string>
+    <string name="feature_auth_error_confirm_password_required">পাসওয়ার্ড নিশ্চিতকরণ ক্ষেত্র খালি রাখা যাবে না।</string>
+    <string name="feature_auth_error_passwords_mismatch">পাসওয়ার্ড মিলছে না।</string>
+    <string name="feature_auth_error_address_line1_required">আপনার ঠিকানা লাইন ১ দিন।</string>
+    <string name="feature_auth_error_pincode_required">আপনার পিন কোড দিন।</string>
+    <string name="feature_auth_error_country_required">আপনার দেশ দিন।</string>
+    <string name="feature_auth_error_state_required">আপনার রাজ্য দিন।</string>
+    <string name="feature_auth_error_field_already_exists">%1$s ইতিমধ্যে বিদ্যমান।</string>
+    <string name="feature_auth_error_check_uniqueness_failed">%1$s অনন্য কিনা যাচাই করা যাচ্ছে না। পরে আবার চেষ্টা করুন।</string>
+    <string name="feature_auth_registration_successful">নিবন্ধন সফল হয়েছে।</string>
+    <string name="feature_auth_connected_to">সংযুক্ত: %1$s</string>
+    <string name="feature_auth_enable_app_lock">অ্যাপ লক সক্রিয় করুন</string>
+    <string name="feature_auth_use_your_device_lock">আপনার ডিভাইস লক ব্যবহার করুন</string>
+    <string name="feature_auth_device_lock_subtitle">আপনার বিদ্যমান পিন, পাসওয়ার্ড, প্যাটার্ন, ফেস আইডি বা আঙুলের ছাপ ব্যবহার করুন</string>
+    <string name="feature_auth_use_mifos_passcode">৪-সংখ্যার Mifos পাসকোড ব্যবহার করুন</string>
+    <string name="feature_auth_mifos_passcode_subtitle">আপনার Mifos পাসকোড ব্যবহার করুন</string>
+    <string name="feature_auth_continue">চালিয়ে যান</string>
+    <string name="feature_auth_no_authentication_options_set">কোনো প্রমাণীকরণ বিকল্প সেট করা নেই</string>
+    <string name="feature_auth_setup_authentication_options">প্রমাণীকরণ বিকল্প সেট করুন</string>
+    <string name="feature_auth_yes">হ্যাঁ</string>
+    <string name="feature_auth_no">না</string>
+    <string name="feature_auth_error">ত্রুটি</string>
+    <string name="feature_auth_ok">ঠিক আছে</string>
+    <string name="feature_auth_radiobutton">রেডিও বোতাম</string>
+</resources>

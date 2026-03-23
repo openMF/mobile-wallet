@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copyright 2024 Mifos Initiative
+
+    This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+    If a copy of the MPL was not distributed with this file,
+    You can obtain one at https://mozilla.org/MPL/2.0/.
+
+    See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+-->
+<resources>
+    <string name="feature_faq_question1">আমি কিভাবে একটি অ্যাকাউন্ট যোগ করতে পারি?</string>
+    <string name="feature_faq_question2">আমি কিভাবে আমার পেমেন্ট ইতিহাস দেখতে পারি?</string>
+    <string name="feature_faq_question3">কিভাবে একটি ট্রান্সফার করতে হয়?</string>
+    <string name="feature_faq_question4">আমি কিভাবে একটি কার্ড যোগ করতে পারি?</string>
+    <string name="feature_faq_answer1">একটি অ্যাকাউন্ট যোগ করতে, ফিন্যান্স বিভাগে যান এবং অ্যাকাউন্ট যোগ করুন বোতামে ক্লিক করুন। তারপরে আপনার ব্যাঙ্ক নির্বাচন করুন এবং শুরু করতে আপনার মোবাইল নম্বর যাচাই করুন।</string>
+    <string name="feature_faq_answer2">পেমেন্ট বিভাগে যান। আপনি ইতিহাস ট্যাবের অধীনে আপনার পেমেন্টের ইতিহাস পাবেন।</string>
+    <string name="feature_faq_answer3">ট্রান্সফার করতে, পেমেন্ট বিভাগে যান। সেন্ড ট্যাবের অধীনে, সেখান থেকে আপনি ট্রান্সফারের ধরন বেছে নিতে পারেন, পরিমাণ যোগ করতে পারেন এবং জমা দিতে পারেন।</string>
+    <string name="feature_faq_answer4">ফিন্যান্স বিভাগে যান। কার্ড ট্যাবের অধীনে কার্ড যোগ করুন-এ ক্লিক করুন।</string>
+    <string name="feature_faq">সচরাচর জিজ্ঞাস্য</string>
+</resources>

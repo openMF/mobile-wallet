@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copyright 2024 Mifos Initiative
+
+    This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+    If a copy of the MPL was not distributed with this file,
+    You can obtain one at https://mozilla.org/MPL/2.0/.
+
+    See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+-->
+<resources>
+    <string name="feature_auth_login">Ingia</string>
+    <string name="feature_auth_welcome_back">Karibu tena!</string>
+    <string name="feature_auth_sign_up">Jisajili</string>
+    <string name="feature_auth_password">Nenosiri</string>
+    <string name="feature_auth_username">Jina la Mtumiaji</string>
+    <string name="feature_auth_logging_in">Inaingia…</string>
+    <string name="feature_auth_create_an_account">Fungua akaunti</string>
+    <string name="feature_auth_sign_up_as_merchant">Jisajili kama mfanyabiashara</string>
+    <string name="feature_auth_sign_up_as_customer">Jisajili kama mteja</string>
+    <string name="feature_auth_or">au</string>
+    <string name="feature_auth_google_account">Rahisisha usajili wangu kwa Akaunti ya Google</string>
+    <string name="feature_auth_validate_email">Tafadhali ingiza anwani ya barua pepe sahihi</string>
+    <string name="feature_auth_all_fields_are_mandatory">Sehemu zote ni lazima isipokuwa Mstari wa Anwani 2.</string>
+    <string name="feature_auth_complete_your_registration">Kamilisha usajili wako</string>
+    <string name="feature_auth_first_name">Jina la Kwanza</string>
+    <string name="feature_auth_last_name">Jina la Familia</string>
+    <string name="feature_auth_email">Barua Pepe</string>
+    <string name="feature_auth_confirm_password">Thibitisha Nenosiri</string>
+    <string name="feature_auth_name_of_business">Jina la Biashara</string>
+    <string name="feature_auth_address_line_1">Mstari wa Anwani 1</string>
+    <string name="feature_auth_address_line_2">Mstari wa Anwani 2 (hiari)</string>
+    <string name="feature_auth_pin_code">Nambari ya Posta</string>
+    <string name="feature_auth_state">Mkoa</string>
+    <string name="feature_auth_country">Nchi</string>
+    <string name="feature_auth_mobile_no">Nambari ya Simu</string>
+    <string name="feature_auth_phone_number">Nambari ya Simu</string>
+    <string name="feature_auth_complete">Kamilisha</string>
+    <string name="feature_auth_password_strength">Nguvu ya Nenosiri:</string>
+    <string name="feature_auth_password_requirements">Tafadhali hakikisha nenosiri lina:\n- Angalau herufi moja kubwa\n- Angalau herufi moja ndogo\n- Angalau nambari moja\n- Angalau alama moja maalum\n- Bila nafasi au kurudia mfululizo</string>
+    <string name="feature_auth_enter_mobile_number">Ingiza Nambari ya Simu</string>
+    <string name="feature_auth_enter_otp">Ingiza OTP</string>
+    <string name="feature_auth_enter_mobile_number_description">Inapaswa kuwa hai kwenye kifaa chako na kuunganishwa na akaunti yako ya benki.</string>
+    <string name="feature_auth_enter_otp_received">Ingiza OTP uliyopokea kwenye kifaa chako kilichosajiliwa</string>
+    <string name="feature_auth_verify_phone">Thibitisha Simu</string>
+    <string name="feature_auth_verify_otp">Thibitisha OTP</string>
+    <string name="feature_auth_error_select_savings_account">Tafadhali chagua akaunti ya akiba.</string>
+    <string name="feature_auth_error_first_name_required">Tafadhali ingiza jina lako la kwanza.</string>
+    <string name="feature_auth_error_last_name_required">Tafadhali ingiza jina lako la familia.</string>
+    <string name="feature_auth_error_username_required">Tafadhali ingiza jina lako la mtumiaji.</string>
+    <string name="feature_auth_error_email_required">Tafadhali ingiza barua pepe yako.</string>
+    <string name="feature_auth_error_email_invalid">Tafadhali ingiza barua pepe sahihi.</string>
+    <string name="feature_auth_error_mobile_required">Tafadhali ingiza nambari yako ya simu.</string>
+    <string name="feature_auth_error_mobile_invalid">Nambari ya simu lazima iwe na tarakimu 10.</string>
+    <string name="feature_auth_error_password_required">Sehemu ya nenosiri haiwezi kuwa tupu.</string>
+    <string name="feature_auth_error_password_invalid">Nenosiri lako halikidhi mahitaji.</string>
+    <string name="feature_auth_error_confirm_password_required">Sehemu ya kuthibitisha nenosiri haiwezi kuwa tupu.</string>
+    <string name="feature_auth_error_passwords_mismatch">Manenosiri hayafanani.</string>
+    <string name="feature_auth_error_address_line1_required">Tafadhali ingiza mstari wa anwani 1.</string>
+    <string name="feature_auth_error_pincode_required">Tafadhali ingiza nambari yako ya posta.</string>
+    <string name="feature_auth_error_country_required">Tafadhali ingiza nchi yako.</string>
+    <string name="feature_auth_error_state_required">Tafadhali ingiza mkoa wako.</string>
+    <string name="feature_auth_error_field_already_exists">%1$s tayari ipo.</string>
+    <string name="feature_auth_error_check_uniqueness_failed">Haiwezekani kuthibitisha kama %1$s ni ya kipekee. Jaribu tena baadaye.</string>
+    <string name="feature_auth_registration_successful">Usajili umefaulu.</string>
+    <string name="feature_auth_connected_to">Imeunganishwa na: %1$s</string>
+    <string name="feature_auth_enable_app_lock">Washa kufuli ya programu</string>
+    <string name="feature_auth_use_your_device_lock">Tumia kufuli ya kifaa</string>
+    <string name="feature_auth_device_lock_subtitle">Tumia PIN, nenosiri, mchoro, Face ID au alama ya kidole yako iliyopo</string>
+    <string name="feature_auth_use_mifos_passcode">Tumia Nambari ya Siri ya Mifos ya tarakimu 4</string>
+    <string name="feature_auth_mifos_passcode_subtitle">Tumia Nambari yako ya Siri ya Mifos</string>
+    <string name="feature_auth_continue">Endelea</string>
+    <string name="feature_auth_no_authentication_options_set">Hakuna chaguo la uthibitishaji lililowekwa</string>
+    <string name="feature_auth_setup_authentication_options">Weka chaguo la uthibitishaji</string>
+    <string name="feature_auth_yes">Ndiyo</string>
+    <string name="feature_auth_no">Hapana</string>
+    <string name="feature_auth_error">Hitilafu</string>
+    <string name="feature_auth_ok">Sawa</string>
+    <string name="feature_auth_radiobutton">Kitufe cha Redio</string>
+</resources>
