@@ -17,6 +17,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.unit.sp
 import mobile_wallet.core.designsystem.generated.resources.Res
+import mobile_wallet.core.designsystem.generated.resources.noto_sans_arabic_regular
 import mobile_wallet.core.designsystem.generated.resources.outfit_black
 import mobile_wallet.core.designsystem.generated.resources.outfit_bold
 import mobile_wallet.core.designsystem.generated.resources.outfit_extra_bold
@@ -29,7 +30,7 @@ import mobile_wallet.core.designsystem.generated.resources.outfit_thin
 import org.jetbrains.compose.resources.Font
 
 @Composable
-private fun fontFamily(): FontFamily {
+private fun outfitFontFamily(): FontFamily {
     return FontFamily(
         Font(Res.font.outfit_black, FontWeight.Black),
         Font(Res.font.outfit_bold, FontWeight.Bold),
@@ -41,6 +42,23 @@ private fun fontFamily(): FontFamily {
         Font(Res.font.outfit_extra_light, FontWeight.ExtraLight),
         Font(Res.font.outfit_extra_bold, FontWeight.ExtraBold),
     )
+}
+
+@Composable
+private fun arabicFontFamily(): FontFamily {
+    return FontFamily(
+        Font(Res.font.noto_sans_arabic_regular, FontWeight.Normal),
+    )
+}
+
+@Composable
+private fun fontFamily(): FontFamily {
+    val locale = androidx.compose.ui.text.intl.Locale.current.language
+    return if (locale == "ar" || locale == "ur" || locale == "fa") {
+        arabicFontFamily()
+    } else {
+        outfitFontFamily()
+    }
 }
 
 // Set of Material typography styles to start with
