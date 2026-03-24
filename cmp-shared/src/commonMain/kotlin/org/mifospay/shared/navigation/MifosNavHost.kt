@@ -13,6 +13,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.navOptions
+import mobile_wallet.cmp_shared.generated.resources.feature_finance_accounts
+import mobile_wallet.cmp_shared.generated.resources.feature_finance_beneficiaries
 import mobile_wallet.feature.payments.generated.resources.Res
 import mobile_wallet.feature.payments.generated.resources.feature_payments_history
 import mobile_wallet.feature.payments.generated.resources.feature_payments_request
@@ -40,7 +42,6 @@ import org.mifospay.feature.faq.navigation.navigateToFAQ
 import org.mifospay.feature.fastmpay.navigation.FAST_MPAY_ROUTE
 import org.mifospay.feature.fastmpay.navigation.fastMpayScreen
 import org.mifospay.feature.fastmpay.navigation.navigateToFastMpay
-import org.mifospay.feature.finance.FinanceScreenContents
 import org.mifospay.feature.finance.navigation.FINANCE_ROUTE
 import org.mifospay.feature.finance.navigation.financeScreen
 import org.mifospay.feature.history.HistoryScreen
@@ -90,6 +91,7 @@ import org.mifospay.feature.transfer.intrabank.success.navigateTransferSuccess
 import org.mifospay.feature.transfer.intrabank.success.transferSuccessScreen
 import org.mifospay.feature.upi.setup.navigation.setupUpiPinScreen
 import org.mifospay.shared.ui.MifosAppState
+import mobile_wallet.cmp_shared.generated.resources.Res as SharedRes
 
 const val AUTHENTICATION_VERIFICATION_KEY = "org.mifospay.mifos.authentication_verification_success"
 
@@ -138,7 +140,7 @@ internal fun MifosNavHost(
 
 //    TODO Cards and Merchants are not using self api
     val tabContents = listOf(
-        TabContent(FinanceScreenContents.ACCOUNTS.name) {
+        TabContent(stringResource(SharedRes.string.feature_finance_accounts)) {
             AccountsScreen(
                 onAddEditSavingsAccount = navController::navigateToSavingAccountAddEdit,
                 onViewSavingAccountDetails = navController::navigateToSavingAccountDetails,
@@ -146,7 +148,7 @@ internal fun MifosNavHost(
             )
         },
 
-        TabContent(FinanceScreenContents.BENEFICIARIES.name) {
+        TabContent(stringResource(SharedRes.string.feature_finance_beneficiaries)) {
             BeneficiaryListScreen(
                 onAddOrEditBeneficiary = navController::navigateToBeneficiaryAddEdit,
             )

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copyright 2024 Mifos Initiative
+
+    This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+    If a copy of the MPL was not distributed with this file,
+    You can obtain one at https://mozilla.org/MPL/2.0/.
+
+    See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+-->
+<resources>
+    <string name="feature_faq_question1">¿Cómo puedo añadir una cuenta?</string>
+    <string name="feature_faq_question2">¿Cómo puedo acceder a mi historial de pagos?</string>
+    <string name="feature_faq_question3">¿Cómo hacer una transferencia?</string>
+    <string name="feature_faq_question4">¿Cómo puedo añadir una tarjeta?</string>
+    <string name="feature_faq_answer1">Para añadir una cuenta, ve a la sección de finanzas y haz clic en el botón de añadir cuenta. Luego selecciona tu banco y verifica tu número de móvil para empezar.</string>
+    <string name="feature_faq_answer2">Ve a la sección de Pagos. Encontrarás tu historial de pagos en la pestaña Historial.</string>
+    <string name="feature_faq_answer3">Para hacer una transferencia, ve a la sección de Pagos. En la pestaña Enviar, puedes elegir el tipo de transferencia, añadir la cantidad y enviar.</string>
+    <string name="feature_faq_answer4">Ve a la sección de Finanzas. Haz clic en Añadir tarjeta en la pestaña Tarjetas.</string>
+    <string name="feature_faq">Preguntas frecuentes</string>
+</resources>

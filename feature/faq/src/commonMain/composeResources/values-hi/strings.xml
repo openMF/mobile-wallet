@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copyright 2024 Mifos Initiative
+
+    This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+    If a copy of the MPL was not distributed with this file,
+    You can obtain one at https://mozilla.org/MPL/2.0/.
+
+    See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+-->
+<resources>
+    <string name="feature_faq_question1">मैं खाता कैसे जोड़ सकता हूँ?</string>
+    <string name="feature_faq_question2">मैं अपने भुगतान इतिहास तक कैसे पहुँच सकता हूँ?</string>
+    <string name="feature_faq_question3">ट्रांसफर कैसे करें?</string>
+    <string name="feature_faq_question4">मैं कार्ड कैसे जोड़ सकता हूँ?</string>
+    <string name="feature_faq_answer1">खाता जोड़ने के लिए, वित्त अनुभाग पर जाएँ और खाता जोड़ें बटन पर क्लिक करें। फिर अपना बैंक चुनें और आरंभ करने के लिए अपना मोबाइल नंबर सत्यापित करें।</string>
+    <string name="feature_faq_answer2">भुगतान अनुभाग पर जाएँ। आपको इतिहास टैब के अंतर्गत अपना भुगतान इतिहास मिलेगा।</string>
+    <string name="feature_faq_answer3">ट्रांसफर करने के लिए, भुगतान अनुभाग पर जाएँ। भेजें टैब के अंतर्गत, वहाँ से आप ट्रांसफर का प्रकार चुन सकते हैं, राशि जोड़ सकते हैं और सबमिट कर सकते हैं।</string>
+    <string name="feature_faq_answer4">वित्त अनुभाग पर जाएँ। कार्ड टैब के अंतर्गत कार्ड जोड़ें पर क्लिक करें।</string>
+    <string name="feature_faq">सामान्य प्रश्न</string>
+</resources>
