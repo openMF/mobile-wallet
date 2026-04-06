@@ -14,6 +14,7 @@
     <string name="feature_payments_mobile_number">Número de teléfono</string>
     <string name="feature_payments_receive">Recibir</string>
     <string name="feature_payments_show_code">Mostrar código</string>
+    <string name="feature_payments_copy_text">Copiar texto</string>
     <string name="feature_payments_send">Enviar</string>
     <string name="feature_payments_request">Solicitar</string>
     <string name="feature_payments_history">Historial</string>

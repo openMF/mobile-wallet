@@ -14,6 +14,7 @@
     <string name="feature_payments_mobile_number">মোবাইল নম্বর</string>
     <string name="feature_payments_receive">গ্রহণ করুন</string>
     <string name="feature_payments_show_code">কোড দেখান</string>
+    <string name="feature_payments_copy_text">টেক্সট কপি করুন</string>
     <string name="feature_payments_send">পাঠান</string>
     <string name="feature_payments_request">অনুরোধ করুন</string>
     <string name="feature_payments_history">ইতিহাস</string>

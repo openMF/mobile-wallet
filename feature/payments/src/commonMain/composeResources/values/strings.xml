@@ -13,6 +13,7 @@
     <string name="feature_payments_mobile_number">Mobile Number</string>
     <string name="feature_payments_receive">Receive</string>
     <string name="feature_payments_show_code">Show code</string>
+    <string name="feature_payments_copy_text">Copy Text</string>
 
     <!-- Payments Tab Labels -->
     <string name="feature_payments_send">Send</string>

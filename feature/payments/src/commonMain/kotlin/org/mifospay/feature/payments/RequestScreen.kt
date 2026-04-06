@@ -31,6 +31,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import mobile_wallet.feature.payments.generated.resources.Res
 import mobile_wallet.feature.payments.generated.resources.baseline_content_copy
+import mobile_wallet.feature.payments.generated.resources.feature_payments_copy_text
 import mobile_wallet.feature.payments.generated.resources.feature_payments_mobile_number
 import mobile_wallet.feature.payments.generated.resources.feature_payments_receive
 import mobile_wallet.feature.payments.generated.resources.feature_payments_show_code
@@ -154,7 +155,7 @@ private fun RequestScreenContent(
                 ) {
                     Icon(
                         imageVector = vectorResource(Res.drawable.baseline_content_copy),
-                        contentDescription = "Copy Text",
+                        contentDescription = stringResource(Res.string.feature_payments_copy_text),
                     )
                 }
             }
