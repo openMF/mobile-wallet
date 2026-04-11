@@ -97,7 +97,11 @@ internal fun MpayQrScreen(
             MpayQrEvent.OnNavigateBack -> navigateBack.invoke()
             MpayQrEvent.QrDownloaded -> snackbarHostState.showSnackbar(downloadedMessage)
             is MpayQrEvent.ShowSnackbar -> {
-                clipboardManager.setText(AnnotatedString(event.message))
+                snackbarHostState.showSnackbar(event.message)
+            }
+
+            is MpayQrEvent.CopyToClipboard -> {
+                clipboardManager.setText(AnnotatedString(event.text))
                 snackbarHostState.showSnackbar(copiedMessage)
             }
         }
@@ -292,6 +296,7 @@ private fun MpayQrScreenContent(
                                 modifier = Modifier.padding(horizontal = KptTheme.spacing.sm),
                             )
                         }
+
                         1 -> {
                             // Inter-Bank - show QR or placeholder
                             if (contentState.interBankData != null) {
