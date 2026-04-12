@@ -125,13 +125,17 @@ internal class AddEditSavingViewModel(
 
             is AESAction.MinRequiredOpeningBalanceChanged -> {
                 updateContent { content ->
-                    content.copy(minRequiredOpeningBalance = action.balance.toLong())
+                    val balance = action.balance.toLongOrNull() ?: 0L
+                    content.copy(minRequiredOpeningBalance = balance)
                 }
             }
 
             is AESAction.NominalAnnualInterestRateChanged -> {
                 updateContent { content ->
-                    content.copy(nominalAnnualInterestRate = action.rate.toDouble())
+                    val rate = action.rate.toDoubleOrNull() ?: 0.0
+                    content.copy(
+                        nominalAnnualInterestRate = if (rate.isFinite()) rate else 0.0
+                    )
                 }
             }
 
