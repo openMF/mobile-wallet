@@ -134,7 +134,7 @@ internal class AddEditSavingViewModel(
                 updateContent { content ->
                     val rate = action.rate.toDoubleOrNull() ?: 0.0
                     content.copy(
-                        nominalAnnualInterestRate = if (rate.isFinite()) rate else 0.0
+                        nominalAnnualInterestRate = if (rate.isFinite()) rate else 0.0,
                     )
                 }
             }
