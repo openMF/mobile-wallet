@@ -23,12 +23,19 @@ import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import org.mifospay.core.common.DataState
+import org.mifospay.core.data.repository.AccountRepository
 import org.mifospay.core.data.repository.LocalAssetRepository
 import org.mifospay.core.datastore.UserPreferencesRepository
+import org.mifospay.core.model.account.Account
+import org.mifospay.core.model.account.AccountTransferPayload
 import org.mifospay.core.model.account.DefaultAccount
 import org.mifospay.core.model.client.Client
 import org.mifospay.core.model.client.UpdatedClient
 import org.mifospay.core.model.instance.InterbankServer
+import org.mifospay.core.model.instance.ServerInstance
+import org.mifospay.core.model.savingsaccount.Transaction
+import org.mifospay.core.model.savingsaccount.TransferDetail
+import org.mifospay.core.model.search.AccountResult
 import org.mifospay.core.model.instance.ServerInstance
 import org.mifospay.core.model.user.UserInfo
 import org.mifospay.core.model.utils.CurrencyCode
@@ -58,6 +65,7 @@ class MpayQrViewModelTest {
     private val testDispatcher = StandardTestDispatcher()
     private lateinit var fakeUserPreferencesRepository: FakeUserPreferencesRepository
     private lateinit var fakeLocalAssetRepository: FakeLocalAssetRepository
+    private lateinit var fakeAccountRepository: FakeAccountRepository
     private lateinit var savedStateHandle: SavedStateHandle
 
     @BeforeTest
@@ -70,6 +78,7 @@ class MpayQrViewModelTest {
             initialSelectedInstance = createTestServerInstance(),
         )
         fakeLocalAssetRepository = FakeLocalAssetRepository()
+        fakeAccountRepository = FakeAccountRepository()
         savedStateHandle = SavedStateHandle()
     }
 
@@ -82,6 +91,7 @@ class MpayQrViewModelTest {
         return MpayQrViewModel(
             localRepository = fakeLocalAssetRepository,
             repository = fakeUserPreferencesRepository,
+            accountRepository = fakeAccountRepository,
             savedStateHandle = savedStateHandle,
             ioDispatcher = testDispatcher,
         )
@@ -90,20 +100,24 @@ class MpayQrViewModelTest {
     // region Initialization Tests
 
     /**
-     * TODO: This test requires investigating the ViewModel initialization timing with test dispatchers.
-     * The MpayQrViewModel reads repository values during initialState construction which happens
-     * before viewModelScope is fully set up with the test dispatcher.
+     * Test verifying the ViewModel initialization and state transitions.
+     * The initial state should be Loading, and after the coroutines finish, it should be Content.
      */
     @Test
-    fun givenValidClientAndAccount_whenViewModelCreated_thenInitialStateIsLoading() = runTest {
+    fun givenValidClientAndAccount_whenViewModelCreated_thenInitialStateIsLoadingAndTransitionsToContent() = runTest {
         // Given - values are pre-set in setUp()
 
         // When
         val viewModel = createViewModel()
 
         // Then - initial state should be loading before QR generation completes
-        // Note: Full QR generation test would require synchronizing test dispatcher with viewModelScope
         assertEquals(MpayQrState.ViewState.Loading, viewModel.stateFlow.value.viewState)
+
+        // Advance dispatcher to allow coroutines to execute and transition state
+        advanceUntilIdle()
+
+        // Then - the QR should be successfully generated
+        assertIs<MpayQrState.ViewState.Content>(viewModel.stateFlow.value.viewState)
     }
 
     @Test
@@ -438,4 +452,19 @@ private class FakeUserPreferencesRepository(
         _accountExternalIds.value[accountId]
 
     override suspend fun logOut() {}
+}
+
+/**
+ * Fake implementation of [AccountRepository] for testing.
+ */
+private class FakeAccountRepository(
+    initialAccounts: List<Account> = emptyList()
+) : AccountRepository {
+    private val _accounts = MutableStateFlow(initialAccounts)
+    
+    override fun getTransaction(accountId: Long, transactionId: Long): Flow<DataState<Transaction>> = flowOf(DataState.Error(Exception("Not implemented")))
+    override fun getAccountTransfer(transferId: Long): Flow<DataState<TransferDetail>> = flowOf(DataState.Error(Exception("Not implemented")))
+    override fun searchAccounts(query: String): Flow<DataState<List<AccountResult>>> = flowOf(DataState.Error(Exception("Not implemented")))
+    override fun getSelfAccounts(clientId: Long): Flow<DataState<List<Account>>> = flowOf(DataState.Success(_accounts.value))
+    override suspend fun makeTransfer(payload: AccountTransferPayload): DataState<String> = DataState.Error(Exception("Not implemented"))
 }
