@@ -25,6 +25,7 @@ import org.mifospay.core.network.services.createRunReportService
 import org.mifospay.core.network.services.createSavedCardService
 import org.mifospay.core.network.services.createSavingsAccountsService
 import org.mifospay.core.network.services.createSearchService
+import org.mifospay.core.network.services.createPocketService
 import org.mifospay.core.network.services.createStandingInstructionService
 import org.mifospay.core.network.services.createThirdPartyTransferService
 import org.mifospay.core.network.services.createTwoFactorAuthService
@@ -70,4 +71,6 @@ class KtorfitClient(
     internal val interBankApi by lazy { ktorfit.createInterBankService() }
 
     internal val officeApi by lazy { ktorfit.createOfficeService() }
+
+    internal val pocketApi by lazy { ktorfit.createPocketService() }
 }

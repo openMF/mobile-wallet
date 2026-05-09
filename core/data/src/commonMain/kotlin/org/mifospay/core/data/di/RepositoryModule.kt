@@ -29,6 +29,7 @@ import org.mifospay.core.data.repository.KycLevelRepository
 import org.mifospay.core.data.repository.LocalAssetRepository
 import org.mifospay.core.data.repository.NotificationRepository
 import org.mifospay.core.data.repository.OfficeRepository
+import org.mifospay.core.data.repository.PocketRepository
 import org.mifospay.core.data.repository.RecentPayeeRepository
 import org.mifospay.core.data.repository.RegistrationRepository
 import org.mifospay.core.data.repository.RunReportRepository
@@ -47,6 +48,7 @@ import org.mifospay.core.data.repositoryImpl.AssetRepositoryImpl
 import org.mifospay.core.data.repositoryImpl.AuthenticationRepositoryImpl
 import org.mifospay.core.data.repositoryImpl.BeneficiaryRepositoryImpl
 import org.mifospay.core.data.repositoryImpl.ClientRepositoryImpl
+import org.mifospay.core.data.repositoryImpl.DemoPocketRepository
 import org.mifospay.core.data.repositoryImpl.DocumentRepositoryImpl
 import org.mifospay.core.data.repositoryImpl.InterBankRepositoryImpl
 import org.mifospay.core.data.repositoryImpl.InvoiceRepositoryImpl
@@ -111,6 +113,7 @@ val RepositoryModule = module {
     single<TwoFactorAuthRepository> { TwoFactorAuthRepositoryImpl(get(), get(ioDispatcher)) }
     single<UserRepository> { UserRepositoryImpl(get(), get(ioDispatcher)) }
     single<OfficeRepository> { OfficeRepositoryImpl(get(), get(ioDispatcher)) }
+    single<PocketRepository> { DemoPocketRepository() }
 
     singleOf(::MifosPasscodeAdapterImpl).bind<PasscodeStorageAdapter>()
     singleOf(::AppLockRepositoryImpl).bind<AppLockRepository>()

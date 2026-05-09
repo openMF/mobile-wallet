@@ -89,6 +89,11 @@ import org.mifospay.feature.transfer.intrabank.selectScreen.navigateToSelectAcco
 import org.mifospay.feature.transfer.intrabank.selectScreen.selectAccountScreenDestination
 import org.mifospay.feature.transfer.intrabank.success.navigateTransferSuccess
 import org.mifospay.feature.transfer.intrabank.success.transferSuccessScreen
+import org.mifospay.feature.pocket.navigation.POCKET_DASHBOARD_ROUTE
+import org.mifospay.feature.pocket.navigation.linkAccountScreen
+import org.mifospay.feature.pocket.navigation.navigateToLinkAccount
+import org.mifospay.feature.pocket.navigation.navigateToPocketDashboard
+import org.mifospay.feature.pocket.navigation.pocketDashboardScreen
 import org.mifospay.feature.upi.setup.navigation.setupUpiPinScreen
 import org.mifospay.shared.ui.MifosAppState
 import mobile_wallet.cmp_shared.generated.resources.Res as SharedRes
@@ -173,7 +178,7 @@ internal fun MifosNavHost(
 
     NavHost(
         route = MifosNavGraph.MAIN_GRAPH,
-        startDestination = HOME_ROUTE,
+        startDestination = POCKET_DASHBOARD_ROUTE,
         navController = navController,
         modifier = modifier,
     ) {
@@ -210,6 +215,7 @@ internal fun MifosNavHost(
                 navController.navigateToMpayQrScreen()
             },
             onPay = navController::navigateToTransferOptions,
+            navigateToPocketDashboard = navController::navigateToPocketDashboard,
             navigateToTransactionDetail = navController::navigateToSpecificTransaction,
             navigateToAccountDetail = navController::navigateToSavingAccountDetails,
             navigateToHistory = navController::navigateToHistory,
@@ -561,6 +567,17 @@ internal fun MifosNavHost(
 
         setupUpiPinScreen(
             navigateBack = navController::navigateUp,
+        )
+
+        pocketDashboardScreen(
+            navigateBack = navController::navigateUp,
+            navigateToLinkAccount = navController::navigateToLinkAccount,
+            navigateToAccountDetails = navController::navigateToSavingAccountDetails,
+        )
+
+        linkAccountScreen(
+            navigateBack = navController::navigateUp,
+            onLinkSuccess = { navController.navigateToPocketDashboard() },
         )
 
         transferOptionsDialog(
