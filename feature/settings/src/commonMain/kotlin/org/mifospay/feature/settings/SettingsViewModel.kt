@@ -225,13 +225,20 @@ class SettingsViewModel(
     }
 
     private fun handleDisableAccount() {
+        val accountId = userPreferencesRepository.defaultAccountId.value
+        if (accountId == null) {
+            mutableStateFlow.update {
+                it.copy(dialogState = DialogState.Error("Default account not available"))
+            }
+            return
+        }
+
         mutableStateFlow.update {
             it.copy(dialogState = DialogState.Loading)
         }
 
-        // TODO:: this shouldn't work, we need account id to block account
         viewModelScope.launch {
-            val result = repository.blockAccount(state.client.id)
+            val result = repository.blockAccount(accountId)
             sendAction(DisableAccountResult(result))
         }
     }
