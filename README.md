@@ -96,3 +96,15 @@ Special thanks to the incredible code contributors who continue to drive this pr
 [![Back To Top](https://img.shields.io/badge/Back%20To%20Top-Blue?style=flat)](#readme-top)
 
 </div>
+
+---
+
+##  Security & Privacy Architecture
+
+As a financial platform built on Apache Fineract, Mifos Pay prioritizes secure data handling and transaction integrity:
+
+* **Secure API Communication:** Utilizes **Ktor** with TLS/SSL for encrypted data transfer between the KMP client and Fineract backend.
+* **Dependency Injection:** Implements **Koin** for clean architectural separation, reducing the attack surface by avoiding hardcoded dependencies.
+* **Data Persistence:** Follows platform-specific secure storage practices for sensitive user credentials and tokens.
+* **Multi-Platform Safety:** Leverages Kotlin's type-safety across Android, iOS, and Web to prevent common runtime vulnerabilities.
+
