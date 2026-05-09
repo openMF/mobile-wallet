@@ -1,5 +1,16 @@
-### Module Graph
+# Mifos Pay Web Module
 
+This module represents the web interface for the Mifos Pay application, built using **Compose Multiplatform (KMP)**.
+
+## Architecture & Dependencies
+The web module is integrated with the core system to ensure consistent business logic across platforms. As shown in the module graph below:
+
+* **:core:common**: Shared utility functions.
+* **:core:model**: Data models used across the app.
+* **:core:data**: Repository and network logic.
+* **:core:datastore**: Local storage management.
+
+## Module Graph
 ```mermaid
 %%{
   init: {
@@ -19,7 +30,3 @@ graph LR
   :mifospay-web --> :core:data
   :mifospay-web --> :core:model
   :mifospay-web --> :core:datastore
-```
-# :mifospay-web module
-## Dependency graph
-![Dependency graph](../docs/images/graphs-kmp/dep_graph_mifospay_web.svg)
