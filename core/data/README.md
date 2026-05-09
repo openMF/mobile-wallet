@@ -1,5 +1,13 @@
-### Module Graph
+# Mifos Pay: Core Data Module
 
+The `:core:data` module is the central repository layer of the Mifos Pay application. It coordinates data flow between external network sources and local persistence.
+
+## Key Responsibilities
+* **Repository Pattern:** Provides a clean API for accessing data.
+* **Security & Encryption:** Ensures sensitive payment data is handled securely.
+* **Data Synchronization:** Manages logic between network and local storage.
+
+## Dependency Graph
 ```mermaid
 %%{
   init: {
@@ -21,7 +29,3 @@ graph LR
   :core:data --> :core:model
   :core:data --> :core:network
   :core:data --> :core:analytics
-```
-# :core:data module
-## Dependency graph
-![Dependency graph](../../docs/images/graphs-kmp/dep_graph_core_data.svg)
