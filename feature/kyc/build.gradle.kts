@@ -17,6 +17,10 @@ android {
 
 kotlin {
     sourceSets {
+        commonTest.dependencies {
+            implementation(libs.turbine)
+        }
+
         commonMain.dependencies {
             implementation(compose.ui)
             implementation(compose.foundation)
