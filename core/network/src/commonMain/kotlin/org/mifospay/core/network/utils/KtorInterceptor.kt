@@ -36,7 +36,7 @@ class KtorInterceptor(
 
                 plugin.getToken()?.let { token ->
                     val sanitizedToken = sanitizeHeaderValue(token)
-                    if (sanitizedToken.isNotEmpty()) {
+                    if (sanitizedToken.isNotEmpty() && shouldAttachAuthorizationHeader(context.url.host, context.url.protocol.name)) {
                         context.headers[BaseURL.HEADER_AUTHORIZATION] = "Basic $sanitizedToken"
                     }
                 }
@@ -80,7 +80,7 @@ class KtorInterceptorRe(
 
                 token?.let { token ->
                     val sanitizedToken = sanitizeHeaderValue(token)
-                    if (sanitizedToken.isNotEmpty()) {
+                    if (sanitizedToken.isNotEmpty() && shouldAttachAuthorizationHeader(context.url.host, context.url.protocol.name)) {
                         context.headers[BaseURL.HEADER_AUTHORIZATION] = "Basic $sanitizedToken"
                     }
                 }
@@ -111,4 +111,14 @@ private fun sanitizeHeaderValue(value: String): String {
         .trim()
         .replace("\r", "")
         .replace("\n", "")
+}
+
+private fun shouldAttachAuthorizationHeader(host: String, protocolName: String): Boolean {
+    return protocolName.equals("https", ignoreCase = true) || isLocalDevelopmentHost(host)
+}
+
+private fun isLocalDevelopmentHost(host: String): Boolean {
+    return host.equals("localhost", ignoreCase = true) ||
+        host == "127.0.0.1" ||
+        host == "10.0.2.2"
 }
