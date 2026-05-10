@@ -9,6 +9,7 @@ The web module is integrated with the core system to ensure consistent business 
 * **:core:model**: Data models used across the app.
 * **:core:data**: Repository and network logic.
 * **:core:datastore**: Local storage management.
+* **:mifospay-shared**: Shared resources and utility components used across the web and mobile platforms.
 
 ## Module Graph
 ```mermaid
