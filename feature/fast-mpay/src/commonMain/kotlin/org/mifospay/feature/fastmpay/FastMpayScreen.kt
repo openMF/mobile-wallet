@@ -190,8 +190,8 @@ fun FastMpayScreen(
     }
 
     // Bank mismatch info bottom sheet
-    if (showBankMismatchSheet && bankMismatchData != null) {
-        val mismatchData = bankMismatchData!!
+    val mismatchData = bankMismatchData
+    if (showBankMismatchSheet && mismatchData != null) {
         InfoBottomSheet(
             title = stringResource(Res.string.core_ui_different_bank_title),
             message = stringResource(Res.string.core_ui_different_bank_message),
@@ -242,8 +242,8 @@ fun FastMpayScreen(
     }
 
     // Amount confirmation bottom sheet
-    if (showAmountConfirmation && pendingAmountConfirmation != null) {
-        val pending = pendingAmountConfirmation!!
+    val pending = pendingAmountConfirmation
+    if (showAmountConfirmation && pending != null) {
         val (amount, currency) = when (pending) {
             is PendingAmountConfirmation.MakeTransfer -> {
                 pending.qrData.amount to pending.qrData.currency
