@@ -71,6 +71,10 @@ import org.mifospay.feature.payments.PAYMENTS_ROUTE
 import org.mifospay.feature.payments.RequestScreen
 import org.mifospay.feature.payments.paymentsScreen
 import org.mifospay.feature.payments.selectTransferType.SelectTransferTypeScreen
+import org.mifospay.feature.pocket.navigation.linkAccountScreen
+import org.mifospay.feature.pocket.navigation.navigateToLinkAccount
+import org.mifospay.feature.pocket.navigation.navigateToPocketDashboard
+import org.mifospay.feature.pocket.navigation.pocketDashboardScreen
 import org.mifospay.feature.profile.navigation.navigateToProfile
 import org.mifospay.feature.profile.navigation.profileNavGraph
 import org.mifospay.feature.receipt.navigation.receiptScreen
@@ -89,11 +93,6 @@ import org.mifospay.feature.transfer.intrabank.selectScreen.navigateToSelectAcco
 import org.mifospay.feature.transfer.intrabank.selectScreen.selectAccountScreenDestination
 import org.mifospay.feature.transfer.intrabank.success.navigateTransferSuccess
 import org.mifospay.feature.transfer.intrabank.success.transferSuccessScreen
-import org.mifospay.feature.pocket.navigation.POCKET_DASHBOARD_ROUTE
-import org.mifospay.feature.pocket.navigation.linkAccountScreen
-import org.mifospay.feature.pocket.navigation.navigateToLinkAccount
-import org.mifospay.feature.pocket.navigation.navigateToPocketDashboard
-import org.mifospay.feature.pocket.navigation.pocketDashboardScreen
 import org.mifospay.feature.upi.setup.navigation.setupUpiPinScreen
 import org.mifospay.shared.ui.MifosAppState
 import mobile_wallet.cmp_shared.generated.resources.Res as SharedRes
@@ -178,7 +177,7 @@ internal fun MifosNavHost(
 
     NavHost(
         route = MifosNavGraph.MAIN_GRAPH,
-        startDestination = POCKET_DASHBOARD_ROUTE,
+        startDestination = HOME_ROUTE,
         navController = navController,
         modifier = modifier,
     ) {

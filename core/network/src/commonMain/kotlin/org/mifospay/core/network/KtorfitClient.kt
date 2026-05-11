@@ -20,12 +20,12 @@ import org.mifospay.core.network.services.createInvoiceService
 import org.mifospay.core.network.services.createKYCLevel1Service
 import org.mifospay.core.network.services.createNotificationService
 import org.mifospay.core.network.services.createOfficeService
+import org.mifospay.core.network.services.createPocketService
 import org.mifospay.core.network.services.createRegistrationService
 import org.mifospay.core.network.services.createRunReportService
 import org.mifospay.core.network.services.createSavedCardService
 import org.mifospay.core.network.services.createSavingsAccountsService
 import org.mifospay.core.network.services.createSearchService
-import org.mifospay.core.network.services.createPocketService
 import org.mifospay.core.network.services.createStandingInstructionService
 import org.mifospay.core.network.services.createThirdPartyTransferService
 import org.mifospay.core.network.services.createTwoFactorAuthService
