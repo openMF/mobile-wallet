@@ -1,13 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-    Copyright 2024 Mifos Initiative
-
-    This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
-    If a copy of the MPL was not distributed with this file,
-    You can obtain one at https://mozilla.org/MPL/2.0/.
-
-    See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
--->
 <resources>
     <string name="app_name">Mifos Pay</string>
     <string name="home">होम</string>
@@ -27,7 +18,16 @@
     <string name="tenant_value">टेनेंट: %1$s</string>
     <string name="error_message">त्रुटि: %1$s</string>
 
-    <!-- Finance Tab Labels -->
     <string name="feature_finance_accounts">खाते</string>
     <string name="feature_finance_beneficiaries">लाभार्थी</string>
+
+    <string name="complete_kyc">केवाईसी (KYC) पूरा करें</string>
+    <string name="security_settings">सुरक्षा सेटिंग्स</string>
+    <string name="change_pin">पिन बदलें</string>
+
+    <string name="payment_successful">भुगतान सफल रहा</string>
+    <string name="payment_failed">भुगतान विफल रहा</string>
+    <string name="retry_payment">पुनः प्रयास करें</string>
+    <string name="processing_payment">भुगतान संसाधित हो रहा है...</string>
+    <string name="send_money_to">को पैसे भेजें</string>
 </resources>
