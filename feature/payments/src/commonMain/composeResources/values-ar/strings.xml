@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copyright 2024 Mifos Initiative
+
+    This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+    If a copy of the MPL was not distributed with this file,
+    You can obtain one at https://mozilla.org/MPL/2.0/.
+
+    See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+-->
+<resources>
+    <!-- Payments Tab Labels -->
+    <string name="feature_payments_vpa">عنوان الدفع الافتراضي (VPA)</string>
+    <string name="feature_payments_mobile_number">رقم الهاتف المحمول</string>
+    <string name="feature_payments_receive">استلام</string>
+    <string name="feature_payments_show_code">إظهار الرمز</string>
+    <string name="feature_payments_send">إرسال</string>
+    <string name="feature_payments_request">طلب</string>
+    <string name="feature_payments_history">السجل</string>
+    <string name="feature_payments_select_transfer_type_header">كيف ترغب في إجراء\nهذا التحويل؟</string>
+    <string name="feature_payments_select_transfer_type_subtitle">اختر طريقة التحويل أدناه</string>
+    <string name="feature_payments_intra_bank_transfer_title">تحويل داخل البنك</string>
+    <string name="feature_payments_intra_bank_transfer_description">نقل الأموال بين الحسابات داخل هذا البنك.</string>
+    <string name="feature_payments_inter_bank_transfer_title">تحويل بين البنوك</string>
+    <string name="feature_payments_inter_bank_transfer_description">إرسال الأموال إلى حسابات في بنوك مختلفة.</string>
+    <string name="feature_payments_transfer_options_title">خيارات التحويل</string>
+</resources>

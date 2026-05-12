@@ -29,10 +29,10 @@ import androidx.compose.material3.Checkbox
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuAnchorType
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.MenuAnchorType
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
@@ -70,12 +70,10 @@ import mobile_wallet.feature.accounts.generated.resources.feature_accounts_add_s
 import mobile_wallet.feature.accounts.generated.resources.feature_accounts_add_with_hold_tax
 import mobile_wallet.feature.accounts.generated.resources.feature_accounts_add_withdrawal_fee
 import mobile_wallet.feature.accounts.generated.resources.feature_accounts_error_oops
-import mobile_wallet.feature.accounts.generated.resources.feature_accounts_loading
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.mifospay.core.designsystem.component.BasicDialogState
 import org.mifospay.core.designsystem.component.LoadingDialogState
-import org.mifospay.core.designsystem.component.MfLoadingWheel
 import org.mifospay.core.designsystem.component.MifosBasicDialog
 import org.mifospay.core.designsystem.component.MifosButton
 import org.mifospay.core.designsystem.component.MifosLoadingDialog
@@ -85,6 +83,7 @@ import org.mifospay.core.model.utils.Locale
 import org.mifospay.core.model.utils.filterLocales
 import org.mifospay.core.ui.EmptyContentScreen
 import org.mifospay.core.ui.MifosDivider
+import org.mifospay.core.ui.MifosProgressIndicator
 import org.mifospay.core.ui.utils.EventsEffect
 import template.core.base.designsystem.theme.KptTheme
 
@@ -176,11 +175,7 @@ internal fun AddEditSavingAccountScreenContent(
             contentAlignment = Alignment.Center,
         ) {
             when (state.viewState) {
-                is AESState.ViewState.Loading -> {
-                    MfLoadingWheel(
-                        contentDesc = stringResource(Res.string.feature_accounts_loading),
-                    )
-                }
+                is AESState.ViewState.Loading -> MifosProgressIndicator()
 
                 is AESState.ViewState.Error -> {
                     EmptyContentScreen(
@@ -267,7 +262,7 @@ internal fun AddEditSavingAccountScreenContent(
                         .onGloballyPositioned { coordinates ->
                             fieldSize = coordinates.size.toSize()
                         }
-                        .menuAnchor(MenuAnchorType.PrimaryNotEditable),
+                        .menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable),
                 )
 
                 DropdownMenu(
@@ -383,7 +378,7 @@ internal fun AddEditSavingAccountScreenContent(
                             .onGloballyPositioned { coordinates ->
                                 textFieldSize = coordinates.size.toSize()
                             }
-                            .menuAnchor(MenuAnchorType.PrimaryNotEditable),
+                            .menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable),
                     )
 
                     DropdownMenu(

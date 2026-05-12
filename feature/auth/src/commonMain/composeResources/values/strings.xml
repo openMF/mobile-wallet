@@ -23,7 +23,7 @@
     <string name="feature_auth_or">or</string>
     <string name="feature_auth_google_account">Ease my sign-up using Google Account</string>
     <string name="feature_auth_validate_email">Please enter a valid email address</string>
-    <string name="feature_auth_all_fields_are_mandatory">All fields are mandatory.</string>
+    <string name="feature_auth_all_fields_are_mandatory">All fields are mandatory except Address Line 2.</string>
     <string name="feature_auth_complete_your_registration">Complete your registration</string>
 
     <!-- Labels -->
@@ -33,7 +33,7 @@
     <string name="feature_auth_confirm_password">Confirm Password</string>
     <string name="feature_auth_name_of_business">Name of Business</string>
     <string name="feature_auth_address_line_1">Address Line 1</string>
-    <string name="feature_auth_address_line_2">Address Line 2</string>
+    <string name="feature_auth_address_line_2">Address Line 2 (optional)</string>
     <string name="feature_auth_pin_code">Pin Code</string>
     <string name="feature_auth_state">State</string>
     <string name="feature_auth_country">Country</string>
@@ -69,7 +69,6 @@
     <string name="feature_auth_error_confirm_password_required">The confirm password field cannot be empty.</string>
     <string name="feature_auth_error_passwords_mismatch">Passwords do not match.</string>
     <string name="feature_auth_error_address_line1_required">Please enter your address line 1.</string>
-    <string name="feature_auth_error_address_line2_required">Please enter your address line 2.</string>
     <string name="feature_auth_error_pincode_required">Please enter your pin code.</string>
     <string name="feature_auth_error_country_required">Please enter your country.</string>
     <string name="feature_auth_error_state_required">Please enter your state.</string>
@@ -77,4 +76,22 @@
     <string name="feature_auth_error_field_already_exists">%1$s already exists.</string>
     <string name="feature_auth_error_check_uniqueness_failed">Unable to check if %1$s is unique. Please try again later.</string>
     <string name="feature_auth_registration_successful">Registration successful.</string>
+
+    <!-- Server Instance -->
+    <string name="feature_auth_connected_to">Connected to: %1$s</string>
+
+    <!-- Choose Auth Option -->
+    <string name="feature_auth_enable_app_lock">Enable app lock</string>
+    <string name="feature_auth_use_your_device_lock">Use your device lock</string>
+    <string name="feature_auth_device_lock_subtitle">Use your existing PIN, password, pattern, face ID, or fingerprint</string>
+    <string name="feature_auth_use_mifos_passcode">Use 4-digit Mifos Passcode</string>
+    <string name="feature_auth_mifos_passcode_subtitle">Use your Mifos Passcode</string>
+    <string name="feature_auth_continue">Continue</string>
+    <string name="feature_auth_no_authentication_options_set">No authentication options set</string>
+    <string name="feature_auth_setup_authentication_options">Set Up authentication options</string>
+    <string name="feature_auth_yes">Yes</string>
+    <string name="feature_auth_no">No</string>
+    <string name="feature_auth_error">Error</string>
+    <string name="feature_auth_ok">OK</string>
+    <string name="feature_auth_radiobutton">Radio Button</string>
 </resources>

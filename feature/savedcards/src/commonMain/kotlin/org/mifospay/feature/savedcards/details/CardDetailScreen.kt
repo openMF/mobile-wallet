@@ -40,15 +40,14 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import mobile_wallet.feature.savedcards.generated.resources.Res
 import mobile_wallet.feature.savedcards.generated.resources.feature_savedcards_error_oops
-import mobile_wallet.feature.savedcards.generated.resources.feature_savedcards_loading
 import mobile_wallet.feature.savedcards.generated.resources.feature_savedcards_subtitle
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
-import org.mifospay.core.designsystem.component.MfLoadingWheel
 import org.mifospay.core.designsystem.component.MifosScaffold
 import org.mifospay.core.model.savedcards.SavedCard
 import org.mifospay.core.ui.EmptyContentScreen
 import org.mifospay.core.ui.MifosDivider
+import org.mifospay.core.ui.MifosProgressIndicator
 import org.mifospay.core.ui.utils.EventsEffect
 import org.mifospay.feature.savedcards.components.CreditCard
 import org.mifospay.feature.savedcards.utils.CardMaskStyle
@@ -98,12 +97,7 @@ internal fun CardDetailScreen(
             contentAlignment = Alignment.Center,
         ) {
             when (state) {
-                is ViewState.Loading -> {
-                    MfLoadingWheel(
-                        contentDesc = stringResource(Res.string.feature_savedcards_loading),
-                        backgroundColor = KptTheme.colorScheme.surface,
-                    )
-                }
+                is ViewState.Loading -> MifosProgressIndicator()
 
                 is ViewState.Error -> {
                     EmptyContentScreen(

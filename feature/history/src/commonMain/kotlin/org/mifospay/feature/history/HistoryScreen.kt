@@ -9,33 +9,48 @@
  */
 package org.mifospay.feature.history
 
-import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import mobile_wallet.feature.history.generated.resources.Res
 import mobile_wallet.feature.history.generated.resources.feature_history_empty
-import mobile_wallet.feature.history.generated.resources.feature_history_error
+import mobile_wallet.feature.history.generated.resources.feature_history_empty_filter
 import mobile_wallet.feature.history.generated.resources.feature_history_error_oops
-import mobile_wallet.feature.history.generated.resources.feature_history_loading
-import mobile_wallet.feature.history.generated.resources.feature_history_title
+import mobile_wallet.feature.history.generated.resources.feature_history_filter_content_desc
+import mobile_wallet.feature.history.generated.resources.feature_history_header_account
+import mobile_wallet.feature.history.generated.resources.feature_history_header_all
+import mobile_wallet.feature.history.generated.resources.feature_history_header_credit
+import mobile_wallet.feature.history.generated.resources.feature_history_header_debit
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
-import org.mifospay.core.designsystem.component.MifosLoadingWheel
 import org.mifospay.core.designsystem.component.MifosScaffold
-import org.mifospay.core.designsystem.component.MifosTopBar
+import org.mifospay.core.designsystem.icon.MifosIcons
 import org.mifospay.core.model.savingsaccount.TransactionType
 import org.mifospay.core.ui.EmptyContentScreen
+import org.mifospay.core.ui.MifosProgressIndicator
+import org.mifospay.core.ui.TransactionFilterBottomSheet
 import org.mifospay.core.ui.utils.EventsEffect
-import org.mifospay.feature.history.components.HistoryScreenFilter
 import org.mifospay.feature.history.components.TransactionList
 import template.core.base.designsystem.theme.KptTheme
 
@@ -44,8 +59,6 @@ fun HistoryScreen(
     viewTransferDetail: (Long) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: HistoryViewModel = koinViewModel(),
-    showTopBar: Boolean = true,
-    onBackClick: (() -> Unit)? = null,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
 
@@ -63,8 +76,6 @@ fun HistoryScreen(
         onAction = remember(viewModel) {
             { action -> viewModel.trySendAction(action) }
         },
-        showTopBar = showTopBar,
-        onBackClick = onBackClick,
     )
 }
 
@@ -73,38 +84,17 @@ internal fun HistoryScreenContent(
     state: HistoryState,
     modifier: Modifier = Modifier,
     onAction: (HistoryAction) -> Unit,
-    showTopBar: Boolean = true,
-    onBackClick: (() -> Unit)? = null,
 ) {
     MifosScaffold(
         modifier = modifier.fillMaxSize(),
-        topBar = {
-            if (showTopBar && onBackClick != null) {
-                MifosTopBar(
-                    topBarTitle = stringResource(Res.string.feature_history_title),
-                    backPress = onBackClick,
-                )
-            }
-        },
     ) { paddingValues ->
         when (state.viewState) {
-            is HistoryState.ViewState.Loading -> {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(paddingValues),
-                    contentAlignment = Alignment.Center,
-                ) {
-                    MifosLoadingWheel(
-                        contentDesc = stringResource(Res.string.feature_history_loading),
-                    )
-                }
-            }
+            is HistoryState.ViewState.Loading -> MifosProgressIndicator()
 
             is HistoryState.ViewState.Error -> {
                 EmptyContentScreen(
                     title = stringResource(Res.string.feature_history_error_oops),
-                    subTitle = stringResource(Res.string.feature_history_error),
+                    subTitle = stringResource(state.viewState.message),
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(paddingValues),
@@ -123,49 +113,121 @@ internal fun HistoryScreenContent(
             }
 
             is HistoryState.ViewState.Content -> {
-                HistoryScreenContent(
-                    state = state.viewState,
-                    selectedTransactionType = state.transactionType,
-                    onAction = onAction,
-                    modifier = Modifier.padding(paddingValues),
-                )
+                Column(
+                    Modifier.fillMaxWidth().padding(paddingValues),
+                ) {
+                    HistoryScreenHeader(
+                        accountNo = state.selectedAccount?.number ?: "",
+                        selectedTransactionType = state.selectedTransactionType,
+                        onFilterClick = {
+                            onAction(HistoryAction.OnFilterClick)
+                        },
+                    )
+                    if (state.viewState.list.isEmpty()) {
+                        EmptyContentScreen(
+                            title = stringResource(Res.string.feature_history_error_oops),
+                            subTitle = stringResource(Res.string.feature_history_empty_filter),
+                            modifier = Modifier
+                                .fillMaxSize(),
+                        )
+                    } else {
+                        TransactionList(
+                            transactions = state.viewState.list,
+                            onAction = onAction,
+                            modifier = modifier,
+                        )
+                    }
+                }
+                if (state.showFilter) {
+                    TransactionFilterBottomSheet(
+                        selectedAccount = state.selectedAccount,
+                        accounts = state.accounts,
+                        selectedTransactionType = state.selectedTransactionType,
+                        onAccountSelected = {
+                            onAction(HistoryAction.SetSelectedAccount(it))
+                        },
+                        onTransactionTypeSelected = {
+                            onAction(HistoryAction.SetTransactionType(it))
+                        },
+                        onClearFilters = {
+                            onAction(HistoryAction.ClearFilters)
+                        },
+                        onApplyFilters = {
+                            onAction(HistoryAction.OnApplyFilterClick)
+                        },
+                        onDismiss = {
+                            onAction(HistoryAction.OnFilterClick)
+                        },
+                    )
+                }
             }
         }
     }
 }
 
 @Composable
-private fun HistoryScreenContent(
-    state: HistoryState.ViewState.Content,
+private fun HistoryScreenHeader(
+    accountNo: String,
     selectedTransactionType: TransactionType,
     modifier: Modifier = Modifier,
-    onAction: (HistoryAction) -> Unit,
+    onFilterClick: () -> Unit,
 ) {
-    val allTransactionsListState = rememberLazyListState()
-    val debitTransactionsListState = rememberLazyListState()
-    val creditTransactionsListState = rememberLazyListState()
-
-    val currentListState = when (selectedTransactionType) {
-        TransactionType.OTHER -> allTransactionsListState
-        TransactionType.DEBIT -> debitTransactionsListState
-        TransactionType.CREDIT -> creditTransactionsListState
-    }
-
-    Column(
+    Row(
         modifier = modifier
-            .fillMaxSize(),
-        verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.md),
+            .fillMaxWidth()
+            .padding(KptTheme.spacing.md),
+        verticalAlignment = Alignment.CenterVertically,
     ) {
-        HistoryScreenFilter(
-            selectedTransactionType = selectedTransactionType,
-            onAction = onAction,
-            modifier = Modifier.padding(top = KptTheme.spacing.sm),
-        )
+        Column(
+            Modifier.weight(1f),
+        ) {
+            Text(
+                text = stringResource(Res.string.feature_history_header_account, accountNo),
+                style = KptTheme.typography.bodyLarge,
+            )
+            Spacer(Modifier.height(KptTheme.spacing.xs))
+            Text(
+                text = when (selectedTransactionType) {
+                    TransactionType.OTHER -> stringResource(Res.string.feature_history_header_all)
+                    TransactionType.DEBIT -> stringResource(Res.string.feature_history_header_debit)
+                    TransactionType.CREDIT -> stringResource(Res.string.feature_history_header_credit)
+                },
+                style = KptTheme.typography.bodyMedium,
+            )
+        }
 
-        TransactionList(
-            transactions = state.list,
-            onAction = onAction,
-            lazyListState = currentListState,
-        )
+        Box(
+            modifier = Modifier
+                .size(32.dp)
+                .border(
+                    width = 1.dp,
+                    color = KptTheme.colorScheme.outline,
+                    shape = KptTheme.shapes.medium,
+                )
+                .clip(KptTheme.shapes.medium),
+            contentAlignment = Alignment.Center,
+        ) {
+            IconButton(
+                onClick = onFilterClick,
+                modifier = Modifier.matchParentSize(),
+            ) {
+                Icon(
+                    imageVector = MifosIcons.Filter,
+                    contentDescription = stringResource(Res.string.feature_history_filter_content_desc),
+                    tint = KptTheme.colorScheme.onSurface,
+                )
+            }
+
+            if (selectedTransactionType != TransactionType.OTHER) {
+                Box(
+                    modifier = Modifier
+                        .align(Alignment.TopEnd)
+                        .offset(x = (-4).dp, y = 8.dp)
+                        .size(6.dp)
+                        .clip(CircleShape)
+                        .background(KptTheme.colorScheme.error),
+                )
+            }
+        }
     }
 }

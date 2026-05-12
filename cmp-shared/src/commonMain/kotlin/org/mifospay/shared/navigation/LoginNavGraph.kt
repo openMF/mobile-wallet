@@ -12,7 +12,7 @@ package org.mifospay.shared.navigation
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.navigation
-import org.mifos.library.passcode.navigateToPasscodeScreen
+import org.mifos.feature.passcode.navigateToRootMifosPasscodeScreen
 import org.mifospay.feature.auth.navigation.LOGIN_ROUTE
 import org.mifospay.feature.auth.navigation.loginScreen
 import org.mifospay.feature.auth.navigation.mobileVerificationScreen
@@ -22,15 +22,19 @@ import org.mifospay.feature.auth.navigation.signupScreen
 import org.mifospay.feature.auth.socialSignup.navigateToSignupMethod
 import org.mifospay.feature.auth.socialSignup.signupMethodScreen
 
-internal fun NavGraphBuilder.loginNavGraph(navController: NavController) {
+internal fun NavGraphBuilder.loginNavGraph(
+    navController: NavController,
+    onShowInstanceSelector: () -> Unit,
+) {
     navigation(
         route = MifosNavGraph.LOGIN_GRAPH,
         startDestination = LOGIN_ROUTE,
     ) {
         loginScreen(
             onNavigateBack = navController::popBackStack,
-            onNavigateToPasscodeScreen = navController::navigateToPasscodeScreen,
+            navigateToMifosPasscodeScreen = navController::navigateToRootMifosPasscodeScreen,
             onNavigateToSignupScreen = navController::navigateToSignupMethod,
+            onShowInstanceSelector = onShowInstanceSelector,
         )
 
         signupMethodScreen(

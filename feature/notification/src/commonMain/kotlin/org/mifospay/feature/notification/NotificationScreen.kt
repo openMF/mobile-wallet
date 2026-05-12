@@ -31,7 +31,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import mobile_wallet.feature.notification.generated.resources.Res
 import mobile_wallet.feature.notification.generated.resources.feature_notification_error_oops
-import mobile_wallet.feature.notification.generated.resources.feature_notification_loading
 import mobile_wallet.feature.notification.generated.resources.feature_notification_nothing_to_notify
 import mobile_wallet.feature.notification.generated.resources.feature_notification_notifications
 import mobile_wallet.feature.notification.generated.resources.feature_notification_there_is_nothing_to_show
@@ -41,11 +40,11 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.jetbrains.compose.ui.tooling.preview.PreviewParameter
 import org.jetbrains.compose.ui.tooling.preview.PreviewParameterProvider
 import org.koin.compose.viewmodel.koinViewModel
-import org.mifospay.core.designsystem.component.MfLoadingWheel
 import org.mifospay.core.designsystem.component.MifosScaffold
 import org.mifospay.core.designsystem.theme.MifosTheme
 import org.mifospay.core.model.notification.Notification
 import org.mifospay.core.ui.EmptyContentScreen
+import org.mifospay.core.ui.MifosProgressIndicator
 import template.core.base.designsystem.theme.KptTheme
 
 @Composable
@@ -92,13 +91,7 @@ internal fun NotificationScreen(
                     )
                 }
 
-                is NotificationUiState.Loading -> {
-                    MfLoadingWheel(
-                        contentDesc = stringResource(Res.string.feature_notification_loading),
-                        modifier = Modifier.align(Alignment.Center),
-                        backgroundColor = Color.Transparent,
-                    )
-                }
+                is NotificationUiState.Loading -> MifosProgressIndicator()
 
                 is NotificationUiState.Success -> {
                     if (uiState.notificationList.isEmpty()) {

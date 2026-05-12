@@ -22,6 +22,7 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             implementation(projects.core.domain)
+            implementation(projects.coreBase.ui)
             api(projects.core.data)
             api(projects.core.network)
             //put your multiplatform dependencies here
@@ -43,18 +44,21 @@ kotlin {
             implementation(projects.feature.payments)
             implementation(projects.feature.finance)
             implementation(projects.feature.accounts)
+            implementation(projects.feature.beneficiary)
             implementation(projects.feature.invoices)
             implementation(projects.feature.kyc)
             implementation(projects.feature.notification)
             implementation(projects.feature.savedcards)
             implementation(projects.feature.receipt)
             implementation(projects.feature.standingInstruction)
-            implementation(projects.feature.requestMoney)
-            implementation(projects.feature.sendMoney)
-            implementation(projects.feature.makeTransfer)
-            implementation(projects.feature.qr)
+            implementation(projects.feature.transferIntrabank)
+            implementation(projects.feature.transferInterbank)
+            implementation(projects.feature.mpayQr)
+            implementation(projects.feature.mpayQrScan)
+            implementation(projects.feature.fastMpay)
             implementation(projects.feature.merchants)
             implementation(projects.feature.upiSetup)
+            implementation(projects.feature.passcode)
         }
 
         desktopMain.dependencies {
@@ -80,7 +84,7 @@ kotlin {
 
 android {
     namespace = "org.mifospay.shared"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         minSdk = 26

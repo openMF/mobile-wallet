@@ -9,12 +9,14 @@
  */
 package org.mifospay.shared.di
 
+import kotlinx.coroutines.MainScope
 import org.koin.core.context.startKoin
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.KoinAppDeclaration
 import org.koin.dsl.koinApplication
 import org.koin.dsl.module
-import org.mifos.library.passcode.di.PasscodeModule
+import org.mifos.authenticator.passcode.PasscodeManager
+import org.mifos.feature.passcode.MifosAuthenticatorModule
 import org.mifospay.core.common.di.DispatchersModule
 import org.mifospay.core.common.di.stringProviderModule
 import org.mifospay.core.data.di.RepositoryModule
@@ -24,26 +26,29 @@ import org.mifospay.core.network.di.LocalModule
 import org.mifospay.core.network.di.NetworkModule
 import org.mifospay.feature.accounts.di.AccountsModule
 import org.mifospay.feature.auth.di.AuthModule
+import org.mifospay.feature.beneficiary.di.BeneficiaryModule
 import org.mifospay.feature.editpassword.di.EditPasswordModule
 import org.mifospay.feature.faq.di.FaqModule
+import org.mifospay.feature.fastmpay.di.FastMpayModule
 import org.mifospay.feature.history.di.HistoryModule
 import org.mifospay.feature.home.di.HomeModule
 import org.mifospay.feature.invoices.di.InvoicesModule
 import org.mifospay.feature.kyc.di.KYCModule
-import org.mifospay.feature.make.transfer.di.MakeTransferModule
 import org.mifospay.feature.merchants.di.MerchantsModule
+import org.mifospay.feature.mpay.qr.di.MpayQrModule
+import org.mifospay.feature.mpay.qr.scan.di.MpayQrScanModule
 import org.mifospay.feature.notification.di.NotificationModule
 import org.mifospay.feature.payments.di.PaymentsModule
 import org.mifospay.feature.profile.di.ProfileModule
-import org.mifospay.feature.qr.di.QrModule
 import org.mifospay.feature.receipt.di.ReceiptModule
-import org.mifospay.feature.request.money.di.RequestMoneyModule
 import org.mifospay.feature.savedcards.di.SavedCardsModule
-import org.mifospay.feature.send.money.di.SendMoneyModule
 import org.mifospay.feature.settings.di.SettingsModule
 import org.mifospay.feature.standing.instruction.di.StandingInstructionModule
+import org.mifospay.feature.transfer.interbank.di.interbankTransferModule
+import org.mifospay.feature.transfer.intrabank.di.IntraBankModule
 import org.mifospay.feature.upi.setup.di.UpiSetupModule
 import org.mifospay.shared.MifosPayViewModel
+import org.mifospay.shared.instance.InstanceSelectorViewModel
 
 object KoinModules {
     private val commonModules = module {
@@ -64,6 +69,7 @@ object KoinModules {
     }
     private val sharedModule = module {
         viewModelOf(::MifosPayViewModel)
+        viewModelOf(::InstanceSelectorViewModel)
     }
     private val featureModules = module {
         includes(
@@ -76,22 +82,28 @@ object KoinModules {
             HistoryModule,
             PaymentsModule,
             AccountsModule,
+            BeneficiaryModule,
             InvoicesModule,
             KYCModule,
             NotificationModule,
             SavedCardsModule,
             ReceiptModule,
             StandingInstructionModule,
-            RequestMoneyModule,
-            SendMoneyModule,
-            MakeTransferModule,
-            QrModule,
+            IntraBankModule,
+            interbankTransferModule,
+            MpayQrModule,
+            MpayQrScanModule,
+            FastMpayModule,
             MerchantsModule,
             UpiSetupModule,
+            MifosAuthenticatorModule,
         )
     }
-    private val LibraryModule = module {
-        includes(PasscodeModule)
+
+    private val MifosPasscodeModule = module {
+        single {
+            PasscodeManager(get(), MainScope()).initialize()
+        }
     }
 
     val allModules = listOf(
@@ -102,7 +114,7 @@ object KoinModules {
         networkModules,
         featureModules,
         sharedModule,
-        LibraryModule,
+        MifosPasscodeModule,
     )
 }
 

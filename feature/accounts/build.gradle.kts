@@ -18,6 +18,7 @@ android {
 kotlin {
     sourceSets {
         commonMain.dependencies {
+            implementation(projects.feature.beneficiary)
             implementation(compose.ui)
             implementation(compose.foundation)
             implementation(compose.material3)

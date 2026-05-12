@@ -12,7 +12,6 @@ package org.mifospay.core.network.services
 import de.jensklingenberg.ktorfit.http.Body
 import de.jensklingenberg.ktorfit.http.GET
 import de.jensklingenberg.ktorfit.http.POST
-import kotlinx.coroutines.flow.Flow
 import org.mifospay.core.network.model.entity.TPTResponse
 import org.mifospay.core.network.model.entity.payload.TransferPayload
 import org.mifospay.core.network.model.entity.templates.account.AccountOptionsTemplate
@@ -20,8 +19,8 @@ import org.mifospay.core.network.utils.ApiEndPoints
 
 interface ThirdPartyTransferService {
     @GET(ApiEndPoints.ACCOUNT_TRANSFER + "/template?type=tpt")
-    suspend fun accountTransferTemplate(): Flow<AccountOptionsTemplate>
+    suspend fun accountTransferTemplate(): AccountOptionsTemplate
 
     @POST(ApiEndPoints.ACCOUNT_TRANSFER + "?type=tpt")
-    suspend fun makeTransfer(@Body transferPayload: TransferPayload): Flow<TPTResponse>
+    suspend fun makeTransfer(@Body transferPayload: TransferPayload): TPTResponse
 }

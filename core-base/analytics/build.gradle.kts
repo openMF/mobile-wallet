@@ -25,31 +25,19 @@ kotlin {
             implementation(compose.ui)
             implementation(compose.foundation)
             implementation(libs.kermit.logging)
-            
+
             // For timing and performance tracking
             implementation(libs.kotlinx.datetime)
         }
 
-        androidMain.dependencies {
-            api(libs.gitlive.firebase.analytics)
+        // Firebase Analytics for non-JS platforms (Android, iOS, Desktop)
+        val nonJsCommonMain by getting {
+            dependencies {
+                implementation(libs.gitlive.firebase.app)
+                implementation(libs.gitlive.firebase.analytics)
+            }
         }
 
-        nonJsCommonMain.dependencies {
-            api(libs.gitlive.firebase.analytics)
-        }
-
-        nativeMain.dependencies {
-            api(libs.gitlive.firebase.analytics)
-        }
-
-        desktopMain.dependencies {
-            api(libs.gitlive.firebase.analytics)
-        }
-
-        mobileMain.dependencies {
-            api(libs.gitlive.firebase.crashlytics)
-        }
-        
         // Test dependencies for all platforms
         commonTest.dependencies {
             implementation(libs.kotlin.test)

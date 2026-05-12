@@ -20,7 +20,6 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.datetime.Clock
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 import org.mifospay.core.common.DataState
@@ -42,6 +41,8 @@ import org.mifospay.feature.standing.instruction.createOrUpdate.AddEditSIAction.
 import org.mifospay.feature.standing.instruction.createOrUpdate.AddEditSIAction.Internal.HandleTemplateResult
 import org.mifospay.feature.standing.instruction.createOrUpdate.AddEditSIAction.Internal.LoadClientAccount
 import org.mifospay.feature.standing.instruction.createOrUpdate.AddEditSIState.DialogState.Error
+import kotlin.time.Clock
+import kotlin.time.ExperimentalTime
 
 internal class AddEditSIViewModel(
     private val repository: StandingInstructionRepository,
@@ -580,6 +581,7 @@ internal data class AddEditSIState(
                 it.id == payload.recurrenceFrequency
             }?.value ?: ""
 
+            @OptIn(ExperimentalTime::class)
             @Transient
             val initialDate = Clock.System.now().toEpochMilliseconds()
 

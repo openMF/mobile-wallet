@@ -16,7 +16,7 @@ import org.mifospay.core.network.model.entity.payload.TransferPayload
 import org.mifospay.core.network.model.entity.templates.account.AccountOptionsTemplate
 
 interface ThirdPartyTransferRepository {
-    suspend fun getTransferTemplate(): Flow<DataState<AccountOptionsTemplate>>
+    suspend fun getTransferTemplate(): AccountOptionsTemplate
 
-    suspend fun makeTransfer(payload: TransferPayload): Flow<DataState<TPTResponse>>
+    fun makeTransfer(payload: TransferPayload): Flow<DataState<TPTResponse>>
 }

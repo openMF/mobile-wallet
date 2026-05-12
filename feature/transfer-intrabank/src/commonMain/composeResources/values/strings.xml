@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copyright 2024 Mifos Initiative
+
+    This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+    If a copy of the MPL was not distributed with this file,
+    You can obtain one at https://mozilla.org/MPL/2.0/.
+
+    See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+-->
+<resources>
+    <string name="feature_send_money_insufficient_balance">Insufficient balance</string>
+    <string name="feature_send_money_error_fetching_balance">Error fetching balance</string>
+    <string name="feature_send_money_not_allowed">Self Account transfer is not allowed</string>
+    <string name="feature_send_money_send">Send Money</string>
+    <string name="feature_send_money_select_transfer_method">Select transfer method</string>
+    <string name="feature_send_money_vpa">VPA</string>
+    <string name="feature_send_money_mobile">Mobile number</string>
+    <string name="feature_send_money_amount">Amount</string>
+    <string name="feature_send_money_virtual_payment_address">Virtual Payment Address</string>
+    <string name="feature_send_money_submit">Submit</string>
+    <string name="feature_send_money_please_wait">Please wait…</string>
+    <string name="feature_send_money_phone_number">Phone Number</string>
+
+    <string name="feature_send_money_oops">Oops!</string>
+    <string name="feature_send_money_something_went_wrong">Something went wrong!</string>
+    <string name="feature_send_money_no_accounts_found">No accounts found!</string>
+    <string name="feature_send_money_vpa_mobile_account_number">VPA/Mobile/Account Number</string>
+    <string name="feature_send_money_to_account">To Account</string>
+    <string name="feature_send_money_proceed">Proceed</string>
+    <string name="feature_send_money_bottom_bar">Bottom Bar</string>
+    <string name="feature_send_money_scan_qr">Scan QR</string>
+    <string name="feature_send_money_close">Close</string>
+    <string name="feature_send_money_loading">Loading</string>
+    <string name="feature_send_money_selected">Selected</string>
+    <string name="feature_send_money_error_amount_cannot_be_empty">Amount cannot be empty</string>
+    <string name="feature_send_money_error_invalid_amount">Invalid amount</string>
+    <string name="feature_send_money_error_account_cannot_be_empty">Account cannot be empty</string>
+    <string name="feature_send_money_error_requesting_payment_qr_but_found">Requesting payment QR but found - %1$s</string>
+    <string name="feature_send_money_error_requesting_payment_qr_data_missing">Failed to request payment QR: required data is missing</string>
+
+    <string name="feature_select_payment_title">Select Payee</string>
+    <string name="feature_select_account_placeholder">Search VPA/Mobile/Account Number</string>
+    <string name="feature_send_money_add_payee_title">Add Payee</string>
+    <string name="feature_send_money_add_payee_subtitle">Add Payee to transfer money quickly</string>
+    <string name="feature_send_money_add_icon_desc">Add</string>
+    <string name="feature_send_money_recents_title">Recents</string>
+    <string name="feature_send_money_recents_icon_desc">Recents</string>
+
+    <!-- Quick Actions -->
+    <string name="feature_send_money_add_payee">Add Payee</string>
+    <string name="feature_send_money_history">History</string>
+    <string name="feature_send_money_request">Request</string>
+
+    <!-- Tabs -->
+    <string name="feature_send_money_tab_recents">Recents</string>
+    <string name="feature_send_money_tab_beneficiaries">Beneficiaries</string>
+
+    <!-- Recents Section -->
+    <string name="feature_send_money_see_all">See all transactions</string>
+    <string name="feature_send_money_no_recents">No recent transfers</string>
+    <string name="feature_send_money_no_recents_subtitle">Add a payee to start sending money</string>
+
+    <!-- Beneficiaries Section -->
+    <string name="feature_send_money_no_beneficiaries">No beneficiaries</string>
+    <string name="feature_send_money_no_beneficiaries_subtitle">Add a beneficiary to send money quickly</string>
+    <string name="feature_send_money_all_accounts">All Accounts</string>
+    <string name="feature_send_money_last_paid">Last paid %1$s</string>
+    <string name="feature_send_money_pay_button">Pay</string>
+    <string name="feature_send_money_no_accounts_found_for_search">No accounts found for searched query</string>
+
+    <!-- Transfer Confirm Screen (migrated from make-transfer) -->
+    <string name="feature_make_transfer_loading">Loading</string>
+    <string name="feature_make_transfer_send_money">Send money</string>
+    <string name="feature_make_transfer_sending_to">Sending to</string>
+    <string name="feature_make_transfer_amount">Enter Amount</string>
+    <string name="feature_make_transfer_transaction_success">Transaction successful</string>
+    <string name="feature_make_transfer_transaction_unable_to_process">Unable to process transfer</string>
+    <string name="feature_make_transfer_review_title">Review Transfer</string>
+    <string name="feature_make_transfer_description_label">Add a Message</string>
+    <string name="feature_make_transfer_to_account">To %1$s</string>
+    <string name="feature_make_transfer_from_account">From %1$s</string>
+    <string name="feature_make_transfer_from_account_title">From Account</string>
+    <string name="feature_make_transfer_continue_button">Continue</string>
+    <string name="feature_make_transfer_oops_title">Oops!</string>
+    <string name="feature_make_transfer_no_accounts_found">No accounts found!</string>
+    <string name="feature_make_transfer_check_icon_description">check</string>
+    <string name="feature_make_transfer_badge_wallet">WALLET</string>
+    <string name="feature_make_transfer_badge_saving">SAVING</string>
+    <string name="feature_make_transfer_icon_selected_description">Selected account indicator</string>
+
+    <!-- Transfer Success Screen -->
+    <string name="feature_make_transfer_continue">Continue</string>
+    <string name="feature_make_transfer_success">Success</string>
+    <string name="feature_make_transfer_payment_success">Payment Success</string>
+    <string name="feature_make_transfer_payment_done">Your payment has been successfully done.</string>
+
+    <!-- TransferConfirmViewModel errors -->
+    <string name="feature_make_transfer_error_empty_amount">Amount cannot be empty</string>
+    <string name="feature_make_transfer_error_invalid_amount">Please enter a valid amount</string>
+    <string name="feature_make_transfer_error_empty_description">Description cannot be empty</string>
+    <string name="feature_make_transfer_error_select_account">Please select an account</string>
+    <string name="feature_make_transfer_error_inactive_account">Account is inactive</string>
+    <string name="feature_make_transfer_error_same_account">Cannot transfer to the same account</string>
+    <string name="feature_make_transfer_error_insufficient_balance">Insufficient balance</string>
+    <string name="feature_make_transfer_available_balance">Available Balance: %1$s</string>
+    <string name="feature_make_transfer_show_balance">Show Balance</string>
+    <string name="feature_make_transfer_hide_balance">Hide Balance</string>
+    <string name="feature_make_transfer_amount_error">Your account has insufficient balance</string>
+    <string name="feature_make_transfer_user_verification_failed">User verification failed</string>
+
+    <!-- Error dialog titles -->
+    <string name="feature_transfer_error_title">Error</string>
+    <string name="feature_transfer_error_network_title">Network Error</string>
+    <string name="feature_transfer_error_server_title">Server Error</string>
+    <string name="feature_transfer_error_invalid_request_title">Invalid Request</string>
+    <string name="feature_transfer_error_access_denied_title">Access Denied</string>
+
+    <!-- Error messages -->
+    <string name="feature_transfer_error_network">Please check your internet connection</string>
+    <string name="feature_transfer_error_server">Server error occurred. Please try again later.</string>
+    <string name="feature_transfer_error_invalid_request">Invalid request. Please check your details.</string>
+
+    <!-- Dialog buttons -->
+    <string name="feature_transfer_retry">Retry</string>
+    <string name="feature_transfer_cancel">Cancel</string>
+    <string name="feature_transfer_close">Close</string>
+
+    <!-- Success screen -->
+    <string name="feature_transfer_transaction_id">Transaction ID</string>
+    <string name="feature_transfer_copy">Copy</string>
+    <string name="feature_transfer_amount">Amount</string>
+    <string name="feature_transfer_to_account">To</string>
+    <string name="feature_transfer_from_account">From</string>
+    <string name="feature_transfer_date">Date</string>
+    <string name="feature_transfer_description">Description</string>
+    <string name="feature_transfer_back_to_home">Back to Home</string>
+    <string name="feature_transfer_transfer_completed">Transfer to %1$s completed</string>
+
+</resources>

@@ -28,7 +28,7 @@ fun MifosScrollableTabRow(
     tabContents: List<TabContent>,
     pagerState: PagerState,
     modifier: Modifier = Modifier,
-    containerColor: Color = KptTheme.colorScheme.surfaceContainerLow,
+    containerColor: Color = Color.Transparent,
     selectedContentColor: Color = KptTheme.colorScheme.primary,
     unselectedContentColor: Color = KptTheme.colorScheme.surfaceContainerLow,
     unselectedBorderColor: Color = KptTheme.colorScheme.primary,

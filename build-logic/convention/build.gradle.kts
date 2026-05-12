@@ -9,8 +9,8 @@ group = "org.mifospay.buildlogic"
 // Configure the build-logic plugins to target JDK 19
 // This matches the JDK used to build the project, and is not related to what is running on device.
 java {
-    sourceCompatibility = JavaVersion.VERSION_21
-    targetCompatibility = JavaVersion.VERSION_21
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
 }
 
 kotlin {
@@ -81,6 +81,11 @@ gradlePlugin {
         register("kmpLibrary") {
             id = "org.convention.kmp.library"
             implementationClass = "KMPLibraryConventionPlugin"
+        }
+
+        register("kmpSupabaseConfig") {
+            id = "org.convention.kmp.supabase.config"
+            implementationClass = "SupabaseConfigConventionPlugin"
         }
 
         // Static Analysis & Formatting Plugins

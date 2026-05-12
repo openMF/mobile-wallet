@@ -26,6 +26,7 @@ kotlin {
             api(libs.ktor.client.auth)
             api(libs.ktorfit.lib)
             api(libs.kermit.logging)
+            api(libs.supabase.postgrest)
         }
 
         androidMain.dependencies {

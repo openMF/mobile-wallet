@@ -18,26 +18,25 @@ import io.ktor.http.HttpStatusCode
 import io.ktor.util.AttributeKey
 import org.mifospay.core.common.GlobalAuthManager
 import org.mifospay.core.datastore.UserPreferencesRepository
+import org.mifospay.core.network.config.InstanceConfigManager
 
 class KtorInterceptor(
     private val getToken: () -> String?,
+    private val configManager: InstanceConfigManager,
 ) {
     companion object Plugin : HttpClientPlugin<Config, KtorInterceptor> {
-        private const val HEADER_TENANT = "Fineract-Platform-TenantId"
-        private const val HEADER_AUTH = "Authorization"
-        private const val DEFAULT = "venus"
 
         override val key: AttributeKey<KtorInterceptor> = AttributeKey("KtorInterceptor")
 
         override fun install(plugin: KtorInterceptor, scope: HttpClient) {
             scope.requestPipeline.intercept(HttpRequestPipeline.State) {
-                context.header("Content-Type", "application/json")
-                context.header("Accept", "application/json")
-                context.header(HEADER_TENANT, DEFAULT)
+                context.header(BaseURL.HEADER_CONTENT_TYPE, BaseURL.HEADER_CONTENT_TYPE_VALUE)
+                context.header(BaseURL.HEADER_ACCEPT, BaseURL.HEADER_ACCEPT_VALUE)
+                context.header(BaseURL.HEADER_TENANT, plugin.configManager.getPlatformTenantId())
 
                 plugin.getToken()?.let { token ->
                     if (token.isNotEmpty()) {
-                        context.headers[HEADER_AUTH] = "Basic $token"
+                        context.headers[BaseURL.HEADER_AUTHORIZATION] = "Basic $token"
                     }
                 }
             }
@@ -52,22 +51,21 @@ class KtorInterceptor(
 
         override fun prepare(block: Config.() -> Unit): KtorInterceptor {
             val config = Config().apply(block)
-            return KtorInterceptor(config.getToken)
+            return KtorInterceptor(config.getToken, config.configManager)
         }
     }
 }
 
 class Config {
     lateinit var getToken: () -> String?
+    lateinit var configManager: InstanceConfigManager
 }
 
 class KtorInterceptorRe(
     private val repository: UserPreferencesRepository,
+    private val configManager: InstanceConfigManager,
 ) {
     companion object Plugin : HttpClientPlugin<ConfigRe, KtorInterceptorRe> {
-        private const val HEADER_TENANT = "Fineract-Platform-TenantId"
-        private const val HEADER_AUTH = "Authorization"
-        private const val DEFAULT = "venus"
 
         override val key: AttributeKey<KtorInterceptorRe> = AttributeKey("KtorInterceptorRe")
 
@@ -75,13 +73,13 @@ class KtorInterceptorRe(
             val token = plugin.repository.token.value
 
             scope.requestPipeline.intercept(HttpRequestPipeline.State) {
-                context.header("Content-Type", "application/json")
-                context.header("Accept", "application/json")
-                context.header(HEADER_TENANT, DEFAULT)
+                context.header(BaseURL.HEADER_CONTENT_TYPE, BaseURL.HEADER_CONTENT_TYPE_VALUE)
+                context.header(BaseURL.HEADER_ACCEPT, BaseURL.HEADER_ACCEPT_VALUE)
+                context.header(BaseURL.HEADER_TENANT, plugin.configManager.getPlatformTenantId())
 
                 token?.let { token ->
                     if (token.isNotEmpty()) {
-                        context.headers[HEADER_AUTH] = "Basic $token"
+                        context.headers[BaseURL.HEADER_AUTHORIZATION] = "Basic $token"
                     }
                 }
             }
@@ -96,11 +94,12 @@ class KtorInterceptorRe(
 
         override fun prepare(block: ConfigRe.() -> Unit): KtorInterceptorRe {
             val config = ConfigRe().apply(block)
-            return KtorInterceptorRe(config.repository)
+            return KtorInterceptorRe(config.repository, config.configManager)
         }
     }
 }
 
 class ConfigRe {
     lateinit var repository: UserPreferencesRepository
+    lateinit var configManager: InstanceConfigManager
 }

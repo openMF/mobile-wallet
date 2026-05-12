@@ -13,47 +13,176 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
+import mobile_wallet.feature.history.generated.resources.Res
+import mobile_wallet.feature.history.generated.resources.feature_history_error
+import mobile_wallet.feature.history.generated.resources.feature_history_no_account
+import org.jetbrains.compose.resources.StringResource
 import org.mifospay.core.common.DataState
 import org.mifospay.core.data.repository.SelfServiceRepository
 import org.mifospay.core.datastore.UserPreferencesRepository
+import org.mifospay.core.model.account.Account
 import org.mifospay.core.model.savingsaccount.Transaction
 import org.mifospay.core.model.savingsaccount.TransactionType
 import org.mifospay.core.ui.utils.BaseViewModel
-import org.mifospay.feature.history.HistoryAction.Internal.TransactionsLoaded
 
 class HistoryViewModel(
     private val preferencesRepository: UserPreferencesRepository,
-    repository: SelfServiceRepository,
+    private val repository: SelfServiceRepository,
 ) : BaseViewModel<HistoryState, HistoryEvent, HistoryAction>(
     initialState = run {
         val clientId = requireNotNull(preferencesRepository.clientId.value)
         HistoryState(
             clientId = clientId,
             viewState = HistoryState.ViewState.Loading,
-            transactionType = TransactionType.OTHER,
         )
     },
 ) {
     init {
-        repository.getAccountsTransactions(state.clientId).onEach {
-            sendAction(TransactionsLoaded(it))
-        }.launchIn(viewModelScope)
+        loadActiveAccounts()
     }
 
     override fun handleAction(action: HistoryAction) {
         when (action) {
-            is HistoryAction.SetFilter -> applyFilter(action.filter)
+            is HistoryAction.SetTransactionType -> handleSetTransactionType(action.filter)
 
-            is HistoryAction.ViewTransaction -> {
-                sendEvent(HistoryEvent.OnTransactionDetail(action.transferId))
-            }
+            is HistoryAction.ViewTransaction -> handleViewTransaction(action.transferId)
 
-            is TransactionsLoaded -> handleTransactionLoaded(action)
+            is HistoryAction.OnFilterClick -> handleFilterClick()
+
+            is HistoryAction.OnApplyFilterClick -> handleApplyFilterClick()
+
+            is HistoryAction.SetSelectedAccount -> handleSetSelectedAccount(action.account)
+
+            HistoryAction.ClearFilters -> handleClearFilters()
         }
     }
 
-    private fun applyFilter(filter: TransactionType) {
-        val filteredTransactions = state.transactions.filter {
+    private fun loadTransactions(accountId: Long) {
+        repository.getTransactions(accountId, null).onEach { result ->
+            when (result) {
+                is DataState.Error -> {
+                    mutableStateFlow.update {
+                        it.copy(viewState = HistoryState.ViewState.Error(Res.string.feature_history_error))
+                    }
+                }
+
+                DataState.Loading -> {
+                    mutableStateFlow.update {
+                        it.copy(viewState = HistoryState.ViewState.Loading)
+                    }
+                }
+
+                is DataState.Success -> {
+                    val transactions = result.data
+                    if (transactions.isNotEmpty()) {
+                        mutableStateFlow.update {
+                            it.copy(
+                                transactions = transactions,
+                                viewState = HistoryState.ViewState.Content(transactions),
+                            )
+                        }
+                        applyFilter(transactions)
+                    } else {
+                        mutableStateFlow.update {
+                            it.copy(
+                                transactions = transactions,
+                                viewState = HistoryState.ViewState.Empty,
+                            )
+                        }
+                    }
+                }
+            }
+        }.launchIn(viewModelScope)
+    }
+
+    private fun loadActiveAccounts() {
+        repository.getActiveAccounts(state.clientId).onEach { result ->
+            when (result) {
+                is DataState.Error -> {
+                    mutableStateFlow.update {
+                        it.copy(viewState = HistoryState.ViewState.Error(Res.string.feature_history_error))
+                    }
+                }
+
+                DataState.Loading -> {
+                    mutableStateFlow.update {
+                        it.copy(viewState = HistoryState.ViewState.Loading)
+                    }
+                }
+
+                is DataState.Success -> {
+                    val accounts = result.data
+                    if (accounts.isNotEmpty()) {
+                        loadTransactions(accounts.first().id)
+                        mutableStateFlow.update { state ->
+                            state.copy(
+                                accounts = accounts,
+                                selectedAccount = accounts.firstOrNull(),
+                            )
+                        }
+                    } else {
+                        mutableStateFlow.update {
+                            it.copy(viewState = HistoryState.ViewState.Error(Res.string.feature_history_no_account))
+                        }
+                    }
+                }
+            }
+        }.launchIn(viewModelScope)
+    }
+
+    private fun handleClearFilters() {
+        mutableStateFlow.update {
+            it.copy(
+                selectedTransactionType = TransactionType.OTHER,
+                showFilter = false,
+            )
+        }
+        applyFilter(state.transactions)
+    }
+
+    private fun handleApplyFilterClick() {
+        mutableStateFlow.update {
+            it.copy(
+                showFilter = false,
+            )
+        }
+        val accountIdOfLoadedTransactions: Long? =
+            if (state.transactions.isNotEmpty()) state.transactions.first().accountId else null
+
+        if (state.selectedAccount?.id == accountIdOfLoadedTransactions) {
+            applyFilter(state.transactions)
+        } else {
+            state.selectedAccount?.let { account ->
+                loadTransactions(account.id)
+            }
+        }
+    }
+
+    private fun handleSetTransactionType(filter: TransactionType) {
+        mutableStateFlow.update {
+            it.copy(selectedTransactionType = filter)
+        }
+    }
+
+    private fun handleSetSelectedAccount(account: Account) {
+        mutableStateFlow.update {
+            it.copy(selectedAccount = account)
+        }
+    }
+
+    private fun handleViewTransaction(transferId: Long) {
+        sendEvent(HistoryEvent.OnTransactionDetail(transferId))
+    }
+
+    private fun handleFilterClick() {
+        mutableStateFlow.update {
+            it.copy(showFilter = !state.showFilter)
+        }
+    }
+
+    private fun applyFilter(transactions: List<Transaction>) {
+        val filter = state.selectedTransactionType
+        val filteredTransactions = transactions.filter {
             if (filter == TransactionType.OTHER) {
                 true
             } else {
@@ -63,43 +192,8 @@ class HistoryViewModel(
 
         mutableStateFlow.update {
             it.copy(
-                transactionType = filter,
-                viewState = if (filteredTransactions.isEmpty()) {
-                    HistoryState.ViewState.Empty
-                } else {
-                    HistoryState.ViewState.Content(filteredTransactions)
-                },
+                viewState = HistoryState.ViewState.Content(filteredTransactions),
             )
-        }
-    }
-
-    private fun handleTransactionLoaded(action: TransactionsLoaded) {
-        when (action.result) {
-            is DataState.Loading -> {
-                mutableStateFlow.update {
-                    it.copy(viewState = HistoryState.ViewState.Loading)
-                }
-            }
-
-            is DataState.Error -> {
-                val message = action.result.exception.message.toString()
-                mutableStateFlow.update {
-                    it.copy(viewState = HistoryState.ViewState.Error(message))
-                }
-            }
-
-            is DataState.Success -> {
-                mutableStateFlow.update {
-                    it.copy(
-                        transactions = action.result.data,
-                        viewState = if (action.result.data.isEmpty()) {
-                            HistoryState.ViewState.Empty
-                        } else {
-                            HistoryState.ViewState.Content(action.result.data)
-                        },
-                    )
-                }
-            }
         }
     }
 }
@@ -107,13 +201,16 @@ class HistoryViewModel(
 data class HistoryState(
     val clientId: Long,
     val viewState: ViewState,
-    val transactionType: TransactionType,
+    val selectedTransactionType: TransactionType = TransactionType.OTHER,
     val transactions: List<Transaction> = emptyList(),
+    val accounts: List<Account> = emptyList(),
+    val selectedAccount: Account? = null,
+    val showFilter: Boolean = false,
 ) {
     sealed interface ViewState {
         data object Loading : ViewState
         data object Empty : ViewState
-        data class Error(val message: String) : ViewState
+        data class Error(val message: StringResource) : ViewState
         data class Content(val list: List<Transaction>) : ViewState
     }
 }
@@ -123,10 +220,10 @@ sealed interface HistoryEvent {
 }
 
 sealed interface HistoryAction {
-    data class SetFilter(val filter: TransactionType) : HistoryAction
+    data class SetTransactionType(val filter: TransactionType) : HistoryAction
     data class ViewTransaction(val transferId: Long) : HistoryAction
-
-    sealed interface Internal : HistoryAction {
-        data class TransactionsLoaded(val result: DataState<List<Transaction>>) : Internal
-    }
+    data object OnFilterClick : HistoryAction
+    data class SetSelectedAccount(val account: Account) : HistoryAction
+    data object OnApplyFilterClick : HistoryAction
+    data object ClearFilters : HistoryAction
 }

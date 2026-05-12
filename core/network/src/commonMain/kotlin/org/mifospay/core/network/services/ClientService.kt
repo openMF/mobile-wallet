@@ -53,7 +53,7 @@ interface ClientService {
     ): Unit
 
     @GET(ApiEndPoints.CLIENTS + "/{clientId}/accounts")
-    suspend fun getClientAccounts(@Path("clientId") clientId: Long): Flow<ClientAccountsEntity>
+    suspend fun getClientAccounts(@Path("clientId") clientId: Long): ClientAccountsEntity
 
     @GET(ApiEndPoints.CLIENTS + "/{clientId}/accounts")
     fun getAccounts(

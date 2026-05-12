@@ -10,9 +10,9 @@
 package org.mifospay
 
 import android.os.Bundle
-import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -35,7 +35,7 @@ import org.mifospay.shared.MainUiState
 import org.mifospay.shared.MifosPaySharedApp
 import org.mifospay.shared.MifosPayViewModel
 
-class MainActivity : ComponentActivity() {
+class MainActivity : AppCompatActivity() {
     private val networkMonitor: NetworkMonitor by inject()
     private val timeZoneMonitor: TimeZoneMonitor by inject()
     private val viewModel: MifosPayViewModel by viewModel()

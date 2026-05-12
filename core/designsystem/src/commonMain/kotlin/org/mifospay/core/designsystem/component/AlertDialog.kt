@@ -9,6 +9,7 @@
  */
 package org.mifospay.core.designsystem.component
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.BasicAlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -28,7 +29,7 @@ fun MifosDialogBox(
     modifier: Modifier = Modifier,
     message: String? = null,
 ) {
-    if (showDialogState) {
+    AnimatedVisibility(showDialogState) {
         AlertDialog(
             modifier = modifier,
             onDismissRequest = onDismiss,

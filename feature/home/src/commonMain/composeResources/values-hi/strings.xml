@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copyright 2024 Mifos Initiative
+
+    This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+    If a copy of the MPL was not distributed with this file,
+    You can obtain one at https://mozilla.org/MPL/2.0/.
+
+    See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+-->
+<resources>
+    <string name="feature_home_loading">लोड हो रहा है</string>
+    <string name="start_sending_your_money_tax_free">कर-मुक्त पैसे भेजना शुरू करें!</string>
+    <string name="feature_home_desc">Mifos Pay उपयोगकर्ताओं के लिए पैसे प्राप्त करने और भेजने का सबसे अच्छा स्थान है। अभी बचत शुरू करें!</string>
+    <string name="feature_home_wallet_balance">वॉलेट बैलेंस</string>
+    <string name="feature_home_view_more">और देखें</string>
+    <string name="feature_home_mark_default">डिफ़ॉल्ट के रूप में चिह्नित करें</string>
+    <string name="feature_home_request">प्राप्त करें</string>
+    <string name="feature_home_request_money">पैसे का अनुरोध</string>
+    <string name="feature_home_send">भेजें</string>
+    <string name="feature_home_send_money">पैसे भेजें</string>
+    <string name="feature_home_account_type">खाता प्रकार</string>
+    <string name="home_filter_transactions">लेन-देन फ़िल्टर करें</string>
+    <string name="home_transaction_history">लेन-देन इतिहास</string>
+    <string name="home_see_all">सभी देखें</string>
+    <string name="home_no_transactions_found">चयनित फ़िल्टर के साथ कोई लेन-देन नहीं मिला</string>
+    <string name="feature_home_account_success">खाते को डिफ़ॉल्ट के रूप में चिह्नित किया गया</string>
+    <string name="feature_home_account_error">खाते को डिफ़ॉल्ट चिह्नित करने में त्रुटि</string>
+    <string name="feature_home_no_account">कोई खाता नहीं मिला</string>
+    <string name="feature_home_failed_to_load_accounts">खाते लोड करने में विफल। कृपया पुनः प्रयास करें।</string>
+    <string name="feature_home_account_number">खाता नं: %1$s</string>
+</resources>

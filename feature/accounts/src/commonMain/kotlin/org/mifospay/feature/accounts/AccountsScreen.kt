@@ -28,12 +28,9 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.FabPosition
-import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.OutlinedCard
@@ -53,16 +50,11 @@ import mobile_wallet.feature.accounts.generated.resources.Res
 import mobile_wallet.feature.accounts.generated.resources.baseline_check
 import mobile_wallet.feature.accounts.generated.resources.baseline_unchecked
 import mobile_wallet.feature.accounts.generated.resources.feature_accounts_add
-import mobile_wallet.feature.accounts.generated.resources.feature_accounts_add_beneficiary
-import mobile_wallet.feature.accounts.generated.resources.feature_accounts_beneficiaries
 import mobile_wallet.feature.accounts.generated.resources.feature_accounts_check
 import mobile_wallet.feature.accounts.generated.resources.feature_accounts_default
-import mobile_wallet.feature.accounts.generated.resources.feature_accounts_delete_beneficiary
 import mobile_wallet.feature.accounts.generated.resources.feature_accounts_edit
-import mobile_wallet.feature.accounts.generated.resources.feature_accounts_edit_beneficiary
 import mobile_wallet.feature.accounts.generated.resources.feature_accounts_error_oops
 import mobile_wallet.feature.accounts.generated.resources.feature_accounts_info
-import mobile_wallet.feature.accounts.generated.resources.feature_accounts_loading
 import mobile_wallet.feature.accounts.generated.resources.feature_accounts_savings_account
 import mobile_wallet.feature.accounts.generated.resources.feature_accounts_status_active
 import mobile_wallet.feature.accounts.generated.resources.feature_accounts_status_approved
@@ -82,24 +74,22 @@ import org.jetbrains.compose.resources.vectorResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.mifospay.core.designsystem.component.BasicDialogState
 import org.mifospay.core.designsystem.component.LoadingDialogState
-import org.mifospay.core.designsystem.component.MfLoadingWheel
 import org.mifospay.core.designsystem.component.MifosBasicDialog
-import org.mifospay.core.designsystem.component.MifosButton
 import org.mifospay.core.designsystem.component.MifosLoadingDialog
 import org.mifospay.core.designsystem.component.MifosScaffold
 import org.mifospay.core.designsystem.icon.MifosIcons
 import org.mifospay.core.model.account.Account
-import org.mifospay.core.model.beneficiary.Beneficiary
 import org.mifospay.core.model.savingsaccount.Status
 import org.mifospay.core.ui.AvatarBox
 import org.mifospay.core.ui.EmptyContentScreen
+import org.mifospay.core.ui.MifosProgressIndicator
 import org.mifospay.core.ui.MifosSmallChip
 import org.mifospay.core.ui.RevealDirection
 import org.mifospay.core.ui.RevealSwipe
 import org.mifospay.core.ui.rememberRevealState
 import org.mifospay.core.ui.utils.EventsEffect
-import org.mifospay.feature.accounts.beneficiary.BeneficiaryAddEditType
 import org.mifospay.feature.accounts.savingsaccount.SavingsAddEditType
+import org.mifospay.feature.beneficiary.addupdatebeneficiary.BeneficiaryAddEditType
 import template.core.base.designsystem.theme.KptTheme
 
 @Composable
@@ -192,11 +182,7 @@ internal fun AccountsScreenContent(
             contentAlignment = Alignment.Center,
         ) {
             when (state) {
-                is AccountState.ViewState.Loading -> {
-                    MfLoadingWheel(
-                        contentDesc = stringResource(Res.string.feature_accounts_loading),
-                    )
-                }
+                is AccountState.ViewState.Loading -> MifosProgressIndicator()
 
                 is AccountState.ViewState.Error -> {
                     EmptyContentScreen(
@@ -230,16 +216,6 @@ internal fun AccountsScreenContent(
         modifier = modifier,
         defaultAccountId = defaultAccountId,
         accounts = state.accounts,
-        beneficiaryList = state.beneficiaries,
-        onAddTPTBeneficiary = {
-            onAction(AccountAction.AddTPTBeneficiary)
-        },
-        onClickEditBeneficiary = {
-            onAction(AccountAction.EditBeneficiary(it))
-        },
-        onClickDeleteBeneficiary = {
-            onAction(AccountAction.DeleteBeneficiary(it))
-        },
         onAccountClicked = { accId, accNo ->
             onAction(AccountAction.SetDefaultAccount(accId, accNo))
         },
@@ -256,11 +232,7 @@ internal fun AccountsScreenContent(
 private fun AccountsList(
     defaultAccountId: Long?,
     accounts: List<Account>,
-    beneficiaryList: List<Beneficiary>,
     onAccountClicked: (Long, String) -> Unit,
-    onAddTPTBeneficiary: () -> Unit,
-    onClickEditBeneficiary: (Beneficiary) -> Unit,
-    onClickDeleteBeneficiary: (Long) -> Unit,
     onClickEditAccount: (Long) -> Unit,
     onClickViewAccount: (Long) -> Unit,
     modifier: Modifier = Modifier,
@@ -282,7 +254,7 @@ private fun AccountsList(
 
         items(
             items = accounts,
-            key = { it.id },
+            key = { "account_${it.id}" },
         ) { account ->
             AccountItem(
                 account = account,
@@ -291,63 +263,6 @@ private fun AccountsList(
                 onClickEditAccount = onClickEditAccount,
                 onClickViewAccount = onClickViewAccount,
             )
-        }
-
-        item {
-            HorizontalDivider(
-                modifier = Modifier
-                    .fillMaxWidth(),
-            )
-        }
-
-        item {
-            Text(
-                text = stringResource(Res.string.feature_accounts_beneficiaries),
-                style = KptTheme.typography.labelLarge,
-            )
-        }
-
-        items(
-            items = beneficiaryList,
-            key = { it.accountNumber },
-        ) { beneficiary ->
-            BeneficiaryItem(
-                beneficiary = beneficiary,
-                onClickEdit = onClickEditBeneficiary,
-                onClickDelete = onClickDeleteBeneficiary,
-            )
-        }
-
-        item {
-            HorizontalDivider(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = KptTheme.spacing.sm),
-            )
-        }
-
-        item {
-            Box(
-                modifier = modifier
-                    .fillMaxWidth(),
-                contentAlignment = Alignment.Center,
-            ) {
-                MifosButton(
-                    text = {
-                        Text(
-                            text = stringResource(Res.string.feature_accounts_add_beneficiary),
-                        )
-                    },
-                    leadingIcon = {
-                        Icon(
-                            imageVector = MifosIcons.Add,
-                            contentDescription = stringResource(Res.string.feature_accounts_add),
-                        )
-                    },
-                    onClick = onAddTPTBeneficiary,
-                    modifier = Modifier.align(Alignment.Center),
-                )
-            }
         }
     }
 }
@@ -484,78 +399,6 @@ private fun AccountItem(
                 ),
             )
         }
-    }
-}
-
-@Composable
-private fun BeneficiaryItem(
-    beneficiary: Beneficiary,
-    modifier: Modifier = Modifier,
-    onClickEdit: (Beneficiary) -> Unit,
-    onClickDelete: (Long) -> Unit,
-) {
-    OutlinedCard(
-        modifier = modifier.fillMaxWidth(),
-        shape = KptTheme.shapes.small,
-        colors = CardDefaults.outlinedCardColors(
-            containerColor = Color.Transparent,
-            contentColor = KptTheme.colorScheme.onSurface,
-        ),
-    ) {
-        ListItem(
-            headlineContent = {
-                Text(text = beneficiary.name)
-            },
-            supportingContent = {
-                Text(text = beneficiary.accountNumber)
-            },
-            leadingContent = {
-                AvatarBox(
-                    icon = MifosIcons.AccountCircle,
-                    backgroundColor = KptTheme.colorScheme.tertiaryContainer,
-                    contentColor = KptTheme.colorScheme.tertiary,
-                )
-            },
-            trailingContent = {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(KptTheme.spacing.xs),
-                ) {
-                    FilledTonalIconButton(
-                        onClick = {
-                            onClickEdit(beneficiary)
-                        },
-                        colors = IconButtonDefaults.filledTonalIconButtonColors(
-                            containerColor = KptTheme.colorScheme.surfaceContainerHighest,
-                            contentColor = KptTheme.colorScheme.onSurfaceVariant,
-                        ),
-                    ) {
-                        Icon(
-                            imageVector = MifosIcons.Edit2,
-                            contentDescription = stringResource(Res.string.feature_accounts_edit_beneficiary),
-                        )
-                    }
-
-                    FilledTonalIconButton(
-                        onClick = {
-                            onClickDelete(beneficiary.id)
-                        },
-                        colors = IconButtonDefaults.filledTonalIconButtonColors(
-                            containerColor = KptTheme.colorScheme.errorContainer,
-                            contentColor = KptTheme.colorScheme.error,
-                        ),
-                    ) {
-                        Icon(
-                            imageVector = MifosIcons.OutlinedDelete,
-                            contentDescription = stringResource(Res.string.feature_accounts_delete_beneficiary),
-                        )
-                    }
-                }
-            },
-            colors = ListItemDefaults.colors(
-                containerColor = Color.Transparent,
-            ),
-        )
     }
 }
 

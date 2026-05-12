@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 Mifos Initiative
+ * Copyright 2026 Mifos Initiative
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -15,6 +15,8 @@ import org.mifospay.core.common.DataState
 import org.mifospay.core.model.account.DefaultAccount
 import org.mifospay.core.model.client.Client
 import org.mifospay.core.model.client.UpdatedClient
+import org.mifospay.core.model.instance.InterbankServer
+import org.mifospay.core.model.instance.ServerInstance
 import org.mifospay.core.model.user.UserInfo
 
 interface UserPreferencesRepository {
@@ -32,6 +34,12 @@ interface UserPreferencesRepository {
 
     val defaultAccountId: StateFlow<Long?>
 
+    val selectedInstance: StateFlow<ServerInstance?>
+
+    val selectedInterbankInstance: StateFlow<InterbankServer?>
+
+    val accountExternalIds: StateFlow<Map<Long, String>>
+
     suspend fun updateToken(token: String): DataState<Unit>
 
     suspend fun updateUserInfo(user: UserInfo): DataState<Unit>
@@ -41,6 +49,14 @@ interface UserPreferencesRepository {
     suspend fun updateClientProfile(client: UpdatedClient): DataState<Unit>
 
     suspend fun updateDefaultAccount(account: DefaultAccount): DataState<Unit>
+
+    suspend fun updateSelectedInstance(instance: ServerInstance): DataState<Unit>
+
+    suspend fun updateSelectedInterbankInstance(instance: InterbankServer): DataState<Unit>
+
+    suspend fun updateAccountExternalIds(accountExternalIds: Map<Long, String>): DataState<Unit>
+
+    fun getAccountExternalId(accountId: Long): String?
 
     suspend fun logOut(): Unit
 }

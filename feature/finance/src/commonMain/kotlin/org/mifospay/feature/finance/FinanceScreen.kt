@@ -33,11 +33,15 @@ internal fun FinanceRoute(
     }
 }
 
+// TODO Cards not using self apis until then commented it.
+//  https://venus.mifos.community/fineract-provider/api/v1/datatables/saved_cards/2
+//  https://venus.mifos.community/fineract-provider/api/v1/datatables/kyc_level1_details/2
 enum class FinanceScreenContents {
     ACCOUNTS,
-    CARDS,
-    MERCHANTS,
-    KYC,
+    BENEFICIARIES,
+//    CARDS,
+//    MERCHANTS,
+//    KYC,
 }
 
 @Preview

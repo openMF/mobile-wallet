@@ -9,20 +9,16 @@
  */
 package org.mifospay.feature.home
 
-import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.mapLatest
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 import mobile_wallet.feature.home.generated.resources.Res
 import mobile_wallet.feature.home.generated.resources.feature_home_account_error
 import mobile_wallet.feature.home.generated.resources.feature_home_account_success
-import mobile_wallet.feature.home.generated.resources.feature_home_no_account
+import mobile_wallet.feature.home.generated.resources.feature_home_failed_to_load_accounts
 import org.jetbrains.compose.resources.StringResource
+import org.jetbrains.compose.resources.getString
 import org.mifospay.core.common.DataState
 import org.mifospay.core.data.repository.SelfServiceRepository
 import org.mifospay.core.datastore.UserPreferencesRepository
@@ -30,6 +26,7 @@ import org.mifospay.core.model.account.Account
 import org.mifospay.core.model.account.DefaultAccount
 import org.mifospay.core.model.client.Client
 import org.mifospay.core.model.savingsaccount.Transaction
+import org.mifospay.core.model.savingsaccount.TransactionType
 import org.mifospay.core.ui.utils.BaseViewModel
 
 private const val TRANSACTION_LIMIT = 5
@@ -49,62 +46,133 @@ class HomeViewModel(
         )
     },
 ) {
-    /**
-     * Exposes the current view state for the Home screen (loading, content, or error),
-     * and automatically updates when a reload is triggered via the state.
-     *
-     * This state is driven by [HomeState.reloadTrigger], which toggles whenever the user
-     * explicitly requests a refresh — for example, by clicking the Retry button on an error screen,
-     * or performing a pull-to-refresh gesture.
-     *
-     * The flow reacts to changes in [reloadTrigger] using `flatMapLatest`, triggering a new
-     * call to [SelfServiceRepository.getActiveAccountsWithTransactions]. The result of that call
-     * is mapped into a [ViewState], and exposed via a hot [StateFlow] for UI consumption.
-     *
-     * Additionally, [HomeState.isRefreshing] is reset to false once a response (either success or error)
-     * is received, ensuring the UI (e.g. pull-to-refresh indicator) stops spinning.
-     */
-    val accountState = stateFlow
-        .mapLatest { it.reloadTrigger }
-        .flatMapLatest {
-            repository.getActiveAccountsWithTransactions(
-                clientId = state.client.id,
-                limit = TRANSACTION_LIMIT,
-            )
-        }.mapLatest { result ->
-            when (result) {
-                is DataState.Error -> {
-                    mutableStateFlow.update {
-                        it.copy(isRefreshing = false)
+
+    fun getAccounts() {
+        launchIO {
+            repository.getActiveAccounts(state.client.id)
+                .collect { result ->
+                    when (result) {
+                        is DataState.Error -> {
+                            val errorMessage = result.exception.message
+                                ?.takeIf { it != "null" && it.isNotBlank() }
+                                ?: getString(Res.string.feature_home_failed_to_load_accounts)
+                            mutableStateFlow.update {
+                                it.copy(
+                                    isRefreshing = false,
+                                    viewState = ViewState.Error(errorMessage),
+                                )
+                            }
+                        }
+
+                        is DataState.Loading -> {
+                            mutableStateFlow.update { it.copy(viewState = ViewState.Loading) }
+                        }
+
+                        is DataState.Success -> {
+                            if (result.data.isEmpty()) {
+                                mutableStateFlow.update {
+                                    it.copy(
+                                        isRefreshing = false,
+                                        accounts = emptyList(),
+                                        accountsWithTransactions = emptyMap(),
+                                        viewState = ViewState.NoAccounts,
+                                    )
+                                }
+                            } else {
+                                val selected = result.data.firstOrNull()
+
+                                // Save account external IDs map
+                                val accountExternalIds = result.data
+                                    .filter { !it.externalId.isNullOrBlank() }
+                                    .associate { it.id to it.externalId!! }
+                                preferencesRepository.updateAccountExternalIds(accountExternalIds)
+
+                                if (selected != null) {
+                                    mutableStateFlow.update {
+                                        it.copy(
+                                            isRefreshing = false,
+                                            accounts = result.data,
+                                            accountsWithTransactions = emptyMap(),
+                                            viewState = ViewState.Content,
+                                            selectedAccount = selected,
+                                            currentSelectedAccount = selected,
+                                        )
+                                    }
+                                }
+
+                                if (state.defaultAccountId == null && selected != null) {
+                                    sendAction(HomeAction.MarkAsDefault(selected.id, selected.number))
+                                }
+                                if (selected != null) {
+                                    getAccountBasedOnId(selected)
+                                }
+                            }
+                        }
                     }
-                    ViewState.Error(Res.string.feature_home_no_account)
                 }
+        }
+    }
 
-                is DataState.Loading -> ViewState.Loading
+    private var loadTransactionsJob: Job? = null
 
-                is DataState.Success -> {
-                    mutableStateFlow.update {
-                        it.copy(isRefreshing = false)
+    fun getAccountBasedOnId(account: Account) {
+        if (state.accountsWithTransactions.containsKey(account)) {
+            mutableStateFlow.update {
+                it.copy(
+                    transactions = state.accountsWithTransactions[account],
+                    selectedAccount = account,
+                    currentSelectedAccount = account,
+                )
+            }
+            applyFilter()
+        } else {
+            // cancel the previous job if it's still active
+            loadTransactionsJob?.cancel()
+
+            // launch a new job
+            loadTransactionsJob = launchIO {
+                repository.getTransactions(
+                    account.id,
+                    TRANSACTION_LIMIT,
+                ).collect { result ->
+                    when (result) {
+                        is DataState.Error -> {
+                            mutableStateFlow.update {
+                                it.copy(
+                                    transactionsLoading = false,
+                                    transactions = emptyList(),
+                                    selectedAccount = account,
+                                    currentSelectedAccount = account,
+                                )
+                            }
+                        }
+                        DataState.Loading -> {
+                            mutableStateFlow.update {
+                                it.copy(
+                                    transactions = emptyList(),
+                                    transactionsLoading = true,
+                                )
+                            }
+                        }
+                        is DataState.Success -> {
+                            val newMap = state.accountsWithTransactions.toMutableMap()
+                            newMap.put(account, result.data)
+                            mutableStateFlow.update {
+                                it.copy(
+                                    transactionsLoading = false,
+                                    transactions = result.data,
+                                    selectedAccount = account,
+                                    currentSelectedAccount = account,
+                                    accountsWithTransactions = newMap,
+                                )
+                            }
+                            applyFilter()
+                        }
                     }
-
-                    if (state.defaultAccountId == null && result.data.accounts.isNotEmpty()) {
-                        val accountId = result.data.accounts.first().id
-                        val accountNo = result.data.accounts.first().number
-
-                        sendAction(HomeAction.MarkAsDefault(accountId, accountNo))
-                    }
-
-                    ViewState.Content(
-                        accounts = result.data.accounts,
-                        transactions = result.data.transactions,
-                    )
                 }
             }
-        }.stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5_000),
-            initialValue = ViewState.Loading,
-        )
+        }
+    }
 
     override fun handleAction(action: HomeAction) {
         when (action) {
@@ -149,7 +217,7 @@ class HomeViewModel(
             }
 
             is HomeAction.MarkAsDefault -> {
-                viewModelScope.launch {
+                launchIO {
                     val result = preferencesRepository.updateDefaultAccount(
                         DefaultAccount(
                             accountId = action.accountId,
@@ -173,13 +241,96 @@ class HomeViewModel(
                 }
             }
 
-            is HomeAction.OnRetryClicked -> mutableStateFlow.update {
-                it.copy(reloadTrigger = !it.reloadTrigger)
+            is HomeAction.OnRetryClicked -> {
+                getAccounts()
             }
 
-            is HomeAction.OnPullToRefresh -> mutableStateFlow.update {
-                it.copy(isRefreshing = true, reloadTrigger = !it.reloadTrigger)
+            is HomeAction.OnPullToRefresh -> {
+                mutableStateFlow.update {
+                    it.copy(isRefreshing = true)
+                }
+                getAccounts()
             }
+
+            is HomeAction.OnSelectedAccountChanged -> {
+                getAccountBasedOnId(action.account)
+            }
+
+            HomeAction.DismissBottomSheet -> {
+                mutableStateFlow.update {
+                    it.copy(showBottomSheet = false)
+                }
+            }
+
+            HomeAction.ShowBottomSheet -> {
+                mutableStateFlow.update {
+                    it.copy(showBottomSheet = true)
+                }
+            }
+
+            HomeAction.ClearFilters -> {
+                mutableStateFlow.update {
+                    it.copy(
+                        transactionType = TransactionType.OTHER,
+                        currentSelectedTransactionType = TransactionType.OTHER,
+                        showBottomSheet = false,
+                        transactions = it.accountsWithTransactions[it.selectedAccount],
+                    )
+                }
+            }
+
+            HomeAction.OnApplyFilterClick -> {
+                mutableStateFlow.update {
+                    it.copy(
+                        showBottomSheet = false,
+                    )
+                }
+                if (state.currentSelectedAccount != null) {
+                    getAccountBasedOnId(state.currentSelectedAccount!!)
+                }
+            }
+
+            is HomeAction.SetFilter -> {
+                mutableStateFlow.update {
+                    it.copy(currentSelectedTransactionType = action.filter)
+                }
+            }
+
+            is HomeAction.OnFilterAccountSelected -> {
+                mutableStateFlow.update {
+                    it.copy(
+                        currentSelectedAccount = action.account,
+                    )
+                }
+            }
+
+            is HomeAction.OnFilterTransactionTypeSelected -> {
+                mutableStateFlow.update {
+                    it.copy(
+                        currentSelectedTransactionType = action.transactionType,
+                    )
+                }
+            }
+        }
+    }
+
+    private fun applyFilter() {
+        val filter = state.currentSelectedTransactionType
+        val transactions = state.accountsWithTransactions[state.currentSelectedAccount]
+        val filteredTransactions = transactions?.filter {
+            if (filter == TransactionType.OTHER) {
+                true
+            } else {
+                it.transactionType == filter
+            }
+        }
+
+        mutableStateFlow.update {
+            it.copy(
+                transactions = filteredTransactions,
+                transactionType = filter,
+                selectedAccount = it.currentSelectedAccount,
+            )
         }
     }
 }
@@ -188,9 +339,19 @@ class HomeViewModel(
 data class HomeState(
     val client: Client,
     val defaultAccountId: Long?,
-    val reloadTrigger: Boolean = false,
+    val transactionType: TransactionType = TransactionType.OTHER,
+    val currentTransactionType: TransactionType = TransactionType.OTHER,
+    val selectedAccount: Account? = null,
+    val currentSelectedAccount: Account? = null,
     val isRefreshing: Boolean = false,
     val dialogState: DialogState? = null,
+    val accounts: List<Account> = emptyList(),
+    val accountsWithTransactions: Map<Account, List<Transaction>> = emptyMap(),
+    val viewState: ViewState = ViewState.Loading,
+    val transactions: List<Transaction>? = null,
+    val showBottomSheet: Boolean = false,
+    val transactionsLoading: Boolean = true,
+    val currentSelectedTransactionType: TransactionType = TransactionType.OTHER,
 ) {
 
     @Serializable
@@ -207,12 +368,11 @@ data class HomeState(
 sealed interface ViewState {
     data object Loading : ViewState
 
-    data class Error(val message: StringResource) : ViewState
+    data class Error(val message: String) : ViewState
 
-    data class Content(
-        val accounts: List<Account>,
-        val transactions: List<Transaction>,
-    ) : ViewState
+    data object Content : ViewState
+
+    data object NoAccounts : ViewState
 }
 
 sealed interface HomeEvent {
@@ -240,4 +400,14 @@ sealed interface HomeAction {
     data class MarkAsDefault(val accountId: Long, val accountNo: String) : HomeAction
     data class AccountDetailsClicked(val accountId: Long) : HomeAction
     data class TransactionClicked(val accountId: Long, val transactionId: Long) : HomeAction
+
+    data class OnSelectedAccountChanged(val account: Account) : HomeAction
+    data object ShowBottomSheet : HomeAction
+    data object DismissBottomSheet : HomeAction
+    data object OnApplyFilterClick : HomeAction
+    data object ClearFilters : HomeAction
+    data class SetFilter(val filter: TransactionType) : HomeAction
+
+    data class OnFilterTransactionTypeSelected(val transactionType: TransactionType) : HomeAction
+    data class OnFilterAccountSelected(val account: Account) : HomeAction
 }

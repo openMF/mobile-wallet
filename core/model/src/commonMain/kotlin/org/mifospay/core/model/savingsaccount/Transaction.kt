@@ -23,6 +23,7 @@ data class Transaction(
     val transferId: Long?,
     val originalTransactionId: Long,
     val paymentDetailId: Long?,
+    val description: String = "",
 ) {
     @Serializable
     data class Type(

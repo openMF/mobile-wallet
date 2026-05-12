@@ -50,6 +50,8 @@
     <string name="feature_accounts_savings_account">Savings Account</string>
     <string name="feature_accounts_beneficiaries">Beneficiaries</string>
     <string name="feature_accounts_add_beneficiary">Add Beneficiary</string>
+    <string name="feature_accounts_no_beneficiaries">No Beneficiaries</string>
+    <string name="feature_accounts_add_beneficiary_hint">Tap the + button to add a beneficiary</string>
     <string name="feature_accounts_add">Add</string>
     <string name="feature_accounts_edit">Edit</string>
     <string name="feature_accounts_info">Info</string>
@@ -160,4 +162,8 @@
     <string name="feature_accounts_saving_button_update">Update</string>
     <string name="feature_accounts_saving_title_create">Create Saving Account</string>
     <string name="feature_accounts_saving_title_update">Update Saving Account</string>
+
+
+    <string name="skip_the_form">Skip the form </string>
+    <string name="scan_qr_code">Scan QR Code</string>
 </resources>

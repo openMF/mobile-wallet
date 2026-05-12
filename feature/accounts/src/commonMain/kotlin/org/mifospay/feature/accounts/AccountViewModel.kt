@@ -13,10 +13,10 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import mobile_wallet.feature.accounts.generated.resources.Res
@@ -35,8 +35,8 @@ import org.mifospay.core.ui.utils.BaseViewModel
 import org.mifospay.feature.accounts.AccountAction.Internal.BeneficiaryDeleteResultReceived
 import org.mifospay.feature.accounts.AccountAction.Internal.DeleteBeneficiary
 import org.mifospay.feature.accounts.AccountEvent.OnAddEditSavingsAccount
-import org.mifospay.feature.accounts.beneficiary.BeneficiaryAddEditType
 import org.mifospay.feature.accounts.savingsaccount.SavingsAddEditType
+import org.mifospay.feature.beneficiary.addupdatebeneficiary.BeneficiaryAddEditType
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class AccountViewModel(
@@ -45,7 +45,7 @@ class AccountViewModel(
     private val json: Json,
 ) : BaseViewModel<AccountState, AccountEvent, AccountAction>(
     initialState = run {
-        val clientId = requireNotNull(userRepository.clientId.value)
+        val clientId = userRepository.clientId.value
         val defaultAccount = userRepository.defaultAccountId.value
 
         AccountState(
@@ -55,15 +55,28 @@ class AccountViewModel(
     },
 ) {
     val accountState = mutableStateFlow
-        .flatMapLatest {
-            repository.getAccountAndBeneficiaryList(state.clientId)
+        .flatMapLatest { currentState ->
+            val clientId = currentState.clientId
+            if (clientId != null) {
+                repository.getAccountAndBeneficiaryList(clientId)
+            } else {
+                flowOf(DataState.Error(IllegalStateException("Client ID not available")))
+            }
         }
         .mapLatest {
             when (it) {
                 is DataState.Loading -> AccountState.ViewState.Loading
                 is DataState.Error -> AccountState.ViewState.Error(it.exception.message.toString())
                 is DataState.Success -> {
-                    AccountState.ViewState.Content(it.data.accounts, it.data.beneficiaries)
+                    val sortedAccounts = it.data.accounts.sortedWith(
+                        compareByDescending<Account> { account -> account.status.active }
+                            .thenBy { account -> account.number },
+                    )
+
+                    AccountState.ViewState.Content(
+                        accounts = sortedAccounts,
+                        beneficiaries = it.data.beneficiaries,
+                    )
                 }
             }
         }
@@ -88,11 +101,11 @@ class AccountViewModel(
             }
 
             is AccountAction.AddTPTBeneficiary -> {
-                sendEvent(AccountEvent.OnAddOrEditTPTBeneficiary(BeneficiaryAddEditType.AddItem))
+                sendEvent(AccountEvent.OnAddOrEditTPTBeneficiary(BeneficiaryAddEditType.AddItem()))
             }
 
             is AccountAction.EditBeneficiary -> {
-                viewModelScope.launch {
+                launchIO {
                     val beneficiary = json.encodeToString<Beneficiary>(action.beneficiary)
                     sendEvent(
                         AccountEvent.OnAddOrEditTPTBeneficiary(
@@ -131,7 +144,7 @@ class AccountViewModel(
     }
 
     private fun handleSetDefaultAccount(action: AccountAction.SetDefaultAccount) {
-        viewModelScope.launch {
+        launchIO {
             userRepository.updateDefaultAccount(
                 DefaultAccount(
                     accountId = action.accountId,
@@ -147,7 +160,7 @@ class AccountViewModel(
     private fun handleDeleteBeneficiary(action: DeleteBeneficiary) {
         mutableStateFlow.update { it.copy(dialogState = AccountState.DialogState.Loading) }
 
-        viewModelScope.launch {
+        launchIO {
             val result = repository.deleteBeneficiary(action.beneficiaryId)
 
             sendAction(BeneficiaryDeleteResultReceived(result))
@@ -182,7 +195,7 @@ class AccountViewModel(
 }
 
 data class AccountState(
-    val clientId: Long,
+    val clientId: Long? = null,
     val defaultAccountId: Long? = null,
     val dialogState: DialogState? = null,
 ) {

@@ -35,18 +35,17 @@ import mobile_wallet.feature.invoices.generated.resources.feature_invoices_consu
 import mobile_wallet.feature.invoices.generated.resources.feature_invoices_date
 import mobile_wallet.feature.invoices.generated.resources.feature_invoices_invoice_details
 import mobile_wallet.feature.invoices.generated.resources.feature_invoices_items_bought
-import mobile_wallet.feature.invoices.generated.resources.feature_invoices_loading
 import mobile_wallet.feature.invoices.generated.resources.feature_invoices_merchant_id
 import mobile_wallet.feature.invoices.generated.resources.feature_invoices_status
 import mobile_wallet.feature.invoices.generated.resources.feature_invoices_transaction_id
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.mifospay.core.common.Constants
-import org.mifospay.core.designsystem.component.MifosLoadingWheel
 import org.mifospay.core.designsystem.component.MifosScaffold
 import org.mifospay.core.model.datatables.invoice.Invoice
 import org.mifospay.core.ui.ErrorScreenContent
 import org.mifospay.core.ui.MifosDivider
+import org.mifospay.core.ui.MifosProgressIndicator
 import org.mifospay.core.ui.utils.EventsEffect
 import org.mifospay.feature.invoices.details.InvoiceDetailState.ViewState.Content
 import org.mifospay.feature.invoices.details.InvoiceDetailState.ViewState.Error
@@ -94,12 +93,7 @@ internal fun InvoiceDetailScreen(
             contentAlignment = Alignment.Center,
         ) {
             when (state) {
-                is Loading -> {
-                    MifosLoadingWheel(
-                        modifier = Modifier.align(Alignment.Center),
-                        contentDesc = stringResource(Res.string.feature_invoices_loading),
-                    )
-                }
+                is Loading -> MifosProgressIndicator()
 
                 is Error -> {
                     ErrorScreenContent(

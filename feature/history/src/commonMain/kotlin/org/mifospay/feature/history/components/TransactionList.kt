@@ -10,11 +10,12 @@
 package org.mifospay.feature.history.components
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -35,17 +36,20 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import mobile_wallet.core.ui.generated.resources.Res
 import mobile_wallet.core.ui.generated.resources.core_ui_money_in
 import mobile_wallet.core.ui.generated.resources.core_ui_money_out
+import mobile_wallet.feature.history.generated.resources.Res
 import mobile_wallet.feature.history.generated.resources.arrow_outward
+import mobile_wallet.feature.history.generated.resources.feature_history_description
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.resources.vectorResource
 import org.mifospay.core.common.CurrencyFormatter
 import org.mifospay.core.model.savingsaccount.Transaction
 import org.mifospay.core.model.savingsaccount.TransactionType
 import org.mifospay.feature.history.HistoryAction
 import template.core.base.designsystem.theme.KptTheme
+import mobile_wallet.core.ui.generated.resources.Res as UiRes
 
 @Composable
 internal fun TransactionList(
@@ -86,97 +90,76 @@ internal fun TransactionItem(
     transaction: Transaction,
     modifier: Modifier = Modifier,
     showLeadingIcon: Boolean = true,
+    showDescription: Boolean = false,
     onClick: (Long) -> Unit,
 ) {
+//    TODO Disabling this view specific transfer details because of not using self api
     Surface(
         modifier = modifier,
         enabled = transaction.transferId != null,
-        onClick = {
-            transaction.transferId?.let { onClick(it) }
-        },
+//        onClick = {
+//            transaction.transferId?.let { onClick(it) }
+//        },
+        onClick = { },
         color = Color.Transparent,
         contentColor = KptTheme.colorScheme.onSurface,
     ) {
-        Row(
+        Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(KptTheme.spacing.md),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             Row(
+                modifier = Modifier
+                    .fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(KptTheme.spacing.sm),
+                horizontalArrangement = Arrangement.SpaceBetween,
             ) {
-                AnimatedVisibility(showLeadingIcon) {
-                    Image(
-                        modifier = Modifier
-                            .size(20.dp)
-                            .padding(top = KptTheme.spacing.xs),
-                        painter = painterResource(
-                            resource = when (transaction.transactionType) {
-                                TransactionType.DEBIT -> Res.drawable.core_ui_money_out
-                                TransactionType.CREDIT -> Res.drawable.core_ui_money_in
-                                else -> Res.drawable.core_ui_money_in
-                            },
-                        ),
-                        contentDescription = null,
-                    )
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(KptTheme.spacing.sm),
+                ) {
+                    AnimatedVisibility(showLeadingIcon) {
+                        Icon(
+                            modifier = Modifier
+                                .size(20.dp)
+                                .padding(top = KptTheme.spacing.xs),
+                            painter = painterResource(
+                                resource = when (transaction.transactionType) {
+                                    TransactionType.DEBIT -> UiRes.drawable.core_ui_money_out
+                                    TransactionType.CREDIT -> UiRes.drawable.core_ui_money_in
+                                    else -> UiRes.drawable.core_ui_money_in
+                                },
+                            ),
+                            contentDescription = null,
+                        )
+                    }
+
+                    Column {
+                        Text(
+                            text = transaction.transactionType.name,
+                            fontWeight = FontWeight(400),
+                            style = KptTheme.typography.bodySmall,
+                        )
+                        Text(
+                            text = transaction.date,
+                            fontWeight = FontWeight(300),
+                            style = KptTheme.typography.bodySmall,
+                        )
+                    }
                 }
 
-                Column {
-                    Text(
-                        text = transaction.transactionType.name,
-                        fontWeight = FontWeight(400),
-                        style = KptTheme.typography.bodySmall,
-                    )
-                    Text(
-                        text = transaction.date,
-                        fontWeight = FontWeight(300),
-                        style = KptTheme.typography.bodySmall,
-                    )
-                }
-            }
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Icon(
+                        imageVector = vectorResource(mobile_wallet.feature.history.generated.resources.Res.drawable.arrow_outward),
+                        modifier = when (transaction.transactionType) {
+                            TransactionType.DEBIT -> Modifier.size(16.dp)
+                            TransactionType.CREDIT -> Modifier.graphicsLayer(rotationZ = 180f)
+                                .size(16.dp)
 
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Icon(
-                    imageVector = vectorResource(mobile_wallet.feature.history.generated.resources.Res.drawable.arrow_outward),
-                    modifier = when (transaction.transactionType) {
-                        TransactionType.DEBIT -> Modifier.size(16.dp)
-                        TransactionType.CREDIT -> Modifier.graphicsLayer(rotationZ = 180f)
-                            .size(16.dp)
-
-                        else -> Modifier.graphicsLayer(rotationZ = 180f).size(16.dp)
-                    },
-                    tint = when (transaction.transactionType) {
-                        TransactionType.CREDIT -> KptTheme.colorScheme.onTertiaryContainer.copy(
-                            red = 0f,
-                            green = 0.51f,
-                            blue = 0.21f,
-                        )
-
-                        TransactionType.DEBIT -> KptTheme.colorScheme.error.copy(
-                            red = 0.8f,
-                            green = 0f,
-                            blue = 0f,
-                        )
-
-                        else -> KptTheme.colorScheme.scrim
-                    },
-                    contentDescription = null,
-                )
-                val amount = CurrencyFormatter.format(
-                    balance = transaction.amount,
-                    currencyCode = transaction.currency.code,
-                    maximumFractionDigits = 2,
-                )
-                Text(
-                    modifier = Modifier,
-                    text = amount,
-                    style = TextStyle(
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight.Normal,
-                        color = when (transaction.transactionType) {
+                            else -> Modifier.graphicsLayer(rotationZ = 180f).size(16.dp)
+                        },
+                        tint = when (transaction.transactionType) {
                             TransactionType.CREDIT -> KptTheme.colorScheme.onTertiaryContainer.copy(
                                 red = 0f,
                                 green = 0.51f,
@@ -191,8 +174,48 @@ internal fun TransactionItem(
 
                             else -> KptTheme.colorScheme.scrim
                         },
-                        textAlign = TextAlign.End,
-                    ),
+                        contentDescription = null,
+                    )
+                    val amount = CurrencyFormatter.format(
+                        balance = transaction.amount,
+                        currencyCode = transaction.currency.code,
+                        maximumFractionDigits = 2,
+                    )
+                    Text(
+                        modifier = Modifier,
+                        text = amount,
+                        style = TextStyle(
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.Normal,
+                            color = when (transaction.transactionType) {
+                                TransactionType.CREDIT -> KptTheme.colorScheme.onTertiaryContainer.copy(
+                                    red = 0f,
+                                    green = 0.51f,
+                                    blue = 0.21f,
+                                )
+
+                                TransactionType.DEBIT -> KptTheme.colorScheme.error.copy(
+                                    red = 0.8f,
+                                    green = 0f,
+                                    blue = 0f,
+                                )
+
+                                else -> KptTheme.colorScheme.scrim
+                            },
+                            textAlign = TextAlign.End,
+                        ),
+                    )
+                }
+            }
+            if (showDescription && transaction.description.isNotEmpty()) {
+                Spacer(Modifier.height(KptTheme.spacing.md))
+                Text(
+                    text = stringResource(Res.string.feature_history_description),
+                    style = KptTheme.typography.bodyMedium,
+                )
+                Text(
+                    text = transaction.description,
+                    style = KptTheme.typography.bodySmall,
                 )
             }
         }

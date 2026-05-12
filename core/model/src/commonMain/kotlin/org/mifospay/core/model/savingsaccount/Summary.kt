@@ -17,10 +17,10 @@ data class Summary(
     val currency: Currency,
     val totalDeposits: Double = 0.0,
     val totalWithdrawals: Double = 0.0,
-    val totalInterestPosted: Long = 0,
+    val totalInterestPosted: Double = 0.0,
     val accountBalance: Double = 0.0,
-    val totalOverdraftInterestDerived: Long = 0,
-    val interestNotPosted: Long = 0,
+    val totalOverdraftInterestDerived: Double = 0.0,
+    val interestNotPosted: Double = 0.0,
     val availableBalance: Double = 0.0,
 )
 
