@@ -110,7 +110,6 @@ object MifosIcons {
     val Visibility: ImageVector = Icons.Filled.Visibility
     val Check: ImageVector = Icons.Default.Check
     val KeyboardArrowDown: ImageVector = Icons.Default.KeyboardArrowDown
-    val KeyboardArrowUp: ImageVector = Icons.Default.KeyboardArrowUp
     val DropDown: ImageVector = Icons.Default.ExpandMore
     val DropUp: ImageVector = Icons.Default.ExpandLess
     val KeyboardArrowUp: ImageVector = Icons.Default.KeyboardArrowUp
@@ -162,7 +161,6 @@ object MifosIcons {
     val ArrowForward = Icons.AutoMirrored.Filled.ArrowForward
 
     val CurrencyRupee = Icons.Filled.CurrencyRupee
-    val CheckCircle = Icons.Rounded.CheckCircle
     val CheckRounded = Icons.Rounded.Check
 
     val Send = Icons.AutoMirrored.Filled.Send
