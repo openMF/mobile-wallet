@@ -101,6 +101,20 @@ import org.mifospay.feature.savedcards.details.navigateToCardDetails
 //import org.mifospay.feature.send.money.navigation.sendMoneyScreen
 //import org.mifospay.feature.send.money.navigation.upiPinScreen
 //import org.mifospay.feature.send.money.navigation.upiTransactionHistoryScreen
+//import org.mifospay.feature.send.money.SendMoneyScreen
+//import org.mifospay.feature.send.money.navigation.PAY_ANYONE_ROUTE
+//import org.mifospay.feature.send.money.navigation.SEND_MONEY_BASE_ROUTE
+//import org.mifospay.feature.send.money.navigation.SEND_MONEY_OPTIONS_ROUTE
+//import org.mifospay.feature.send.money.navigation.contactsPickerScreen
+//import org.mifospay.feature.send.money.navigation.navigateToContactsPickerScreen
+//import org.mifospay.feature.send.money.navigation.navigateToPayAnyoneScreen
+//import org.mifospay.feature.send.money.navigation.navigateToPayeeDetailsScreen
+//import org.mifospay.feature.send.money.navigation.navigateToSendMoneyOptionsScreen
+//import org.mifospay.feature.send.money.navigation.navigateToSendMoneyScreen
+//import org.mifospay.feature.send.money.navigation.payAnyoneScreen
+//import org.mifospay.feature.send.money.navigation.payeeDetailsScreen
+//import org.mifospay.feature.send.money.navigation.sendMoneyOptionsScreen
+//import org.mifospay.feature.send.money.navigation.sendMoneyScreen
 import org.mifospay.feature.settings.navigation.settingsScreen
 import org.mifospay.feature.standing.instruction.createOrUpdate.addEditSIScreen
 import org.mifospay.feature.standing.instruction.details.siDetailsScreen
@@ -388,6 +402,9 @@ internal fun MifosNavHost(
 
         mpayQrScreen(
             navigateBack = navController::navigateUp,
+            // from #1906 pr
+            navigateToSendScreen = {},
+            navigateToPayeeDetailsScreen = {},
         )
 
         // from send money pr
@@ -399,6 +416,8 @@ internal fun MifosNavHost(
 //            },
 //            onPayAnyoneClick = {
 //                // TODO: Navigate to Pay Anyone screen
+        // from #19006 pr
+//        navController.navigateToPayAnyoneScreen()
 //            },
 //            onBankTransferClick = {
 //                // TODO: Navigate to Bank Transfer screen
@@ -528,6 +547,47 @@ internal fun MifosNavHost(
 //                )
 //            },
 //        )
+
+
+
+//   from #1906 pr
+
+//        payAnyoneScreen(
+//            onBackClick = navController::popBackStack,
+//            onContactPickerClick = {
+//                navController.navigateToContactsPickerScreen()
+//            },
+//            onContactSelected = { phoneNumber ->
+//                // Contact selection updates the input field via ViewModel
+//                // No navigation needed - user stays on Pay Anyone screen
+//            },
+//        )
+//
+//        contactsPickerScreen(
+//            onBackClick = navController::popBackStack,
+//            onContactSelected = { phoneNumber ->
+//                // Navigate back to Pay Anyone screen with selected phone number
+//                navController.navigateToPayAnyoneScreen(
+//                    selectedContactPhone = phoneNumber,
+//                    navOptions = navOptions {
+//                        popUpTo(PAY_ANYONE_ROUTE) { inclusive = true }
+//                    },
+//                )
+//            },
+//        )
+//
+//        payeeDetailsScreen(
+//            onBackClick = navController::popBackStack,
+//            onNavigateToUpiPayment = { state ->
+//                // TODO: Handle UPI payment navigation
+//            },
+//            onNavigateToFineractPayment = { state ->
+//                // TODO: Handle Fineract payment navigation
+//            },
+//        )
+
+
+
 
         fastMpayScreen(
             onNavigateToAddBeneficiary = { beneficiaryData, sourceQrType, sourceQrData ->

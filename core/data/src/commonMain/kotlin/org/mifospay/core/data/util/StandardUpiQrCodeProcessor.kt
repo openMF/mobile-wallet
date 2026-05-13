@@ -10,7 +10,7 @@
 package org.mifospay.core.data.util
 
 // from send money pr
-//import org.mifospay.core.model.utils.PaymentQrData
+// import org.mifospay.core.model.utils.PaymentQrData
 import org.mifospay.core.model.utils.StandardUpiQrData
 
 /**

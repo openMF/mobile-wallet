@@ -47,7 +47,9 @@ class PayeeDetailsViewModel(
                     payeeName = qrCodeData.payeeName,
                     upiId = qrCodeData.payeeVpa,
                     phoneNumber = "",
-                    amount = amountInPaise,
+                    amount = qrCodeData.amount,
+                    // from #1906 pr
+//                    amount = amountInPaise,
                     note = qrCodeData.transactionNote,
                     isAmountEditable = qrCodeData.amount.isEmpty(),
                     isUpiCode = true,
@@ -61,6 +63,9 @@ class PayeeDetailsViewModel(
             is PayeeDetailsAction.NavigateBack -> {
                 sendEvent(PayeeDetailsEvent.NavigateBack)
             }
+            is PayeeDetailsAction.UpdateAmount -> {
+                val cleanAmount = action.amount.replace(",", "")
+                val isValidAmount = cleanAmount.isEmpty() || cleanAmount.toDoubleOrNull() != null
 
             is PayeeDetailsAction.UpdateInputAmount -> {
                 val validatedAmount = AmountUtils.validateAndFormatAmountInput(action.inputAmount)
@@ -79,6 +84,8 @@ class PayeeDetailsViewModel(
 
                     val currentAmount = stateFlow.value.amount
                     val shouldClearAccount = amountInPaise != currentAmount
+                    val amountValue = cleanAmount.toDoubleOrNull() ?: 0.0
+                    val showMessage = amountValue > 500000
 
                     mutableStateFlow.value = stateFlow.value.copy(
                         amount = amountInPaise,
@@ -86,6 +93,8 @@ class PayeeDetailsViewModel(
                         showMaxAmountMessage = showMaxMessage,
                         showMinAmountMessage = showMinMessage,
                         selectedAccount = if (shouldClearAccount) null else stateFlow.value.selectedAccount,
+                        amount = cleanAmount,
+                        showMaxAmountMessage = showMessage,
                     )
 
                     if (showMaxMessage) {
@@ -154,7 +163,11 @@ class PayeeDetailsViewModel(
             }
             is PayeeDetailsAction.ConfirmPayment -> {
                 val currentState = stateFlow.value
-                sendEvent(PayeeDetailsEvent.NavigateToUpiPin(currentState))
+                if (currentState.isUpiCode) {
+                    sendEvent(PayeeDetailsEvent.NavigateToUpiPayment(currentState))
+                } else {
+                    sendEvent(PayeeDetailsEvent.NavigateToFineractPayment(currentState))
+                }
             }
         }
     }
@@ -246,12 +259,13 @@ data class BankAccount(
 
 sealed interface PayeeDetailsEvent {
     data object NavigateBack : PayeeDetailsEvent
-    data class NavigateToUpiPin(val state: PayeeDetailsState) : PayeeDetailsEvent
-    data class NavigateToPaymentProcessing(val state: PayeeDetailsState) : PayeeDetailsEvent
+    data class NavigateToUpiPayment(val state: PayeeDetailsState) : PayeeDetailsEvent
+    data class NavigateToFineractPayment(val state: PayeeDetailsState) : PayeeDetailsEvent
 }
 
 sealed interface PayeeDetailsAction {
     data object NavigateBack : PayeeDetailsAction
+    data class UpdateAmount(val amount: String) : PayeeDetailsAction
     data class UpdateInputAmount(val inputAmount: String) : PayeeDetailsAction
     data class UpdateNote(val note: String) : PayeeDetailsAction
     data object NoteFieldFocused : PayeeDetailsAction

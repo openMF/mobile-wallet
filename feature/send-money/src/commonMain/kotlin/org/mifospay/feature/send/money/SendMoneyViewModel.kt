@@ -26,6 +26,7 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 import mobile_wallet.feature.send_money.generated.resources.Res
 import mobile_wallet.feature.send_money.generated.resources.feature_send_money_error_account_cannot_be_empty
 import mobile_wallet.feature.send_money.generated.resources.feature_send_money_error_amount_cannot_be_empty
@@ -228,7 +229,7 @@ data class SendMoneyState(
     val amount: String = "",
     val accountNumber: String = "",
     val selectedAccount: AccountResult? = null,
-    val dialogState: DialogState? = null,
+    @Transient val dialogState: DialogState? = null,
 ) {
     val amountIsValid: Boolean
         get() = amount.isNotEmpty() &&
@@ -247,9 +248,8 @@ data class SendMoneyState(
             amount = amount,
         )
 
-    @Serializable
     sealed interface DialogState {
-        @Serializable
+
         data object Loading : DialogState
 
         @Serializable
@@ -260,7 +260,8 @@ data class SendMoneyState(
                 val message: StringResource,
             ) : Error()
 
-            @Serializable
+            data class ResourceMessage(val message: StringResource) : Error
+
             data class GenericResourceMessage(
                 @Serializable(with = StringResourceSerializer::class)
                 val message: StringResource,
