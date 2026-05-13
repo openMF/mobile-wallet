@@ -40,7 +40,7 @@ class ClientRepositoryImpl(
     }
 
     override fun getClientInfo(clientId: Long): Flow<DataState<Client>> {
-        return fineractApiManager.clientsApi
+        return apiManager.clientsApi
             .getClient(clientId)
             .catch { DataState.Error(it, null) }
             .map { DataState.Success(it.toModel()) }
@@ -69,7 +69,7 @@ class ClientRepositoryImpl(
     }
 
     override fun getClientImage(clientId: Long): Flow<DataState<String>> {
-        return fineractApiManager.clientsApi
+        return apiManager.clientsApi
             .getClientImage(clientId)
             .catch { DataState.Error(it, null) }
             .map { DataState.Success(it) }
@@ -90,10 +90,9 @@ class ClientRepositoryImpl(
         }
     }
 
-    override suspend fun getClientAccounts(clientId: Long): Flow<DataState<ClientAccountsEntity>> {
+    override suspend fun getClientAccounts(clientId: Long): ClientAccountsEntity {
         return apiManager.clientsApi
             .getClientAccounts(clientId)
-            .asDataStateFlow().flowOn(ioDispatcher)
     }
 
     override suspend fun getAccounts(

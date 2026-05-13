@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copyright 2024 Mifos Initiative
+
+    This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+    If a copy of the MPL was not distributed with this file,
+    You can obtain one at https://mozilla.org/MPL/2.0/.
+
+    See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+-->
+<resources>
+    <string name="feature_history_title">السجل</string>
+    <string name="feature_history_transaction_id">معرف المعاملة : </string>
+    <string name="feature_history_transaction_date">تاريخ المعاملة : </string>
+    <string name="feature_history_other">أخرى</string>
+    <string name="feature_history_pan_id">معرف PAN</string>
+    <string name="feature_history_view_Receipt">عرض الإيصال</string>
+    <string name="feature_history_error_oops">عذرًا!</string>
+    <string name="feature_history_empty">سجل معاملاتك فارغ</string>
+    <string name="feature_history_empty_filter">سجل معاملاتك فارغ للفلاتر المحددة</string>
+    <string name="feature_history_error">حدث خطأ غير متوقع. يرجى المحاولة مرة أخرى.</string>
+    <string name="feature_history_all">الكل</string>
+    <string name="feature_history_credits">دائن</string>
+    <string name="feature_history_debits">مدين</string>
+    <string name="feature_history_loading">جاري التحميل</string>
+    <string name="feature_history_no_account">لم يتم العثور على حسابات</string>
+    <string name="feature_history_no_transactions_found">لم يتم العثور على معاملات</string>
+    <string name="feature_history_specific_transactions_history">سجل معاملات محددة</string>
+    <string name="feature_history_transaction_details">تفاصيل المعاملة</string>
+    <string name="feature_history_share">مشاركة</string>
+    <string name="feature_history_paid_to">تم الدفع إلى</string>
+    <string name="feature_history_debited_from">تم الخصم من</string>
+    <string name="feature_history_error_fallback">خطأ</string>
+    <string name="feature_history_description">وصف التحويل :</string>
+    <string name="feature_history_select_account">حدد الحساب</string>
+    <string name="feature_history_account_number">رقم الحساب: %1$s</string>
+    <string name="feature_history_account_balance">الرصيد: %1$s %2$s</string>
+    <string name="feature_history_header_account">الحساب: %1$s</string>
+    <string name="feature_history_header_all">جميع المعاملات</string>
+    <string name="feature_history_header_debit">معاملات الخصم</string>
+    <string name="feature_history_header_credit">معاملات الائتمان</string>
+    <string name="feature_history_filter_content_desc">تصفية</string>
+    <string name="feature_history_filter_title">تصفية المعاملات</string>
+    <string name="feature_history_filter_clear_all">مسح الكل</string>
+    <string name="feature_history_filter_by_account">تصفية حسب الحساب :</string>
+    <string name="feature_history_filter_transaction_type">نوع المعاملة:</string>
+    <string name="feature_history_filter_apply">تطبيق الفلاتر</string>
+</resources>

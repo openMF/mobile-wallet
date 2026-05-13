@@ -204,7 +204,7 @@ fun TransactionItem(
                                 blue = 0f,
                             )
 
-                            else -> KptTheme.colorScheme.scrim
+                            else -> KptTheme.colorScheme.onSurface
                         },
                         textAlign = TextAlign.End,
                     ),

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copyright 2024 Mifos Initiative
+
+    This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+    If a copy of the MPL was not distributed with this file,
+    You can obtain one at https://mozilla.org/MPL/2.0/.
+
+    See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+-->
+<resources>
+    <string name="feature_history_title">Riwayat</string>
+    <string name="feature_history_transaction_id">ID Transaksi : </string>
+    <string name="feature_history_transaction_date">Tanggal Transaksi : </string>
+    <string name="feature_history_other">Lainnya</string>
+    <string name="feature_history_pan_id">ID PAN</string>
+    <string name="feature_history_view_Receipt">Lihat Tanda Terima</string>
+    <string name="feature_history_error_oops">Ups!</string>
+    <string name="feature_history_empty">Riwayat transaksi Anda kosong</string>
+    <string name="feature_history_empty_filter">Riwayat transaksi Anda kosong untuk Filter yang dipilih</string>
+    <string name="feature_history_error">Terjadi kesalahan tak terduga. Silakan coba lagi.</string>
+    <string name="feature_history_all">Semua</string>
+    <string name="feature_history_credits">Kredit</string>
+    <string name="feature_history_debits">Debit</string>
+    <string name="feature_history_loading">Memuat</string>
+    <string name="feature_history_no_account">Tidak ada akun yang ditemukan</string>
+    <string name="feature_history_no_transactions_found">Tidak ada transaksi yang ditemukan</string>
+    <string name="feature_history_specific_transactions_history">Riwayat Transaksi Tertentu</string>
+    <string name="feature_history_transaction_details">Detail Transaksi</string>
+    <string name="feature_history_share">Bagikan</string>
+    <string name="feature_history_paid_to">Dibayarkan Kepada</string>
+    <string name="feature_history_debited_from">Didebet Dari</string>
+    <string name="feature_history_error_fallback">Kesalahan</string>
+    <string name="feature_history_description">Deskripsi Transfer :</string>
+    <string name="feature_history_select_account">Pilih Akun</string>
+    <string name="feature_history_account_number">No. Rek: %1$s</string>
+    <string name="feature_history_account_balance">Saldo: %1$s %2$s</string>
+    <string name="feature_history_header_account">Akun: %1$s</string>
+    <string name="feature_history_header_all">Semua Transaksi</string>
+    <string name="feature_history_header_debit">Transaksi Debit</string>
+    <string name="feature_history_header_credit">Transaksi Kredit</string>
+    <string name="feature_history_filter_content_desc">Filter</string>
+    <string name="feature_history_filter_title">Filter Transaksi</string>
+    <string name="feature_history_filter_clear_all">Hapus Semua</string>
+    <string name="feature_history_filter_by_account">Filter Berdasarkan Akun :</string>
+    <string name="feature_history_filter_transaction_type">Jenis Transaksi:</string>
+    <string name="feature_history_filter_apply">Terapkan Filter</string>
+</resources>

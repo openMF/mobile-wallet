@@ -27,6 +27,7 @@ import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
@@ -124,6 +125,7 @@ fun MifosTextField(
     errorText: String? = null,
     onClickClearIcon: () -> Unit = { onValueChange("") },
     visualTransformation: VisualTransformation = VisualTransformation.None,
+    textStyle: TextStyle? = null,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
     singleLine: Boolean = true,
     maxLines: Int = if (singleLine) 1 else Int.Companion.MAX_VALUE,
@@ -133,9 +135,14 @@ fun MifosTextField(
     keyboardOptions: KeyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
     trailingIcon: @Composable (() -> Unit)? = null,
     leadingIcon: @Composable (() -> Unit)? = null,
+    onFocusChanged: (Boolean) -> Unit = {},
 ) {
     val isFocused by interactionSource.collectIsFocusedAsState()
     val showIcon by rememberUpdatedState(value.isNotEmpty())
+
+    LaunchedEffect(isFocused) {
+        onFocusChanged(isFocused)
+    }
 
     MifosCustomTextField(
         value = value,
@@ -177,9 +184,9 @@ fun MifosTextField(
                 )
             }
         },
-        textStyle = LocalDensity.current.run {
-            TextStyle(color = KptTheme.colorScheme.onSurface)
-        },
+        textStyle = (textStyle ?: TextStyle()).copy(
+            color = KptTheme.colorScheme.onSurface,
+        ),
     )
 }
 

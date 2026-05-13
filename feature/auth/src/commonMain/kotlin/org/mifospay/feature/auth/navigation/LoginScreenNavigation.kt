@@ -20,8 +20,9 @@ const val LOGIN_ROUTE = "login_route"
 
 fun NavGraphBuilder.loginScreen(
     onNavigateBack: () -> Unit,
-    onNavigateToPasscodeScreen: () -> Unit,
+    navigateToMifosPasscodeScreen: () -> Unit,
     onNavigateToSignupScreen: () -> Unit,
+    onShowInstanceSelector: () -> Unit,
 ) {
     composable(
         route = "$LOGIN_ROUTE?username={username}",
@@ -34,8 +35,9 @@ fun NavGraphBuilder.loginScreen(
     ) {
         LoginScreen(
             onNavigateBack = onNavigateBack,
-            navigateToPasscodeScreen = onNavigateToPasscodeScreen,
+            navigateToMifosPasscodeScreen = navigateToMifosPasscodeScreen,
             navigateToSignupScreen = onNavigateToSignupScreen,
+            onShowInstanceSelector = onShowInstanceSelector,
         )
     }
 }

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copyright 2024 Mifos Initiative
+
+    This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+    If a copy of the MPL was not distributed with this file,
+    You can obtain one at https://mozilla.org/MPL/2.0/.
+
+    See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+-->
+<resources>
+    <string name="feature_home_loading">Carregando</string>
+    <string name="start_sending_your_money_tax_free">Comece a enviar dinheiro sem impostos!</string>
+    <string name="feature_home_desc">Mifos Pay é o melhor lugar para receber e enviar dinheiro. Comece a economizar agora!</string>
+    <string name="feature_home_wallet_balance">Saldo da Carteira</string>
+    <string name="feature_home_view_more">Ver Mais</string>
+    <string name="feature_home_mark_default">Marcar como Padrão</string>
+    <string name="feature_home_request">Receber</string>
+    <string name="feature_home_request_money">Solicitar Dinheiro</string>
+    <string name="feature_home_send">Enviar</string>
+    <string name="feature_home_send_money">Enviar Dinheiro</string>
+    <string name="feature_home_account_type">Tipo de conta</string>
+    <string name="home_filter_transactions">Filtrar Transações</string>
+    <string name="home_transaction_history">Histórico de Transações</string>
+    <string name="home_see_all">Ver Tudo</string>
+    <string name="home_no_transactions_found">Nenhuma transação encontrada com os filtros selecionados</string>
+    <string name="feature_home_account_success">Conta marcada como padrão</string>
+    <string name="feature_home_account_error">Erro ao marcar conta como padrão</string>
+    <string name="feature_home_no_account">Nenhuma conta encontrada</string>
+    <string name="feature_home_failed_to_load_accounts">Falha ao carregar contas. Tente novamente.</string>
+    <string name="feature_home_account_number">Conta Nº: %1$s</string>
+</resources>

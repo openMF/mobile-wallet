@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copyright 2024 Mifos Initiative
+
+    This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+    If a copy of the MPL was not distributed with this file,
+    You can obtain one at https://mozilla.org/MPL/2.0/.
+
+    See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+-->
+<resources>
+    <string name="feature_home_loading">Cargando</string>
+    <string name="start_sending_your_money_tax_free">¡Comienza a enviar dinero libre de impuestos!</string>
+    <string name="feature_home_desc">Mifos Pay es el mejor lugar para que los usuarios reciban y envíen dinero. ¡Comienza a ahorrar ahora!</string>
+    <string name="feature_home_wallet_balance">Saldo de la billetera</string>
+    <string name="feature_home_view_more">Ver más</string>
+    <string name="feature_home_mark_default">Marcar como predeterminado</string>
+    <string name="feature_home_request">Recibir</string>
+    <string name="feature_home_request_money">Solicitar dinero</string>
+    <string name="feature_home_send">Enviar</string>
+    <string name="feature_home_send_money">Enviar dinero</string>
+    <string name="feature_home_account_type">Tipo de cuenta</string>
+    <string name="home_filter_transactions">Filtrar transacciones</string>
+    <string name="home_transaction_history">Historial de transacciones</string>
+    <string name="home_see_all">Ver todo</string>
+    <string name="home_no_transactions_found">No se encontraron transacciones con los filtros seleccionados</string>
+    <string name="feature_home_account_success">Cuenta marcada como predeterminada</string>
+    <string name="feature_home_account_error">Error al marcar cuenta como predeterminada</string>
+    <string name="feature_home_no_account">No se encontraron cuentas</string>
+    <string name="feature_home_failed_to_load_accounts">Error al cargar cuentas. Inténtalo de nuevo.</string>
+    <string name="feature_home_account_number">Cta. Nro: %1$s</string>
+</resources>

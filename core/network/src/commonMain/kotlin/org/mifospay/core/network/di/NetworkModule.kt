@@ -10,34 +10,84 @@
 package org.mifospay.core.network.di
 
 import de.jensklingenberg.ktorfit.Ktorfit
+import io.github.jan.supabase.logging.LogLevel
 import io.ktor.client.plugins.auth.providers.BasicAuthCredentials
+import org.koin.core.qualifier.named
 import org.koin.dsl.module
+import org.mifos.corebase.network.DynamicBaseUrlPlugin
+import org.mifos.corebase.network.DynamicLoggableHosts
+import org.mifos.corebase.network.MultiUrlConfigProvider
+import org.mifos.corebase.network.SupabaseConfigClient
 import org.mifos.corebase.network.httpClient
 import org.mifos.corebase.network.setupDefaultHttpClient
+import org.mifospay.core.common.MifosDispatchers
 import org.mifospay.core.datastore.UserPreferencesRepository
 import org.mifospay.core.network.FineractApiManager
+import org.mifospay.core.network.InterBankApiManager
 import org.mifospay.core.network.KtorfitClient
 import org.mifospay.core.network.SelfServiceApiManager
+import org.mifospay.core.network.SupabaseApiManager
+import org.mifospay.core.network.config.InstanceConfigLoader
+import org.mifospay.core.network.config.InstanceConfigManager
+import org.mifospay.core.network.config.SupabaseCredentialsImpl
+import org.mifospay.core.network.config.SupabaseInstanceConfigLoader
 import org.mifospay.core.network.utils.BaseURL
 import org.mifospay.core.network.utils.FlowConverterFactory
 import org.mifospay.core.network.utils.KtorInterceptor
 import kotlin.io.encoding.ExperimentalEncodingApi
 
+private val ioDispatcher = named(MifosDispatchers.IO.name)
+
 @OptIn(ExperimentalEncodingApi::class)
 val NetworkModule = module {
+    single {
+        SupabaseConfigClient(
+            credentials = SupabaseCredentialsImpl,
+            logLevel = LogLevel.DEBUG,
+        )
+    }
+
+    single {
+        SupabaseApiManager(supabaseClient = get())
+    }
+
+    single<InstanceConfigLoader> {
+        SupabaseInstanceConfigLoader(
+            supabaseApiManager = get(),
+            ioDispatcher = get(ioDispatcher),
+            json = get(),
+        )
+    }
+
+    single {
+        InstanceConfigManager(userPreferencesRepository = get())
+    }
+
+    single {
+        BaseURL(configManager = get())
+    }
+
     single<KtorfitClient>(qualifier = SelfClient) {
         val preferencesRepository = get<UserPreferencesRepository>()
+        val configManager = get<InstanceConfigManager>()
         KtorfitClient(
             Ktorfit.Builder()
                 .httpClient(
                     client = httpClient(
                         config = setupDefaultHttpClient(
-                            baseUrl = BaseURL.selfServiceUrl,
-                            loggableHosts = listOf("venus.mifos.community"),
+                            // Use placeholder - actual URL is set dynamically by DynamicBaseUrlPlugin
+                            baseUrl = "https://placeholder.local/",
+                            // Dynamic loggable hosts - reads current endpoints from configManager
+                            loggableHosts = DynamicLoggableHosts(configManager),
                         ),
                     ).config {
+                        install(DynamicBaseUrlPlugin) {
+                            multiConfigProvider = configManager
+                            urlType = MultiUrlConfigProvider.UrlType.SELF_SERVICE
+                        }
                         install(KtorInterceptor) {
                             getToken = { preferencesRepository.authToken }
+                            this.configManager = configManager
                         }
                     },
                 )
@@ -47,30 +97,75 @@ val NetworkModule = module {
     }
 
     single<KtorfitClient>(qualifier = BaseClient) {
+        val configManager = get<InstanceConfigManager>()
         KtorfitClient(
             Ktorfit.Builder()
                 .httpClient(
                     client = httpClient(
                         config = setupDefaultHttpClient(
-                            baseUrl = BaseURL.url,
+                            // Use placeholder - actual URL is set dynamically by DynamicBaseUrlPlugin
+                            baseUrl = "https://placeholder.local/",
                             basicCredentialsProvider = {
                                 BasicAuthCredentials(
                                     username = "mifos",
                                     password = "password",
                                 )
                             },
+                            // Headers are set dynamically by KtorInterceptor
                             defaultHeaders = mapOf(
-                                "Fineract-Platform-TenantId" to "venus",
-                                "Content-Type" to "application/json",
-                                "Accept" to "application/json",
+                                BaseURL.HEADER_CONTENT_TYPE to BaseURL.HEADER_CONTENT_TYPE_VALUE,
+                                BaseURL.HEADER_ACCEPT to BaseURL.HEADER_ACCEPT_VALUE,
                             ),
-                            loggableHosts = listOf("venus.mifos.community"),
+                            // Dynamic loggable hosts - reads current endpoints from configManager
+                            loggableHosts = DynamicLoggableHosts(configManager),
                         ),
-                    ),
+                    ).config {
+                        install(DynamicBaseUrlPlugin) {
+                            multiConfigProvider = configManager
+                            urlType = MultiUrlConfigProvider.UrlType.MAIN
+                        }
+                        install(KtorInterceptor) {
+                            getToken = { null }
+                            this.configManager = configManager
+                        }
+                    },
                 )
                 .converterFactories(
                     FlowConverterFactory(),
                 )
+                .build(),
+        )
+    }
+
+    single<KtorfitClient>(qualifier = InterBankClient) {
+        val configManager = get<InstanceConfigManager>()
+        KtorfitClient(
+            Ktorfit.Builder()
+                .httpClient(
+                    client = httpClient(
+                        config = setupDefaultHttpClient(
+                            // Use placeholder - actual URL is set dynamically by DynamicBaseUrlPlugin
+                            baseUrl = "https://placeholder.local/",
+                            // Headers are set dynamically by KtorInterceptor
+                            defaultHeaders = mapOf(
+                                BaseURL.HEADER_CONTENT_TYPE to BaseURL.HEADER_CONTENT_TYPE_VALUE,
+                                BaseURL.HEADER_ACCEPT to BaseURL.HEADER_ACCEPT_VALUE,
+                            ),
+                            // Dynamic loggable hosts - reads current endpoints from configManager
+                            loggableHosts = DynamicLoggableHosts(configManager),
+                        ),
+                    ).config {
+                        install(DynamicBaseUrlPlugin) {
+                            multiConfigProvider = configManager
+                            urlType = MultiUrlConfigProvider.UrlType.INTERBANK
+                        }
+                        install(KtorInterceptor) {
+                            getToken = { null }
+                            this.configManager = configManager
+                        }
+                    },
+                )
+                .converterFactories(FlowConverterFactory())
                 .build(),
         )
     }
@@ -81,5 +176,9 @@ val NetworkModule = module {
 
     single {
         SelfServiceApiManager(ktorfitClient = get(SelfClient))
+    }
+
+    single {
+        InterBankApiManager(ktorfitClient = get(InterBankClient))
     }
 }

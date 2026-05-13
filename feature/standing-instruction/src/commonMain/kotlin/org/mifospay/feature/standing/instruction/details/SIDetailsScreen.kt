@@ -38,11 +38,11 @@ import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.mifospay.core.common.CurrencyFormatter
 import org.mifospay.core.common.DateHelper
-import org.mifospay.core.designsystem.component.MifosLoadingWheel
 import org.mifospay.core.designsystem.component.MifosScaffold
 import org.mifospay.core.model.standinginstruction.StandingInstruction
 import org.mifospay.core.ui.EmptyContentScreen
 import org.mifospay.core.ui.MifosDivider
+import org.mifospay.core.ui.MifosProgressIndicator
 import org.mifospay.core.ui.utils.EventsEffect
 import org.mifospay.feature.standing.instruction.components.FrequencyChip
 import org.mifospay.feature.standing.instruction.components.InstructionTypeChip
@@ -92,9 +92,7 @@ internal fun SIDetailsScreen(
             contentAlignment = Alignment.Center,
         ) {
             when (state.viewState) {
-                is ViewState.Loading -> {
-                    MifosLoadingWheel(contentDesc = "Loading")
-                }
+                is ViewState.Loading -> MifosProgressIndicator()
 
                 is ViewState.Error -> {
                     EmptyContentScreen(

@@ -1,0 +1,56 @@
+{
+  "instances": [
+    {
+      "endpoint": "mifos-bank-2.mifos.community",
+      "protocol": "https://",
+      "path": "/fineract-provider/api/v1/",
+      "platformTenantId": "mifos-bank-2",
+      "label": "Mifos Bank 2 Instance",
+      "isDefault": true,
+      "interbankServers": [
+        {
+          "endpoint": "apis.flexcore.mx",
+          "protocol": "https://",
+          "path": "/v1.0/vnext2/",
+          "label": "Mifos Bank 2 Interbank",
+          "isDefault": true
+        }
+      ]
+    },
+    {
+      "endpoint": "mifos-bank-1.mifos.community",
+      "protocol": "https://",
+      "path": "/fineract-provider/api/v1/",
+      "platformTenantId": "mifos-bank-1",
+      "label": "Mifos Bank 1 Instance",
+      "isDefault": false,
+      "interbankServers": [
+        {
+          "endpoint": "apis.flexcore.mx",
+          "protocol": "https://",
+          "path": "/v1.0/vnext1/",
+          "label": "Mifos Bank 1 Interbank",
+          "isDefault": true
+        }
+      ]
+    },
+    {
+      "endpoint": "tt.mifos.community",
+      "protocol": "https://",
+      "path": "/fineract-provider/api/v1/",
+      "platformTenantId": "default",
+      "label": "TT Instance",
+      "isDefault": false,
+      "interbankServers": []
+    },
+    {
+      "endpoint": "venus.mifos.community",
+      "protocol": "https://",
+      "path": "/fineract-provider/api/v1/",
+      "platformTenantId": "venus",
+      "label": "Venus Instance",
+      "isDefault": false,
+      "interbankServers": []
+    }
+  ]
+}

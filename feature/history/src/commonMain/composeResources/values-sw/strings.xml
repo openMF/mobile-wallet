@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copyright 2024 Mifos Initiative
+
+    This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+    If a copy of the MPL was not distributed with this file,
+    You can obtain one at https://mozilla.org/MPL/2.0/.
+
+    See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+-->
+<resources>
+    <string name="feature_history_title">Historia</string>
+    <string name="feature_history_transaction_id">Kitambulisho cha Muamala : </string>
+    <string name="feature_history_transaction_date">Tarehe ya Muamala : </string>
+    <string name="feature_history_other">Nyingine</string>
+    <string name="feature_history_pan_id">Kitambulisho cha PAN</string>
+    <string name="feature_history_view_Receipt">Tazama Risiti</string>
+    <string name="feature_history_error_oops">Lo!</string>
+    <string name="feature_history_empty">Historia yako ya miamala ni tupu</string>
+    <string name="feature_history_empty_filter">Historia yako ya miamala ni tupu kwa vichungi vilivyochaguliwa</string>
+    <string name="feature_history_error">Kosa lisilotarajiwa limetokea. Tafadhali jaribu tena.</string>
+    <string name="feature_history_all">Zote</string>
+    <string name="feature_history_credits">Salio</string>
+    <string name="feature_history_debits">Makato</string>
+    <string name="feature_history_loading">Inapakia</string>
+    <string name="feature_history_no_account">Hakuna akaunti zilizopatikana</string>
+    <string name="feature_history_no_transactions_found">Hakuna miamala iliyopatikana</string>
+    <string name="feature_history_specific_transactions_history">Historia ya Miamala Maalum</string>
+    <string name="feature_history_transaction_details">Maelezo ya Muamala</string>
+    <string name="feature_history_share">Shiriki</string>
+    <string name="feature_history_paid_to">Imelipwa Kwa</string>
+    <string name="feature_history_debited_from">Imekatwa Kutoka</string>
+    <string name="feature_history_error_fallback">Kosa</string>
+    <string name="feature_history_description">Maelezo ya Uhamisho :</string>
+    <string name="feature_history_select_account">Chagua Akaunti</string>
+    <string name="feature_history_account_number">Na. ya Akaunti: %1$s</string>
+    <string name="feature_history_account_balance">Salio: %1$s %2$s</string>
+    <string name="feature_history_header_account">Akaunti: %1$s</string>
+    <string name="feature_history_header_all">Miamala Yote</string>
+    <string name="feature_history_header_debit">Miamala ya Makato</string>
+    <string name="feature_history_header_credit">Miamala ya Salio</string>
+    <string name="feature_history_filter_content_desc">Kichungi</string>
+    <string name="feature_history_filter_title">Chuja Miamala</string>
+    <string name="feature_history_filter_clear_all">Futa Zote</string>
+    <string name="feature_history_filter_by_account">Chuja Kwa Akaunti :</string>
+    <string name="feature_history_filter_transaction_type">Aina ya Muamala:</string>
+    <string name="feature_history_filter_apply">Weka Vichungi</string>
+</resources>

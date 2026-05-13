@@ -61,7 +61,6 @@ import org.mifospay.core.designsystem.component.LoadingDialogState
 import org.mifospay.core.designsystem.component.MifosBasicDialog
 import org.mifospay.core.designsystem.component.MifosButton
 import org.mifospay.core.designsystem.component.MifosLoadingDialog
-import org.mifospay.core.designsystem.component.MifosLoadingWheel
 import org.mifospay.core.designsystem.component.MifosScaffold
 import org.mifospay.core.designsystem.component.MifosTextField
 import org.mifospay.core.designsystem.icon.MifosIcons
@@ -74,6 +73,7 @@ import org.mifospay.core.ui.DropdownBoxItem
 import org.mifospay.core.ui.EmptyContentScreen
 import org.mifospay.core.ui.ExposedDropdownBox
 import org.mifospay.core.ui.MifosDivider
+import org.mifospay.core.ui.MifosProgressIndicator
 import org.mifospay.core.ui.utils.EventsEffect
 import template.core.base.designsystem.theme.KptTheme
 
@@ -168,9 +168,7 @@ internal fun AddEditSIScreen(
             contentAlignment = Alignment.Center,
         ) {
             when (state.viewState) {
-                is AddEditSIState.ViewState.Loading -> {
-                    MifosLoadingWheel(contentDesc = "Loading")
-                }
+                is AddEditSIState.ViewState.Loading -> MifosProgressIndicator()
 
                 is AddEditSIState.ViewState.Error -> {
                     EmptyContentScreen(

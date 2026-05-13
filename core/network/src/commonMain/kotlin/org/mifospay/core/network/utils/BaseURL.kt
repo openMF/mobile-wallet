@@ -9,22 +9,30 @@
  */
 package org.mifospay.core.network.utils
 
-object BaseURL {
-    private const val PROTOCOL_HTTPS = "https://"
-    private const val API_ENDPOINT = "venus.mifos.community"
-    private const val API_PATH = "/fineract-provider/api/v1/"
+import org.mifospay.core.network.config.InstanceConfigManager
 
-    // self service url
-    private const val API_ENDPOINT_SELF = "venus.mifos.community"
-    private const val API_PATH_SELF = "/fineract-provider/api/v1/self/"
+class BaseURL(
+    private val configManager: InstanceConfigManager,
+) {
+    companion object {
+        const val HEADER_TENANT = "Fineract-Platform-TenantId"
+        const val HEADER_CONTENT_TYPE = "Content-Type"
+        const val HEADER_ACCEPT = "Accept"
+        const val HEADER_AUTHORIZATION = "Authorization"
 
-    const val HEADER_TENANT = "Fineract-Platform-TenantId"
-    const val HEADER_AUTH = "Authorization"
-    const val DEFAULT = "venus"
+        const val HEADER_CONTENT_TYPE_VALUE = "application/json"
+        const val HEADER_ACCEPT_VALUE = "application/json"
+    }
 
     val url: String
-        get() = PROTOCOL_HTTPS + API_ENDPOINT + API_PATH
+        get() = configManager.getUrl()
 
     val selfServiceUrl: String
-        get() = PROTOCOL_HTTPS + API_ENDPOINT_SELF + API_PATH_SELF
+        get() = configManager.getSelfServiceUrl()
+
+    val interBankUrl: String
+        get() = configManager.getInterbankUrl()
+
+    val fineractPlatformTenantId: String
+        get() = configManager.getPlatformTenantId()
 }

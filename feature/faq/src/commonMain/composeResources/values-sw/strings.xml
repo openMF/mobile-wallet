@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copyright 2024 Mifos Initiative
+
+    This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+    If a copy of the MPL was not distributed with this file,
+    You can obtain one at https://mozilla.org/MPL/2.0/.
+
+    See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+-->
+<resources>
+    <string name="feature_faq_question1">Ninawezaje kuongeza Akaunti?</string>
+    <string name="feature_faq_question2">Ninawezaje kufikia Historia yangu ya Malipo?</string>
+    <string name="feature_faq_question3">Jinsi ya kufanya Uhamisho?</string>
+    <string name="feature_faq_question4">Ninawezaje kuongeza Kadi?</string>
+    <string name="feature_faq_answer1">Ili kuongeza akaunti, nenda kwenye sehemu ya fedha na ubofye kitufe cha ongeza akaunti. Kisha chagua benki yako na uthibitishe nambari yako ya simu ili kuanza.</string>
+    <string name="feature_faq_answer2">Nenda kwenye sehemu ya Malipo. Utapata historia yako ya malipo chini ya kichupo cha Historia.</string>
+    <string name="feature_faq_answer3">Ili kufanya uhamisho, nenda kwenye sehemu ya Malipo. Chini ya kichupo cha Tuma, kutoka hapo unaweza kuchagua aina ya uhamisho, ongeza kiasi na uwasilishe.</string>
+    <string name="feature_faq_answer4">Nenda kwenye sehemu ya Fedha. Bofya Ongeza Kadi chini ya kichupo cha Kadi.</string>
+    <string name="feature_faq">Maswali Yanayoulizwa</string>
+</resources>

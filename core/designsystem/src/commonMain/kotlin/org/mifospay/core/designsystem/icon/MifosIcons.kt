@@ -13,6 +13,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.icons.automirrored.filled.Send
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
+import androidx.compose.material.icons.automirrored.filled.OpenInNew
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.filled.ArrowOutward
 import androidx.compose.material.icons.filled.AttachMoney
@@ -27,14 +29,20 @@ import androidx.compose.material.icons.filled.ContentCopy
 import androidx.compose.material.icons.filled.CurrencyRupee
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Description
+import androidx.compose.material.icons.filled.Download
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.ExpandLess
 import androidx.compose.material.icons.filled.ExpandMore
+import androidx.compose.material.icons.filled.Error
+import androidx.compose.material.icons.filled.FilterList
+import androidx.compose.material.icons.filled.Fingerprint
 import androidx.compose.material.icons.filled.FlashOff
 import androidx.compose.material.icons.filled.FlashOn
+import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
+import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Photo
 import androidx.compose.material.icons.filled.PhotoLibrary
@@ -46,8 +54,10 @@ import androidx.compose.material.icons.filled.Send
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
+import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material.icons.outlined.Cancel
+import androidx.compose.material.icons.outlined.CheckCircle
 import androidx.compose.material.icons.outlined.DeleteOutline
 import androidx.compose.material.icons.outlined.DoneAll
 import androidx.compose.material.icons.outlined.Edit
@@ -62,13 +72,16 @@ import androidx.compose.material.icons.outlined.Visibility
 import androidx.compose.material.icons.outlined.VisibilityOff
 import androidx.compose.material.icons.outlined.Wallet
 import androidx.compose.material.icons.rounded.AccountBalance
+import androidx.compose.material.icons.rounded.AccountBalanceWallet
 import androidx.compose.material.icons.rounded.AccountCircle
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.Check
 import androidx.compose.material.icons.rounded.CheckCircle
 import androidx.compose.material.icons.rounded.Contacts
+import androidx.compose.material.icons.rounded.History
 import androidx.compose.material.icons.rounded.Home
 import androidx.compose.material.icons.rounded.Info
+import androidx.compose.material.icons.rounded.Money
 import androidx.compose.material.icons.rounded.MoreVert
 import androidx.compose.material.icons.rounded.QrCode
 import androidx.compose.material.icons.rounded.Search
@@ -81,12 +94,14 @@ import androidx.compose.ui.graphics.vector.ImageVector
  * Mifos icons. Material icons are [ImageVector]s, custom icons are drawable resource IDs.
  */
 object MifosIcons {
+    val Fingerprint = Icons.Default.Fingerprint
     val OutlinedInfo = Icons.Outlined.Info
     val OutlinedLock = Icons.Outlined.Lock
     val OutlinedNotifications = Icons.Outlined.Notifications
     val ChevronRight: ImageVector = Icons.Filled.ChevronRight
     val QrCode: ImageVector = Icons.Filled.QrCode
     val Close: ImageVector = Icons.Filled.Close
+    val Error: ImageVector = Icons.Filled.Error
     val AttachMoney: ImageVector = Icons.Filled.AttachMoney
     val OutlinedVisibilityOff: ImageVector = Icons.Outlined.VisibilityOff
     val OutlinedVisibility: ImageVector = Icons.Outlined.Visibility
@@ -145,8 +160,18 @@ object MifosIcons {
     val ArrowForward = Icons.AutoMirrored.Filled.ArrowForward
 
     val CurrencyRupee = Icons.Filled.CurrencyRupee
-    val CheckCircle = Icons.Rounded.CheckCircle
     val CheckRounded = Icons.Rounded.Check
 
     val Send = Icons.AutoMirrored.Filled.Send
+    val History = Icons.Default.History
+    val HistoryBoarder = Icons.Rounded.History
+    val Filter = Icons.Default.FilterList
+    val OpenInNew = Icons.AutoMirrored.Filled.OpenInNew
+    val Warning = Icons.Default.Warning
+    val Location = Icons.Filled.LocationOn
+    val Savings = Icons.Rounded.AccountBalanceWallet
+    val Transfer = Icons.Rounded.Money
+    val CheckCircle = Icons.Outlined.CheckCircle
+    val ArrowRight = Icons.AutoMirrored.Filled.KeyboardArrowRight
+    val Download = Icons.Filled.Download
 }

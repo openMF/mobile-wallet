@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.consumeWindowInsets
@@ -21,8 +22,12 @@ import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.safeDrawingPadding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration.Indefinite
@@ -35,6 +40,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.draw.drawWithContent
@@ -58,7 +64,7 @@ import org.mifospay.core.designsystem.component.MifosNavigationRail
 import org.mifospay.core.designsystem.component.MifosNavigationRailItem
 import org.mifospay.core.designsystem.icon.MifosIcons
 import org.mifospay.core.designsystem.theme.LocalGradientColors
-import org.mifospay.feature.notification.navigateToNotification
+import org.mifospay.feature.mpay.qr.scan.navigation.navigateToScanQr
 import org.mifospay.feature.profile.navigation.navigateToEditProfile
 import org.mifospay.feature.settings.navigation.navigateToSettings
 import org.mifospay.shared.navigation.MifosNavHost
@@ -108,6 +114,7 @@ internal fun MifosApp(
                         destinationsWithUnreadResources = emptySet(),
                         onNavigateToDestination = appState::navigateToTopLevelDestination,
                         currentDestination = appState.currentDestination,
+                        onScanQrClick = { appState.navController.navigateToScanQr() },
                         modifier = Modifier.testTag("NiaBottomBar"),
                     )
                 }
@@ -130,6 +137,7 @@ internal fun MifosApp(
                         destinationsWithUnreadResources = emptySet(),
                         onNavigateToDestination = appState::navigateToTopLevelDestination,
                         currentDestination = appState.currentDestination,
+                        onScanQrClick = { appState.navController.navigateToScanQr() },
                         modifier = Modifier
                             .testTag("NiaNavRail")
                             .safeDrawingPadding(),
@@ -149,9 +157,9 @@ internal fun MifosApp(
                             onNavigateToEditProfile = {
                                 appState.navController.navigateToEditProfile()
                             },
-                            onNavigateToNotification = {
-                                appState.navController.navigateToNotification()
-                            },
+//                            onNavigateToNotification = {
+//                                appState.navController.navigateToNotification()
+//                            },
                             destination = destination,
                         )
                     }
@@ -166,6 +174,8 @@ internal fun MifosApp(
     }
 }
 
+// TODO Notification feature is not using self api
+//  https://venus.mifos.community/fineract-provider/api/v1/notifications/?isRead=true
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun MifosAppBar(
@@ -174,7 +184,7 @@ private fun MifosAppBar(
     onNavigateToFaq: () -> Unit,
     onNavigateToSettings: () -> Unit,
     onNavigateToEditProfile: () -> Unit,
-    onNavigateToNotification: () -> Unit,
+//    onNavigateToNotification: () -> Unit,
     destination: TopLevelDestination?,
     modifier: Modifier = Modifier,
 ) {
@@ -187,10 +197,10 @@ private fun MifosAppBar(
                         Row(
                             horizontalArrangement = Arrangement.spacedBy(KptTheme.spacing.xs),
                         ) {
-                            IconBox(
-                                icon = MifosIcons.OutlinedNotifications,
-                                onClick = onNavigateToNotification,
-                            )
+//                            IconBox(
+//                                icon = MifosIcons.OutlinedNotifications,
+//                                onClick = onNavigateToNotification,
+//                            )
 
                             IconBox(
                                 icon = MifosIcons.SettingsOutlined,
@@ -199,12 +209,12 @@ private fun MifosAppBar(
                         }
                     }
 
-                    TopLevelDestination.PROFILE -> {
-                        IconBox(
-                            icon = MifosIcons.Edit2,
-                            onClick = onNavigateToEditProfile,
-                        )
-                    }
+//                    TopLevelDestination.PROFILE -> {
+//                        IconBox(
+//                            icon = MifosIcons.Edit2,
+//                            onClick = onNavigateToEditProfile,
+//                        )
+//                    }
 
                     else -> {}
                 }
@@ -223,9 +233,24 @@ private fun MifosNavRail(
     destinationsWithUnreadResources: Set<TopLevelDestination>,
     onNavigateToDestination: (TopLevelDestination) -> Unit,
     currentDestination: NavDestination?,
+    onScanQrClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    MifosNavigationRail(modifier = modifier) {
+    MifosNavigationRail(
+        modifier = modifier,
+        header = {
+            FloatingActionButton(
+                onClick = onScanQrClick,
+                containerColor = KptTheme.colorScheme.primary,
+                contentColor = KptTheme.colorScheme.onPrimary,
+            ) {
+                Icon(
+                    imageVector = MifosIcons.Scan,
+                    contentDescription = "Scan QR Code",
+                )
+            }
+        },
+    ) {
         destinations.forEach { destination ->
             val selected = currentDestination.isTopLevelDestinationInHierarchy(destination)
             val hasUnread = destinationsWithUnreadResources.contains(destination)
@@ -257,31 +282,81 @@ private fun MifosBottomBar(
     destinationsWithUnreadResources: Set<TopLevelDestination>,
     onNavigateToDestination: (TopLevelDestination) -> Unit,
     currentDestination: NavDestination?,
+    onScanQrClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    MifosNavigationBar(
+    Box(
         modifier = modifier,
+        contentAlignment = Alignment.Center,
     ) {
-        destinations.forEach { destination ->
-            val hasUnread = destinationsWithUnreadResources.contains(destination)
-            val selected = currentDestination.isTopLevelDestinationInHierarchy(destination)
-            MifosNavigationBarItem(
-                selected = selected,
-                onClick = { onNavigateToDestination(destination) },
-                icon = {
-                    Icon(
-                        imageVector = destination.unselectedIcon,
-                        contentDescription = null,
-                    )
-                },
-                modifier = if (hasUnread) Modifier.notificationDot() else Modifier,
-                selectedIcon = {
-                    Icon(
-                        imageVector = destination.selectedIcon,
-                        contentDescription = null,
-                    )
-                },
-                label = { Text(stringResource(destination.iconText)) },
+        MifosNavigationBar {
+            // First 2 destinations on the left
+            destinations.take(2).forEach { destination ->
+                val hasUnread = destinationsWithUnreadResources.contains(destination)
+                val selected = currentDestination.isTopLevelDestinationInHierarchy(destination)
+                MifosNavigationBarItem(
+                    selected = selected,
+                    onClick = { onNavigateToDestination(destination) },
+                    icon = {
+                        Icon(
+                            imageVector = destination.unselectedIcon,
+                            contentDescription = null,
+                        )
+                    },
+                    modifier = if (hasUnread) Modifier.notificationDot() else Modifier,
+                    selectedIcon = {
+                        Icon(
+                            imageVector = destination.selectedIcon,
+                            contentDescription = null,
+                        )
+                    },
+                    label = { Text(stringResource(destination.iconText)) },
+                )
+            }
+
+            // Spacer for center FAB
+            Spacer(Modifier.weight(1f))
+
+            // Last 2 destinations on the right
+            destinations.drop(2).forEach { destination ->
+                val hasUnread = destinationsWithUnreadResources.contains(destination)
+                val selected = currentDestination.isTopLevelDestinationInHierarchy(destination)
+                MifosNavigationBarItem(
+                    selected = selected,
+                    onClick = { onNavigateToDestination(destination) },
+                    icon = {
+                        Icon(
+                            imageVector = destination.unselectedIcon,
+                            contentDescription = null,
+                        )
+                    },
+                    modifier = if (hasUnread) Modifier.notificationDot() else Modifier,
+                    selectedIcon = {
+                        Icon(
+                            imageVector = destination.selectedIcon,
+                            contentDescription = null,
+                        )
+                    },
+                    label = { Text(stringResource(destination.iconText)) },
+                )
+            }
+        }
+
+        // Center QR Scan FAB - inside navigation bar
+        FloatingActionButton(
+            onClick = onScanQrClick,
+            modifier = Modifier.size(56.dp),
+            shape = CircleShape,
+            containerColor = KptTheme.colorScheme.primary,
+            contentColor = KptTheme.colorScheme.onPrimary,
+            elevation = FloatingActionButtonDefaults.elevation(
+                defaultElevation = 6.dp,
+                pressedElevation = 12.dp,
+            ),
+        ) {
+            Icon(
+                imageVector = MifosIcons.Scan,
+                contentDescription = "Scan QR Code",
             )
         }
     }

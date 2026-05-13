@@ -9,6 +9,9 @@
  */
 package org.mifospay.core.data.repositoryImpl
 
+import io.ktor.client.plugins.ClientRequestException
+import io.ktor.client.plugins.ServerResponseException
+import io.ktor.client.statement.bodyAsText
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
@@ -25,18 +28,22 @@ import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.scan
 import kotlinx.coroutines.flow.zip
 import kotlinx.coroutines.withContext
+import kotlinx.io.IOException
 import org.mifospay.core.common.DataState
 import org.mifospay.core.common.DateHelper
+import org.mifospay.core.common.HttpStatusException
+import org.mifospay.core.common.NetworkException
 import org.mifospay.core.common.asDataStateFlow
 import org.mifospay.core.common.combineResultsWith
 import org.mifospay.core.data.mapper.toAccount
 import org.mifospay.core.data.mapper.toModel
+import org.mifospay.core.data.mapper.toModelAccountType
 import org.mifospay.core.data.mapper.toTransactionList
 import org.mifospay.core.data.repository.SelfServiceRepository
 import org.mifospay.core.data.util.Constants
+import org.mifospay.core.data.util.parseMifosError
 import org.mifospay.core.model.account.Account
 import org.mifospay.core.model.account.AccountContent
-import org.mifospay.core.model.account.AccountsWithTransactions
 import org.mifospay.core.model.beneficiary.Beneficiary
 import org.mifospay.core.model.beneficiary.BeneficiaryPayload
 import org.mifospay.core.model.beneficiary.BeneficiaryUpdatePayload
@@ -107,7 +114,7 @@ class SelfServiceRepositoryImpl(
         return apiManager.clientsApi
             .getAccounts(clientId, Constants.SAVINGS)
             .map { it.toAccount() }
-            .asDataStateFlow().flowOn(dispatcher)
+            .asDataStateFlow(parseMifosError).flowOn(dispatcher)
     }
 
     override fun getAccountAndBeneficiaryList(clientId: Long): Flow<DataState<AccountContent>> {
@@ -132,26 +139,69 @@ class SelfServiceRepositoryImpl(
         }.flowOn(dispatcher)
     }
 
-    // TODO:: Optimize below functions
-    @OptIn(ExperimentalCoroutinesApi::class)
-    override fun getActiveAccountsWithTransactions(
+    override fun getActiveAccountsWithTransactionsPerAccount(
         clientId: Long,
-        limit: Int,
-    ): Flow<DataState<AccountsWithTransactions>> {
+        limit: Int?,
+    ): Flow<DataState<Map<Account, List<Transaction>>>> {
         val accounts = apiManager.clientsApi
             .getAccounts(clientId, Constants.SAVINGS)
             .map { entity -> entity.savingsAccounts.filter { it.status.active } }
             .map { it.toAccount() }
             .flowOn(dispatcher)
 
-        val transactions = accounts
-            .map { list -> list.map { it.id } }
-            .flatMapLatest {
-                getTransactions(it, limit)
+        return accounts.flatMapLatest { accountList ->
+            val flows = accountList.map { account ->
+                getTransactions(listOf(account.id), limit)
+                    .map { transactions -> account to transactions }
             }
 
-        return accounts.combine(transactions) { accountList, transaction ->
-            AccountsWithTransactions(accountList, transaction)
+            combine(flows) { pairs ->
+                pairs.toMap()
+            }
+        }.asDataStateFlow()
+    }
+
+    override fun getActiveAccounts(
+        clientId: Long,
+    ): Flow<DataState<List<Account>>> {
+        return apiManager.clientsApi
+            .getAccounts(clientId, Constants.SAVINGS)
+            .map { entity -> entity.savingsAccounts.filter { it.status.active } }
+            .map { it.toAccount() }
+            .flowOn(dispatcher)
+            .asDataStateFlow()
+    }
+
+    override fun getActiveAccountsWithAccountTransferTemplate(
+        clientId: Long,
+    ): Flow<DataState<List<Account>>> {
+        val accountsFlow = apiManager.clientsApi
+            .getAccounts(clientId, Constants.SAVINGS)
+            .map { entity -> entity.savingsAccounts.filter { it.status.active } }
+            .flowOn(dispatcher)
+
+        val templateFlow = apiManager.accountTransfersApi
+            .getAccountTransferTemplate()
+            .flowOn(dispatcher)
+
+        return accountsFlow.zip(templateFlow) { accounts, template ->
+            accounts
+                .toAccount()
+                .map { account ->
+                    val templateAccount = template.fromAccountOptions?.firstOrNull {
+                        it.accountNo == account.number
+                    }
+                    if (templateAccount == null) {
+                        account
+                    } else {
+                        account.copy(
+                            clientName = templateAccount.clientName ?: "",
+                            accountType = templateAccount.accountType?.toModelAccountType(),
+                            officeName = templateAccount.officeName,
+                            officeId = templateAccount.officeId,
+                        )
+                    }
+                }
         }.asDataStateFlow()
     }
 
@@ -165,6 +215,20 @@ class SelfServiceRepositoryImpl(
                 limit?.let { sortedList.take(it) } ?: sortedList
             }
         }
+    }
+
+    override fun getTransactions(accountId: Long, limit: Int?): Flow<DataState<List<Transaction>>> {
+        return apiManager.savingAccountsListApi
+            .getSavingsWithAssociations(accountId, Constants.TRANSACTIONS)
+            .map {
+                if (limit != null) {
+                    it.toTransactionList().take(limit)
+                } else {
+                    it.toTransactionList()
+                }
+            }
+            .flowOn(dispatcher)
+            .asDataStateFlow()
     }
 
     override fun getAccountsTransactions(
@@ -226,6 +290,26 @@ class SelfServiceRepositoryImpl(
             }
 
             DataState.Success("Beneficiary deleted successfully")
+        } catch (e: ClientRequestException) {
+            val status = e.response.status.value
+            val responseBody = try {
+                e.response.bodyAsText()
+            } catch (_: Exception) {
+                ""
+            }
+            val userMessage = parseMifosError(responseBody, status)
+            DataState.Error(HttpStatusException(status, userMessage, e.message))
+        } catch (e: ServerResponseException) {
+            val status = e.response.status.value
+            val responseBody = try {
+                e.response.bodyAsText()
+            } catch (_: Exception) {
+                ""
+            }
+            val userMessage = parseMifosError(responseBody, status)
+            DataState.Error(HttpStatusException(status, userMessage, e.message))
+        } catch (e: IOException) {
+            DataState.Error(NetworkException("Network unavailable. Please check your connection."))
         } catch (e: Exception) {
             DataState.Error(e)
         }

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copyright 2024 Mifos Initiative
+
+    This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+    If a copy of the MPL was not distributed with this file,
+    You can obtain one at https://mozilla.org/MPL/2.0/.
+
+    See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+-->
+<resources>
+    <string name="feature_settings_alert_disable_account">Je una uhakika unataka kuzima akaunti?</string>
+    <string name="feature_settings_notification_settings">Mipangilio ya Arifa</string>
+    <string name="feature_settings_faq">Maswali ya Kawaida</string>
+    <string name="feature_settings_settings">Mipangilio</string>
+    <string name="feature_settings_change_password">Badilisha Nenosiri</string>
+    <string name="feature_settings_change_passcode">Badilisha Nambari ya Siri</string>
+    <string name="feature_settings_enable_biometrics">Wezesha Biometria</string>
+    <string name="feature_settings_disable_biometrics">Lemaza Biometria</string>
+    <string name="feature_settings_biometrics_not_set">Biometria haijaandaliwa kwenye kifaa hiki</string>
+    <string name="feature_settings_biometrics_not_available">Biometria haipatikani kwenye kifaa hiki</string>
+    <string name="feature_settings_log_out">Toka</string>
+    <string name="feature_settings_disable_account">Zima Akaunti</string>
+    <string name="feature_settings_alert_disable_account_desc">Hii itafuta taarifa zote kuhusu akaunti yako</string>
+    <string name="feature_settings_ok">Sawa</string>
+    <string name="feature_settings_cancel">Ghairi</string>
+    <string name="feature_settings_log_out_title">Je unataka kutoka?</string>
+    <string name="feature_settings_profile">Wasifu</string>
+    <string name="feature_settings_empty"></string>
+    <string name="feature_settings_yes">Ndiyo</string>
+    <string name="feature_settings_no">Hapana</string>
+</resources>

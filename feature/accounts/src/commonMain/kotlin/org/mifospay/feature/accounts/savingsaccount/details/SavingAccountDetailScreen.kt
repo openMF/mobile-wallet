@@ -64,11 +64,9 @@ import mobile_wallet.feature.accounts.generated.resources.feature_accounts_detai
 import mobile_wallet.feature.accounts.generated.resources.feature_accounts_detail_total_withdrawals
 import mobile_wallet.feature.accounts.generated.resources.feature_accounts_detail_wallet_balance
 import mobile_wallet.feature.accounts.generated.resources.feature_accounts_error_oops
-import mobile_wallet.feature.accounts.generated.resources.feature_accounts_loading
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.mifospay.core.common.CurrencyFormatter
-import org.mifospay.core.designsystem.component.MfLoadingWheel
 import org.mifospay.core.designsystem.component.MifosScaffold
 import org.mifospay.core.model.account.Account
 import org.mifospay.core.model.savingsaccount.SavingAccountDetail
@@ -78,6 +76,7 @@ import org.mifospay.core.model.savingsaccount.formatAmount
 import org.mifospay.core.model.savingsaccount.toAccount
 import org.mifospay.core.ui.EmptyContentScreen
 import org.mifospay.core.ui.MifosDivider
+import org.mifospay.core.ui.MifosProgressIndicator
 import org.mifospay.core.ui.TransactionHistoryCard
 import org.mifospay.core.ui.utils.EventsEffect
 import org.mifospay.feature.accounts.SavingAccountStatus
@@ -145,12 +144,7 @@ internal fun SavingAccountDetailScreen(
             contentAlignment = Alignment.Center,
         ) {
             when (state) {
-                is SADState.ViewState.Loading -> {
-                    MfLoadingWheel(
-                        contentDesc = stringResource(Res.string.feature_accounts_loading),
-                        backgroundColor = KptTheme.colorScheme.surface,
-                    )
-                }
+                is SADState.ViewState.Loading -> MifosProgressIndicator()
 
                 is SADState.ViewState.Error -> {
                     EmptyContentScreen(

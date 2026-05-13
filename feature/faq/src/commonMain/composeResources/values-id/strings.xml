@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copyright 2024 Mifos Initiative
+
+    This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+    If a copy of the MPL was not distributed with this file,
+    You can obtain one at https://mozilla.org/MPL/2.0/.
+
+    See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+-->
+<resources>
+    <string name="feature_faq_question1">Bagaimana cara menambahkan Akun?</string>
+    <string name="feature_faq_question2">Bagaimana cara mengakses Riwayat Pembayaran saya?</string>
+    <string name="feature_faq_question3">Bagaimana cara melakukan Transfer?</string>
+    <string name="feature_faq_question4">Bagaimana cara menambahkan Kartu?</string>
+    <string name="feature_faq_answer1">Untuk menambahkan akun, buka bagian keuangan dan klik tombol tambah akun. Kemudian pilih bank Anda dan verifikasi nomor ponsel Anda untuk memulai.</string>
+    <string name="feature_faq_answer2">Buka bagian Pembayaran. Anda akan menemukan riwayat pembayaran Anda di bawah tab Riwayat.</string>
+    <string name="feature_faq_answer3">Untuk melakukan transfer, buka bagian Pembayaran. Di bawah tab Kirim, dari sana Anda dapat memilih jenis transfer, menambahkan jumlah, dan mengirimkan.</string>
+    <string name="feature_faq_answer4">Buka bagian Keuangan. Klik Tambah Kartu di bawah tab Kartu.</string>
+    <string name="feature_faq">FAQ</string>
+</resources>

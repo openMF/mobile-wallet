@@ -21,16 +21,23 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.ExperimentalSerializationApi
+import kotlinx.serialization.builtins.MapSerializer
+import kotlinx.serialization.builtins.serializer
 import org.mifospay.core.datastore.UserPreferencesDataSource.Companion.DEFAULT_ACCOUNT
 import org.mifospay.core.datastore.model.ClientPreferences
 import org.mifospay.core.datastore.model.UserInfoPreferences
 import org.mifospay.core.model.account.DefaultAccount
 import org.mifospay.core.model.client.Client
 import org.mifospay.core.model.client.UpdatedClient
+import org.mifospay.core.model.instance.InterbankServer
+import org.mifospay.core.model.instance.ServerInstance
 import org.mifospay.core.model.user.UserInfo
 
 private const val USER_INFO_KEY = "userInfo"
 private const val CLIENT_INFO_KEY = "clientInfo"
+private const val SELECTED_INSTANCE_KEY = "selectedInstance"
+private const val SELECTED_INTERBANK_INSTANCE_KEY = "selectedInterbankInstance"
+private const val ACCOUNT_EXTERNAL_IDS_KEY = "accountExternalIds"
 
 @OptIn(ExperimentalSerializationApi::class)
 class UserPreferencesDataSource(
@@ -70,6 +77,27 @@ class UserPreferencesDataSource(
         ),
     )
 
+    private val _selectedInstance = MutableStateFlow(
+        settings.decodeValueOrNull(
+            key = SELECTED_INSTANCE_KEY,
+            serializer = ServerInstance.serializer(),
+        ),
+    )
+
+    private val _selectedInterbankInstance = MutableStateFlow(
+        settings.decodeValueOrNull(
+            key = SELECTED_INTERBANK_INSTANCE_KEY,
+            serializer = InterbankServer.serializer(),
+        ),
+    )
+
+    private val _accountExternalIds = MutableStateFlow(
+        settings.decodeValueOrNull(
+            key = ACCOUNT_EXTERNAL_IDS_KEY,
+            serializer = MapSerializer(Long.serializer(), String.serializer()),
+        ) ?: emptyMap(),
+    )
+
     val token = _userInfo.map {
         it.base64EncodedAuthenticationKey
     }
@@ -80,6 +108,12 @@ class UserPreferencesDataSource(
     val clientId = _clientInfo.map { it.id }
 
     val defaultAccount = _defaultAccount.map { it.takeIf { it.accountId != 0L } }
+
+    val selectedInstance = _selectedInstance
+
+    val selectedInterbankInstance = _selectedInterbankInstance
+
+    val accountExternalIds = _accountExternalIds
 
     suspend fun updateClientInfo(client: Client) {
         withContext(dispatcher) {
@@ -138,6 +172,31 @@ class UserPreferencesDataSource(
         return settings.getString(AUTH_TOKEN, "").ifEmpty { null }
     }
 
+    suspend fun updateSelectedInstance(instance: ServerInstance) {
+        withContext(dispatcher) {
+            settings.putSelectedInstance(instance)
+            _selectedInstance.value = instance
+        }
+    }
+
+    suspend fun updateSelectedInterbankInstance(instance: InterbankServer) {
+        withContext(dispatcher) {
+            settings.putSelectedInterbankInstance(instance)
+            _selectedInterbankInstance.value = instance
+        }
+    }
+
+    suspend fun updateAccountExternalIds(accountExternalIds: Map<Long, String>) {
+        withContext(dispatcher) {
+            settings.putAccountExternalIds(accountExternalIds)
+            _accountExternalIds.value = accountExternalIds
+        }
+    }
+
+    fun getAccountExternalId(accountId: Long): String? {
+        return _accountExternalIds.value[accountId]
+    }
+
     suspend fun clearInfo() {
         withContext(dispatcher) {
             settings.clear()
@@ -171,5 +230,29 @@ private fun Settings.putDefaultAccount(account: DefaultAccount) {
         key = DEFAULT_ACCOUNT,
         serializer = DefaultAccount.serializer(),
         value = account,
+    )
+}
+
+private fun Settings.putSelectedInstance(instance: ServerInstance) {
+    encodeValue(
+        key = SELECTED_INSTANCE_KEY,
+        serializer = ServerInstance.serializer(),
+        value = instance,
+    )
+}
+
+private fun Settings.putSelectedInterbankInstance(instance: InterbankServer) {
+    encodeValue(
+        key = SELECTED_INTERBANK_INSTANCE_KEY,
+        serializer = InterbankServer.serializer(),
+        value = instance,
+    )
+}
+
+private fun Settings.putAccountExternalIds(accountExternalIds: Map<Long, String>) {
+    encodeValue(
+        key = ACCOUNT_EXTERNAL_IDS_KEY,
+        serializer = MapSerializer(Long.serializer(), String.serializer()),
+        value = accountExternalIds,
     )
 }

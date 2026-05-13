@@ -1,0 +1,92 @@
+/*
+ * Copyright 2025 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
+package template.core.base.ui
+
+import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableLongStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.composed
+import androidx.compose.ui.input.pointer.pointerInput
+import kotlin.time.Clock
+import kotlin.time.ExperimentalTime
+
+/**
+ * Modifier that detects a multi-tap gesture within a configurable timeout window.
+ *
+ * @param tapCount Number of taps required to trigger the gesture. Defaults to 5.
+ * @param tapTimeoutMs Time window in milliseconds. Defaults to 1000ms.
+ * @param onGestureDetected Callback invoked when the gesture is detected.
+ */
+@OptIn(ExperimentalTime::class)
+fun Modifier.detectMultiTapGesture(
+    tapCount: Int = 5,
+    tapTimeoutMs: Long = 1000L,
+    onGestureDetected: () -> Unit,
+): Modifier = composed {
+    val currentOnGestureDetected by rememberUpdatedState(onGestureDetected)
+    val currentTapCount by rememberUpdatedState(tapCount)
+    val currentTapTimeout by rememberUpdatedState(tapTimeoutMs)
+
+    var tapCounter by remember { mutableIntStateOf(0) }
+    var lastTapTime by remember { mutableLongStateOf(0L) }
+
+    this.pointerInput(Unit) {
+        detectTapGestures(
+            onTap = {
+                val currentTime = Clock.System.now().toEpochMilliseconds()
+                if (currentTime - lastTapTime > currentTapTimeout) {
+                    tapCounter = 0
+                }
+                tapCounter++
+                lastTapTime = currentTime
+
+                if (tapCounter >= currentTapCount) {
+                    currentOnGestureDetected()
+                    tapCounter = 0
+                }
+            },
+        )
+    }
+}
+
+/**
+ * Modifier that detects a long press gesture.
+ */
+fun Modifier.detectLongPressGesture(
+    onLongPress: () -> Unit,
+): Modifier = composed {
+    val currentOnLongPress by rememberUpdatedState(onLongPress)
+
+    this.pointerInput(Unit) {
+        detectTapGestures(
+            onLongPress = { currentOnLongPress() },
+        )
+    }
+}
+
+/**
+ * Modifier that detects a double tap gesture.
+ */
+fun Modifier.detectDoubleTapGesture(
+    onDoubleTap: () -> Unit,
+): Modifier = composed {
+    val currentOnDoubleTap by rememberUpdatedState(onDoubleTap)
+
+    this.pointerInput(Unit) {
+        detectTapGestures(
+            onDoubleTap = { currentOnDoubleTap() },
+        )
+    }
+}

@@ -29,8 +29,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import mobile_wallet.feature.profile.generated.resources.Res
-import mobile_wallet.feature.profile.generated.resources.feature_profile_link_bank_account
-import mobile_wallet.feature.profile.generated.resources.feature_profile_loading
+import mobile_wallet.feature.profile.generated.resources.feature_profile
 import mobile_wallet.feature.profile.generated.resources.feature_profile_personal_qr_code
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
@@ -39,10 +38,10 @@ import org.mifospay.core.designsystem.component.LoadingDialogState
 import org.mifospay.core.designsystem.component.MifosBasicDialog
 import org.mifospay.core.designsystem.component.MifosButton
 import org.mifospay.core.designsystem.component.MifosLoadingDialog
-import org.mifospay.core.designsystem.component.MifosOverlayLoadingWheel
 import org.mifospay.core.designsystem.component.MifosScaffold
 import org.mifospay.core.designsystem.icon.MifosIcons
 import org.mifospay.core.ui.ErrorScreenContent
+import org.mifospay.core.ui.MifosProgressIndicatorOverlay
 import org.mifospay.core.ui.utils.EventsEffect
 import org.mifospay.feature.profile.components.ProfileDetailsCard
 import org.mifospay.feature.profile.components.ProfileImage
@@ -50,6 +49,7 @@ import template.core.base.designsystem.theme.KptTheme
 
 @Composable
 internal fun ProfileScreen(
+    navigateBack: () -> Unit,
     onEditProfile: () -> Unit,
     onLinkBackAccount: () -> Unit,
     showQrCode: () -> Unit,
@@ -64,6 +64,7 @@ internal fun ProfileScreen(
             ProfileEvent.OnEditProfile -> onEditProfile.invoke()
             ProfileEvent.OnLinkBankAccount -> onLinkBackAccount.invoke()
             ProfileEvent.ShowQRCode -> showQrCode.invoke()
+            is ProfileEvent.OnNavigateBack -> navigateBack.invoke()
         }
     }
 
@@ -93,18 +94,18 @@ internal fun ProfileScreenContent(
 ) {
     MifosScaffold(
         modifier = modifier,
-    ) {
+        topBarTitle = stringResource(Res.string.feature_profile),
+        backPress = {
+            onAction(ProfileAction.NavigateBack)
+        },
+        containerColor = KptTheme.colorScheme.background,
+    ) { paddingValues ->
         Box(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier.fillMaxSize().padding(paddingValues),
             contentAlignment = Alignment.Center,
         ) {
             when (clientState) {
-                is ProfileState.ViewState.Loading -> {
-                    MifosOverlayLoadingWheel(
-                        contentDesc = stringResource(Res.string.feature_profile_loading),
-                        modifier = Modifier.align(Alignment.Center),
-                    )
-                }
+                is ProfileState.ViewState.Loading -> MifosProgressIndicatorOverlay()
 
                 is ProfileState.ViewState.Error -> {
                     ErrorScreenContent(
@@ -168,22 +169,23 @@ private fun ProfileScreenContent(
             },
         )
 
-        MifosButton(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(55.dp),
-            text = {
-                Text(
-                    text = stringResource(Res.string.feature_profile_link_bank_account),
-                )
-            },
-            onClick = {
-                onAction(ProfileAction.NavigateToLinkBankAccount)
-            },
-            leadingIcon = {
-                Icon(imageVector = MifosIcons.AttachMoney, contentDescription = "")
-            },
-        )
+//        TODO uncomment this after migrating to self api to link savings account
+//        MifosButton(
+//            modifier = Modifier
+//                .fillMaxWidth()
+//                .height(55.dp),
+//            text = {
+//                Text(
+//                    text = stringResource(Res.string.feature_profile_link_bank_account),
+//                )
+//            },
+//            onClick = {
+//                onAction(ProfileAction.NavigateToLinkBankAccount)
+//            },
+//            leadingIcon = {
+//                Icon(imageVector = MifosIcons.AttachMoney, contentDescription = "")
+//            },
+//        )
 
         Spacer(modifier = Modifier.height(1.dp))
     }

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copyright 2024 Mifos Initiative
+
+    This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+    If a copy of the MPL was not distributed with this file,
+    You can obtain one at https://mozilla.org/MPL/2.0/.
+
+    See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+-->
+<resources>
+    <string name="feature_settings_alert_disable_account">هل أنت متأكد أنك تريد تعطيل الحساب؟</string>
+    <string name="feature_settings_notification_settings">إعدادات الإشعارات</string>
+    <string name="feature_settings_faq">الأسئلة الشائعة</string>
+    <string name="feature_settings_settings">الإعدادات</string>
+    <string name="feature_settings_change_password">تغيير كلمة المرور</string>
+    <string name="feature_settings_change_passcode">تغيير رمز المرور</string>
+    <string name="feature_settings_enable_biometrics">تفعيل بصمة الهوية</string>
+    <string name="feature_settings_disable_biometrics">تعطيل بصمة الهوية</string>
+    <string name="feature_settings_biometrics_not_set">لم يتم إعداد بصمة الهوية على هذا الجهاز</string>
+    <string name="feature_settings_biometrics_not_available">بصمة الهوية غير متاحة على هذا الجهاز</string>
+    <string name="feature_settings_log_out">تسجيل الخروج</string>
+    <string name="feature_settings_disable_account">تعطيل الحساب</string>
+    <string name="feature_settings_alert_disable_account_desc">سيؤدي هذا إلى حذف جميع المعلومات المتعلقة بحسابك</string>
+    <string name="feature_settings_ok">موافق</string>
+    <string name="feature_settings_cancel">إلغاء</string>
+    <string name="feature_settings_log_out_title">هل تريد تسجيل الخروج؟</string>
+    <string name="feature_settings_profile">الملف الشخصي</string>
+    <string name="feature_settings_empty"></string>
+    <string name="feature_settings_yes">نعم</string>
+    <string name="feature_settings_no">لا</string>
+</resources>

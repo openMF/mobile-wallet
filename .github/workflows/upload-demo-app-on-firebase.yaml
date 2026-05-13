@@ -40,4 +40,5 @@ jobs:
           keystore_alias_password: ${{ secrets.ORIGINAL_KEYSTORE_ALIAS_PASSWORD }}
           google_services: ${{ secrets.GOOGLESERVICES }}
           firebase_creds: ${{ secrets.FIREBASECREDS }}
+          supabase_creds: ${{ secrets.SUPABASECREDS }}
           tester_groups: ${{ inputs.tester_groups }}

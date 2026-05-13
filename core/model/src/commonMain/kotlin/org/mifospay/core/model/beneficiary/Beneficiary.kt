@@ -16,13 +16,14 @@ import org.mifospay.core.common.Parcelize
 @Serializable
 @Parcelize
 data class Beneficiary(
-    val id: Long,
-    val name: String,
+    val id: Long = 0L,
+    val name: String = "",
     val officeName: String,
     val clientName: String,
     val accountType: AccountType,
     val accountNumber: String,
     val transferLimit: Int = 0,
+    val officeId: Long? = null,
 ) : Parcelable {
 
     @Serializable

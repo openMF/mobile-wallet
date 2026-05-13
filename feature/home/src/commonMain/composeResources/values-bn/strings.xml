@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copyright 2024 Mifos Initiative
+
+    This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+    If a copy of the MPL was not distributed with this file,
+    You can obtain one at https://mozilla.org/MPL/2.0/.
+
+    See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+-->
+<resources>
+    <string name="feature_home_loading">লোড হচ্ছে</string>
+    <string name="start_sending_your_money_tax_free">করমুক্তভাবে অর্থ পাঠানো শুরু করুন!</string>
+    <string name="feature_home_desc">Mifos Pay হল ব্যবহারকারীদের অর্থ গ্রহণ ও পাঠানোর সেরা জায়গা। এখনই সঞ্চয় শুরু করুন!</string>
+    <string name="feature_home_wallet_balance">ওয়ালেট ব্যালেন্স</string>
+    <string name="feature_home_view_more">আরও দেখুন</string>
+    <string name="feature_home_mark_default">ডিফল্ট হিসেবে চিহ্নিত করুন</string>
+    <string name="feature_home_request">গ্রহণ করুন</string>
+    <string name="feature_home_request_money">অর্থের অনুরোধ</string>
+    <string name="feature_home_send">পাঠান</string>
+    <string name="feature_home_send_money">অর্থ পাঠান</string>
+    <string name="feature_home_account_type">অ্যাকাউন্টের ধরন</string>
+    <string name="home_filter_transactions">লেনদেন ফিল্টার করুন</string>
+    <string name="home_transaction_history">লেনদেনের ইতিহাস</string>
+    <string name="home_see_all">সব দেখুন</string>
+    <string name="home_no_transactions_found">নির্বাচিত ফিল্টারে কোনো লেনদেন পাওয়া যায়নি</string>
+    <string name="feature_home_account_success">অ্যাকাউন্ট ডিফল্ট হিসেবে চিহ্নিত হয়েছে</string>
+    <string name="feature_home_account_error">অ্যাকাউন্ট ডিফল্ট চিহ্নিত করতে ত্রুটি</string>
+    <string name="feature_home_no_account">কোনো অ্যাকাউন্ট পাওয়া যায়নি</string>
+    <string name="feature_home_failed_to_load_accounts">অ্যাকাউন্ট লোড করতে ব্যর্থ। আবার চেষ্টা করুন।</string>
+    <string name="feature_home_account_number">অ্যাকাউন্ট নং: %1$s</string>
+</resources>

@@ -14,4 +14,20 @@
     <string name="feature_payments_receive">Receive</string>
     <string name="feature_payments_show_code">Show code</string>
 
+    <!-- Payments Tab Labels -->
+    <string name="feature_payments_send">Send</string>
+    <string name="feature_payments_request">Request</string>
+    <string name="feature_payments_history">History</string>
+
+    <!-- Select Transfer Type Screen -->
+    <string name="feature_payments_select_transfer_type_header">How would you like to make\nthis transfer?</string>
+    <string name="feature_payments_select_transfer_type_subtitle">Choose a transfer method below</string>
+    <string name="feature_payments_intra_bank_transfer_title">Intra-Bank Transfer</string>
+    <string name="feature_payments_intra_bank_transfer_description">Move funds between accounts within this bank.</string>
+    <string name="feature_payments_inter_bank_transfer_title">Inter-Bank Transfer</string>
+    <string name="feature_payments_inter_bank_transfer_description">Send funds to accounts in different banks.</string>
+
+    <!-- Transfer Options Bottom Sheet -->
+    <string name="feature_payments_transfer_options_title">Transfer Options</string>
+
 </resources>

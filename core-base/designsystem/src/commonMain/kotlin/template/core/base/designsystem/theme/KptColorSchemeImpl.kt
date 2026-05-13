@@ -66,6 +66,8 @@ data class KptColorSchemeImpl(
     override val surfaceContainerHigh: Color = Color(0xFFDAD6DC),
     override val surfaceContainerHighest: Color = Color(0xFFCFC8D0),
     override val surfaceTint: Color = Color(0xFF6750A4),
+    override val qrBackground: Color = Color(0xFFFFFFFF),
+    override val qrForeground: Color = Color(0xFF000000),
 ) : KptColorScheme
 
 @Immutable
@@ -269,6 +271,8 @@ class KptColorSchemeBuilder {
     var onSurfaceVariant: Color = Color(0xFF49454F)
     var outline: Color = Color(0xFF79747E)
     var outlineVariant: Color = Color(0xFFCAC4D0)
+    var qrBackground: Color = Color(0xFFFFFFFF)
+    var qrForeground: Color = Color(0xFF000000)
 
     fun build(): KptColorScheme = KptColorSchemeImpl(
         primary = primary,
@@ -295,6 +299,8 @@ class KptColorSchemeBuilder {
         onSurfaceVariant = onSurfaceVariant,
         outline = outline,
         outlineVariant = outlineVariant,
+        qrBackground = qrBackground,
+        qrForeground = qrForeground,
     )
 }
 

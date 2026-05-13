@@ -9,9 +9,10 @@
  */
 package template.core.base.analytics
 
-import kotlinx.datetime.Clock
+import kotlin.time.Clock
 import kotlin.time.Duration
 import kotlin.time.DurationUnit
+import kotlin.time.ExperimentalTime
 
 /**
  * Extension functions for enhanced analytics functionality
@@ -115,8 +116,10 @@ class TimedEvent internal constructor(
     private val eventType: String,
     private val baseParams: List<Param>,
 ) {
+    @OptIn(ExperimentalTime::class)
     private val startTime = Clock.System.now().toEpochMilliseconds()
 
+    @OptIn(ExperimentalTime::class)
     fun complete(additionalParams: Map<String, String> = emptyMap()) {
         val duration = Clock.System.now().toEpochMilliseconds() - startTime
         val params = baseParams +
@@ -137,6 +140,7 @@ fun AnalyticsHelper.startTiming(eventType: String, vararg params: Pair<String, S
 /**
  * Time a block of code execution
  */
+@OptIn(ExperimentalTime::class)
 inline fun <T> AnalyticsHelper.timeExecution(
     eventType: String,
     vararg params: Pair<String, String>,

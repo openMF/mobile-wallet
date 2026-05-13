@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copyright 2026 Mifos Initiative
+
+    This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+    If a copy of the MPL was not distributed with this file,
+    You can obtain one at https://mozilla.org/MPL/2.0/.
+
+    See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+-->
+<resources>
+    <string name="feature_authenticator_error">Error</string>
+    <string name="feature_authenticator_ok">OK</string>
+    <string name="feature_authenticator_use_biometrics">Use Biometrics</string>
+    <string name="feature_authenticator_fingerprint_icon">Fingerprint icon</string>
+    <string name="feature_authenticator_facescan_icon">Face scan icon</string>
+    <string name="feature_authenticator_keypad_icon">Keypad icon</string>
+    <string name="feature_authenticator_set_up_authentication_option">Set up Authentication Option</string>
+    <string name="feature_authenticator_authenticate_windows_hello">Authenticate using Windows Hello</string>
+    <string name="feature_authenticator_unsupported_platform">Unsupported platform</string>
+    <string name="feature_authenticator_user_not_registered_error_message">Biometrics not registered or invalid registration data. Re-Enable biometrics from app settings</string>
+    <string name="feature_authenticator_biometrics_usage_message">Use biometrics (fingerprint or face) for faster and more secure access</string>
+    <string name="feature_authenticator_biometrics_not_set">Biometrics not set up on this device</string>
+    <string name="feature_authenticator_biometrics_available">Biometrics not available on this device</string>
+</resources>

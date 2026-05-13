@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copyright 2024 Mifos Initiative
+
+    This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+    If a copy of the MPL was not distributed with this file,
+    You can obtain one at https://mozilla.org/MPL/2.0/.
+
+    See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+-->
+<resources>
+    <string name="feature_settings_alert_disable_account">क्या आप वाकई खाता अक्षम करना चाहते हैं?</string>
+    <string name="feature_settings_notification_settings">सूचना सेटिंग्स</string>
+    <string name="feature_settings_faq">सामान्य प्रश्न</string>
+    <string name="feature_settings_settings">सेटिंग्स</string>
+    <string name="feature_settings_change_password">पासवर्ड बदलें</string>
+    <string name="feature_settings_change_passcode">पासकोड बदलें</string>
+    <string name="feature_settings_enable_biometrics">बायोमेट्रिक्स सक्षम करें</string>
+    <string name="feature_settings_disable_biometrics">बायोमेट्रिक्स अक्षम करें</string>
+    <string name="feature_settings_biometrics_not_set">इस डिवाइस पर बायोमेट्रिक्स सेट अप नहीं किया गया है</string>
+    <string name="feature_settings_biometrics_not_available">इस डिवाइस पर बायोमेट्रिक्स उपलब्ध नहीं है</string>
+    <string name="feature_settings_log_out">लॉग आउट</string>
+    <string name="feature_settings_disable_account">खाता अक्षम करें</string>
+    <string name="feature_settings_alert_disable_account_desc">इससे आपके खाते की सभी जानकारी हटा दी जाएगी</string>
+    <string name="feature_settings_ok">ठीक है</string>
+    <string name="feature_settings_cancel">रद्द करें</string>
+    <string name="feature_settings_log_out_title">क्या आप लॉग आउट करना चाहते हैं?</string>
+    <string name="feature_settings_profile">प्रोफ़ाइल</string>
+    <string name="feature_settings_empty"></string>
+    <string name="feature_settings_yes">हाँ</string>
+    <string name="feature_settings_no">नहीं</string>
+</resources>

@@ -61,12 +61,12 @@ import org.mifospay.core.designsystem.component.BasicDialogState
 import org.mifospay.core.designsystem.component.LoadingDialogState
 import org.mifospay.core.designsystem.component.MifosBasicDialog
 import org.mifospay.core.designsystem.component.MifosLoadingDialog
-import org.mifospay.core.designsystem.component.MifosLoadingWheel
 import org.mifospay.core.designsystem.component.MifosScaffold
 import org.mifospay.core.designsystem.icon.MifosIcons
 import org.mifospay.core.designsystem.theme.toRoundedCornerShape
 import org.mifospay.core.model.standinginstruction.StandingInstruction
 import org.mifospay.core.ui.EmptyContentScreen
+import org.mifospay.core.ui.MifosProgressIndicator
 import org.mifospay.core.ui.RevealDirection
 import org.mifospay.core.ui.RevealSwipe
 import org.mifospay.core.ui.rememberRevealState
@@ -179,9 +179,7 @@ internal fun StandingInstructionScreen(
             contentAlignment = Alignment.Center,
         ) {
             when (state) {
-                is SIViewState.Loading -> {
-                    MifosLoadingWheel(contentDesc = "Loading")
-                }
+                is SIViewState.Loading -> MifosProgressIndicator()
 
                 is SIViewState.Error -> {
                     EmptyContentScreen(

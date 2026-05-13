@@ -5,7 +5,7 @@
 /.idea/libraries
 .DS_Store
 /build
-/captures 
+/captures
 .externalNativeBuild
 .idea
 /*.iml
@@ -24,11 +24,23 @@ build/
 build-cache/
 .externalNativeBuild
 .cxx
+# iOS/CocoaPods (cmp-ios module)
+cmp-ios/Podfile.lock
+cmp-ios/Pods/
+cmp-ios/iosApp.xcworkspace/xcuserdata/
+cmp-ios/iosApp.xcodeproj/xcuserdata/
+!cmp-ios/iosApp.xcodeproj/project.pbxproj
+
+# Swift Package Manager build directory
+cmp-ios/.build/
+
+# Legacy iosApp paths (kept for backwards compatibility)
 iosApp/Podfile.lock
 iosApp/Pods/*
 iosApp/iosApp.xcworkspace/*
 iosApp/iosApp.xcodeproj/*
 !iosApp/iosApp.xcodeproj/project.pbxproj
+
 cmp-shared/cmp-shared.podspec
 
 # Eclipse project files
@@ -51,6 +63,7 @@ cmp-shared/cmp-shared.podspec
 
 # Kotlin
 .kotlin
+kotlin-js-store/
 
 # Android Studio captures folder
 captures/
@@ -77,4 +90,10 @@ secrets/
 # Sync Log File
 *.log
 
+# Java heap dumps
+*.hprof
+
 *.provisionprofile
+/fastlane/screenshots_ios/
+/fastlane/screenshots_macos/
+/fastlane/metadata/
