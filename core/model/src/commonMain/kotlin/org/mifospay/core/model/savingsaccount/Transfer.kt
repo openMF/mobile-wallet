@@ -14,11 +14,11 @@ import org.mifospay.core.common.DateAsStringSerializer
 
 @Serializable
 data class Transfer(
-    val id: Long,
-    val reversed: Boolean,
-    val currency: Currency,
-    val transferAmount: Double,
+    val id: Long? = null,
+    val reversed: Boolean? = null,
+    val currency: Currency? = null,
+    val transferAmount: Double? = null,
     @Serializable(with = DateAsStringSerializer::class)
-    val transferDate: String,
-    val transferDescription: String,
+    val transferDate: String? = null,
+    val transferDescription: String? = null,
 )
