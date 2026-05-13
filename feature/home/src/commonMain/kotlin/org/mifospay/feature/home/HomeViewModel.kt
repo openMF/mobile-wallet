@@ -83,8 +83,11 @@ class HomeViewModel(
 
                                 // Save account external IDs map
                                 val accountExternalIds = result.data
-                                    .filter { !it.externalId.isNullOrBlank() }
-                                    .associate { it.id to it.externalId!! }
+                                    .mapNotNull { account ->
+                                        account.externalId?.takeIf { it.isNotBlank() }
+                                            ?.let { account.id to it }
+                                    }
+                                    .toMap()
                                 preferencesRepository.updateAccountExternalIds(accountExternalIds)
 
                                 if (selected != null) {
@@ -285,8 +288,8 @@ class HomeViewModel(
                         showBottomSheet = false,
                     )
                 }
-                if (state.currentSelectedAccount != null) {
-                    getAccountBasedOnId(state.currentSelectedAccount!!)
+                state.currentSelectedAccount?.let { account ->
+                    getAccountBasedOnId(account)
                 }
             }
 

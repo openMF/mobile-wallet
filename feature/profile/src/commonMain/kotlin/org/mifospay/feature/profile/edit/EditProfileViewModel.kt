@@ -236,10 +236,11 @@ internal class EditProfileViewModel(
 
             is DataState.Success -> {
                 viewModelScope.launch {
-                    if (state.profileImage != null) {
+                    val image = state.profileImage
+                    if (image != null) {
                         val result = clientRepository.updateClientImage(
                             state.clientId,
-                            state.profileImage!!.decodeToString(),
+                            image.decodeToString(),
                         )
                         sendAction(HandleUpdateClientImageResult(result))
                     }

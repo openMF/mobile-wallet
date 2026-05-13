@@ -60,8 +60,9 @@ internal class AddEditCardViewModel(
             .onEach { savedStateHandle.setSerialized(key = ADD_EDIT_CARD_STATE_KEY, value = it) }
             .launchIn(viewModelScope)
 
-        if (state.type is CardAddEditType.EditItem) {
-            repository.getSavedCard(state.clientId, state.type.savedCardId!!).onEach {
+        val editType = state.type as? CardAddEditType.EditItem
+        if (editType != null) {
+            repository.getSavedCard(state.clientId, editType.savedCardId).onEach {
                 sendAction(HandleCardResult(it))
             }.launchIn(viewModelScope)
         }
@@ -181,7 +182,7 @@ internal class AddEditCardViewModel(
         }
 
         viewModelScope.launch {
-            when (state.type) {
+            when (val type = state.type) {
                 is CardAddEditType.AddItem -> {
                     val result = repository.addSavedCard(state.clientId, state.cardPayload)
 
@@ -191,7 +192,7 @@ internal class AddEditCardViewModel(
                 is CardAddEditType.EditItem -> {
                     val result = repository.updateCard(
                         clientId = state.clientId,
-                        cardId = state.type.savedCardId!!,
+                        cardId = type.savedCardId,
                         card = state.cardPayload,
                     )
 
