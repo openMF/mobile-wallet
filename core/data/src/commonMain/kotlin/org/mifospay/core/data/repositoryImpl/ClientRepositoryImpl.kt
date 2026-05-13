@@ -49,7 +49,7 @@ class ClientRepositoryImpl(
 
     override suspend fun getClient(clientId: Long): DataState<Client> {
         return try {
-            val result = fineractApiManager.clientsApi.getClientForId(clientId)
+            val result = apiManager.clientsApi.getClientForId(clientId)
             DataState.Success(result.toModel())
         } catch (e: Exception) {
             DataState.Error(e)
@@ -99,7 +99,7 @@ class ClientRepositoryImpl(
         clientId: Long,
         accountType: String,
     ): Flow<DataState<List<Account>>> {
-        return fineractApiManager.clientsApi
+        return apiManager.clientsApi
             .getAccounts(clientId, accountType)
             .map { it.toAccount() }
             .asDataStateFlow().flowOn(ioDispatcher)

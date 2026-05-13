@@ -17,10 +17,10 @@ import org.mifospay.core.common.Parcelize
 @Parcelize
 data class PaymentDetailData(
     val id: Long,
-    val paymentType: PaymentType,
-    val accountNumber: String,
-    val checkNumber: String,
-    val routingCode: String,
-    val receiptNumber: String,
-    val bankNumber: String,
+    val paymentType: PaymentType? = null,
+    val accountNumber: String? = null,
+    val checkNumber: String? = null,
+    val routingCode: String? = null,
+    val receiptNumber: String? = null,
+    val bankNumber: String? = null,
 ) : Parcelable

@@ -18,5 +18,5 @@ import org.mifospay.core.common.Parcelize
 data class PaymentType(
     val id: Int? = null,
     val name: String? = null,
-    val isSystemDefined: Boolean,
+    val isSystemDefined: Boolean? = null,
 ) : Parcelable
