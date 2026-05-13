@@ -77,29 +77,30 @@ import org.mifospay.feature.receipt.navigation.receiptScreen
 import org.mifospay.feature.savedcards.createOrUpdate.addEditCardScreen
 import org.mifospay.feature.savedcards.details.cardDetailRoute
 import org.mifospay.feature.savedcards.details.navigateToCardDetails
-import org.mifospay.feature.send.money.AmountUtils
-import org.mifospay.feature.send.money.SendMoneyScreen
-import org.mifospay.feature.send.money.navigation.PAYMENT_SUCCESS_ROUTE
-import org.mifospay.feature.send.money.navigation.SEND_MONEY_BASE_ROUTE
-import org.mifospay.feature.send.money.navigation.SEND_MONEY_OPTIONS_ROUTE
-import org.mifospay.feature.send.money.navigation.navigateToPayeeDetailsScreen
-import org.mifospay.feature.send.money.navigation.navigateToPaymentChatHistoryScreen
-import org.mifospay.feature.send.money.navigation.navigateToPaymentDetailsScreen
-import org.mifospay.feature.send.money.navigation.navigateToPaymentProcessingScreen
-import org.mifospay.feature.send.money.navigation.navigateToPaymentSuccessScreen
-import org.mifospay.feature.send.money.navigation.navigateToSendMoneyOptionsScreen
-import org.mifospay.feature.send.money.navigation.navigateToSendMoneyScreen
-import org.mifospay.feature.send.money.navigation.navigateToUpiPinScreen
-import org.mifospay.feature.send.money.navigation.navigateToUpiTransactionHistoryScreen
-import org.mifospay.feature.send.money.navigation.payeeDetailsScreen
-import org.mifospay.feature.send.money.navigation.paymentChatHistoryScreen
-import org.mifospay.feature.send.money.navigation.paymentDetailsScreen
-import org.mifospay.feature.send.money.navigation.paymentProcessingScreen
-import org.mifospay.feature.send.money.navigation.paymentSuccessScreen
-import org.mifospay.feature.send.money.navigation.sendMoneyOptionsScreen
-import org.mifospay.feature.send.money.navigation.sendMoneyScreen
-import org.mifospay.feature.send.money.navigation.upiPinScreen
-import org.mifospay.feature.send.money.navigation.upiTransactionHistoryScreen
+// from send money pr
+//import org.mifospay.feature.send.money.AmountUtils
+//import org.mifospay.feature.send.money.SendMoneyScreen
+//import org.mifospay.feature.send.money.navigation.PAYMENT_SUCCESS_ROUTE
+//import org.mifospay.feature.send.money.navigation.SEND_MONEY_BASE_ROUTE
+//import org.mifospay.feature.send.money.navigation.SEND_MONEY_OPTIONS_ROUTE
+//import org.mifospay.feature.send.money.navigation.navigateToPayeeDetailsScreen
+//import org.mifospay.feature.send.money.navigation.navigateToPaymentChatHistoryScreen
+//import org.mifospay.feature.send.money.navigation.navigateToPaymentDetailsScreen
+//import org.mifospay.feature.send.money.navigation.navigateToPaymentProcessingScreen
+//import org.mifospay.feature.send.money.navigation.navigateToPaymentSuccessScreen
+//import org.mifospay.feature.send.money.navigation.navigateToSendMoneyOptionsScreen
+//import org.mifospay.feature.send.money.navigation.navigateToSendMoneyScreen
+//import org.mifospay.feature.send.money.navigation.navigateToUpiPinScreen
+//import org.mifospay.feature.send.money.navigation.navigateToUpiTransactionHistoryScreen
+//import org.mifospay.feature.send.money.navigation.payeeDetailsScreen
+//import org.mifospay.feature.send.money.navigation.paymentChatHistoryScreen
+//import org.mifospay.feature.send.money.navigation.paymentDetailsScreen
+//import org.mifospay.feature.send.money.navigation.paymentProcessingScreen
+//import org.mifospay.feature.send.money.navigation.paymentSuccessScreen
+//import org.mifospay.feature.send.money.navigation.sendMoneyOptionsScreen
+//import org.mifospay.feature.send.money.navigation.sendMoneyScreen
+//import org.mifospay.feature.send.money.navigation.upiPinScreen
+//import org.mifospay.feature.send.money.navigation.upiTransactionHistoryScreen
 import org.mifospay.feature.settings.navigation.settingsScreen
 import org.mifospay.feature.standing.instruction.createOrUpdate.addEditSIScreen
 import org.mifospay.feature.standing.instruction.details.siDetailsScreen
@@ -245,7 +246,7 @@ internal fun MifosNavHost(
             },
             onPay = navController::navigateToTransferOptions,
             // from send money pr
-            onPay = navController::navigateToSendMoneyOptionsScreen,
+//            onPay = navController::navigateToSendMoneyOptionsScreen,
             navigateToTransactionDetail = navController::navigateToSpecificTransaction,
             navigateToAccountDetail = navController::navigateToSavingAccountDetails,
             navigateToHistory = navController::navigateToHistory,
@@ -389,7 +390,6 @@ internal fun MifosNavHost(
             navigateBack = navController::navigateUp,
         )
 
-
         // from send money pr
 
 //        sendMoneyOptionsScreen(
@@ -528,10 +528,6 @@ internal fun MifosNavHost(
 //                )
 //            },
 //        )
-
-
-
-
 
         fastMpayScreen(
             onNavigateToAddBeneficiary = { beneficiaryData, sourceQrType, sourceQrData ->
