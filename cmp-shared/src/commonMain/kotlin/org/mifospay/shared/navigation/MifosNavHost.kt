@@ -178,7 +178,7 @@ internal fun MifosNavHost(
         modifier = modifier,
     ) {
         internalMifosPasscodeScreen(
-            onForgotButton = onClickLogout,
+            navigateToLogin = onClickLogout,
             onAuthenticationSuccess = { verificationKey ->
                 userVerificationRepository.recordVerification()
                 verificationKey?.let {
@@ -199,7 +199,7 @@ internal fun MifosNavHost(
             onPasscodeChanged = {
                 navController.popBackStack()
             },
-            onDisableBiometrics = {
+            onBackPress = {
                 navController.popBackStack()
             },
         )

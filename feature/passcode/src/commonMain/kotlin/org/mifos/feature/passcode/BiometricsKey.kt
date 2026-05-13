@@ -30,8 +30,8 @@ import template.core.base.designsystem.theme.KptTheme
 @Composable
 fun BiometricsKey(
     systemAvailableAuthOption: PlatformAvailableAuthenticationOption,
+    onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    onAuthenticatorClick: () -> Unit,
 ) {
     val authOptions by systemAvailableAuthOption.currentAuthOption.collectAsStateWithLifecycle()
 
@@ -54,9 +54,7 @@ fun BiometricsKey(
     PasscodeKey(
         modifier = modifier,
         keyIcon = icon,
-        onClick = {
-            onAuthenticatorClick()
-        },
+        onClick = { onClick() },
         keyColor = passcodeKeyConfig.keyColor,
         shape = passcodeKeyConfig.keyShape,
         elevation = passcodeKeyConfig.keyElevation ?: CardDefaults.elevatedCardElevation(

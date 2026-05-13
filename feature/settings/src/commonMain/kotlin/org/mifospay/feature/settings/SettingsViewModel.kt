@@ -11,7 +11,6 @@ package org.mifospay.feature.settings
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import mobile_wallet.feature.settings.generated.resources.Res
@@ -25,7 +24,6 @@ import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.getString
 import org.mifos.authenticator.biometrics.platformAuthenticator.PlatformAuthenticationProvider
 import org.mifos.authenticator.biometrics.platformAuthenticator.RegistrationResult
-import org.mifos.authenticator.passcode.PasscodeAction
 import org.mifos.authenticator.passcode.PasscodeManager
 import org.mifospay.core.common.DataState
 import org.mifospay.core.data.repository.SavingsAccountRepository
@@ -49,23 +47,9 @@ class SettingsViewModel(
         SettingsState(
             client = client,
             dialogState = null,
-            isBiometricsRegistered = passcodeManager.state.value.isBiometricEnabled,
         )
     },
 ) {
-
-    init {
-        viewModelScope.launch {
-            passcodeManager.state.collect { passcodeState ->
-                mutableStateFlow.update {
-                    it.copy(isBiometricsRegistered = passcodeState.isBiometricEnabled)
-                }
-            }
-        }
-    }
-
-    val authenticationSuccess: MutableStateFlow<Boolean?> =
-        savedStateHandle.getMutableStateFlow(DISABLE_BIOMETRICS_VERIFICATION_KEY, null)
 
     override fun handleAction(action: SettingsAction) {
         when (action) {
@@ -82,7 +66,7 @@ class SettingsViewModel(
             }
 
             is SettingsAction.ChangePasscode -> {
-                passcodeManager.trySendAction(PasscodeAction.ChangePasscode)
+                passcodeManager.changePasscode()
                 sendEvent(SettingsEvent.NavigateToPasscodeScreen)
             }
 
@@ -132,14 +116,17 @@ class SettingsViewModel(
             is SettingsAction.Internal.DisableAccount -> handleDisableAccount()
 
             is DisableAccountResult -> handleDisableAccountResult(action)
+
             is SettingsAction.ToggleSystemAuth -> {
-                if (state.isBiometricsRegistered) {
-                    passcodeManager.trySendAction(PasscodeAction.DisableBiometrics)
+                if (action.isCurrentlyRegistered) {
                     sendEvent(SettingsEvent.NavigateToPasscodeScreen)
-                    handlePasscodeVerification()
                 } else {
                     handleBiometricsAuthRegistration(action.systemAuthProvider)
                 }
+            }
+
+            is SettingsAction.DisableBiometricsResult -> {
+                handleDisableBiometricsResult(action.success, action.systemAuthProvider)
             }
 
             SettingsAction.BiometricsNotAvailable -> {
@@ -152,32 +139,15 @@ class SettingsViewModel(
         }
     }
 
-    private fun handlePasscodeVerification() {
+    private fun handleDisableBiometricsResult(
+        authenticationSuccess: Boolean,
+        authProvider: PlatformAuthenticationProvider,
+    ) {
         viewModelScope.launch {
-            authenticationSuccess.collect { result ->
-                when (result) {
-                    true -> {
-                        if (userVerificationRepository.consumeVerification()) {
-                            passcodeManager.trySendAction(PasscodeAction.DeleteBiometricRegistration)
-                            mutableStateFlow.update {
-                                it.copy(
-                                    isBiometricsRegistered = false,
-                                )
-                            }
-                        }
-                        savedStateHandle.remove<Boolean?>(DISABLE_BIOMETRICS_VERIFICATION_KEY)
-                        authenticationSuccess.value = null
-                    }
-                    false -> {
-                        mutableStateFlow.update {
-                            it.copy(isBiometricsRegistered = true)
-                        }
-                        savedStateHandle.remove<Boolean?>(DISABLE_BIOMETRICS_VERIFICATION_KEY)
-                        authenticationSuccess.value = null
-                    }
-                    null -> {}
-                }
+            if (authenticationSuccess && userVerificationRepository.consumeVerification()) {
+                authProvider.unregister()
             }
+            savedStateHandle.remove<Boolean?>(DISABLE_BIOMETRICS_VERIFICATION_KEY)
         }
     }
 
@@ -192,9 +162,7 @@ class SettingsViewModel(
             )
 
             when (result) {
-                is RegistrationResult.Success -> {
-                    passcodeManager.trySendAction(PasscodeAction.SaveBiometricRegistration(result.message))
-                }
+                is RegistrationResult.Success -> { }
                 RegistrationResult.PlatformAuthenticatorNotSet -> {
                     mutableStateFlow.update {
                         it.copy(
@@ -220,6 +188,7 @@ class SettingsViewModel(
                         )
                     }
                 }
+                RegistrationResult.UserCancelled -> { }
             }
         }
     }
@@ -267,7 +236,6 @@ class SettingsViewModel(
 data class SettingsState(
     val client: Client,
     val dialogState: DialogState? = null,
-    val isBiometricsRegistered: Boolean = false,
 )
 
 sealed interface DialogState {
@@ -301,9 +269,29 @@ sealed interface SettingsAction {
     data object Logout : SettingsAction
     data object DisableAccount : SettingsAction
     data object BiometricsNotAvailable : SettingsAction
+
+    /**
+     * Toggle biometric registration. Enable path runs `registerUser()` directly.
+     * Disable path emits a navigation event so the screen can route to the
+     * internal passcode screen for verification; the verification result then
+     * comes back as [DisableBiometricsResult].
+     */
     data class ToggleSystemAuth(
         val systemAuthProvider: PlatformAuthenticationProvider,
+        val isCurrentlyRegistered: Boolean,
     ) : SettingsAction
+
+    /**
+     * Result of the disable-biometrics passcode-verification round trip.
+     * Dispatched by the screen's `LaunchedEffect` observing
+     * [DISABLE_BIOMETRICS_VERIFICATION_KEY]. On `success=true` (and a still-valid
+     * verification token), calls `systemAuthProvider.unregister()`.
+     */
+    data class DisableBiometricsResult(
+        val success: Boolean,
+        val systemAuthProvider: PlatformAuthenticationProvider,
+    ) : SettingsAction
+
     data object ChangePasscode : SettingsAction
     data object ChangePassword : SettingsAction
     data object NavigateToFaqScreen : SettingsAction

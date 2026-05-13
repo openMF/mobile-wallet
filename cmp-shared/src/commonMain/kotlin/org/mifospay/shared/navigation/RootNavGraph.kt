@@ -59,7 +59,7 @@ internal fun RootNavGraph(
         )
 
         rootMifosPasscodeScreen(
-            onForgotButton = onClickLogout,
+            navigateToLogin = onClickLogout,
             onAuthenticationSuccess = {
                 navHostController.popBackStack()
                 navHostController.navigateToMainGraph()
@@ -86,7 +86,7 @@ internal fun RootNavGraph(
         )
 
         reAuthMifosPasscodeScreen(
-            onForgotButton = {
+            navigateToLogin = {
                 navHostController.popBackStack()
                 onClickLogout()
             },

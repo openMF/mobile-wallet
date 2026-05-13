@@ -14,6 +14,7 @@ import org.koin.core.module.dsl.singleOf
 import org.koin.core.qualifier.named
 import org.koin.dsl.bind
 import org.koin.dsl.module
+import org.mifos.authenticator.biometrics.BiometricStorageAdapter
 import org.mifos.authenticator.passcode.PasscodeStorageAdapter
 import org.mifospay.core.common.MifosDispatchers
 import org.mifospay.core.data.repository.AccountRepository
@@ -46,6 +47,7 @@ import org.mifospay.core.data.repositoryImpl.AppLockRepositoryImpl
 import org.mifospay.core.data.repositoryImpl.AssetRepositoryImpl
 import org.mifospay.core.data.repositoryImpl.AuthenticationRepositoryImpl
 import org.mifospay.core.data.repositoryImpl.BeneficiaryRepositoryImpl
+import org.mifospay.core.data.repositoryImpl.BiometricsSetupAdapterImpl
 import org.mifospay.core.data.repositoryImpl.ClientRepositoryImpl
 import org.mifospay.core.data.repositoryImpl.DocumentRepositoryImpl
 import org.mifospay.core.data.repositoryImpl.InterBankRepositoryImpl
@@ -113,6 +115,7 @@ val RepositoryModule = module {
     single<OfficeRepository> { OfficeRepositoryImpl(get(), get(ioDispatcher)) }
 
     singleOf(::MifosPasscodeAdapterImpl).bind<PasscodeStorageAdapter>()
+    singleOf(::BiometricsSetupAdapterImpl).bind<BiometricStorageAdapter>()
     singleOf(::AppLockRepositoryImpl).bind<AppLockRepository>()
     singleOf(::UserVerificationRepositoryImpl).bind<UserVerificationRepository>()
 

@@ -24,7 +24,8 @@ import androidx.navigation.compose.rememberNavController
 import co.touchlab.kermit.Logger
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
-import org.mifos.authenticator.biometrics.PlatformAuthenticatorLocalCompositionProvider
+import org.mifos.authenticator.biometrics.BiometricStorageAdapter
+import org.mifos.authenticator.biometrics.PlatformAuthenticatorCompositionProvider
 import org.mifos.feature.passcode.ROOT_MIFOS_PASSCODE_ROUTE
 import org.mifos.feature.passcode.navigateToReAuthMifosPasscodeScreen
 import org.mifospay.core.common.GlobalAuthManager
@@ -44,7 +45,10 @@ fun MifosPaySharedApp(
     networkMonitor: NetworkMonitor = koinInject(),
     timeZoneMonitor: TimeZoneMonitor = koinInject(),
 ) {
-    PlatformAuthenticatorLocalCompositionProvider {
+    val biometricStorageAdapter: BiometricStorageAdapter = koinInject()
+    PlatformAuthenticatorCompositionProvider(
+        biometricStorageAdapter = biometricStorageAdapter,
+    ) {
         MifosPayApp(modifier, networkMonitor, timeZoneMonitor)
     }
 }

@@ -18,8 +18,6 @@ import mobile_wallet.feature.passcode.generated.resources.feature_authenticator_
 import org.jetbrains.compose.resources.getString
 import org.mifos.authenticator.biometrics.platformAuthenticator.PlatformAuthenticationProvider
 import org.mifos.authenticator.biometrics.platformAuthenticator.RegistrationResult
-import org.mifos.authenticator.passcode.PasscodeAction
-import org.mifos.authenticator.passcode.PasscodeManager
 import org.mifospay.core.datastore.UserPreferencesRepository
 import org.mifospay.core.model.client.Client
 import org.mifospay.core.ui.utils.AuthenticationUtils
@@ -27,7 +25,6 @@ import org.mifospay.core.ui.utils.BaseViewModel
 
 class BiometricSetupScreenViewmodel(
     userPreferencesRepository: UserPreferencesRepository,
-    private val passcodeManager: PasscodeManager,
 ) : BaseViewModel<
     BiometricSetupScreenState,
     BiometricSetupScreenEvent,
@@ -52,15 +49,15 @@ class BiometricSetupScreenViewmodel(
 
     private fun registerUser(platformAuthenticationProvider: PlatformAuthenticationProvider) {
         viewModelScope.launch {
+            val client = mutableStateFlow.value.client
             val result = platformAuthenticationProvider.registerUser(
-                mutableStateFlow.value.client?.id?.run { toString() } ?: AuthenticationUtils.DEFAULT_USER_ID,
-                mutableStateFlow.value.client?.emailAddress ?: AuthenticationUtils.DEFAULT_USER_EMAIL,
-                mutableStateFlow.value.client?.displayName ?: AuthenticationUtils.DEFAULT_DISPLAY_NAME,
+                client?.id?.run { toString() } ?: AuthenticationUtils.DEFAULT_USER_ID,
+                client?.emailAddress ?: AuthenticationUtils.DEFAULT_USER_EMAIL,
+                client?.displayName ?: AuthenticationUtils.DEFAULT_DISPLAY_NAME,
             )
 
             when (result) {
                 is RegistrationResult.Success -> {
-                    passcodeManager.trySendAction(PasscodeAction.SaveBiometricRegistration(result.message))
                     sendEvent(BiometricSetupScreenEvent.OnBiometricSetupSuccess)
                 }
                 RegistrationResult.PlatformAuthenticatorNotSet -> {
@@ -84,6 +81,7 @@ class BiometricSetupScreenViewmodel(
                         )
                     }
                 }
+                RegistrationResult.UserCancelled -> { }
             }
         }
     }

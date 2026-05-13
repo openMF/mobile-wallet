@@ -9,7 +9,6 @@
  */
 package org.mifospay.shared.di
 
-import kotlinx.coroutines.MainScope
 import org.koin.core.context.startKoin
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.KoinAppDeclaration
@@ -101,9 +100,7 @@ object KoinModules {
     }
 
     private val MifosPasscodeModule = module {
-        single {
-            PasscodeManager(get(), MainScope()).initialize()
-        }
+        single { PasscodeManager(get()) }
     }
 
     val allModules = listOf(

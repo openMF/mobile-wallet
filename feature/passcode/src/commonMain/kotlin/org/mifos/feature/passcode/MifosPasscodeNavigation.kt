@@ -19,12 +19,9 @@ import kotlinx.serialization.Serializable
 import template.core.base.ui.composableWithSlideTransitions
 import template.core.base.ui.composableWithStayTransitions
 
-// Kept as constants so they can be used as startDestination strings in NavHost
 const val ROOT_MIFOS_PASSCODE_ROUTE = "root_mifos_passcode_route"
 const val RE_AUTH_MIFOS_PASSCODE_ROUTE = "reauth_mifos_passcode_route"
 
-// @SerialName ensures composable<T> registers at the same route string as the constant above,
-// so startDestination = ROOT_MIFOS_PASSCODE_ROUTE in NavHost still matches.
 @Serializable
 @SerialName(ROOT_MIFOS_PASSCODE_ROUTE)
 data object RootPasscodeRoute
@@ -34,7 +31,10 @@ data object RootPasscodeRoute
 data object ReAuthPasscodeRoute
 
 @Serializable
-data class InternalPasscodeRoute(val verificationKey: String? = null)
+data class InternalPasscodeRoute(
+    val verificationKey: String? = null,
+    val allowBiometricAuth: Boolean = true,
+)
 
 fun NavController.navigateToRootMifosPasscodeScreen(navOptions: NavOptions? = null) =
     navigate(RootPasscodeRoute, navOptions)
@@ -44,67 +44,82 @@ fun NavController.navigateToReAuthMifosPasscodeScreen(navOptions: NavOptions? = 
 
 fun NavController.navigateToInternalMifosPasscodeScreen(
     verificationKey: String? = null,
+    allowBiometricAuth: Boolean = true,
     navOptions: NavOptions? = null,
-) = navigate(InternalPasscodeRoute(verificationKey), navOptions)
+) = navigate(InternalPasscodeRoute(verificationKey, allowBiometricAuth), navOptions)
 
 @OptIn(ExperimentalComposeUiApi::class)
 fun NavGraphBuilder.rootMifosPasscodeScreen(
-    onForgotButton: () -> Unit,
+    navigateToLogin: () -> Unit,
     onAuthenticationSuccess: () -> Unit,
     onPasscodeCreation: () -> Unit = {},
     onAuthenticationFailed: () -> Unit = {},
     onPasscodeChanged: () -> Unit = {},
-    onDisableBiometrics: () -> Unit = {},
 ) {
     composableWithStayTransitions<RootPasscodeRoute> {
         MifosPasscode(
-            onForgotButton = onForgotButton,
             onAuthenticationSuccess = onAuthenticationSuccess,
+            navigateToLogin = navigateToLogin,
             onPasscodeCreation = onPasscodeCreation,
             onAuthenticationFailed = onAuthenticationFailed,
             onPasscodeChanged = onPasscodeChanged,
-            onDisableBiometrics = onDisableBiometrics,
+            allowBackNavigation = false,
+            allowBiometricAuth = true,
         )
     }
 }
 
 @OptIn(ExperimentalComposeUiApi::class)
 fun NavGraphBuilder.reAuthMifosPasscodeScreen(
-    onForgotButton: () -> Unit,
+    navigateToLogin: () -> Unit,
     onAuthenticationSuccess: () -> Unit,
     onAuthenticationFailed: () -> Unit = {},
     onPasscodeChanged: () -> Unit = {},
-    onDisableBiometrics: () -> Unit = {},
 ) {
     composableWithSlideTransitions<ReAuthPasscodeRoute> {
         MifosPasscode(
-            onForgotButton = onForgotButton,
             onAuthenticationSuccess = onAuthenticationSuccess,
-            onPasscodeCreation = {},
+            navigateToLogin = navigateToLogin,
             onAuthenticationFailed = onAuthenticationFailed,
             onPasscodeChanged = onPasscodeChanged,
-            onDisableBiometrics = onDisableBiometrics,
+            allowBackNavigation = false,
+            allowBiometricAuth = true,
         )
     }
 }
 
+/**
+ * In-app passcode prompt for sensitive operations (change passcode, disable
+ * biometrics, intra-bank transfer auth gate).
+ *
+ * @param verificationKey Carried via [InternalPasscodeRoute]; forwarded back to
+ *        the caller's saved-state-handle on success/failure so the previous
+ *        screen can observe the round-trip result. Null if the caller doesn't
+ *        need the round-trip channel.
+ * @param onAuthenticationSuccess `(verificationKey) -> Unit` — typically writes
+ *        `true` to the previous back stack entry's saved-state-handle and pops.
+ * @param onAuthenticationFailed `(verificationKey) -> Unit` — typically writes
+ *        `false` to the previous saved-state-handle and pops.
+ */
 @OptIn(ExperimentalComposeUiApi::class)
 fun NavGraphBuilder.internalMifosPasscodeScreen(
-    onForgotButton: () -> Unit,
-    onAuthenticationSuccess: (String?) -> Unit,
-    onAuthenticationFailed: (String?) -> Unit = {},
+    navigateToLogin: () -> Unit,
+    onAuthenticationSuccess: (verificationKey: String?) -> Unit,
+    onAuthenticationFailed: (verificationKey: String?) -> Unit = {},
     onPasscodeChanged: () -> Unit = {},
-    onDisableBiometrics: () -> Unit = {},
+    onBackPress: () -> Unit = {},
 ) {
     composableWithSlideTransitions<InternalPasscodeRoute> { backStackEntry ->
-        val verificationKey = backStackEntry.toRoute<InternalPasscodeRoute>().verificationKey
+        val route = backStackEntry.toRoute<InternalPasscodeRoute>()
         MifosPasscode(
-            onForgotButton = onForgotButton,
-            onAuthenticationSuccess = { onAuthenticationSuccess(verificationKey) },
+            onAuthenticationSuccess = { onAuthenticationSuccess(route.verificationKey) },
+            navigateToLogin = navigateToLogin,
             onPasscodeCreation = {},
-            onAuthenticationFailed = { onAuthenticationFailed(verificationKey) },
+            onAuthenticationFailed = { onAuthenticationFailed(route.verificationKey) },
             onPasscodeChanged = onPasscodeChanged,
-            onDisableBiometrics = onDisableBiometrics,
+            onBackPress = onBackPress,
+            allowBackNavigation = true,
+            allowBiometricAuth = route.allowBiometricAuth,
         )
     }
 }

@@ -24,13 +24,13 @@ fun NavController.navigateToSettings(navOptions: NavOptions? = null) {
 fun NavGraphBuilder.settingsScreen(
     onBackPress: () -> Unit,
     onLogout: () -> Unit,
-    navigateToPasscodeScreen: () -> Unit,
+    navigateToPasscodeScreen: (verificationKey: String?) -> Unit,
     navigateToEditPasswordScreen: () -> Unit,
     navigateToFaqScreen: () -> Unit,
     navigateToNotificationScreen: () -> Unit,
     navigateToProfile: () -> Unit,
 ) {
-    composableWithSlideTransitions(route = SETTINGS_ROUTE) {
+    composableWithSlideTransitions(route = SETTINGS_ROUTE) { entry ->
         SettingsScreenRoute(
             backPress = onBackPress,
             onEditPassword = navigateToEditPasswordScreen,
@@ -39,6 +39,7 @@ fun NavGraphBuilder.settingsScreen(
             navigateToFaqScreen = navigateToFaqScreen,
             navigateToNotificationScreen = navigateToNotificationScreen,
             navigateToProfile = navigateToProfile,
+            entryStateHandle = entry.savedStateHandle,
         )
     }
 }

@@ -9,7 +9,6 @@
  */
 package org.mifos.feature.passcode
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -33,6 +32,7 @@ import org.koin.compose.viewmodel.koinViewModel
 import org.mifos.authenticator.biometrics.platformAuthenticationProvider
 import org.mifos.authenticator.biometrics.platformAvailableAuthenticationOption
 import org.mifos.authenticator.passcode.PasscodeManager
+import org.mifos.authenticator.passcode.PasscodeResult
 import org.mifos.authenticator.passcode.screen.PasscodeAppearanceConfig
 import org.mifos.authenticator.passcode.screen.PasscodeButtonConfig
 import org.mifos.authenticator.passcode.screen.PasscodeDialogConfig
@@ -50,11 +50,13 @@ internal object MifosPasscodeCurrentInfo : NavigationEventInfo()
 @Composable
 fun MifosPasscode(
     onAuthenticationSuccess: () -> Unit,
-    onForgotButton: () -> Unit = {},
+    onBackPress: () -> Unit = {},
+    navigateToLogin: () -> Unit = {},
     onPasscodeCreation: () -> Unit = {},
-    onAuthenticationFailed: () -> Unit = {},
     onPasscodeChanged: () -> Unit = {},
-    onDisableBiometrics: () -> Unit = {},
+    onAuthenticationFailed: () -> Unit = {},
+    allowBackNavigation: Boolean = false,
+    allowBiometricAuth: Boolean = true,
     viewModel: MifosPasscodeViewModel = koinViewModel(),
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
@@ -62,32 +64,41 @@ fun MifosPasscode(
 
     val systemAuthProvider = platformAuthenticationProvider.current
     val systemAvailableAuthOption = platformAvailableAuthenticationOption.current
+    val isRegistered by systemAuthProvider.isRegistered.collectAsStateWithLifecycle()
+    val lifeCycleOwner = LocalLifecycleOwner.current
 
     val navEventState = rememberNavigationEventState(
         currentInfo = MifosPasscodeCurrentInfo,
     )
+
     NavigationBackHandler(
         state = navEventState,
         isBackEnabled = true,
         onBackCancelled = { },
-        onBackCompleted = { },
+        onBackCompleted = {
+            if (allowBackNavigation) {
+                onBackPress()
+            }
+        },
     )
 
     LaunchedEffect(Unit) {
         viewModel.eventFlow.collect { event ->
             when (event) {
-                MifosPasscodeEvent.OnAuthenticationSuccess -> onAuthenticationSuccess()
-                MifosPasscodeEvent.OnForgotButton -> onForgotButton()
-                MifosPasscodeEvent.OnPasscodeCreation -> onPasscodeCreation()
-                MifosPasscodeEvent.OnPasscodeRejected -> onAuthenticationFailed()
-                MifosPasscodeEvent.OnPasscodeChanged -> onPasscodeChanged()
-                MifosPasscodeEvent.OnDisableBiometrics -> onDisableBiometrics()
+                is MifosPasscodeEvent.NavigateForResult -> {
+                    when (event.result) {
+                        PasscodeResult.Verified -> onAuthenticationSuccess()
+                        PasscodeResult.Created -> onPasscodeCreation()
+                        PasscodeResult.Changed -> onPasscodeChanged()
+                        PasscodeResult.Forgotten -> navigateToLogin()
+                        PasscodeResult.Rejected -> onAuthenticationFailed()
+                    }
+                }
             }
         }
     }
 
-    val lifeCycleOwner = LocalLifecycleOwner.current
-    DisposableEffect(lifeCycleOwner) {
+    DisposableEffect(lifeCycleOwner, allowBiometricAuth) {
         val observer = LifecycleEventObserver { _, event ->
             when (event) {
                 Lifecycle.Event.ON_START -> {
@@ -98,6 +109,7 @@ fun MifosPasscode(
                     viewModel.trySendAction(
                         MifosPasscodeAction.OnResume(
                             systemAuthProvider = systemAuthProvider,
+                            allowBiometricAuth = allowBiometricAuth,
                         ),
                     )
                 }
@@ -114,8 +126,9 @@ fun MifosPasscode(
         confirmButtonText = stringResource(Res.string.feature_authenticator_ok),
         dismissButtonText = null,
         onConfirm = {
-            when (val dialogState = state.dialogState) {
+            when (state.dialogState) {
                 is PasscodeDialogState.UserNotRegistered -> {
+                    viewModel.trySendAction(MifosPasscodeAction.ClickConfirmOnNotRegisteredDialog)
                 }
                 else -> viewModel.trySendAction(MifosPasscodeAction.DismissDialog)
             }
@@ -132,27 +145,16 @@ fun MifosPasscode(
 
     PasscodeScreen(
         passcodeManager = passcodeManager,
-        onForgotButton = {
-            viewModel.trySendAction(MifosPasscodeAction.ForgotPasscode)
-        },
-        // onPasscodeConfirm will be renamed to onAuthenticationSuccess in next update to the passcode library.
-        // It is the commonCallBack function for successful biometrics and passcode authentication.
-        onPasscodeConfirm = {
-            viewModel.trySendAction(MifosPasscodeAction.AuthenticationSuccess)
-        },
-        onPasscodeCreation = {
-            viewModel.trySendAction(MifosPasscodeAction.PasscodeCreation)
-        },
-        onPasscodeChanged = {
-            viewModel.trySendAction(MifosPasscodeAction.PasscodeChanged)
-        },
-        // onPasscodeRejected will be renamed to onAuthenticationFailed in next update to the passcode library.
-        // It is the commonCallBack function for failed biometrics and passcode authentication.
-        onPasscodeRejected = {
-            viewModel.trySendAction(MifosPasscodeAction.PasscodeRejected)
-        },
-        onDisableBiometrics = {
-            viewModel.trySendAction(MifosPasscodeAction.DisableBiometrics)
+        onResult = { result ->
+            if (result == PasscodeResult.Forgotten) {
+                viewModel.trySendAction(
+                    MifosPasscodeAction.ForgetPasscode(
+                        systemAuthProvider = systemAuthProvider,
+                    ),
+                )
+            } else {
+                viewModel.trySendAction(MifosPasscodeAction.HandlePasscodeResult(result = result))
+            }
         },
         appearanceConfig = PasscodeAppearanceConfig(
             backgroundColor = KptTheme.colorScheme.background,
@@ -164,24 +166,6 @@ fun MifosPasscode(
             inactiveDotColor = KptTheme.colorScheme.onBackground,
             visiblePasscodeTextStyle = KptTheme.typography.headlineSmall,
         ),
-        biometricButton = { modifier ->
-            AnimatedVisibility(state.showBiometricsKeyButton) {
-                BiometricsKey(
-                    modifier = modifier,
-                    systemAvailableAuthOption = systemAvailableAuthOption,
-                    onAuthenticatorClick = {
-                        viewModel.trySendAction(
-                            MifosPasscodeAction.OnAuthenticatorClick(
-                                systemAuthProvider = systemAuthProvider,
-                            ),
-                        )
-                    },
-                )
-            }
-        },
-        onBiometricError = {
-            viewModel.trySendAction(MifosPasscodeAction.BiometricError(it.toString()))
-        },
         keyConfig = PasscodeKeyConfig(
             shouldShuffleKeys = true,
             keyTextStyle = null,
@@ -208,5 +192,23 @@ fun MifosPasscode(
             dialogButtonTextColor = KptTheme.colorScheme.onSurface,
             dialogShape = null,
         ),
+        isExternalAuthEnabled = allowBiometricAuth && isRegistered,
+        externalAuthButton = if (allowBiometricAuth) {
+            { modifier ->
+                BiometricsKey(
+                    modifier = modifier,
+                    systemAvailableAuthOption = systemAvailableAuthOption,
+                    onClick = {
+                        viewModel.trySendAction(
+                            MifosPasscodeAction.OnAuthenticatorClick(
+                                systemAuthProvider = systemAuthProvider,
+                            ),
+                        )
+                    },
+                )
+            }
+        } else {
+            null
+        },
     )
 }

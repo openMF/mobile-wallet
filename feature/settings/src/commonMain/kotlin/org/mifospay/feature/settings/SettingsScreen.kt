@@ -22,9 +22,11 @@ import androidx.compose.material3.ListItem
 import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.SavedStateHandle
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -61,19 +63,42 @@ internal fun SettingsScreenRoute(
     backPress: () -> Unit,
     onEditPassword: () -> Unit,
     onLogout: () -> Unit,
-    navigateToPasscodeScreen: () -> Unit,
+    navigateToPasscodeScreen: (verificationKey: String?) -> Unit,
     navigateToFaqScreen: () -> Unit,
     navigateToNotificationScreen: () -> Unit,
     navigateToProfile: () -> Unit,
+    entryStateHandle: SavedStateHandle,
     modifier: Modifier = Modifier,
     viewmodel: SettingsViewModel = koinViewModel(),
 ) {
     val state by viewmodel.stateFlow.collectAsStateWithLifecycle()
+    val authProvider = platformAuthenticationProvider.current
+    val isRegistered by authProvider.isRegistered.collectAsStateWithLifecycle()
+
+    val disableBiometricsResult by entryStateHandle
+        .getStateFlow<Boolean?>(DISABLE_BIOMETRICS_VERIFICATION_KEY, null)
+        .collectAsStateWithLifecycle()
+
+    LaunchedEffect(disableBiometricsResult) {
+        disableBiometricsResult?.let { result ->
+            viewmodel.trySendAction(
+                SettingsAction.DisableBiometricsResult(
+                    success = result,
+                    systemAuthProvider = authProvider,
+                ),
+            )
+            entryStateHandle.remove<Boolean>(DISABLE_BIOMETRICS_VERIFICATION_KEY)
+        }
+    }
 
     EventsEffect(viewmodel) { event ->
         when (event) {
             SettingsEvent.OnNavigateBack -> backPress.invoke()
-            SettingsEvent.NavigateToPasscodeScreen -> navigateToPasscodeScreen()
+            SettingsEvent.NavigateToPasscodeScreen -> {
+                navigateToPasscodeScreen(
+                    if (isRegistered) DISABLE_BIOMETRICS_VERIFICATION_KEY else null,
+                )
+            }
             SettingsEvent.OnNavigateToEditPasswordScreen -> onEditPassword.invoke()
             SettingsEvent.OnNavigateToFaqScreen -> navigateToFaqScreen.invoke()
             SettingsEvent.OnNavigateToLogout -> onLogout.invoke()
@@ -91,7 +116,7 @@ internal fun SettingsScreenRoute(
         )
 
         SettingsScreenContent(
-            isSystemAuthenticationEnabled = state.isBiometricsRegistered,
+            isSystemAuthenticationEnabled = isRegistered,
             onAction = viewmodel::trySendAction,
         )
     }
@@ -171,7 +196,12 @@ private fun SettingsScreenContent(
                     icon = MifosIcons.Fingerprint,
                     onClick = {
                         if (authenticatorStatus.contains(PlatformAuthenticatorStatus.BIOMETRICS_SET)) {
-                            onAction(SettingsAction.ToggleSystemAuth(authProvider))
+                            onAction(
+                                SettingsAction.ToggleSystemAuth(
+                                    systemAuthProvider = authProvider,
+                                    isCurrentlyRegistered = isSystemAuthenticationEnabled,
+                                ),
+                            )
                         } else {
                             onAction(SettingsAction.BiometricsNotAvailable)
                         }

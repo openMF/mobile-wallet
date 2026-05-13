@@ -16,7 +16,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import org.mifos.authenticator.passcode.PasscodeAction
 import org.mifos.authenticator.passcode.PasscodeManager
 import org.mifos.authenticator.passcode.PasscodeStorageAdapter
 import org.mifospay.core.data.repository.AppLockRepository
@@ -45,7 +44,7 @@ class MifosPayViewModel(
         viewModelScope.launch {
             userDataRepository.logOut()
             appLockRepository.deleteLock()
-            passcodeManager.trySendAction(PasscodeAction.LogOutErasePasscode)
+            passcodeManager.logOut()
         }
     }
     fun isAppUnlocked(): Boolean {
