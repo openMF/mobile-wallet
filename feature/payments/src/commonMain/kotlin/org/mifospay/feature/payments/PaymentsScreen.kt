@@ -64,8 +64,9 @@ enum class PaymentsScreenContents {
     SEND,
     REQUEST,
     HISTORY,
-//    SI,
-//    INVOICES,
+    SI,
+    INVOICES,
+    AUTOPAY,
 }
 
 @Preview

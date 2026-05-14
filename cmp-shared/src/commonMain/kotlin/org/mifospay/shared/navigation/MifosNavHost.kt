@@ -31,6 +31,14 @@ import org.mifospay.feature.accounts.savingsaccount.addEditSavingAccountScreen
 import org.mifospay.feature.accounts.savingsaccount.details.navigateToSavingAccountDetails
 import org.mifospay.feature.accounts.savingsaccount.details.savingAccountDetailRoute
 import org.mifospay.feature.accounts.savingsaccount.navigateToSavingAccountAddEdit
+// from #1908 pr
+//import org.mifospay.feature.autopay.AutoPayScreen
+//import org.mifospay.feature.autopay.autoPayGraph
+//import org.mifospay.feature.autopay.navigateToAutoPay
+//import org.mifospay.feature.autopay.navigateToAutoPayHistory
+//import org.mifospay.feature.autopay.navigateToAutoPayPreferences
+//import org.mifospay.feature.autopay.navigateToAutoPayRules
+//import org.mifospay.feature.autopay.navigateToAutoPaySetup
 import org.mifospay.feature.beneficiary.addupdatebeneficiary.BeneficiaryAddEditType
 import org.mifospay.feature.beneficiary.addupdatebeneficiary.addEditBeneficiaryScreen
 import org.mifospay.feature.beneficiary.addupdatebeneficiary.navigateToBeneficiaryAddEdit
@@ -68,6 +76,7 @@ import org.mifospay.feature.mpay.qr.scan.navigation.scanQrScreen
 import org.mifospay.feature.notification.navigateToNotification
 import org.mifospay.feature.notification.notificationScreen
 import org.mifospay.feature.payments.PAYMENTS_ROUTE
+import org.mifospay.feature.payments.PaymentsScreenContents
 import org.mifospay.feature.payments.RequestScreen
 import org.mifospay.feature.payments.paymentsScreen
 import org.mifospay.feature.payments.selectTransferType.SelectTransferTypeScreen
@@ -198,6 +207,25 @@ internal fun MifosNavHost(
 //                navigateToInvoiceDetailScreen = navController::navigateToInvoiceDetail,
 //            )
 //        },
+
+
+        // from #1908 pr
+//        TabContent(PaymentsScreenContents.AUTOPAY.name) {
+//            AutoPayScreen(
+//                onNavigateToSetup = {
+//                    navController.navigateToAutoPaySetup()
+//                },
+//                onNavigateToRules = {
+//                    navController.navigateToAutoPayRules()
+//                },
+//                onNavigateToPreferences = {
+//                    navController.navigateToAutoPayPreferences()
+//                },
+//                onNavigateToHistory = {
+//                    navController.navigateToAutoPayHistory()
+//                },
+//            )
+//        },
     )
 
 //    TODO Cards and Merchants are not using self api
@@ -272,8 +300,9 @@ internal fun MifosNavHost(
                 navController.navigateToMpayQrScreen()
             },
             onPay = navController::navigateToTransferOptions,
-            // from send money pr
-//            onPay = navController::navigateToSendMoneyOptionsScreen,
+            onAutoPay = {
+                navController.navigateToAutoPay()
+            },
             navigateToTransactionDetail = navController::navigateToSpecificTransaction,
             navigateToAccountDetail = navController::navigateToSavingAccountDetails,
             navigateToHistory = navController::navigateToHistory,
@@ -439,6 +468,9 @@ internal fun MifosNavHost(
 //            },
 //            onFineractPaymentsClick = {
 //                navController.navigateToSendMoneyScreen()
+//            },
+//            onAutoPayClick = {
+//              navController.navigateToAutoPay()
 //            },
 //            onQrCodeScanned = { qrData ->
 //                navController.navigateToSendMoneyScreen(
@@ -863,6 +895,11 @@ internal fun MifosNavHost(
 
         setupUpiPinScreen(
             navigateBack = navController::navigateUp,
+        )
+
+        autoPayGraph(
+            navController = navController,
+            onNavigateBack = navController::navigateUp,
         )
 
         transferOptionsDialog(

@@ -103,4 +103,5 @@
     <string name="feature_send_money_receivers_name_required">Receiver's name is required</string>
     <string name="feature_send_money_ifsc_validation_error">IFSC should be 4 letters, followed by 7 letters or digits</string>
     <string name="feature_send_money_confirm">Confirm</string>
+    <string name="feature_send_money_autopay">AutoPay</string>
 </resources>
