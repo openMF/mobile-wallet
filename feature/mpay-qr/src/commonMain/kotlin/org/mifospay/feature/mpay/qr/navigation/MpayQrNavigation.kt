@@ -21,7 +21,7 @@ fun NavGraphBuilder.mpayQrScreen(
     navigateBack: () -> Unit,
     navigateToSendScreen: (String) -> Unit,
     navigateToPayeeDetailsScreen: (String) -> Unit,
-    ) {
+) {
     composableWithPushTransitions(
         route = MPAY_QR_ROUTE,
     ) {

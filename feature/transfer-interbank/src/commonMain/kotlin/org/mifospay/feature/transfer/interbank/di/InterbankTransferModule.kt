@@ -13,11 +13,11 @@ import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
 import org.mifospay.feature.transfer.interbank.InterbankTransferViewModel
 // from #1906 pr
-//import org.mifospay.feature.send.money.PayAnyoneViewModel
-//import org.mifospay.feature.send.money.PayeeDetailsViewModel
-//import org.mifospay.feature.send.money.ScannerModule
-//import org.mifospay.feature.send.money.SendMoneyOptionsViewModel
-//import org.mifospay.feature.send.money.SendMoneyViewModel
+// import org.mifospay.feature.send.money.PayAnyoneViewModel
+// import org.mifospay.feature.send.money.PayeeDetailsViewModel
+// import org.mifospay.feature.send.money.ScannerModule
+// import org.mifospay.feature.send.money.SendMoneyOptionsViewModel
+// import org.mifospay.feature.send.money.SendMoneyViewModel
 
 val interbankTransferModule = module {
     viewModelOf(::InterbankTransferViewModel)
