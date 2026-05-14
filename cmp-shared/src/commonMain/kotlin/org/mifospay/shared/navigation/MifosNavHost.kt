@@ -71,6 +71,10 @@ import org.mifospay.feature.payments.PAYMENTS_ROUTE
 import org.mifospay.feature.payments.RequestScreen
 import org.mifospay.feature.payments.paymentsScreen
 import org.mifospay.feature.payments.selectTransferType.SelectTransferTypeScreen
+import org.mifospay.feature.pocket.navigation.linkAccountScreen
+import org.mifospay.feature.pocket.navigation.navigateToLinkAccount
+import org.mifospay.feature.pocket.navigation.navigateToPocketDashboard
+import org.mifospay.feature.pocket.navigation.pocketDashboardScreen
 import org.mifospay.feature.profile.navigation.navigateToProfile
 import org.mifospay.feature.profile.navigation.profileNavGraph
 import org.mifospay.feature.receipt.navigation.receiptScreen
@@ -210,6 +214,7 @@ internal fun MifosNavHost(
                 navController.navigateToMpayQrScreen()
             },
             onPay = navController::navigateToTransferOptions,
+            navigateToPocketDashboard = navController::navigateToPocketDashboard,
             navigateToTransactionDetail = navController::navigateToSpecificTransaction,
             navigateToAccountDetail = navController::navigateToSavingAccountDetails,
             navigateToHistory = navController::navigateToHistory,
@@ -561,6 +566,17 @@ internal fun MifosNavHost(
 
         setupUpiPinScreen(
             navigateBack = navController::navigateUp,
+        )
+
+        pocketDashboardScreen(
+            navigateBack = navController::navigateUp,
+            navigateToLinkAccount = navController::navigateToLinkAccount,
+            navigateToAccountDetails = navController::navigateToSavingAccountDetails,
+        )
+
+        linkAccountScreen(
+            navigateBack = navController::navigateUp,
+            onLinkSuccess = { navController.navigateToPocketDashboard() },
         )
 
         transferOptionsDialog(

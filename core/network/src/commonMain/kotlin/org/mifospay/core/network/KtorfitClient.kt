@@ -20,6 +20,7 @@ import org.mifospay.core.network.services.createInvoiceService
 import org.mifospay.core.network.services.createKYCLevel1Service
 import org.mifospay.core.network.services.createNotificationService
 import org.mifospay.core.network.services.createOfficeService
+import org.mifospay.core.network.services.createPocketService
 import org.mifospay.core.network.services.createRegistrationService
 import org.mifospay.core.network.services.createRunReportService
 import org.mifospay.core.network.services.createSavedCardService
@@ -70,4 +71,6 @@ class KtorfitClient(
     internal val interBankApi by lazy { ktorfit.createInterBankService() }
 
     internal val officeApi by lazy { ktorfit.createOfficeService() }
+
+    internal val pocketApi by lazy { ktorfit.createPocketService() }
 }

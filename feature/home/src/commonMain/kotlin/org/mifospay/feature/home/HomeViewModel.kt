@@ -185,6 +185,10 @@ class HomeViewModel(
                 sendEvent(HomeEvent.NavigateToSendScreen)
             }
 
+            HomeAction.PocketClicked -> {
+                sendEvent(HomeEvent.NavigateToPocketDashboard)
+            }
+
             is HomeAction.ClientDetailsClicked -> {
                 sendEvent(HomeEvent.NavigateToClientDetailScreen)
             }
@@ -378,6 +382,7 @@ sealed interface ViewState {
 sealed interface HomeEvent {
     data object NavigateBack : HomeEvent
     data object NavigateToSendScreen : HomeEvent
+    data object NavigateToPocketDashboard : HomeEvent
     data object NavigateToTransactionScreen : HomeEvent
     data object NavigateToClientDetailScreen : HomeEvent
     data class NavigateToRequestScreen(val vpa: String) : HomeEvent
@@ -390,6 +395,7 @@ sealed interface HomeEvent {
 sealed interface HomeAction {
     data object RequestClicked : HomeAction
     data object SendClicked : HomeAction
+    data object PocketClicked : HomeAction
     data object ClientDetailsClicked : HomeAction
     data object OnClickSeeAllTransactions : HomeAction
     data object OnDismissDialog : HomeAction

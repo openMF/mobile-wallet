@@ -39,6 +39,7 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountBalanceWallet
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -89,6 +90,8 @@ import mobile_wallet.feature.home.generated.resources.feature_home_coin_image
 import mobile_wallet.feature.home.generated.resources.feature_home_desc
 import mobile_wallet.feature.home.generated.resources.feature_home_mark_default
 import mobile_wallet.feature.home.generated.resources.feature_home_no_account
+import mobile_wallet.feature.home.generated.resources.feature_home_pocket
+import mobile_wallet.feature.home.generated.resources.feature_home_pocket_subtitle
 import mobile_wallet.feature.home.generated.resources.feature_home_request
 import mobile_wallet.feature.home.generated.resources.feature_home_request_money
 import mobile_wallet.feature.home.generated.resources.feature_home_send
@@ -141,6 +144,7 @@ internal fun HomeScreen(
     onNavigateBack: () -> Unit,
     onRequest: (String) -> Unit,
     onPay: () -> Unit,
+    navigateToPocketDashboard: () -> Unit,
     navigateToTransactionDetail: (Long, Long) -> Unit,
     navigateToAccountDetail: (Long) -> Unit,
     navigateToHistory: () -> Unit,
@@ -162,6 +166,7 @@ internal fun HomeScreen(
             is HomeEvent.NavigateBack -> onNavigateBack()
             is HomeEvent.NavigateToRequestScreen -> onRequest(event.vpa)
             is HomeEvent.NavigateToSendScreen -> onPay()
+            HomeEvent.NavigateToPocketDashboard -> navigateToPocketDashboard()
             is HomeEvent.NavigateToClientDetailScreen -> {}
             is HomeEvent.NavigateToTransactionDetail -> {
                 navigateToTransactionDetail(event.accountId, event.transactionId)
@@ -325,6 +330,16 @@ private fun HomeScreenContent(
                     onSend = {
                         onAction(HomeAction.SendClicked)
                     },
+                )
+            }
+
+            item {
+                PocketShortcutCard(
+                    modifier = Modifier.padding(
+                        vertical = KptTheme.spacing.md,
+                        horizontal = KptTheme.spacing.md,
+                    ),
+                    onClick = { onAction(HomeAction.PocketClicked) },
                 )
             }
 
@@ -630,6 +645,59 @@ private fun PayRequestScreen(
                 )
             },
         )
+    }
+}
+
+@Composable
+private fun PocketShortcutCard(
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Card(
+        modifier = modifier
+            .fillMaxWidth()
+            .clickable(onClick = onClick),
+        colors = CardDefaults.cardColors(
+            containerColor = KptTheme.colorScheme.surface,
+        ),
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(KptTheme.spacing.md),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween,
+        ) {
+            Row(
+                modifier = Modifier.weight(1f),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Icon(
+                    imageVector = Icons.Default.AccountBalanceWallet,
+                    contentDescription = null,
+                    tint = KptTheme.colorScheme.primary,
+                    modifier = Modifier.size(32.dp),
+                )
+                Spacer(Modifier.width(KptTheme.spacing.md))
+                Column {
+                    Text(
+                        text = stringResource(Res.string.feature_home_pocket),
+                        style = KptTheme.typography.bodyLarge,
+                        fontWeight = FontWeight.SemiBold,
+                    )
+                    Text(
+                        text = stringResource(Res.string.feature_home_pocket_subtitle),
+                        style = KptTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                }
+            }
+            Icon(
+                imageVector = MifosIcons.ChevronRight,
+                contentDescription = null,
+                tint = KptTheme.colorScheme.onSurface,
+            )
+        }
     }
 }
 
