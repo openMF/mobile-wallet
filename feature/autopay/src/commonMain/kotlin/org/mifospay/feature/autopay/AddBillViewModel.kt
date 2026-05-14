@@ -17,10 +17,13 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock
 import kotlinx.serialization.Serializable
+import org.mifospay.core.common.DataState
 import org.mifospay.core.common.DateHelper
 import org.mifospay.core.common.getSerialized
 import org.mifospay.core.common.setSerialized
 import org.mifospay.core.data.util.BillValidator
+import org.mifospay.core.datastore.BillRepository
+import org.mifospay.core.datastore.BillerRepository
 import org.mifospay.core.model.autopay.Bill
 import org.mifospay.core.model.autopay.BillFormData
 import org.mifospay.core.model.autopay.BillValidationResult
@@ -32,8 +35,8 @@ import kotlin.random.Random
 
 class AddBillViewModel(
     savedStateHandle: SavedStateHandle,
-    private val billRepository: org.mifospay.core.datastore.BillRepository,
-    private val billerRepository: org.mifospay.core.datastore.BillerRepository,
+    private val billRepository: BillRepository,
+    private val billerRepository: BillerRepository,
 ) : BaseViewModel<AddBillState, AddBillEvent, AddBillAction>(
     initialState = savedStateHandle.getSerialized(KEY_STATE) ?: AddBillState(),
 ) {
@@ -47,7 +50,6 @@ class AddBillViewModel(
             .onEach { savedStateHandle.setSerialized(key = KEY_STATE, value = it) }
             .launchIn(viewModelScope)
 
-        // Load available billers
         loadAvailableBillers()
     }
 
@@ -89,11 +91,25 @@ class AddBillViewModel(
             is AddBillAction.RefreshBillers -> {
                 loadAvailableBillers()
             }
+            is AddBillAction.UpdateAutoPayEnabled -> {
+                updateAutoPayEnabled(action.enabled)
+            }
+            is AddBillAction.UpdateAutoPayPaymentMethod -> {
+                updateAutoPayPaymentMethod(action.paymentMethod)
+            }
+            is AddBillAction.UpdateAutoPaySourceAccount -> {
+                updateAutoPaySourceAccount(action.sourceAccount)
+            }
+            is AddBillAction.UpdateAutoPayMaxAmount -> {
+                updateAutoPayMaxAmount(action.maxAmount)
+            }
         }
     }
 
     private fun updateBillName(name: String) {
-        val nameError = BillValidator.validateNameField(name)
+        val nameError = BillValidator.validateBillFormData(
+            BillFormData(name = name),
+        ).nameError
         mutableStateFlow.update {
             it.copy(
                 formData = it.formData.copy(name = name),
@@ -103,7 +119,9 @@ class AddBillViewModel(
     }
 
     private fun updateAmount(amount: String) {
-        val amountError = BillValidator.validateAmountField(amount)
+        val amountError = BillValidator.validateBillFormData(
+            BillFormData(amount = amount),
+        ).amountError
         mutableStateFlow.update {
             it.copy(
                 formData = it.formData.copy(amount = amount),
@@ -113,7 +131,9 @@ class AddBillViewModel(
     }
 
     private fun updateDueDate(dueDate: Long) {
-        val dueDateError = BillValidator.validateDueDateField(dueDate)
+        val dueDateError = BillValidator.validateBillFormData(
+            BillFormData(dueDate = dueDate),
+        ).dueDateError
         mutableStateFlow.update {
             it.copy(
                 formData = it.formData.copy(dueDate = dueDate),
@@ -124,7 +144,9 @@ class AddBillViewModel(
     }
 
     private fun updateRecurrencePattern(recurrencePattern: RecurrencePattern) {
-        val recurrencePatternError = BillValidator.validateRecurrencePatternField(recurrencePattern)
+        val recurrencePatternError = BillValidator.validateBillFormData(
+            BillFormData(recurrencePattern = recurrencePattern),
+        ).recurrencePatternError
         mutableStateFlow.update {
             it.copy(
                 formData = it.formData.copy(recurrencePattern = recurrencePattern),
@@ -144,7 +166,7 @@ class AddBillViewModel(
         val currentState = stateFlow.value
         val formData = currentState.formData
 
-        val validationResult = BillValidator.validateBillForm(formData)
+        val validationResult = BillValidator.validateBillFormData(formData)
 
         mutableStateFlow.update { it.copy(validationResult = validationResult) }
         return validationResult
@@ -212,15 +234,20 @@ class AddBillViewModel(
                     billerId = formData.billerId,
                     billerName = formData.billerName,
                     description = formData.description.takeIf { it.isNotBlank() },
+                    // AutoPay configuration
+                    autoPayEnabled = formData.enableAutoPay,
+                    autoPayPaymentMethod = formData.autoPayPaymentMethod.takeIf { it.isNotBlank() },
+                    autoPaySourceAccount = formData.autoPaySourceAccount.takeIf { it.isNotBlank() },
+                    autoPayMaxAmount = formData.autoPayMaxAmount.toDoubleOrNull(),
                 )
 
                 val result = billRepository.saveBill(bill)
 
                 when (result) {
-                    is org.mifospay.core.common.DataState.Loading -> {
+                    is DataState.Loading -> {
                         // Loading state is already handled by setting isLoading = true above
                     }
-                    is org.mifospay.core.common.DataState.Success -> {
+                    is DataState.Success -> {
                         mutableStateFlow.update {
                             it.copy(
                                 isLoading = false,
@@ -229,7 +256,7 @@ class AddBillViewModel(
                         }
                         sendEvent(AddBillEvent.BillSaved(result.data))
                     }
-                    is org.mifospay.core.common.DataState.Error -> {
+                    is DataState.Error -> {
                         mutableStateFlow.update {
                             it.copy(
                                 isLoading = false,
@@ -262,7 +289,9 @@ class AddBillViewModel(
     }
 
     private fun selectBiller(biller: Biller) {
-        val billerError = BillValidator.validateBillerField(biller.id, biller.name)
+        val billerError = BillValidator.validateBillFormData(
+            BillFormData(billerId = biller.id, billerName = biller.name),
+        ).billerError
         mutableStateFlow.update {
             it.copy(
                 formData = it.formData.copy(
@@ -270,6 +299,66 @@ class AddBillViewModel(
                     billerName = biller.name,
                 ),
                 validationResult = it.validationResult.copy(billerError = billerError),
+            )
+        }
+    }
+
+    private fun updateAutoPayEnabled(enabled: Boolean) {
+        mutableStateFlow.update {
+            it.copy(
+                formData = it.formData.copy(enableAutoPay = enabled),
+            )
+        }
+    }
+
+    private fun updateAutoPayPaymentMethod(paymentMethod: String) {
+        val paymentMethodError = if (stateFlow.value.formData.enableAutoPay && paymentMethod.isBlank()) {
+            "Payment method is required when AutoPay is enabled"
+        } else {
+            null
+        }
+
+        mutableStateFlow.update {
+            it.copy(
+                formData = it.formData.copy(autoPayPaymentMethod = paymentMethod),
+                validationResult = it.validationResult.copy(autoPayPaymentMethodError = paymentMethodError),
+            )
+        }
+    }
+
+    private fun updateAutoPaySourceAccount(sourceAccount: String) {
+        val sourceAccountError = if (stateFlow.value.formData.enableAutoPay && sourceAccount.isBlank()) {
+            "Source account is required when AutoPay is enabled"
+        } else {
+            null
+        }
+
+        mutableStateFlow.update {
+            it.copy(
+                formData = it.formData.copy(autoPaySourceAccount = sourceAccount),
+                validationResult = it.validationResult.copy(autoPaySourceAccountError = sourceAccountError),
+            )
+        }
+    }
+
+    private fun updateAutoPayMaxAmount(maxAmount: String) {
+        val maxAmountError = if (maxAmount.isNotBlank()) {
+            val amount = maxAmount.toDoubleOrNull()
+            if (amount == null) {
+                "Invalid amount format"
+            } else if (amount <= 0) {
+                "Maximum amount must be greater than 0"
+            } else {
+                null
+            }
+        } else {
+            null
+        }
+
+        mutableStateFlow.update {
+            it.copy(
+                formData = it.formData.copy(autoPayMaxAmount = maxAmount),
+                validationResult = it.validationResult.copy(autoPayMaxAmountError = maxAmountError),
             )
         }
     }
@@ -315,4 +404,10 @@ sealed interface AddBillAction {
     data object CalculateNextPaymentDates : AddBillAction
     data class SelectBiller(val biller: Biller) : AddBillAction
     data object RefreshBillers : AddBillAction
+
+    // AutoPay actions
+    data class UpdateAutoPayEnabled(val enabled: Boolean) : AddBillAction
+    data class UpdateAutoPayPaymentMethod(val paymentMethod: String) : AddBillAction
+    data class UpdateAutoPaySourceAccount(val sourceAccount: String) : AddBillAction
+    data class UpdateAutoPayMaxAmount(val maxAmount: String) : AddBillAction
 }

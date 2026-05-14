@@ -51,6 +51,9 @@ import org.mifospay.feature.accounts.savingsaccount.navigateToSavingAccountAddEd
 //import org.mifospay.feature.autopay.navigateToAutoPaySetup
 //import org.mifospay.feature.autopay.navigateToBillList
 //import org.mifospay.feature.autopay.navigateToBillerList
+//import org.mifospay.feature.autopay.navigateToBillList
+//import org.mifospay.feature.autopay.navigateToBillerList
+//import org.mifospay.feature.autopay.navigateToScheduleManagement
 import org.mifospay.feature.beneficiary.addupdatebeneficiary.BeneficiaryAddEditType
 import org.mifospay.feature.beneficiary.addupdatebeneficiary.addEditBeneficiaryScreen
 import org.mifospay.feature.beneficiary.addupdatebeneficiary.navigateToBeneficiaryAddEdit
@@ -224,6 +227,9 @@ internal fun MifosNavHost(
         // from #1908 pr
 //        TabContent(PaymentsScreenContents.AUTOPAY.name) {
 //            AutoPayScreen(
+//                onNavigateToScheduleManagement = {
+//                  navController.navigateToScheduleManagement()
+//                 },
 //                onNavigateToSetup = {
 //                    navController.navigateToAutoPaySetup()
 //                },

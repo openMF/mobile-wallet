@@ -10,6 +10,7 @@
 package org.mifospay.feature.autopay
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -22,67 +23,111 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Divider
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.DividerDefaults
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import org.koin.compose.viewmodel.koinViewModel
+import org.mifospay.core.common.CurrencyFormatter
 import org.mifospay.core.designsystem.component.MifosScaffold
 import org.mifospay.core.designsystem.icon.MifosIcons
+import org.mifospay.core.model.autopay.AutoPayHistory
+import org.mifospay.core.model.autopay.PaymentStatus
 
 @Composable
 fun AutoPayHistoryScreen(
     onNavigateBack: () -> Unit,
+    viewModel: AutoPayHistoryViewModel = koinViewModel(),
     modifier: Modifier = Modifier,
 ) {
+    val uiState by viewModel.uiState.collectAsState()
+
     MifosScaffold(
         modifier = modifier,
         topBarTitle = "AutoPay History",
         backPress = onNavigateBack,
     ) { paddingValues ->
-        Column(
+        Box(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
                 .padding(16.dp),
         ) {
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.padding(bottom = 16.dp),
-            ) {
-                Icon(
-                    imageVector = MifosIcons.History,
-                    contentDescription = null,
-                    modifier = Modifier.size(64.dp),
-                    tint = MaterialTheme.colorScheme.primary,
-                )
-
-                Spacer(modifier = Modifier.height(16.dp))
-
-                Text(
-                    text = "AutoPay History",
-                    style = MaterialTheme.typography.headlineMedium,
-                    fontWeight = FontWeight.Medium,
-                )
-
-                Text(
-                    text = "View your AutoPay transaction history and activities.",
-                    style = MaterialTheme.typography.bodyLarge,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                )
-            }
-
-            LazyColumn(
-                verticalArrangement = Arrangement.spacedBy(12.dp),
-            ) {
-                items(getDummyHistoryItems()) { historyItem ->
-                    HistoryItemCard(historyItem = historyItem)
+            when {
+                uiState.isLoading -> {
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center,
+                    ) {
+                        CircularProgressIndicator()
+                    }
+                }
+                uiState.error != null -> {
+                    val errorMessage = uiState.error
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center,
+                    ) {
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                        ) {
+                            Icon(
+                                imageVector = MifosIcons.Error,
+                                contentDescription = null,
+                                modifier = Modifier.size(48.dp),
+                                tint = MaterialTheme.colorScheme.error,
+                            )
+                            Spacer(modifier = Modifier.height(16.dp))
+                            Text(
+                                text = errorMessage ?: "Unknown error occurred",
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = MaterialTheme.colorScheme.error,
+                            )
+                        }
+                    }
+                }
+                uiState.displayHistoryList.isEmpty() -> {
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center,
+                    ) {
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                        ) {
+                            Icon(
+                                imageVector = MifosIcons.History,
+                                contentDescription = null,
+                                modifier = Modifier.size(48.dp),
+                                tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                            )
+                            Spacer(modifier = Modifier.height(16.dp))
+                            Text(
+                                text = "No history available",
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            )
+                        }
+                    }
+                }
+                else -> {
+                    LazyColumn(
+                        modifier = Modifier.fillMaxSize(),
+                        verticalArrangement = Arrangement.spacedBy(12.dp),
+                    ) {
+                        items(uiState.displayHistoryList) { historyItem ->
+                            HistoryItemCard(historyItem = historyItem)
+                        }
+                    }
                 }
             }
         }
@@ -91,9 +136,32 @@ fun AutoPayHistoryScreen(
 
 @Composable
 private fun HistoryItemCard(
-    historyItem: AutoPayHistoryItem,
+    historyItem: AutoPayHistory,
     modifier: Modifier = Modifier,
 ) {
+    val currentStatus = historyItem.status
+
+    val statusColor = when (currentStatus) {
+        // Green color for success
+        PaymentStatus.COMPLETED -> Color(0xFF4CAF50)
+        PaymentStatus.FAILED -> MaterialTheme.colorScheme.error
+        PaymentStatus.PROCESSING -> MaterialTheme.colorScheme.tertiary
+        PaymentStatus.PENDING -> MaterialTheme.colorScheme.tertiary
+        PaymentStatus.UPCOMING -> MaterialTheme.colorScheme.primary
+        PaymentStatus.CANCELLED -> MaterialTheme.colorScheme.outline
+        null -> MaterialTheme.colorScheme.primary
+    }
+
+    val statusIcon = when (currentStatus) {
+        PaymentStatus.COMPLETED -> MifosIcons.CheckCircle
+        PaymentStatus.FAILED -> MifosIcons.Error
+        PaymentStatus.PROCESSING -> MifosIcons.Schedule
+        PaymentStatus.PENDING -> MifosIcons.Schedule
+        PaymentStatus.UPCOMING -> MifosIcons.Schedule
+        PaymentStatus.CANCELLED -> MifosIcons.Cancel
+        null -> MifosIcons.History
+    }
+
     Card(
         modifier = modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(
@@ -109,10 +177,10 @@ private fun HistoryItemCard(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Icon(
-                    imageVector = historyItem.icon,
+                    imageVector = statusIcon,
                     contentDescription = null,
                     modifier = Modifier.size(24.dp),
-                    tint = historyItem.statusColor,
+                    tint = statusColor,
                 )
 
                 Spacer(modifier = Modifier.size(12.dp))
@@ -121,13 +189,13 @@ private fun HistoryItemCard(
                     modifier = Modifier.weight(1f),
                 ) {
                     Text(
-                        text = historyItem.title,
+                        text = historyItem.recipientName ?: "Unknown Recipient",
                         style = MaterialTheme.typography.bodyMedium,
                         fontWeight = FontWeight.Medium,
                     )
 
                     Text(
-                        text = historyItem.description,
+                        text = "Account: ${historyItem.recipientAccountNumber ?: "N/A"}",
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
@@ -137,111 +205,55 @@ private fun HistoryItemCard(
                     horizontalAlignment = Alignment.End,
                 ) {
                     Text(
-                        text = historyItem.amount,
+                        text = CurrencyFormatter.format(historyItem.amount, historyItem.currency, 2),
                         style = MaterialTheme.typography.bodyMedium,
                         fontWeight = FontWeight.Medium,
                     )
 
                     Text(
-                        text = historyItem.date,
+                        text = historyItem.transactionDate ?: "N/A",
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
                 }
             }
 
-            if (historyItem.status != null) {
+            if (currentStatus != null) {
                 Spacer(modifier = Modifier.height(8.dp))
 
-                Divider()
+                HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)
 
                 Spacer(modifier = Modifier.height(8.dp))
 
-                Text(
-                    text = "Status: ${historyItem.status}",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = historyItem.statusColor,
-                    fontWeight = FontWeight.Medium,
-                )
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                ) {
+                    Text(
+                        text = "Status: ${currentStatus.name}",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = statusColor,
+                        fontWeight = FontWeight.Medium,
+                    )
+
+                    if (historyItem.referenceNumber != null) {
+                        Text(
+                            text = "Ref: ${historyItem.referenceNumber}",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
+                    }
+                }
+
+                if (historyItem.failureReason != null) {
+                    Spacer(modifier = Modifier.height(4.dp))
+                    Text(
+                        text = "Reason: ${historyItem.failureReason}",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.error,
+                    )
+                }
             }
         }
     }
-}
-
-private data class AutoPayHistoryItem(
-    val title: String,
-    val description: String,
-    val amount: String,
-    val date: String,
-    val status: String?,
-    val icon: ImageVector,
-    val statusColor: Color,
-)
-
-private fun getDummyHistoryItems(): List<AutoPayHistoryItem> {
-    return listOf(
-        AutoPayHistoryItem(
-            title = "Monthly Rent Payment",
-            description = "AutoPay to Landlord Corp",
-            amount = "$1,200.00",
-            date = "Jan 15, 2024",
-            status = "Completed",
-            icon = MifosIcons.CheckCircle,
-            statusColor = Color.Green,
-        ),
-        AutoPayHistoryItem(
-            title = "Internet Bill",
-            description = "AutoPay to Comcast",
-            amount = "$89.99",
-            date = "Jan 10, 2024",
-            status = "Completed",
-            icon = MifosIcons.CheckCircle,
-            statusColor = Color.Green,
-        ),
-        AutoPayHistoryItem(
-            title = "Electricity Bill",
-            description = "AutoPay to Power Company",
-            amount = "$156.75",
-            date = "Jan 5, 2024",
-            status = "Failed",
-            icon = MifosIcons.Error,
-            statusColor = Color.Red,
-        ),
-        AutoPayHistoryItem(
-            title = "Phone Bill",
-            description = "AutoPay to Verizon",
-            amount = "$85.50",
-            date = "Dec 28, 2023",
-            status = "Completed",
-            icon = MifosIcons.CheckCircle,
-            statusColor = Color.Green,
-        ),
-        AutoPayHistoryItem(
-            title = "Gym Membership",
-            description = "AutoPay to Fitness Center",
-            amount = "$45.00",
-            date = "Dec 20, 2023",
-            status = "Completed",
-            icon = MifosIcons.CheckCircle,
-            statusColor = Color.Green,
-        ),
-        AutoPayHistoryItem(
-            title = "Schedule Created",
-            description = "New AutoPay schedule for Netflix",
-            amount = "$15.99/month",
-            date = "Dec 15, 2023",
-            status = null,
-            icon = MifosIcons.Add,
-            statusColor = Color.Blue,
-        ),
-        AutoPayHistoryItem(
-            title = "Schedule Cancelled",
-            description = "AutoPay schedule for Spotify cancelled",
-            amount = "$9.99/month",
-            date = "Dec 10, 2023",
-            status = null,
-            icon = MifosIcons.Cancel,
-            statusColor = Color.Yellow,
-        ),
-    )
 }

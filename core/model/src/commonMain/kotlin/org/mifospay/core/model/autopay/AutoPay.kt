@@ -10,13 +10,10 @@
 package org.mifospay.core.model.autopay
 
 import kotlinx.serialization.Serializable
-import org.mifospay.core.common.Parcelable
-import org.mifospay.core.common.Parcelize
 
 // TODO: Align data models with final API response schema once confirmed by backend
 
 @Serializable
-@Parcelize
 data class AutoPay(
     val id: Long? = null,
     val name: String? = null,
@@ -42,10 +39,9 @@ data class AutoPay(
     val minAmount: Double? = null,
     val paymentMethod: String? = null,
     val isActive: Boolean? = null,
-) : Parcelable
+)
 
 @Serializable
-@Parcelize
 data class AutoPayTemplate(
     val id: Long? = null,
     val name: String? = null,
@@ -56,42 +52,38 @@ data class AutoPayTemplate(
     val accountTypes: List<AccountType>? = emptyList(),
     val maxAmount: Double? = null,
     val minAmount: Double? = null,
-) : Parcelable
+)
 
 @Serializable
-@Parcelize
 data class FrequencyOption(
     val id: Long,
     val code: String,
     val value: String,
     val description: String? = null,
-) : Parcelable
+)
 
 @Serializable
-@Parcelize
 data class PaymentMethod(
     val id: Long,
     val code: String,
     val value: String,
     val description: String? = null,
-) : Parcelable
+)
 
 @Serializable
-@Parcelize
 data class CurrencyOption(
     val code: String,
     val name: String,
     val symbol: String? = null,
-) : Parcelable
+)
 
 @Serializable
-@Parcelize
 data class AccountType(
     val id: Long,
     val code: String,
     val value: String,
     val description: String? = null,
-) : Parcelable
+)
 
 @Serializable
 enum class AutoPayStatus {
@@ -107,7 +99,50 @@ enum class AutoPayStatus {
 enum class PaymentStatus {
     UPCOMING,
     PROCESSING,
+    PENDING,
     COMPLETED,
     FAILED,
     CANCELLED,
 }
+
+@Serializable
+data class AutoPayGlobalSettings(
+    val isAutoPayEnabled: Boolean = false,
+    val defaultPaymentMethod: String? = null,
+    val defaultSourceAccount: String? = null,
+    val maxPaymentAmount: Double? = null,
+    val notificationSettings: NotificationSettings = NotificationSettings(),
+    val securitySettings: SecuritySettings = SecuritySettings(),
+    val globalAutoPayRules: AutoPayRules = AutoPayRules(),
+)
+
+@Serializable
+data class NotificationSettings(
+    val paymentConfirmations: Boolean = true,
+    val failedPaymentAlerts: Boolean = true,
+    val scheduleReminders: Boolean = true,
+    val reminderDaysBefore: Int = 3,
+    val emailNotifications: Boolean = true,
+    val pushNotifications: Boolean = true,
+    val smsNotifications: Boolean = false,
+)
+
+@Serializable
+data class SecuritySettings(
+    val requireTwoFactorAuth: Boolean = false,
+    val maxDailyAmount: Double? = null,
+    val requireConfirmationForLargePayments: Boolean = true,
+    val largePaymentThreshold: Double = 1000.0,
+    val allowMultiplePaymentsPerDay: Boolean = true,
+    val maxPaymentsPerDay: Int = 10,
+)
+
+@Serializable
+data class AutoPayRules(
+    val autoApprovePayments: Boolean = false,
+    val requireManualApprovalAbove: Double? = null,
+    val skipPaymentsOnHolidays: Boolean = true,
+    val retryFailedPayments: Boolean = true,
+    val maxRetryAttempts: Int = 3,
+    val retryIntervalHours: Int = 24,
+)

@@ -22,9 +22,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
+import androidx.compose.material3.DividerDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
@@ -40,13 +45,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.datetime.Clock
 import org.koin.compose.viewmodel.koinViewModel
-import org.mifospay.core.common.DateHelper
 import org.mifospay.core.designsystem.component.BasicDialogState
 import org.mifospay.core.designsystem.component.LoadingDialogState
 import org.mifospay.core.designsystem.component.MifosBasicDialog
@@ -230,6 +235,29 @@ fun AddBillScreen(
                     ),
                 )
 
+                // AutoPay Section
+                AutoPaySection(
+                    enableAutoPay = state.formData.enableAutoPay,
+                    paymentMethod = state.formData.autoPayPaymentMethod,
+                    sourceAccount = state.formData.autoPaySourceAccount,
+                    maxAmount = state.formData.autoPayMaxAmount,
+                    paymentMethodError = state.validationResult.autoPayPaymentMethodError,
+                    sourceAccountError = state.validationResult.autoPaySourceAccountError,
+                    maxAmountError = state.validationResult.autoPayMaxAmountError,
+                    onEnableAutoPayChanged = { enabled ->
+                        viewModel.trySendAction(AddBillAction.UpdateAutoPayEnabled(enabled))
+                    },
+                    onPaymentMethodChanged = { paymentMethod ->
+                        viewModel.trySendAction(AddBillAction.UpdateAutoPayPaymentMethod(paymentMethod))
+                    },
+                    onSourceAccountChanged = { sourceAccount ->
+                        viewModel.trySendAction(AddBillAction.UpdateAutoPaySourceAccount(sourceAccount))
+                    },
+                    onMaxAmountChanged = { maxAmount ->
+                        viewModel.trySendAction(AddBillAction.UpdateAutoPayMaxAmount(maxAmount))
+                    },
+                )
+
                 if (state.nextPaymentDates.isNotEmpty()) {
                     Spacer(modifier = Modifier.height(16.dp))
 
@@ -339,6 +367,109 @@ fun AddBillScreen(
     }
 }
 
-private fun formatDateForDisplay(timestamp: Long): String {
-    return DateHelper.getDateAsStringFromLong(timestamp)
+@Composable
+private fun AutoPaySection(
+    enableAutoPay: Boolean,
+    paymentMethod: String,
+    sourceAccount: String,
+    maxAmount: String,
+    paymentMethodError: String?,
+    sourceAccountError: String?,
+    maxAmountError: String?,
+    onEnableAutoPayChanged: (Boolean) -> Unit,
+    onPaymentMethodChanged: (String) -> Unit,
+    onSourceAccountChanged: (String) -> Unit,
+    onMaxAmountChanged: (String) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Card(
+        modifier = modifier.fillMaxWidth(),
+        colors = CardDefaults.cardColors(
+            containerColor = KptTheme.colorScheme.surfaceContainerHigh,
+        ),
+    ) {
+        Column(
+            modifier = Modifier.padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp),
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Column {
+                    Text(
+                        text = "AutoPay Settings",
+                        style = KptTheme.typography.titleMedium,
+                        fontWeight = FontWeight.Medium,
+                    )
+                    Text(
+                        text = "Automatically pay this bill when due",
+                        style = KptTheme.typography.bodySmall,
+                        color = KptTheme.colorScheme.onSurfaceVariant,
+                    )
+                }
+                Checkbox(
+                    checked = enableAutoPay,
+                    onCheckedChange = onEnableAutoPayChanged,
+                )
+            }
+
+            if (enableAutoPay) {
+                HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)
+
+                var showPaymentMethodDropdown by remember { mutableStateOf(false) }
+                DropdownBox(
+                    expanded = showPaymentMethodDropdown,
+                    label = "Payment Method *",
+                    value = paymentMethod.ifBlank { "Select payment method" },
+                    readOnly = true,
+                    isError = paymentMethodError != null,
+                    errorText = paymentMethodError,
+                    onExpandChange = { showPaymentMethodDropdown = it },
+                ) {
+                    listOf("Bank Account", "Credit Card", "UPI").forEach { method ->
+                        DropdownBoxItem(
+                            text = method,
+                            onClick = {
+                                onPaymentMethodChanged(method)
+                                showPaymentMethodDropdown = false
+                            },
+                        )
+                    }
+                }
+
+                MifosOutlinedTextField(
+                    label = "Source Account *",
+                    value = sourceAccount,
+                    onValueChange = onSourceAccountChanged,
+                    isError = sourceAccountError != null,
+                    errorMessage = sourceAccountError,
+                    singleLine = true,
+                    keyboardOptions = KeyboardOptions(
+                        imeAction = ImeAction.Next,
+                    ),
+                )
+
+                MifosOutlinedTextField(
+                    label = "Maximum Amount Limit (Optional)",
+                    value = maxAmount,
+                    onValueChange = onMaxAmountChanged,
+                    isError = maxAmountError != null,
+                    errorMessage = maxAmountError,
+                    singleLine = true,
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Decimal,
+                        imeAction = ImeAction.Done,
+                    ),
+                )
+
+                Text(
+                    text = "This amount will be used as a safety limit for automatic payments",
+                    style = KptTheme.typography.bodySmall,
+                    color = KptTheme.colorScheme.onSurfaceVariant,
+                )
+            }
+        }
+    }
 }

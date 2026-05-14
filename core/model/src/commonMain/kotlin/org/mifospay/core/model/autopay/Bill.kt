@@ -28,6 +28,11 @@ data class Bill(
     val description: String? = null,
     val isActive: Boolean = true,
     val status: BillStatus = BillStatus.ACTIVE,
+    // AutoPay configuration
+    val autoPayEnabled: Boolean = false,
+    val autoPayPaymentMethod: String? = null,
+    val autoPaySourceAccount: String? = null,
+    val autoPayMaxAmount: Double? = null,
     val createdAt: Long = Clock.System.now().toEpochMilliseconds(),
     val updatedAt: Long = Clock.System.now().toEpochMilliseconds(),
 ) : Parcelable
@@ -35,6 +40,7 @@ data class Bill(
 @Serializable
 enum class RecurrencePattern(val displayName: String, val interval: Int) {
     NONE("No Recurrence", 0),
+    DAILY("Daily", 1),
     WEEKLY("Weekly", 7),
     BIWEEKLY("Bi-weekly", 14),
     MONTHLY("Monthly", 30),
@@ -68,6 +74,11 @@ data class BillFormData(
     val billerId: String? = null,
     val billerName: String? = null,
     val description: String = "",
+    // AutoPay configuration
+    val enableAutoPay: Boolean = false,
+    val autoPayPaymentMethod: String = "",
+    val autoPaySourceAccount: String = "",
+    val autoPayMaxAmount: String = "",
 )
 
 @Serializable
@@ -78,6 +89,10 @@ data class BillValidationResult(
     val dueDateError: String? = null,
     val recurrencePatternError: String? = null,
     val billerError: String? = null,
+    // AutoPay validation
+    val autoPayPaymentMethodError: String? = null,
+    val autoPaySourceAccountError: String? = null,
+    val autoPayMaxAmountError: String? = null,
 )
 
 @Serializable

@@ -25,7 +25,10 @@ import org.mifospay.core.model.autopay.UpcomingPayment
 import org.mifospay.core.network.model.entity.Page
 import org.mifospay.core.network.utils.ApiEndPoints
 
-// TODO: Sync with backend team and update service layer according to finalized API contract
+/**
+* TODO: Sync with backend team and update service layer according to finalized API contract,
+* also use Flow only in get operations where List<T> is returned, do not use Flow for one-shot operations
+*/
 
 interface AutoPayService {
 

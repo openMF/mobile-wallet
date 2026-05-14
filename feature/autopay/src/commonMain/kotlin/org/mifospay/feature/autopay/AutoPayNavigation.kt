@@ -25,8 +25,7 @@ import androidx.navigation.navOptions
 
 object AutoPayNavigation {
     const val AUTO_PAY_ROUTE = "autopay_route"
-    const val AUTO_PAY_SETUP_ROUTE = "autopay_setup_route"
-    const val AUTO_PAY_RULES_ROUTE = "autopay_rules_route"
+    const val AUTO_PAY_SCHEDULE_MANAGEMENT_ROUTE = "autopay_schedule_management_route"
     const val AUTO_PAY_PREFERENCES_ROUTE = "autopay_preferences_route"
     const val AUTO_PAY_HISTORY_ROUTE = "autopay_history_route"
     const val AUTO_PAY_SCHEDULE_DETAILS_ROUTE = "autopay_schedule_details_route"
@@ -40,6 +39,7 @@ object AutoPayNavigation {
     const val BILLER_ID_ARG = "billerId"
     const val BILL_ID_ARG = "billId"
     const val SOURCE_ARG = "source"
+    const val AUTO_PAY_ID_ARG = "autoPayId"
 }
 
 /**
@@ -76,20 +76,17 @@ fun NavController.navigateToAutoPay(navOptions: NavOptions? = null) {
     navigate(AutoPayNavigation.AUTO_PAY_ROUTE, navOptions)
 }
 
-fun NavController.navigateToAutoPaySetup(navOptions: NavOptions? = null) {
-    navigate(AutoPayNavigation.AUTO_PAY_SETUP_ROUTE, navOptions)
-}
-
-fun NavController.navigateToAutoPayRules(navOptions: NavOptions? = null) {
-    navigate(AutoPayNavigation.AUTO_PAY_RULES_ROUTE, navOptions)
+fun NavController.navigateToScheduleManagement(navOptions: NavOptions? = null) {
+    navigate(AutoPayNavigation.AUTO_PAY_SCHEDULE_MANAGEMENT_ROUTE, navOptions)
 }
 
 fun NavController.navigateToAutoPayPreferences(navOptions: NavOptions? = null) {
     navigate(AutoPayNavigation.AUTO_PAY_PREFERENCES_ROUTE, navOptions)
 }
 
-fun NavController.navigateToAutoPayHistory(navOptions: NavOptions? = null) {
-    navigate(AutoPayNavigation.AUTO_PAY_HISTORY_ROUTE, navOptions)
+fun NavController.navigateToAutoPayHistory(autoPayId: Long = 0L, navOptions: NavOptions? = null) {
+    val route = "${AutoPayNavigation.AUTO_PAY_HISTORY_ROUTE}?${AutoPayNavigation.AUTO_PAY_ID_ARG}=$autoPayId"
+    navigate(route, navOptions)
 }
 
 fun NavController.navigateToAutoPayScheduleDetails(scheduleId: String, navOptions: NavOptions? = null) {
@@ -130,17 +127,14 @@ fun NavGraphBuilder.autoPayGraph(
 ) {
     composableWithFadeTransitions(AutoPayNavigation.AUTO_PAY_ROUTE) {
         AutoPayScreen(
-            onNavigateToSetup = {
-                navController.navigateToAutoPaySetup()
-            },
-            onNavigateToRules = {
-                navController.navigateToAutoPayRules()
+            onNavigateToScheduleManagement = {
+                navController.navigateToScheduleManagement()
             },
             onNavigateToPreferences = {
                 navController.navigateToAutoPayPreferences()
             },
             onNavigateToHistory = {
-                navController.navigateToAutoPayHistory()
+                navController.navigateToAutoPayHistory(autoPayId = 0L)
             },
             onNavigateToScheduleDetails = { scheduleId ->
                 navController.navigateToAutoPayScheduleDetails(scheduleId)
@@ -162,15 +156,18 @@ fun NavGraphBuilder.autoPayGraph(
         )
     }
 
-    composableWithFadeTransitions(AutoPayNavigation.AUTO_PAY_SETUP_ROUTE) {
-        AutoPaySetupScreen(
+    composableWithFadeTransitions(AutoPayNavigation.AUTO_PAY_SCHEDULE_MANAGEMENT_ROUTE) {
+        AutoPayScheduleManagementScreen(
             onNavigateBack = onNavigateBack,
-        )
-    }
-
-    composableWithFadeTransitions(AutoPayNavigation.AUTO_PAY_RULES_ROUTE) {
-        AutoPayRulesScreen(
-            onNavigateBack = onNavigateBack,
+            onNavigateToAddBill = {
+                navController.navigateToAddBill()
+            },
+            onNavigateToEditBill = { billId ->
+                navController.navigateToEditBill(billId)
+            },
+            onNavigateToBillList = {
+                navController.navigateToBillList()
+            },
         )
     }
 
@@ -180,7 +177,16 @@ fun NavGraphBuilder.autoPayGraph(
         )
     }
 
-    composableWithFadeTransitions(AutoPayNavigation.AUTO_PAY_HISTORY_ROUTE) {
+    composableWithFadeTransitions(
+        route = "${AutoPayNavigation.AUTO_PAY_HISTORY_ROUTE}?${AutoPayNavigation.AUTO_PAY_ID_ARG}={${AutoPayNavigation.AUTO_PAY_ID_ARG}}",
+        arguments = listOf(
+            navArgument(AutoPayNavigation.AUTO_PAY_ID_ARG) {
+                type = NavType.LongType
+                nullable = false
+                defaultValue = 0L
+            },
+        ),
+    ) { backStackEntry ->
         AutoPayHistoryScreen(
             onNavigateBack = onNavigateBack,
         )

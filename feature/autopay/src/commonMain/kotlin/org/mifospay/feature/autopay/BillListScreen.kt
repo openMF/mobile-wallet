@@ -180,7 +180,15 @@ private fun BillCard(
                     )
                 }
 
-                BillStatusChip(status = bill.status)
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    if (bill.autoPayEnabled) {
+                        AutoPayChip()
+                    }
+                    BillStatusChip(status = bill.status)
+                }
 
                 Box {
                     IconButton(
@@ -296,6 +304,37 @@ private fun BillStatusChip(
             color = textColor,
             fontWeight = FontWeight.Medium,
         )
+    }
+}
+
+@Composable
+private fun AutoPayChip(
+    modifier: Modifier = Modifier,
+) {
+    Card(
+        modifier = modifier,
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.secondary,
+        ),
+    ) {
+        Row(
+            modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp),
+            horizontalArrangement = Arrangement.spacedBy(4.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Icon(
+                imageVector = MifosIcons.Payment,
+                contentDescription = null,
+                modifier = Modifier.size(12.dp),
+                tint = MaterialTheme.colorScheme.onSecondary,
+            )
+            Text(
+                text = "AutoPay",
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSecondary,
+                fontWeight = FontWeight.Medium,
+            )
+        }
     }
 }
 
