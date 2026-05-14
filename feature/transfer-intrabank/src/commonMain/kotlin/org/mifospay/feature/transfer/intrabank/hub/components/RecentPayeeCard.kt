@@ -16,7 +16,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import kotlin.math.roundToInt
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -35,6 +34,7 @@ import org.mifospay.core.designsystem.component.MifosTextUserImage
 import org.mifospay.core.model.account.RecentPayee
 import template.core.base.designsystem.KptMaterialTheme
 import template.core.base.designsystem.theme.KptTheme
+import kotlin.math.roundToInt
 
 @Composable
 fun RecentPayeeCard(
