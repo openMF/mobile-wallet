@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import kotlin.math.roundToInt
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -125,8 +126,9 @@ private fun formatAccountDisplay(accountNo: String): String {
  * Formats amount with currency symbol
  */
 private fun formatAmount(currency: String, amount: Double): String {
-    val wholePart = amount.toLong()
-    val decimalPart = ((amount - wholePart) * 100).toInt()
+    val cents = (amount * 100).roundToInt()
+    val wholePart = cents / 100
+    val decimalPart = cents % 100
     val formattedWhole = wholePart.toString()
         .reversed()
         .chunked(3)
