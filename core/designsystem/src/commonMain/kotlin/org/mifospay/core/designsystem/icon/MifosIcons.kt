@@ -14,6 +14,7 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material.icons.automirrored.filled.OpenInNew
+import androidx.compose.material.icons.automirrored.filled.Rule
 import androidx.compose.material.icons.automirrored.filled.Send
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.filled.ArrowOutward
@@ -22,10 +23,12 @@ import androidx.compose.material.icons.filled.Badge
 import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material.icons.filled.Camera
 import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.ChevronLeft
 import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.ContentCopy
+import androidx.compose.material.icons.filled.CreditCard
 import androidx.compose.material.icons.filled.CurrencyRupee
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Description
@@ -46,10 +49,14 @@ import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Photo
 import androidx.compose.material.icons.filled.PhotoLibrary
+import androidx.compose.material.icons.filled.Power
 import androidx.compose.material.icons.filled.QrCode
 import androidx.compose.material.icons.filled.QrCode2
 import androidx.compose.material.icons.filled.RadioButtonChecked
 import androidx.compose.material.icons.filled.RadioButtonUnchecked
+import androidx.compose.material.icons.filled.Rule
+import androidx.compose.material.icons.filled.Schedule
+import androidx.compose.material.icons.filled.Security
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
@@ -74,6 +81,7 @@ import androidx.compose.material.icons.rounded.AccountBalance
 import androidx.compose.material.icons.rounded.AccountBalanceWallet
 import androidx.compose.material.icons.rounded.AccountCircle
 import androidx.compose.material.icons.rounded.Add
+import androidx.compose.material.icons.rounded.Check
 import androidx.compose.material.icons.rounded.Contacts
 import androidx.compose.material.icons.rounded.History
 import androidx.compose.material.icons.rounded.Home
@@ -171,4 +179,11 @@ object MifosIcons {
     val CheckCircle = Icons.Outlined.CheckCircle
     val ArrowRight = Icons.AutoMirrored.Filled.KeyboardArrowRight
     val Download = Icons.Filled.Download
+
+    // AutoPay specific icons
+    val Schedule = Icons.Filled.Schedule
+    val Security = Icons.Filled.Security
+    val Power = Icons.Filled.Power
+    val CreditCard = Icons.Filled.CreditCard
+    val Rule = Icons.AutoMirrored.Filled.Rule
 }

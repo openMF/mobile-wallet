@@ -20,6 +20,7 @@ import org.mifospay.core.data.repository.AccountRepository
 import org.mifospay.core.data.repository.AppLockRepository
 import org.mifospay.core.data.repository.AssetRepository
 import org.mifospay.core.data.repository.AuthenticationRepository
+import org.mifospay.core.data.repository.AutoPayRepository
 import org.mifospay.core.data.repository.BeneficiaryRepository
 import org.mifospay.core.data.repository.ClientRepository
 import org.mifospay.core.data.repository.DocumentRepository
@@ -40,11 +41,11 @@ import org.mifospay.core.data.repository.StandingInstructionRepository
 import org.mifospay.core.data.repository.ThirdPartyTransferRepository
 import org.mifospay.core.data.repository.TwoFactorAuthRepository
 import org.mifospay.core.data.repository.UserRepository
-import org.mifospay.core.data.repository.UserVerificationRepository
 import org.mifospay.core.data.repositoryImpl.AccountRepositoryImpl
 import org.mifospay.core.data.repositoryImpl.AppLockRepositoryImpl
 import org.mifospay.core.data.repositoryImpl.AssetRepositoryImpl
 import org.mifospay.core.data.repositoryImpl.AuthenticationRepositoryImpl
+import org.mifospay.core.data.repositoryImpl.AutoPayRepositoryImpl
 import org.mifospay.core.data.repositoryImpl.BeneficiaryRepositoryImpl
 import org.mifospay.core.data.repositoryImpl.ClientRepositoryImpl
 import org.mifospay.core.data.repositoryImpl.DocumentRepositoryImpl
@@ -110,6 +111,7 @@ val RepositoryModule = module {
     }
     single<TwoFactorAuthRepository> { TwoFactorAuthRepositoryImpl(get(), get(ioDispatcher)) }
     single<UserRepository> { UserRepositoryImpl(get(), get(ioDispatcher)) }
+    single<AutoPayRepository> { AutoPayRepositoryImpl(get(), get(ioDispatcher)) }
     single<OfficeRepository> { OfficeRepositoryImpl(get(), get(ioDispatcher)) }
 
     singleOf(::MifosPasscodeAdapterImpl).bind<PasscodeStorageAdapter>()

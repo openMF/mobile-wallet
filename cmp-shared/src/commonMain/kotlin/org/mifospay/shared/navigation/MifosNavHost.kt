@@ -39,6 +39,8 @@ import org.mifospay.feature.accounts.savingsaccount.navigateToSavingAccountAddEd
 //import org.mifospay.feature.autopay.navigateToAutoPayPreferences
 //import org.mifospay.feature.autopay.navigateToAutoPayRules
 //import org.mifospay.feature.autopay.navigateToAutoPaySetup
+//import org.mifospay.feature.autopay.navigateToAutoPayScheduleDetails
+//import org.mifospay.feature.autopay.navigateToAutoPaySetup
 import org.mifospay.feature.beneficiary.addupdatebeneficiary.BeneficiaryAddEditType
 import org.mifospay.feature.beneficiary.addupdatebeneficiary.addEditBeneficiaryScreen
 import org.mifospay.feature.beneficiary.addupdatebeneficiary.navigateToBeneficiaryAddEdit
@@ -224,6 +226,10 @@ internal fun MifosNavHost(
 //                onNavigateToHistory = {
 //                    navController.navigateToAutoPayHistory()
 //                },
+//        onNavigateToScheduleDetails = { scheduleId ->
+//            navController.navigateToAutoPayScheduleDetails(scheduleId)
+//        },
+//        showTopBar = false,
 //            )
 //        },
     )
