@@ -31,4 +31,8 @@
     <string name="feature_finance_accounts">Accounts</string>
     <string name="feature_finance_beneficiaries">Beneficiaries</string>
 
+    <!-- Access restricted dialog -->
+    <string name="feature_not_accessible_title">Feature Not Accessible</string>
+    <string name="feature_not_accessible_message">You do not have permission to access this feature.</string>
+    s<string name="ok">Ok</string>
 </resources>

@@ -13,12 +13,22 @@ import kotlinx.coroutines.flow.MutableStateFlow
 
 object GlobalAuthManager {
     val isUnauthorized = MutableStateFlow(false)
+    val isAccessRestricted = MutableStateFlow(false)
 
     fun markUnauthorized() {
         isUnauthorized.value = true
     }
 
+    fun markAccessRestricted() {
+        isAccessRestricted.value = true
+    }
+
     fun reset() {
         isUnauthorized.value = false
+        isAccessRestricted.value = false
+    }
+
+    fun resetAccessRestricted() {
+        isAccessRestricted.value = false
     }
 }

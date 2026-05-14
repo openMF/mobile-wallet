@@ -88,6 +88,7 @@ val NetworkModule = module {
                         install(KtorInterceptor) {
                             getToken = { preferencesRepository.authToken }
                             this.configManager = configManager
+                            this.isSelfService = true
                         }
                     },
                 )
@@ -127,6 +128,7 @@ val NetworkModule = module {
                         install(KtorInterceptor) {
                             getToken = { null }
                             this.configManager = configManager
+                            this.isSelfService = false
                         }
                     },
                 )
@@ -162,6 +164,7 @@ val NetworkModule = module {
                         install(KtorInterceptor) {
                             getToken = { null }
                             this.configManager = configManager
+                            this.isSelfService = false
                         }
                     },
                 )

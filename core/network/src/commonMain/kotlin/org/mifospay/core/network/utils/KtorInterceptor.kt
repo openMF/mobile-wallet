@@ -23,6 +23,7 @@ import org.mifospay.core.network.config.InstanceConfigManager
 class KtorInterceptor(
     private val getToken: () -> String?,
     private val configManager: InstanceConfigManager,
+    private val isSelfService: Boolean,
 ) {
     companion object Plugin : HttpClientPlugin<Config, KtorInterceptor> {
 
@@ -43,7 +44,11 @@ class KtorInterceptor(
 
             scope.responsePipeline.intercept(HttpResponsePipeline.After) {
                 if (context.response.status == HttpStatusCode.Unauthorized) {
-                    GlobalAuthManager.markUnauthorized()
+                    if (plugin.isSelfService) {
+                        GlobalAuthManager.markUnauthorized()
+                    } else {
+                        GlobalAuthManager.markAccessRestricted()
+                    }
                 }
                 proceedWith(subject)
             }
@@ -51,7 +56,7 @@ class KtorInterceptor(
 
         override fun prepare(block: Config.() -> Unit): KtorInterceptor {
             val config = Config().apply(block)
-            return KtorInterceptor(config.getToken, config.configManager)
+            return KtorInterceptor(config.getToken, config.configManager, config.isSelfService)
         }
     }
 }
@@ -59,6 +64,7 @@ class KtorInterceptor(
 class Config {
     lateinit var getToken: () -> String?
     lateinit var configManager: InstanceConfigManager
+    var isSelfService: Boolean = true
 }
 
 class KtorInterceptorRe(

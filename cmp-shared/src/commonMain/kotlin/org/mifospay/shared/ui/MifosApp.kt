@@ -39,6 +39,7 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -52,11 +53,16 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
 import mobile_wallet.cmp_shared.generated.resources.Res
+import mobile_wallet.cmp_shared.generated.resources.feature_not_accessible_message
+import mobile_wallet.cmp_shared.generated.resources.feature_not_accessible_title
 import mobile_wallet.cmp_shared.generated.resources.not_connected
+import mobile_wallet.cmp_shared.generated.resources.ok
 import org.jetbrains.compose.resources.stringResource
+import org.mifospay.core.common.GlobalAuthManager
 import org.mifospay.core.data.util.NetworkMonitor
 import org.mifospay.core.data.util.TimeZoneMonitor
 import org.mifospay.core.designsystem.component.IconBox
+import org.mifospay.core.designsystem.component.MifosDialogBox
 import org.mifospay.core.designsystem.component.MifosGradientBackground
 import org.mifospay.core.designsystem.component.MifosNavigationBar
 import org.mifospay.core.designsystem.component.MifosNavigationBarItem
@@ -85,6 +91,30 @@ internal fun MifosApp(
             networkMonitor = networkMonitor,
             timeZoneMonitor = timeZoneMonitor,
         )
+
+        var showAccessRestrictedDialog = remember { mutableStateOf<Boolean>(false) }
+        val isAccessRestricted by GlobalAuthManager.isAccessRestricted.collectAsStateWithLifecycle()
+
+        LaunchedEffect(isAccessRestricted) {
+            if (isAccessRestricted) {
+                showAccessRestrictedDialog.value = true
+            }
+        }
+
+        if (showAccessRestrictedDialog.value) {
+            MifosDialogBox(
+                title = stringResource(Res.string.feature_not_accessible_title),
+                showDialogState = showAccessRestrictedDialog.value,
+                confirmButtonText = stringResource(Res.string.ok),
+                onConfirm = {
+                    showAccessRestrictedDialog.value = false
+                    GlobalAuthManager.resetAccessRestricted()
+                    appState.navController.popBackStack()
+                },
+                onDismiss = {},
+                message = stringResource(Res.string.feature_not_accessible_message),
+            )
+        }
 
         val snackbarHostState = remember { SnackbarHostState() }
         val destination = appState.currentTopLevelDestination
