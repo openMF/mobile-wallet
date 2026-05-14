@@ -162,8 +162,8 @@ private fun MifosPayApp(
         is Authenticated -> if (
             (userState as Authenticated).userData.authenticated &&
             !viewModel.isPasscodeNotCreated()
-            ) {
-                ROOT_MIFOS_PASSCODE_ROUTE
+        ) {
+            ROOT_MIFOS_PASSCODE_ROUTE
         } else {
             LOGIN_GRAPH
         }
