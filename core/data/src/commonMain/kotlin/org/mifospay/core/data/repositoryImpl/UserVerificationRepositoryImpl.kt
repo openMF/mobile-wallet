@@ -14,9 +14,19 @@ import org.mifospay.core.data.repository.UserVerificationRepository
 import kotlin.time.Clock
 import kotlin.time.ExperimentalTime
 
+/** Multiplatform-Settings key for the verification timestamp (epoch ms). */
 private const val VERIFICATION_TIMESTAMP_KEY = "org.mifospay.user_verification_timestamp"
+
+/** Validity window for a verification token, in milliseconds. */
 private const val VERIFICATION_EXPIRY_MS = 30_000L
 
+/**
+ * [UserVerificationRepository] implementation backed by
+ * `com.russhwolf.settings.Settings`. Stores a single epoch-millis timestamp
+ * under [VERIFICATION_TIMESTAMP_KEY]; [consumeVerification] always clears
+ * the key before returning the validity result, so the token is genuinely
+ * one-shot regardless of timing.
+ */
 @OptIn(ExperimentalTime::class)
 class UserVerificationRepositoryImpl(
     private val settings: Settings,

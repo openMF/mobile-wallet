@@ -58,6 +58,31 @@ import org.mifospay.core.designsystem.icon.MifosIcons
 import org.mifospay.core.ui.utils.EventsEffect
 import template.core.base.designsystem.theme.KptTheme
 
+/**
+ * Settings screen route. Owns the passcode/biometrics integration glue:
+ *
+ *  - Reads `authProvider.isRegistered` from the composition local
+ *    [platformAuthenticationProvider] and threads it down as the source of
+ *    truth for the biometrics-toggle label and the disable-vs-enable branch.
+ *  - Observes [entryStateHandle] for the disable-biometrics round-trip
+ *    boolean (key: [DISABLE_BIOMETRICS_VERIFICATION_KEY]) written by the
+ *    internal passcode screen, and re-dispatches it as
+ *    [SettingsAction.DisableBiometricsResult] so the VM can call
+ *    `authProvider.unregister()`.
+ *  - Routes [SettingsEvent.NavigateToPasscodeScreen] to
+ *    [navigateToPasscodeScreen] with the verification-key set to
+ *    [DISABLE_BIOMETRICS_VERIFICATION_KEY] when the user is currently
+ *    registered (disable flow), and `null` otherwise (change-passcode flow,
+ *    no round-trip channel needed).
+ *
+ * @param navigateToPasscodeScreen `(verificationKey?) -> Unit` — caller
+ *        binds this to `navController::navigateToInternalMifosPasscodeScreen`.
+ *        The verification-key is written/read on the **previous** back-stack
+ *        entry's saved-state-handle, which is this screen's [entryStateHandle].
+ * @param entryStateHandle The settings destination's own
+ *        `SavedStateHandle`, hoisted from the nav-graph builder so the
+ *        round-trip channel works.
+ */
 @Composable
 internal fun SettingsScreenRoute(
     backPress: () -> Unit,

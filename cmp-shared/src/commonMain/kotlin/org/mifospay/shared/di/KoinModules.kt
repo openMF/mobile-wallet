@@ -49,6 +49,22 @@ import org.mifospay.feature.upi.setup.di.UpiSetupModule
 import org.mifospay.shared.MifosPayViewModel
 import org.mifospay.shared.instance.InstanceSelectorViewModel
 
+/**
+ * Aggregator object that bundles every Koin module the app needs. Consumed by
+ * [koinConfiguration] (test/preview) and [initKoin] (production app start).
+ *
+ * The passcode/biometrics surface is wired across three of the included
+ * modules:
+ *  - [RepositoryModule] (in `:core:data`) binds `MifosPasscodeAdapterImpl` to
+ *    `PasscodeStorageAdapter` and `BiometricsSetupAdapterImpl` to
+ *    `BiometricStorageAdapter` (the two storage contracts the libraries
+ *    require).
+ *  - `MifosAuthenticatorModule` (in `:feature:passcode`) registers
+ *    `MifosPasscodeViewModel` and `BiometricSetupScreenViewmodel`.
+ *  - [MifosPasscodeModule] below constructs the singleton `PasscodeManager`
+ *    that the library exposes; it must be a `single` so the same instance is
+ *    shared by every passcode screen and the logout call site.
+ */
 object KoinModules {
     private val commonModules = module {
         includes(stringProviderModule)
@@ -99,6 +115,16 @@ object KoinModules {
         )
     }
 
+    /**
+     * Provides the library's [PasscodeManager] as a process-wide singleton.
+     *
+     * Must be `single`: every passcode screen, the settings change-passcode
+     * call site, and `MifosPayViewModel.logOut()` all share state through this
+     * one instance. The constructor parameter is the
+     * [PasscodeStorageAdapter] bound by [RepositoryModule]; the manager reads
+     * it once in its `init` block to seed the initial step
+     * (`Enter` if a passcode exists, `Create` otherwise).
+     */
     private val MifosPasscodeModule = module {
         single { PasscodeManager(get()) }
     }
@@ -115,10 +141,23 @@ object KoinModules {
     )
 }
 
+/**
+ * Builds a [koinApplication] without starting it — used by Compose Previews
+ * and tests that need to resolve dependencies without touching the global
+ * Koin state.
+ */
 fun koinConfiguration() = koinApplication {
     modules(KoinModules.allModules)
 }
 
+/**
+ * Starts the global Koin instance. Called once per process from each
+ * platform's entrypoint (Android `MifosPayApplication.onCreate`, desktop
+ * `main`, etc.).
+ *
+ * @param config Optional platform-specific extras (e.g. `androidContext` on
+ *        Android) merged in before the modules list.
+ */
 fun initKoin(config: KoinAppDeclaration? = null) {
     startKoin {
         config?.invoke(this)

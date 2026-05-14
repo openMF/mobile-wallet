@@ -24,6 +24,28 @@ import org.mifos.authenticator.passcode.PasscodeStep
 import org.mifospay.core.data.repository.AppLockRepository
 import org.mifospay.core.ui.utils.BaseViewModel
 
+/**
+ * ViewModel for [MifosPasscode]. Owns the glue between:
+ *  - [PasscodeManager] (passcode library) — provides step/state and emits
+ *    [PasscodeResult]s on creation, verify, change, forget.
+ *  - `PlatformAuthenticationProvider` (biometrics library) — provides
+ *    `isRegistered` + biometric-prompt invocation. **Not** injected here;
+ *    it's composition-scoped and threaded in via
+ *    [MifosPasscodeAction.OnResume], [MifosPasscodeAction.OnAuthenticatorClick],
+ *    and [MifosPasscodeAction.ForgetPasscode] so the VM never holds a
+ *    reference to a composition-scoped object.
+ *  - [AppLockRepository] — the app-wide lock flag consulted by
+ *    `MifosPayApp`'s background-resume gate.
+ *
+ * Lifecycle:
+ *  - `OnStart`: if the screen is in `Enter` step, re-lock the app.
+ *  - `OnResume`: if biometrics are allowed, hardware-available, and
+ *    registered, and the screen is in `Enter` step, auto-trigger the
+ *    biometric prompt.
+ *  - `HandlePasscodeResult(Verified)`: unlock the app.
+ *  - `ForgetPasscode`: clear app-lock + biometric registration via
+ *    `provider.unregister()`.
+ */
 class MifosPasscodeViewModel(
     private val passcodeManager: PasscodeManager,
     private val appLockRepository: AppLockRepository,
@@ -81,6 +103,18 @@ class MifosPasscodeViewModel(
         }
     }
 
+    /**
+     * Auto-triggers biometric authentication on resume — but only when **all
+     * four** gates agree:
+     *  - [allowBiometricAuth] is `true` (caller's UI-layer guard).
+     *  - The authenticator status contains [PlatformAuthenticatorStatus.BIOMETRICS_SET].
+     *  - The passcode screen is in [PasscodeStep.Enter] (not Create / Confirm
+     *    / ChangeVerify — biometric must not be allowed to bypass change-flow).
+     *  - The provider's `isRegistered` flow is `true`.
+     *
+     * Relaxing any one would silently re-enable biometric auth in flows where
+     * it should be suppressed.
+     */
     private fun handleResume(
         systemAuthProvider: PlatformAuthenticationProvider,
         allowBiometricAuth: Boolean,
@@ -96,6 +130,28 @@ class MifosPasscodeViewModel(
         }
     }
 
+    /**
+     * Runs the biometric prompt and converts its outcome into UI state +
+     * navigation events.
+     *
+     * Branch behaviour:
+     *  - [AuthenticationResult.Success] — **re-checks** `passcodeStep == Enter`
+     *    before unlocking. Guards against the step transitioning between
+     *    when `onAuthenticatorClick` was dispatched and when it returns
+     *    (e.g., the auto-resume kicks off, the user navigates into
+     *    change-passcode while the prompt is on screen, prompt succeeds while
+     *    step is now `ChangeVerify`). If still `Enter`, unlocks the app and
+     *    re-emits as [PasscodeResult.Verified] so biometric and passcode
+     *    success converge on the same composable callback. Otherwise the
+     *    result is silently dropped — biometric auth must not satisfy a
+     *    change-passcode / disable-biometrics flow.
+     *  - [AuthenticationResult.UserNotRegistered] — the library has already
+     *    cleared the stored blob and flipped `isRegistered` to false; surface
+     *    the "re-setup" prompt so the user re-enrols from settings.
+     *  - [AuthenticationResult.Error] — render a generic error dialog with
+     *    the platform-provided message.
+     *  - [AuthenticationResult.UserCancelled] — silent no-op.
+     */
     private fun authenticateWithBiometrics(
         systemAuthProvider: PlatformAuthenticationProvider,
     ) {
@@ -133,35 +189,82 @@ class MifosPasscodeViewModel(
     }
 }
 
+/**
+ * UI state for [MifosPasscodeViewModel].
+ *
+ * @property dialogState Non-null when an error / not-registered dialog should
+ *           be shown. Cleared via [MifosPasscodeAction.DismissDialog] or
+ *           [MifosPasscodeAction.ClickConfirmOnNotRegisteredDialog].
+ */
 data class MifosPasscodeState(
     val dialogState: PasscodeDialogState? = null,
 )
 
+/** Dialog variants surfaced by [MifosPasscodeViewModel]. */
 sealed interface PasscodeDialogState {
+    /** Generic biometric error with a platform-provided message. */
     data class Error(val message: String) : PasscodeDialogState
+
+    /**
+     * The platform reported [AuthenticationResult.UserNotRegistered]; the
+     * biometrics library has already wiped the invalid stored blob.
+     * Confirming the dialog is terminal — the user must re-enrol from
+     * settings.
+     */
     data class UserNotRegistered(val message: String) : PasscodeDialogState
 }
 
+/** Actions dispatched to [MifosPasscodeViewModel]. */
 sealed interface MifosPasscodeAction {
+    /** Fired on `Lifecycle.Event.ON_START`. Re-locks the app when in `Enter` step. */
     data object OnStart : MifosPasscodeAction
+
+    /**
+     * Fired on `Lifecycle.Event.ON_RESUME`. Carries the composition-scoped
+     * provider + the caller's biometric-bypass guard so the VM can drive the
+     * auto-auth path (see `handleResume`).
+     */
     data class OnResume(
         val systemAuthProvider: PlatformAuthenticationProvider,
         val allowBiometricAuth: Boolean,
     ) : MifosPasscodeAction
 
+    /** User dismissed an error/not-registered dialog via system back or outside-tap. */
     data object DismissDialog : MifosPasscodeAction
+
+    /**
+     * Non-`Forgotten` [PasscodeResult] from the library. On `Verified` the VM
+     * unlocks the app; other cases just forward to the screen for routing.
+     */
     data class HandlePasscodeResult(val result: PasscodeResult) : MifosPasscodeAction
+
+    /**
+     * Dispatched for the `Forgotten` case only. Split from
+     * [HandlePasscodeResult] so the provider reference (needed for
+     * `unregister()`) is only carried on the one action that uses it.
+     */
     data class ForgetPasscode(
         val systemAuthProvider: PlatformAuthenticationProvider,
     ) : MifosPasscodeAction
 
+    /**
+     * User tapped the biometric button. Carries the provider so the VM can
+     * invoke `onAuthenticatorClick()`.
+     */
     data class OnAuthenticatorClick(
         val systemAuthProvider: PlatformAuthenticationProvider,
     ) : MifosPasscodeAction
 
+    /** User tapped OK on the [PasscodeDialogState.UserNotRegistered] dialog. */
     data object ClickConfirmOnNotRegisteredDialog : MifosPasscodeAction
 }
 
+/** One-shot events emitted by [MifosPasscodeViewModel] to the screen. */
 sealed interface MifosPasscodeEvent {
+    /**
+     * Navigate based on the resulting [PasscodeResult]. Biometric success is
+     * re-emitted as [PasscodeResult.Verified] here so the composable's single
+     * result-switch handles both paths.
+     */
     data class NavigateForResult(val result: PasscodeResult) : MifosPasscodeEvent
 }

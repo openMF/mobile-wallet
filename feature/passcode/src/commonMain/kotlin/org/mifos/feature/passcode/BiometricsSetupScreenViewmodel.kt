@@ -23,6 +23,20 @@ import org.mifospay.core.model.client.Client
 import org.mifospay.core.ui.utils.AuthenticationUtils
 import org.mifospay.core.ui.utils.BaseViewModel
 
+/**
+ * ViewModel for [BiometricSetupScreen].
+ *
+ * Drives the `PlatformAuthenticationProvider.registerUser` call against the
+ * platform authenticator. On success, the biometrics library persists the
+ * registration blob internally via [BiometricStorageAdapter] — there is no
+ * adapter call here. Failure variants surface a dialog message via
+ * [BiometricSetupScreenState.error].
+ *
+ * Identity seed is taken from [UserPreferencesRepository.client] (snapshot
+ * at construction time); falls back to [AuthenticationUtils.DEFAULT_USER_ID]
+ * / `DEFAULT_USER_EMAIL` / `DEFAULT_DISPLAY_NAME` only when the snapshot
+ * fields are absent.
+ */
 class BiometricSetupScreenViewmodel(
     userPreferencesRepository: UserPreferencesRepository,
 ) : BaseViewModel<
@@ -87,21 +101,43 @@ class BiometricSetupScreenViewmodel(
     }
 }
 
+/**
+ * UI state for [BiometricSetupScreenViewmodel].
+ *
+ * @property client Snapshot of the signed-in client; used as the identity
+ *           seed for `registerUser`. May be null in edge cases where the
+ *           registration call has run before the client info was persisted —
+ *           the VM falls back to `AuthenticationUtils` default constants.
+ * @property error Non-null when a registration error should be shown via the
+ *           screen's dialog. Cleared by [BiometricSetupScreenAction.DismissErrorDialog].
+ */
 data class BiometricSetupScreenState(
     val client: Client? = null,
     val error: String? = null,
 )
 
+/** Actions dispatched to [BiometricSetupScreenViewmodel]. */
 sealed interface BiometricSetupScreenAction {
+    /** Dismisses any currently-shown error dialog. */
     data object DismissErrorDialog : BiometricSetupScreenAction
+
+    /** User tapped "Skip for now". Emits [BiometricSetupScreenEvent.OnSkipBiometricSetup]. */
     data object ClickSkipBiometric : BiometricSetupScreenAction
 
+    /**
+     * User tapped "Setup biometrics". Carries the composition-scoped
+     * [PlatformAuthenticationProvider] (VMs cannot inject it directly).
+     */
     data class ClickSetupBiometric(
         val platformAuthenticationProvider: PlatformAuthenticationProvider,
     ) : BiometricSetupScreenAction
 }
 
+/** One-shot navigation events emitted by [BiometricSetupScreenViewmodel]. */
 sealed interface BiometricSetupScreenEvent {
+    /** User skipped setup. The route handler should proceed past this screen. */
     data object OnSkipBiometricSetup : BiometricSetupScreenEvent
+
+    /** Registration succeeded; the library has already persisted the blob. */
     data object OnBiometricSetupSuccess : BiometricSetupScreenEvent
 }

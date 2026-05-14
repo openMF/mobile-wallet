@@ -114,6 +114,10 @@ val RepositoryModule = module {
     single<UserRepository> { UserRepositoryImpl(get(), get(ioDispatcher)) }
     single<OfficeRepository> { OfficeRepositoryImpl(get(), get(ioDispatcher)) }
 
+    // Passcode/biometrics surface — the four bindings below are required by the
+    // mifos-authenticator-passcode and mifos-authenticator-biometrics libraries
+    // (the two adapters) plus the in-app re-auth machinery (lock + verification
+    // token). See KDoc on the bound types for the contracts.
     singleOf(::MifosPasscodeAdapterImpl).bind<PasscodeStorageAdapter>()
     singleOf(::BiometricsSetupAdapterImpl).bind<BiometricStorageAdapter>()
     singleOf(::AppLockRepositoryImpl).bind<AppLockRepository>()

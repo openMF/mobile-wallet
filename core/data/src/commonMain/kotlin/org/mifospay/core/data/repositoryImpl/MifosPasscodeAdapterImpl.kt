@@ -12,8 +12,25 @@ package org.mifospay.core.data.repositoryImpl
 import com.russhwolf.settings.Settings
 import org.mifos.authenticator.passcode.PasscodeStorageAdapter
 
+/** Multiplatform-Settings key for the user's passcode (string). */
 const val MIFOS_PASSCODE = "org.mifospay.mifos.passcode"
 
+/**
+ * [PasscodeStorageAdapter] implementation backed by
+ * `com.russhwolf.settings.Settings`. Single-key layout — just the passcode
+ * itself. The biometric registration blob lives in a separate adapter
+ * ([BiometricsSetupAdapterImpl]) since v2.2.0 of the library decoupled the
+ * two surfaces.
+ *
+ * **Called by the library only.** App code should not invoke these methods
+ * directly — they're the contract the passcode library uses to persist its
+ * state. App-side reads of "is a passcode set" should go via
+ * [org.mifospay.shared.MifosPayViewModel.isPasscodeCreated], which
+ * canonicalises the blank-vs-absent check.
+ *
+ * [loadPasscode] returns `null` for both absent and blank values, so the
+ * library treats them identically as "no passcode set."
+ */
 class MifosPasscodeAdapterImpl(
     private val settings: Settings,
 ) : PasscodeStorageAdapter {

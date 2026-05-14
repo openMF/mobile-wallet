@@ -47,8 +47,26 @@ import org.mifospay.core.designsystem.theme.MifosTheme
 import org.mifospay.core.ui.utils.EventsEffect
 import template.core.base.designsystem.theme.KptTheme
 
+/** Navigation-event info marker for the biometric setup destination. */
 internal object BiometricSetupScreenCurrentInfo : NavigationEventInfo()
 
+/**
+ * First-time biometric enrolment screen, shown after [PasscodeResult.Created]
+ * lands on the root passcode flow. Calls
+ * `PlatformAuthenticationProvider.registerUser(...)` from the composition-
+ * scoped provider via [BiometricSetupScreenViewmodel].
+ *
+ * Both [onBiometricsRegistrationSuccess] and [onSkipBiometricSetup] are
+ * terminal — the caller should pop this screen and route to main; whichever
+ * branch the user takes, the passcode is already created so the app is
+ * authenticated.
+ *
+ * @param onBiometricsRegistrationSuccess Fired after a successful
+ *        `RegistrationResult.Success`. The library has already persisted the
+ *        registration blob via [BiometricStorageAdapter] — no caller-side
+ *        save required.
+ * @param onSkipBiometricSetup Fired when the user taps "Skip for now".
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BiometricSetupScreen(

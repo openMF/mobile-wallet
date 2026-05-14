@@ -12,9 +12,27 @@ package org.mifospay.core.data.repositoryImpl
 import com.russhwolf.settings.Settings
 import org.mifos.authenticator.biometrics.BiometricStorageAdapter
 
+/** Multiplatform-Settings key for the registration blob (string). */
 const val REGISTRATION_DATA_KEY = "org.mifospay.mifos.registration_data"
+
+/**
+ * Multiplatform-Settings key for the boolean "registration has occurred"
+ * flag. Decoupled from [REGISTRATION_DATA_KEY] so we can distinguish
+ * "registered with an empty blob" (valid on Android, where
+ * `PlatformAuthenticator.registerUser` returns `Success("")`) from "never
+ * registered."
+ */
 const val BIOMETRIC_REGISTERED_KEY = "org.mifospay.mifos.biometric_registered"
 
+/**
+ * [BiometricStorageAdapter] implementation backed by
+ * `com.russhwolf.settings.Settings`. Two-key layout: a boolean "registered"
+ * flag plus the registration blob string.
+ *
+ * **Called by the library only.** App code should not invoke these methods
+ * directly; use the provider's `registerUser()`, `onAuthenticatorClick()`,
+ * and `unregister()` methods, which drive this adapter internally.
+ */
 class BiometricsSetupAdapterImpl(
     private val settings: Settings,
 ) : BiometricStorageAdapter {

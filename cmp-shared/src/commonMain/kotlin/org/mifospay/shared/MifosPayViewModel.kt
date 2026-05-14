@@ -22,24 +22,64 @@ import org.mifospay.core.data.repository.AppLockRepository
 import org.mifospay.core.datastore.UserPreferencesRepository
 import org.mifospay.core.model.user.UserInfo
 
+/**
+ * Root ViewModel scoped to [org.mifospay.shared.MifosPayApp].
+ *
+ * Aggregates the three pieces of state the app shell needs to make session
+ * decisions:
+ *  - the persisted user-info flow ([UserPreferencesRepository.userInfo]),
+ *    surfaced as [userState];
+ *  - the passcode storage adapter, used by [isPasscodeNotCreated] for the
+ *    "logged in but no passcode yet" branch;
+ *  - the app-wide lock flag ([AppLockRepository]) consulted by [isAppLocked]
+ *    for the 15-second background-resume re-auth gate.
+ *
+ * [logOut] is the single fan-out point that clears the user session, the lock
+ * flag, and the passcode all at once — every logout path in the app should
+ * funnel through here.
+ */
 class MifosPayViewModel(
     private val userDataRepository: UserPreferencesRepository,
     private val passcodeManager: PasscodeManager,
     private val appLockRepository: AppLockRepository,
     private val passcodeStorageAdapter: PasscodeStorageAdapter,
 ) : ViewModel() {
-    val uiState: StateFlow<MainUiState> = userDataRepository.userInfo.map {
-        MainUiState.Success(it)
+    /**
+     * Reactive session state. Starts as [UserState.UnAuthenticated] and
+     * transitions to [UserState.Authenticated] once the underlying user-info
+     * flow emits — note that the wrapped `UserInfo.authenticated` field can
+     * still be `false` on a logged-out account, so callers must check both
+     * the [UserState] variant *and* `userData.authenticated`.
+     * `WhileSubscribed(5_000)` keeps the upstream alive across short
+     * configuration-change gaps without leaking when the screen is gone.
+     */
+    val userState: StateFlow<UserState> = userDataRepository.userInfo.map {
+        UserState.Authenticated(it)
     }.stateIn(
         scope = viewModelScope,
-        initialValue = MainUiState.Loading,
+        initialValue = UserState.UnAuthenticated,
         started = SharingStarted.WhileSubscribed(5_000),
     )
 
-    fun isPasscodeCreated(): Boolean {
-        return !passcodeStorageAdapter.loadPasscode().isNullOrBlank()
+    /**
+     * `true` iff no non-blank passcode is currently saved by the
+     * [PasscodeStorageAdapter]. Used by `MifosPayApp` to detect the
+     * "authenticated but no passcode yet" half-state and force a logout.
+     */
+    fun isPasscodeNotCreated(): Boolean {
+        return passcodeStorageAdapter.loadPasscode().isNullOrBlank()
     }
 
+    /**
+     * Single canonical logout. Clears in this order:
+     *  1. user-info (flips `authenticated` to false),
+     *  2. app-lock flag (so the next session starts unlocked),
+     *  3. passcode (via [PasscodeManager.logOut], which deletes the stored
+     *     passcode and resets the manager to the creation step).
+     *
+     * Fire-and-forget: the work runs on [viewModelScope]; callers don't await
+     * completion.
+     */
     fun logOut() {
         viewModelScope.launch {
             userDataRepository.logOut()
@@ -47,12 +87,33 @@ class MifosPayViewModel(
             passcodeManager.logOut()
         }
     }
-    fun isAppUnlocked(): Boolean {
-        return !appLockRepository.isAppLocked()
+
+    /**
+     * Pass-through to [AppLockRepository.isAppLocked].
+     *
+     * @return `true` if the app is currently locked, `false` if explicitly
+     *         unlocked, or `null` if no lock flag has been written yet
+     *         (fresh install / post-logout). The `MifosPayApp` re-auth gate
+     *         treats `null` as "no session to gate" — see the gate's
+     *         `isAppLocked()?.let { ... }` use site.
+     */
+    fun isAppLocked(): Boolean? {
+        return appLockRepository.isAppLocked()
     }
 }
 
-sealed interface MainUiState {
-    data object Loading : MainUiState
-    data class Success(val userData: UserInfo) : MainUiState
+/**
+ * Session state surfaced by [MifosPayViewModel.userState]. Two states only —
+ * the app shell makes routing decisions off the [Authenticated.userData]
+ * `authenticated` flag.
+ */
+sealed class UserState {
+    /** Initial value before user-info has been read from preferences. */
+    data object UnAuthenticated : UserState()
+
+    /**
+     * User-info has loaded. [userData].`authenticated` distinguishes a
+     * persisted session from a logged-out state.
+     */
+    data class Authenticated(val userData: UserInfo) : UserState()
 }

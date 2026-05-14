@@ -30,6 +30,42 @@ import org.mifospay.core.data.util.TimeZoneMonitor
 import org.mifospay.shared.instance.InstanceSelectorScreen
 import org.mifospay.shared.ui.MifosApp
 
+/**
+ * Root nav graph composing the three login-perimeter destinations and the
+ * authenticated `:main` graph below them.
+ *
+ * Destinations registered here:
+ *  - `loginNavGraph` — username/password entry; on success calls into
+ *    `navigateToRootMifosPasscodeScreen`.
+ *  - `rootMifosPasscodeScreen` — first-time passcode creation **and** post-
+ *    login passcode unlock (same screen, behaviour driven by whether the
+ *    library finds a stored passcode). On `Created`, routes to either the
+ *    biometric setup screen (if hardware is available) or directly to
+ *    `:main`. On `Verified`, routes to `:main`. On `Forgotten`, calls
+ *    [onClickLogout].
+ *  - `biometricSetupScreen` — first-time biometric enrolment; both the
+ *    "enrol" and "skip" branches land on `:main`.
+ *  - `reAuthMifosPasscodeScreen` — pushed on top by `MifosPayApp` when the
+ *    user backgrounds the app for >15 s; pops back to the prior destination
+ *    on `Verified`.
+ *  - `MifosNavGraph.MAIN_GRAPH` — the authenticated content host
+ *    ([org.mifospay.shared.ui.MifosApp]).
+ *
+ * Biometric availability — [PlatformAuthenticatorStatus.BIOMETRICS_SET] in
+ * the provider's `authenticatorStatus` flow — is read once and used to gate
+ * the biometric-setup detour. If hardware enrolment changes mid-session the
+ * routing decision stays as-of-composition.
+ *
+ * @param networkMonitor Forwarded down to `:main` for offline banner.
+ * @param timeZoneMonitor Forwarded down to `:main`.
+ * @param navHostController Hoisted by the caller so background re-auth
+ *        navigation in `MifosPayApp` can target the same controller.
+ * @param startDestination Resolved by the caller from session state — see
+ *        `MifosPayApp.navDestination`.
+ * @param onClickLogout Invoked from the passcode "Forgot" path and the global
+ *        logout button in `:main`. Should clear session state and return the
+ *        user to [LOGIN_GRAPH].
+ */
 @Composable
 internal fun RootNavGraph(
     networkMonitor: NetworkMonitor,

@@ -33,8 +33,39 @@ import org.mifospay.core.model.client.Client
 import org.mifospay.core.ui.utils.BaseViewModel
 import org.mifospay.feature.settings.SettingsAction.Internal.DisableAccountResult
 
+/**
+ * `SavedStateHandle` key written by `internalMifosPasscodeScreen` and read by
+ * [SettingsScreen]'s `LaunchedEffect` for the disable-biometrics
+ * passcode-verification round trip.
+ *
+ * Flow: tap "Disable" → navigate to internal passcode with this key →
+ * passcode screen writes `true` (verified) or `false` (cancelled) under this
+ * key on the previous back-stack entry → [SettingsScreen] observes and
+ * dispatches [SettingsAction.DisableBiometricsResult] → VM consumes the
+ * 30-second [UserVerificationRepository] token and, if still valid, calls
+ * `authProvider.unregister()`.
+ */
 const val DISABLE_BIOMETRICS_VERIFICATION_KEY = "org.mifospay.mifos.authentication.verification.key"
 
+/**
+ * ViewModel for [SettingsScreen]. Three concerns relevant to passcode /
+ * biometrics:
+ *  - **Change passcode** ([SettingsAction.ChangePasscode]): puts the
+ *    library's `PasscodeManager` into `ChangeVerify` step then emits a
+ *    nav event so the screen pushes the internal passcode screen.
+ *  - **Toggle biometrics** ([SettingsAction.ToggleSystemAuth]): enable path
+ *    calls `provider.registerUser(...)` directly; disable path emits a nav
+ *    event so the screen routes to the internal passcode screen for
+ *    verification — the result returns via [SettingsAction.DisableBiometricsResult].
+ *  - **Disable biometrics result** ([SettingsAction.DisableBiometricsResult]):
+ *    on success + a still-valid [UserVerificationRepository] token, calls
+ *    `authProvider.unregister()`.
+ *
+ * Biometric registration state itself is **not** kept here — the screen
+ * reads `authProvider.isRegistered` from the composition local and passes it
+ * down. Keeping a single source of truth avoids drift between this VM and
+ * the library StateFlow.
+ */
 class SettingsViewModel(
     private val userPreferencesRepository: UserPreferencesRepository,
     private val repository: SavingsAccountRepository,
@@ -271,10 +302,16 @@ sealed interface SettingsAction {
     data object BiometricsNotAvailable : SettingsAction
 
     /**
-     * Toggle biometric registration. Enable path runs `registerUser()` directly.
-     * Disable path emits a navigation event so the screen can route to the
-     * internal passcode screen for verification; the verification result then
-     * comes back as [DisableBiometricsResult].
+     * Toggle biometric registration.
+     *
+     * Enable path (`isCurrentlyRegistered = false`): calls
+     * `systemAuthProvider.registerUser(...)` immediately. The library
+     * persists the registration blob on success.
+     *
+     * Disable path (`isCurrentlyRegistered = true`): emits
+     * [SettingsEvent.NavigateToPasscodeScreen] so the screen routes to the
+     * internal passcode screen with [DISABLE_BIOMETRICS_VERIFICATION_KEY];
+     * the verification result returns as [DisableBiometricsResult].
      */
     data class ToggleSystemAuth(
         val systemAuthProvider: PlatformAuthenticationProvider,
@@ -284,14 +321,22 @@ sealed interface SettingsAction {
     /**
      * Result of the disable-biometrics passcode-verification round trip.
      * Dispatched by the screen's `LaunchedEffect` observing
-     * [DISABLE_BIOMETRICS_VERIFICATION_KEY]. On `success=true` (and a still-valid
-     * verification token), calls `systemAuthProvider.unregister()`.
+     * [DISABLE_BIOMETRICS_VERIFICATION_KEY]. On `success = true` and a
+     * still-valid [UserVerificationRepository] token (30 s window), calls
+     * `systemAuthProvider.unregister()`. On expiry or `success = false`,
+     * just clears the savedStateHandle key.
      */
     data class DisableBiometricsResult(
         val success: Boolean,
         val systemAuthProvider: PlatformAuthenticationProvider,
     ) : SettingsAction
 
+    /**
+     * User tapped "Change Passcode". The VM puts `PasscodeManager` into
+     * `ChangeVerify` step (so the next passcode screen prompts for the
+     * existing passcode first) then emits
+     * [SettingsEvent.NavigateToPasscodeScreen].
+     */
     data object ChangePasscode : SettingsAction
     data object ChangePassword : SettingsAction
     data object NavigateToFaqScreen : SettingsAction
