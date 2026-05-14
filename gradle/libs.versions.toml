@@ -135,7 +135,7 @@ packageName = "Mifos Pay"
 packageNamespace = "org.mifospay"
 packageVersion = "1.0.0"
 
-mifosAuthenticatorPasscode="2.2.0"
+mifosAuthenticatorPasscode="2.2.1"
 mifosAuthenticatorBiometrics="2.2.0"
 
 [libraries]
