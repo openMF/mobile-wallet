@@ -41,6 +41,16 @@ import org.mifospay.feature.accounts.savingsaccount.navigateToSavingAccountAddEd
 //import org.mifospay.feature.autopay.navigateToAutoPaySetup
 //import org.mifospay.feature.autopay.navigateToAutoPayScheduleDetails
 //import org.mifospay.feature.autopay.navigateToAutoPaySetup
+//import org.mifospay.feature.autopay.navigateToAddBill
+//import org.mifospay.feature.autopay.navigateToAddBiller
+//import org.mifospay.feature.autopay.navigateToAutoPay
+//import org.mifospay.feature.autopay.navigateToAutoPayHistory
+//import org.mifospay.feature.autopay.navigateToAutoPayPreferences
+//import org.mifospay.feature.autopay.navigateToAutoPayRules
+//import org.mifospay.feature.autopay.navigateToAutoPayScheduleDetails
+//import org.mifospay.feature.autopay.navigateToAutoPaySetup
+//import org.mifospay.feature.autopay.navigateToBillList
+//import org.mifospay.feature.autopay.navigateToBillerList
 import org.mifospay.feature.beneficiary.addupdatebeneficiary.BeneficiaryAddEditType
 import org.mifospay.feature.beneficiary.addupdatebeneficiary.addEditBeneficiaryScreen
 import org.mifospay.feature.beneficiary.addupdatebeneficiary.navigateToBeneficiaryAddEdit
@@ -229,6 +239,20 @@ internal fun MifosNavHost(
 //        onNavigateToScheduleDetails = { scheduleId ->
 //            navController.navigateToAutoPayScheduleDetails(scheduleId)
 //        },
+
+        // from #1910 pr
+//        onNavigateToAddBiller = {
+//            navController.navigateToAddBiller()
+//        },
+//        onNavigateToBillerList = {
+//            navController.navigateToBillerList()
+//        },
+//        onNavigateToAddBill = {
+//            navController.navigateToAddBill()
+//        },
+//        onNavigateToBillList = {
+//            navController.navigateToBillList()
+//        },
 //        showTopBar = false,
 //            )
 //        },
@@ -335,7 +359,6 @@ internal fun MifosNavHost(
 
         profileNavGraph(
             navController = navController,
-            navigateBack = navController::navigateUp,
             onLinkBankAccount = {
                 navController.navigateToSavingAccountAddEdit(SavingsAddEditType.AddItem)
             },
