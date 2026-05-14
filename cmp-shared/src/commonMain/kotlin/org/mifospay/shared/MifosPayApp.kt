@@ -159,8 +159,11 @@ private fun MifosPayApp(
 
     val navDestination = when (userState) {
         is UserState.UnAuthenticated -> LOGIN_GRAPH
-        is Authenticated -> if ((userState as Authenticated).userData.authenticated) {
-            ROOT_MIFOS_PASSCODE_ROUTE
+        is Authenticated -> if (
+            (userState as Authenticated).userData.authenticated &&
+            !viewModel.isPasscodeNotCreated()
+            ) {
+                ROOT_MIFOS_PASSCODE_ROUTE
         } else {
             LOGIN_GRAPH
         }
