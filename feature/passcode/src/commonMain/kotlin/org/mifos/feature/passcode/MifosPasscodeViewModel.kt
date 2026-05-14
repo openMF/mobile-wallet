@@ -73,7 +73,7 @@ class MifosPasscodeViewModel(
 
             is MifosPasscodeAction.HandlePasscodeResult -> {
                 when (action.result) {
-                    PasscodeResult.Created, PasscodeResult.Verified  -> appLockRepository.unlockApp()
+                    PasscodeResult.Created, PasscodeResult.Verified -> appLockRepository.unlockApp()
                     PasscodeResult.Changed,
                     PasscodeResult.Rejected,
                     PasscodeResult.Forgotten,
