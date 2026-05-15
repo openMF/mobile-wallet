@@ -37,6 +37,7 @@ import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
+import androidx.compose.material.icons.filled.Language
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Photo
@@ -156,5 +157,6 @@ object MifosIcons {
     val Transfer = Icons.Rounded.Money
     val CheckCircle = Icons.Outlined.CheckCircle
     val ArrowRight = Icons.AutoMirrored.Filled.KeyboardArrowRight
+    val Language = Icons.Default.Language
     val Download = Icons.Filled.Download
 }

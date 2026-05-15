@@ -88,3 +88,4 @@ include(":feature:fast-mpay")
 include(":feature:passcode")
 
 include(":libs:mifos-passcode")
+include(":feature:onboarding-language")

@@ -26,7 +26,11 @@ fun main() {
             state = windowState,
             title = "MifosWallet",
         ) {
-            MifosPaySharedApp()
+            MifosPaySharedApp(
+                onLanguageChange = { languageCode ->
+                    java.util.Locale.setDefault(java.util.Locale(languageCode))
+                }
+            )
         }
     }
 }

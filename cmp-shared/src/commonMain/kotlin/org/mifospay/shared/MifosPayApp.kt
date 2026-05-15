@@ -15,6 +15,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
@@ -32,6 +33,7 @@ import org.mifospay.core.data.util.NetworkMonitor
 import org.mifospay.core.data.util.TimeZoneMonitor
 import org.mifospay.core.designsystem.component.MifosDialogBox
 import org.mifospay.core.designsystem.theme.MifosTheme
+import org.mifospay.feature.onboarding.language.navigation.ONBOARDING_LANGUAGE_ROUTE
 import org.mifospay.shared.MainUiState.Success
 import org.mifospay.shared.navigation.MifosNavGraph.LOGIN_GRAPH
 import org.mifospay.shared.navigation.RootNavGraph
@@ -43,9 +45,10 @@ fun MifosPaySharedApp(
     modifier: Modifier = Modifier,
     networkMonitor: NetworkMonitor = koinInject(),
     timeZoneMonitor: TimeZoneMonitor = koinInject(),
+    onLanguageChange: (String) -> Unit = {},
 ) {
     PlatformAuthenticatorLocalCompositionProvider {
-        MifosPayApp(modifier, networkMonitor, timeZoneMonitor)
+        MifosPayApp(modifier, networkMonitor, timeZoneMonitor, onLanguageChange = onLanguageChange)
     }
 }
 
@@ -56,6 +59,7 @@ private fun MifosPayApp(
     networkMonitor: NetworkMonitor,
     timeZoneMonitor: TimeZoneMonitor,
     viewModel: MifosPayViewModel = koinViewModel(),
+    onLanguageChange: (String) -> Unit = {},
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val navController = rememberNavController()
@@ -73,14 +77,21 @@ private fun MifosPayApp(
         }
     }
 
-    LaunchedEffect(Unit) {
+    var hasCheckedPasscodeOnStartup by remember { mutableStateOf(false) }
+
+    LaunchedEffect(uiState) {
         val state = uiState
-        if (
-            state is Success &&
-            state.userData.authenticated &&
-            !viewModel.isPasscodeCreated()
-        ) {
-            viewModel.logOut()
+        if (state is Success) {
+            val langCode = state.language.localName
+            if (!langCode.isNullOrEmpty()) {
+                onLanguageChange(langCode)
+            }
+            if (!hasCheckedPasscodeOnStartup) {
+                hasCheckedPasscodeOnStartup = true
+                if (state.userData.authenticated && !viewModel.isPasscodeCreated()) {
+                    viewModel.logOut()
+                }
+            }
         }
     }
 
@@ -106,7 +117,9 @@ private fun MifosPayApp(
 
     val navDestination = when (uiState) {
         is MainUiState.Loading -> LOGIN_GRAPH
-        is Success -> if ((uiState as Success).userData.authenticated) {
+        is Success -> if ((uiState as Success).showLanguageScreen) {
+            ONBOARDING_LANGUAGE_ROUTE
+        } else if ((uiState as Success).userData.authenticated) {
             ROOT_MIFOS_PASSCODE_ROUTE
         } else {
             LOGIN_GRAPH

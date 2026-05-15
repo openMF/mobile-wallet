@@ -28,6 +28,7 @@
 :feature:mpay-qr
 :feature:mpay-qr-scan
 :feature:notification
+:feature:onboarding-language
 :feature:passcode
 :feature:payments
 :feature:profile

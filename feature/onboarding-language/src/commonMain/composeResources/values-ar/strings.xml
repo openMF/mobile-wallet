@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copyright 2026 Mifos Initiative
+
+    This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+    If a copy of the MPL was not distributed with this file,
+    You can obtain one at https://mozilla.org/MPL/2.0/.
+
+    See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+-->
+<resources>
+    <string name="feature_onboarding_choose_your_app_language">اختر لغة التطبيق</string>
+    <string name="feature_onboarding_chosen_language_can_be_changed_later_in_the_settings">يمكنك تغيير اللغة لاحقاً من الإعدادات</string>
+    <string name="feature_onboarding_submit">تأكيد</string>
+    <string name="feature_onboarding_error_saving_settings">فشل حفظ الإعدادات. يرجى المحاولة مرة أخرى.</string>
+</resources>

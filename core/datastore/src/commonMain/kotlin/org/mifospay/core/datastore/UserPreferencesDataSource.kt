@@ -26,6 +26,7 @@ import kotlinx.serialization.builtins.serializer
 import org.mifospay.core.datastore.UserPreferencesDataSource.Companion.DEFAULT_ACCOUNT
 import org.mifospay.core.datastore.model.ClientPreferences
 import org.mifospay.core.datastore.model.UserInfoPreferences
+import org.mifospay.core.model.LanguageConfig
 import org.mifospay.core.model.account.DefaultAccount
 import org.mifospay.core.model.client.Client
 import org.mifospay.core.model.client.UpdatedClient
@@ -38,6 +39,8 @@ private const val CLIENT_INFO_KEY = "clientInfo"
 private const val SELECTED_INSTANCE_KEY = "selectedInstance"
 private const val SELECTED_INTERBANK_INSTANCE_KEY = "selectedInterbankInstance"
 private const val ACCOUNT_EXTERNAL_IDS_KEY = "accountExternalIds"
+private const val LANGUAGE_KEY = "language"
+private const val SHOW_LANGUAGE_SCREEN_KEY = "showLanguageScreen"
 
 @OptIn(ExperimentalSerializationApi::class)
 class UserPreferencesDataSource(
@@ -91,6 +94,24 @@ class UserPreferencesDataSource(
         ),
     )
 
+    private val _language = MutableStateFlow(
+        settings.decodeValue(
+            key = LANGUAGE_KEY,
+            serializer = LanguageConfig.serializer(),
+            defaultValue = settings.decodeValueOrNull(
+                key = LANGUAGE_KEY,
+                serializer = LanguageConfig.serializer(),
+            ) ?: LanguageConfig.DEFAULT,
+        ),
+    )
+
+    private val _showLanguageScreen = MutableStateFlow(
+        settings.getBoolean(
+            key = SHOW_LANGUAGE_SCREEN_KEY,
+            defaultValue = true,
+        ),
+    )
+
     private val _accountExternalIds = MutableStateFlow(
         settings.decodeValueOrNull(
             key = ACCOUNT_EXTERNAL_IDS_KEY,
@@ -112,6 +133,10 @@ class UserPreferencesDataSource(
     val selectedInstance = _selectedInstance
 
     val selectedInterbankInstance = _selectedInterbankInstance
+
+    val language = _language
+
+    val showLanguageScreen = _showLanguageScreen
 
     val accountExternalIds = _accountExternalIds
 
@@ -186,6 +211,20 @@ class UserPreferencesDataSource(
         }
     }
 
+    suspend fun setLanguage(language: LanguageConfig) {
+        withContext(dispatcher) {
+            settings.putLanguage(language)
+            _language.value = language
+        }
+    }
+
+    suspend fun setShowLanguageScreen(showLanguageScreen: Boolean) {
+        withContext(dispatcher) {
+            settings.putBoolean(SHOW_LANGUAGE_SCREEN_KEY, showLanguageScreen)
+            _showLanguageScreen.value = showLanguageScreen
+        }
+    }
+
     suspend fun updateAccountExternalIds(accountExternalIds: Map<Long, String>) {
         withContext(dispatcher) {
             settings.putAccountExternalIds(accountExternalIds)
@@ -199,7 +238,18 @@ class UserPreferencesDataSource(
 
     suspend fun clearInfo() {
         withContext(dispatcher) {
+            val currentLanguage = _language.value
+            val currentShowLanguageScreen = _showLanguageScreen.value
+
             settings.clear()
+
+            settings.putLanguage(currentLanguage)
+            settings.putBoolean(SHOW_LANGUAGE_SCREEN_KEY, currentShowLanguageScreen)
+
+            _userInfo.value = UserInfoPreferences.DEFAULT
+            _clientInfo.value = ClientPreferences.DEFAULT
+            _defaultAccount.value = DefaultAccount.DEFAULT
+            _accountExternalIds.value = emptyMap()
         }
     }
 
@@ -246,6 +296,14 @@ private fun Settings.putSelectedInterbankInstance(instance: InterbankServer) {
         key = SELECTED_INTERBANK_INSTANCE_KEY,
         serializer = InterbankServer.serializer(),
         value = instance,
+    )
+}
+
+private fun Settings.putLanguage(language: LanguageConfig) {
+    encodeValue(
+        key = LANGUAGE_KEY,
+        serializer = LanguageConfig.serializer(),
+        value = language,
     )
 }
 

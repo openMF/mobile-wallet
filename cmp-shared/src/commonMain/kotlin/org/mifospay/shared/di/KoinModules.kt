@@ -38,6 +38,7 @@ import org.mifospay.feature.merchants.di.MerchantsModule
 import org.mifospay.feature.mpay.qr.di.MpayQrModule
 import org.mifospay.feature.mpay.qr.scan.di.MpayQrScanModule
 import org.mifospay.feature.notification.di.NotificationModule
+import org.mifospay.feature.onboarding.language.di.onboardingLanguageModule
 import org.mifospay.feature.payments.di.PaymentsModule
 import org.mifospay.feature.profile.di.ProfileModule
 import org.mifospay.feature.receipt.di.ReceiptModule
@@ -96,6 +97,7 @@ object KoinModules {
             FastMpayModule,
             MerchantsModule,
             UpiSetupModule,
+            onboardingLanguageModule,
             MifosAuthenticatorModule,
         )
     }

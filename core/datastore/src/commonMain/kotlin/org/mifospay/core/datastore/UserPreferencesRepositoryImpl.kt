@@ -18,6 +18,7 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import org.mifospay.core.common.DataState
+import org.mifospay.core.model.LanguageConfig
 import org.mifospay.core.model.account.DefaultAccount
 import org.mifospay.core.model.client.Client
 import org.mifospay.core.model.client.UpdatedClient
@@ -85,6 +86,20 @@ class UserPreferencesRepositoryImpl(
         get() = preferenceManager.selectedInterbankInstance.stateIn(
             scope = unconfinedScope,
             initialValue = null,
+            started = SharingStarted.Eagerly,
+        )
+
+    override val language: StateFlow<LanguageConfig>
+        get() = preferenceManager.language.stateIn(
+            scope = unconfinedScope,
+            initialValue = LanguageConfig.DEFAULT,
+            started = SharingStarted.Eagerly,
+        )
+
+    override val showLanguageScreen: StateFlow<Boolean>
+        get() = preferenceManager.showLanguageScreen.stateIn(
+            scope = unconfinedScope,
+            initialValue = true,
             started = SharingStarted.Eagerly,
         )
 
@@ -170,6 +185,24 @@ class UserPreferencesRepositoryImpl(
             val result = preferenceManager.updateUserInfo(user)
 
             DataState.Success(result)
+        } catch (e: Exception) {
+            DataState.Error(e)
+        }
+    }
+
+    override suspend fun setLanguage(language: LanguageConfig): DataState<Unit> {
+        return try {
+            preferenceManager.setLanguage(language)
+            DataState.Success(Unit)
+        } catch (e: Exception) {
+            DataState.Error(e)
+        }
+    }
+
+    override suspend fun setShowLanguageScreen(showLanguageScreen: Boolean): DataState<Unit> {
+        return try {
+            preferenceManager.setShowLanguageScreen(showLanguageScreen)
+            DataState.Success(Unit)
         } catch (e: Exception) {
             DataState.Error(e)
         }

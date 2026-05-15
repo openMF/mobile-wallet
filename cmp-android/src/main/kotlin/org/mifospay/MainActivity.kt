@@ -13,9 +13,11 @@ import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.core.os.LocaleListCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.Lifecycle
@@ -57,7 +59,31 @@ class MainActivity : AppCompatActivity() {
         lifecycleScope.launch {
             lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiState
-                    .onEach { uiState = it }
+                    .onEach { state ->
+                        uiState = state
+                        if (state is MainUiState.Success) {
+                            val languageTag = state.language.localName
+                            val currentAppLocales = AppCompatDelegate.getApplicationLocales()
+
+                            val isRequestedDefault = languageTag.isNullOrBlank()
+                            val isCurrentDefault = currentAppLocales.isEmpty
+
+                            val shouldUpdate = if (isRequestedDefault) {
+                                !isCurrentDefault
+                            } else {
+                                languageTag != currentAppLocales.toLanguageTags()
+                            }
+
+                            if (shouldUpdate) {
+                                val appLocale: LocaleListCompat = if (isRequestedDefault) {
+                                    LocaleListCompat.getEmptyLocaleList()
+                                } else {
+                                    LocaleListCompat.forLanguageTags(languageTag)
+                                }
+                                AppCompatDelegate.setApplicationLocales(appLocale)
+                            }
+                        }
+                    }
                     .collect()
             }
         }
