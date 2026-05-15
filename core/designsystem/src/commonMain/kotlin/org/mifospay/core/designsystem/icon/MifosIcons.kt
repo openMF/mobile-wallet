@@ -201,4 +201,7 @@ object MifosIcons {
     val Repeat = Icons.Filled.Repeat
 
     val Refresh = Icons.Filled.Refresh
+
+    val ExpandLess = Icons.Filled.ExpandLess
+    val ExpandMore = Icons.Filled.ExpandMore
 }

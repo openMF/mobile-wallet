@@ -14,8 +14,9 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.datetime.Clock
+import kotlin.time.Clock
 import org.mifospay.core.ui.utils.BaseViewModel
+import kotlin.time.ExperimentalTime
 
 class PaymentProcessingViewModel(
     savedStateHandle: SavedStateHandle,
@@ -76,6 +77,7 @@ class PaymentProcessingViewModel(
      * Gets the current Unix timestamp from the mobile device
      * This is used as a fallback when PSP timestamp is not available
      */
+    @OptIn(ExperimentalTime::class)
     private fun getCurrentUnixTimestamp(): String {
         return Clock.System.now().epochSeconds.toString()
     }

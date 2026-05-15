@@ -12,11 +12,15 @@ package org.mifospay.feature.send.money.di
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
 import org.mifospay.feature.send.money.BankTransferViewModel
+import org.mifospay.feature.send.money.PayAnyoneViewModel
 import org.mifospay.feature.send.money.PayeeDetailsViewModel
+import org.mifospay.feature.send.money.PaymentProcessingViewModel
+import org.mifospay.feature.send.money.PaymentSuccessViewModel
 import org.mifospay.feature.send.money.ScannerModule
 import org.mifospay.feature.send.money.SearchIfscViewModel
 import org.mifospay.feature.send.money.SendMoneyOptionsViewModel
 import org.mifospay.feature.send.money.SendMoneyViewModel
+import org.mifospay.feature.send.money.UpiTransactionHistoryViewModel
 
 val SendMoneyModule = module {
     includes(ScannerModule)
@@ -25,4 +29,9 @@ val SendMoneyModule = module {
     viewModelOf(::PayeeDetailsViewModel)
     viewModelOf(::BankTransferViewModel)
     viewModelOf(::SearchIfscViewModel)
+
+    viewModelOf(::PayAnyoneViewModel)
+    viewModelOf(::PaymentProcessingViewModel)
+    viewModelOf(::PaymentSuccessViewModel)
+    viewModelOf(::UpiTransactionHistoryViewModel)
 }

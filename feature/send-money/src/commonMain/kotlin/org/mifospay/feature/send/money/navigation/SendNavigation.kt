@@ -19,7 +19,6 @@ import org.mifospay.core.ui.composableWithSlideTransitions
 import org.mifospay.feature.send.money.BankTransferScreen
 import org.mifospay.feature.send.money.IfscCode
 import org.mifospay.feature.send.money.PayeeDetailsScreen
-import org.mifospay.feature.send.money.PayeeDetailsState
 import org.mifospay.feature.send.money.PaymentChatHistoryScreen
 import org.mifospay.feature.send.money.PaymentDetailsScreen
 import org.mifospay.feature.send.money.PaymentProcessingScreen
@@ -29,6 +28,7 @@ import org.mifospay.feature.send.money.ContactsPickerScreen
 import org.mifospay.feature.send.money.PayAnyoneScreen
 import org.mifospay.feature.send.money.PayeeDetailsScreen
 import org.mifospay.feature.send.money.PayeeDetailsState
+import org.mifospay.feature.send.money.PayeeDetailsViewModel
 import org.mifospay.feature.send.money.SearchIfscScreen
 import org.mifospay.feature.send.money.SendMoneyOptionsScreen
 import org.mifospay.feature.send.money.SendMoneyScreen
@@ -47,6 +47,11 @@ const val PAYEE_DETAILS_ROUTE = "payee_details_route"
 const val PAYEE_DETAILS_ARG = "qrCodeData"
 
 const val PAYEE_DETAILS_BASE_ROUTE = "$PAYEE_DETAILS_ROUTE?$PAYEE_DETAILS_ARG={$PAYEE_DETAILS_ARG}"
+
+const val PAY_ANYONE_ROUTE = "pay_anyone_route"
+const val PAY_ANYONE_SELECTED_CONTACT_ARG = "selectedContact"
+const val PAY_ANYONE_BASE_ROUTE = "$PAY_ANYONE_ROUTE?$PAY_ANYONE_SELECTED_CONTACT_ARG={$PAY_ANYONE_SELECTED_CONTACT_ARG}"
+const val CONTACTS_PICKER_ROUTE = "contacts_picker_route"
 
 const val UPI_PIN_ROUTE = "upi_pin_route"
 const val UPI_PIN_PAYEE_NAME_ARG = "payeeName"
@@ -89,6 +94,24 @@ fun NavController.navigateToPaymentDetailsScreen(
     }
     navigate(route, options)
 }
+
+
+fun NavController.navigateToPayAnyoneScreen(
+    selectedContactPhone: String? = null,
+    navOptions: NavOptions? = null,
+) {
+    val route = if (selectedContactPhone != null) {
+        "$PAY_ANYONE_ROUTE?$PAY_ANYONE_SELECTED_CONTACT_ARG=$selectedContactPhone"
+    } else {
+        PAY_ANYONE_ROUTE
+    }
+    navigate(route, navOptions)
+}
+
+fun NavController.navigateToContactsPickerScreen(
+    navOptions: NavOptions? = null,
+) = navigate(CONTACTS_PICKER_ROUTE, navOptions)
+
 
 fun NavController.navigateToSendMoneyScreen(
     navOptions: NavOptions? = null,
@@ -267,9 +290,49 @@ fun NavGraphBuilder.searchIfscScreen(
     }
 }
 
+fun NavGraphBuilder.payAnyoneScreen(
+    onBackClick: () -> Unit,
+    onContactPickerClick: () -> Unit,
+    onContactSelected: (String) -> Unit = {},
+) {
+    composableWithSlideTransitions(
+        route = PAY_ANYONE_BASE_ROUTE,
+        arguments = listOf(
+            navArgument(PAY_ANYONE_SELECTED_CONTACT_ARG) {
+                type = NavType.StringType
+                nullable = true
+                defaultValue = null
+            },
+        ),
+    ) { backStackEntry ->
+
+        PayAnyoneScreen(
+            onBackClick = onBackClick,
+            onContactPickerClick = onContactPickerClick,
+            onContactSelected = onContactSelected,
+        )
+    }
+}
+
+fun NavGraphBuilder.contactsPickerScreen(
+    onBackClick: () -> Unit,
+    onContactSelected: (String) -> Unit,
+) {
+    composableWithSlideTransitions(
+        route = CONTACTS_PICKER_ROUTE,
+    ) {
+        ContactsPickerScreen(
+            onBackClick = onBackClick,
+            onContactSelected = onContactSelected,
+        )
+    }
+}
+
 fun NavGraphBuilder.payeeDetailsScreen(
     onBackClick: () -> Unit,
     onNavigateToUpiPin: (PayeeDetailsState) -> Unit,
+    onNavigateToUpiPayment: (PayeeDetailsState) -> Unit,
+    onNavigateToFineractPayment: (PayeeDetailsState) -> Unit,
 ) {
     composableWithSlideTransitions(
         route = PAYEE_DETAILS_BASE_ROUTE,
@@ -283,6 +346,8 @@ fun NavGraphBuilder.payeeDetailsScreen(
         PayeeDetailsScreen(
             onBackClick = onBackClick,
             onNavigateToPaymentProcessing = onNavigateToUpiPin,
+            onNavigateToUpiPayment = onNavigateToUpiPayment,
+            onNavigateToFineractPayment = onNavigateToFineractPayment
         )
     }
 }

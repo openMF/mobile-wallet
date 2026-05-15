@@ -15,7 +15,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.datetime.Clock
+import kotlin.time.Clock
 import kotlinx.serialization.Serializable
 import org.mifospay.core.common.DataState
 import org.mifospay.core.common.getSerialized
@@ -28,6 +28,7 @@ import org.mifospay.core.model.autopay.BillerFormData
 import org.mifospay.core.model.autopay.BillerValidationResult
 import org.mifospay.core.ui.utils.BaseViewModel
 import kotlin.random.Random
+import kotlin.time.ExperimentalTime
 
 class AddBillerViewModel(
     savedStateHandle: SavedStateHandle,
@@ -151,6 +152,7 @@ class AddBillerViewModel(
         return validationResult
     }
 
+    @OptIn(ExperimentalTime::class)
     private fun generateUniqueId(): String {
         val timestamp = Clock.System.now().toEpochMilliseconds()
         val random = Random.nextInt(100000, 999999)

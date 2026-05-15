@@ -48,7 +48,6 @@ class PayeeDetailsViewModel(
                     upiId = qrCodeData.payeeVpa,
                     phoneNumber = "",
                     amount = qrCodeData.amount,
-                    // from #1906 pr
 //                    amount = amountInPaise,
                     note = qrCodeData.transactionNote,
                     isAmountEditable = qrCodeData.amount.isEmpty(),
@@ -66,9 +65,11 @@ class PayeeDetailsViewModel(
             is PayeeDetailsAction.UpdateAmount -> {
                 val cleanAmount = action.amount.replace(",", "")
                 val isValidAmount = cleanAmount.isEmpty() || cleanAmount.toDoubleOrNull() != null
+            }
 
             is PayeeDetailsAction.UpdateInputAmount -> {
-                val validatedAmount = AmountUtils.validateAndFormatAmountInput(action.inputAmount)
+                val validatedAmount =
+                    AmountUtils.validateAndFormatAmountInput(action.inputAmount)
                 val isValidAmount = AmountUtils.isValidAmountInput(validatedAmount)
 
                 if (isValidAmount) {
@@ -84,7 +85,6 @@ class PayeeDetailsViewModel(
 
                     val currentAmount = stateFlow.value.amount
                     val shouldClearAccount = amountInPaise != currentAmount
-                    val amountValue = cleanAmount.toDoubleOrNull() ?: 0.0
                     val showMessage = amountValue > 500000
 
                     mutableStateFlow.value = stateFlow.value.copy(
@@ -93,8 +93,6 @@ class PayeeDetailsViewModel(
                         showMaxAmountMessage = showMaxMessage,
                         showMinAmountMessage = showMinMessage,
                         selectedAccount = if (shouldClearAccount) null else stateFlow.value.selectedAccount,
-                        amount = cleanAmount,
-                        showMaxAmountMessage = showMessage,
                     )
 
                     if (showMaxMessage) {
@@ -141,12 +139,14 @@ class PayeeDetailsViewModel(
                         bankName = "State Bank of India",
                         accountNumber = "****1234",
                         isDefault = true,
+                        accountType = ""
                     )
                     mutableStateFlow.value = stateFlow.value.copy(
                         selectedAccount = defaultAccount,
                     )
                 } else {
-                    mutableStateFlow.value = stateFlow.value.copy(showAccountSelectionSheet = true)
+                    mutableStateFlow.value =
+                        stateFlow.value.copy(showAccountSelectionSheet = true)
                 }
             }
             is PayeeDetailsAction.SelectAccount -> {
@@ -249,13 +249,6 @@ data class PayeeDetailsState(
         }
     }
 }
-
-data class BankAccount(
-    val id: String,
-    val bankName: String,
-    val accountNumber: String,
-    val isDefault: Boolean = false,
-)
 
 sealed interface PayeeDetailsEvent {
     data object NavigateBack : PayeeDetailsEvent

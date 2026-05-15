@@ -9,14 +9,15 @@
  */
 package org.mifospay.core.model.autopay
 
-import kotlinx.datetime.Clock
 import kotlinx.serialization.Serializable
 import org.mifospay.core.common.Parcelable
 import org.mifospay.core.common.Parcelize
+import kotlin.time.Clock
+import kotlin.time.ExperimentalTime
 
 @Serializable
 @Parcelize
-data class Bill(
+data class Bill @OptIn(ExperimentalTime::class) constructor(
     val id: String? = null,
     val name: String,
     val amount: Double,

@@ -16,6 +16,7 @@ import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import org.mifospay.core.common.DateHelper
 import org.mifospay.core.ui.utils.BaseViewModel
+import kotlin.time.ExperimentalTime
 
 class PaymentSuccessViewModel(
     savedStateHandle: SavedStateHandle,
@@ -59,6 +60,7 @@ class PaymentSuccessViewModel(
      * Formats Unix timestamp from PSP or mobile device into readable format
      * Falls back to current device timestamp if parsing fails
      */
+    @OptIn(ExperimentalTime::class)
     private fun formatTransactionTimestamp(unixTimestamp: String): String {
         return try {
             val timestamp = unixTimestamp.toLong()

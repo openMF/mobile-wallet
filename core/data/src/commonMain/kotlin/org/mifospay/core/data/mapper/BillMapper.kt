@@ -9,11 +9,12 @@
  */
 package org.mifospay.core.data.mapper
 
-import kotlinx.datetime.Clock
 import org.mifospay.core.model.autopay.Bill
 import org.mifospay.core.model.autopay.BillFormData
 import org.mifospay.core.model.autopay.BillStatus
 import org.mifospay.core.model.autopay.RecurrencePattern
+import kotlin.time.Clock
+import kotlin.time.ExperimentalTime
 
 /**
  * Utility class for mapping between different bill data models
@@ -23,6 +24,7 @@ object BillMapper {
     /**
      * Converts BillFormData to Bill
      */
+    @OptIn(ExperimentalTime::class)
     fun formDataToBill(formData: BillFormData): Bill {
         return Bill(
             id = null,
@@ -60,6 +62,7 @@ object BillMapper {
     /**
      * Updates an existing Bill with BillFormData
      */
+    @OptIn(ExperimentalTime::class)
     fun updateBillWithFormData(existingBill: Bill, formData: BillFormData): Bill {
         return existingBill.copy(
             name = formData.name.trim(),
@@ -77,6 +80,7 @@ object BillMapper {
     /**
      * Creates a copy of Bill with updated status
      */
+    @OptIn(ExperimentalTime::class)
     fun updateBillStatus(bill: Bill, newStatus: BillStatus): Bill {
         return bill.copy(
             status = newStatus,
@@ -88,6 +92,7 @@ object BillMapper {
     /**
      * Creates a copy of Bill with updated active state
      */
+    @OptIn(ExperimentalTime::class)
     fun updateBillActiveState(bill: Bill, isActive: Boolean): Bill {
         return bill.copy(
             isActive = isActive,
@@ -99,6 +104,7 @@ object BillMapper {
     /**
      * Creates a new Bill from existing Bill with next recurrence date
      */
+    @OptIn(ExperimentalTime::class)
     fun createNextRecurrenceBill(bill: Bill): Bill? {
         if (bill.recurrencePattern == RecurrencePattern.NONE) {
             return null

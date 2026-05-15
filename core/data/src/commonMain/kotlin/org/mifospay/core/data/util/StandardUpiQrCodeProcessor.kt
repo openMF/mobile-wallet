@@ -9,8 +9,7 @@
  */
 package org.mifospay.core.data.util
 
-// from send money pr
-// import org.mifospay.core.model.utils.PaymentQrData
+import org.mifospay.core.model.utils.PaymentQrData
 import org.mifospay.core.model.utils.StandardUpiQrData
 
 /**
@@ -89,16 +88,16 @@ object StandardUpiQrCodeProcessor {
      * Note: clientId and accountId not available in standard UPI
      */
     // from send money pr
-//    fun toPaymentQrData(standardData: StandardUpiQrData): PaymentQrData {
-//        return PaymentQrData(
-//            clientId = 0,
-//            clientName = standardData.payeeName,
-//            accountNo = standardData.payeeVpa,
-//            amount = standardData.amount,
-//            accountId = 0,
-//            currency = standardData.currency,
-//            officeId = 1,
-//            accountTypeId = 2,
-//        )
-//    }
+    fun toPaymentQrData(standardData: StandardUpiQrData): PaymentQrData {
+        return PaymentQrData(
+            clientId = 0,
+            clientName = standardData.payeeName,
+            accountNo = standardData.payeeVpa,
+            amount = standardData.amount,
+            accountId = 0,
+            currency = standardData.currency,
+            officeId = 1,
+            accountTypeId = 2,
+        )
+    }
 }

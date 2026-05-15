@@ -9,11 +9,12 @@
  */
 package org.mifospay.core.data.util
 
-import kotlinx.datetime.Clock
 import org.mifospay.core.model.autopay.Bill
 import org.mifospay.core.model.autopay.BillFormData
 import org.mifospay.core.model.autopay.BillValidationResult
 import org.mifospay.core.model.autopay.RecurrencePattern
+import kotlin.time.Clock
+import kotlin.time.ExperimentalTime
 
 /**
  * Utility class for validating bill data before submission
@@ -115,6 +116,7 @@ object BillValidator {
         }
     }
 
+    @OptIn(ExperimentalTime::class)
     private fun validateDueDate(dueDate: Long): String? {
         val currentTime = Clock.System.now().toEpochMilliseconds()
         return when {
@@ -187,6 +189,7 @@ object BillValidator {
     /**
      * Validates if a bill is overdue
      */
+    @OptIn(ExperimentalTime::class)
     fun isBillOverdue(bill: Bill): Boolean {
         val currentTime = Clock.System.now().toEpochMilliseconds()
         return bill.dueDate < currentTime && bill.status == org.mifospay.core.model.autopay.BillStatus.ACTIVE
@@ -195,6 +198,7 @@ object BillValidator {
     /**
      * Calculates the next payment date based on recurrence pattern
      */
+    @OptIn(ExperimentalTime::class)
     fun calculateNextPaymentDate(bill: Bill): Long {
         val currentTime = Clock.System.now().toEpochMilliseconds()
         return when (bill.recurrencePattern) {
@@ -212,6 +216,7 @@ object BillValidator {
     /**
      * Checks if a bill is due within the specified number of days
      */
+    @OptIn(ExperimentalTime::class)
     fun isBillDueWithinDays(bill: Bill, days: Int): Boolean {
         val currentTime = Clock.System.now().toEpochMilliseconds()
         val daysInMillis = days * 24 * 60 * 60 * 1000L

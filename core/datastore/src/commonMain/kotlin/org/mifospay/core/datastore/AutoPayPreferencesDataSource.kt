@@ -20,12 +20,13 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.withContext
-import kotlinx.datetime.Clock
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.builtins.ListSerializer
 import org.mifospay.core.model.autopay.AutoPay
 import org.mifospay.core.model.autopay.AutoPayHistory
 import org.mifospay.core.model.autopay.UpcomingPayment
+import kotlin.time.Clock
+import kotlin.time.ExperimentalTime
 
 private const val IS_AUTO_PAY_ENABLED_KEY = "is_autopay_enabled"
 private const val CACHED_AUTO_PAY_SCHEDULES_KEY = "cached_autopay_schedules"
@@ -112,6 +113,7 @@ class AutoPayPreferencesDataSource(
         }
     }
 
+    @OptIn(ExperimentalTime::class)
     suspend fun updateLastSyncTimestamp() {
         withContext(dispatcher) {
             val timestamp = Clock.System.now().toEpochMilliseconds()
@@ -138,6 +140,7 @@ class AutoPayPreferencesDataSource(
         return _cachedAutoPaySchedules.value.find { autoPay -> autoPay.id == autoPayId }
     }
 
+    @OptIn(ExperimentalTime::class)
     suspend fun isCacheStale(maxAgeMinutes: Long): Boolean {
         val lastSync = _lastSyncTimestamp.value
         val currentTime = Clock.System.now().toEpochMilliseconds()

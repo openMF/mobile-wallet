@@ -43,6 +43,7 @@ import org.mifospay.core.data.repository.StandingInstructionRepository
 import org.mifospay.core.data.repository.ThirdPartyTransferRepository
 import org.mifospay.core.data.repository.TwoFactorAuthRepository
 import org.mifospay.core.data.repository.UserRepository
+import org.mifospay.core.data.repository.UserVerificationRepository
 import org.mifospay.core.data.repositoryImpl.AccountRepositoryImpl
 import org.mifospay.core.data.repositoryImpl.AppLockRepositoryImpl
 import org.mifospay.core.data.repositoryImpl.AssetRepositoryImpl

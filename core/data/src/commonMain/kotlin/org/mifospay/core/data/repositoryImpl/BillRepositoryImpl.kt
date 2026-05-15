@@ -15,7 +15,6 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
-import kotlinx.datetime.Clock
 import org.mifospay.core.common.DataState
 import org.mifospay.core.common.asDataStateFlow
 import org.mifospay.core.data.repository.BillRepository
@@ -27,6 +26,8 @@ import org.mifospay.core.model.autopay.BillStatus
 import org.mifospay.core.model.autopay.RecurrencePattern
 import org.mifospay.core.network.FineractApiManager
 import org.mifospay.core.network.services.BillStatisticsResponse
+import kotlin.time.Clock
+import kotlin.time.ExperimentalTime
 
 /**
  * Network-based implementation of BillRepository.
@@ -58,6 +59,7 @@ class BillRepositoryImpl(
         }
     }
 
+    @OptIn(ExperimentalTime::class)
     override suspend fun createBill(bill: Bill): DataState<Bill> {
         return try {
             val billWithId = bill.copy(
@@ -74,6 +76,7 @@ class BillRepositoryImpl(
         }
     }
 
+    @OptIn(ExperimentalTime::class)
     override suspend fun updateBill(bill: Bill): DataState<Bill> {
         return try {
             val billId =
@@ -219,6 +222,7 @@ class BillRepositoryImpl(
         }
     }
 
+    @OptIn(ExperimentalTime::class)
     private fun generateBillId(): String {
         return "bill_${Clock.System.now().toEpochMilliseconds()}_${(0..999).random()}"
     }

@@ -30,8 +30,8 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
+//import androidx.compose.material.icons.Icons
+//import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -325,7 +325,7 @@ private fun SelectedAccountCard(
                             onClick = onDeselect,
                         ) {
                             Icon(
-                                imageVector = Icons.Default.Close,
+                                imageVector = MifosIcons.Close,
                                 contentDescription = stringResource(Res.string.feature_send_money_close),
                             )
                         }

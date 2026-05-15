@@ -9,12 +9,13 @@
  */
 package org.mifospay.feature.autopay
 
-import kotlinx.datetime.Clock
+import kotlin.time.Clock
 import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import org.mifospay.core.model.autopay.Bill
 import org.mifospay.core.model.autopay.BillStatus
+import kotlin.time.ExperimentalTime
 
 /**
  * Converts a Bill with AutoPay enabled to an AutoPaySchedule
@@ -75,6 +76,7 @@ fun mapBillStatusToPaymentStatus(billStatus: BillStatus): PaymentStatus {
 /**
  * Calculates the next payment date based on the bill's due date and recurrence pattern
  */
+@OptIn(ExperimentalTime::class)
 fun calculateNextPaymentDate(bill: Bill): Long {
     val currentTime = Clock.System.now().toEpochMilliseconds()
     val dueDate = bill.dueDate
@@ -93,6 +95,7 @@ fun calculateNextPaymentDate(bill: Bill): Long {
 /**
  * Formats a timestamp to a readable date string
  */
+@OptIn(ExperimentalTime::class)
 fun formatDateForDisplay(timestamp: Long): String {
     return try {
         val instant = Instant.fromEpochMilliseconds(timestamp)
@@ -106,6 +109,7 @@ fun formatDateForDisplay(timestamp: Long): String {
 /**
  * Checks if a bill is overdue
  */
+@OptIn(ExperimentalTime::class)
 fun isBillOverdue(bill: Bill): Boolean {
     val currentTime = Clock.System.now().toEpochMilliseconds()
     return bill.dueDate < currentTime && bill.status == BillStatus.ACTIVE

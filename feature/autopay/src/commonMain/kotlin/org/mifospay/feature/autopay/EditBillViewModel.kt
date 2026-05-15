@@ -13,7 +13,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.datetime.Clock
+import kotlin.time.Clock
 import kotlinx.serialization.Serializable
 import org.mifospay.core.common.DataState
 import org.mifospay.core.common.DateHelper
@@ -27,6 +27,7 @@ import org.mifospay.core.model.autopay.Biller
 import org.mifospay.core.model.autopay.NextPaymentDate
 import org.mifospay.core.model.autopay.RecurrencePattern
 import org.mifospay.core.ui.utils.BaseViewModel
+import kotlin.time.ExperimentalTime
 
 class EditBillViewModel(
     savedStateHandle: SavedStateHandle,
@@ -207,6 +208,7 @@ class EditBillViewModel(
         return validationResult
     }
 
+    @OptIn(ExperimentalTime::class)
     private fun calculateNextPaymentDates() {
         val currentState = stateFlow.value
         val formData = currentState.formData

@@ -27,10 +27,10 @@ import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Check
-import androidx.compose.material.icons.filled.ExpandLess
-import androidx.compose.material.icons.filled.ExpandMore
+//import androidx.compose.material.icons.Icons
+//import androidx.compose.material.icons.filled.Check
+//import androidx.compose.material.icons.filled.ExpandLess
+//import androidx.compose.material.icons.filled.ExpandMore
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DividerDefaults
@@ -461,7 +461,7 @@ private fun TransactionMetadataSection(
             }
 
             Icon(
-                imageVector = if (isExpanded) Icons.Default.ExpandLess else Icons.Default.ExpandMore,
+                imageVector = if (isExpanded)  MifosIcons.ExpandLess else MifosIcons.ExpandMore,
                 contentDescription = if (isExpanded) "Collapse" else "Expand",
                 tint = KptTheme.colorScheme.onSurfaceVariant,
             )
@@ -572,7 +572,7 @@ private fun TimelineStep(
             ) {
                 if (isCompleted && !isError) {
                     Icon(
-                        imageVector = Icons.Filled.Check,
+                        imageVector = MifosIcons.Check,
                         contentDescription = "Completed",
                         modifier = Modifier.size(12.dp),
                         tint = Color.White,

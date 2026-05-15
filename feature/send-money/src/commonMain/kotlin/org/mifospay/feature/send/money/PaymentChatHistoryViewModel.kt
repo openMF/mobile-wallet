@@ -13,7 +13,8 @@ import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.datetime.Clock
+import kotlin.time.Clock
+import kotlin.time.ExperimentalTime
 
 /**
  * ViewModel for the Payment Chat History screen
@@ -57,6 +58,7 @@ class PaymentChatHistoryViewModel : ViewModel() {
      * Demonstrates the chat-like payment history interface
      * Most recent transactions appear at the bottom (like chat messages)
      */
+    @OptIn(ExperimentalTime::class)
     private fun createPlaceholderPaymentHistory(): List<PaymentHistoryGroup> {
         return listOf(
             PaymentHistoryGroup(

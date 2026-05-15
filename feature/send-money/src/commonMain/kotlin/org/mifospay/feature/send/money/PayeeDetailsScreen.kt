@@ -110,8 +110,8 @@ fun PayeeDetailsScreen(
             PayeeDetailsEvent.NavigateBack -> onBackClick.invoke()
             is PayeeDetailsEvent.NavigateToUpiPayment -> onNavigateToUpiPayment.invoke(event.state)
             is PayeeDetailsEvent.NavigateToFineractPayment -> onNavigateToFineractPayment.invoke(event.state)
-            is PayeeDetailsEvent.NavigateToUpiPin -> onNavigateToPaymentProcessing.invoke(event.state)
-            is PayeeDetailsEvent.NavigateToPaymentProcessing -> onNavigateToPaymentProcessing.invoke(event.state)
+//            is PayeeDetailsEvent.NavigateToUpiPin -> onNavigateToPaymentProcessing.invoke(event.state)
+//            is PayeeDetailsEvent.NavigateToPaymentProcessing -> onNavigateToPaymentProcessing.invoke(event.state)
         }
     }
 
@@ -542,6 +542,7 @@ private fun ExpandableNoteInput(
                 decorationBox = { innerTextField ->
                     if (value.isEmpty()) {
                         Text(
+                            text = "Add note",
                             style = TextStyle(
                                 fontSize = 16.sp,
                                 fontWeight = FontWeight.Normal,
@@ -581,7 +582,6 @@ private fun ProceedButton(
     val isAmountPrefilled = !state.isAmountEditable
     val showCheckMark = isAmountValid && isContactValid && (isAmountPrefilled || state.hasNoteFieldBeenFocused)
     val hasSelectedAccount = state.selectedAccount != null
-    val showCheckMark = isAmountValid && isContactValid && (isAmountPrefilled || state.hasNoteFieldBeenFocused || hasSelectedAccount)
 
     val isButtonEnabled = if (hasSelectedAccount) {
         isAmountValid && isContactValid
@@ -658,12 +658,14 @@ private fun AccountSelectionBottomSheet(
             bankName = "State Bank of India",
             accountNumber = "****1234",
             isDefault = true,
+            accountType = ""
         ),
         BankAccount(
             id = "2",
             bankName = "HDFC Bank",
             accountNumber = "****5678",
             isDefault = false,
+            accountType = ""
         ),
     )
 
@@ -942,8 +944,12 @@ private fun AddBankAccountItem(
 fun PayeeDetailsScreenPreview() {
     PayeeDetailsScreen(
         onBackClick = {},
-        onNavigateToPaymentProcessing = {},
+        onNavigateToPaymentProcessing = {
+            it
+        },
         modifier = Modifier,
+        onNavigateToUpiPayment = {},
+        onNavigateToFineractPayment = {},
         // TODO: Figure out how to instantiate 'PayeeDetailsViewModel'
         // viewModel = koinViewModel(),
     )
@@ -1077,6 +1083,8 @@ fun AccountItemPreview() {
         bankName = "State Bank of India",
         accountNumber = "****1234",
         isDefault = true,
+        accountType = ""
+
     )
     AccountItem(
         account = account,
@@ -1094,6 +1102,7 @@ fun SelectedAccountSectionPreview() {
         bankName = "State Bank of India",
         accountNumber = "****1234",
         isDefault = true,
+        accountType = ""
     )
     SelectedAccountSection(
         account = account,

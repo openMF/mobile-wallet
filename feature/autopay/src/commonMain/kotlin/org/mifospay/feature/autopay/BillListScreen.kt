@@ -54,7 +54,7 @@ import org.mifospay.core.designsystem.icon.MifosIcons
 import org.mifospay.core.model.autopay.Bill
 import org.mifospay.core.model.autopay.BillStatus
 import org.mifospay.core.ui.utils.EventsEffect
-
+import kotlin.time.ExperimentalTime
 @Composable
 fun BillListScreen(
     onNavigateBack: () -> Unit,
@@ -401,6 +401,7 @@ private fun EmptyStateCard(
     }
 }
 
+@OptIn(ExperimentalTime::class)
 private fun formatDate(timestamp: Long): String {
     return try {
         val instant = Instant.fromEpochMilliseconds(timestamp)

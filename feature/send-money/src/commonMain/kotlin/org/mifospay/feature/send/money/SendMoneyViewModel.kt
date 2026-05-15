@@ -260,7 +260,6 @@ data class SendMoneyState(
                 val message: StringResource,
             ) : Error()
 
-            data class ResourceMessage(val message: StringResource) : Error
 
             data class GenericResourceMessage(
                 @Serializable(with = StringResourceSerializer::class)
