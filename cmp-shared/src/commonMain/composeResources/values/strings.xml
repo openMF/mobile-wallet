@@ -33,6 +33,6 @@
 
     <!-- Access restricted dialog -->
     <string name="feature_not_accessible_title">Feature Not Accessible</string>
-    <string name="feature_not_accessible_message">You do not have permission to access this feature.</string>
-    s<string name="ok">Ok</string>
+    <string name="feature_not_accessible_message">You do not have permission to access this feature</string>
+    <string name="ok">Ok</string>
 </resources>
