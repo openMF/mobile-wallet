@@ -13,7 +13,9 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.onEach
@@ -53,8 +55,13 @@ class CardsScreenViewModel(
         private const val KEY_STATE = "saved_card_state"
     }
 
+    private val refreshTrigger = MutableSharedFlow<Unit>(replay = 1).apply {
+        tryEmit(Unit)
+    }
+
     @OptIn(ExperimentalCoroutinesApi::class)
-    val cardState = repository.getSavedCards(state.clientId)
+    val cardState = refreshTrigger
+        .flatMapLatest { repository.getSavedCards(state.clientId) }
         .mapLatest { result ->
             when (result) {
                 is DataState.Loading -> ViewState.Loading
@@ -95,6 +102,8 @@ class CardsScreenViewModel(
                     it.copy(dialogState = null)
                 }
             }
+
+            is CardAction.RefreshCards -> refreshTrigger.tryEmit(Unit)
 
             is CardAction.DeleteCardClicked -> {
                 mutableStateFlow.update {
@@ -147,7 +156,7 @@ class CardsScreenViewModel(
                 mutableStateFlow.update {
                     it.copy(dialogState = null)
                 }
-
+                refreshTrigger.tryEmit(Unit)
                 sendEvent(CardEvent.ShowToast(action.result.data))
             }
         }
@@ -218,6 +227,7 @@ sealed interface CardAction {
     data class DeleteCardClicked(val cardId: Long) : CardAction
     data object DismissDialog : CardAction
     data object AddNewCard : CardAction
+    data object RefreshCards : CardAction
 
     sealed interface Internal : CardAction {
         data class DeleteCard(val cardId: Long) : Internal

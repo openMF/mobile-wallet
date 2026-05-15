@@ -56,6 +56,7 @@ import org.mifospay.core.designsystem.component.LoadingDialogState
 import org.mifospay.core.designsystem.component.MifosBasicDialog
 import org.mifospay.core.designsystem.component.MifosLoadingDialog
 import org.mifospay.core.designsystem.component.MifosScaffold
+import org.mifospay.core.designsystem.component.rememberMifosPullToRefreshState
 import org.mifospay.core.designsystem.icon.MifosIcons
 import org.mifospay.core.model.savedcards.SavedCard
 import org.mifospay.core.ui.EmptyContentScreen
@@ -66,11 +67,6 @@ import org.mifospay.feature.savedcards.utils.CreditCardUtils.detectCardType
 import org.mifospay.feature.savedcards.utils.CreditCardUtils.maskCreditCardNumber
 import template.core.base.designsystem.theme.KptTheme
 
-/**
- * Known Issue, On deleting card, state isn't updating automatically
- * whereas on adding or updating, card state is updating properly,
- * This issue will be fixed soon.
- */
 @Composable
 fun CardsScreen(
     modifier: Modifier = Modifier,
@@ -156,6 +152,11 @@ internal fun CardsScreen(
         snackbarHostState = snackbarHostState,
         floatingActionButtonPosition = FabPosition.EndOverlay,
         modifier = modifier,
+        pullToRefreshState = rememberMifosPullToRefreshState(
+            isEnabled = state.isPullRefreshEnabled,
+            isRefreshing = false,
+            onRefresh = { onAction(CardAction.RefreshCards) },
+        ),
         floatingActionButton = {
             AnimatedVisibility(
                 visible = state.hasFab,
