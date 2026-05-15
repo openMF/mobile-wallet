@@ -139,7 +139,7 @@ class PayeeDetailsViewModel(
                         bankName = "State Bank of India",
                         accountNumber = "****1234",
                         isDefault = true,
-                        accountType = ""
+                        accountType = "",
                     )
                     mutableStateFlow.value = stateFlow.value.copy(
                         selectedAccount = defaultAccount,

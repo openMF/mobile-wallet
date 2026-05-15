@@ -100,7 +100,7 @@ object KoinModules {
             UpiSetupModule,
             MifosAuthenticatorModule,
             AutoPayModule,
-            SendMoneyModule
+            SendMoneyModule,
         )
     }
 

@@ -68,7 +68,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import mobile_wallet.feature.send_money.generated.resources.Res
 import mobile_wallet.feature.send_money.generated.resources.feature_send_money_add_bank_account
 import mobile_wallet.feature.send_money.generated.resources.feature_send_money_add_bank_account_desc
-import mobile_wallet.feature.send_money.generated.resources.feature_send_money_add_note
 import mobile_wallet.feature.send_money.generated.resources.feature_send_money_amount_below_minimum
 import mobile_wallet.feature.send_money.generated.resources.feature_send_money_amount_exceeds_limit
 import mobile_wallet.feature.send_money.generated.resources.feature_send_money_balance
@@ -658,14 +657,14 @@ private fun AccountSelectionBottomSheet(
             bankName = "State Bank of India",
             accountNumber = "****1234",
             isDefault = true,
-            accountType = ""
+            accountType = "",
         ),
         BankAccount(
             id = "2",
             bankName = "HDFC Bank",
             accountNumber = "****5678",
             isDefault = false,
-            accountType = ""
+            accountType = "",
         ),
     )
 
@@ -1083,7 +1082,7 @@ fun AccountItemPreview() {
         bankName = "State Bank of India",
         accountNumber = "****1234",
         isDefault = true,
-        accountType = ""
+        accountType = "",
 
     )
     AccountItem(
@@ -1102,7 +1101,7 @@ fun SelectedAccountSectionPreview() {
         bankName = "State Bank of India",
         accountNumber = "****1234",
         isDefault = true,
-        accountType = ""
+        accountType = "",
     )
     SelectedAccountSection(
         account = account,

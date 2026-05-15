@@ -17,7 +17,9 @@ import kotlin.time.ExperimentalTime
 
 @Serializable
 @Parcelize
-data class Bill @OptIn(ExperimentalTime::class) constructor(
+data class Bill
+@OptIn(ExperimentalTime::class)
+constructor(
     val id: String? = null,
     val name: String,
     val amount: Double,

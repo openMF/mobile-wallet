@@ -17,18 +17,15 @@ import androidx.navigation.navArgument
 import androidx.navigation.navOptions
 import org.mifospay.core.ui.composableWithSlideTransitions
 import org.mifospay.feature.send.money.BankTransferScreen
+import org.mifospay.feature.send.money.ContactsPickerScreen
 import org.mifospay.feature.send.money.IfscCode
+import org.mifospay.feature.send.money.PayAnyoneScreen
 import org.mifospay.feature.send.money.PayeeDetailsScreen
+import org.mifospay.feature.send.money.PayeeDetailsState
 import org.mifospay.feature.send.money.PaymentChatHistoryScreen
 import org.mifospay.feature.send.money.PaymentDetailsScreen
 import org.mifospay.feature.send.money.PaymentProcessingScreen
 import org.mifospay.feature.send.money.PaymentSuccessScreen
-import org.mifospay.feature.send.money.SendMoneyOptionsScreen
-import org.mifospay.feature.send.money.ContactsPickerScreen
-import org.mifospay.feature.send.money.PayAnyoneScreen
-import org.mifospay.feature.send.money.PayeeDetailsScreen
-import org.mifospay.feature.send.money.PayeeDetailsState
-import org.mifospay.feature.send.money.PayeeDetailsViewModel
 import org.mifospay.feature.send.money.SearchIfscScreen
 import org.mifospay.feature.send.money.SendMoneyOptionsScreen
 import org.mifospay.feature.send.money.SendMoneyScreen
@@ -95,7 +92,6 @@ fun NavController.navigateToPaymentDetailsScreen(
     navigate(route, options)
 }
 
-
 fun NavController.navigateToPayAnyoneScreen(
     selectedContactPhone: String? = null,
     navOptions: NavOptions? = null,
@@ -111,7 +107,6 @@ fun NavController.navigateToPayAnyoneScreen(
 fun NavController.navigateToContactsPickerScreen(
     navOptions: NavOptions? = null,
 ) = navigate(CONTACTS_PICKER_ROUTE, navOptions)
-
 
 fun NavController.navigateToSendMoneyScreen(
     navOptions: NavOptions? = null,
@@ -347,7 +342,7 @@ fun NavGraphBuilder.payeeDetailsScreen(
             onBackClick = onBackClick,
             onNavigateToPaymentProcessing = onNavigateToUpiPin,
             onNavigateToUpiPayment = onNavigateToUpiPayment,
-            onNavigateToFineractPayment = onNavigateToFineractPayment
+            onNavigateToFineractPayment = onNavigateToFineractPayment,
         )
     }
 }
