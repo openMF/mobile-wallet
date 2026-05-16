@@ -93,14 +93,12 @@ internal fun TransactionItem(
     showDescription: Boolean = false,
     onClick: (Long) -> Unit,
 ) {
-//    TODO Disabling this view specific transfer details because of not using self api
     Surface(
         modifier = modifier,
         enabled = transaction.transferId != null,
-//        onClick = {
-//            transaction.transferId?.let { onClick(it) }
-//        },
-        onClick = { },
+        onClick = {
+            transaction.transferId?.let { onClick(it) }
+        },
         color = Color.Transparent,
         contentColor = KptTheme.colorScheme.onSurface,
     ) {
