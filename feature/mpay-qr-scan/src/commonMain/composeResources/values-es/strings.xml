@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copyright 2024 Mifos Initiative
+
+    This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+    If a copy of the MPL was not distributed with this file,
+    You can obtain one at https://mozilla.org/MPL/2.0/.
+
+    See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+-->
+<resources>
+    <string name="feature_qr_approve_permission_description_camera">Necesitas otorgar estos permisos para poder acceder a la cámara.</string>
+    <string name="feature_qr_permission_required">Permiso requerido</string>
+    <string name="feature_qr_dismiss">Descartar</string>
+    <string name="feature_qr_proceed">Continuar</string>
+    <string name="feature_qr_scan_code">Escanear código</string>
+    <string name="feature_qr_loading">Cargando</string>
+    <string name="feature_qr_oops">¡Ups!</string>
+    <string name="feature_qr_unexpected_error_subtitle">Ocurrió un error inesperado. Por favor, inténtalo de nuevo.</string>
+    <string name="feature_qr_instruction">Por favor, alinea el código QR dentro del recuadro para que la lectura sea más rápida.</string>
+    <string name="feature_qr_warning_title">Aviso de seguridad</string>
+    <string name="feature_qr_warning_message">Si escaneas este código QR, podría redirigirte a un sitio web de phishing diseñado para robar tu información personal, como números de tarjetas de crédito, nombres de usuario o contraseñas. También podría descargar software malicioso (malware) en tu teléfono y dar acceso a hackers a tu dispositivo.</string>
+    <string name="feature_qr_scan_any_qr">Escanear cualquier QR</string>
+    <string name="feature_qr_supported_transfers">Interbancarias • Intrabancarias</string>
+    <string name="feature_qr_upload_qr">Subir QR</string>
+    <string name="feature_qr_torch">Linterna</string>
+    <string name="feature_qr_powered_by">Desarrollado por Mifos</string>
+    <string name="feature_qr_help_title">Seguridad con códigos QR</string>
+    <string name="feature_qr_help_description">Ten cuidado al escanear códigos QR. Pueden dirigirte a sitios de phishing que roban tu información personal o descargar malware en tu dispositivo. Escanea únicamente códigos QR de fuentes confiables.</string>
+    <string name="feature_qr_ok">Aceptar</string>
+    <string name="feature_qr_import_qr_code">Importar código QR</string>
+    <string name="feature_qr_import_description">Selecciona una imagen de código QR desde tu dispositivo para procesar un pago o agregar un beneficiario</string>
+    <string name="feature_qr_select_image">Seleccionar imagen</string>
+    <string name="feature_qr_drag_drop_hint">o arrastra y suelta una imagen aquí</string>
+    <string name="feature_qr_supported_formats">Formatos compatibles: PNG, JPG, JPEG</string>
+    <string name="feature_qr_processing">Procesando código QR...</string>
+    <string name="feature_qr_no_qr_found">No se encontró ningún código QR en la imagen seleccionada</string>
+    <string name="feature_qr_scan_success">Código QR escaneado con éxito</string>
+    <string name="feature_qr_camera_permission_title">Se requiere acceso a la cámara</string>
+    <string name="feature_qr_camera_permission_description">Para escanear códigos QR, por favor permite el acceso a la cámara. También tienes la opción de subir una imagen con el código QR.</string>
+    <string name="feature_qr_open_settings">Abrir configuración</string>
+    <string name="feature_qr_close">Cerrar</string>
+    <string name="feature_qr_help">Ayuda</string>
+    <string name="feature_qr_scan_qr_code">Escanear código QR</string>
+    <string name="feature_qr_viewfinder">Visor de código QR</string>
+    <string name="feature_qr_toggle_flash">Encender/Apagar linterna</string>
+    <string name="feature_qr_select_qr_image">Seleccionar imagen de código QR</string>
+    <string name="feature_qr_drop_image_here">Suelta la imagen aquí</string>
+    <string name="feature_qr_preview_image">Vista previa de la imagen seleccionada</string>
+    <string name="feature_qr_scan_valid_qr">Escanea un código QR válido</string>
+
+    <string name="feature_qr_initializing_camera">Iniciando cámara...</string>
+    <string name="feature_qr_position_qr_code">Coloca el código QR dentro del recuadro</string>
+    <string name="feature_qr_camera_view_active">Vista de cámara activa</string>
+    <string name="feature_qr_select_from_gallery">Seleccionar de la galería</string>
+    <string name="feature_qr_camera_access_denied">Acceso a la cámara denegado</string>
+    <string name="feature_qr_camera_denied_message">Por favor, permite el acceso a la cámara en la configuración de tu navegador para escanear códigos QR, o usa la opción de seleccionar archivo.</string>
+    <string name="feature_qr_camera_error">Error de la cámara</string>
+    <string name="feature_qr_camera_settings_hint">Configuración de la cámara: Ve a los ajustes de tu navegador para administrar los permisos de la cámara.</string>
+</resources>
