@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copyright 2024 Mifos Initiative
+
+    This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+    If a copy of the MPL was not distributed with this file,
+    You can obtain one at https://mozilla.org/MPL/2.0/.
+
+    See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+-->
+<resources>
+    <string name="feature_fast_mpay_interbank_missing_id">Falta el ID externo de la cuenta en el QR interbancario</string>
+    <string name="feature_fast_mpay_savings">Ahorros</string>
+    <string name="feature_fast_mpay_head_office">Oficina principal</string>
+    <string name="feature_fast_mpay_qr_data_missing">Faltan los datos del QR</string>
+    <string name="feature_fast_mpay_failed_to_process">No se pudo procesar el código QR</string>
+    <string name="feature_fast_mpay_interbank_unavailable">La transferencia interbancaria no está disponible para este código QR</string>
+</resources>

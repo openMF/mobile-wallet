@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copyright 2024 Mifos Initiative
+
+    This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+    If a copy of the MPL was not distributed with this file,
+    You can obtain one at https://mozilla.org/MPL/2.0/.
+
+    See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+-->
+<resources>
+    <string name="delete_beneficiary_title">Eliminar beneficiario</string>
+    <string name="delete_beneficiary_subtitle">¿Estás seguro de que deseas eliminar a este beneficiario?</string>
+    <string name="feature_beneficiary_add_beneficiary">Agregar beneficiario</string>
+    <string name="feature_beneficiary_no_beneficiaries">No hay beneficiarios</string>
+    <string name="feature_beneficiary_add_beneficiary_hint">Toca el botón + para agregar un beneficiario</string>
+    <string name="feature_beneficiary_add">Agregar</string>
+    <string name="feature_beneficiary_edit_beneficiary">Editar beneficiario</string>
+    <string name="feature_beneficiary_delete_beneficiary">Eliminar beneficiario</string>
+    <string name="feature_beneficiary_error_oops">¡Ups!</string>
+    <string name="feature_beneficiary_unexpected_error_subtitle">Ocurrió un error inesperado. Por favor, inténtalo de nuevo.</string>
+
+    <string name="feature_beneficiary_deleted">Beneficiario eliminado</string>
+    <string name="feature_beneficiary_added">Beneficiario agregado</string>
+    <string name="feature_beneficiary_updated">Beneficiario actualizado</string>
+
+    <string name="feature_beneficiary_delete_confirmation_message">¿Estás seguro de que quieres eliminar a \"%1$s\"? Esta acción no se puede deshacer.</string>
+    <string name="feature_beneficiary_cancel">Cancelar</string>
+    <string name="feature_beneficiary_delete">Eliminar</string>
+    <string name="feature_beneficiary_deleting">Eliminando beneficiario…</string>
+    <string name="feature_beneficiary_delete_failed">No se pudo eliminar</string>
+    <string name="feature_beneficiary_ok">Aceptar</string>
+
+    <string name="feature_beneficiary_nickname">Apodo / Alias</string>
+    <string name="feature_beneficiary_account_no">No. de cuenta</string>
+    <string name="feature_beneficiary_transfer_limit">Límite de transferencia</string>
+    <string name="feature_beneficiary_locale">Configuración regional (Locale)</string>
+    <string name="feature_beneficiary_office_name">Nombre de la oficina</string>
+    <string name="feature_beneficiary_account_type">Tipo de cuenta</string>
+
+    <string name="feature_beneficiary_error_empty_beneficiary_name">El nombre del beneficiario no puede estar vacío</string>
+    <string name="feature_beneficiary_error_empty_account_number">El número de cuenta no puede estar vacío</string>
+    <string name="feature_beneficiary_error_invalid_transfer_limit">El límite de transferencia debe ser mayor que 0</string>
+    <string name="feature_beneficiary_error_select_locale">Selecciona una configuración regional</string>
+    <string name="feature_beneficiary_error_empty_office_name">El nombre de la oficina no puede estar vacío</string>
+    <string name="feature_beneficiary_error_select_account_type">Selecciona un tipo de cuenta</string>
+
+    <string name="feature_beneficiary_button_save">Guardar</string>
+    <string name="feature_beneficiary_button_update">Actualizar</string>
+    <string name="feature_beneficiary_title_add">Agregar beneficiario</string>
+    <string name="feature_beneficiary_title_update">Actualizar beneficiario</string>
+    <string name="feature_beneficiary_account_type_wallet">BILLETERA</string>
+    <string name="feature_beneficiary_account_type_other">Otro</string>
+
+    <string name="skip_the_form">Omitir el formulario </string>
+    <string name="scan_qr_code">Escanear código QR</string>
+</resources>
