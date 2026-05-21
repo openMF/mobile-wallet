@@ -25,6 +25,8 @@ import org.jetbrains.compose.resources.getString
 import org.mifos.authenticator.biometrics.platformAuthenticator.PlatformAuthenticationProvider
 import org.mifos.authenticator.biometrics.platformAuthenticator.RegistrationResult
 import org.mifos.authenticator.passcode.PasscodeManager
+import org.mifos.feature.passcode.BiometricErrorMessages
+import org.mifos.feature.passcode.BiometricPromptStrings
 import org.mifospay.core.common.DataState
 import org.mifospay.core.data.repository.SavingsAccountRepository
 import org.mifospay.core.data.repository.UserVerificationRepository
@@ -152,7 +154,11 @@ class SettingsViewModel(
                 if (action.isCurrentlyRegistered) {
                     sendEvent(SettingsEvent.NavigateToPasscodeScreen)
                 } else {
-                    handleBiometricsAuthRegistration(action.systemAuthProvider)
+                    handleBiometricsAuthRegistration(
+                        systemAuthProvider = action.systemAuthProvider,
+                        errorMessages = action.errorMessages,
+                        promptStrings = action.promptStrings,
+                    )
                 }
             }
 
@@ -184,12 +190,18 @@ class SettingsViewModel(
 
     private fun handleBiometricsAuthRegistration(
         systemAuthProvider: PlatformAuthenticationProvider,
+        errorMessages: BiometricErrorMessages,
+        promptStrings: BiometricPromptStrings,
     ) {
         viewModelScope.launch {
             val result = systemAuthProvider.registerUser(
                 userName = mutableStateFlow.value.client.id.toString(),
                 emailId = mutableStateFlow.value.client.emailAddress,
                 displayName = mutableStateFlow.value.client.displayName,
+                title = promptStrings.title,
+                subtitle = promptStrings.subtitle,
+                description = promptStrings.description,
+                negativeButtonText = promptStrings.negativeButtonText,
             )
 
             when (result) {
@@ -215,7 +227,7 @@ class SettingsViewModel(
                 is RegistrationResult.Error -> {
                     mutableStateFlow.update {
                         it.copy(
-                            dialogState = DialogState.Error(message = result.message),
+                            dialogState = DialogState.Error(message = errorMessages.localize(result.error)),
                         )
                     }
                 }
@@ -305,17 +317,23 @@ sealed interface SettingsAction {
      * Toggle biometric registration.
      *
      * Enable path (`isCurrentlyRegistered = false`): calls
-     * `systemAuthProvider.registerUser(...)` immediately. The library
-     * persists the registration blob on success.
+     * `systemAuthProvider.registerUser(...)` immediately, using
+     * [promptStrings] for the v2.3.0-beta caller-supplied OS-prompt strings
+     * and [errorMessages] to map any `RegistrationResult.Error.error` to
+     * localized text. The library persists the registration blob on success.
      *
      * Disable path (`isCurrentlyRegistered = true`): emits
      * [SettingsEvent.NavigateToPasscodeScreen] so the screen routes to the
      * internal passcode screen with [DISABLE_BIOMETRICS_VERIFICATION_KEY];
-     * the verification result returns as [DisableBiometricsResult].
+     * the verification result returns as [DisableBiometricsResult]. The
+     * string holders are unused on this path but always carried so the
+     * action shape stays stable.
      */
     data class ToggleSystemAuth(
         val systemAuthProvider: PlatformAuthenticationProvider,
         val isCurrentlyRegistered: Boolean,
+        val errorMessages: BiometricErrorMessages,
+        val promptStrings: BiometricPromptStrings,
     ) : SettingsAction
 
     /**

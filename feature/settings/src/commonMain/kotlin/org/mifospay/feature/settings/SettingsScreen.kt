@@ -49,6 +49,8 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
 import org.mifos.authenticator.biometrics.platformAuthenticationProvider
 import org.mifos.authenticator.biometrics.platformAuthenticator.PlatformAuthenticatorStatus
+import org.mifos.feature.passcode.rememberBiometricErrorMessages
+import org.mifos.feature.passcode.rememberBiometricPromptStrings
 import org.mifospay.core.designsystem.component.BasicDialogState
 import org.mifospay.core.designsystem.component.LoadingDialogState
 import org.mifospay.core.designsystem.component.MifosBasicDialog
@@ -155,6 +157,8 @@ private fun SettingsScreenContent(
 ) {
     val authProvider = platformAuthenticationProvider.current
     val authenticatorStatus by authProvider.authenticatorStatus.collectAsStateWithLifecycle()
+    val biometricErrorMessages = rememberBiometricErrorMessages()
+    val biometricPromptStrings = rememberBiometricPromptStrings()
 
     MifosScaffold(
         modifier = modifier,
@@ -225,6 +229,8 @@ private fun SettingsScreenContent(
                                 SettingsAction.ToggleSystemAuth(
                                     systemAuthProvider = authProvider,
                                     isCurrentlyRegistered = isSystemAuthenticationEnabled,
+                                    errorMessages = biometricErrorMessages,
+                                    promptStrings = biometricPromptStrings,
                                 ),
                             )
                         } else {
