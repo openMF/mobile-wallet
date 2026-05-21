@@ -223,14 +223,13 @@ fun MifosPasscode(
             keySize = 60.dp,
         ),
         buttonConfig = PasscodeButtonConfig(
-            skipButtonTextStyle = KptTheme.typography.labelLarge,
             forgotButtonTextStyle = KptTheme.typography.labelLarge,
         ),
         switchConfig = PasscodeSwitchConfig(
             switchTabColor = KptTheme.colorScheme.primary,
-            switchEnabledColor = KptTheme.colorScheme.surfaceContainerHighest,
-            switchEnabledTextColor = KptTheme.colorScheme.onSurface,
-            switchDisabledTextColor = KptTheme.colorScheme.surface,
+            switchTrackColor = KptTheme.colorScheme.surfaceContainerHighest,
+            switchUnselectedTextColor = KptTheme.colorScheme.onSurface,
+            switchSelectedTextColor = KptTheme.colorScheme.surface,
             switchTextStyle = null,
         ),
         dialogConfig = PasscodeDialogConfig(
