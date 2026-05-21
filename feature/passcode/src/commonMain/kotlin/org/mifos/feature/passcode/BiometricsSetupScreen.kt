@@ -86,6 +86,8 @@ fun BiometricSetupScreen(
     )
 
     val platformAuthenticationProvider = platformAuthenticationProvider.current
+    val biometricErrorMessages = rememberBiometricErrorMessages()
+    val biometricPromptStrings = rememberBiometricPromptStrings()
 
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
 
@@ -100,7 +102,11 @@ fun BiometricSetupScreen(
         state = state,
         onSetupBiometrics = {
             viewModel.trySendAction(
-                BiometricSetupScreenAction.ClickSetupBiometric(platformAuthenticationProvider),
+                BiometricSetupScreenAction.ClickSetupBiometric(
+                    platformAuthenticationProvider = platformAuthenticationProvider,
+                    errorMessages = biometricErrorMessages,
+                    promptStrings = biometricPromptStrings,
+                ),
             )
         },
         onSkipBiometricSetup = {

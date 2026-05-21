@@ -47,7 +47,11 @@ class BiometricSetupScreenViewmodel(
     override fun handleAction(action: BiometricSetupScreenAction) {
         when (action) {
             is BiometricSetupScreenAction.ClickSetupBiometric -> {
-                registerUser(action.platformAuthenticationProvider)
+                registerUser(
+                    platformAuthenticationProvider = action.platformAuthenticationProvider,
+                    errorMessages = action.errorMessages,
+                    promptStrings = action.promptStrings,
+                )
             }
             BiometricSetupScreenAction.ClickSkipBiometric -> {
                 sendEvent(BiometricSetupScreenEvent.OnSkipBiometricSetup)
@@ -61,13 +65,21 @@ class BiometricSetupScreenViewmodel(
         }
     }
 
-    private fun registerUser(platformAuthenticationProvider: PlatformAuthenticationProvider) {
+    private fun registerUser(
+        platformAuthenticationProvider: PlatformAuthenticationProvider,
+        errorMessages: BiometricErrorMessages,
+        promptStrings: BiometricPromptStrings,
+    ) {
         viewModelScope.launch {
             val client = mutableStateFlow.value.client
             val result = platformAuthenticationProvider.registerUser(
-                client?.id?.run { toString() } ?: AuthenticationUtils.DEFAULT_USER_ID,
-                client?.emailAddress ?: AuthenticationUtils.DEFAULT_USER_EMAIL,
-                client?.displayName ?: AuthenticationUtils.DEFAULT_DISPLAY_NAME,
+                userName = client?.id?.run { toString() } ?: AuthenticationUtils.DEFAULT_USER_ID,
+                emailId = client?.emailAddress ?: AuthenticationUtils.DEFAULT_USER_EMAIL,
+                displayName = client?.displayName ?: AuthenticationUtils.DEFAULT_DISPLAY_NAME,
+                title = promptStrings.title,
+                subtitle = promptStrings.subtitle,
+                description = promptStrings.description,
+                negativeButtonText = promptStrings.negativeButtonText,
             )
 
             when (result) {
@@ -91,7 +103,7 @@ class BiometricSetupScreenViewmodel(
                 is RegistrationResult.Error -> {
                     mutableStateFlow.update {
                         it.copy(
-                            error = result.message,
+                            error = errorMessages.localize(result.error),
                         )
                     }
                 }
@@ -126,10 +138,15 @@ sealed interface BiometricSetupScreenAction {
 
     /**
      * User tapped "Setup biometrics". Carries the composition-scoped
-     * [PlatformAuthenticationProvider] (VMs cannot inject it directly).
+     * [PlatformAuthenticationProvider] (VMs cannot inject it directly) plus
+     * pre-resolved biometric error/prompt strings, since the v2.3.0-beta
+     * library requires caller-supplied OS-prompt copy on `registerUser(...)`
+     * and a `BiometricError`-to-string mapping for `RegistrationResult.Error`.
      */
     data class ClickSetupBiometric(
         val platformAuthenticationProvider: PlatformAuthenticationProvider,
+        val errorMessages: BiometricErrorMessages,
+        val promptStrings: BiometricPromptStrings,
     ) : BiometricSetupScreenAction
 }
 
