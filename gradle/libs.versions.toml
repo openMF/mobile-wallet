@@ -134,6 +134,7 @@ sqliteBundled = "2.6.2"
 packageName = "Mifos Pay"
 packageNamespace = "org.mifospay"
 packageVersion = "1.0.0"
+lifecycleRuntimeKtx = "2.8.7"
 
 mifosAuthenticatorPasscode="2.0.6"
 mifosAuthenticatorBiometrics="2.0.4"
@@ -381,6 +382,8 @@ moko-permission-compose = { group = "dev.icerock.moko", name = "permissions-comp
 
 ui-backhandler = { module = "org.jetbrains.compose.ui:ui-backhandler", version.ref = "uiBackhandler" }
 window-size = { group = "dev.chrisbanes.material3", name = "material3-window-size-class-multiplatform", version.ref = "windowsSizeClass" }
+androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
+androidx-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
 
 compose-ui-test-junit4-android = { module = "androidx.compose.ui:ui-test-junit4-android", version.ref = "composeTest" }
 compose-ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest", version.ref = "composeTest" }
