@@ -94,6 +94,7 @@ import mobile_wallet.feature.home.generated.resources.feature_home_request
 import mobile_wallet.feature.home.generated.resources.feature_home_request_money
 import mobile_wallet.feature.home.generated.resources.feature_home_send
 import mobile_wallet.feature.home.generated.resources.feature_home_send_money
+import mobile_wallet.feature.home.generated.resources.feature_home_upi
 import mobile_wallet.feature.home.generated.resources.feature_home_view_more
 import mobile_wallet.feature.home.generated.resources.feature_home_wallet_balance
 import mobile_wallet.feature.home.generated.resources.home_no_transactions_found
@@ -142,6 +143,7 @@ internal fun HomeScreen(
     onNavigateBack: () -> Unit,
     onRequest: (String) -> Unit,
     onPay: () -> Unit,
+    onUpiSendMoney: () -> Unit,
     onAutoPay: () -> Unit,
     navigateToTransactionDetail: (Long, Long) -> Unit,
     navigateToAccountDetail: (Long) -> Unit,
@@ -164,7 +166,7 @@ internal fun HomeScreen(
             is HomeEvent.NavigateBack -> onNavigateBack()
             is HomeEvent.NavigateToRequestScreen -> onRequest(event.vpa)
             is HomeEvent.NavigateToSendScreen -> onPay()
-//            is HomeEvent.NavigateToSendScreen -> onPay.invoke()
+            is HomeEvent.NavigateToUpiSendMoneyScreen -> onUpiSendMoney()
             is HomeEvent.NavigateToAutoPayScreen -> onAutoPay.invoke()
             is HomeEvent.NavigateToClientDetailScreen -> {}
             is HomeEvent.NavigateToTransactionDetail -> {
@@ -331,6 +333,9 @@ private fun HomeScreenContent(
                     },
                     onAutoPay = {
                         onAction(HomeAction.AutoPayClicked)
+                    },
+                    onUpiSendMoney = {
+                        onAction(HomeAction.UpiSendMoneyClicked)
                     },
                 )
             }
@@ -596,6 +601,7 @@ private fun PayRequestScreen(
     onRequest: () -> Unit,
     onSend: () -> Unit,
     onAutoPay: () -> Unit,
+    onUpiSendMoney: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -644,20 +650,42 @@ private fun PayRequestScreen(
             )
         }
 
-        PaymentButton(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(55.dp),
-            text = stringResource(Res.string.feature_home_autopay),
-            onClick = onAutoPay,
-            leadingIcon = {
-                Icon(
-                    modifier = Modifier.size(26.dp),
-                    imageVector = MifosIcons.Payment,
-                    contentDescription = stringResource(Res.string.feature_home_autopay),
-                )
-            },
-        )
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+        ) {
+            PaymentButton(
+                modifier = Modifier
+                    .weight(1f)
+                    .height(55.dp),
+                text = stringResource(Res.string.feature_home_autopay),
+                onClick = onAutoPay,
+                leadingIcon = {
+                    Icon(
+                        modifier = Modifier.size(26.dp),
+                        imageVector = MifosIcons.Payment,
+                        contentDescription = stringResource(Res.string.feature_home_autopay),
+                    )
+                },
+            )
+
+            Spacer(modifier = Modifier.width(20.dp))
+
+            PaymentButton(
+                modifier = Modifier
+                    .weight(1f)
+                    .height(55.dp),
+                text = stringResource(Res.string.feature_home_upi),
+                onClick = onUpiSendMoney,
+                leadingIcon = {
+                    Icon(
+                        modifier = Modifier.size(26.dp),
+                        imageVector = MifosIcons.Payment,
+                        contentDescription = stringResource(Res.string.feature_home_autopay),
+                    )
+                },
+            )
+        }
     }
 }
 

@@ -19,9 +19,11 @@ import androidx.compose.material3.ListItem
 import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import mobile_wallet.feature.payments.generated.resources.Res
 import mobile_wallet.feature.payments.generated.resources.feature_payments_inter_bank_transfer_description
 import mobile_wallet.feature.payments.generated.resources.feature_payments_inter_bank_transfer_title
@@ -30,8 +32,10 @@ import mobile_wallet.feature.payments.generated.resources.feature_payments_intra
 import mobile_wallet.feature.payments.generated.resources.feature_payments_transfer_options_title
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
+import org.koin.compose.viewmodel.koinViewModel
 import org.mifospay.core.designsystem.component.MifosBottomSheet
 import org.mifospay.core.designsystem.theme.MifosTheme
+import org.mifospay.shared.TransferOptionsViewModel
 import template.core.base.designsystem.theme.KptTheme
 
 @Composable
@@ -40,7 +44,9 @@ fun TransferOptionsBottomSheet(
     onInterBankTransferClick: () -> Unit,
     onDismiss: () -> Unit,
     modifier: Modifier = Modifier,
+    transferOptionsViewModel: TransferOptionsViewModel = koinViewModel(),
 ) {
+    val state by transferOptionsViewModel.stateFlow.collectAsStateWithLifecycle()
     MifosBottomSheet(
         onDismiss = onDismiss,
         modifier = modifier,
@@ -84,37 +90,38 @@ fun TransferOptionsBottomSheet(
                         },
                 )
 
-                HorizontalDivider(
-                    modifier = Modifier.padding(horizontal = KptTheme.spacing.md),
-                    color = KptTheme.colorScheme.outlineVariant,
-                )
-
-                // Inter-Bank Transfer Option
-                ListItem(
-                    headlineContent = {
-                        Text(
-                            text = stringResource(Res.string.feature_payments_inter_bank_transfer_title),
-                            style = KptTheme.typography.bodyLarge,
-                            fontWeight = FontWeight.SemiBold,
-                            color = KptTheme.colorScheme.onSurface,
-                        )
-                    },
-                    supportingContent = {
-                        Text(
-                            text = stringResource(Res.string.feature_payments_inter_bank_transfer_description),
-                            style = KptTheme.typography.bodySmall,
-                            color = KptTheme.colorScheme.onSurfaceVariant,
-                        )
-                    },
-                    colors = ListItemDefaults.colors(
-                        containerColor = Color.Transparent,
-                    ),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clickable {
-                            onInterBankTransferClick()
+                if (state.isInterTransferOptionEnabled) {
+                    HorizontalDivider(
+                        modifier = Modifier.padding(horizontal = KptTheme.spacing.md),
+                        color = KptTheme.colorScheme.outlineVariant,
+                    )
+                    // Inter-Bank Transfer Option
+                    ListItem(
+                        headlineContent = {
+                            Text(
+                                text = stringResource(Res.string.feature_payments_inter_bank_transfer_title),
+                                style = KptTheme.typography.bodyLarge,
+                                fontWeight = FontWeight.SemiBold,
+                                color = KptTheme.colorScheme.onSurface,
+                            )
                         },
-                )
+                        supportingContent = {
+                            Text(
+                                text = stringResource(Res.string.feature_payments_inter_bank_transfer_description),
+                                style = KptTheme.typography.bodySmall,
+                                color = KptTheme.colorScheme.onSurfaceVariant,
+                            )
+                        },
+                        colors = ListItemDefaults.colors(
+                            containerColor = Color.Transparent,
+                        ),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable {
+                                onInterBankTransferClick()
+                            },
+                    )
+                }
             }
         },
     )

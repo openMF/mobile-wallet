@@ -300,10 +300,8 @@ internal fun MifosNavHost(
             onRequest = {
                 navController.navigateToMpayQrScreen()
             },
-//            onPay = navController::navigateToTransferOptions,
-            //  TODO Send money feature: uncomment below one and comment above line to explore send-money feature
-            onPay = navController::navigateToSendMoneyOptionsScreen,
-
+            onPay = navController::navigateToTransferOptions,
+            onUpiSendMoney = navController::navigateToSendMoneyOptionsScreen,
             onAutoPay = {
                 navController.navigateToAutoPay()
             },

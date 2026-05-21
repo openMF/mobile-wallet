@@ -50,6 +50,7 @@ import org.mifospay.feature.transfer.interbank.di.interbankTransferModule
 import org.mifospay.feature.transfer.intrabank.di.IntraBankModule
 import org.mifospay.feature.upi.setup.di.UpiSetupModule
 import org.mifospay.shared.MifosPayViewModel
+import org.mifospay.shared.TransferOptionsViewModel
 import org.mifospay.shared.instance.InstanceSelectorViewModel
 
 object KoinModules {
@@ -72,6 +73,7 @@ object KoinModules {
     private val sharedModule = module {
         viewModelOf(::MifosPayViewModel)
         viewModelOf(::InstanceSelectorViewModel)
+        viewModelOf(::TransferOptionsViewModel)
     }
     private val featureModules = module {
         includes(

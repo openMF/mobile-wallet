@@ -23,6 +23,7 @@
     <string name="feature_home_send">Send</string>
     <string name="feature_home_send_money">Send Money</string>
     <string name="feature_home_autopay">AutoPay</string>
+    <string name="feature_home_upi"> UPI </string>
     <string name="feature_home_coin_image">Coin</string>
     <string name="feature_home_account_type">Account type</string>
     <string name="home_filter_transactions">Filter Transactions</string>

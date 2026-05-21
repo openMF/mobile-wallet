@@ -185,6 +185,10 @@ class HomeViewModel(
                 sendEvent(HomeEvent.NavigateToSendScreen)
             }
 
+            is HomeAction.UpiSendMoneyClicked -> {
+                sendEvent(HomeEvent.NavigateToUpiSendMoneyScreen)
+            }
+
             is HomeAction.AutoPayClicked -> {
                 sendEvent(HomeEvent.NavigateToAutoPayScreen)
             }
@@ -382,6 +386,7 @@ sealed interface ViewState {
 sealed interface HomeEvent {
     data object NavigateBack : HomeEvent
     data object NavigateToSendScreen : HomeEvent
+    data object NavigateToUpiSendMoneyScreen : HomeEvent
     data object NavigateToAutoPayScreen : HomeEvent
     data object NavigateToTransactionScreen : HomeEvent
     data object NavigateToClientDetailScreen : HomeEvent
@@ -396,6 +401,7 @@ sealed interface HomeAction {
     data object RequestClicked : HomeAction
     data object SendClicked : HomeAction
     data object AutoPayClicked : HomeAction
+    data object UpiSendMoneyClicked : HomeAction
     data object ClientDetailsClicked : HomeAction
     data object OnClickSeeAllTransactions : HomeAction
     data object OnDismissDialog : HomeAction
