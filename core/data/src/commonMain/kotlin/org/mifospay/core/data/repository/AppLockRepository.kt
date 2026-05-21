@@ -17,8 +17,10 @@ package org.mifospay.core.data.repository
  *  - unlocked on `PasscodeResult.Verified` (passcode or biometric success),
  *  - deleted on `PasscodeResult.Forgotten` / logout.
  *
- * Read by `MifosPayViewModel.isAppUnlocked()` for the 15-second
- * background-resume re-auth gate in `MifosPayApp`.
+ * Read by `MifosPayViewModel.isAppLocked()` (nullable `Boolean?`) for the
+ * 15-second background-resume re-auth gate in `MifosPayApp`. `null` means
+ * "no flag written yet" — fresh install or post-logout — and is treated
+ * as "no session to gate".
  */
 interface AppLockRepository {
     /** Mark the app as locked. Persisted. */

@@ -38,8 +38,9 @@ import org.mifospay.core.designsystem.theme.MifosTheme
 import org.mifospay.shared.UserState.Authenticated
 import org.mifospay.shared.navigation.MifosNavGraph.LOGIN_GRAPH
 import org.mifospay.shared.navigation.RootNavGraph
-import kotlin.time.Clock
+import kotlin.time.Duration.Companion.seconds
 import kotlin.time.ExperimentalTime
+import kotlin.time.TimeSource
 
 /**
  * Top-level entry point composable for the Mifos Pay app, called from each
@@ -116,9 +117,16 @@ private fun MifosPayApp(
     val showErrorDialog = remember { mutableStateOf<Boolean>(false) }
     val isUnauthorized by GlobalAuthManager.isUnauthorized.collectAsStateWithLifecycle()
 
-    val lockTimeOut = 15_000L
+    val lockTimeOut = 15.seconds
 
-    val onStopTime = remember { mutableStateOf(Long.MAX_VALUE) }
+    // Monotonic mark of the most recent ON_STOP. `null` means "no stop
+    // recorded yet" or "already consumed on a previous ON_RESUME" — either
+    // way, ON_RESUME must skip the re-auth gate. Monotonic clock is used
+    // instead of wall-clock (Clock.System.now()) to defeat clock-rewind:
+    // a user with passcode access could otherwise background the app, roll
+    // the device clock back via Settings → Date & time, and resume far
+    // past the 15-second window without triggering re-auth.
+    val onStopMark = remember { mutableStateOf<TimeSource.Monotonic.ValueTimeMark?>(null) }
 
     LaunchedEffect(isUnauthorized) {
         if (isUnauthorized) {
@@ -175,19 +183,21 @@ private fun MifosPayApp(
         val observer = LifecycleEventObserver { _, event ->
             when (event) {
                 Lifecycle.Event.ON_RESUME -> {
-                    val inactiveTime = Clock.System.now().toEpochMilliseconds() - onStopTime.value
-                    Logger.a { "inactiveTime: ${inactiveTime / 1000}s" }
-                    viewModel.isAppLocked()?.let {
-                        if (inactiveTime > lockTimeOut && !it) {
-                            if (passcodeManager.state.value.passcodeStep == PasscodeStep.Enter) {
-                                navController.navigateToReAuthMifosPasscodeScreen()
+                    onStopMark.value?.let { mark ->
+                        val inactiveTime = mark.elapsedNow()
+                        Logger.a { "inactiveTime: ${inactiveTime.inWholeSeconds}s" }
+                        viewModel.isAppLocked()?.let {
+                            if (inactiveTime > lockTimeOut && !it) {
+                                if (passcodeManager.state.value.passcodeStep == PasscodeStep.Enter) {
+                                    navController.navigateToReAuthMifosPasscodeScreen()
+                                }
                             }
                         }
                     }
-                    onStopTime.value = Long.MAX_VALUE
+                    onStopMark.value = null
                 }
                 Lifecycle.Event.ON_STOP -> {
-                    onStopTime.value = Clock.System.now().toEpochMilliseconds()
+                    onStopMark.value = TimeSource.Monotonic.markNow()
                 }
                 else -> {}
             }

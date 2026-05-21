@@ -44,7 +44,8 @@ import org.mifospay.core.ui.utils.BaseViewModel
  *    biometric prompt.
  *  - `HandlePasscodeResult(Verified)`: unlock the app.
  *  - `ForgetPasscode`: clear app-lock + biometric registration via
- *    `provider.unregister()`.
+ *    `provider.unregister()`, then emit `NavigateForResult(Forgotten)`
+ *    after unregistration completes.
  */
 class MifosPasscodeViewModel(
     private val passcodeManager: PasscodeManager,
@@ -91,8 +92,8 @@ class MifosPasscodeViewModel(
                 appLockRepository.deleteLock()
                 viewModelScope.launch {
                     action.systemAuthProvider.unregister()
+                    sendEvent(MifosPasscodeEvent.NavigateForResult(PasscodeResult.Forgotten))
                 }
-                sendEvent(MifosPasscodeEvent.NavigateForResult(PasscodeResult.Forgotten))
             }
 
             is MifosPasscodeAction.OnAuthenticatorClick -> {
@@ -266,6 +267,10 @@ sealed interface MifosPasscodeAction {
      * Dispatched for the `Forgotten` case only. Split from
      * [HandlePasscodeResult] so the provider reference (needed for
      * `unregister()`) is only carried on the one action that uses it.
+     *
+     * Handler emits `NavigateForResult(Forgotten)` only after `unregister()`
+     * completes, so any downstream consumer of `isRegistered` sees the
+     * post-unregistration state.
      */
     data class ForgetPasscode(
         val systemAuthProvider: PlatformAuthenticationProvider,

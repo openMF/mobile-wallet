@@ -36,7 +36,7 @@ interface UserVerificationRepository {
     /**
      * Returns `true` iff a [recordVerification] happened within the
      * implementation's validity window (currently 30 s) **and** has not been
-     * consumed yet. Always clears the stored timestamp before returning.
+     * consumed yet. Always clears the stored mark before returning.
      */
     fun consumeVerification(): Boolean
 }
