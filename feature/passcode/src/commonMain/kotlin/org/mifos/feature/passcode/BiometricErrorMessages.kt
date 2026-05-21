@@ -20,6 +20,10 @@ import mobile_wallet.feature.passcode.generated.resources.feature_authenticator_
 import mobile_wallet.feature.passcode.generated.resources.feature_authenticator_biometric_error_not_enrolled
 import mobile_wallet.feature.passcode.generated.resources.feature_authenticator_biometric_error_timeout
 import mobile_wallet.feature.passcode.generated.resources.feature_authenticator_biometric_error_unknown
+import mobile_wallet.feature.passcode.generated.resources.feature_authenticator_biometric_prompt_description
+import mobile_wallet.feature.passcode.generated.resources.feature_authenticator_biometric_prompt_negative_button
+import mobile_wallet.feature.passcode.generated.resources.feature_authenticator_biometric_prompt_subtitle
+import mobile_wallet.feature.passcode.generated.resources.feature_authenticator_biometric_prompt_title
 import org.jetbrains.compose.resources.stringResource
 import org.mifos.authenticator.biometrics.platformAuthenticator.AuthStage
 import org.mifos.authenticator.biometrics.platformAuthenticator.BiometricError
@@ -87,4 +91,38 @@ fun rememberBiometricErrorMessages(): BiometricErrorMessages = BiometricErrorMes
     invalidArgumentsAuth = stringResource(Res.string.feature_authenticator_biometric_error_invalid_arguments_auth),
     invalidArgumentsRegistration = stringResource(Res.string.feature_authenticator_biometric_error_invalid_arguments_registration),
     unknown = stringResource(Res.string.feature_authenticator_biometric_error_unknown),
+)
+
+/**
+ * Pre-resolved OS-prompt strings passed to
+ * `PlatformAuthenticator.registerUser(...)` and
+ * `PlatformAuthenticationProvider.onAuthenticatorClick(...)` — the v2.3.0-beta
+ * library requires these as caller-supplied parameters.
+ *
+ * Bundled into a single holder so ViewModel actions can carry one value
+ * across the `viewModelScope.launch` boundary instead of four individual
+ * strings.
+ *
+ * Note: only strings the app passes here render in the app locale. System-
+ * rendered chrome inside the OS biometric prompt (e.g. "Use your fingerprint"
+ * subtext on Android, "Try Face ID again" feedback on iOS, rate-limit
+ * messages) always renders in the **system** locale, not the app locale.
+ */
+data class BiometricPromptStrings(
+    val title: String,
+    val subtitle: String,
+    val description: String,
+    val negativeButtonText: String,
+)
+
+/**
+ * Composable factory for [BiometricPromptStrings] — reads the four
+ * `feature_authenticator_biometric_prompt_*` keys at the current locale.
+ */
+@Composable
+fun rememberBiometricPromptStrings(): BiometricPromptStrings = BiometricPromptStrings(
+    title = stringResource(Res.string.feature_authenticator_biometric_prompt_title),
+    subtitle = stringResource(Res.string.feature_authenticator_biometric_prompt_subtitle),
+    description = stringResource(Res.string.feature_authenticator_biometric_prompt_description),
+    negativeButtonText = stringResource(Res.string.feature_authenticator_biometric_prompt_negative_button),
 )

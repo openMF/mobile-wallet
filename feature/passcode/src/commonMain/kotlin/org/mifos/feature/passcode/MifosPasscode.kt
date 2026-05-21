@@ -106,6 +106,12 @@ fun MifosPasscode(
     val isRegistered by systemAuthProvider.isRegistered.collectAsStateWithLifecycle()
     val lifeCycleOwner = LocalLifecycleOwner.current
 
+    // Pre-resolve biometric error/prompt strings once at composition; ferry
+    // them across the viewModelScope.launch boundary via the action constructors
+    // (stringResource() is not callable from inside the suspend launch block).
+    val biometricErrorMessages = rememberBiometricErrorMessages()
+    val biometricPromptStrings = rememberBiometricPromptStrings()
+
     val navEventState = rememberNavigationEventState(
         currentInfo = MifosPasscodeCurrentInfo,
     )
@@ -137,7 +143,7 @@ fun MifosPasscode(
         }
     }
 
-    DisposableEffect(lifeCycleOwner, allowBiometricAuth) {
+    DisposableEffect(lifeCycleOwner, allowBiometricAuth, biometricErrorMessages, biometricPromptStrings) {
         val observer = LifecycleEventObserver { _, event ->
             when (event) {
                 Lifecycle.Event.ON_START -> {
@@ -149,6 +155,8 @@ fun MifosPasscode(
                         MifosPasscodeAction.OnResume(
                             systemAuthProvider = systemAuthProvider,
                             allowBiometricAuth = allowBiometricAuth,
+                            errorMessages = biometricErrorMessages,
+                            promptStrings = biometricPromptStrings,
                         ),
                     )
                 }
@@ -241,6 +249,8 @@ fun MifosPasscode(
                         viewModel.trySendAction(
                             MifosPasscodeAction.OnAuthenticatorClick(
                                 systemAuthProvider = systemAuthProvider,
+                                errorMessages = biometricErrorMessages,
+                                promptStrings = biometricPromptStrings,
                             ),
                         )
                     },

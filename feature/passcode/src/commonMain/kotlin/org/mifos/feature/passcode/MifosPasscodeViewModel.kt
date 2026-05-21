@@ -62,7 +62,12 @@ class MifosPasscodeViewModel(
             }
 
             is MifosPasscodeAction.OnResume -> {
-                handleResume(action.systemAuthProvider, action.allowBiometricAuth)
+                handleResume(
+                    systemAuthProvider = action.systemAuthProvider,
+                    allowBiometricAuth = action.allowBiometricAuth,
+                    errorMessages = action.errorMessages,
+                    promptStrings = action.promptStrings,
+                )
             }
 
             is MifosPasscodeAction.DismissDialog -> {
@@ -91,7 +96,11 @@ class MifosPasscodeViewModel(
             }
 
             is MifosPasscodeAction.OnAuthenticatorClick -> {
-                authenticateWithBiometrics(action.systemAuthProvider)
+                authenticateWithBiometrics(
+                    systemAuthProvider = action.systemAuthProvider,
+                    errorMessages = action.errorMessages,
+                    promptStrings = action.promptStrings,
+                )
             }
 
             MifosPasscodeAction.ClickConfirmOnNotRegisteredDialog -> {
@@ -117,6 +126,8 @@ class MifosPasscodeViewModel(
     private fun handleResume(
         systemAuthProvider: PlatformAuthenticationProvider,
         allowBiometricAuth: Boolean,
+        errorMessages: BiometricErrorMessages,
+        promptStrings: BiometricPromptStrings,
     ) {
         if (!allowBiometricAuth) return
         val biometricsStatus = systemAuthProvider.authenticatorStatus.value
@@ -125,7 +136,7 @@ class MifosPasscodeViewModel(
             passcodeManager.state.value.passcodeStep == PasscodeStep.Enter &&
             systemAuthProvider.isRegistered.value
         ) {
-            authenticateWithBiometrics(systemAuthProvider)
+            authenticateWithBiometrics(systemAuthProvider, errorMessages, promptStrings)
         }
     }
 
@@ -153,14 +164,21 @@ class MifosPasscodeViewModel(
      */
     private fun authenticateWithBiometrics(
         systemAuthProvider: PlatformAuthenticationProvider,
+        errorMessages: BiometricErrorMessages,
+        promptStrings: BiometricPromptStrings,
     ) {
         viewModelScope.launch {
-            val result = systemAuthProvider.onAuthenticatorClick(appName = "Mifos Pay")
+            val result = systemAuthProvider.onAuthenticatorClick(
+                title = promptStrings.title,
+                subtitle = promptStrings.subtitle,
+                description = promptStrings.description,
+                negativeButtonText = promptStrings.negativeButtonText,
+            )
             when (result) {
                 is AuthenticationResult.Error -> {
                     mutableStateFlow.update {
                         it.copy(
-                            dialogState = PasscodeDialogState.Error(result.message),
+                            dialogState = PasscodeDialogState.Error(errorMessages.localize(result.error)),
                         )
                     }
                 }
@@ -220,12 +238,17 @@ sealed interface MifosPasscodeAction {
 
     /**
      * Fired on `Lifecycle.Event.ON_RESUME`. Carries the composition-scoped
-     * provider + the caller's biometric-bypass guard so the VM can drive the
-     * auto-auth path (see `handleResume`).
+     * provider + the caller's biometric-bypass guard + the localized
+     * error/prompt strings so the VM can drive the auto-auth path inside
+     * `viewModelScope.launch` (see `handleResume`). The string holders are
+     * resolved once at the composable layer via
+     * `rememberBiometricErrorMessages()` and `rememberBiometricPromptStrings()`.
      */
     data class OnResume(
         val systemAuthProvider: PlatformAuthenticationProvider,
         val allowBiometricAuth: Boolean,
+        val errorMessages: BiometricErrorMessages,
+        val promptStrings: BiometricPromptStrings,
     ) : MifosPasscodeAction
 
     /** User dismissed an error/not-registered dialog via system back or outside-tap. */
@@ -247,11 +270,15 @@ sealed interface MifosPasscodeAction {
     ) : MifosPasscodeAction
 
     /**
-     * User tapped the biometric button. Carries the provider so the VM can
-     * invoke `onAuthenticatorClick()`.
+     * User tapped the biometric button. Carries the provider + the localized
+     * error/prompt strings so the VM can invoke `onAuthenticatorClick()` with
+     * the v2.3.0-beta caller-supplied prompt strings and map the structured
+     * `BiometricError` payload back to localized text.
      */
     data class OnAuthenticatorClick(
         val systemAuthProvider: PlatformAuthenticationProvider,
+        val errorMessages: BiometricErrorMessages,
+        val promptStrings: BiometricPromptStrings,
     ) : MifosPasscodeAction
 
     /** User tapped OK on the [PasscodeDialogState.UserNotRegistered] dialog. */
