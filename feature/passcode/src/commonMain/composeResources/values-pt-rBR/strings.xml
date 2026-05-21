@@ -9,17 +9,30 @@
     See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
 -->
 <resources>
-    <string name="feature_authenticator_biometric_error_lockout">Muitas tentativas. Aguarde e tente novamente.</string>
-    <string name="feature_authenticator_biometric_error_hardware_unavailable">O hardware biométrico está temporariamente indisponível. Tente novamente mais tarde.</string>
-    <string name="feature_authenticator_biometric_error_not_enrolled">Nenhuma biometria cadastrada neste dispositivo. Configure a biometria nas configurações do sistema.</string>
-    <string name="feature_authenticator_biometric_error_timeout">A autenticação biométrica expirou. Tente novamente.</string>
-    <string name="feature_authenticator_biometric_error_no_space">Armazenamento insuficiente para concluir a autenticação biométrica.</string>
-    <string name="feature_authenticator_biometric_error_invalid_registration_data">Os dados de registro biométrico são inválidos. Ative a biometria novamente nas configurações do app.</string>
-    <string name="feature_authenticator_biometric_error_invalid_arguments_auth">Não foi possível iniciar a autenticação biométrica devido a argumentos inválidos.</string>
-    <string name="feature_authenticator_biometric_error_invalid_arguments_registration">Não foi possível iniciar o registro biométrico devido a argumentos inválidos.</string>
-    <string name="feature_authenticator_biometric_error_unknown">Ocorreu um erro biométrico inesperado. Tente novamente.</string>
-    <string name="feature_authenticator_biometric_prompt_title">Desbloquear Mifos Pay</string>
-    <string name="feature_authenticator_biometric_prompt_subtitle">Verifique sua identidade para continuar</string>
-    <string name="feature_authenticator_biometric_prompt_description">Use sua digital, rosto ou credencial do dispositivo</string>
-    <string name="feature_authenticator_biometric_prompt_negative_button">Cancelar</string>
+    <string name="feature_passcode_biometric_error_lockout">Muitas tentativas. Aguarde e tente novamente.</string>
+    <string name="feature_passcode_biometric_error_hardware_unavailable">O hardware biométrico está temporariamente indisponível. Tente novamente mais tarde.</string>
+    <string name="feature_passcode_biometric_error_not_enrolled">Nenhuma biometria cadastrada neste dispositivo. Configure a biometria nas configurações do sistema.</string>
+    <string name="feature_passcode_biometric_error_timeout">A autenticação biométrica expirou. Tente novamente.</string>
+    <string name="feature_passcode_biometric_error_no_space">Armazenamento insuficiente para concluir a autenticação biométrica.</string>
+    <string name="feature_passcode_biometric_error_invalid_registration_data">Os dados de registro biométrico são inválidos. Ative a biometria novamente nas configurações do app.</string>
+    <string name="feature_passcode_biometric_error_invalid_arguments_auth">Não foi possível iniciar a autenticação biométrica devido a argumentos inválidos.</string>
+    <string name="feature_passcode_biometric_error_invalid_arguments_registration">Não foi possível iniciar o registro biométrico devido a argumentos inválidos.</string>
+    <string name="feature_passcode_biometric_error_unknown">Ocorreu um erro biométrico inesperado. Tente novamente.</string>
+    <string name="feature_passcode_biometric_prompt_title">Desbloquear Mifos Pay</string>
+    <string name="feature_passcode_biometric_prompt_subtitle">Verifique sua identidade para continuar</string>
+    <string name="feature_passcode_biometric_prompt_description">Use sua digital, rosto ou credencial do dispositivo</string>
+    <string name="feature_passcode_biometric_prompt_negative_button">Cancelar</string>
+
+    <!-- BiometricSetupScreen UI labels -->
+    <string name="feature_passcode_biometric_setup_headline">Proteja seu app</string>
+    <string name="feature_passcode_biometric_setup_confirm">Configurar biometria</string>
+    <string name="feature_passcode_biometric_setup_skip">Pular por enquanto</string>
+
+    <!-- Legacy feature_passcode_* strings -->
+    <string name="feature_passcode_ok">OK</string>
+    <string name="feature_passcode_biometrics_usage_message">Use biometria (digital ou rosto) para um acesso mais rápido e seguro.</string>
+    <string name="feature_passcode_biometrics_not_set">A biometria não está configurada neste dispositivo. Ative a impressão digital ou o reconhecimento facial nas configurações do dispositivo e tente novamente.</string>
+    <string name="feature_passcode_biometrics_available">Biometria não disponível neste dispositivo</string>
+    <string name="feature_passcode_error">Erro</string>
+    <string name="feature_passcode_user_not_registered_error_message">Os dados de registro biométrico são inválidos. Ative a biometria novamente nas configurações do app.</string>
 </resources>

@@ -11,19 +11,19 @@ package org.mifos.feature.passcode
 
 import androidx.compose.runtime.Composable
 import mobile_wallet.feature.passcode.generated.resources.Res
-import mobile_wallet.feature.passcode.generated.resources.feature_authenticator_biometric_error_hardware_unavailable
-import mobile_wallet.feature.passcode.generated.resources.feature_authenticator_biometric_error_invalid_arguments_auth
-import mobile_wallet.feature.passcode.generated.resources.feature_authenticator_biometric_error_invalid_arguments_registration
-import mobile_wallet.feature.passcode.generated.resources.feature_authenticator_biometric_error_invalid_registration_data
-import mobile_wallet.feature.passcode.generated.resources.feature_authenticator_biometric_error_lockout
-import mobile_wallet.feature.passcode.generated.resources.feature_authenticator_biometric_error_no_space
-import mobile_wallet.feature.passcode.generated.resources.feature_authenticator_biometric_error_not_enrolled
-import mobile_wallet.feature.passcode.generated.resources.feature_authenticator_biometric_error_timeout
-import mobile_wallet.feature.passcode.generated.resources.feature_authenticator_biometric_error_unknown
-import mobile_wallet.feature.passcode.generated.resources.feature_authenticator_biometric_prompt_description
-import mobile_wallet.feature.passcode.generated.resources.feature_authenticator_biometric_prompt_negative_button
-import mobile_wallet.feature.passcode.generated.resources.feature_authenticator_biometric_prompt_subtitle
-import mobile_wallet.feature.passcode.generated.resources.feature_authenticator_biometric_prompt_title
+import mobile_wallet.feature.passcode.generated.resources.feature_passcode_biometric_error_hardware_unavailable
+import mobile_wallet.feature.passcode.generated.resources.feature_passcode_biometric_error_invalid_arguments_auth
+import mobile_wallet.feature.passcode.generated.resources.feature_passcode_biometric_error_invalid_arguments_registration
+import mobile_wallet.feature.passcode.generated.resources.feature_passcode_biometric_error_invalid_registration_data
+import mobile_wallet.feature.passcode.generated.resources.feature_passcode_biometric_error_lockout
+import mobile_wallet.feature.passcode.generated.resources.feature_passcode_biometric_error_no_space
+import mobile_wallet.feature.passcode.generated.resources.feature_passcode_biometric_error_not_enrolled
+import mobile_wallet.feature.passcode.generated.resources.feature_passcode_biometric_error_timeout
+import mobile_wallet.feature.passcode.generated.resources.feature_passcode_biometric_error_unknown
+import mobile_wallet.feature.passcode.generated.resources.feature_passcode_biometric_prompt_description
+import mobile_wallet.feature.passcode.generated.resources.feature_passcode_biometric_prompt_negative_button
+import mobile_wallet.feature.passcode.generated.resources.feature_passcode_biometric_prompt_subtitle
+import mobile_wallet.feature.passcode.generated.resources.feature_passcode_biometric_prompt_title
 import org.jetbrains.compose.resources.stringResource
 import org.mifos.authenticator.biometrics.platformAuthenticator.AuthStage
 import org.mifos.authenticator.biometrics.platformAuthenticator.BiometricError
@@ -76,21 +76,21 @@ class BiometricErrorMessages(
 
 /**
  * Composable factory for [BiometricErrorMessages] — reads all nine
- * `feature_authenticator_biometric_error_*` keys from compose resources at
+ * `feature_passcode_biometric_error_*` keys from compose resources at
  * the current locale and bundles them into a single object the ViewModel can
  * carry across `viewModelScope.launch` boundaries.
  */
 @Composable
 fun rememberBiometricErrorMessages(): BiometricErrorMessages = BiometricErrorMessages(
-    lockout = stringResource(Res.string.feature_authenticator_biometric_error_lockout),
-    hardwareUnavailable = stringResource(Res.string.feature_authenticator_biometric_error_hardware_unavailable),
-    notEnrolled = stringResource(Res.string.feature_authenticator_biometric_error_not_enrolled),
-    timeout = stringResource(Res.string.feature_authenticator_biometric_error_timeout),
-    noSpace = stringResource(Res.string.feature_authenticator_biometric_error_no_space),
-    invalidRegistrationData = stringResource(Res.string.feature_authenticator_biometric_error_invalid_registration_data),
-    invalidArgumentsAuth = stringResource(Res.string.feature_authenticator_biometric_error_invalid_arguments_auth),
-    invalidArgumentsRegistration = stringResource(Res.string.feature_authenticator_biometric_error_invalid_arguments_registration),
-    unknown = stringResource(Res.string.feature_authenticator_biometric_error_unknown),
+    lockout = stringResource(Res.string.feature_passcode_biometric_error_lockout),
+    hardwareUnavailable = stringResource(Res.string.feature_passcode_biometric_error_hardware_unavailable),
+    notEnrolled = stringResource(Res.string.feature_passcode_biometric_error_not_enrolled),
+    timeout = stringResource(Res.string.feature_passcode_biometric_error_timeout),
+    noSpace = stringResource(Res.string.feature_passcode_biometric_error_no_space),
+    invalidRegistrationData = stringResource(Res.string.feature_passcode_biometric_error_invalid_registration_data),
+    invalidArgumentsAuth = stringResource(Res.string.feature_passcode_biometric_error_invalid_arguments_auth),
+    invalidArgumentsRegistration = stringResource(Res.string.feature_passcode_biometric_error_invalid_arguments_registration),
+    unknown = stringResource(Res.string.feature_passcode_biometric_error_unknown),
 )
 
 /**
@@ -117,12 +117,12 @@ data class BiometricPromptStrings(
 
 /**
  * Composable factory for [BiometricPromptStrings] — reads the four
- * `feature_authenticator_biometric_prompt_*` keys at the current locale.
+ * `feature_passcode_biometric_prompt_*` keys at the current locale.
  */
 @Composable
 fun rememberBiometricPromptStrings(): BiometricPromptStrings = BiometricPromptStrings(
-    title = stringResource(Res.string.feature_authenticator_biometric_prompt_title),
-    subtitle = stringResource(Res.string.feature_authenticator_biometric_prompt_subtitle),
-    description = stringResource(Res.string.feature_authenticator_biometric_prompt_description),
-    negativeButtonText = stringResource(Res.string.feature_authenticator_biometric_prompt_negative_button),
+    title = stringResource(Res.string.feature_passcode_biometric_prompt_title),
+    subtitle = stringResource(Res.string.feature_passcode_biometric_prompt_subtitle),
+    description = stringResource(Res.string.feature_passcode_biometric_prompt_description),
+    negativeButtonText = stringResource(Res.string.feature_passcode_biometric_prompt_negative_button),
 )

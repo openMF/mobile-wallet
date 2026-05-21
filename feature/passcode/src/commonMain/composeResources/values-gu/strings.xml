@@ -9,17 +9,30 @@
     See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
 -->
 <resources>
-    <string name="feature_authenticator_biometric_error_lockout">ઘણા પ્રયાસો. કૃપા કરીને રાહ જુઓ અને ફરી પ્રયાસ કરો.</string>
-    <string name="feature_authenticator_biometric_error_hardware_unavailable">બાયોમેટ્રિક હાર્ડવેર અસ્થાયી રૂપે ઉપલબ્ધ નથી. કૃપા કરીને પછી ફરી પ્રયાસ કરો.</string>
-    <string name="feature_authenticator_biometric_error_not_enrolled">આ ડિવાઇસ પર કોઈ બાયોમેટ્રિક નોંધાયેલ નથી. કૃપા કરીને સિસ્ટમ સેટિંગ્સમાં બાયોમેટ્રિક્સ સેટ કરો.</string>
-    <string name="feature_authenticator_biometric_error_timeout">બાયોમેટ્રિક પ્રમાણીકરણ સમય સમાપ્ત થયો. કૃપા કરીને ફરી પ્રયાસ કરો.</string>
-    <string name="feature_authenticator_biometric_error_no_space">બાયોમેટ્રિક પ્રમાણીકરણ પૂર્ણ કરવા માટે પૂરતી જગ્યા નથી.</string>
-    <string name="feature_authenticator_biometric_error_invalid_registration_data">બાયોમેટ્રિક નોંધણી ડેટા અમાન્ય છે. કૃપા કરીને એપ સેટિંગ્સમાંથી બાયોમેટ્રિક્સ ફરી સક્ષમ કરો.</string>
-    <string name="feature_authenticator_biometric_error_invalid_arguments_auth">અમાન્ય ઇનપુટના કારણે બાયોમેટ્રિક પ્રમાણીકરણ શરૂ થઈ શક્યું નહીં.</string>
-    <string name="feature_authenticator_biometric_error_invalid_arguments_registration">અમાન્ય ઇનપુટના કારણે બાયોમેટ્રિક નોંધણી શરૂ થઈ શકી નહીં.</string>
-    <string name="feature_authenticator_biometric_error_unknown">એક અણધારી બાયોમેટ્રિક ભૂલ આવી. કૃપા કરીને ફરી પ્રયાસ કરો.</string>
-    <string name="feature_authenticator_biometric_prompt_title">Mifos Pay અનલૉક કરો</string>
-    <string name="feature_authenticator_biometric_prompt_subtitle">ચાલુ રાખવા માટે તમારી ઓળખ ચકાસો</string>
-    <string name="feature_authenticator_biometric_prompt_description">તમારી ફિંગરપ્રિન્ટ, ચહેરો, અથવા ડિવાઇસ ઓળખપત્રનો ઉપયોગ કરો</string>
-    <string name="feature_authenticator_biometric_prompt_negative_button">રદ કરો</string>
+    <string name="feature_passcode_biometric_error_lockout">ઘણા પ્રયાસો. કૃપા કરીને રાહ જુઓ અને ફરી પ્રયાસ કરો.</string>
+    <string name="feature_passcode_biometric_error_hardware_unavailable">બાયોમેટ્રિક હાર્ડવેર અસ્થાયી રૂપે ઉપલબ્ધ નથી. કૃપા કરીને પછી ફરી પ્રયાસ કરો.</string>
+    <string name="feature_passcode_biometric_error_not_enrolled">આ ડિવાઇસ પર કોઈ બાયોમેટ્રિક નોંધાયેલ નથી. કૃપા કરીને સિસ્ટમ સેટિંગ્સમાં બાયોમેટ્રિક્સ સેટ કરો.</string>
+    <string name="feature_passcode_biometric_error_timeout">બાયોમેટ્રિક પ્રમાણીકરણ સમય સમાપ્ત થયો. કૃપા કરીને ફરી પ્રયાસ કરો.</string>
+    <string name="feature_passcode_biometric_error_no_space">બાયોમેટ્રિક પ્રમાણીકરણ પૂર્ણ કરવા માટે પૂરતી જગ્યા નથી.</string>
+    <string name="feature_passcode_biometric_error_invalid_registration_data">બાયોમેટ્રિક નોંધણી ડેટા અમાન્ય છે. કૃપા કરીને એપ સેટિંગ્સમાંથી બાયોમેટ્રિક્સ ફરી સક્ષમ કરો.</string>
+    <string name="feature_passcode_biometric_error_invalid_arguments_auth">અમાન્ય ઇનપુટના કારણે બાયોમેટ્રિક પ્રમાણીકરણ શરૂ થઈ શક્યું નહીં.</string>
+    <string name="feature_passcode_biometric_error_invalid_arguments_registration">અમાન્ય ઇનપુટના કારણે બાયોમેટ્રિક નોંધણી શરૂ થઈ શકી નહીં.</string>
+    <string name="feature_passcode_biometric_error_unknown">એક અણધારી બાયોમેટ્રિક ભૂલ આવી. કૃપા કરીને ફરી પ્રયાસ કરો.</string>
+    <string name="feature_passcode_biometric_prompt_title">Mifos Pay અનલૉક કરો</string>
+    <string name="feature_passcode_biometric_prompt_subtitle">ચાલુ રાખવા માટે તમારી ઓળખ ચકાસો</string>
+    <string name="feature_passcode_biometric_prompt_description">તમારી ફિંગરપ્રિન્ટ, ચહેરો, અથવા ડિવાઇસ ઓળખપત્રનો ઉપયોગ કરો</string>
+    <string name="feature_passcode_biometric_prompt_negative_button">રદ કરો</string>
+
+    <!-- BiometricSetupScreen UI labels -->
+    <string name="feature_passcode_biometric_setup_headline">તમારી એપ સુરક્ષિત કરો</string>
+    <string name="feature_passcode_biometric_setup_confirm">બાયોમેટ્રિક સેટઅપ કરો</string>
+    <string name="feature_passcode_biometric_setup_skip">હમણાં છોડો</string>
+
+    <!-- Legacy feature_passcode_* strings -->
+    <string name="feature_passcode_ok">બરાબર</string>
+    <string name="feature_passcode_biometrics_usage_message">ઝડપી અને વધુ સુરક્ષિત ઍક્સેસ માટે બાયોમેટ્રિક (ફિંગરપ્રિન્ટ અથવા ચહેરો) નો ઉપયોગ કરો.</string>
+    <string name="feature_passcode_biometrics_not_set">આ ડિવાઇસ પર બાયોમેટ્રિક સેટઅપ થયેલ નથી. કૃપા કરીને ડિવાઇસ સેટિંગ્સમાં ફિંગરપ્રિન્ટ અથવા ચહેરો અનલૉક ચાલુ કરો, પછી ફરી પ્રયાસ કરો.</string>
+    <string name="feature_passcode_biometrics_available">આ ડિવાઇસ પર બાયોમેટ્રિક ઉપલબ્ધ નથી</string>
+    <string name="feature_passcode_error">ભૂલ</string>
+    <string name="feature_passcode_user_not_registered_error_message">બાયોમેટ્રિક નોંધણી ડેટા અમાન્ય છે. કૃપા કરીને એપ સેટિંગ્સમાંથી બાયોમેટ્રિક્સ ફરી સક્ષમ કરો.</string>
 </resources>

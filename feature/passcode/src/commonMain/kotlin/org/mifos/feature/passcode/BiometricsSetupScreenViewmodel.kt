@@ -13,8 +13,8 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import mobile_wallet.feature.passcode.generated.resources.Res
-import mobile_wallet.feature.passcode.generated.resources.feature_authenticator_biometrics_available
-import mobile_wallet.feature.passcode.generated.resources.feature_authenticator_biometrics_not_set
+import mobile_wallet.feature.passcode.generated.resources.feature_passcode_biometrics_available
+import mobile_wallet.feature.passcode.generated.resources.feature_passcode_biometrics_not_set
 import org.jetbrains.compose.resources.getString
 import org.mifos.authenticator.biometrics.platformAuthenticator.PlatformAuthenticationProvider
 import org.mifos.authenticator.biometrics.platformAuthenticator.RegistrationResult
@@ -89,14 +89,14 @@ class BiometricSetupScreenViewmodel(
                 RegistrationResult.PlatformAuthenticatorNotSet -> {
                     mutableStateFlow.update {
                         it.copy(
-                            error = getString(Res.string.feature_authenticator_biometrics_not_set),
+                            error = getString(Res.string.feature_passcode_biometrics_not_set),
                         )
                     }
                 }
                 RegistrationResult.PlatformAuthenticatorNotAvailable -> {
                     mutableStateFlow.update {
                         it.copy(
-                            error = getString(Res.string.feature_authenticator_biometrics_available),
+                            error = getString(Res.string.feature_passcode_biometrics_available),
                         )
                     }
                 }

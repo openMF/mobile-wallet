@@ -13,7 +13,7 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import mobile_wallet.feature.passcode.generated.resources.Res
-import mobile_wallet.feature.passcode.generated.resources.feature_authenticator_user_not_registered_error_message
+import mobile_wallet.feature.passcode.generated.resources.feature_passcode_user_not_registered_error_message
 import org.jetbrains.compose.resources.getString
 import org.mifos.authenticator.biometrics.platformAuthenticator.AuthenticationResult
 import org.mifos.authenticator.biometrics.platformAuthenticator.PlatformAuthenticationProvider
@@ -194,7 +194,7 @@ class MifosPasscodeViewModel(
 
                 AuthenticationResult.UserNotRegistered -> {
                     val message =
-                        getString(Res.string.feature_authenticator_user_not_registered_error_message)
+                        getString(Res.string.feature_passcode_user_not_registered_error_message)
                     mutableStateFlow.update {
                         it.copy(
                             dialogState = PasscodeDialogState.UserNotRegistered(message = message),

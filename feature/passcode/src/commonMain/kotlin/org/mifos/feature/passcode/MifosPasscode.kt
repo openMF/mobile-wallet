@@ -24,8 +24,8 @@ import androidx.navigationevent.NavigationEventInfo
 import androidx.navigationevent.compose.NavigationBackHandler
 import androidx.navigationevent.compose.rememberNavigationEventState
 import mobile_wallet.feature.passcode.generated.resources.Res
-import mobile_wallet.feature.passcode.generated.resources.feature_authenticator_error
-import mobile_wallet.feature.passcode.generated.resources.feature_authenticator_ok
+import mobile_wallet.feature.passcode.generated.resources.feature_passcode_error
+import mobile_wallet.feature.passcode.generated.resources.feature_passcode_ok
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
@@ -168,9 +168,9 @@ fun MifosPasscode(
     }
 
     MifosDialogBox(
-        title = stringResource(Res.string.feature_authenticator_error),
+        title = stringResource(Res.string.feature_passcode_error),
         showDialogState = state.dialogState != null,
-        confirmButtonText = stringResource(Res.string.feature_authenticator_ok),
+        confirmButtonText = stringResource(Res.string.feature_passcode_ok),
         dismissButtonText = null,
         onConfirm = {
             when (state.dialogState) {

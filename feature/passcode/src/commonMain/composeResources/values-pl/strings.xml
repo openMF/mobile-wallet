@@ -9,17 +9,30 @@
     See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
 -->
 <resources>
-    <string name="feature_authenticator_biometric_error_lockout">Zbyt wiele prób. Poczekaj i spróbuj ponownie.</string>
-    <string name="feature_authenticator_biometric_error_hardware_unavailable">Sprzęt biometryczny jest tymczasowo niedostępny. Spróbuj ponownie później.</string>
-    <string name="feature_authenticator_biometric_error_not_enrolled">Na tym urządzeniu nie ma zarejestrowanej biometrii. Skonfiguruj biometrię w ustawieniach systemu.</string>
-    <string name="feature_authenticator_biometric_error_timeout">Uwierzytelnianie biometryczne wygasło. Spróbuj ponownie.</string>
-    <string name="feature_authenticator_biometric_error_no_space">Za mało miejsca, aby ukończyć uwierzytelnianie biometryczne.</string>
-    <string name="feature_authenticator_biometric_error_invalid_registration_data">Dane rejestracji biometrycznej są nieprawidłowe. Włącz ponownie biometrię w ustawieniach aplikacji.</string>
-    <string name="feature_authenticator_biometric_error_invalid_arguments_auth">Nie można uruchomić uwierzytelniania biometrycznego z powodu nieprawidłowych argumentów.</string>
-    <string name="feature_authenticator_biometric_error_invalid_arguments_registration">Nie można uruchomić rejestracji biometrycznej z powodu nieprawidłowych argumentów.</string>
-    <string name="feature_authenticator_biometric_error_unknown">Wystąpił nieoczekiwany błąd biometryczny. Spróbuj ponownie.</string>
-    <string name="feature_authenticator_biometric_prompt_title">Odblokuj Mifos Pay</string>
-    <string name="feature_authenticator_biometric_prompt_subtitle">Zweryfikuj swoją tożsamość, aby kontynuować</string>
-    <string name="feature_authenticator_biometric_prompt_description">Użyj odcisku palca, twarzy lub poświadczenia urządzenia</string>
-    <string name="feature_authenticator_biometric_prompt_negative_button">Anuluj</string>
+    <string name="feature_passcode_biometric_error_lockout">Zbyt wiele prób. Poczekaj i spróbuj ponownie.</string>
+    <string name="feature_passcode_biometric_error_hardware_unavailable">Sprzęt biometryczny jest tymczasowo niedostępny. Spróbuj ponownie później.</string>
+    <string name="feature_passcode_biometric_error_not_enrolled">Na tym urządzeniu nie ma zarejestrowanej biometrii. Skonfiguruj biometrię w ustawieniach systemu.</string>
+    <string name="feature_passcode_biometric_error_timeout">Uwierzytelnianie biometryczne wygasło. Spróbuj ponownie.</string>
+    <string name="feature_passcode_biometric_error_no_space">Za mało miejsca, aby ukończyć uwierzytelnianie biometryczne.</string>
+    <string name="feature_passcode_biometric_error_invalid_registration_data">Dane rejestracji biometrycznej są nieprawidłowe. Włącz ponownie biometrię w ustawieniach aplikacji.</string>
+    <string name="feature_passcode_biometric_error_invalid_arguments_auth">Nie można uruchomić uwierzytelniania biometrycznego z powodu nieprawidłowych argumentów.</string>
+    <string name="feature_passcode_biometric_error_invalid_arguments_registration">Nie można uruchomić rejestracji biometrycznej z powodu nieprawidłowych argumentów.</string>
+    <string name="feature_passcode_biometric_error_unknown">Wystąpił nieoczekiwany błąd biometryczny. Spróbuj ponownie.</string>
+    <string name="feature_passcode_biometric_prompt_title">Odblokuj Mifos Pay</string>
+    <string name="feature_passcode_biometric_prompt_subtitle">Zweryfikuj swoją tożsamość, aby kontynuować</string>
+    <string name="feature_passcode_biometric_prompt_description">Użyj odcisku palca, twarzy lub poświadczenia urządzenia</string>
+    <string name="feature_passcode_biometric_prompt_negative_button">Anuluj</string>
+
+    <!-- BiometricSetupScreen UI labels -->
+    <string name="feature_passcode_biometric_setup_headline">Zabezpiecz swoją aplikację</string>
+    <string name="feature_passcode_biometric_setup_confirm">Skonfiguruj biometrię</string>
+    <string name="feature_passcode_biometric_setup_skip">Pomiń na razie</string>
+
+    <!-- Legacy feature_passcode_* strings -->
+    <string name="feature_passcode_ok">OK</string>
+    <string name="feature_passcode_biometrics_usage_message">Używaj biometrii (odcisku palca lub twarzy), aby uzyskać szybszy i bezpieczniejszy dostęp.</string>
+    <string name="feature_passcode_biometrics_not_set">Biometria nie jest skonfigurowana na tym urządzeniu. Włącz odcisk palca lub rozpoznawanie twarzy w ustawieniach urządzenia i spróbuj ponownie.</string>
+    <string name="feature_passcode_biometrics_available">Biometria niedostępna na tym urządzeniu</string>
+    <string name="feature_passcode_error">Błąd</string>
+    <string name="feature_passcode_user_not_registered_error_message">Dane rejestracji biometrycznej są nieprawidłowe. Włącz ponownie biometrię w ustawieniach aplikacji.</string>
 </resources>
