@@ -26,6 +26,12 @@ kotlin {
 
             implementation(libs.koin.compose.viewmodel)
             implementation(libs.koin.compose)
+
+            // For BiometricErrorMessages / BiometricPromptStrings used by
+            // SettingsViewModel's enable-biometrics path (v2.3.0-beta requires
+            // caller-supplied prompt strings + BiometricError mapping).
+            implementation(projects.feature.passcode)
+            implementation(libs.mifos.authenticator.biometrics)
         }
     }
 }
