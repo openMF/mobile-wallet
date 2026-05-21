@@ -9,17 +9,17 @@
     See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
 -->
 <resources>
-    <string name="feature_authenticator_error">Error</string>
-    <string name="feature_authenticator_ok">Aceptar</string>
-    <string name="feature_authenticator_use_biometrics">Usar datos biométricos</string>
-    <string name="feature_authenticator_fingerprint_icon">Ícono de huella digital</string>
-    <string name="feature_authenticator_facescan_icon">Ícono de reconocimiento facial</string>
-    <string name="feature_authenticator_keypad_icon">Ícono de teclado numérico</string>
-    <string name="feature_authenticator_set_up_authentication_option">Configurar opción de autenticación</string>
-    <string name="feature_authenticator_authenticate_windows_hello">Autenticar usando Windows Hello</string>
-    <string name="feature_authenticator_unsupported_platform">Plataforma no compatible</string>
-    <string name="feature_authenticator_user_not_registered_error_message">Datos biométricos no registrados o datos de registro no válidos. Vuelve a activar los datos biométricos desde la configuración de la app</string>
-    <string name="feature_authenticator_biometrics_usage_message">Usa tus datos biométricos (huella digital o rostro) para un acceso más rápido y seguro</string>
-    <string name="feature_authenticator_biometrics_not_set">Los datos biométricos no están configurados en este dispositivo</string>
-    <string name="feature_authenticator_biometrics_available">Los datos biométricos no están disponibles en este dispositivo</string>
+    <string name="feature_authenticator_biometric_error_lockout">Demasiados intentos. Por favor espera e inténtalo de nuevo.</string>
+    <string name="feature_authenticator_biometric_error_hardware_unavailable">El hardware biométrico no está disponible temporalmente. Por favor inténtalo de nuevo más tarde.</string>
+    <string name="feature_authenticator_biometric_error_not_enrolled">No hay datos biométricos registrados en este dispositivo. Por favor configura la biometría en los ajustes del sistema.</string>
+    <string name="feature_authenticator_biometric_error_timeout">Se ha agotado el tiempo de la autenticación biométrica. Por favor inténtalo de nuevo.</string>
+    <string name="feature_authenticator_biometric_error_no_space">No hay suficiente almacenamiento para completar la autenticación biométrica.</string>
+    <string name="feature_authenticator_biometric_error_invalid_registration_data">Los datos de registro biométrico no son válidos. Por favor vuelve a activar la biometría en los ajustes de la app.</string>
+    <string name="feature_authenticator_biometric_error_invalid_arguments_auth">No se pudo iniciar la autenticación biométrica debido a argumentos no válidos.</string>
+    <string name="feature_authenticator_biometric_error_invalid_arguments_registration">No se pudo iniciar el registro biométrico debido a argumentos no válidos.</string>
+    <string name="feature_authenticator_biometric_error_unknown">Se produjo un error biométrico inesperado. Por favor inténtalo de nuevo.</string>
+    <string name="feature_authenticator_biometric_prompt_title">Desbloquear Mifos Pay</string>
+    <string name="feature_authenticator_biometric_prompt_subtitle">Verifica tu identidad para continuar</string>
+    <string name="feature_authenticator_biometric_prompt_description">Usa tu huella dactilar, rostro o credencial del dispositivo</string>
+    <string name="feature_authenticator_biometric_prompt_negative_button">Cancelar</string>
 </resources>
