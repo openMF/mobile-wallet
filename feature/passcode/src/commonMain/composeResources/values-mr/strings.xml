@@ -30,8 +30,8 @@
 
     <!-- Legacy feature_passcode_* strings -->
     <string name="feature_passcode_ok">ठीक आहे</string>
-    <string name="feature_passcode_biometrics_usage_message">जलद आणि अधिक सुरक्षित प्रवेशासाठी बायोमेट्रिक (बोटाचा ठसा किंवा चेहरा) वापरा.</string>
-    <string name="feature_passcode_biometrics_not_set">या डिव्हाइसवर बायोमेट्रिक सेट केलेले नाही. कृपया डिव्हाइस सेटिंग्जमध्ये बोटाचा ठसा किंवा चेहरा अनलॉक सक्षम करा, मग पुन्हा प्रयत्न करा.</string>
+    <string name="feature_passcode_biometrics_usage_message">जलद आणि अधिक सुरक्षित प्रवेशासाठी बायोमेट्रिक (बोटाचा ठसा किंवा चेहरा) वापरा।</string>
+    <string name="feature_passcode_biometrics_not_set">या डिव्हाइसवर बायोमेट्रिक सेट केलेले नाही। कृपया डिव्हाइस सेटिंग्जमध्ये बोटाचा ठसा किंवा चेहरा अनलॉक सक्षम करा, मग पुन्हा प्रयत्न करा।</string>
     <string name="feature_passcode_biometrics_available">या डिव्हाइसवर बायोमेट्रिक उपलब्ध नाही</string>
     <string name="feature_passcode_error">त्रुटी</string>
     <string name="feature_passcode_user_not_registered_error_message">बायोमेट्रिक नोंदणी डेटा अवैध आहे। कृपया अॅप सेटिंग्जमधून बायोमेट्रिक्स पुन्हा सक्षम करा।</string>
