@@ -158,8 +158,10 @@ class MifosPasscodeViewModel(
      *  - [AuthenticationResult.UserNotRegistered] — the library has already
      *    cleared the stored blob and flipped `isRegistered` to false; surface
      *    the "re-setup" prompt so the user re-enrols from settings.
-     *  - [AuthenticationResult.Error] — render a generic error dialog with
-     *    the platform-provided message.
+     *  - [AuthenticationResult.Error] — map the structured `BiometricError`
+     *    payload to localized text via the pre-resolved `errorMessages`
+     *    bundle (sample-mirroring pattern; library deliberately ships no
+     *    error copy in v2.3.0-beta), then render the error dialog.
      *  - [AuthenticationResult.UserCancelled] — silent no-op.
      */
     private fun authenticateWithBiometrics(
