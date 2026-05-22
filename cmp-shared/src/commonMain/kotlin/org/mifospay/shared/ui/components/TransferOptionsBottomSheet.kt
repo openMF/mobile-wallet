@@ -50,6 +50,7 @@ fun TransferOptionsBottomSheet(
     transferOptionsViewModel: TransferOptionsViewModel = koinViewModel(),
 ) {
     val state by transferOptionsViewModel.stateFlow.collectAsStateWithLifecycle()
+
     MifosBottomSheet(
         onDismiss = onDismiss,
         modifier = modifier,
@@ -126,37 +127,38 @@ fun TransferOptionsBottomSheet(
                     )
                 }
 
-                HorizontalDivider(
-                    modifier = Modifier.padding(horizontal = KptTheme.spacing.md),
-                    color = KptTheme.colorScheme.outlineVariant,
-                )
+                if (state.isUpiEnabled) {
+                    HorizontalDivider(
+                        modifier = Modifier.padding(horizontal = KptTheme.spacing.md),
+                        color = KptTheme.colorScheme.outlineVariant,
+                    )
 
-                // Inter-Bank Transfer Option
-                ListItem(
-                    headlineContent = {
-                        Text(
-                            text = stringResource(SharedRes.string.upi_and_autopay),
-                            style = KptTheme.typography.bodyLarge,
-                            fontWeight = FontWeight.SemiBold,
-                            color = KptTheme.colorScheme.onSurface,
-                        )
-                    },
-                    supportingContent = {
-                        Text(
-                            text = stringResource(SharedRes.string.upi_and_autopay),
-                            style = KptTheme.typography.bodySmall,
-                            color = KptTheme.colorScheme.onSurfaceVariant,
-                        )
-                    },
-                    colors = ListItemDefaults.colors(
-                        containerColor = Color.Transparent,
-                    ),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clickable {
-                            onUpiSendMoney()
+                    ListItem(
+                        headlineContent = {
+                            Text(
+                                text = stringResource(SharedRes.string.upi_and_autopay),
+                                style = KptTheme.typography.bodyLarge,
+                                fontWeight = FontWeight.SemiBold,
+                                color = KptTheme.colorScheme.onSurface,
+                            )
                         },
-                )
+                        supportingContent = {
+                            Text(
+                                text = stringResource(SharedRes.string.upi_and_autopay),
+                                style = KptTheme.typography.bodySmall,
+                                color = KptTheme.colorScheme.onSurfaceVariant,
+                            )
+                        },
+                        colors = ListItemDefaults.colors(
+                            containerColor = Color.Transparent,
+                        ),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable {
+                                onUpiSendMoney()
+                            },
+                    )
+                }
             }
         },
     )

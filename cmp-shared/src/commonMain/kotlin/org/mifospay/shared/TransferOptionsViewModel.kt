@@ -9,16 +9,46 @@
  */
 package org.mifospay.shared
 
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import template.core.base.ui.BaseViewModel
 
 class TransferOptionsViewModel : BaseViewModel<TransferOptionState, Unit, Unit>(
     initialState = TransferOptionState(),
 ) {
-    override fun handleAction(action: Unit) {
-        TODO("Not yet implemented")
+
+    init {
+        fetchTransferOptions()
+    }
+
+    override fun handleAction(action: Unit) = Unit
+
+    private fun fetchTransferOptions() {
+        viewModelScope.launch {
+            val countryCode = getCountryCode()
+
+            val isUpiEnabled = countryCode == "IN"
+
+            mutableStateFlow.update {
+                it.copy(
+                    isLoading = false,
+                    isUpiEnabled = isUpiEnabled,
+                    isInterTransferOptionEnabled = true,
+                )
+            }
+        }
+    }
+
+    private fun getCountryCode(): String {
+        // Dummy API / device locale simulation
+
+        return "IN"
     }
 }
 
 data class TransferOptionState(
-    val isInterTransferOptionEnabled: Boolean = true,
+    val isLoading: Boolean = true,
+    val isInterTransferOptionEnabled: Boolean = false,
+    val isUpiEnabled: Boolean = false,
 )
