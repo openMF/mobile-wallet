@@ -85,6 +85,7 @@ import mobile_wallet.feature.home.generated.resources.coin_image
 import mobile_wallet.feature.home.generated.resources.feature_home_account_number
 import mobile_wallet.feature.home.generated.resources.feature_home_account_type
 import mobile_wallet.feature.home.generated.resources.feature_home_arrow_up
+import mobile_wallet.feature.home.generated.resources.feature_home_autopay
 import mobile_wallet.feature.home.generated.resources.feature_home_coin_image
 import mobile_wallet.feature.home.generated.resources.feature_home_desc
 import mobile_wallet.feature.home.generated.resources.feature_home_mark_default
@@ -642,21 +643,20 @@ private fun PayRequestScreen(
             )
         }
 
-        // This feature can be accessed from upi and auto-pay
-//        PaymentButton(
-//            modifier = Modifier
-//                .fillMaxWidth()
-//                .height(55.dp),
-//            text = stringResource(Res.string.feature_home_autopay),
-//            onClick = onAutoPay,
-//            leadingIcon = {
-//                Icon(
-//                    modifier = Modifier.size(26.dp),
-//                    imageVector = MifosIcons.Payment,
-//                    contentDescription = stringResource(Res.string.feature_home_autopay),
-//                )
-//            },
-//        )
+        PaymentButton(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(55.dp),
+            text = stringResource(Res.string.feature_home_autopay),
+            onClick = onAutoPay,
+            leadingIcon = {
+                Icon(
+                    modifier = Modifier.size(26.dp),
+                    imageVector = MifosIcons.Payment,
+                    contentDescription = stringResource(Res.string.feature_home_autopay),
+                )
+            },
+        )
     }
 }
 
