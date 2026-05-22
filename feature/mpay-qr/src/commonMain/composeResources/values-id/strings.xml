@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copyright 2024 Mifos Initiative
+
+    This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+    If a copy of the MPL was not distributed with this file,
+    You can obtain one at https://mozilla.org/MPL/2.0/.
+
+    See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+-->
+<resources>
+    <string name="feature_request_money_enter_valid_amount">Silakan masukkan jumlah yang valid</string>
+    <string name="feature_request_money_enter_currency">Masukkan mata uang</string>
+    <string name="feature_request_money_set_amount">Tetapkan Jumlah</string>
+    <string name="feature_request_money_currency">Tetapkan Mata Uang</string>
+    <string name="feature_request_money_cancel">Batal</string>
+    <string name="feature_request_money_confirm">Konfirmasi</string>
+    <string name="feature_request_money_qr_code_details">Detail kode QR</string>
+    <string name="feature_request_money_vpa">VPA</string>
+    <string name="feature_request_money_amount">Jumlah</string>
+    <string name="feature_request_money_usd">USD</string>
+    <string name="feature_request_money_request">Minta</string>
+    <string name="feature_request_money_loading">Memuat</string>
+    <string name="feature_request_money_nothing_to_notify">Tidak ada yang perlu diberitahukan</string>
+    <string name="feature_request_money_there_is_nothing_to_show">Tidak ada yang ditampilkan</string>
+    <string name="feature_request_money_error_oops">Ups!</string>
+    <string name="feature_request_money_unexpected_error_subtitle">Terjadi kesalahan yang tidak terduga. Silakan coba lagi.</string>
+    <string name="feature_mpay_qr_receive_money">Terima Uang</string>
+    <string name="feature_mpay_qr_intra_bank">QR Intra-bank</string>
+    <string name="feature_mpay_qr_inter_bank">QR Antar-bank</string>
+    <string name="feature_mpay_qr_share">Bagikan</string>
+    <string name="feature_mpay_qr_unable_to_generate">Tidak dapat membuat kode QR</string>
+    <string name="feature_mpay_qr_go_back">Kembali</string>
+    <string name="feature_mpay_qr_unknown">Tidak diketahui</string>
+    <string name="feature_mpay_qr_no_default_account">Belum ada akun default yang ditetapkan. Silakan tetapkan akun default terlebih dahulu.</string>
+    <string name="feature_mpay_qr_failed_to_generate">Gagal membuat kode QR</string>
+    <string name="feature_mpay_qr_no_currency_found">Mata uang tidak ditemukan</string>
+    <string name="feature_mpay_qr_scan_to_pay">Pindai untuk membayar saya menggunakan aplikasi pembayaran apa pun</string>
+    <string name="feature_mpay_qr_primary">Utama</string>
+    <string name="feature_mpay_qr_share_qr">Bagikan</string>
+    <string name="feature_mpay_qr_download_qr">Unduh</string>
+    <string name="feature_mpay_qr_account_ids">ID Akun</string>
+    <string name="feature_mpay_qr_account_number">Nomor Akun</string>
+    <string name="feature_mpay_qr_external_id">ID Eksternal</string>
+    <string name="feature_mpay_qr_copy">Salin</string>
+    <string name="feature_mpay_qr_copied">Disalin ke papan klip</string>
+    <string name="feature_mpay_qr_scan_instruction">Pindai dengan aplikasi pembayaran apa pun</string>
+    <string name="feature_mpay_qr_downloaded">Kode QR diunduh</string>
+    <string name="feature_mpay_qr_inter_bank_unavailable">QR Antar-bank Tidak Tersedia</string>
+    <string name="feature_mpay_qr_external_id_required">Akun Anda tidak memiliki ID eksternal yang dikonfigurasi. Hubungi bank Anda untuk mengaktifkan transfer antar-bank.</string>
+    <string name="feature_mpay_qr_select_account">Pilih Akun</string>
+    <string name="feature_mpay_qr_has_external_id">Antar-bank aktif</string>
+    <string name="feature_mpay_qr_no_external_id">Antar-bank tidak tersedia</string>
+    <string name="feature_mpay_qr_account_selected">Akun dipilih</string>
+</resources>
