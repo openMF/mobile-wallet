@@ -93,8 +93,40 @@ import org.mifospay.feature.upi.setup.navigation.setupUpiPinScreen
 import org.mifospay.shared.ui.MifosAppState
 import mobile_wallet.cmp_shared.generated.resources.Res as SharedRes
 
+/**
+ * `SavedStateHandle` key used by callers of [internalMifosPasscodeScreen] for
+ * the round-trip "did the user verify their passcode?" boolean. Currently
+ * consumed by the intra-bank transfer auth gate
+ * (`TransferConfirmScreen` → `TransferConfirmViewModel`); the settings
+ * disable-biometrics flow uses its own
+ * `DISABLE_BIOMETRICS_VERIFICATION_KEY` from `:feature:settings`.
+ */
 const val AUTHENTICATION_VERIFICATION_KEY = "org.mifospay.mifos.authentication_verification_success"
 
+/**
+ * Authenticated-area navigation host hung off `MifosNavGraph.MAIN_GRAPH` from
+ * [RootNavGraph]. Composes every in-app feature destination plus the
+ * **internal passcode screen** that backs sensitive-operation gates.
+ *
+ * The internal passcode wiring is the only library-touching piece in this
+ * file:
+ *  - `internalMifosPasscodeScreen(...)` is registered with
+ *    `onAuthenticationSuccess` / `onAuthenticationFailed` callbacks that
+ *    write `true` / `false` to the **previous** back-stack entry's
+ *    `SavedStateHandle` under the verification-key the caller passed via
+ *    [navigateToInternalMifosPasscodeScreen]. On success, also calls
+ *    [UserVerificationRepository.recordVerification] to mint a 30-second
+ *    one-shot token that the caller must consume on its side
+ *    (`consumeVerification()`) before performing the protected action.
+ *  - Two callers currently use this gate:
+ *      * The **settings** flow (change-passcode + disable-biometrics) —
+ *        unconditionally passes `allowBiometricAuth = false` when navigating
+ *        to the internal passcode screen, since both flows would be defeated
+ *        by allowing biometric bypass.
+ *      * The **intra-bank** `transferConfirmScreen`'s
+ *        `navigateForPasscodeVerification` callback — does not override
+ *        `allowBiometricAuth`, so biometric is allowed there.
+ */
 @Composable
 internal fun MifosNavHost(
     appState: MifosAppState,
@@ -178,7 +210,7 @@ internal fun MifosNavHost(
         modifier = modifier,
     ) {
         internalMifosPasscodeScreen(
-            onForgotButton = onClickLogout,
+            navigateToLogin = onClickLogout,
             onAuthenticationSuccess = { verificationKey ->
                 userVerificationRepository.recordVerification()
                 verificationKey?.let {
@@ -199,7 +231,7 @@ internal fun MifosNavHost(
             onPasscodeChanged = {
                 navController.popBackStack()
             },
-            onDisableBiometrics = {
+            onBackPress = {
                 navController.popBackStack()
             },
         )
@@ -218,7 +250,12 @@ internal fun MifosNavHost(
         settingsScreen(
             onBackPress = navController::navigateUp,
             onLogout = onClickLogout,
-            navigateToPasscodeScreen = navController::navigateToInternalMifosPasscodeScreen,
+            navigateToPasscodeScreen = { verificationKey ->
+                navController.navigateToInternalMifosPasscodeScreen(
+                    verificationKey = verificationKey,
+                    allowBiometricAuth = false,
+                )
+            },
             navigateToEditPasswordScreen = navController::navigateToEditPassword,
             navigateToFaqScreen = navController::navigateToFAQ,
             navigateToNotificationScreen = navController::navigateToNotification,

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copyright 2026 Mifos Initiative
+
+    This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+    If a copy of the MPL was not distributed with this file,
+    You can obtain one at https://mozilla.org/MPL/2.0/.
+
+    See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+-->
+<resources>
+    <string name="feature_passcode_biometric_error_lockout">시도 횟수가 너무 많습니다. 잠시 후 다시 시도해 주세요.</string>
+    <string name="feature_passcode_biometric_error_hardware_unavailable">생체 인식 하드웨어를 일시적으로 사용할 수 없습니다. 잠시 후 다시 시도해 주세요.</string>
+    <string name="feature_passcode_biometric_error_not_enrolled">이 기기에 등록된 생체 인식 정보가 없습니다. 시스템 설정에서 생체 인식을 설정해 주세요.</string>
+    <string name="feature_passcode_biometric_error_timeout">생체 인식 인증 시간이 초과되었습니다. 다시 시도해 주세요.</string>
+    <string name="feature_passcode_biometric_error_no_space">생체 인식 인증을 완료할 저장 공간이 부족합니다.</string>
+    <string name="feature_passcode_biometric_error_invalid_registration_data">생체 인식 등록 데이터가 잘못되었습니다. 앱 설정에서 생체 인식을 다시 활성화해 주세요.</string>
+    <string name="feature_passcode_biometric_error_invalid_arguments_auth">잘못된 인수로 인해 생체 인식 인증을 시작할 수 없습니다.</string>
+    <string name="feature_passcode_biometric_error_invalid_arguments_registration">잘못된 인수로 인해 생체 인식 등록을 시작할 수 없습니다.</string>
+    <string name="feature_passcode_biometric_error_unknown">예기치 않은 생체 인식 오류가 발생했습니다. 다시 시도해 주세요.</string>
+    <string name="feature_passcode_biometric_prompt_title">Mifos Pay 잠금 해제</string>
+    <string name="feature_passcode_biometric_prompt_subtitle">계속하려면 본인 확인을 해주세요</string>
+    <string name="feature_passcode_biometric_prompt_description">지문, 얼굴 또는 기기 자격 증명을 사용하세요</string>
+    <string name="feature_passcode_biometric_prompt_negative_button">취소</string>
+
+    <!-- BiometricSetupScreen UI labels -->
+    <string name="feature_passcode_biometric_setup_headline">앱 보안 강화</string>
+    <string name="feature_passcode_biometric_setup_confirm">생체 인식 설정</string>
+    <string name="feature_passcode_biometric_setup_skip">지금은 건너뛰기</string>
+
+    <!-- Legacy feature_passcode_* strings -->
+    <string name="feature_passcode_ok">확인</string>
+    <string name="feature_passcode_biometrics_usage_message">생체 인식(지문 또는 얼굴)을 사용해 더 빠르고 안전하게 접근하세요.</string>
+    <string name="feature_passcode_biometrics_not_set">이 기기에 생체 인식이 설정되지 않았습니다. 기기 설정에서 지문 또는 얼굴 인식을 활성화한 후 다시 시도하세요.</string>
+    <string name="feature_passcode_biometrics_available">이 기기에서는 생체 인식을 사용할 수 없습니다</string>
+    <string name="feature_passcode_error">오류</string>
+    <string name="feature_passcode_user_not_registered_error_message">생체 인식 등록 데이터가 잘못되었습니다. 앱 설정에서 생체 인식을 다시 활성화해 주세요.</string>
+</resources>

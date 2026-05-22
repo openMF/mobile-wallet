@@ -47,7 +47,6 @@ include(":core:designsystem")
 include(":core:ui")
 include(":core:common")
 include(":core:network")
-include(":core:network")
 include(":core:model")
 include(":core:analytics")
 

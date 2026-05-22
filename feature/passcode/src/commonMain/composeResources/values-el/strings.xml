@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copyright 2026 Mifos Initiative
+
+    This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+    If a copy of the MPL was not distributed with this file,
+    You can obtain one at https://mozilla.org/MPL/2.0/.
+
+    See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+-->
+<resources>
+    <string name="feature_passcode_biometric_error_lockout">Πάρα πολλές προσπάθειες. Περιμένετε και δοκιμάστε ξανά.</string>
+    <string name="feature_passcode_biometric_error_hardware_unavailable">Το βιομετρικό υλικό είναι προσωρινά μη διαθέσιμο. Δοκιμάστε ξανά αργότερα.</string>
+    <string name="feature_passcode_biometric_error_not_enrolled">Δεν έχουν εγγραφεί βιομετρικά σε αυτήν τη συσκευή. Ρυθμίστε τα βιομετρικά στις ρυθμίσεις του συστήματος.</string>
+    <string name="feature_passcode_biometric_error_timeout">Ο βιομετρικός έλεγχος ταυτότητας έληξε. Δοκιμάστε ξανά.</string>
+    <string name="feature_passcode_biometric_error_no_space">Δεν υπάρχει αρκετός χώρος αποθήκευσης για να ολοκληρωθεί ο βιομετρικός έλεγχος ταυτότητας.</string>
+    <string name="feature_passcode_biometric_error_invalid_registration_data">Τα δεδομένα βιομετρικής εγγραφής δεν είναι έγκυρα. Ενεργοποιήστε ξανά τα βιομετρικά από τις ρυθμίσεις της εφαρμογής.</string>
+    <string name="feature_passcode_biometric_error_invalid_arguments_auth">Δεν ήταν δυνατή η εκκίνηση του βιομετρικού ελέγχου ταυτότητας λόγω μη έγκυρων ορισμάτων.</string>
+    <string name="feature_passcode_biometric_error_invalid_arguments_registration">Δεν ήταν δυνατή η εκκίνηση της βιομετρικής εγγραφής λόγω μη έγκυρων ορισμάτων.</string>
+    <string name="feature_passcode_biometric_error_unknown">Παρουσιάστηκε μη αναμενόμενο βιομετρικό σφάλμα. Δοκιμάστε ξανά.</string>
+    <string name="feature_passcode_biometric_prompt_title">Ξεκλείδωμα Mifos Pay</string>
+    <string name="feature_passcode_biometric_prompt_subtitle">Επαληθεύστε την ταυτότητά σας για να συνεχίσετε</string>
+    <string name="feature_passcode_biometric_prompt_description">Χρησιμοποιήστε το δακτυλικό αποτύπωμα, το πρόσωπο ή τα διαπιστευτήρια της συσκευής σας</string>
+    <string name="feature_passcode_biometric_prompt_negative_button">Ακύρωση</string>
+
+    <!-- BiometricSetupScreen UI labels -->
+    <string name="feature_passcode_biometric_setup_headline">Ασφαλίστε την εφαρμογή σας</string>
+    <string name="feature_passcode_biometric_setup_confirm">Ρύθμιση βιομετρίας</string>
+    <string name="feature_passcode_biometric_setup_skip">Παράλειψη προς το παρόν</string>
+
+    <!-- Legacy feature_passcode_* strings -->
+    <string name="feature_passcode_ok">OK</string>
+    <string name="feature_passcode_biometrics_usage_message">Χρησιμοποιήστε τη βιομετρία (δακτυλικό αποτύπωμα ή πρόσωπο) για πιο γρήγορη και ασφαλή πρόσβαση.</string>
+    <string name="feature_passcode_biometrics_not_set">Η βιομετρία δεν έχει ρυθμιστεί σε αυτή τη συσκευή. Ενεργοποιήστε το δακτυλικό αποτύπωμα ή την αναγνώριση προσώπου στις ρυθμίσεις της συσκευής και δοκιμάστε ξανά.</string>
+    <string name="feature_passcode_biometrics_available">Η βιομετρία δεν είναι διαθέσιμη σε αυτή τη συσκευή</string>
+    <string name="feature_passcode_error">Σφάλμα</string>
+    <string name="feature_passcode_user_not_registered_error_message">Τα δεδομένα βιομετρικής εγγραφής δεν είναι έγκυρα. Ενεργοποιήστε ξανά τα βιομετρικά από τις ρυθμίσεις της εφαρμογής.</string>
+</resources>
