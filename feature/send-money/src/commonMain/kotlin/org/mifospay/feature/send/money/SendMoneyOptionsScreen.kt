@@ -50,7 +50,7 @@ import mobile_wallet.feature.send_money.generated.resources.feature_send_money_m
 import mobile_wallet.feature.send_money.generated.resources.feature_send_money_pay_anyone
 import mobile_wallet.feature.send_money.generated.resources.feature_send_money_people
 import mobile_wallet.feature.send_money.generated.resources.feature_send_money_scan_qr_code
-import mobile_wallet.feature.send_money.generated.resources.feature_send_money_send
+import mobile_wallet.feature.send_money.generated.resources.feature_send_money_title
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.mifospay.core.common.CurrencyFormatter
@@ -108,7 +108,7 @@ fun SendMoneyOptionsScreen(
             modifier = modifier,
             topBar = {
                 MifosTopBar(
-                    topBarTitle = stringResource(Res.string.feature_send_money_send),
+                    topBarTitle = stringResource(Res.string.feature_send_money_title),
                     backPress = {
                         viewModel.trySendAction(SendMoneyOptionsAction.NavigateBack)
                     },

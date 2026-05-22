@@ -301,7 +301,6 @@ internal fun MifosNavHost(
                 navController.navigateToMpayQrScreen()
             },
             onPay = navController::navigateToTransferOptions,
-            onUpiSendMoney = navController::navigateToSendMoneyOptionsScreen,
             onAutoPay = {
                 navController.navigateToAutoPay()
             },
@@ -911,6 +910,7 @@ internal fun MifosNavHost(
         transferOptionsDialog(
             onIntraBankTransferClick = navController::navigateToIntraBankHub,
             onInterBankTransferClick = navController::navigateToInterbankTransfer,
+            onUpiSendMoney = navController::navigateToSendMoneyOptionsScreen,
             onDismiss = {
                 navController.popBackStack()
             },

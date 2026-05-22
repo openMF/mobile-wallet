@@ -24,6 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import mobile_wallet.cmp_shared.generated.resources.upi_and_autopay
 import mobile_wallet.feature.payments.generated.resources.Res
 import mobile_wallet.feature.payments.generated.resources.feature_payments_inter_bank_transfer_description
 import mobile_wallet.feature.payments.generated.resources.feature_payments_inter_bank_transfer_title
@@ -37,11 +38,13 @@ import org.mifospay.core.designsystem.component.MifosBottomSheet
 import org.mifospay.core.designsystem.theme.MifosTheme
 import org.mifospay.shared.TransferOptionsViewModel
 import template.core.base.designsystem.theme.KptTheme
+import mobile_wallet.cmp_shared.generated.resources.Res as SharedRes
 
 @Composable
 fun TransferOptionsBottomSheet(
     onIntraBankTransferClick: () -> Unit,
     onInterBankTransferClick: () -> Unit,
+    onUpiSendMoney: () -> Unit,
     onDismiss: () -> Unit,
     modifier: Modifier = Modifier,
     transferOptionsViewModel: TransferOptionsViewModel = koinViewModel(),
@@ -122,6 +125,38 @@ fun TransferOptionsBottomSheet(
                             },
                     )
                 }
+
+                HorizontalDivider(
+                    modifier = Modifier.padding(horizontal = KptTheme.spacing.md),
+                    color = KptTheme.colorScheme.outlineVariant,
+                )
+
+                // Inter-Bank Transfer Option
+                ListItem(
+                    headlineContent = {
+                        Text(
+                            text = stringResource(SharedRes.string.upi_and_autopay),
+                            style = KptTheme.typography.bodyLarge,
+                            fontWeight = FontWeight.SemiBold,
+                            color = KptTheme.colorScheme.onSurface,
+                        )
+                    },
+                    supportingContent = {
+                        Text(
+                            text = stringResource(SharedRes.string.upi_and_autopay),
+                            style = KptTheme.typography.bodySmall,
+                            color = KptTheme.colorScheme.onSurfaceVariant,
+                        )
+                    },
+                    colors = ListItemDefaults.colors(
+                        containerColor = Color.Transparent,
+                    ),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable {
+                            onUpiSendMoney()
+                        },
+                )
             }
         },
     )
@@ -134,6 +169,7 @@ fun TransferOptionsBottomSheetPreview() {
         TransferOptionsBottomSheet(
             onIntraBankTransferClick = {},
             onInterBankTransferClick = {},
+            onUpiSendMoney = {},
             onDismiss = {},
         )
     }
