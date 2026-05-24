@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copyright 2024 Mifos Initiative
+
+    This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+    If a copy of the MPL was not distributed with this file,
+    You can obtain one at https://mozilla.org/MPL/2.0/.
+
+    See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+-->
+<resources>
+    <string name="feature_merchants_empty_no_merchants_title">Aún no has agregado ningún comercio</string>
+    <string name="feature_merchants_empty_no_merchants_subtitle">Todos los comercios que agregues se verán aquí</string>
+    <string name="feature_merchants_error_oops">¡Ups!</string>
+    <string name="feature_merchants_unexpected_error_subtitle">Ocurrió un error inesperado. Por favor, inténtalo de nuevo.</string>
+    <string name="feature_merchants_loading">Cargando</string>
+    <string name="feature_merchants_vpa_copy_success">El VPA se copió al portapapeles con éxito</string>
+    <string name="feature_merchants_search">Buscar</string>
+    <string name="feature_merchants_close">Cerrar</string>
+    <string name="feature_merchants_merchant_transaction">Transacción del comercio</string>
+    <string name="feature_merchants_no_transactions_found">No se encontraron transacciones</string>
+    <string name="feature_merchants_insufficient_balance">Saldo insuficiente</string>
+    <string name="feature_merchants_transfer_money_to_this_merchant">Transferir dinero a este comercio</string>
+    <string name="feature_merchants_amount">Monto</string>
+    <string name="feature_merchants_submit">Enviar</string>
+    <string name="feature_merchants_transaction_id">ID de transacción : </string>
+    <string name="feature_merchants_transaction_date">Fecha de transacción : </string>
+    <string name="feature_merchants_credits">Abonos</string>
+    <string name="feature_merchants_debits">Cargos</string>
+    <string name="feature_merchants_other">Otro</string>
+</resources>

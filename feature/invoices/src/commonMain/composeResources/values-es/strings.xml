@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copyright 2024 Mifos Initiative
+
+    This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+    If a copy of the MPL was not distributed with this file,
+    You can obtain one at https://mozilla.org/MPL/2.0/.
+
+    See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+-->
+<resources>
+    <string name="feature_invoices_invoice">Factura</string>
+    <string name="feature_invoices_loading">Cargando</string>
+    <string name="feature_invoices_invoice_details">Detalles de la factura</string>
+    <string name="feature_invoices_merchant_id">ID del consumidor</string>
+    <string name="feature_invoices_consumer_id">Nombre del consumidor</string>
+    <string name="feature_invoices_amount">Monto</string>
+    <string name="feature_invoices_items_bought">Artículos comprados</string>
+    <string name="feature_invoices_status">Estado</string>
+    <string name="feature_invoices_transaction_id">ID de transacción : </string>
+    <string name="feature_invoices_unique_receipt_link">Enlace único del recibo : </string>
+    <string name="feature_invoices_date">Fecha</string>
+    <string name="feature_invoices_payment_options_will_be_fetched_from_upi">Opciones de pago (se obtendrán desde
+        UPI)
+    </string>
+    <string name="feature_invoices_unique_payment_link">Enlace único de pago</string>
+    <string name="feature_invoices_error_oops">¡Ups!</string>
+    <string name="feature_invoices_unexpected_error_subtitle">Ocurrió un error inesperado. Por favor, inténtalo de nuevo.</string>
+    <string name="feature_invoices_error_no_invoices_found">No se pudo obtener la lista de facturas. Por favor, inténtalo de nuevo.</string>
+</resources>

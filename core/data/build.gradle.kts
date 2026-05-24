@@ -37,6 +37,7 @@ kotlin {
             implementation(libs.jb.composeRuntime)
             implementation(compose.components.resources)
             implementation(libs.mifos.authenticator.passcode)
+            implementation(libs.mifos.authenticator.biometrics)
         }
 
         androidMain.dependencies {
