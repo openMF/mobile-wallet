@@ -107,10 +107,8 @@ fun PayeeDetailsScreen(
     EventsEffect(viewModel) { event ->
         when (event) {
             PayeeDetailsEvent.NavigateBack -> onBackClick.invoke()
-            is PayeeDetailsEvent.NavigateToUpiPayment -> onNavigateToUpiPayment.invoke(event.state)
-            is PayeeDetailsEvent.NavigateToFineractPayment -> onNavigateToFineractPayment.invoke(event.state)
-//            is PayeeDetailsEvent.NavigateToUpiPin -> onNavigateToPaymentProcessing.invoke(event.state)
-//            is PayeeDetailsEvent.NavigateToPaymentProcessing -> onNavigateToPaymentProcessing.invoke(event.state)
+            is PayeeDetailsEvent.NavigateToUpiPayment -> onNavigateToPaymentProcessing.invoke(event.state)
+            is PayeeDetailsEvent.NavigateToFineractPayment -> onNavigateToPaymentProcessing.invoke(event.state)
         }
     }
 

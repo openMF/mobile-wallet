@@ -528,7 +528,6 @@ internal fun MifosNavHost(
 
         sendMoneyScreen(
             onBackClick = navController::popBackStack,
-            // TODO Need clarification
             navigateToTransferScreen = navController::navigateToSendMoneyScreen,
             navigateToPayeeDetailsScreen = navController::navigateToPayeeDetailsScreen,
             navigateToScanQrScreen = navController::navigateToScanQr,
