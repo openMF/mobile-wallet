@@ -43,7 +43,7 @@ class TransferOptionsViewModel : BaseViewModel<TransferOptionState, Unit, Unit>(
     private fun getCountryCode(): String {
         // Dummy API / device locale simulation
 
-        return "IN"
+        return "US"
     }
 }
 
