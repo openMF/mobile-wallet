@@ -15,6 +15,7 @@
 :core:ui
 :feature:accounts
 :feature:auth
+:feature:autopay
 :feature:beneficiary
 :feature:editpassword
 :feature:faq
@@ -33,6 +34,7 @@
 :feature:profile
 :feature:receipt
 :feature:savedcards
+:feature:send-money
 :feature:settings
 :feature:standing-instruction
 :feature:transfer-interbank
@@ -345,10 +347,10 @@ io.github.jan-tennert.supabase:postgrest-kt-android:3.1.1
 io.github.jan-tennert.supabase:postgrest-kt:3.1.1
 io.github.jan-tennert.supabase:supabase-kt-android:3.1.1
 io.github.jan-tennert.supabase:supabase-kt:3.1.1
-io.github.openmf:mifos-authenticator-biometrics-android:2.0.4
-io.github.openmf:mifos-authenticator-biometrics:2.0.4
-io.github.openmf:mifos-authenticator-passcode-android:2.0.6
-io.github.openmf:mifos-authenticator-passcode:2.0.6
+io.github.openmf:mifos-authenticator-biometrics-android:2.3.0-beta
+io.github.openmf:mifos-authenticator-biometrics:2.3.0-beta
+io.github.openmf:mifos-authenticator-passcode-android:2.3.0-beta
+io.github.openmf:mifos-authenticator-passcode:2.3.0-beta
 io.github.vinceglb:filekit-coil-android:0.12.0
 io.github.vinceglb:filekit-coil:0.12.0
 io.github.vinceglb:filekit-core-android:0.12.0

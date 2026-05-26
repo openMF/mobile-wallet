@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copyright 2024 Mifos Initiative
+
+    This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+    If a copy of the MPL was not distributed with this file,
+    You can obtain one at https://mozilla.org/MPL/2.0/.
+
+    See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+-->
+<resources>
+    <string name="feature_send_money_insufficient_balance">Insufficient balance</string>
+    <string name="feature_send_money_error_fetching_balance">Error fetching balance</string>
+    <string name="feature_send_money_not_allowed">Self Account transfer is not allowed</string>
+    <string name="feature_send_money_send">Send Money</string>
+    <string name="feature_send_money_title">UPI Payments &amp; AutoPay </string>
+    <string name="feature_send_money_select_transfer_method">Select transfer method</string>
+    <string name="feature_send_money_vpa">VPA</string>
+    <string name="feature_send_money_mobile">Mobile number</string>
+    <string name="feature_send_money_amount">Amount</string>
+    <string name="feature_send_money_virtual_payment_address">Virtual Payment Address</string>
+    <string name="feature_send_money_submit">Submit</string>
+    <string name="feature_send_money_please_wait">Please wait…</string>
+    <string name="feature_send_money_phone_number">Phone Number</string>
+
+    <string name="feature_send_money_oops">Oops!</string>
+    <string name="feature_send_money_something_went_wrong">Something went wrong!</string>
+    <string name="feature_send_money_no_accounts_found">No accounts found!</string>
+    <string name="feature_send_money_vpa_mobile_account_number">VPA/Mobile/Account Number</string>
+    <string name="feature_send_money_to_account">To Account</string>
+    <string name="feature_send_money_proceed">Proceed</string>
+    <string name="feature_send_money_bottom_bar">Bottom Bar</string>
+    <string name="feature_send_money_scan_qr">Scan QR</string>
+    <string name="feature_send_money_close">Close</string>
+    <string name="feature_send_money_loading">Loading</string>
+    <string name="feature_send_money_selected">Selected</string>
+    <string name="feature_send_money_error_amount_cannot_be_empty">Amount cannot be empty</string>
+    <string name="feature_send_money_error_invalid_amount">Invalid amount</string>
+    <string name="feature_send_money_error_account_cannot_be_empty">Account cannot be empty</string>
+    <string name="feature_send_money_error_requesting_payment_qr_but_found">Requesting payment QR but found - %1$s</string>
+    <string name="feature_send_money_error_requesting_payment_qr_data_missing">Failed to request payment QR: required data is missing</string>
+    <string name="feature_send_money_upi_qr_parsed_successfully">UPI QR code parsed successfully</string>
+    <string name="feature_send_money_external_upi_payment">External UPI Payment</string>
+    <string name="feature_send_money_choose_method">Choose how you want to send money</string>
+    <string name="feature_send_money_scan_qr_code">Scan any QR code</string>
+    <string name="feature_send_money_pay_anyone">Pay anyone</string>
+    <string name="feature_send_money_bank_transfer">Bank Transfer</string>
+    <string name="feature_send_money_bank_transfer_to_others">To Others</string>
+    <string name="feature_send_money_bank_transfer_to_self">To Self</string>
+    <string name="feature_send_money_fineract_payments">Fineract Payments</string>
+    <string name="feature_send_money_people">People</string>
+    <string name="feature_send_money_merchants">Merchants</string>
+    <string name="feature_send_money_more">More</string>
+
+    <string name="feature_send_money_payee_details_title">Payee Details</string>
+    <string name="feature_send_money_payee_profile">Payee Profile</string>
+    <string name="feature_send_money_paying">Paying %1$s</string>
+    <string name="feature_send_money_upi_id">UPI ID: %1$s</string>
+    <string name="feature_send_money_amount_exceeds_limit">Amount cannot be more than ₹ 5,00,000</string>
+    <string name="feature_send_money_amount_below_minimum">Amount must be at least ₹ 1</string>
+    <string name="feature_send_money_rupee_icon">Rupee Icon</string>
+    <string name="feature_send_money_add_note">Add note</string>
+    <string name="feature_send_money_pay_amount">Pay %1$s</string>
+    <string name="feature_send_money_choose_account">Choose account to pay with</string>
+    <string name="feature_send_money_bank_icon">Bank Icon</string>
+    <string name="feature_send_money_balance">Balance:</string>
+    <string name="feature_send_money_check_now">Check now</string>
+    <string name="feature_send_money_change_account">Change Account</string>
+    <string name="feature_send_money_add_bank_account">Add bank account</string>
+    <string name="feature_send_money_add_bank_account_desc">Add Bank Account</string>
+    <string name="feature_send_money_continue">Continue</string>
+    <string name="feature_send_money_paying_securely">Paying securely %1$s to</string>
+    <string name="feature_send_money_paid_to">Paid to</string>
+
+    <string name="feature_send_money_payment_success">Payment Successful</string>
+    <string name="feature_send_money_banking_name">Banking name: %1$s</string>
+    <string name="feature_send_money_powered_by_upi">Powered by UPI</string>
+    <string name="feature_send_money_share_screenshot">Share screenshot</string>
+    <string name="feature_send_money_done">Done</string>
+    <string name="feature_send_money_payment_success_description">Payment completed successfully</string>
+
+
+    <string name="feature_send_money_receivers_bank_details">Receiver's Bank Details</string>
+    <string name="feature_send_money_account_number">Bank account number</string>
+    <string name="feature_send_money_account_number_error">Input not valid</string>
+    <string name="feature_send_money_ifsc_code">IFSC Code</string>
+    <string name="feature_send_money_search_ifsc">Search for IFSC</string>
+    <string name="feature_send_money_bank_details_note">This information will be securely saved as per Mifos Initiative Terms of Service and Privacy Policy</string>
+    <string name="feature_send_money_recent_transfers">Recent Transfers</string>
+    <string name="feature_send_money_self_transfer">Self Transfer</string>
+    <string name="feature_send_money_select_different_accounts">Select different accounts for self transfer</string>
+    <string name="feature_send_money_search_ifsc_placeholder">Search IFSC code or bank name</string>
+    <string name="feature_send_money_searching">Searching...</string>
+    <string name="feature_send_money_no_ifsc_found">No IFSC codes found</string>
+    <string name="feature_send_money_search_ifsc_instructions">Search for IFSC codes by bank name or code</string>
+    <string name="feature_send_money_bank_name">Bank name</string>
+    <string name="feature_send_money_bank_branch">Bank branch</string>
+    <string name="feature_send_money_cancel">Cancel</string>
+
+    <string name="feature_send_money_reenter_account_number">Re-enter Bank Account Number</string>
+    <string name="feature_send_money_receivers_name">Receiver's Name</string>
+    <string name="feature_send_money_account_number_mismatch">Account numbers do not match</string>
+    <string name="feature_send_money_receivers_name_required">Receiver's name is required</string>
+    <string name="feature_send_money_ifsc_validation_error">IFSC should be 4 letters, followed by 7 letters or digits</string>
+    <string name="feature_send_money_confirm">Confirm</string>
+    <string name="feature_send_money_autopay">AutoPay</string>
+</resources>

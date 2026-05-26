@@ -9,17 +9,32 @@
     See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
 -->
 <resources>
-    <string name="feature_authenticator_error">Error</string>
-    <string name="feature_authenticator_ok">OK</string>
-    <string name="feature_authenticator_use_biometrics">Use Biometrics</string>
-    <string name="feature_authenticator_fingerprint_icon">Fingerprint icon</string>
-    <string name="feature_authenticator_facescan_icon">Face scan icon</string>
-    <string name="feature_authenticator_keypad_icon">Keypad icon</string>
-    <string name="feature_authenticator_set_up_authentication_option">Set up Authentication Option</string>
-    <string name="feature_authenticator_authenticate_windows_hello">Authenticate using Windows Hello</string>
-    <string name="feature_authenticator_unsupported_platform">Unsupported platform</string>
-    <string name="feature_authenticator_user_not_registered_error_message">Biometrics not registered or invalid registration data. Re-Enable biometrics from app settings</string>
-    <string name="feature_authenticator_biometrics_usage_message">Use biometrics (fingerprint or face) for faster and more secure access</string>
-    <string name="feature_authenticator_biometrics_not_set">Biometrics not set up on this device</string>
-    <string name="feature_authenticator_biometrics_available">Biometrics not available on this device</string>
+    <string name="feature_passcode_error">Error</string>
+    <string name="feature_passcode_ok">OK</string>
+    <string name="feature_passcode_user_not_registered_error_message">Biometrics not registered or invalid registration data. Re-Enable biometrics from app settings</string>
+    <string name="feature_passcode_biometrics_usage_message">Use biometrics (fingerprint or face) for faster and more secure access</string>
+    <string name="feature_passcode_biometrics_not_set">Biometrics not set up on this device</string>
+    <string name="feature_passcode_biometrics_available">Biometrics not available on this device</string>
+
+    <!-- BiometricSetupScreen UI labels -->
+    <string name="feature_passcode_biometric_setup_headline">Secure your app</string>
+    <string name="feature_passcode_biometric_setup_confirm">Setup Biometrics</string>
+    <string name="feature_passcode_biometric_setup_skip">Skip for Now</string>
+
+    <!-- BiometricError messages (consumer-owned per library v2.3.0-beta contract) -->
+    <string name="feature_passcode_biometric_error_lockout">Too many attempts. Please wait and try again.</string>
+    <string name="feature_passcode_biometric_error_hardware_unavailable">Biometric hardware is temporarily unavailable. Please try again later.</string>
+    <string name="feature_passcode_biometric_error_not_enrolled">No biometrics are enrolled on this device. Please set up biometrics in system settings.</string>
+    <string name="feature_passcode_biometric_error_timeout">Biometric authentication timed out. Please try again.</string>
+    <string name="feature_passcode_biometric_error_no_space">Not enough storage to complete biometric authentication.</string>
+    <string name="feature_passcode_biometric_error_invalid_registration_data">Biometric registration data is invalid. Please re-enable biometrics from app settings.</string>
+    <string name="feature_passcode_biometric_error_invalid_arguments_auth">Could not start biometric authentication due to invalid arguments.</string>
+    <string name="feature_passcode_biometric_error_invalid_arguments_registration">Could not start biometric registration due to invalid arguments.</string>
+    <string name="feature_passcode_biometric_error_unknown">An unexpected biometric error occurred. Please try again.</string>
+
+    <!-- OS biometric prompt strings (caller-supplied per library v2.3.0-beta contract) -->
+    <string name="feature_passcode_biometric_prompt_title">Unlock Mifos Pay</string>
+    <string name="feature_passcode_biometric_prompt_subtitle">Verify your identity to continue</string>
+    <string name="feature_passcode_biometric_prompt_description">Use your fingerprint, face, or device credential</string>
+    <string name="feature_passcode_biometric_prompt_negative_button">Cancel</string>
 </resources>

@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copyright 2024 Mifos Initiative
+
+    This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+    If a copy of the MPL was not distributed with this file,
+    You can obtain one at https://mozilla.org/MPL/2.0/.
+
+    See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+-->
+<resources>
+    <string name="feature_send_money_insufficient_balance">Saldo insuficiente</string>
+    <string name="feature_send_money_error_fetching_balance">Error al consultar el saldo</string>
+    <string name="feature_send_money_not_allowed">No se permiten transferencias a cuentas propias</string>
+    <string name="feature_send_money_send">Enviar dinero</string>
+    <string name="feature_send_money_select_transfer_method">Selecciona el método de transferencia</string>
+    <string name="feature_send_money_vpa">VPA</string>
+    <string name="feature_send_money_mobile">Número de celular</string>
+    <string name="feature_send_money_amount">Monto</string>
+    <string name="feature_send_money_virtual_payment_address">Dirección de pago virtual (VPA)</string>
+    <string name="feature_send_money_submit">Enviar</string>
+    <string name="feature_send_money_please_wait">Por favor, espera…</string>
+    <string name="feature_send_money_phone_number">Número de teléfono</string>
+
+    <string name="feature_send_money_oops">¡Ups!</string>
+    <string name="feature_send_money_something_went_wrong">¡Algo salió mal!</string>
+    <string name="feature_send_money_no_accounts_found">¡No se encontraron cuentas!</string>
+    <string name="feature_send_money_vpa_mobile_account_number">VPA/Celular/Número de cuenta</string>
+    <string name="feature_send_money_to_account">A la cuenta</string>
+    <string name="feature_send_money_proceed">Continuar</string>
+    <string name="feature_send_money_bottom_bar">Barra inferior</string>
+    <string name="feature_send_money_scan_qr">Escanear QR</string>
+    <string name="feature_send_money_close">Cerrar</string>
+    <string name="feature_send_money_loading">Cargando</string>
+    <string name="feature_send_money_selected">Seleccionado</string>
+    <string name="feature_send_money_error_amount_cannot_be_empty">El monto no puede estar vacío</string>
+    <string name="feature_send_money_error_invalid_amount">Monto no válido</string>
+    <string name="feature_send_money_error_account_cannot_be_empty">La cuenta no puede estar vacía</string>
+    <string name="feature_send_money_error_requesting_payment_qr_but_found">Se solicitó un QR de pago pero se encontró - %1$s</string>
+    <string name="feature_send_money_error_requesting_payment_qr_data_missing">Error al solicitar el QR de pago: faltan datos obligatorios</string>
+
+    <string name="feature_select_payment_title">Seleccionar destinatario</string>
+    <string name="feature_select_account_placeholder">Buscar VPA/Celular/Número de cuenta</string>
+    <string name="feature_send_money_add_payee_title">Agregar destinatario</string>
+    <string name="feature_send_money_add_payee_subtitle">Agrega un destinatario para enviar dinero rápidamente</string>
+    <string name="feature_send_money_add_icon_desc">Agregar</string>
+    <string name="feature_send_money_recents_title">Recientes</string>
+    <string name="feature_send_money_recents_icon_desc">Recientes</string>
+
+    <string name="feature_send_money_add_payee">Agregar destinatario</string>
+    <string name="feature_send_money_history">Historial</string>
+    <string name="feature_send_money_request">Solicitar</string>
+
+    <string name="feature_send_money_tab_recents">Recientes</string>
+    <string name="feature_send_money_tab_beneficiaries">Beneficiarios</string>
+
+    <string name="feature_send_money_see_all">Ver todas las transacciones</string>
+    <string name="feature_send_money_no_recents">No hay transferencias recientes</string>
+    <string name="feature_send_money_no_recents_subtitle">Agrega un destinatario para empezar a enviar dinero</string>
+
+    <string name="feature_send_money_no_beneficiaries">No hay beneficiarios</string>
+    <string name="feature_send_money_no_beneficiaries_subtitle">Agrega un beneficiario para enviar dinero rápidamente</string>
+    <string name="feature_send_money_all_accounts">Todas las cuentas</string>
+    <string name="feature_send_money_last_paid">Último pago el %1$s</string>
+    <string name="feature_send_money_pay_button">Pagar</string>
+    <string name="feature_send_money_no_accounts_found_for_search">No se encontraron cuentas para la búsqueda realizada</string>
+
+    <string name="feature_make_transfer_loading">Cargando</string>
+    <string name="feature_make_transfer_send_money">Enviar dinero</string>
+    <string name="feature_make_transfer_sending_to">Enviando a</string>
+    <string name="feature_make_transfer_amount">Ingresa el monto</string>
+    <string name="feature_make_transfer_transaction_success">Transacción exitosa</string>
+    <string name="feature_make_transfer_transaction_unable_to_process">No se pudo procesar la transferencia</string>
+    <string name="feature_make_transfer_review_title">Revisar transferencia</string>
+    <string name="feature_make_transfer_description_label">Agregar un mensaje</string>
+    <string name="feature_make_transfer_to_account">A %1$s</string>
+    <string name="feature_make_transfer_from_account">Desde %1$s</string>
+    <string name="feature_make_transfer_from_account_title">Desde la cuenta</string>
+    <string name="feature_make_transfer_continue_button">Continuar</string>
+    <string name="feature_make_transfer_oops_title">¡Ups!</string>
+    <string name="feature_make_transfer_no_accounts_found">¡No se encontraron cuentas!</string>
+    <string name="feature_make_transfer_check_icon_description">verificar</string>
+    <string name="feature_make_transfer_badge_wallet">BILLETERA</string>
+    <string name="feature_make_transfer_badge_saving">AHORRO</string>
+    <string name="feature_make_transfer_icon_selected_description">Indicador de cuenta seleccionada</string>
+
+    <string name="feature_make_transfer_continue">Continuar</string>
+    <string name="feature_make_transfer_success">Éxito</string>
+    <string name="feature_make_transfer_payment_success">Pago exitoso</string>
+    <string name="feature_make_transfer_payment_done">Tu pago se ha realizado con éxito.</string>
+
+    <string name="feature_make_transfer_error_empty_amount">El monto no puede estar vacío</string>
+    <string name="feature_make_transfer_error_invalid_amount">Por favor, ingresa un monto válido</string>
+    <string name="feature_make_transfer_error_empty_description">La descripción no puede estar vacía</string>
+    <string name="feature_make_transfer_error_select_account">Por favor, selecciona una cuenta</string>
+    <string name="feature_make_transfer_error_inactive_account">La cuenta está inactiva</string>
+    <string name="feature_make_transfer_error_same_account">No se puede transferir a la misma cuenta</string>
+    <string name="feature_make_transfer_error_insufficient_balance">Saldo insuficiente</string>
+    <string name="feature_make_transfer_available_balance">Saldo disponible: %1$s</string>
+    <string name="feature_make_transfer_show_balance">Mostrar saldo</string>
+    <string name="feature_make_transfer_hide_balance">Ocultar saldo</string>
+    <string name="feature_make_transfer_amount_error">Tu cuenta no tiene saldo suficiente</string>
+    <string name="feature_make_transfer_user_verification_failed">Error en la verificación del usuario</string>
+
+    <string name="feature_transfer_error_title">Error</string>
+    <string name="feature_transfer_error_network_title">Error de red</string>
+    <string name="feature_transfer_error_server_title">Error del servidor</string>
+    <string name="feature_transfer_error_invalid_request_title">Solicitud no válida</string>
+    <string name="feature_transfer_error_access_denied_title">Acceso denegado</string>
+
+    <string name="feature_transfer_error_network">Por favor, comprueba tu conexión a internet</string>
+    <string name="feature_transfer_error_server">Ocurrió un error en el servidor. Por favor, inténtalo más tarde.</string>
+    <string name="feature_transfer_error_invalid_request">Solicitud no válida. Por favor, verifica tus datos.</string>
+
+    <string name="feature_transfer_retry">Reintentar</string>
+    <string name="feature_transfer_cancel">Cancelar</string>
+    <string name="feature_transfer_close">Cerrar</string>
+
+    <string name="feature_transfer_transaction_id">ID de transacción</string>
+    <string name="feature_transfer_copy">Copiar</string>
+    <string name="feature_transfer_amount">Monto</string>
+    <string name="feature_transfer_to_account">Para</string>
+    <string name="feature_transfer_from_account">De</string>
+    <string name="feature_transfer_date">Fecha</string>
+    <string name="feature_transfer_description">Descripción</string>
+    <string name="feature_transfer_back_to_home">Volver al inicio</string>
+    <string name="feature_transfer_transfer_completed">Transferencia a %1$s completada</string>
+
+</resources>
