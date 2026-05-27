@@ -15,6 +15,7 @@
 :core:ui
 :feature:accounts
 :feature:auth
+:feature:autopay
 :feature:beneficiary
 :feature:editpassword
 :feature:faq
@@ -33,6 +34,7 @@
 :feature:profile
 :feature:receipt
 :feature:savedcards
+:feature:send-money
 :feature:settings
 :feature:standing-instruction
 :feature:transfer-interbank

@@ -25,6 +25,7 @@ import org.mifospay.core.network.di.LocalModule
 import org.mifospay.core.network.di.NetworkModule
 import org.mifospay.feature.accounts.di.AccountsModule
 import org.mifospay.feature.auth.di.AuthModule
+import org.mifospay.feature.autopay.di.AutoPayModule
 import org.mifospay.feature.beneficiary.di.BeneficiaryModule
 import org.mifospay.feature.editpassword.di.EditPasswordModule
 import org.mifospay.feature.faq.di.FaqModule
@@ -41,12 +42,14 @@ import org.mifospay.feature.payments.di.PaymentsModule
 import org.mifospay.feature.profile.di.ProfileModule
 import org.mifospay.feature.receipt.di.ReceiptModule
 import org.mifospay.feature.savedcards.di.SavedCardsModule
+import org.mifospay.feature.send.money.di.SendMoneyModule
 import org.mifospay.feature.settings.di.SettingsModule
 import org.mifospay.feature.standing.instruction.di.StandingInstructionModule
 import org.mifospay.feature.transfer.interbank.di.interbankTransferModule
 import org.mifospay.feature.transfer.intrabank.di.IntraBankModule
 import org.mifospay.feature.upi.setup.di.UpiSetupModule
 import org.mifospay.shared.MifosPayViewModel
+import org.mifospay.shared.TransferOptionsViewModel
 import org.mifospay.shared.instance.InstanceSelectorViewModel
 
 /**
@@ -85,6 +88,7 @@ object KoinModules {
     private val sharedModule = module {
         viewModelOf(::MifosPayViewModel)
         viewModelOf(::InstanceSelectorViewModel)
+        viewModelOf(::TransferOptionsViewModel)
     }
     private val featureModules = module {
         includes(
@@ -112,6 +116,8 @@ object KoinModules {
             MerchantsModule,
             UpiSetupModule,
             MifosAuthenticatorModule,
+            AutoPayModule,
+            SendMoneyModule,
         )
     }
 
