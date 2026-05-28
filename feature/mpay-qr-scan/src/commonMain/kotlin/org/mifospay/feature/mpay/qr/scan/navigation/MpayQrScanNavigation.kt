@@ -26,6 +26,9 @@ fun NavGraphBuilder.scanQrScreen(
     navigateToIntraBankTransfer: (QrCodeData) -> Unit,
     navigateToInterbankTransfer: (accountExternalId: String, recipientName: String, amount: String) -> Unit,
     navigateToAddBeneficiaryScreen: (String) -> Unit,
+    // from send money pr
+//    navigateToSendScreen: (String) -> Unit,
+//    navigateToPayeeDetailsScreen: (String) -> Unit,
 ) {
     composableWithSlideTransitions(route = SCAN_QR_ROUTE) {
         ScanQrCodeScreen(
@@ -33,6 +36,9 @@ fun NavGraphBuilder.scanQrScreen(
             navigateToIntraBankTransfer = navigateToIntraBankTransfer,
             navigateToInterbankTransfer = navigateToInterbankTransfer,
             navigateToAddBeneficiaryScreen = navigateToAddBeneficiaryScreen,
+            // from send money pr
+//            navigateToSendScreen = navigateToSendScreen,
+//            navigateToPayeeDetailsScreen = navigateToPayeeDetailsScreen,
         )
     }
 }
