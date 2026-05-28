@@ -32,4 +32,42 @@ actual object CurrencyFormatter {
             } ?: "0.00"
         }"
     }
+
+    actual fun format(
+        balance: Double?,
+        maximumFractionDigits: Int?,
+    ): String {
+        if (balance == null) {
+            return "0.00"
+        }
+
+        val digits = maximumFractionDigits ?: 2
+
+        val formattedBalance = balance.toString()
+
+        val integerPart = formattedBalance.substringBefore(".")
+        val decimalPart = formattedBalance.substringAfter(".", "")
+
+        val formattedIntegerPart = integerPart
+            .reversed()
+            .chunked(3)
+            .joinToString(",")
+            .reversed()
+
+        val formattedDecimalPart = when {
+            decimalPart.length >= digits -> {
+                decimalPart.substring(0, digits)
+            }
+
+            else -> {
+                decimalPart.padEnd(digits, '0')
+            }
+        }
+
+        return if (digits > 0) {
+            "$formattedIntegerPart.$formattedDecimalPart"
+        } else {
+            formattedIntegerPart
+        }
+    }
 }

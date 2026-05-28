@@ -527,11 +527,10 @@ private fun AccountCard(
                         color = KptTheme.colorScheme.surface,
                     )
 
-                    val accountBalance = CurrencyFormatter.format(
+                    val accountBalance = "${account.currency.code} ${account.currency.displaySymbol}${CurrencyFormatter.format(
                         balance = account.balance,
-                        currencyCode = account.currency.code,
-                        maximumFractionDigits = null,
-                    )
+                        maximumFractionDigits = 2,
+                    )}"
 
                     Text(
                         text = accountBalance,
@@ -956,6 +955,7 @@ private fun HomeScreenContentPreview() {
             transferId = null,
             originalTransactionId = 101L,
             paymentDetailId = null,
+            reversed = true,
         ),
         Transaction(
             accountId = 2L,
@@ -975,6 +975,7 @@ private fun HomeScreenContentPreview() {
             transferId = null,
             originalTransactionId = 101L,
             paymentDetailId = null,
+            reversed = false,
         ),
         Transaction(
             accountId = 3L,
@@ -994,6 +995,7 @@ private fun HomeScreenContentPreview() {
             transferId = null,
             originalTransactionId = 101L,
             paymentDetailId = null,
+            reversed = true,
         ),
         Transaction(
             accountId = 4L,
@@ -1013,6 +1015,7 @@ private fun HomeScreenContentPreview() {
             transferId = null,
             originalTransactionId = 101L,
             paymentDetailId = null,
+            reversed = false,
         ),
     )
     MaterialTheme {

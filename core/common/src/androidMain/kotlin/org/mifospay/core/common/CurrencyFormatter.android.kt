@@ -10,17 +10,31 @@
 package org.mifospay.core.common
 
 import java.text.NumberFormat
-import java.util.Currency
 
 actual object CurrencyFormatter {
+
     actual fun format(
         balance: Double?,
         currencyCode: String?,
         maximumFractionDigits: Int?,
     ): String {
-        val balanceFormatter = NumberFormat.getCurrencyInstance()
-        balanceFormatter.maximumFractionDigits = maximumFractionDigits ?: 0
-        balanceFormatter.currency = Currency.getInstance(currencyCode)
-        return balanceFormatter.format(balance)
+        val formatter = NumberFormat.getNumberInstance()
+
+        formatter.maximumFractionDigits = maximumFractionDigits ?: 0
+        formatter.minimumFractionDigits = maximumFractionDigits ?: 0
+
+        return formatter.format(balance)
+    }
+
+    actual fun format(
+        balance: Double?,
+        maximumFractionDigits: Int?,
+    ): String {
+        val formatter = NumberFormat.getNumberInstance()
+
+        formatter.maximumFractionDigits = maximumFractionDigits ?: 0
+        formatter.minimumFractionDigits = maximumFractionDigits ?: 0
+
+        return formatter.format(balance)
     }
 }

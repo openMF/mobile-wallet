@@ -23,4 +23,16 @@ actual object CurrencyFormatter {
         numberFormat.currency = Currency.getInstance(currencyCode)
         return numberFormat.format(balance)
     }
+
+    actual fun format(
+        balance: Double?,
+        maximumFractionDigits: Int?,
+    ): String {
+        val numberFormat = NumberFormat.getNumberInstance()
+
+        numberFormat.maximumFractionDigits = maximumFractionDigits ?: 0
+        numberFormat.minimumFractionDigits = maximumFractionDigits ?: 0
+
+        return numberFormat.format(balance ?: 0.0)
+    }
 }

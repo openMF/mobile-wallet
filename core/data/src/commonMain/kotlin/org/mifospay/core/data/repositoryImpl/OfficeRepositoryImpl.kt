@@ -16,10 +16,10 @@ import org.mifospay.core.common.DataState
 import org.mifospay.core.common.asDataStateFlow
 import org.mifospay.core.data.repository.OfficeRepository
 import org.mifospay.core.model.office.Office
-import org.mifospay.core.network.FineractApiManager
+import org.mifospay.core.network.SelfServiceApiManager
 
 class OfficeRepositoryImpl(
-    private val apiManager: FineractApiManager,
+    private val apiManager: SelfServiceApiManager,
     private val ioDispatcher: CoroutineDispatcher,
 ) : OfficeRepository {
     override fun getOffices(): Flow<DataState<List<Office>>> {
