@@ -41,14 +41,11 @@ actual object CurrencyFormatter {
         if (balance == null) {
             return ""
         }
-
         val options = js("{}").unsafeCast<dynamic>()
-
         if (maximumFractionDigits != null) {
             options.maximumFractionDigits = maximumFractionDigits
             options.minimumFractionDigits = maximumFractionDigits
         }
-
         return try {
             js("new Intl.NumberFormat('en-US', options).format(balance)")
                 .toString()

@@ -35,7 +35,6 @@ actual object CurrencyFormatter {
         numberFormatter.numberStyle = NSNumberFormatterDecimalStyle
         numberFormatter.maximumFractionDigits =
             (maximumFractionDigits ?: 0).toULong()
-
         return numberFormatter
             .stringFromNumber(NSNumber(balance ?: 0.0))
             ?: ""

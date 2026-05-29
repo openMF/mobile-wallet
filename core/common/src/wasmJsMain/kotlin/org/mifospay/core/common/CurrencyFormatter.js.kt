@@ -42,28 +42,22 @@ actual object CurrencyFormatter {
         }
 
         val digits = maximumFractionDigits ?: 2
-
         val formattedBalance = balance.toString()
-
         val integerPart = formattedBalance.substringBefore(".")
         val decimalPart = formattedBalance.substringAfter(".", "")
-
         val formattedIntegerPart = integerPart
             .reversed()
             .chunked(3)
             .joinToString(",")
             .reversed()
-
         val formattedDecimalPart = when {
             decimalPart.length >= digits -> {
                 decimalPart.substring(0, digits)
             }
-
             else -> {
                 decimalPart.padEnd(digits, '0')
             }
         }
-
         return if (digits > 0) {
             "$formattedIntegerPart.$formattedDecimalPart"
         } else {

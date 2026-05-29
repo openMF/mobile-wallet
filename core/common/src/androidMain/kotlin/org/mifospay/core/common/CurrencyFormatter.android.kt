@@ -19,10 +19,8 @@ actual object CurrencyFormatter {
         maximumFractionDigits: Int?,
     ): String {
         val formatter = NumberFormat.getNumberInstance()
-
         formatter.maximumFractionDigits = maximumFractionDigits ?: 0
         formatter.minimumFractionDigits = maximumFractionDigits ?: 0
-
         return formatter.format(balance)
     }
 
@@ -31,10 +29,8 @@ actual object CurrencyFormatter {
         maximumFractionDigits: Int?,
     ): String {
         val formatter = NumberFormat.getNumberInstance()
-
         formatter.maximumFractionDigits = maximumFractionDigits ?: 0
         formatter.minimumFractionDigits = maximumFractionDigits ?: 0
-
         return formatter.format(balance)
     }
 }
