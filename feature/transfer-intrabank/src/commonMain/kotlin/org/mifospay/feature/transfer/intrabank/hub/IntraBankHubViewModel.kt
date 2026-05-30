@@ -86,6 +86,10 @@ class IntraBankHubViewModel(
                 sendEvent(IntraBankHubEvent.NavigateToHistory)
             }
 
+            IntraBankHubAction.RefreshBeneficiaries -> {
+                loadBeneficiaries()
+            }
+
             is IntraBankHubAction.OnTabSelected -> {
                 mutableStateFlow.update {
                     it.copy(selectedTab = action.tab)
@@ -240,4 +244,6 @@ sealed interface IntraBankHubAction {
     data class OnTabSelected(val tab: PayeeTab) : IntraBankHubAction
     data class OnPayRecentPayee(val payee: RecentPayee) : IntraBankHubAction
     data class OnPayBeneficiary(val beneficiary: Beneficiary) : IntraBankHubAction
+
+    data object RefreshBeneficiaries : IntraBankHubAction
 }
