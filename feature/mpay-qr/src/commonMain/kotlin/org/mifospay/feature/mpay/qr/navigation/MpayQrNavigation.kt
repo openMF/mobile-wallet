@@ -19,12 +19,17 @@ const val MPAY_QR_ROUTE = "mpay_qr_route"
 
 fun NavGraphBuilder.mpayQrScreen(
     navigateBack: () -> Unit,
+    navigateToSendScreen: (String) -> Unit,
+    navigateToPayeeDetailsScreen: (String) -> Unit,
 ) {
     composableWithPushTransitions(
         route = MPAY_QR_ROUTE,
     ) {
         MpayQrScreen(
             navigateBack = navigateBack,
+            // from #1906 pr
+//            navigateToSendScreen = navigateToSendScreen,
+//            navigateToPayeeDetailsScreen = navigateToPayeeDetailsScreen,
         )
     }
 }

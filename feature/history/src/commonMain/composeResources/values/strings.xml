@@ -45,4 +45,14 @@
     <string name="feature_history_filter_by_account">Filter By Account :</string>
     <string name="feature_history_filter_transaction_type">Transaction Type:</string>
     <string name="feature_history_filter_apply">Apply Filters</string>
+
+    <string name="feature_history_transaction_amount">Transaction Amount:</string>
+    <string name="feature_history_destination">Destination:</string>
+    <string name="feature_history_transferred_from">Transferred From:</string>
+    <string name="feature_history_transferred_to">Transferred To</string>
+    <string name="feature_history_account_number_alter">Account No:</string>
+    <string name="feature_history_transaction_type">Transaction Type:</string>
+    <string name="feature_history_currency">Currency:</string>
+    <string name="feature_history_amount">Amount:</string>
+    <string name="feature_history_note">Note:</string>
 </resources>

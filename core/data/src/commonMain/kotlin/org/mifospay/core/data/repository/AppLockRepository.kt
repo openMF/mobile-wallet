@@ -9,13 +9,38 @@
  */
 package org.mifospay.core.data.repository
 
+/**
+ * App-wide lock flag, persisted across process restarts.
+ *
+ * Set/cleared by [org.mifos.feature.passcode.MifosPasscodeViewModel]:
+ *  - locked on `OnStart` if the passcode screen is in `Enter` step,
+ *  - unlocked on `PasscodeResult.Verified` (passcode or biometric success),
+ *  - deleted on `PasscodeResult.Forgotten` / logout.
+ *
+ * Read by `MifosPayViewModel.isAppLocked()` (nullable `Boolean?`) for the
+ * 15-second background-resume re-auth gate in `MifosPayApp`. `null` means
+ * "no flag written yet" — fresh install or post-logout — and is treated
+ * as "no session to gate".
+ */
 interface AppLockRepository {
-
+    /** Mark the app as locked. Persisted. */
     fun lockApp()
 
+    /** Mark the app as unlocked. Persisted. */
     fun unlockApp()
 
+    /** Clear the flag entirely (logout / forgot-passcode). */
     fun deleteLock()
 
-    fun isAppLocked(): Boolean
+    /**
+     * Snapshot read of the lock flag.
+     *
+     * @return `true` if explicitly locked (set via [lockApp]), `false` if
+     *         explicitly unlocked (set via [unlockApp]), or `null` if no flag
+     *         has been written or it was cleared via [deleteLock] (fresh
+     *         install / post-logout). Callers that want to treat
+     *         "absent" as a specific boolean must do so themselves —
+     *         this interface no longer assumes a default.
+     */
+    fun isAppLocked(): Boolean?
 }

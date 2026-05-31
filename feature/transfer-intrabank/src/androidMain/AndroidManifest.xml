@@ -8,4 +8,6 @@
 
     See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
 -->
-<manifest />
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+</manifest>

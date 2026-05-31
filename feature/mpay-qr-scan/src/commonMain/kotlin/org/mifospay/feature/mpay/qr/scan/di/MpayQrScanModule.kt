@@ -12,7 +12,29 @@ package org.mifospay.feature.mpay.qr.scan.di
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
 import org.mifospay.feature.mpay.qr.scan.ScanQrViewModel
+// from send money pr
+// import org.mifospay.feature.send.money.PayeeDetailsViewModel
+// import org.mifospay.feature.send.money.PaymentChatHistoryViewModel
+// import org.mifospay.feature.send.money.PaymentDetailsViewModel
+// import org.mifospay.feature.send.money.PaymentProcessingViewModel
+// import org.mifospay.feature.send.money.PaymentSuccessViewModel
+// import org.mifospay.feature.send.money.ScannerModule
+// import org.mifospay.feature.send.money.SendMoneyOptionsViewModel
+// import org.mifospay.feature.send.money.SendMoneyViewModel
+// import org.mifospay.feature.send.money.UpiPinViewModel
+// import org.mifospay.feature.send.money.UpiTransactionHistoryViewModel
 
 val MpayQrScanModule = module {
     viewModelOf(::ScanQrViewModel)
+
+    // from send money pr
+//    viewModelOf(::SendMoneyViewModel)
+//    viewModelOf(::SendMoneyOptionsViewModel)
+//    viewModelOf(::PayeeDetailsViewModel)
+//    viewModelOf(::PaymentProcessingViewModel)
+//    viewModelOf(::PaymentSuccessViewModel)
+//    viewModelOf(::UpiPinViewModel)
+//    viewModelOf(::PaymentChatHistoryViewModel)
+//    viewModelOf(::PaymentDetailsViewModel)
+//    viewModelOf(::UpiTransactionHistoryViewModel)
 }

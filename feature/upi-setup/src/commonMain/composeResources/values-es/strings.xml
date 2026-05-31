@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copyright 2024 Mifos Initiative
+
+    This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+    If a copy of the MPL was not distributed with this file,
+    You can obtain one at https://mozilla.org/MPL/2.0/.
+
+    See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+-->
+<resources>
+    <string name="feature_upi_setup_upi_pin_setup">Configuración del PIN de UPI</string>
+    <string name="feature_upi_setup_enter_upi_pin">Ingresa tu PIN de UPI</string>
+    <string name="feature_upi_setup_reenter_upi">Vuelve a ingresar tu PIN de UPI</string>
+    <string name="feature_upi_setup_invalid_upi_pin">PIN de UPI no válido</string>
+    <string name="feature_upi_setup_back">Atrás</string>
+    <string name="feature_upi_setup_enter_otp">Ingresa el código OTP</string>
+
+</resources>

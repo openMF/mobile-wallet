@@ -12,6 +12,7 @@
     <string name="app_name">Mifos Pay</string>
     <string name="home">Home</string>
     <string name="payments">Payments</string>
+    <string name="upi_and_autopay"> UPI Payments &amp; AutoPay </string>
     <string name="finance">Finance</string>
     <string name="history">History</string>
     <string name="transaction_history">Transaction History</string>

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copyright 2024 Mifos Initiative
+
+    This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+    If a copy of the MPL was not distributed with this file,
+    You can obtain one at https://mozilla.org/MPL/2.0/.
+
+    See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+-->
+<resources>
+    <string name="feature_profile">Perfil</string>
+    <string name="feature_profile_email">Correo electrónico</string>
+    <string name="feature_profile_vpa">VPA</string>
+    <string name="feature_profile_mobile">Número de celular</string>
+    <string name="feature_profile_personal_qr_code">Código QR personal</string>
+    <string name="feature_profile_link_bank_account">Vincular cuenta bancaria</string>
+    <string name="feature_profile_edit_profile">Editar perfil</string>
+    <string name="feature_profile_settings">Configuración</string>
+    <string name="feature_profile_loading">Cargando</string>
+    <string name="feature_profile_discard_changes">¿Quieres descartar los cambios?</string>
+    <string name="feature_profile_confirm_text">Descartar</string>
+    <string name="feature_profile_dismiss_text">Cancelar</string>
+    <string name="feature_profile_permission_required">Permisos requeridos</string>
+    <string name="feature_profile_approve_description">Necesitas otorgar estos permisos para poder acceder a la cámara.</string>
+    <string name="feature_profile_proceed">Continuar</string>
+    <string name="feature_profile_dismiss">Descartar</string>
+    <string name="feature_profile_username">Nombre de usuario</string>
+    <string name="feature_profile_firstname">Nombre</string>
+    <string name="feature_profile_lastname">Apellido</string>
+    <string name="feature_profile_phone_number">Número de teléfono</string>
+    <string name="feature_profile_failed_to_save_changes">No se pudieron guardar los cambios</string>
+    <string name="feature_profile_save">Guardar</string>
+    <string name="feature_profile_click_profile_picture">Tomar foto de perfil</string>
+    <string name="feature_profile_change_profile_picture">Elegir foto de perfil del dispositivo</string>
+    <string name="feature_profile_remove_profile_picture">Eliminar foto de perfil</string>
+    <string name="feature_profile_updated_sucessfully">Actualizado con éxito</string>
+
+    <string name="feature_profile_error_empty_firstname">Por favor, ingresa el nombre del cliente.</string>
+    <string name="feature_profile_error_empty_lastname">Por favor, ingresa el apellido del cliente.</string>
+    <string name="feature_profile_error_empty_email">Por favor, ingresa tu correo electrónico.</string>
+    <string name="feature_profile_error_invalid_email">Por favor, ingresa un correo electrónico válido.</string>
+    <string name="feature_profile_error_empty_phone">Por favor, ingresa tu número de celular.</string>
+    <string name="feature_profile_error_invalid_phone_length">El número de celular debe tener 10 dígitos.</string>
+    <string name="feature_profile_error_loading_client_image">No se pudo cargar la imagen del cliente.</string>
+    <string name="feature_profile_error_updating_client_image">No se pudo actualizar la imagen del cliente.</string>
+
+    <string name="feature_profile_profile_updated_successfully">Perfil actualizado con éxito</string>
+    <string name="feature_profile_profile_image_updated_successfully">Imagen de perfil actualizada con éxito</string>
+
+    <string name="feature_profile_profile_image_description">Imagen de perfil</string>
+</resources>

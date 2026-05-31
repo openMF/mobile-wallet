@@ -10,6 +10,7 @@
 package org.mifospay.core.data.mapper
 
 import org.mifospay.core.common.DateHelper
+import org.mifospay.core.model.savingsaccount.PaymentType
 import org.mifospay.core.model.savingsaccount.SavingsWithAssociationsEntity
 import org.mifospay.core.model.savingsaccount.Transaction
 import org.mifospay.core.model.savingsaccount.TransactionType
@@ -21,6 +22,7 @@ fun SavingsWithAssociationsEntity.toTransactionList(): List<Transaction> {
 
 fun TransactionsEntity.toModel(): Transaction {
     return Transaction(
+        reversed = this.reversed,
         transactionId = this.id,
         amount = this.amount,
         date = DateHelper.getDateAsString(this.submittedOnDate),
@@ -36,5 +38,32 @@ fun TransactionsEntity.toModel(): Transaction {
         originalTransactionId = this.originalTransactionId,
         paymentDetailId = this.paymentDetailData?.id,
         description = this.transfer?.transferDescription ?: "",
+        transfer = this.transfer?.let {
+            Transaction.Transfer(
+                id = it.id ?: 0L,
+                transferAmount = it.transferAmount ?: 0.00,
+                transferDescription = it.transferDescription ?: "",
+                reversed = it.reversed ?: false,
+            )
+        },
+        paymentDetailData = this.paymentDetailData?.let {
+            Transaction.PaymentDetailData(
+                id = it.id,
+                paymentType = it.paymentType?.toModalUi(),
+                accountNumber = it.accountNumber ?: "",
+                checkNumber = it.checkNumber ?: "",
+                routingCode = it.routingCode ?: "",
+                receiptNumber = it.receiptNumber ?: "",
+                bankNumber = it.bankNumber ?: "",
+            )
+        },
+    )
+}
+
+fun PaymentType.toModalUi(): Transaction.PaymentType {
+    return Transaction.PaymentType(
+        id = this.id ?: 0,
+        name = this.name ?: "",
+        isSystemDefined = this.isSystemDefined ?: false,
     )
 }

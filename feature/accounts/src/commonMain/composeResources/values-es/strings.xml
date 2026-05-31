@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copyright 2024 Mifos Initiative
+
+    This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+    If a copy of the MPL was not distributed with this file,
+    You can obtain one at https://mozilla.org/MPL/2.0/.
+
+    See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+-->
+<resources>
+    <string name="feature_accounts_bank_account_details">Detalles de la cuenta bancaria</string>
+    <string name="feature_accounts_bank_name">Nombre del banco</string>
+    <string name="feature_accounts_ac_holder_name">Nombre del titular de la cuenta</string>
+    <string name="feature_accounts_branch_name">Nombre de la sucursal</string>
+    <string name="feature_accounts_ifsc">IFSC</string>
+    <string name="feature_accounts_type">Tipo</string>
+    <string name="feature_accounts_setup_upi">Configurar UPI</string>
+    <string name="feature_accounts_delete_bank">Eliminar banco</string>
+    <string name="feature_accounts_change_upi_pin">Cambiar PIN de UPI</string>
+    <string name="feature_accounts_forgot_upi_pin">Olvidé mi PIN de UPI</string>
+    <string name="feature_accounts_link_bank_account">Vincular cuenta bancaria</string>
+    <string name="feature_accounts_loading">Cargando</string>
+    <string name="feature_accounts_search">Buscar</string>
+    <string name="feature_accounts_popular_banks">Bancos populares</string>
+    <string name="feature_accounts_other_banks">Otros bancos</string>
+    <string name="feature_accounts_error_oops">¡Ups!</string>
+    <string name="feature_accounts_unexpected_error_subtitle">Ocurrió un error inesperado. Por favor, inténtalo de nuevo.</string>
+    <string name="feature_accounts_linked_bank_account">Cuentas bancarias vinculadas</string>
+    <string name="feature_accounts_add_account">AGREGAR CUENTA</string>
+    <string name="feature_accounts_add_cards">Por favor, agrega tarjetas</string>
+    <string name="feature_accounts_no_linked_bank_accounts">No hay cuentas bancarias vinculadas</string>
+    <string name="feature_accounts_verify_mobile_number">Verificar número de celular</string>
+    <string name="feature_accounts_confirm_mobile_number_message">Para confirmar tu número de celular \n necesitamos enviar un
+        SMS desde \n tu teléfono*
+    </string>
+    <string name="feature_accounts_or">o</string>
+    <string name="feature_accounts_regular_charges_will_apply">*Se aplicarán cargos estándar</string>
+    <string name="feature_accounts_choose_a_sim">Por favor, elige una SIM</string>
+    <string name="feature_accounts_confirm">Confirmar</string>
+    <string name="feature_accounts_bank_account_mobile_verification_conditions">Asegúrate de que se cumplan las
+        siguientes condiciones: \n1. El número de celular está vinculado a tu cuenta bancaria. \n2. El número de celular
+        está
+        registrado en MifosPay. \n3. La tarjeta SIM está en este dispositivo.
+    </string>
+    <string name="delete_beneficiary_title">Eliminar beneficiario</string>
+    <string name="delete_beneficiary_subtitle">¿Estás seguro de que deseas eliminar a este beneficiario?</string>
+
+    <string name="feature_accounts_savings_account">Cuenta de ahorros</string>
+    <string name="feature_accounts_beneficiaries">Beneficiarios</string>
+    <string name="feature_accounts_add_beneficiary">Agregar beneficiario</string>
+    <string name="feature_accounts_no_beneficiaries">No hay beneficiarios</string>
+    <string name="feature_accounts_add_beneficiary_hint">Toca el botón + para agregar un beneficiario</string>
+    <string name="feature_accounts_add">Agregar</string>
+    <string name="feature_accounts_edit">Editar</string>
+    <string name="feature_accounts_info">Información</string>
+    <string name="feature_accounts_check">Consultar</string>
+    <string name="feature_accounts_default">Predeterminada</string>
+    <string name="feature_accounts_edit_beneficiary">Editar beneficiario</string>
+    <string name="feature_accounts_delete_beneficiary">Eliminar beneficiario</string>
+
+    <string name="feature_accounts_status_pending_approval">Pendiente de aprobación</string>
+    <string name="feature_accounts_status_approved">Aprobada</string>
+    <string name="feature_accounts_status_rejected">Rechazada</string>
+    <string name="feature_accounts_status_withdrawn">Retirada</string>
+    <string name="feature_accounts_status_active">Activa</string>
+    <string name="feature_accounts_status_closed">Cerrada</string>
+    <string name="feature_accounts_status_prematurely_closed">Cerrada antes de tiempo</string>
+    <string name="feature_accounts_status_transfer_in_progress">Transferencia en progreso</string>
+    <string name="feature_accounts_status_transfer_on_hold">Transferencia retenida</string>
+    <string name="feature_accounts_status_matured">Vencida</string>
+
+    <string name="feature_accounts_default_account_updated">Cuenta predeterminada actualizada</string>
+    <string name="feature_accounts_beneficiary_deleted">Beneficiario eliminado</string>
+    <string name="feature_accounts_beneficiary_added">Beneficiario agregado</string>
+    <string name="feature_accounts_beneficiary_updated">Beneficiario actualizado</string>
+
+    <string name="feature_accounts_detail_account_details">Detalles de la cuenta</string>
+    <string name="feature_accounts_detail_account_summary">Resumen de la cuenta</string>
+    <string name="feature_accounts_detail_account_balance">Saldo de la cuenta</string>
+    <string name="feature_accounts_detail_total_deposits">Total de depósitos</string>
+    <string name="feature_accounts_detail_total_withdrawals">Total de retiros</string>
+    <string name="feature_accounts_detail_available_balance">Saldo disponible</string>
+    <string name="feature_accounts_detail_total_interest_posted">Total de intereses aplicados</string>
+    <string name="feature_accounts_detail_total_overdraft">Total de sobregiros</string>
+    <string name="feature_accounts_detail_interest_not_posted">Intereses no aplicados</string>
+    <string name="feature_accounts_detail_product_name">Nombre del producto</string>
+    <string name="feature_accounts_detail_wallet_balance">Saldo de la billetera</string>
+    <string name="feature_accounts_detail_arrow">flecha</string>
+
+    <string name="feature_accounts_add_client_name">Nombre del cliente</string>
+    <string name="feature_accounts_add_saving_product">Producto de ahorro</string>
+    <string name="feature_accounts_add_product_name">Nombre del producto</string>
+    <string name="feature_accounts_add_submit_account">Enviar cuenta</string>
+    <string name="feature_accounts_add_nominal_annual">Tasa de interés nominal anual</string>
+    <string name="feature_accounts_add_savings_account">Agregar cuenta de ahorros</string>
+    <string name="feature_accounts_edit_savings_account">Editar cuenta de ahorros</string>
+    <string name="feature_accounts_update_savings_account">Actualizar cuenta de ahorros</string>
+
+    <string name="feature_accounts_add_external_id">ID externo</string>
+    <string name="feature_accounts_add_submitted_date">Fecha de envío</string>
+    <string name="feature_accounts_add_date_format">Formato de fecha</string>
+    <string name="feature_accounts_add_locale">Configuración regional (Locale)</string>
+    <string name="feature_accounts_add_allow_overdraft">Permitir sobregiro</string>
+    <string name="feature_accounts_add_overdraft_limit">Límite de sobregiro</string>
+    <string name="feature_accounts_add_min_required_balance">Saldo mínimo requerido</string>
+    <string name="feature_accounts_add_opening_balance">Saldo de apertura</string>
+    <string name="feature_accounts_add_withdrawal_fee">Comisión por retiro para transferencia</string>
+    <string name="feature_accounts_add_with_hold_tax">Retención de impuestos</string>
+
+    <string name="feature_accounts_add_beneficiary_title">Agregar beneficiario</string>
+    <string name="feature_accounts_edit_beneficiary_title">Editar beneficiario</string>
+    <string name="feature_accounts_beneficiary_name">Nombre del beneficiario</string>
+    <string name="feature_accounts_beneficiary_account_number">Número de cuenta del beneficiario</string>
+    <string name="feature_accounts_beneficiary_office_name">Nombre de la oficina</string>
+    <string name="feature_accounts_beneficiary_transfer_limit">Límite de transferencia</string>
+    <string name="feature_accounts_beneficiary_save">Guardar</string>
+
+    <string name="feature_accounts_beneficiary_nickname">Apodo / Alias</string>
+    <string name="feature_accounts_beneficiary_account_no">No. de cuenta</string>
+    <string name="feature_accounts_beneficiary_locale">Configuración regional (Locale)</string>
+    <string name="feature_accounts_beneficiary_account_type">Tipo de cuenta</string>
+
+    <string name="feature_accounts_error_empty_beneficiary_name">El nombre del beneficiario no puede estar vacío</string>
+    <string name="feature_accounts_error_empty_account_number">El número de cuenta no puede estar vacío</string>
+    <string name="feature_accounts_error_invalid_transfer_limit">El límite de transferencia debe ser mayor que 0</string>
+    <string name="feature_accounts_error_select_locale">Selecciona una configuración regional</string>
+    <string name="feature_accounts_error_empty_office_name">El nombre de la oficina no puede estar vacío</string>
+    <string name="feature_accounts_error_select_account_type">Selecciona un tipo de cuenta</string>
+
+    <string name="feature_accounts_beneficiary_button_save">Guardar</string>
+    <string name="feature_accounts_beneficiary_button_update">Actualizar</string>
+    <string name="feature_accounts_beneficiary_title_add">Agregar beneficiario</string>
+    <string name="feature_accounts_beneficiary_title_update">Actualizar beneficiario</string>
+    <string name="feature_accounts_beneficiary_account_type_wallet">BILLETERA</string>
+    <string name="feature_accounts_beneficiary_account_type_other">Otro</string>
+
+    <string name="feature_accounts_error_select_saving_product">Selecciona un producto de ahorro</string>
+    <string name="feature_accounts_error_client_id_required">El ID del cliente es obligatorio</string>
+    <string name="feature_accounts_error_external_id_required">El ID externo es obligatorio</string>
+    <string name="feature_accounts_error_external_id_length">El ID externo debe tener al menos 8 caracteres</string>
+    <string name="feature_accounts_error_min_opening_balance_required">El saldo mínimo de apertura es obligatorio</string>
+    <string name="feature_accounts_error_overdraft_limit_required">El límite de sobregiro es obligatorio</string>
+    <string name="feature_accounts_error_locale_required">La configuración regional es obligatoria</string>
+    <string name="feature_accounts_error_submitted_date_required">La fecha de envío es obligatoria</string>
+    <string name="feature_accounts_error_date_format_required">El formato de fecha es obligatorio</string>
+    <string name="feature_accounts_error_account_id_required">El ID de la cuenta es obligatorio para actualizar la cuenta de ahorros</string>
+
+    <string name="feature_accounts_saving_button_save">Guardar</string>
+    <string name="feature_accounts_saving_button_update">Actualizar</string>
+    <string name="feature_accounts_saving_title_create">Crear cuenta de ahorros</string>
+    <string name="feature_accounts_saving_title_update">Actualizar cuenta de ahorros</string>
+
+
+    <string name="skip_the_form">Omitir el formulario </string>
+    <string name="scan_qr_code">Escanear código QR</string>
+</resources>
