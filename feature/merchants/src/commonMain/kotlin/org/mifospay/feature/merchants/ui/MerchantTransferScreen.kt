@@ -449,6 +449,7 @@ private fun TransactionItemPreview() {
                 transferId = null,
                 originalTransactionId = 8388,
                 paymentDetailId = null,
+                reversed = true,
             ),
         )
     }
