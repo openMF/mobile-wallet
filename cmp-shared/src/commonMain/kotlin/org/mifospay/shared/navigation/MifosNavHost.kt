@@ -208,7 +208,7 @@ internal fun MifosNavHost(
         },
         TabContent(stringResource(Res.string.feature_payments_history)) {
             HistoryScreen(
-                viewTransferDetail = navController::navigateToTransactionDetail,
+                viewTransferDetail = navController::navigateToSpecificTransaction,
             )
         },
 //        TabContent(PaymentsScreenContents.SI.name) {
@@ -375,7 +375,7 @@ internal fun MifosNavHost(
         )
 
         historyNavigation(
-            viewTransactionDetail = navController::navigateToTransactionDetail,
+            viewTransactionDetail = navController::navigateToSpecificTransaction,
         )
 
         paymentsScreen(tabContents = paymentsTabContents)
