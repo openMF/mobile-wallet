@@ -31,9 +31,9 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.mifospay.core.data.util.NetworkMonitor
 import org.mifospay.core.data.util.TimeZoneMonitor
 import org.mifospay.core.ui.utils.ShareUtils
-import org.mifospay.shared.MainUiState
 import org.mifospay.shared.MifosPaySharedApp
 import org.mifospay.shared.MifosPayViewModel
+import org.mifospay.shared.UserState
 
 class MainActivity : AppCompatActivity() {
     private val networkMonitor: NetworkMonitor by inject()
@@ -51,12 +51,12 @@ class MainActivity : AppCompatActivity() {
         // Initialize FileKit
         FileKit.init(this)
 
-        var uiState: MainUiState by mutableStateOf(MainUiState.Loading)
+        var uiState: UserState by mutableStateOf(UserState.UnAuthenticated)
 
         // Update the uiState
         lifecycleScope.launch {
             lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.uiState
+                viewModel.userState
                     .onEach { uiState = it }
                     .collect()
             }
@@ -64,8 +64,8 @@ class MainActivity : AppCompatActivity() {
 
         splashScreen.setKeepOnScreenCondition {
             when (uiState) {
-                MainUiState.Loading -> true
-                is MainUiState.Success -> false
+                UserState.UnAuthenticated -> true
+                is UserState.Authenticated -> false
             }
         }
 

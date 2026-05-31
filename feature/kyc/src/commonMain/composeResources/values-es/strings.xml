@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copyright 2024 Mifos Initiative
+
+    This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+    If a copy of the MPL was not distributed with this file,
+    You can obtain one at https://mozilla.org/MPL/2.0/.
+
+    See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+-->
+<resources>
+    <string name="feature_kyc_complete_kyc">Completa el proceso de KYC (Validación de identidad)</string>
+    <string name="feature_kyc_level_1">Nivel 1</string>
+    <string name="feature_kyc_level_2">Nivel 2</string>
+    <string name="feature_kyc_level_3">Nivel 3</string>
+    <string name="feature_kyc_content_description_placeholder">Marcador de posición</string>
+    <string name="feature_kyc_error_oops">¡Ups!</string>
+    <string name="feature_kyc_unexpected_error_subtitle">Ocurrió un error inesperado. Por favor, inténtalo de nuevo.</string>
+    <string name="feature_kyc_loading">Cargando</string>
+    <string name="feature_kyc_level">Nivel</string>
+    <string name="feature_kyc_completion">Completado</string>
+    <string name="feature_kyc_check">Verificado</string>
+    <string name="feature_kyc_error_kyc_details">No se pudieron obtener los detalles de KYC. Por favor, inténtalo de nuevo.</string>
+    <string name="feature_kyc_submitting">Enviando</string>
+    <string name="feature_kyc_error_adding_KYC_Level_1_details">Error al agregar los detalles de KYC Nivel 1.</string>
+    <string name="feature_kyc_error_adding_KYC_Level_2_details">Error al agregar los detalles de KYC Nivel 2.</string>
+    <string name="feature_kyc_successkyc1">Se agregaron los detalles de KYC Nivel 1.</string>
+    <string name="feature_kyc_successkyc2">Se agregaron los detalles de KYC Nivel 2.</string>
+    <string name="feature_kyc_date_format">dd-MM-yyyy</string>
+    <string name="feature_kyc_first_name">Nombre</string>
+    <string name="feature_kyc_last_name">Apellido</string>
+    <string name="feature_kyc_address_line_1">Dirección Línea 1</string>
+    <string name="feature_kyc_address_line_2">Dirección Línea 2</string>
+    <string name="feature_kyc_phone_number">Número de teléfono</string>
+    <string name="feature_kyc_select_dob">Fecha de nacimiento</string>
+    <string name="feature_kyc_submit">Enviar</string>
+    <string name="feature_kyc_approve_permission">Por favor, otorga los permisos de almacenamiento</string>
+    <string name="feature_kyc_browse">Examinar / Buscar</string>
+    <string name="feature_kyc_file_name">Nombre del archivo: </string>
+    <string name="feature_kyc_approve">Autorizar</string>
+    <string name="feature_kyc_id_type">Tipo de identificación</string>
+    <string name="feature_kyc_pan_id">PAN ID / RFC</string>
+</resources>

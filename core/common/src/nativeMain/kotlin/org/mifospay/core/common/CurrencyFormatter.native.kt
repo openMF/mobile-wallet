@@ -12,6 +12,7 @@ package org.mifospay.core.common
 import platform.Foundation.NSNumber
 import platform.Foundation.NSNumberFormatter
 import platform.Foundation.NSNumberFormatterCurrencyStyle
+import platform.Foundation.NSNumberFormatterDecimalStyle
 
 actual object CurrencyFormatter {
     actual fun format(
@@ -24,5 +25,18 @@ actual object CurrencyFormatter {
         numberFormatter.currencyCode = currencyCode ?: "$"
         numberFormatter.maximumFractionDigits = (maximumFractionDigits ?: 0).toULong()
         return numberFormatter.stringFromNumber(NSNumber(balance ?: 0.0)) ?: ""
+    }
+
+    actual fun format(
+        balance: Double?,
+        maximumFractionDigits: Int?,
+    ): String {
+        val numberFormatter = NSNumberFormatter()
+        numberFormatter.numberStyle = NSNumberFormatterDecimalStyle
+        numberFormatter.maximumFractionDigits =
+            (maximumFractionDigits ?: 0).toULong()
+        return numberFormatter
+            .stringFromNumber(NSNumber(balance ?: 0.0))
+            ?: ""
     }
 }

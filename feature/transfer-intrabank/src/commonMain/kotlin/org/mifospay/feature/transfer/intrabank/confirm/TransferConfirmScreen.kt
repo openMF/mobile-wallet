@@ -98,6 +98,33 @@ import org.mifospay.core.ui.utils.EventsEffect
 import template.core.base.designsystem.KptTheme
 import template.core.base.designsystem.theme.KptTheme
 
+/**
+ * Intra-bank transfer confirmation route. Owns the **passcode/biometric
+ * auth-gate plumbing** for MW-390:
+ *
+ *  - Observes [entryStateHandle] for [INTRA_BANK_TRANSFER_VERIFICATION_KEY]
+ *    (written by `internalMifosPasscodeScreen` on success/failure) and
+ *    re-dispatches as [TransferConfirmAction.UpdateUserVerificationResult]
+ *    so the suspended `handleUserVerification` in
+ *    [TransferConfirmViewModel] resumes.
+ *  - Cancellation guard: if the user backs out of the passcode screen
+ *    without verifying (the saved-state-handle stays null but
+ *    `isAwaitingPasscodeVerification` is true), the `repeatOnLifecycle`
+ *    block dispatches `UpdateUserVerificationResult(false)` on RESUMED so
+ *    the VM doesn't hang forever.
+ *  - Routes [TransferConfirmEvent.NavigateForPasscodeVerification] to
+ *    [navigateForPasscodeVerification] with
+ *    [INTRA_BANK_TRANSFER_VERIFICATION_KEY] — caller binds this to
+ *    `navController::navigateToInternalMifosPasscodeScreen`.
+ *
+ * @param navigateForPasscodeVerification `(verificationKey) -> Unit` —
+ *        caller binds to `navController::navigateToInternalMifosPasscodeScreen`.
+ *        The verificationKey passed in is the same constant the screen
+ *        observes on its saved-state-handle, so the round trip closes.
+ * @param entryStateHandle The transfer-confirm destination's own
+ *        `SavedStateHandle`, hoisted from the nav-graph builder so the
+ *        round-trip channel works.
+ */
 @Composable
 internal fun TransferConfirmScreen(
     navigateBack: () -> Unit,

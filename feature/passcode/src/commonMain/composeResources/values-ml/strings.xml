@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copyright 2026 Mifos Initiative
+
+    This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+    If a copy of the MPL was not distributed with this file,
+    You can obtain one at https://mozilla.org/MPL/2.0/.
+
+    See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+-->
+<resources>
+    <string name="feature_passcode_biometric_error_lockout">വളരെ അധികം ശ്രമങ്ങൾ. ദയവായി കാത്തിരുന്ന് വീണ്ടും ശ്രമിക്കുക.</string>
+    <string name="feature_passcode_biometric_error_hardware_unavailable">ബയോമെട്രിക് ഹാർഡ്‌വെയർ താൽക്കാലികമായി ലഭ്യമല്ല. ദയവായി പിന്നീട് വീണ്ടും ശ്രമിക്കുക.</string>
+    <string name="feature_passcode_biometric_error_not_enrolled">ഈ ഉപകരണത്തിൽ ബയോമെട്രിക്കുകൾ എൻറോൾ ചെയ്തിട്ടില്ല. സിസ്റ്റം ക്രമീകരണങ്ങളിൽ ബയോമെട്രിക്സ് സജ്ജമാക്കുക.</string>
+    <string name="feature_passcode_biometric_error_timeout">ബയോമെട്രിക് പ്രാമാണീകരണ സമയം കഴിഞ്ഞു. ദയവായി വീണ്ടും ശ്രമിക്കുക.</string>
+    <string name="feature_passcode_biometric_error_no_space">ബയോമെട്രിക് പ്രാമാണീകരണം പൂർത്തിയാക്കാൻ ആവശ്യമായ സംഭരണം ഇല്ല.</string>
+    <string name="feature_passcode_biometric_error_invalid_registration_data">ബയോമെട്രിക് രജിസ്ട്രേഷൻ ഡാറ്റ അസാധുവാണ്. ദയവായി ആപ്പ് ക്രമീകരണങ്ങളിൽ നിന്ന് ബയോമെട്രിക്സ് വീണ്ടും പ്രവർത്തനക്ഷമമാക്കുക.</string>
+    <string name="feature_passcode_biometric_error_invalid_arguments_auth">അസാധു ആർഗ്യുമെന്റുകൾ കാരണം ബയോമെട്രിക് പ്രാമാണീകരണം ആരംഭിക്കാൻ കഴിഞ്ഞില്ല.</string>
+    <string name="feature_passcode_biometric_error_invalid_arguments_registration">അസാധു ആർഗ്യുമെന്റുകൾ കാരണം ബയോമെട്രിക് രജിസ്ട്രേഷൻ ആരംഭിക്കാൻ കഴിഞ്ഞില്ല.</string>
+    <string name="feature_passcode_biometric_error_unknown">ഒരു അപ്രതീക്ഷിത ബയോമെട്രിക് പിശക് സംഭവിച്ചു. ദയവായി വീണ്ടും ശ്രമിക്കുക.</string>
+    <string name="feature_passcode_biometric_prompt_title">Mifos Pay അൺലോക്ക് ചെയ്യുക</string>
+    <string name="feature_passcode_biometric_prompt_subtitle">തുടരാൻ നിങ്ങളുടെ ഐഡന്റിറ്റി പരിശോധിക്കുക</string>
+    <string name="feature_passcode_biometric_prompt_description">നിങ്ങളുടെ വിരലടയാളം, മുഖം, അല്ലെങ്കിൽ ഉപകരണ ക്രെഡൻഷ്യൽ ഉപയോഗിക്കുക</string>
+    <string name="feature_passcode_biometric_prompt_negative_button">റദ്ദാക്കുക</string>
+
+    <!-- BiometricSetupScreen UI labels -->
+    <string name="feature_passcode_biometric_setup_headline">നിങ്ങളുടെ ആപ്പ് സുരക്ഷിതമാക്കുക</string>
+    <string name="feature_passcode_biometric_setup_confirm">ബയോമെട്രിക് സജ്ജീകരിക്കുക</string>
+    <string name="feature_passcode_biometric_setup_skip">ഇപ്പോൾ ഒഴിവാക്കുക</string>
+
+    <!-- Legacy feature_passcode_* strings -->
+    <string name="feature_passcode_ok">ശരി</string>
+    <string name="feature_passcode_biometrics_usage_message">വേഗത്തിലുള്ള ഒപ്പം കൂടുതൽ സുരക്ഷിതമായ ആക്സസിന് ബയോമെട്രിക് (വിരലടയാളം അല്ലെങ്കിൽ മുഖം) ഉപയോഗിക്കുക.</string>
+    <string name="feature_passcode_biometrics_not_set">ഈ ഉപകരണത്തിൽ ബയോമെട്രിക് സജ്ജീകരിച്ചിട്ടില്ല. ദയവായി ഉപകരണ ക്രമീകരണങ്ങളിൽ വിരലടയാളം അല്ലെങ്കിൽ മുഖം അൺലോക്ക് പ്രവർത്തനക്ഷമമാക്കി വീണ്ടും ശ്രമിക്കുക.</string>
+    <string name="feature_passcode_biometrics_available">ഈ ഉപകരണത്തിൽ ബയോമെട്രിക് ലഭ്യമല്ല</string>
+    <string name="feature_passcode_error">പിശക്</string>
+    <string name="feature_passcode_user_not_registered_error_message">ബയോമെട്രിക് രജിസ്ട്രേഷൻ ഡാറ്റ അസാധുവാണ്. ദയവായി ആപ്പ് ക്രമീകരണങ്ങളിൽ നിന്ന് ബയോമെട്രിക്സ് വീണ്ടും പ്രവർത്തനക്ഷമമാക്കുക.</string>
+</resources>

@@ -12,6 +12,17 @@ package org.mifos.feature.passcode
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
 
+/**
+ * Koin module exposing the `:feature:passcode` ViewModels. Included by the
+ * top-level [org.mifospay.shared.di.KoinModules] aggregator.
+ *
+ * Note: the `PasscodeManager` singleton itself is registered in
+ * [org.mifospay.shared.di.KoinModules.MifosPasscodeModule] (cmp-shared)
+ * because it depends on `PasscodeStorageAdapter`, which lives in
+ * `:core:data`'s [org.mifospay.core.data.di.RepositoryModule]. Keeping the
+ * VM bindings here and the manager binding in cmp-shared avoids a circular
+ * module dependency.
+ */
 val MifosAuthenticatorModule = module {
     viewModelOf(::BiometricSetupScreenViewmodel)
     viewModelOf(::MifosPasscodeViewModel)

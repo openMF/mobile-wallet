@@ -85,6 +85,7 @@ import mobile_wallet.feature.home.generated.resources.coin_image
 import mobile_wallet.feature.home.generated.resources.feature_home_account_number
 import mobile_wallet.feature.home.generated.resources.feature_home_account_type
 import mobile_wallet.feature.home.generated.resources.feature_home_arrow_up
+import mobile_wallet.feature.home.generated.resources.feature_home_autopay
 import mobile_wallet.feature.home.generated.resources.feature_home_coin_image
 import mobile_wallet.feature.home.generated.resources.feature_home_desc
 import mobile_wallet.feature.home.generated.resources.feature_home_mark_default
@@ -141,6 +142,7 @@ internal fun HomeScreen(
     onNavigateBack: () -> Unit,
     onRequest: (String) -> Unit,
     onPay: () -> Unit,
+    onAutoPay: () -> Unit,
     navigateToTransactionDetail: (Long, Long) -> Unit,
     navigateToAccountDetail: (Long) -> Unit,
     navigateToHistory: () -> Unit,
@@ -162,6 +164,7 @@ internal fun HomeScreen(
             is HomeEvent.NavigateBack -> onNavigateBack()
             is HomeEvent.NavigateToRequestScreen -> onRequest(event.vpa)
             is HomeEvent.NavigateToSendScreen -> onPay()
+            is HomeEvent.NavigateToAutoPayScreen -> onAutoPay.invoke()
             is HomeEvent.NavigateToClientDetailScreen -> {}
             is HomeEvent.NavigateToTransactionDetail -> {
                 navigateToTransactionDetail(event.accountId, event.transactionId)
@@ -324,6 +327,9 @@ private fun HomeScreenContent(
                     },
                     onSend = {
                         onAction(HomeAction.SendClicked)
+                    },
+                    onAutoPay = {
+                        onAction(HomeAction.AutoPayClicked)
                     },
                 )
             }
@@ -521,11 +527,10 @@ private fun AccountCard(
                         color = KptTheme.colorScheme.surface,
                     )
 
-                    val accountBalance = CurrencyFormatter.format(
+                    val accountBalance = "${account.currency.code} ${account.currency.displaySymbol}${CurrencyFormatter.format(
                         balance = account.balance,
-                        currencyCode = account.currency.code,
-                        maximumFractionDigits = null,
-                    )
+                        maximumFractionDigits = 2,
+                    )}"
 
                     Text(
                         text = accountBalance,
@@ -588,45 +593,66 @@ fun CardDropdownBox(
 private fun PayRequestScreen(
     onRequest: () -> Unit,
     onSend: () -> Unit,
+    onAutoPay: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Row(
+    Column(
         modifier = modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+        ) {
+            PaymentButton(
+                modifier = Modifier
+                    .weight(1f)
+                    .height(55.dp),
+                text = stringResource(Res.string.feature_home_request),
+                onClick = onRequest,
+                leadingIcon = {
+                    Icon(
+                        modifier = Modifier
+                            .size(26.dp),
+                        imageVector = vectorResource(
+                            Res.drawable.arrow_backward,
+                        ),
+                        contentDescription = stringResource(Res.string.feature_home_request_money),
+                    )
+                },
+            )
+
+            Spacer(modifier = Modifier.width(20.dp))
+
+            PaymentButton(
+                modifier = Modifier
+                    .weight(1f)
+                    .height(55.dp),
+                text = stringResource(Res.string.feature_home_send),
+                onClick = onSend,
+                leadingIcon = {
+                    Icon(
+                        modifier = Modifier
+                            .size(26.dp)
+                            .graphicsLayer(rotationZ = 180f),
+                        imageVector = vectorResource(Res.drawable.arrow_backward),
+                        contentDescription = stringResource(Res.string.feature_home_send_money),
+                    )
+                },
+            )
+        }
+
         PaymentButton(
             modifier = Modifier
-                .weight(1f)
+                .fillMaxWidth()
                 .height(55.dp),
-            text = stringResource(Res.string.feature_home_request),
-            onClick = onRequest,
+            text = stringResource(Res.string.feature_home_autopay),
+            onClick = onAutoPay,
             leadingIcon = {
                 Icon(
-                    modifier = Modifier
-                        .size(26.dp),
-                    imageVector = vectorResource(
-                        Res.drawable.arrow_backward,
-                    ),
-                    contentDescription = stringResource(Res.string.feature_home_request_money),
-                )
-            },
-        )
-
-        Spacer(modifier = Modifier.width(20.dp))
-
-        PaymentButton(
-            modifier = Modifier
-                .weight(1f)
-                .height(55.dp),
-            text = stringResource(Res.string.feature_home_send),
-            onClick = onSend,
-            leadingIcon = {
-                Icon(
-                    modifier = Modifier
-                        .size(26.dp)
-                        .graphicsLayer(rotationZ = 180f),
-                    imageVector = vectorResource(Res.drawable.arrow_backward),
-                    contentDescription = stringResource(Res.string.feature_home_send_money),
+                    modifier = Modifier.size(26.dp),
+                    imageVector = MifosIcons.Payment,
+                    contentDescription = stringResource(Res.string.feature_home_autopay),
                 )
             },
         )
@@ -929,6 +955,7 @@ private fun HomeScreenContentPreview() {
             transferId = null,
             originalTransactionId = 101L,
             paymentDetailId = null,
+            reversed = true,
         ),
         Transaction(
             accountId = 2L,
@@ -948,6 +975,7 @@ private fun HomeScreenContentPreview() {
             transferId = null,
             originalTransactionId = 101L,
             paymentDetailId = null,
+            reversed = false,
         ),
         Transaction(
             accountId = 3L,
@@ -967,6 +995,7 @@ private fun HomeScreenContentPreview() {
             transferId = null,
             originalTransactionId = 101L,
             paymentDetailId = null,
+            reversed = true,
         ),
         Transaction(
             accountId = 4L,
@@ -986,6 +1015,7 @@ private fun HomeScreenContentPreview() {
             transferId = null,
             originalTransactionId = 101L,
             paymentDetailId = null,
+            reversed = false,
         ),
     )
     MaterialTheme {

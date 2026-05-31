@@ -59,6 +59,8 @@ kotlin {
             implementation(projects.feature.merchants)
             implementation(projects.feature.upiSetup)
             implementation(projects.feature.passcode)
+            implementation(projects.feature.autopay)
+            implementation(projects.feature.sendMoney)
         }
 
         desktopMain.dependencies {
