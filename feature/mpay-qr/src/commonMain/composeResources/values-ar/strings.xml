@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copyright 2024 Mifos Initiative
+
+    This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+    If a copy of the MPL was not distributed with this file,
+    You can obtain one at https://mozilla.org/MPL/2.0/.
+
+    See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+-->
+<resources>
+    <string name="feature_request_money_enter_valid_amount">يرجى إدخال مبلغ صالح</string>
+    <string name="feature_request_money_enter_currency">أدخل العملة</string>
+    <string name="feature_request_money_set_amount">تحديد المبلغ</string>
+    <string name="feature_request_money_currency">تحديد العملة</string>
+    <string name="feature_request_money_cancel">إلغاء</string>
+    <string name="feature_request_money_confirm">تأكيد</string>
+    <string name="feature_request_money_qr_code_details">تفاصيل رمز QR</string>
+    <string name="feature_request_money_vpa">VPA</string>
+    <string name="feature_request_money_amount">المبلغ</string>
+    <string name="feature_request_money_usd">USD</string>
+    <string name="feature_request_money_request">طلب</string>
+    <string name="feature_request_money_loading">جار التحميل</string>
+    <string name="feature_request_money_nothing_to_notify">لا يوجد شيء للإشعار</string>
+    <string name="feature_request_money_there_is_nothing_to_show">لا يوجد شيء لعرضه</string>
+    <string name="feature_request_money_error_oops">عذراً!</string>
+    <string name="feature_request_money_unexpected_error_subtitle">حدث خطأ غير متوقع. يرجى المحاولة مرة أخرى.</string>
+    <string name="feature_mpay_qr_receive_money">استلام الأموال</string>
+    <string name="feature_mpay_qr_intra_bank">QR داخل البنك</string>
+    <string name="feature_mpay_qr_inter_bank">QR بين البنوك</string>
+    <string name="feature_mpay_qr_share">مشاركة</string>
+    <string name="feature_mpay_qr_unable_to_generate">تعذر إنشاء رمز QR</string>
+    <string name="feature_mpay_qr_go_back">رجوع</string>
+    <string name="feature_mpay_qr_unknown">غير معروف</string>
+    <string name="feature_mpay_qr_no_default_account">لم يتم تعيين حساب افتراضي. يرجى تعيين حساب افتراضي أولاً.</string>
+    <string name="feature_mpay_qr_failed_to_generate">فشل في إنشاء رمز QR</string>
+    <string name="feature_mpay_qr_no_currency_found">لم يتم العثور على عملة</string>
+
+    <!-- Header -->
+    <string name="feature_mpay_qr_scan_to_pay">امسح للدفع لي باستخدام أي تطبيق دفع</string>
+
+    <!-- Account Card -->
+    <string name="feature_mpay_qr_primary">أساسي</string>
+
+    <!-- QR Actions -->
+    <string name="feature_mpay_qr_share_qr">مشاركة</string>
+    <string name="feature_mpay_qr_download_qr">تنزيل</string>
+
+    <!-- Account IDs -->
+    <string name="feature_mpay_qr_account_ids">معرفات الحساب</string>
+    <string name="feature_mpay_qr_account_number">رقم الحساب</string>
+    <string name="feature_mpay_qr_external_id">المعرف الخارجي</string>
+    <string name="feature_mpay_qr_copy">نسخ</string>
+    <string name="feature_mpay_qr_copied">تم النسخ إلى الحافظة</string>
+
+    <!-- QR Card -->
+    <string name="feature_mpay_qr_scan_instruction">امسح بأي تطبيق دفع</string>
+    <string name="feature_mpay_qr_downloaded">تم تنزيل رمز QR</string>
+
+    <!-- Inter-Bank QR Placeholder -->
+    <string name="feature_mpay_qr_inter_bank_unavailable">QR بين البنوك غير متاح</string>
+    <string name="feature_mpay_qr_external_id_required">حسابك لا يحتوي على معرف خارجي. تواصل مع البنك لتفعيل التحويلات بين البنوك.</string>
+
+    <!-- Account Picker -->
+    <string name="feature_mpay_qr_select_account">اختيار الحساب</string>
+    <string name="feature_mpay_qr_has_external_id">التحويل بين البنوك مفعّل</string>
+    <string name="feature_mpay_qr_no_external_id">التحويل بين البنوك غير متاح</string>
+    <string name="feature_mpay_qr_account_selected">تم اختيار الحساب</string>
+</resources>
