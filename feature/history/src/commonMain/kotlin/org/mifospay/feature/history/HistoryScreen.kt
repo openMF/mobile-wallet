@@ -65,7 +65,9 @@ fun HistoryScreen(
     EventsEffect(viewModel) { event ->
         when (event) {
             is HistoryEvent.OnTransactionDetail -> {
-                viewTransferDetail.invoke(state.selectedAccount?.id ?: -1L, event.transferId)
+                state.selectedAccount?.id?.let { accountId ->
+                    viewTransferDetail.invoke(accountId, event.transferId)
+                }
             }
         }
     }
