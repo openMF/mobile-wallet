@@ -59,6 +59,7 @@ class HistoryViewModel(
 
     private fun loadTransactions(accountId: Long) {
         repository.getTransactions(accountId, null).onEach { result ->
+
             when (result) {
                 is DataState.Error -> {
                     mutableStateFlow.update {
