@@ -74,10 +74,10 @@ class IntraBankHubViewModel(
                         it.accountNo == action.beneficiary.accountNumber
                     }
 
-                matchedAccount?.let {
-                    val officeId = requireNotNull(it.officeId)
-                    val clientId = requireNotNull(it.clientId)
-                    val accountId = requireNotNull(it.accountId)
+                matchedAccount?.let { account ->
+                    val officeId = account.officeId ?: return@let
+                    val clientId = account.clientId ?: return@let
+                    val accountId = account.accountId ?: return@let
 
                     sendEvent(
                         IntraBankHubEvent.NavigateToTransfer(
@@ -121,9 +121,13 @@ class IntraBankHubViewModel(
 
     private fun loadTptTemplate() {
         viewModelScope.launch {
-            val toAccountOptions = repository.getTransferTemplate().toAccountOptions
-            mutableStateFlow.update {
-                it.copy(toAccountOptionsTemplate = toAccountOptions)
+            try {
+                val toAccountOptions = repository.getTransferTemplate().toAccountOptions
+                mutableStateFlow.update {
+                    it.copy(toAccountOptionsTemplate = toAccountOptions)
+                }
+            } catch (e: Exception) {
+                Logger.e(e) { "Failed to load account template" }
             }
         }
     }
