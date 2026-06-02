@@ -371,7 +371,7 @@ internal fun MifosNavHost(
                 navController.navigateToSavingAccountAddEdit(SavingsAddEditType.AddItem)
             },
             showQrCode = navController::navigateToMpayQrScreen,
-            navigateBack = {},
+            navigateBack = navController::popBackStack,
         )
 
         historyNavigation(

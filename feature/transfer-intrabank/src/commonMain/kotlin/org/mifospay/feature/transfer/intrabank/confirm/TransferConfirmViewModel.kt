@@ -338,7 +338,6 @@ internal class TransferConfirmViewModel(
                             transferResult = transferResult,
                         )
                     }
-                    sendEvent(TransferConfirmEvent.OnTransferSuccess(transferResult))
                 }
             }
         }
@@ -389,6 +388,7 @@ internal class TransferConfirmViewModel(
     private fun updateValidationError(message: StringResource) {
         mutableStateFlow.update {
             it.copy(
+                isProcessing = false,
                 dialogState = TransferConfirmState.DialogState.Error.ValidationError(message),
             )
         }
@@ -522,7 +522,6 @@ internal sealed interface TransferConfirmEvent {
      * [TransferConfirmAction.UpdateUserVerificationResult].
      */
     data object NavigateForPasscodeVerification : TransferConfirmEvent
-    data class OnTransferSuccess(val transferResult: TransferResult) : TransferConfirmEvent
 }
 
 internal sealed interface TransferConfirmAction {

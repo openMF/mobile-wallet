@@ -20,13 +20,16 @@ import kotlinx.serialization.Transient
 import org.mifospay.core.common.DataState
 import org.mifospay.core.data.repository.RecentPayeeRepository
 import org.mifospay.core.data.repository.SelfServiceRepository
+import org.mifospay.core.data.repository.ThirdPartyTransferRepository
 import org.mifospay.core.datastore.UserPreferencesRepository
 import org.mifospay.core.model.account.RecentPayee
 import org.mifospay.core.model.beneficiary.Beneficiary
+import org.mifospay.core.network.model.entity.templates.account.AccountOption
 import org.mifospay.core.ui.utils.BaseViewModel
 
 class IntraBankHubViewModel(
     private val recentPayeeRepository: RecentPayeeRepository,
+    private val repository: ThirdPartyTransferRepository,
     private val selfServiceRepository: SelfServiceRepository,
     private val userPreferencesRepository: UserPreferencesRepository,
 ) : BaseViewModel<IntraBankHubState, IntraBankHubEvent, IntraBankHubAction>(
@@ -36,6 +39,7 @@ class IntraBankHubViewModel(
     init {
         loadRecentPayees()
         loadBeneficiaries()
+        loadTptTemplate()
     }
 
     override fun handleAction(action: IntraBankHubAction) {
@@ -65,9 +69,26 @@ class IntraBankHubViewModel(
             }
 
             is IntraBankHubAction.OnPayBeneficiary -> {
-                sendEvent(
-                    IntraBankHubEvent.NavigateToTransferBeneficiary(action.beneficiary),
-                )
+                val matchedAccount = state.toAccountOptionsTemplate
+                    ?.firstOrNull {
+                        it.accountNo == action.beneficiary.accountNumber
+                    }
+
+                matchedAccount?.let {
+                    val officeId = requireNotNull(it.officeId)
+                    val clientId = requireNotNull(it.clientId)
+                    val accountId = requireNotNull(it.accountId)
+
+                    sendEvent(
+                        IntraBankHubEvent.NavigateToTransfer(
+                            toOfficeId = officeId,
+                            toClientId = clientId,
+                            toAccountId = accountId,
+                            accountName = action.beneficiary.name,
+                            accountNo = action.beneficiary.accountNumber,
+                        ),
+                    )
+                }
             }
 
             IntraBankHubAction.OnHistoryClicked -> {
@@ -94,6 +115,15 @@ class IntraBankHubViewModel(
                 mutableStateFlow.update {
                     it.copy(selectedTab = action.tab)
                 }
+            }
+        }
+    }
+
+    private fun loadTptTemplate() {
+        viewModelScope.launch {
+            val toAccountOptions = repository.getTransferTemplate().toAccountOptions
+            mutableStateFlow.update {
+                it.copy(toAccountOptionsTemplate = toAccountOptions)
             }
         }
     }
@@ -190,6 +220,7 @@ enum class PayeeTab {
 @Serializable
 data class IntraBankHubState(
     val selectedTab: PayeeTab = PayeeTab.Recents,
+    val toAccountOptionsTemplate: List<AccountOption>? = null,
     @Transient
     val recentPayees: List<RecentPayee> = emptyList(),
     @Transient

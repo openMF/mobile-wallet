@@ -147,6 +147,12 @@ internal fun TransferConfirmScreen(
         }
     }
 
+    LaunchedEffect(state.transferResult) {
+        state.transferResult?.let { result ->
+            onTransferSuccess(result)
+        }
+    }
+
     val lifecycleOwner = LocalLifecycleOwner.current
     LaunchedEffect(lifecycleOwner) {
         lifecycleOwner.repeatOnLifecycle(Lifecycle.State.RESUMED) {
@@ -161,7 +167,6 @@ internal fun TransferConfirmScreen(
     EventsEffect(viewModel) { event ->
         when (event) {
             TransferConfirmEvent.OnNavigateBack -> navigateBack.invoke()
-            is TransferConfirmEvent.OnTransferSuccess -> onTransferSuccess.invoke(event.transferResult)
             TransferConfirmEvent.NavigateForPasscodeVerification -> {
                 navigateForPasscodeVerification(INTRA_BANK_TRANSFER_VERIFICATION_KEY)
             }
