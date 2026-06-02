@@ -31,7 +31,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.backhandler.BackHandler
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -58,6 +60,7 @@ import org.mifospay.feature.transfer.intrabank.confirm.TransferResult
 import template.core.base.designsystem.KptTheme
 import template.core.base.designsystem.theme.KptTheme
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 internal fun TransferSuccessScreen(
     transferResult: TransferResult,
@@ -66,6 +69,10 @@ internal fun TransferSuccessScreen(
 ) {
     val clipboardManager = LocalClipboardManager.current
     var copied by remember { mutableStateOf(false) }
+
+    BackHandler {
+        navigateBack()
+    }
 
     MifosScaffold(
         modifier = modifier,
