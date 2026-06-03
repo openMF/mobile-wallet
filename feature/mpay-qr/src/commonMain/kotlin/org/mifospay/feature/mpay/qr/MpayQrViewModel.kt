@@ -139,6 +139,14 @@ class MpayQrViewModel(
                                     accounts = accounts,
                                     selectedAccount = defaultAcc,
                                     accountExternalId = defaultAcc?.externalId ?: "",
+                                    qrData = it.qrData.copy(
+                                        currency = defaultAcc?.currency?.code ?: QrCodeData.DEFAULT_CURRENCY,
+                                        accountNo = defaultAcc?.number ?: "",
+                                        accountId = defaultAcc?.id ?: 0L,
+                                        accountExternalId = defaultAcc?.externalId ?: "",
+                                        officeId = defaultAcc?.officeId?.toLong() ?: it.qrData.officeId,
+                                        officeName = defaultAcc?.officeName ?: it.qrData.officeName,
+                                    ),
                                 )
                             }
                             sendAction(MpayQrAction.Internal.GenerateQr)
@@ -245,6 +253,14 @@ class MpayQrViewModel(
                         selectedAccount = action.account,
                         accountExternalId = action.account.externalId ?: "",
                         isAccountPickerVisible = false,
+                        qrData = it.qrData.copy(
+                            currency = action.account.currency.code,
+                            accountNo = action.account.number,
+                            accountId = action.account.id,
+                            accountExternalId = action.account.externalId ?: "",
+                            officeId = action.account.officeId?.toLong() ?: it.qrData.officeId,
+                            officeName = action.account.officeName ?: it.qrData.officeName,
+                        ),
                     )
                 }
                 generateQr() // Regenerate QR for new account
@@ -268,6 +284,7 @@ class MpayQrViewModel(
                 return@launch
             }
 
+            Logger.d { "QR Generating QR code with data: ${state.selectedAccount}" }
             Logger.d { "QR Generate - client.id: ${state.client.id}, defaultAccount.accountId: ${state.defaultAccount.accountId}, qrData.clientId: ${state.qrData.clientId}, qrData.accountId: ${state.qrData.accountId}" }
 
             // Generate Intra-Bank QR (always works with internal IDs)
@@ -400,7 +417,7 @@ data class MpayQrState(
         officeName = selectedAccount?.officeName ?: client.officeName,
         accountTypeId = QrCodeData.ACCOUNT_TYPE_ID,
         accountExternalId = selectedAccount?.externalId ?: accountExternalId,
-        currency = "USD",
+        currency = selectedAccount?.currency?.code ?: QrCodeData.DEFAULT_CURRENCY,
         amount = "",
     ),
     @Transient
