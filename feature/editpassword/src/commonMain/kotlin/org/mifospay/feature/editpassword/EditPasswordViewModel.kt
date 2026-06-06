@@ -28,10 +28,13 @@ import mobile_wallet.feature.editpassword.generated.resources.feature_editpasswo
 import mobile_wallet.feature.editpassword.generated.resources.feature_editpassword_error_same_password
 import org.jetbrains.compose.resources.StringResource
 import org.mifospay.core.common.DataState
+import org.mifospay.core.common.UiError
 import org.mifospay.core.common.getSerialized
 import org.mifospay.core.common.setSerialized
+import org.mifospay.core.common.toUiError
 import org.mifospay.core.data.repository.UserRepository
 import org.mifospay.core.datastore.UserPreferencesRepository
+import org.mifospay.core.ui.DefaultErrorMessageProvider
 import org.mifospay.core.ui.PasswordStrengthState
 import org.mifospay.core.ui.utils.BaseViewModel
 import org.mifospay.core.ui.utils.PasswordChecker
@@ -150,8 +153,9 @@ internal class EditPasswordViewModel(
             }
 
             is DataState.Error -> {
+                val uiError = result.toUiError(DefaultErrorMessageProvider)
                 mutableStateFlow.update {
-                    it.copy(dialogState = EditPasswordDialog.ApiError(result.exception.message.toString()))
+                    it.copy(dialogState = EditPasswordDialog.ApiError(uiError))
                 }
             }
 
@@ -254,7 +258,7 @@ internal sealed interface EditPasswordDialog {
         val message: StringResource,
         val formatArgs: List<Any> = emptyList(),
     ) : EditPasswordDialog
-    data class ApiError(val message: String) : EditPasswordDialog
+    data class ApiError(val message: UiError) : EditPasswordDialog
 }
 
 internal sealed interface EditPasswordEvent {

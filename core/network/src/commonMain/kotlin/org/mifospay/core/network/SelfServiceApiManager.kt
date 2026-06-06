@@ -27,4 +27,6 @@ class SelfServiceApiManager(
     val accountTransfersApi by lazy { ktorfitClient.accountTransfersApi }
 
     val officeApi by lazy { ktorfitClient.officeApi }
+
+    val userApi by lazy { ktorfitClient.userApi }
 }

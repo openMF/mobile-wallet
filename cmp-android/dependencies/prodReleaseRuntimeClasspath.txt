@@ -40,7 +40,6 @@
 :feature:transfer-interbank
 :feature:transfer-intrabank
 :feature:upi-setup
-:libs:mifos-passcode
 androidx.activity:activity-compose:1.12.2
 androidx.activity:activity-ktx:1.12.2
 androidx.activity:activity:1.12.2
@@ -289,8 +288,6 @@ com.google.mlkit:barcode-scanning:17.3.0
 com.google.mlkit:common:18.11.0
 com.google.mlkit:vision-common:17.3.0
 com.google.mlkit:vision-interfaces:16.3.0
-com.google.protobuf:protobuf-javalite:4.31.1
-com.google.protobuf:protobuf-kotlin-lite:4.31.1
 com.google.zxing:core:3.5.3
 com.mohamedrejeb.calf:calf-permissions-android:0.8.0
 com.mohamedrejeb.calf:calf-permissions:0.8.0

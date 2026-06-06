@@ -9,6 +9,9 @@
  */
 package org.mifospay.core.data.repositoryImpl
 
+import io.ktor.client.plugins.ClientRequestException
+import io.ktor.client.plugins.ServerResponseException
+import io.ktor.client.statement.bodyAsText
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn
@@ -17,15 +20,16 @@ import org.mifospay.core.common.DataState
 import org.mifospay.core.common.asDataStateFlow
 import org.mifospay.core.data.mapper.toEntity
 import org.mifospay.core.data.repository.UserRepository
+import org.mifospay.core.data.util.parseMifosError
 import org.mifospay.core.model.user.NewUser
-import org.mifospay.core.network.FineractApiManager
+import org.mifospay.core.network.SelfServiceApiManager
 import org.mifospay.core.network.model.CommonResponse
 import org.mifospay.core.network.model.GenericResponse
 import org.mifospay.core.network.model.entity.UserWithRole
 import org.mifospay.core.network.model.entity.user.UpdateUserEntityPassword
 
 class UserRepositoryImpl(
-    private val apiManager: FineractApiManager,
+    private val apiManager: SelfServiceApiManager,
     private val ioDispatcher: CoroutineDispatcher,
 ) : UserRepository {
     override suspend fun getUsers(): Flow<DataState<List<UserWithRole>>> {
@@ -53,18 +57,37 @@ class UserRepositoryImpl(
         updatedUser: NewUser,
     ): Flow<DataState<GenericResponse>> {
         return apiManager.userApi
-            .updateUser(userId, updatedUser.toEntity())
+            .updateUser(updatedUser.toEntity())
             .asDataStateFlow().flowOn(ioDispatcher)
     }
 
-    override suspend fun updateUserPassword(userId: Long, password: String): DataState<String> {
+    override suspend fun updateUserPassword(
+        userId: Long,
+        password: String,
+    ): DataState<String> {
         return try {
             apiManager.userApi.updateUserPassword(
-                userId = userId,
-                updateUserEntity = UpdateUserEntityPassword(password, password),
+                updateUserEntity = UpdateUserEntityPassword(
+                    password,
+                    password,
+                ),
             )
 
             DataState.Success("Password updated successfully")
+        } catch (e: ClientRequestException) {
+            val message = parseMifosError(
+                e.response.bodyAsText(),
+                e.response.status.value,
+            )
+
+            DataState.Error(Exception(message))
+        } catch (e: ServerResponseException) {
+            val message = parseMifosError(
+                e.response.bodyAsText(),
+                e.response.status.value,
+            )
+
+            DataState.Error(Exception(message))
         } catch (e: Exception) {
             DataState.Error(e)
         }

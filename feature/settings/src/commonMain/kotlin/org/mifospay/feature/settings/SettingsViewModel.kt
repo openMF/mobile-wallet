@@ -32,6 +32,9 @@ import org.mifospay.core.data.repository.SavingsAccountRepository
 import org.mifospay.core.data.repository.UserVerificationRepository
 import org.mifospay.core.datastore.UserPreferencesRepository
 import org.mifospay.core.model.client.Client
+import org.mifospay.core.model.user.Language
+import org.mifospay.core.model.user.LanguageConfig
+import org.mifospay.core.model.user.toLanguage
 import org.mifospay.core.ui.utils.BaseViewModel
 import org.mifospay.feature.settings.SettingsAction.Internal.DisableAccountResult
 
@@ -80,6 +83,9 @@ class SettingsViewModel(
         SettingsState(
             client = client,
             dialogState = null,
+            language = userPreferencesRepository.language.value.takeIf {
+                !it.localeName.isNullOrBlank()
+            } ?: LanguageConfig.DEFAULT.toLanguage(),
         )
     },
 ) {
@@ -109,6 +115,12 @@ class SettingsViewModel(
 
             is SettingsAction.NavigateToNotificationSettings -> {
                 sendEvent(SettingsEvent.OnNavigateToNotificationScreen)
+            }
+
+            is SettingsAction.ShowLanguageSelection -> {
+                mutableStateFlow.update {
+                    it.copy(dialogState = DialogState.LanguageSelection)
+                }
             }
 
             is SettingsAction.DismissDialog -> {
@@ -274,11 +286,30 @@ class SettingsViewModel(
             }
         }
     }
+
+    fun updateLanguage(language: LanguageConfig) {
+        viewModelScope.launch {
+            mutableStateFlow.update {
+                it.copy(
+                    language = language.toLanguage(),
+                )
+            }
+        }
+    }
+
+    fun updateAppLocale() {
+        viewModelScope.launch {
+            userPreferencesRepository.setLanguage(state.language)
+
+            sendEvent(SettingsEvent.ChangeLocale(state.language.localeName ?: "En"))
+        }
+    }
 }
 
 data class SettingsState(
     val client: Client,
     val dialogState: DialogState? = null,
+    val language: Language,
 )
 
 sealed interface DialogState {
@@ -295,6 +326,8 @@ sealed interface DialogState {
         val message: StringResource,
         val onConfirm: () -> Unit,
     ) : DialogState
+
+    data object LanguageSelection : DialogState
 }
 
 sealed interface SettingsEvent {
@@ -305,6 +338,8 @@ sealed interface SettingsEvent {
     data object OnNavigateToFaqScreen : SettingsEvent
     data object OnNavigateToProfile : SettingsEvent
     data object OnNavigateToNotificationScreen : SettingsEvent
+
+    data class ChangeLocale(val locale: String) : SettingsEvent
 }
 
 sealed interface SettingsAction {
@@ -312,6 +347,8 @@ sealed interface SettingsAction {
     data object Logout : SettingsAction
     data object DisableAccount : SettingsAction
     data object BiometricsNotAvailable : SettingsAction
+
+    data object ShowLanguageSelection : SettingsAction
 
     /**
      * Toggle biometric registration.

@@ -11,6 +11,7 @@ package org.mifospay.feature.beneficiary.addupdatebeneficiary
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import co.touchlab.kermit.Logger
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.launchIn
@@ -50,7 +51,6 @@ import org.mifospay.core.model.utils.QrCodeData
 import org.mifospay.core.model.utils.QrCodeType
 import org.mifospay.core.ui.utils.BaseViewModel
 import org.mifospay.feature.beneficiary.addupdatebeneficiary.AEBAction.Internal.HandleBeneficiaryAddEditResult
-import org.mifospay.feature.beneficiary.addupdatebeneficiary.AEBState.Companion.DEFAULT_OFFICE
 import org.mifospay.feature.beneficiary.addupdatebeneficiary.AEBState.DialogState.Error
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -134,14 +134,14 @@ internal class AddEditBeneficiaryViewModel(
     val officeList = officeRepository.getOffices()
         .mapLatest { dataState ->
             when (dataState) {
-                is DataState.Success -> dataState.data.ifEmpty { listOf(DEFAULT_OFFICE) }
-                else -> listOf(DEFAULT_OFFICE)
+                is DataState.Success -> dataState.data
+                else -> emptyList()
             }
         }
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5_000),
-            initialValue = listOf(DEFAULT_OFFICE),
+            initialValue = emptyList(),
         )
 
     init {
@@ -153,12 +153,34 @@ internal class AddEditBeneficiaryViewModel(
         officeList
             .onEach { offices ->
                 val currentState = state
+
+                Logger.d { "@@@@ Offices: ${offices.map { it.name }}" }
+                Logger.d { "@@@@ Current officeName: ${currentState.officeName}" }
+
+                // Add flow: auto-select first office
+                if (
+                    currentState.officeName.isBlank() &&
+                    currentState.officeId == null &&
+                    offices.isNotEmpty()
+                ) {
+                    val firstOffice = offices.first()
+
+                    mutableStateFlow.update {
+                        it.copy(
+                            officeName = firstOffice.name,
+                            officeId = firstOffice.id,
+                        )
+                    }
+                    return@onEach
+                }
+
+                // Edit flow: resolve office name from officeId
                 val officeId = currentState.officeId
-                // Only resolve if officeId is set and current officeName is the fallback
-                if (officeId != null && currentState.officeName == DEFAULT_OFFICE.name) {
-                    val resolvedOffice = offices.find { it.id == officeId }
-                    if (resolvedOffice != null) {
-                        mutableStateFlow.update { it.copy(officeName = resolvedOffice.name) }
+                if (officeId != null) {
+                    offices.find { it.id == officeId }?.let { office ->
+                        mutableStateFlow.update {
+                            it.copy(officeName = office.name)
+                        }
                     }
                 }
             }
@@ -170,6 +192,15 @@ internal class AddEditBeneficiaryViewModel(
             is AEBAction.ChangeName -> {
                 mutableStateFlow.update {
                     it.copy(name = action.name)
+                }
+            }
+
+            is AEBAction.ChangeOffice -> {
+                mutableStateFlow.update {
+                    it.copy(
+                        officeName = action.office.name,
+                        officeId = action.office.id,
+                    )
                 }
             }
 
@@ -388,7 +419,7 @@ internal data class AEBState(
     val accountNumber: String,
     val transferLimit: Int,
     val locale: String = "en_US",
-    val officeName: String = DEFAULT_OFFICE.name,
+    val officeName: String = "",
     val officeId: Long? = null,
     val accountType: Int = SAVINGS_ACC_ID,
     val beneficiaryId: Long? = null,
@@ -467,6 +498,8 @@ internal sealed interface AEBEvent {
 internal sealed interface AEBAction {
     data class ChangeLocale(val locale: String) : AEBAction
     data class ChangeName(val name: String) : AEBAction
+
+    data class ChangeOffice(val office: Office) : AEBAction
     data class ChangeOfficeName(val officeName: String) : AEBAction
     data class ChangeAccountNumber(val accountNumber: String) : AEBAction
     data class ChangeAccountType(val accountType: Int) : AEBAction

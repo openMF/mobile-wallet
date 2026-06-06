@@ -70,6 +70,7 @@ import org.mifospay.shared.ui.MifosApp
 internal fun RootNavGraph(
     networkMonitor: NetworkMonitor,
     timeZoneMonitor: TimeZoneMonitor,
+    handleAppLocale: (locale: String?) -> Unit,
     navHostController: NavHostController,
     startDestination: String,
     onClickLogout: () -> Unit,
@@ -135,6 +136,7 @@ internal fun RootNavGraph(
             MifosApp(
                 networkMonitor = networkMonitor,
                 timeZoneMonitor = timeZoneMonitor,
+                handleAppLocale = handleAppLocale,
                 onClickLogout = onClickLogout,
             )
         }

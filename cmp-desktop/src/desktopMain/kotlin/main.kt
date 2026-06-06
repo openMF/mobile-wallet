@@ -8,16 +8,22 @@
  * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
  */
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 import androidx.compose.ui.window.rememberWindowState
 import io.github.vinceglb.filekit.FileKit
 import org.mifospay.shared.MifosPaySharedApp
 import org.mifospay.shared.di.initKoin
+import java.util.Locale
 
 fun main() {
     application {
         initKoin()
+        var localeVersion by remember { mutableStateOf(0) }
         // Initialize FileKit
         FileKit.init(appId = "org.mifospay")
         val windowState = rememberWindowState()
@@ -26,7 +32,27 @@ fun main() {
             state = windowState,
             title = "MifosWallet",
         ) {
-            MifosPaySharedApp()
+            MifosPaySharedApp(
+                handleAppLocale = { languageTag ->
+                    if (languageTag != null) {
+                        // Parse language tag and set as default locale
+                        val locale = when {
+                            languageTag.contains("-") -> {
+                                val parts = languageTag.split("-")
+                                Locale(parts[0], parts[1])
+                            }
+                            else -> Locale(languageTag)
+                        }
+                        Locale.setDefault(locale)
+                    } else {
+                        // System Default: reset to system locale
+                        val systemLocale = Locale.getDefault(Locale.Category.DISPLAY)
+                        Locale.setDefault(systemLocale)
+                    }
+                    // Trigger recomposition with new locale
+                    localeVersion++
+                },
+            )
         }
     }
 }

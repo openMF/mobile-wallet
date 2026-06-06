@@ -31,6 +31,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import mobile_wallet.feature.settings.generated.resources.Res
+import mobile_wallet.feature.settings.generated.resources.feature_settings_change_language_text
 import mobile_wallet.feature.settings.generated.resources.feature_settings_change_passcode
 import mobile_wallet.feature.settings.generated.resources.feature_settings_change_password
 import mobile_wallet.feature.settings.generated.resources.feature_settings_disable_account
@@ -58,6 +59,7 @@ import org.mifospay.core.designsystem.component.MifosLoadingDialog
 import org.mifospay.core.designsystem.component.MifosScaffold
 import org.mifospay.core.designsystem.icon.MifosIcons
 import org.mifospay.core.ui.utils.EventsEffect
+import org.mifospay.feature.settings.langugae.LanguageDialog
 import template.core.base.designsystem.theme.KptTheme
 
 /**
@@ -90,6 +92,7 @@ internal fun SettingsScreenRoute(
     backPress: () -> Unit,
     onEditPassword: () -> Unit,
     onLogout: () -> Unit,
+    handleAppLocale: (String) -> Unit,
     navigateToPasscodeScreen: (verificationKey: String?) -> Unit,
     navigateToFaqScreen: () -> Unit,
     navigateToNotificationScreen: () -> Unit,
@@ -126,6 +129,7 @@ internal fun SettingsScreenRoute(
                     if (isRegistered) DISABLE_BIOMETRICS_VERIFICATION_KEY else null,
                 )
             }
+            is SettingsEvent.ChangeLocale -> handleAppLocale(event.locale)
             SettingsEvent.OnNavigateToEditPasswordScreen -> onEditPassword.invoke()
             SettingsEvent.OnNavigateToFaqScreen -> navigateToFaqScreen.invoke()
             SettingsEvent.OnNavigateToLogout -> onLogout.invoke()
@@ -212,6 +216,14 @@ private fun SettingsScreenContent(
                 icon = vectorResource(Res.drawable.outline_pin),
                 onClick = {
                     onAction(SettingsAction.ChangePasscode)
+                },
+            )
+
+            SettingsCardItem(
+                title = stringResource(Res.string.feature_settings_change_language_text),
+                icon = vectorResource(Res.drawable.outline_pin),
+                onClick = {
+                    onAction(SettingsAction.ShowLanguageSelection)
                 },
             )
 
@@ -328,6 +340,12 @@ private fun SettingsDialogs(
             onConfirm = dialogState.onConfirm,
             onDismissRequest = onDismissRequest,
         )
+
+        DialogState.LanguageSelection -> {
+            LanguageDialog(
+                onDismiss = onDismissRequest,
+            )
+        }
 
         null -> Unit
     }

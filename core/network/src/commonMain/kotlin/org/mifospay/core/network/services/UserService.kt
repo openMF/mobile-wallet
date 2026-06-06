@@ -33,13 +33,11 @@ interface UserService {
 
     @PUT(ApiEndPoints.USER + "/{userId}")
     suspend fun updateUser(
-        @Path("userId") userId: Int,
         @Body updateUserEntity: NewUserEntity,
     ): Flow<GenericResponse>
 
-    @PUT(ApiEndPoints.USER + "/{userId}")
+    @PUT(ApiEndPoints.USER_SELF)
     suspend fun updateUserPassword(
-        @Path("userId") userId: Long,
         @Body updateUserEntity: UpdateUserEntityPassword,
     ): UpdateUserPasswordResponse
 
