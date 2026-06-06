@@ -7,7 +7,7 @@
  *
  * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
  */
-package org.mifospay.feature.settings.langugae
+package org.mifospay.feature.settings.language
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row

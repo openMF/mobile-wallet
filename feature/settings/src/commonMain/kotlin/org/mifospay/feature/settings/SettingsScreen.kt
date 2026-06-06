@@ -59,7 +59,7 @@ import org.mifospay.core.designsystem.component.MifosLoadingDialog
 import org.mifospay.core.designsystem.component.MifosScaffold
 import org.mifospay.core.designsystem.icon.MifosIcons
 import org.mifospay.core.ui.utils.EventsEffect
-import org.mifospay.feature.settings.langugae.LanguageDialog
+import org.mifospay.feature.settings.language.LanguageDialog
 import template.core.base.designsystem.theme.KptTheme
 
 /**
