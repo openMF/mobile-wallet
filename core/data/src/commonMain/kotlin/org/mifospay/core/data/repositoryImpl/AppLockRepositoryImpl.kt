@@ -12,7 +12,19 @@ package org.mifospay.core.data.repositoryImpl
 import com.russhwolf.settings.Settings
 import org.mifospay.core.data.repository.AppLockRepository
 
+/** Multiplatform-Settings key for the [APP_LOCK_FLAG] boolean. */
 const val APP_LOCK_FLAG = "org.mifospay.mifos.app_lock_flag"
+
+/**
+ * [AppLockRepository] implementation backed by `com.russhwolf.settings.Settings`
+ * (single boolean entry under [APP_LOCK_FLAG]).
+ *
+ * `isAppLocked()` returns `null` when the key is absent (fresh install or
+ * after [deleteLock]); the caller decides how to interpret that.
+ * `MifosPayApp` treats `null` the same as "no re-auth needed" via
+ * `isAppLocked()?.let { ... }` — the absence of a flag means there's no
+ * established session to re-gate.
+ */
 class AppLockRepositoryImpl(
     private val settings: Settings,
 ) : AppLockRepository {
@@ -28,7 +40,7 @@ class AppLockRepositoryImpl(
         settings.remove(APP_LOCK_FLAG)
     }
 
-    override fun isAppLocked(): Boolean {
-        return settings.getBoolean(APP_LOCK_FLAG, true)
+    override fun isAppLocked(): Boolean? {
+        return settings.getBooleanOrNull(APP_LOCK_FLAG)
     }
 }

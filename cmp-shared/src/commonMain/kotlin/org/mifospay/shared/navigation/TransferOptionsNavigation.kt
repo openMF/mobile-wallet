@@ -25,6 +25,7 @@ fun NavController.navigateToTransferOptions() {
 fun NavGraphBuilder.transferOptionsDialog(
     onIntraBankTransferClick: () -> Unit,
     onInterBankTransferClick: () -> Unit,
+    onUpiSendMoney: () -> Unit,
     onDismiss: () -> Unit,
 ) {
     dialog<TransferOptionsRoute> {
@@ -34,6 +35,9 @@ fun NavGraphBuilder.transferOptionsDialog(
             },
             onInterBankTransferClick = {
                 onInterBankTransferClick()
+            },
+            onUpiSendMoney = {
+                onUpiSendMoney()
             },
             onDismiss = onDismiss,
         )

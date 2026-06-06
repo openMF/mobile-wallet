@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copyright 2024 Mifos Initiative
+
+    This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+    If a copy of the MPL was not distributed with this file,
+    You can obtain one at https://mozilla.org/MPL/2.0/.
+
+    See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+-->
+<resources>
+    <string name="feature_request_money_enter_valid_amount">Por favor insira um valor válido</string>
+    <string name="feature_request_money_enter_currency">Inserir moeda</string>
+    <string name="feature_request_money_set_amount">Definir Valor</string>
+    <string name="feature_request_money_currency">Definir Moeda</string>
+    <string name="feature_request_money_cancel">Cancelar</string>
+    <string name="feature_request_money_confirm">Confirmar</string>
+    <string name="feature_request_money_qr_code_details">Detalhes do código QR</string>
+    <string name="feature_request_money_vpa">VPA</string>
+    <string name="feature_request_money_amount">Valor</string>
+    <string name="feature_request_money_usd">USD</string>
+    <string name="feature_request_money_request">Solicitar</string>
+    <string name="feature_request_money_loading">Carregando</string>
+    <string name="feature_request_money_nothing_to_notify">Nada para notificar</string>
+    <string name="feature_request_money_there_is_nothing_to_show">Não há nada para mostrar</string>
+    <string name="feature_request_money_error_oops">Ops!</string>
+    <string name="feature_request_money_unexpected_error_subtitle">Ocorreu um erro inesperado. Por favor tente novamente.</string>
+    <string name="feature_mpay_qr_receive_money">Receber Dinheiro</string>
+    <string name="feature_mpay_qr_intra_bank">QR Intrabancário</string>
+    <string name="feature_mpay_qr_inter_bank">QR Interbancário</string>
+    <string name="feature_mpay_qr_share">Compartilhar</string>
+    <string name="feature_mpay_qr_unable_to_generate">Não foi possível gerar o código QR</string>
+    <string name="feature_mpay_qr_go_back">Voltar</string>
+    <string name="feature_mpay_qr_unknown">Desconhecido</string>
+    <string name="feature_mpay_qr_no_default_account">Nenhuma conta padrão definida. Por favor defina uma conta padrão primeiro.</string>
+    <string name="feature_mpay_qr_failed_to_generate">Falha ao gerar código QR</string>
+    <string name="feature_mpay_qr_no_currency_found">Nenhuma moeda encontrada</string>
+    <string name="feature_mpay_qr_scan_to_pay">Escaneie para me pagar usando qualquer aplicativo de pagamento</string>
+    <string name="feature_mpay_qr_primary">Principal</string>
+    <string name="feature_mpay_qr_share_qr">Compartilhar</string>
+    <string name="feature_mpay_qr_download_qr">Baixar</string>
+    <string name="feature_mpay_qr_account_ids">IDs da Conta</string>
+    <string name="feature_mpay_qr_account_number">Número da Conta</string>
+    <string name="feature_mpay_qr_external_id">ID Externo</string>
+    <string name="feature_mpay_qr_copy">Copiar</string>
+    <string name="feature_mpay_qr_copied">Copiado para a área de transferência</string>
+    <string name="feature_mpay_qr_scan_instruction">Escaneie com qualquer aplicativo de pagamento</string>
+    <string name="feature_mpay_qr_downloaded">Código QR baixado</string>
+    <string name="feature_mpay_qr_inter_bank_unavailable">QR Interbancário Não Disponível</string>
+    <string name="feature_mpay_qr_external_id_required">Sua conta não possui um ID externo configurado. Entre em contato com seu banco para habilitar transferências interbancárias.</string>
+    <string name="feature_mpay_qr_select_account">Selecionar Conta</string>
+    <string name="feature_mpay_qr_has_external_id">Interbancário ativado</string>
+    <string name="feature_mpay_qr_no_external_id">Interbancário não disponível</string>
+    <string name="feature_mpay_qr_account_selected">Conta selecionada</string>
+</resources>

@@ -28,17 +28,17 @@ import org.mifospay.core.model.savingsaccount.SavingsWithAssociationsEntity
 import org.mifospay.core.model.savingsaccount.Transaction
 import org.mifospay.core.model.savingsaccount.TransactionsEntity
 import org.mifospay.core.model.savingsaccount.UpdateSavingAccountEntity
-import org.mifospay.core.network.FineractApiManager
+import org.mifospay.core.network.SelfServiceApiManager
 import org.mifospay.core.network.model.entity.Page
 
 class SavingsAccountRepositoryImpl(
-    private val apiManager: FineractApiManager,
+    private val apiManager: SelfServiceApiManager,
     private val ioDispatcher: CoroutineDispatcher,
 ) : SavingsAccountRepository {
     override suspend fun getSavingsAccounts(
         limit: Int,
     ): Flow<DataState<Page<SavingsWithAssociationsEntity>>> {
-        return apiManager.savingsAccountsApi
+        return apiManager.savingAccountsListApi
             .getSavingsAccounts(limit)
             .asDataStateFlow().flowOn(ioDispatcher)
     }
@@ -47,7 +47,7 @@ class SavingsAccountRepositoryImpl(
         accountId: Long,
         associationType: String,
     ): Flow<DataState<SavingsWithAssociationsEntity>> {
-        return apiManager.savingsAccountsApi
+        return apiManager.savingAccountsListApi
             .getSavingsWithAssociations(accountId, associationType)
             .catch { DataState.Error(it, null) }
             .asDataStateFlow()
@@ -55,7 +55,7 @@ class SavingsAccountRepositoryImpl(
     }
 
     override fun getAccountDetail(accountId: Long): Flow<DataState<SavingAccountDetail>> {
-        return apiManager.savingsAccountsApi
+        return apiManager.savingAccountsListApi
             .getSavingsWithAssociations(accountId, Constants.TRANSACTIONS)
             .catch { DataState.Error(it, null) }
             .map(SavingsWithAssociationsEntity::toSavingDetail)
@@ -68,7 +68,7 @@ class SavingsAccountRepositoryImpl(
     ): DataState<String> {
         return try {
             withContext(ioDispatcher) {
-                apiManager.savingsAccountsApi.createSavingsAccount(savingAccount)
+                apiManager.savingAccountsListApi.createSavingsAccount(savingAccount)
             }
 
             DataState.Success("Savings Account Created Successfully")
@@ -83,7 +83,7 @@ class SavingsAccountRepositoryImpl(
     ): DataState<String> {
         return try {
             withContext(ioDispatcher) {
-                apiManager.savingsAccountsApi.updateSavingsAccount(accountId, savingAccount)
+                apiManager.savingAccountsListApi.updateSavingsAccount(accountId, savingAccount)
             }
 
             DataState.Success("Savings Account Updated Successfully")
@@ -97,7 +97,7 @@ class SavingsAccountRepositoryImpl(
     ): DataState<String> {
         return try {
             withContext(ioDispatcher) {
-                apiManager.savingsAccountsApi.blockUnblockAccount(accountId, "unblock")
+                apiManager.savingAccountsListApi.blockUnblockAccount(accountId, "unblock")
             }
 
             DataState.Success("Account unblocked successfully")
@@ -109,7 +109,7 @@ class SavingsAccountRepositoryImpl(
     override suspend fun blockAccount(accountId: Long): DataState<String> {
         return try {
             withContext(ioDispatcher) {
-                apiManager.savingsAccountsApi.blockUnblockAccount(accountId, "block")
+                apiManager.savingAccountsListApi.blockUnblockAccount(accountId, "block")
             }
 
             DataState.Success("Account blocked successfully")
@@ -122,7 +122,7 @@ class SavingsAccountRepositoryImpl(
         accountId: Long,
         transactionId: Long,
     ): Flow<DataState<Transaction>> {
-        return apiManager.savingsAccountsApi
+        return apiManager.savingAccountsListApi
             .getSavingAccountTransaction(accountId, transactionId)
             .map(TransactionsEntity::toModel)
             .asDataStateFlow()
@@ -130,14 +130,14 @@ class SavingsAccountRepositoryImpl(
     }
 
     override suspend fun payViaMobile(accountId: Long): Flow<DataState<Transaction>> {
-        return apiManager.savingsAccountsApi
+        return apiManager.savingAccountsListApi
             .payViaMobile(accountId)
             .map(TransactionsEntity::toModel)
             .asDataStateFlow().flowOn(ioDispatcher)
     }
 
     override fun getSavingAccountTemplate(clientId: Long): Flow<DataState<SavingAccountTemplate>> {
-        return apiManager.savingsAccountsApi
+        return apiManager.savingAccountsListApi
             .getSavingAccountTemplate(clientId)
             .catch { DataState.Error(it, null) }
             .asDataStateFlow()

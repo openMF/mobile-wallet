@@ -42,8 +42,39 @@ import org.mifospay.core.ui.DefaultErrorMessageProvider
 import org.mifospay.core.ui.utils.BaseViewModel
 import org.mifospay.feature.transfer.intrabank.navigation.TransferConfirmRoute
 
+/**
+ * `SavedStateHandle` key written by `internalMifosPasscodeScreen` and read by
+ * [TransferConfirmScreen] for the intra-bank transfer auth-gate round trip
+ * (MW-390).
+ *
+ * Mirrors the disable-biometrics flow in `:feature:settings`, but with its
+ * own key so the two flows don't cross-fire.
+ */
 const val INTRA_BANK_TRANSFER_VERIFICATION_KEY = "intra-banking_transfer_verification_key"
 
+/**
+ * ViewModel for the intra-bank transfer confirmation screen.
+ *
+ * Owns the **passcode/biometric auth gate** required before initiating a
+ * transfer (MW-390):
+ *  1. On [TransferConfirmAction.InitiateTransfer], runs validation; if it
+ *     passes, calls `handleUserVerification` which emits
+ *     [TransferConfirmEvent.NavigateForPasscodeVerification]. The screen
+ *     responds by navigating to `internalMifosPasscodeScreen` with
+ *     [INTRA_BANK_TRANSFER_VERIFICATION_KEY].
+ *  2. The screen observes its own saved-state-handle for the round-trip
+ *     boolean and re-dispatches it as
+ *     [TransferConfirmAction.UpdateUserVerificationResult]. The VM resumes
+ *     `handleUserVerification` on the result.
+ *  3. On `success = true`, the VM calls
+ *     [UserVerificationRepository.consumeVerification]. If the 30 s token is
+ *     still valid the transfer proceeds; if expired, the transfer is
+ *     cancelled with a "user verification failed" dialog.
+ *
+ * The VM does **not** import any `org.mifos.authenticator.*` symbol — the
+ * library integration is purely on the screen and navigation side. This
+ * class only needs the [UserVerificationRepository] contract.
+ */
 internal class TransferConfirmViewModel(
     private val repository: ThirdPartyTransferRepository,
     private val clientRepo: ClientRepository,
@@ -307,12 +338,28 @@ internal class TransferConfirmViewModel(
                             transferResult = transferResult,
                         )
                     }
-                    sendEvent(TransferConfirmEvent.OnTransferSuccess(transferResult))
                 }
             }
         }
     }
 
+    /**
+     * Suspends until the passcode/biometric gate round trip completes.
+     *
+     * Emits [TransferConfirmEvent.NavigateForPasscodeVerification], then
+     * waits for [TransferConfirmState.userVerificationResult] to flip from
+     * null. The screen is responsible for calling
+     * [TransferConfirmAction.UpdateUserVerificationResult] with the boolean
+     * written under [INTRA_BANK_TRANSFER_VERIFICATION_KEY] in the
+     * saved-state-handle.
+     *
+     * Branches:
+     *  - `true` → [onSuccess] (caller still needs to call
+     *    [UserVerificationRepository.consumeVerification] to confirm the
+     *    30 s token is valid).
+     *  - `false` → [onFailed] (user cancelled or rejected).
+     *  - `null` → no-op (defensive; the filter above prevents this).
+     */
     private suspend fun handleUserVerification(
         onSuccess: suspend () -> Unit,
         onFailed: suspend () -> Unit,
@@ -341,6 +388,7 @@ internal class TransferConfirmViewModel(
     private fun updateValidationError(message: StringResource) {
         mutableStateFlow.update {
             it.copy(
+                isProcessing = false,
                 dialogState = TransferConfirmState.DialogState.Error.ValidationError(message),
             )
         }
@@ -366,8 +414,22 @@ internal data class TransferConfirmState(
     val fromAccountOptions: List<AccountOption>? = emptyList(),
     val balanceMap: Map<String, Double> = emptyMap(),
     val isProcessing: Boolean = false,
+    /**
+     * `true` between [TransferConfirmEvent.NavigateForPasscodeVerification]
+     * being emitted and [TransferConfirmAction.UpdateUserVerificationResult]
+     * being received. Used by the screen to suppress double-taps on the
+     * confirm button during the round trip.
+     */
     val isAwaitingPasscodeVerification: Boolean = false,
     val transferResult: TransferResult? = null,
+    /**
+     * Round-trip result from the passcode/biometric gate:
+     *  - `null` — not yet returned (initial / mid-flight),
+     *  - `true` — verified; transfer can proceed,
+     *  - `false` — cancelled / rejected; transfer is aborted.
+     *
+     * Cleared back to `null` on each new [handleUserVerification] call.
+     */
     val userVerificationResult: Boolean? = null,
 ) {
     val amountIsValid: Boolean
@@ -451,8 +513,15 @@ data class TransferResult(
 
 internal sealed interface TransferConfirmEvent {
     data object OnNavigateBack : TransferConfirmEvent
+
+    /**
+     * Tells the screen to push `internalMifosPasscodeScreen` with
+     * [INTRA_BANK_TRANSFER_VERIFICATION_KEY]. The screen is responsible for
+     * observing its own saved-state-handle for the round-trip boolean and
+     * dispatching it back as
+     * [TransferConfirmAction.UpdateUserVerificationResult].
+     */
     data object NavigateForPasscodeVerification : TransferConfirmEvent
-    data class OnTransferSuccess(val transferResult: TransferResult) : TransferConfirmEvent
 }
 
 internal sealed interface TransferConfirmAction {
@@ -465,5 +534,13 @@ internal sealed interface TransferConfirmAction {
     data class SelectAccount(val account: AccountOption?) : TransferConfirmAction
     data object OpenBottomSheet : TransferConfirmAction
     data object CloseBottomSheet : TransferConfirmAction
+
+    /**
+     * Round-trip result from the passcode/biometric gate, dispatched by
+     * [TransferConfirmScreen] after observing
+     * [INTRA_BANK_TRANSFER_VERIFICATION_KEY] flip on its saved-state-handle.
+     * `true` lets the transfer proceed (subject to a still-valid
+     * [UserVerificationRepository] token); `false` aborts.
+     */
     data class UpdateUserVerificationResult(val result: Boolean) : TransferConfirmAction
 }

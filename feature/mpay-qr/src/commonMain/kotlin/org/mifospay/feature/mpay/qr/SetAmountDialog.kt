@@ -24,17 +24,15 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import mobile_wallet.feature.mpay_qr.generated.resources.Res
-import mobile_wallet.feature.mpay_qr.generated.resources.feature_mpay_qr_no_currency_found
 import mobile_wallet.feature.mpay_qr.generated.resources.feature_request_money_cancel
 import mobile_wallet.feature.mpay_qr.generated.resources.feature_request_money_confirm
-import mobile_wallet.feature.mpay_qr.generated.resources.feature_request_money_currency
 import mobile_wallet.feature.mpay_qr.generated.resources.feature_request_money_enter_valid_amount
 import mobile_wallet.feature.mpay_qr.generated.resources.feature_request_money_set_amount
 import org.jetbrains.compose.resources.stringResource
@@ -45,11 +43,7 @@ import org.mifospay.core.designsystem.component.MifosOutlinedButton
 import org.mifospay.core.designsystem.component.MifosTextField
 import org.mifospay.core.designsystem.utils.onClick
 import org.mifospay.core.model.utils.CurrencyCode
-import org.mifospay.core.model.utils.filterList
 import org.mifospay.core.ui.AvatarBox
-import org.mifospay.core.ui.DropdownBox
-import org.mifospay.core.ui.DropdownBoxItem
-import org.mifospay.core.ui.MifosDivider
 import template.core.base.designsystem.theme.KptTheme
 
 @Composable
@@ -94,62 +88,29 @@ internal fun SetAmountDialog(
                         }
                     }
 
-                    MifosTextField(
-                        value = amount,
-                        label = stringResource(Res.string.feature_request_money_set_amount),
-                        onValueChange = {
-                            onAction(MpayQrAction.AmountChanged(it))
-                        },
-                        isError = amountValidator != null,
-                        errorText = amountValidator,
+                    Column(
                         modifier = Modifier.fillMaxWidth(),
-                        keyboardOptions = KeyboardOptions(
-                            keyboardType = KeyboardType.Number,
-                        ),
-                    )
-
-                    val filteredCurrencyList by remember(currencyList, currency) {
-                        derivedStateOf {
-                            currencyList.filterList(currency)
-                        }
-                    }
-
-                    var currencyToggled by remember { mutableStateOf(false) }
-
-                    DropdownBox(
-                        expanded = currencyToggled,
-                        label = stringResource(Res.string.feature_request_money_currency),
-                        value = currency,
-                        readOnly = false,
-                        onValueChange = {
-                            onAction(MpayQrAction.CurrencyChanged(it))
-                        },
-                        onExpandChange = {
-                            currencyToggled = it
-                        },
+                        verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.sm),
                     ) {
-                        filteredCurrencyList.forEachIndexed { index, currencyCode ->
-                            CurrencyDropdownItem(
-                                currency = currencyCode,
-                                onClick = {
-                                    onAction(MpayQrAction.CurrencyChanged(it))
-                                    currencyToggled = false
-                                },
-                            )
+                        Text(
+                            textAlign = TextAlign.Start,
+                            text = currency,
+                            style = KptTheme.typography.bodyMedium,
+                        )
 
-                            if (index < filteredCurrencyList.size - 1) {
-                                MifosDivider()
-                            }
-                        }
-
-                        if (filteredCurrencyList.isEmpty()) {
-                            DropdownBoxItem(
-                                text = stringResource(Res.string.feature_mpay_qr_no_currency_found),
-                                onClick = {
-                                    currencyToggled = false
-                                },
-                            )
-                        }
+                        MifosTextField(
+                            value = amount,
+                            label = stringResource(Res.string.feature_request_money_set_amount),
+                            onValueChange = {
+                                onAction(MpayQrAction.AmountChanged(it))
+                            },
+                            isError = amountValidator != null,
+                            errorText = amountValidator,
+                            modifier = Modifier.fillMaxWidth(),
+                            keyboardOptions = KeyboardOptions(
+                                keyboardType = KeyboardType.Number,
+                            ),
+                        )
                     }
 
                     Row(

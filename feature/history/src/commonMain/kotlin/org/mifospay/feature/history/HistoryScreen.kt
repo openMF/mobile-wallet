@@ -56,7 +56,7 @@ import template.core.base.designsystem.theme.KptTheme
 
 @Composable
 fun HistoryScreen(
-    viewTransferDetail: (Long) -> Unit,
+    viewTransferDetail: (Long, Long) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: HistoryViewModel = koinViewModel(),
 ) {
@@ -65,7 +65,9 @@ fun HistoryScreen(
     EventsEffect(viewModel) { event ->
         when (event) {
             is HistoryEvent.OnTransactionDetail -> {
-                viewTransferDetail.invoke(event.transferId)
+                state.selectedAccount?.id?.let { accountId ->
+                    viewTransferDetail.invoke(accountId, event.transferId)
+                }
             }
         }
     }

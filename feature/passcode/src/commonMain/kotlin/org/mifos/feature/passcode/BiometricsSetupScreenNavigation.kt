@@ -15,11 +15,18 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 
+/** Route string for the biometric-setup destination. */
 const val BIOMETRIC_SETUP_ROUTE = "biometrics_setup_route"
 
+/** Pushes [BIOMETRIC_SETUP_ROUTE]. Called from `RootNavGraph` after [PasscodeResult.Created]. */
 fun NavController.navigateToBiometricSetupScreen(navOptions: NavOptions? = null) =
     navigate(BIOMETRIC_SETUP_ROUTE, navOptions)
 
+/**
+ * Registers the biometric-setup destination. Both `onBiometricsRegistrationSuccess`
+ * and `onSkipBiometricSetup` are terminal — wire both to "pop and route to
+ * main" in the caller.
+ */
 @OptIn(ExperimentalComposeUiApi::class)
 fun NavGraphBuilder.biometricSetupScreen(
     onBiometricsRegistrationSuccess: () -> Unit,

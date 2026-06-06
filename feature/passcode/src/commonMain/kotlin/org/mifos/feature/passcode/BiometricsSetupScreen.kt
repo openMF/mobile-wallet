@@ -17,7 +17,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -33,9 +33,12 @@ import androidx.navigationevent.NavigationEventInfo
 import androidx.navigationevent.compose.NavigationBackHandler
 import androidx.navigationevent.compose.rememberNavigationEventState
 import mobile_wallet.feature.passcode.generated.resources.Res
-import mobile_wallet.feature.passcode.generated.resources.feature_authenticator_biometrics_usage_message
-import mobile_wallet.feature.passcode.generated.resources.feature_authenticator_error
-import mobile_wallet.feature.passcode.generated.resources.feature_authenticator_ok
+import mobile_wallet.feature.passcode.generated.resources.feature_passcode_biometric_setup_confirm
+import mobile_wallet.feature.passcode.generated.resources.feature_passcode_biometric_setup_headline
+import mobile_wallet.feature.passcode.generated.resources.feature_passcode_biometric_setup_skip
+import mobile_wallet.feature.passcode.generated.resources.feature_passcode_biometrics_usage_message
+import mobile_wallet.feature.passcode.generated.resources.feature_passcode_error
+import mobile_wallet.feature.passcode.generated.resources.feature_passcode_ok
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
@@ -47,8 +50,26 @@ import org.mifospay.core.designsystem.theme.MifosTheme
 import org.mifospay.core.ui.utils.EventsEffect
 import template.core.base.designsystem.theme.KptTheme
 
+/** Navigation-event info marker for the biometric setup destination. */
 internal object BiometricSetupScreenCurrentInfo : NavigationEventInfo()
 
+/**
+ * First-time biometric enrolment screen, shown after [PasscodeResult.Created]
+ * lands on the root passcode flow. Calls
+ * `PlatformAuthenticationProvider.registerUser(...)` from the composition-
+ * scoped provider via [BiometricSetupScreenViewmodel].
+ *
+ * Both [onBiometricsRegistrationSuccess] and [onSkipBiometricSetup] are
+ * terminal — the caller should pop this screen and route to main; whichever
+ * branch the user takes, the passcode is already created so the app is
+ * authenticated.
+ *
+ * @param onBiometricsRegistrationSuccess Fired after a successful
+ *        `RegistrationResult.Success`. The library has already persisted the
+ *        registration blob via [BiometricStorageAdapter] — no caller-side
+ *        save required.
+ * @param onSkipBiometricSetup Fired when the user taps "Skip for now".
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BiometricSetupScreen(
@@ -68,6 +89,8 @@ fun BiometricSetupScreen(
     )
 
     val platformAuthenticationProvider = platformAuthenticationProvider.current
+    val biometricErrorMessages = rememberBiometricErrorMessages()
+    val biometricPromptStrings = rememberBiometricPromptStrings()
 
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
 
@@ -82,7 +105,11 @@ fun BiometricSetupScreen(
         state = state,
         onSetupBiometrics = {
             viewModel.trySendAction(
-                BiometricSetupScreenAction.ClickSetupBiometric(platformAuthenticationProvider),
+                BiometricSetupScreenAction.ClickSetupBiometric(
+                    platformAuthenticationProvider = platformAuthenticationProvider,
+                    errorMessages = biometricErrorMessages,
+                    promptStrings = biometricPromptStrings,
+                ),
             )
         },
         onSkipBiometricSetup = {
@@ -103,9 +130,9 @@ internal fun BiometricSetupContent(
     onDismissErrorDialog: () -> Unit,
 ) {
     MifosDialogBox(
-        title = stringResource(Res.string.feature_authenticator_error),
+        title = stringResource(Res.string.feature_passcode_error),
         showDialogState = state.error != null,
-        confirmButtonText = stringResource(Res.string.feature_authenticator_ok),
+        confirmButtonText = stringResource(Res.string.feature_passcode_ok),
         dismissButtonText = null,
         onConfirm = onDismissErrorDialog,
         onDismiss = onDismissErrorDialog,
@@ -126,14 +153,14 @@ internal fun BiometricSetupContent(
             Spacer(Modifier.height(40.dp))
 
             Text(
-                text = "Secure Your App",
+                text = stringResource(Res.string.feature_passcode_biometric_setup_headline),
                 style = KptTheme.typography.headlineSmall,
             )
 
             Spacer(Modifier.height(16.dp))
 
             Text(
-                text = stringResource(Res.string.feature_authenticator_biometrics_usage_message),
+                text = stringResource(Res.string.feature_passcode_biometrics_usage_message),
                 style = KptTheme.typography.bodyLarge,
                 color = KptTheme.colorScheme.inverseSurface,
                 modifier = Modifier.padding(horizontal = 16.dp),
@@ -144,10 +171,13 @@ internal fun BiometricSetupContent(
 
             Button(
                 onClick = onSetupBiometrics,
-                modifier = Modifier.width(200.dp),
+                modifier = Modifier.widthIn(min = 200.dp),
                 shape = RoundedCornerShape(20),
             ) {
-                Text("Setup Biometrics", color = KptTheme.colorScheme.onPrimary)
+                Text(
+                    text = stringResource(Res.string.feature_passcode_biometric_setup_confirm),
+                    color = KptTheme.colorScheme.onPrimary,
+                )
             }
 
             Spacer(Modifier.height(16.dp))
@@ -156,7 +186,7 @@ internal fun BiometricSetupContent(
                 onClick = onSkipBiometricSetup,
                 modifier = Modifier.fillMaxWidth(),
             ) {
-                Text("Skip for Now")
+                Text(stringResource(Res.string.feature_passcode_biometric_setup_skip))
             }
         }
     }

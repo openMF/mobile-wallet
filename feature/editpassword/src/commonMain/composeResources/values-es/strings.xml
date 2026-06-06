@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copyright 2024 Mifos Initiative
+
+    This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+    If a copy of the MPL was not distributed with this file,
+    You can obtain one at https://mozilla.org/MPL/2.0/.
+
+    See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+-->
+<resources>
+    <string name="feature_editpassword_password_changed_successfully">Contraseña cambiada con éxito</string>
+    <string name="feature_editpassword_change_password">Cambiar contraseña</string>
+    <string name="feature_editpassword_current_password">Contraseña actual</string>
+    <string name="feature_editpassword_new_password">Contraseña nueva</string>
+    <string name="feature_editpassword_confirm_new_password">Confirmar contraseña nueva</string>
+    <string name="feature_editpassword_old_password">Contraseña anterior</string>
+    <string name="feature_editpassword_password_length_error">La contraseña es demasiado corta</string>
+    <string name="feature_editpassword_password_mismatch_error">Las contraseñas no coinciden</string>
+    <string name="feature_editpassword_cancel">Cancelar</string>
+    <string name="feature_editpassword_save">Guardar</string>
+
+    <string name="feature_editpassword_error_empty_current_password">Por favor, ingresa tu contraseña actual</string>
+    <string name="feature_editpassword_error_same_password">La contraseña nueva no puede ser igual a la contraseña actual</string>
+    <string name="feature_editpassword_error_password_min_length">La contraseña debe tener al menos %1$d caracteres.</string>
+    <string name="feature_editpassword_error_password_mismatch">Las contraseñas no coinciden.</string>
+    <string name="feature_editpassword_error_password_weak">La contraseña es débil.</string>
+</resources>

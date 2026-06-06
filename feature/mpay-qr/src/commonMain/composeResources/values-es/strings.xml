@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copyright 2024 Mifos Initiative
+
+    This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+    If a copy of the MPL was not distributed with this file,
+    You can obtain one at https://mozilla.org/MPL/2.0/.
+
+    See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+-->
+<resources>
+    <string name="feature_request_money_enter_valid_amount">Por favor ingrese un monto válido</string>
+    <string name="feature_request_money_enter_currency">Ingresar moneda</string>
+    <string name="feature_request_money_set_amount">Establecer monto</string>
+    <string name="feature_request_money_currency">Establecer moneda</string>
+    <string name="feature_request_money_cancel">Cancelar</string>
+    <string name="feature_request_money_confirm">Confirmar</string>
+    <string name="feature_request_money_qr_code_details">Detalles del código QR</string>
+    <string name="feature_request_money_vpa">VPA</string>
+    <string name="feature_request_money_amount">Monto</string>
+    <string name="feature_request_money_usd">USD</string>
+    <string name="feature_request_money_request">Solicitar</string>
+    <string name="feature_request_money_loading">Cargando</string>
+    <string name="feature_request_money_nothing_to_notify">Nada que notificar</string>
+    <string name="feature_request_money_there_is_nothing_to_show">No hay nada que mostrar</string>
+    <string name="feature_request_money_error_oops">¡Ups!</string>
+    <string name="feature_request_money_unexpected_error_subtitle">Ocurrió un error inesperado. Por favor intente de nuevo.</string>
+    <string name="feature_mpay_qr_receive_money">Recibir dinero</string>
+    <string name="feature_mpay_qr_intra_bank">QR intrabancario</string>
+    <string name="feature_mpay_qr_inter_bank">QR interbancario</string>
+    <string name="feature_mpay_qr_share">Compartir</string>
+    <string name="feature_mpay_qr_unable_to_generate">No se puede generar el código QR</string>
+    <string name="feature_mpay_qr_go_back">Volver</string>
+    <string name="feature_mpay_qr_unknown">Desconocido</string>
+    <string name="feature_mpay_qr_no_default_account">No se ha establecido una cuenta predeterminada. Por favor establezca una cuenta predeterminada primero.</string>
+    <string name="feature_mpay_qr_failed_to_generate">Error al generar el código QR</string>
+    <string name="feature_mpay_qr_no_currency_found">No se encontró moneda</string>
+    <!-- Header -->
+    <string name="feature_mpay_qr_scan_to_pay">Escanee para pagarme con cualquier app de pago</string>
+    <!-- Account Card -->
+    <string name="feature_mpay_qr_primary">Principal</string>
+    <!-- QR Actions -->
+    <string name="feature_mpay_qr_share_qr">Compartir</string>
+    <string name="feature_mpay_qr_download_qr">Descargar</string>
+    <!-- Account IDs -->
+    <string name="feature_mpay_qr_account_ids">IDs de cuenta</string>
+    <string name="feature_mpay_qr_account_number">Número de cuenta</string>
+    <string name="feature_mpay_qr_external_id">ID externo</string>
+    <string name="feature_mpay_qr_copy">Copiar</string>
+    <string name="feature_mpay_qr_copied">Copiado al portapapeles</string>
+    <!-- QR Card -->
+    <string name="feature_mpay_qr_scan_instruction">Escanee con cualquier app de pago</string>
+    <string name="feature_mpay_qr_downloaded">Código QR descargado</string>
+    <!-- Inter-Bank QR Placeholder -->
+    <string name="feature_mpay_qr_inter_bank_unavailable">QR interbancario no disponible</string>
+    <string name="feature_mpay_qr_external_id_required">Su cuenta no tiene un ID externo configurado. Contacte a su banco para habilitar transferencias interbancarias.</string>
+    <!-- Account Picker -->
+    <string name="feature_mpay_qr_select_account">Seleccionar cuenta</string>
+    <string name="feature_mpay_qr_has_external_id">Interbancario habilitado</string>
+    <string name="feature_mpay_qr_no_external_id">Interbancario no disponible</string>
+    <string name="feature_mpay_qr_account_selected">Cuenta seleccionada</string>
+</resources>

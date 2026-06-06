@@ -12,25 +12,44 @@ package org.mifospay.feature.history.transactions
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import mobile_wallet.feature.history.generated.resources.Res
+import mobile_wallet.feature.history.generated.resources.feature_history_account_number_alter
+import mobile_wallet.feature.history.generated.resources.feature_history_amount
+import mobile_wallet.feature.history.generated.resources.feature_history_currency
 import mobile_wallet.feature.history.generated.resources.feature_history_error
 import mobile_wallet.feature.history.generated.resources.feature_history_error_oops
+import mobile_wallet.feature.history.generated.resources.feature_history_note
 import mobile_wallet.feature.history.generated.resources.feature_history_specific_transactions_history
+import mobile_wallet.feature.history.generated.resources.feature_history_transaction_date
+import mobile_wallet.feature.history.generated.resources.feature_history_transaction_details
+import mobile_wallet.feature.history.generated.resources.feature_history_transaction_id
+import mobile_wallet.feature.history.generated.resources.feature_history_transaction_type
+import mobile_wallet.feature.history.generated.resources.feature_history_transferred_from
+import mobile_wallet.feature.history.generated.resources.feature_history_transferred_to
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
+import org.mifospay.core.common.CurrencyFormatter
 import org.mifospay.core.designsystem.component.MifosScaffold
+import org.mifospay.core.model.savingsaccount.Transaction
 import org.mifospay.core.ui.ErrorScreenContent
 import org.mifospay.core.ui.MifosProgressIndicator
 import org.mifospay.core.ui.utils.EventsEffect
-import org.mifospay.feature.history.components.TransactionDetail
-import org.mifospay.feature.history.components.TransactionItem
 import template.core.base.designsystem.theme.KptTheme
 
 @Composable
@@ -90,9 +109,9 @@ internal fun SpecificTransactionsScreenContent(
 
                 is STState.ViewState.Content -> {
                     TransactionDetails(
-                        state = state,
-                        onAction = onAction,
                         modifier = Modifier,
+                        transaction = state.transaction,
+                        onAction = onAction,
                     )
                 }
             }
@@ -102,29 +121,188 @@ internal fun SpecificTransactionsScreenContent(
 
 @Composable
 private fun TransactionDetails(
-    state: STState.ViewState.Content,
+    transaction: Transaction,
     onAction: (STAction.ViewTransaction) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    when {
+        transaction.transfer != null -> {
+            TransferTransactionDetails(
+                transaction = transaction,
+                modifier = modifier,
+            )
+        }
+
+        else -> {
+            RegularTransactionDetails(
+                transaction = transaction,
+                modifier = modifier,
+            )
+        }
+    }
+}
+
+@Composable
+private fun TransferTransactionDetails(
+    transaction: Transaction,
     modifier: Modifier = Modifier,
 ) {
     Column(
         modifier = modifier
             .fillMaxSize()
+            .verticalScroll(rememberScrollState())
             .padding(horizontal = KptTheme.spacing.md),
-        verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.md),
+        verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.sm),
     ) {
-        TransactionItem(
-            transaction = state.transaction,
-            modifier = Modifier,
-            onClick = {
-                onAction(STAction.ViewTransaction(it))
-            },
-            showDescription = true,
+        SectionTitle(
+            title = stringResource(Res.string.feature_history_transaction_details),
         )
 
-        state.detail?.let {
-            TransactionDetail(
-                detail = it,
+        DetailRow(
+            label = stringResource(Res.string.feature_history_amount),
+            value = "${transaction.currency.displaySymbol}${
+                CurrencyFormatter.format(
+                    balance = transaction.amount,
+                    maximumFractionDigits = 2,
+                )
+            } (${transaction.currency.code})",
+        )
+
+        DetailRow(
+            label = stringResource(Res.string.feature_history_transaction_date),
+            value = transaction.date,
+        )
+
+        SectionTitle(
+            title = stringResource(Res.string.feature_history_transferred_from),
+        )
+
+        DetailRow(
+            label = stringResource(Res.string.feature_history_account_number_alter),
+            value = transaction.accountNo,
+        )
+
+        SectionTitle(
+            title = stringResource(Res.string.feature_history_transferred_to),
+        )
+
+        DetailRow(
+            label = stringResource(Res.string.feature_history_transaction_id),
+            value = transaction.transferId?.toString() ?: "-",
+        )
+
+        DetailRow(
+            label = stringResource(Res.string.feature_history_note),
+            value = transaction.transfer?.transferDescription ?: "-",
+        )
+    }
+}
+
+@Composable
+private fun RegularTransactionDetails(
+    transaction: Transaction,
+    modifier: Modifier = Modifier,
+) {
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
+            .padding(horizontal = KptTheme.spacing.md),
+        verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.sm),
+    ) {
+        DetailRow(
+            label = stringResource(Res.string.feature_history_transaction_id),
+            value = transaction.transactionId.toString(),
+        )
+
+        DetailRow(
+            label = stringResource(Res.string.feature_history_transaction_type),
+            value = transaction.transactionType.name,
+        )
+
+        DetailRow(
+            label = stringResource(Res.string.feature_history_transaction_date),
+            value = transaction.date,
+        )
+
+        DetailRow(
+            label = stringResource(Res.string.feature_history_currency),
+            value = transaction.currency.displayLabel,
+        )
+
+        DetailRow(
+            label = stringResource(Res.string.feature_history_amount),
+            value = "${transaction.currency.displaySymbol}${
+                CurrencyFormatter.format(
+                    balance = transaction.amount,
+                    maximumFractionDigits = 2,
+                )
+            }",
+        )
+
+        transaction.transfer?.transferDescription?.let { note ->
+            DetailRow(
+                label = stringResource(Res.string.feature_history_note),
+                value = note,
             )
         }
+
+        transaction.paymentDetailData?.paymentType?.let {
+            DetailRow(
+                label = stringResource(Res.string.feature_history_transaction_type),
+                value = it.name,
+            )
+        }
+    }
+}
+
+@Composable
+private fun SectionTitle(
+    title: String,
+    modifier: Modifier = Modifier,
+) {
+    Column(
+        modifier = modifier.fillMaxWidth(),
+    ) {
+        Text(
+            text = title,
+            style = KptTheme.typography.titleMedium,
+        )
+
+        HorizontalDivider(
+            modifier = Modifier.padding(
+                top = KptTheme.spacing.sm,
+            ),
+            color = KptTheme.colorScheme.outlineVariant,
+        )
+    }
+}
+
+@Composable
+private fun DetailRow(
+    label: String,
+    value: String,
+    modifier: Modifier = Modifier,
+) {
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(vertical = KptTheme.spacing.sm),
+        verticalAlignment = Alignment.Top,
+    ) {
+        Text(
+            text = "$label",
+            modifier = Modifier.width(140.dp),
+            style = KptTheme.typography.bodyMedium,
+            color = KptTheme.colorScheme.onSurfaceVariant,
+        )
+
+        Text(
+            text = value,
+            modifier = Modifier.weight(1f),
+            style = KptTheme.typography.bodyMedium,
+            fontWeight = FontWeight.Medium,
+            color = KptTheme.colorScheme.onSurface,
+        )
     }
 }

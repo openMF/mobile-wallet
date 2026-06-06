@@ -139,6 +139,14 @@ class MpayQrViewModel(
                                 accounts = accounts,
                                 selectedAccount = defaultAcc,
                                 accountExternalId = defaultAcc?.externalId ?: "",
+                                qrData = it.qrData.copy(
+                                    currency = defaultAcc?.currency?.code ?: QrCodeData.DEFAULT_CURRENCY,
+                                    accountNo = defaultAcc?.number ?: "",
+                                    accountId = defaultAcc?.id ?: 0L,
+                                    accountExternalId = defaultAcc?.externalId ?: "",
+                                    officeId = defaultAcc?.officeId?.toLong() ?: it.qrData.officeId,
+                                    officeName = defaultAcc?.officeName ?: it.qrData.officeName,
+                                ),
                             )
                         }
                         sendAction(MpayQrAction.Internal.GenerateQr)
@@ -329,7 +337,12 @@ class MpayQrViewModel(
 
                 mutableStateFlow.update { it.copy(dialogState = null) }
             } catch (e: IllegalArgumentException) {
-                mutableStateFlow.update { it.copy(dialogState = null) }
+                mutableStateFlow.update {
+                    it.copy(
+                        dialogState = null,
+                        qrData = it.qrData.copy(amount = ""),
+                    )
+                }
                 sendEvent(MpayQrEvent.ShowSnackbar(e.message ?: "Invalid amount entered"))
             }
         }
