@@ -119,13 +119,19 @@ class SettingsViewModel(
 
             is SettingsAction.ShowLanguageSelection -> {
                 mutableStateFlow.update {
-                    it.copy(dialogState = DialogState.LanguageSelection)
+                    it.copy(
+                        dialogState = DialogState.LanguageSelection,
+                        pendingLanguage = it.language,
+                    )
                 }
             }
 
             is SettingsAction.DismissDialog -> {
                 mutableStateFlow.update {
-                    it.copy(dialogState = null)
+                    it.copy(
+                        dialogState = null,
+                        pendingLanguage = null,
+                    )
                 }
             }
 
@@ -291,7 +297,7 @@ class SettingsViewModel(
         viewModelScope.launch {
             mutableStateFlow.update {
                 it.copy(
-                    language = language.toLanguage(),
+                    pendingLanguage = language.toLanguage()
                 )
             }
         }
@@ -299,9 +305,22 @@ class SettingsViewModel(
 
     fun updateAppLocale() {
         viewModelScope.launch {
-            userPreferencesRepository.setLanguage(state.language)
+            val selectedLanguage = state.pendingLanguage ?: state.language
 
-            sendEvent(SettingsEvent.ChangeLocale(state.language.localeName ?: "En"))
+            userPreferencesRepository.setLanguage(selectedLanguage)
+
+            mutableStateFlow.update {
+                it.copy(
+                    language = selectedLanguage,
+                    pendingLanguage = null,
+                )
+            }
+
+            sendEvent(
+                SettingsEvent.ChangeLocale(
+                    selectedLanguage.localeName ?: "en"
+                )
+            )
         }
     }
 }
@@ -310,6 +329,7 @@ data class SettingsState(
     val client: Client,
     val dialogState: DialogState? = null,
     val language: Language,
+    val pendingLanguage: Language? = null,
 )
 
 sealed interface DialogState {

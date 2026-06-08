@@ -77,7 +77,7 @@ fun LanguageDialogContent(
             HorizontalDivider()
             Column(Modifier.verticalScroll(rememberScrollState())) {
                 LanguagePanel(
-                    currentLanguage = settingsUiState.language,
+                    currentLanguage = settingsUiState.pendingLanguage ?: Language.DEFAULT,
                     onChangeLanguage = onChangeLanguage,
                 )
             }
