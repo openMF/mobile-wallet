@@ -85,8 +85,8 @@ fun LanguageDialogContent(
         confirmButton = {
             Button(
                 onClick = {
-                    onDismiss()
                     onUpdateAppLocale()
+                    onDismiss()
                 },
                 modifier = Modifier.padding(horizontal = 8.dp),
             ) {
