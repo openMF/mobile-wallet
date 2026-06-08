@@ -29,21 +29,21 @@ import org.mifospay.core.network.model.entity.UserWithRole
 import org.mifospay.core.network.model.entity.user.UpdateUserEntityPassword
 
 class UserRepositoryImpl(
-    private val apiManager: SelfServiceApiManager,
+    private val selfServiceApiManager: SelfServiceApiManager,
     private val ioDispatcher: CoroutineDispatcher,
 ) : UserRepository {
     override suspend fun getUsers(): Flow<DataState<List<UserWithRole>>> {
-        return apiManager.userApi.users().asDataStateFlow().flowOn(ioDispatcher)
+        return selfServiceApiManager.userApi.users().asDataStateFlow().flowOn(ioDispatcher)
     }
 
     override suspend fun getUser(): Flow<DataState<UserWithRole>> {
-        return apiManager.userApi.getUser().asDataStateFlow().flowOn(ioDispatcher)
+        return selfServiceApiManager.userApi.getUser().asDataStateFlow().flowOn(ioDispatcher)
     }
 
     override suspend fun createUser(newUser: NewUser): DataState<Int> {
         return try {
             val result = withContext(ioDispatcher) {
-                apiManager.userApi.createUser(newUser.toEntity())
+                selfServiceApiManager.userApi.createUser(newUser.toEntity())
             }
 
             DataState.Success(result.resourceId)
@@ -56,7 +56,7 @@ class UserRepositoryImpl(
         userId: Int,
         updatedUser: NewUser,
     ): Flow<DataState<GenericResponse>> {
-        return apiManager.userApi
+        return selfServiceApiManager.userApi
             .updateUser(updatedUser.toEntity())
             .asDataStateFlow().flowOn(ioDispatcher)
     }
@@ -66,7 +66,7 @@ class UserRepositoryImpl(
         password: String,
     ): DataState<String> {
         return try {
-            apiManager.userApi.updateUserPassword(
+            selfServiceApiManager.userApi.updateUserPassword(
                 updateUserEntity = UpdateUserEntityPassword(
                     password,
                     password,
@@ -96,7 +96,7 @@ class UserRepositoryImpl(
     override suspend fun deleteUser(userId: Int): DataState<CommonResponse> {
         return try {
             val result = withContext(ioDispatcher) {
-                apiManager.userApi.deleteUser(userId)
+                selfServiceApiManager.userApi.deleteUser(userId)
             }
 
             DataState.Success(result)
@@ -108,7 +108,7 @@ class UserRepositoryImpl(
     override suspend fun assignClientToUser(userId: Int, clientId: Int): DataState<Unit> {
         return try {
             val result = withContext(ioDispatcher) {
-                apiManager.userApi.assignClientToUser(userId, mapOf("clients" to listOf(clientId)))
+                selfServiceApiManager.userApi.assignClientToUser(userId, mapOf("clients" to listOf(clientId)))
             }
 
             DataState.Success(Unit)
