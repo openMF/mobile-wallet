@@ -297,7 +297,7 @@ class SettingsViewModel(
         viewModelScope.launch {
             mutableStateFlow.update {
                 it.copy(
-                    pendingLanguage = language.toLanguage()
+                    pendingLanguage = language.toLanguage(),
                 )
             }
         }
@@ -318,8 +318,8 @@ class SettingsViewModel(
 
             sendEvent(
                 SettingsEvent.ChangeLocale(
-                    selectedLanguage.localeName ?: "en"
-                )
+                    selectedLanguage.localeName ?: "en",
+                ),
             )
         }
     }
