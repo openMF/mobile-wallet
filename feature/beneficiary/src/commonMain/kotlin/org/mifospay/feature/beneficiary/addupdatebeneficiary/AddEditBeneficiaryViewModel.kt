@@ -11,7 +11,6 @@ package org.mifospay.feature.beneficiary.addupdatebeneficiary
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
-import co.touchlab.kermit.Logger
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.launchIn
@@ -154,10 +153,6 @@ internal class AddEditBeneficiaryViewModel(
             .onEach { offices ->
                 val currentState = state
 
-                Logger.d { "@@@@ Offices: ${offices.map { it.name }}" }
-                Logger.d { "@@@@ Current officeName: ${currentState.officeName}" }
-
-                // Add flow: auto-select first office
                 if (
                     currentState.officeName.isBlank() &&
                     currentState.officeId == null &&
@@ -174,7 +169,6 @@ internal class AddEditBeneficiaryViewModel(
                     return@onEach
                 }
 
-                // Edit flow: resolve office name from officeId
                 val officeId = currentState.officeId
                 if (officeId != null) {
                     offices.find { it.id == officeId }?.let { office ->
