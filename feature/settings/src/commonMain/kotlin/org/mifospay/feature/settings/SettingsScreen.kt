@@ -221,7 +221,7 @@ private fun SettingsScreenContent(
 
             SettingsCardItem(
                 title = stringResource(Res.string.feature_settings_change_language_text),
-                icon = vectorResource(Res.drawable.outline_pin),
+                icon = MifosIcons.Language,
                 onClick = {
                     onAction(SettingsAction.ShowLanguageSelection)
                 },

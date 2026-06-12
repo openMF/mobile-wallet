@@ -46,6 +46,7 @@ import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
+import androidx.compose.material.icons.filled.Language
 import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Person
@@ -204,4 +205,6 @@ object MifosIcons {
 
     val ExpandLess = Icons.Filled.ExpandLess
     val ExpandMore = Icons.Filled.ExpandMore
+
+    val Language = Icons.Default.Language
 }
