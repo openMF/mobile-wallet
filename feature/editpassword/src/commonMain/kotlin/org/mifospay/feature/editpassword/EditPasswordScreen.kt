@@ -199,7 +199,7 @@ private fun EditPasswordDialogs(
 
         is EditPasswordDialog.ApiError -> MifosBasicDialog(
             visibilityState = BasicDialogState.Shown(
-                message = dialogState.message,
+                message = dialogState.message.message,
             ),
             onDismissRequest = onDismissRequest,
         )

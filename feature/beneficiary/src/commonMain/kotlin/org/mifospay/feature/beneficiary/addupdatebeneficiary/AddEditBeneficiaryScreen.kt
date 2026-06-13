@@ -305,7 +305,7 @@ internal fun AddEditBeneficiaryScreenContent(
                     selectedValue = state.officeName,
                     items = filteredOfficeList,
                     onItemSelected = { office ->
-                        onAction(AEBAction.ChangeOfficeName(office.name))
+                        onAction(AEBAction.ChangeOffice(office))
                     },
                     onValueChange = { value ->
                         onAction(AEBAction.ChangeOfficeName(value))

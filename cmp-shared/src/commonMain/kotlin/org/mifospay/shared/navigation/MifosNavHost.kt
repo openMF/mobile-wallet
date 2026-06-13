@@ -174,6 +174,7 @@ const val AUTHENTICATION_VERIFICATION_KEY = "org.mifospay.mifos.authentication_v
 internal fun MifosNavHost(
     appState: MifosAppState,
     onClickLogout: () -> Unit,
+    handleAppLocale: (locale: String?) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val navController = appState.navController
@@ -344,6 +345,7 @@ internal fun MifosNavHost(
         settingsScreen(
             onBackPress = navController::navigateUp,
             onLogout = onClickLogout,
+            handleAppLocale = { handleAppLocale(it) },
             navigateToPasscodeScreen = { verificationKey ->
                 navController.navigateToInternalMifosPasscodeScreen(
                     verificationKey = verificationKey,

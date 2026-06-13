@@ -34,7 +34,6 @@ kotlin {
             implementation(libs.window.size)
 
             implementation(projects.feature.auth)
-            implementation(projects.libs.mifosPasscode)
             implementation(projects.feature.home)
             implementation(projects.feature.settings)
             implementation(projects.feature.faq)

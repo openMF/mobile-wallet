@@ -26,5 +26,5 @@ data class UpdateUserPasswordResponse(
 
 @Serializable
 data class Changes(
-    val passwordEncoded: String,
+    val password: Boolean,
 )

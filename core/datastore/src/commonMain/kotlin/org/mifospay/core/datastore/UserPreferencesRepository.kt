@@ -17,6 +17,7 @@ import org.mifospay.core.model.client.Client
 import org.mifospay.core.model.client.UpdatedClient
 import org.mifospay.core.model.instance.InterbankServer
 import org.mifospay.core.model.instance.ServerInstance
+import org.mifospay.core.model.user.Language
 import org.mifospay.core.model.user.UserInfo
 
 interface UserPreferencesRepository {
@@ -40,9 +41,13 @@ interface UserPreferencesRepository {
 
     val accountExternalIds: StateFlow<Map<Long, String>>
 
+    val language: StateFlow<Language>
+
     suspend fun updateToken(token: String): DataState<Unit>
 
     suspend fun updateUserInfo(user: UserInfo): DataState<Unit>
+
+    suspend fun setLanguage(language: Language): DataState<Unit>
 
     suspend fun updateClientInfo(client: Client): DataState<Unit>
 
