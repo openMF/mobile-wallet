@@ -10,8 +10,10 @@
 package org.mifospay.shared.di
 
 import org.koin.core.context.startKoin
+import org.koin.core.module.dsl.singleOf
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.KoinAppDeclaration
+import org.koin.dsl.bind
 import org.koin.dsl.koinApplication
 import org.koin.dsl.module
 import org.mifos.authenticator.passcode.PasscodeManager
@@ -51,6 +53,8 @@ import org.mifospay.feature.upi.setup.di.UpiSetupModule
 import org.mifospay.shared.MifosPayViewModel
 import org.mifospay.shared.TransferOptionsViewModel
 import org.mifospay.shared.instance.InstanceSelectorViewModel
+import org.mifospay.shared.widget.WidgetDataProvider
+import org.mifospay.shared.widget.WidgetDataProviderImpl
 
 /**
  * Aggregator object that bundles every Koin module the app needs. Consumed by
@@ -89,6 +93,7 @@ object KoinModules {
         viewModelOf(::MifosPayViewModel)
         viewModelOf(::InstanceSelectorViewModel)
         viewModelOf(::TransferOptionsViewModel)
+        singleOf(::WidgetDataProviderImpl).bind<WidgetDataProvider>()
     }
     private val featureModules = module {
         includes(

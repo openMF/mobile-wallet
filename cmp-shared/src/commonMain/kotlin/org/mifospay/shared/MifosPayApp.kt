@@ -20,6 +20,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import co.touchlab.kermit.Logger
 import org.koin.compose.koinInject
@@ -115,6 +116,8 @@ private fun MifosPayApp(
 ) {
     val userState by viewModel.userState.collectAsStateWithLifecycle()
     val navController = rememberNavController()
+
+    HandleDeepLinks(navController)
 
     val showErrorDialog = remember { mutableStateOf<Boolean>(false) }
     val isUnauthorized by GlobalAuthManager.isUnauthorized.collectAsStateWithLifecycle()
@@ -227,3 +230,8 @@ private fun MifosPayApp(
         )
     }
 }
+
+@Composable
+expect fun HandleDeepLinks(
+    navController: NavHostController,
+)

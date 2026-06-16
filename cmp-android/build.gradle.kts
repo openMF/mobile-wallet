@@ -80,6 +80,7 @@ android {
 }
 
 dependencies {
+    implementation(libs.androidx.runtime)
     implementation(projects.cmpShared)
     implementation(projects.core.data)
     implementation(projects.core.ui)
@@ -128,6 +129,14 @@ dependencies {
     testImplementation(kotlin("test"))
     testImplementation(libs.koin.test)
     testImplementation(libs.koin.test.junit4)
+
+    implementation("androidx.glance:glance-appwidget:1.1.0")
+    implementation("androidx.glance:glance-material3:1.1.0")
+
+    implementation("androidx.work:work-runtime-ktx:2.9.1")
+    implementation("io.insert-koin:koin-android:3.5.6")
+    implementation("io.insert-koin:koin-androidx-workmanager:3.5.6")
+
 }
 
 dependencyGuard {

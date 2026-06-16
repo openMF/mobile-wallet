@@ -10,11 +10,13 @@
 package org.mifospay.shared.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.input.KeyboardType.Companion.Uri
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -133,6 +135,11 @@ internal fun RootNavGraph(
         )
 
         composable(MifosNavGraph.MAIN_GRAPH) {
+
+            LaunchedEffect(Unit) {
+                consumePendingDeepLink(navHostController)
+            }
+
             MifosApp(
                 networkMonitor = networkMonitor,
                 timeZoneMonitor = timeZoneMonitor,

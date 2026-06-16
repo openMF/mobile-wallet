@@ -19,7 +19,9 @@ import kotlinx.coroutines.launch
 import org.mifos.authenticator.passcode.PasscodeManager
 import org.mifos.authenticator.passcode.PasscodeStorageAdapter
 import org.mifospay.core.data.repository.AppLockRepository
+import org.mifospay.core.data.repository.WidgetManagerRepository
 import org.mifospay.core.datastore.UserPreferencesRepository
+import org.mifospay.core.datastore.WidgetPreferencesDataSource
 import org.mifospay.core.model.user.UserInfo
 
 /**
@@ -43,6 +45,7 @@ class MifosPayViewModel(
     private val passcodeManager: PasscodeManager,
     private val appLockRepository: AppLockRepository,
     private val passcodeStorageAdapter: PasscodeStorageAdapter,
+    private val widgetManagerRepository: WidgetManagerRepository,
 ) : ViewModel() {
     /**
      * Reactive session state. Starts as [UserState.UnAuthenticated] and
@@ -83,6 +86,7 @@ class MifosPayViewModel(
     fun logOut() {
         viewModelScope.launch {
             userDataRepository.logOut()
+            widgetManagerRepository.clear()
             appLockRepository.deleteLock()
             passcodeManager.logOut()
         }

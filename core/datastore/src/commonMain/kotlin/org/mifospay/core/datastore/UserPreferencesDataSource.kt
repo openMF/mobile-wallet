@@ -217,6 +217,16 @@ class UserPreferencesDataSource(
     suspend fun clearInfo() {
         withContext(dispatcher) {
             settings.clear()
+
+            _userInfo.value = UserInfoPreferences.DEFAULT
+            _clientInfo.value = ClientPreferences.DEFAULT
+            _defaultAccount.value = DefaultAccount.DEFAULT
+
+            _selectedInstance.value = null
+            _selectedInterbankInstance.value = null
+            _accountExternalIds.value = emptyMap()
+
+            selectedLanguage.value = Language.DEFAULT
         }
     }
 

@@ -45,6 +45,8 @@ import org.mifospay.core.data.repository.ThirdPartyTransferRepository
 import org.mifospay.core.data.repository.TwoFactorAuthRepository
 import org.mifospay.core.data.repository.UserRepository
 import org.mifospay.core.data.repository.UserVerificationRepository
+import org.mifospay.core.data.repository.WidgetManagerRepository
+import org.mifospay.core.data.repository.WidgetRepository
 import org.mifospay.core.data.repositoryImpl.AccountRepositoryImpl
 import org.mifospay.core.data.repositoryImpl.AppLockRepositoryImpl
 import org.mifospay.core.data.repositoryImpl.AssetRepositoryImpl
@@ -75,6 +77,8 @@ import org.mifospay.core.data.repositoryImpl.ThirdPartyTransferRepositoryImpl
 import org.mifospay.core.data.repositoryImpl.TwoFactorAuthRepositoryImpl
 import org.mifospay.core.data.repositoryImpl.UserRepositoryImpl
 import org.mifospay.core.data.repositoryImpl.UserVerificationRepositoryImpl
+import org.mifospay.core.data.repositoryImpl.WidgetManagerRepositoryImpl
+import org.mifospay.core.data.repositoryImpl.WidgetRepositoryImpl
 import org.mifospay.core.data.util.NetworkMonitor
 import org.mifospay.core.data.util.QrTransferRouter
 import org.mifospay.core.data.util.TimeZoneMonitor
@@ -152,4 +156,20 @@ val RepositoryModule = module {
             networkJson = get(),
         )
     }
+
+    single<WidgetManagerRepository> {
+        WidgetManagerRepositoryImpl(
+            repository = get(),
+            widgetSyncService = get()
+        )
+    }
+    single<WidgetRepository> {
+        WidgetRepositoryImpl(
+            accountRepository = get(),
+            widgetDataSource  = get(),
+            userPreferencesRepository = get(),
+            ioDispatcher  = get(ioDispatcher),
+        )
+    }
+
 }

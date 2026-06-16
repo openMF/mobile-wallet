@@ -20,6 +20,7 @@ val DomainModule = module {
             repository = get(),
             clientRepository = get(),
             userPreferencesRepository = get(),
+            widgetManagerRepository = get(),
             ioDispatcher = get(named(MifosDispatchers.IO.name)),
         )
     }

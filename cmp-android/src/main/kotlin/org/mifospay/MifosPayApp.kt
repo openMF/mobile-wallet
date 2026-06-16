@@ -12,17 +12,27 @@ package org.mifospay
 import android.app.Application
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.os.LocaleListCompat
+import androidx.work.Configuration
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.koin.android.ext.android.inject
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
+import org.koin.androidx.workmanager.factory.KoinWorkerFactory
+import org.koin.androidx.workmanager.koin.workManagerFactory
 import org.koin.core.context.GlobalContext.startKoin
+import org.mifospay.core.data.repository.WidgetManagerRepository
 import org.mifospay.core.datastore.UserPreferencesRepository
 import org.mifospay.shared.di.KoinModules
+import org.mifospay.widget.WidgetRefreshWorker
+import org.mifospay.widget.androidWidgetModule
 
-class MifosPayApp : Application() {
+class MifosPayApp : Application(), Configuration.Provider {
     private val userDataRepository: UserPreferencesRepository by inject()
+    private val widgetManager: WidgetManagerRepository by inject()
+
 
     override fun onCreate() {
         super.onCreate()
@@ -30,11 +40,25 @@ class MifosPayApp : Application() {
         startKoin {
             androidContext(this@MifosPayApp)
             androidLogger()
-            modules(KoinModules.allModules)
+            workManagerFactory()
+            modules(KoinModules.allModules + androidWidgetModule)
         }
+
+        widgetManager.schedule()
+
+        WorkManager.getInstance(this)
+            .enqueue(
+                OneTimeWorkRequestBuilder<WidgetRefreshWorker>()
+                    .build()
+            )
 
         restoreSavedLanguage()
     }
+
+    override val workManagerConfiguration: Configuration
+        get() = Configuration.Builder()
+            .setWorkerFactory(KoinWorkerFactory())
+            .build()
 
     private fun restoreSavedLanguage() {
         runBlocking {

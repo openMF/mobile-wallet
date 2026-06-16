@@ -13,6 +13,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
+import androidx.navigation.navDeepLink
 import org.mifospay.feature.home.HomeScreen
 
 const val HOME_ROUTE = "home_route"
@@ -28,7 +29,13 @@ fun NavGraphBuilder.homeScreen(
     navigateToAccountDetail: (Long) -> Unit,
     navigateToHistory: () -> Unit,
 ) {
-    composable(route = HOME_ROUTE) {
+    composable(route = HOME_ROUTE,
+        deepLinks = listOf(
+            navDeepLink {
+                uriPattern = "mifospay://dashboard"
+            },
+        ),
+    ) {
         HomeScreen(
             onRequest = onRequest,
             onPay = onPay,

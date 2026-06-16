@@ -137,6 +137,7 @@ packageVersion = "1.0.0"
 
 mifosAuthenticatorPasscode="2.3.0-beta"
 mifosAuthenticatorBiometrics="2.3.0-beta"
+runtime = "1.11.2"
 
 [libraries]
 accompanist-pager = { group = "com.google.accompanist", name = "accompanist-pager", version.ref = "accompanist" }
@@ -388,6 +389,7 @@ core-ktx = { group = "androidx.test", name = "core-ktx", version.ref = "coreKtx"
 
 mifos-authenticator-passcode = {group="io.github.openmf", name="mifos-authenticator-passcode", version.ref="mifosAuthenticatorPasscode"}
 mifos-authenticator-biometrics = {group="io.github.openmf", name="mifos-authenticator-biometrics", version.ref="mifosAuthenticatorBiometrics"}
+androidx-runtime = { group = "androidx.compose.runtime", name = "runtime", version.ref = "runtime" }
 
 [bundles]
 androidx-compose-ui-test = [

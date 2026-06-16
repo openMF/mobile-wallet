@@ -15,6 +15,7 @@ import org.mifospay.core.common.DataState
 import org.mifospay.core.common.utils.OpenForMokkery
 import org.mifospay.core.data.repository.AuthenticationRepository
 import org.mifospay.core.data.repository.ClientRepository
+import org.mifospay.core.data.repository.WidgetManagerRepository
 import org.mifospay.core.datastore.UserPreferencesRepository
 import org.mifospay.core.model.user.UserInfo
 
@@ -23,6 +24,7 @@ class LoginUseCase(
     private val repository: AuthenticationRepository,
     private val clientRepository: ClientRepository,
     private val userPreferencesRepository: UserPreferencesRepository,
+    private val widgetManagerRepository: WidgetManagerRepository,
     private val ioDispatcher: CoroutineDispatcher,
 ) {
     suspend operator fun invoke(username: String, password: String): DataState<UserInfo> {
@@ -64,6 +66,7 @@ class LoginUseCase(
                 withContext(ioDispatcher) {
                     userPreferencesRepository.updateClientInfo(clientInfo.data)
                     userPreferencesRepository.updateUserInfo(userInfo)
+                    widgetManagerRepository.refresh()
                 }
 
                 DataState.Success(userInfo)

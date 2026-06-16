@@ -16,5 +16,7 @@
     <string name="profile">Profile</string>
     <string name="not_connected">⚠️ You aren’t connected to the internet</string>
     <string name="faq">FAQ</string>
+    <string name="widget_description">Finance widget — balance, budget and quick actions</string>
+
 
 </resources>

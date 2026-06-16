@@ -36,6 +36,7 @@ import org.mifospay.core.common.utils.capitalizeWords
 import org.mifospay.core.data.repository.ClientRepository
 import org.mifospay.core.data.repository.ThirdPartyTransferRepository
 import org.mifospay.core.data.repository.UserVerificationRepository
+import org.mifospay.core.data.repository.WidgetManagerRepository
 import org.mifospay.core.network.model.entity.payload.TransferPayload
 import org.mifospay.core.network.model.entity.templates.account.AccountOption
 import org.mifospay.core.ui.DefaultErrorMessageProvider
@@ -79,6 +80,7 @@ internal class TransferConfirmViewModel(
     private val repository: ThirdPartyTransferRepository,
     private val clientRepo: ClientRepository,
     private val userVerificationRepository: UserVerificationRepository,
+    private val widgetManagerRepository: WidgetManagerRepository,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<TransferConfirmState, TransferConfirmEvent, TransferConfirmAction>(
     initialState = run {
@@ -338,6 +340,7 @@ internal class TransferConfirmViewModel(
                             transferResult = transferResult,
                         )
                     }
+                    widgetManagerRepository.refresh()
                 }
             }
         }

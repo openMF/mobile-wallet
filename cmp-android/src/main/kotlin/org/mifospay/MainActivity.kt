@@ -9,6 +9,7 @@
  */
 package org.mifospay
 
+import android.content.Intent
 import android.content.res.Resources
 import android.os.Bundle
 import androidx.activity.compose.setContent
@@ -106,4 +107,10 @@ class MainActivity : AppCompatActivity() {
             )
         }
     }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        setIntent(intent)
+    }
+
 }

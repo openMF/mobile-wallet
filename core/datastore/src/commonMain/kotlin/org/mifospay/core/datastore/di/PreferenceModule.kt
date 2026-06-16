@@ -25,6 +25,7 @@ import org.mifospay.core.datastore.BillerRepositoryImpl
 import org.mifospay.core.datastore.UserPreferencesDataSource
 import org.mifospay.core.datastore.UserPreferencesRepository
 import org.mifospay.core.datastore.UserPreferencesRepositoryImpl
+import org.mifospay.core.datastore.WidgetPreferencesDataSource
 
 val PreferencesModule = module {
     factory<Settings> { Settings() }
@@ -61,4 +62,12 @@ val PreferencesModule = module {
             billDataSource = get(),
         )
     }
+
+    factory {
+        WidgetPreferencesDataSource(
+            settings = get(),
+            dispatcher = get(named(MifosDispatchers.IO.name))
+        )
+    }
+
 }

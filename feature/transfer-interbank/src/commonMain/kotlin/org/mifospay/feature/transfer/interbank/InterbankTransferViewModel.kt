@@ -10,7 +10,9 @@
 package org.mifospay.feature.transfer.interbank
 
 import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.todayIn
 import kotlinx.serialization.Serializable
@@ -19,6 +21,7 @@ import org.mifospay.core.common.DataState
 import org.mifospay.core.common.DateHelper
 import org.mifospay.core.data.repository.InterBankRepository
 import org.mifospay.core.data.repository.SelfServiceRepository
+import org.mifospay.core.data.repository.WidgetManagerRepository
 import org.mifospay.core.datastore.UserPreferencesRepository
 import org.mifospay.core.model.account.Account
 import org.mifospay.core.model.client.Client
@@ -42,6 +45,7 @@ const val INTER_BANK_TRANSFER_VERIFICATION_KEY = "inter-banking_transfer_verific
 class InterbankTransferViewModel(
     private val selfServiceRepository: SelfServiceRepository,
     private val interBankRepository: InterBankRepository,
+    private val widgetManagerRepository: WidgetManagerRepository,
     private val preferencesRepository: UserPreferencesRepository,
     private val savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<InterbankTransferState, InterbankTransferEvent, InterbankTransferAction>(
@@ -359,6 +363,9 @@ class InterbankTransferViewModel(
                         currentStep = InterbankTransferState.Step.TransferSuccess,
                         transferResponse = responseMessage,
                     )
+                }
+                viewModelScope.launch {
+                    widgetManagerRepository.refresh()
                 }
                 sendEvent(InterbankTransferEvent.OnTransferSuccess)
             }

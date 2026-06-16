@@ -36,6 +36,7 @@ import org.mifospay.core.common.getSerialized
 import org.mifospay.core.common.setSerialized
 import org.mifospay.core.common.utils.capitalizeWords
 import org.mifospay.core.data.repository.AccountRepository
+import org.mifospay.core.data.repository.WidgetManagerRepository
 import org.mifospay.core.data.util.UpiQrCodeProcessor
 import org.mifospay.core.datastore.UserPreferencesRepository
 import org.mifospay.core.model.account.Account
@@ -48,6 +49,7 @@ import org.mifospay.feature.make.transfer.navigation.TRANSFER_ARG
 
 internal class MakeTransferViewModel(
     private val accountRepository: AccountRepository,
+    private val widgetManagerRepository: WidgetManagerRepository,
     repository: UserPreferencesRepository,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<MakeTransferState, MakeTransferEvent, MakeTransferAction>(
@@ -187,7 +189,7 @@ internal class MakeTransferViewModel(
                 mutableStateFlow.update {
                     it.copy(dialogState = null)
                 }
-
+                viewModelScope.launch { widgetManagerRepository.refresh() }
                 sendEvent(MakeTransferEvent.OnTransferSuccess)
             }
         }
