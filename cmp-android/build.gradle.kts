@@ -80,7 +80,6 @@ android {
 }
 
 dependencies {
-    implementation(libs.androidx.runtime)
     implementation(projects.cmpShared)
     implementation(projects.core.data)
     implementation(projects.core.ui)
