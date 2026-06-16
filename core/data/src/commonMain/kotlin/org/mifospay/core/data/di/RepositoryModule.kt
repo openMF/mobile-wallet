@@ -160,16 +160,15 @@ val RepositoryModule = module {
     single<WidgetManagerRepository> {
         WidgetManagerRepositoryImpl(
             repository = get(),
-            widgetSyncService = get()
+            widgetSyncService = get(),
         )
     }
     single<WidgetRepository> {
         WidgetRepositoryImpl(
             accountRepository = get(),
-            widgetDataSource  = get(),
+            widgetDataSource = get(),
             userPreferencesRepository = get(),
-            ioDispatcher  = get(ioDispatcher),
+            ioDispatcher = get(ioDispatcher),
         )
     }
-
 }

@@ -16,7 +16,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.input.KeyboardType.Companion.Uri
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -135,7 +134,6 @@ internal fun RootNavGraph(
         )
 
         composable(MifosNavGraph.MAIN_GRAPH) {
-
             LaunchedEffect(Unit) {
                 consumePendingDeepLink(navHostController)
             }

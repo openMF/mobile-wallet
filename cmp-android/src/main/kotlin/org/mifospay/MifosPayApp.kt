@@ -33,7 +33,6 @@ class MifosPayApp : Application(), Configuration.Provider {
     private val userDataRepository: UserPreferencesRepository by inject()
     private val widgetManager: WidgetManagerRepository by inject()
 
-
     override fun onCreate() {
         super.onCreate()
 
@@ -49,7 +48,7 @@ class MifosPayApp : Application(), Configuration.Provider {
         WorkManager.getInstance(this)
             .enqueue(
                 OneTimeWorkRequestBuilder<WidgetRefreshWorker>()
-                    .build()
+                    .build(),
             )
 
         restoreSavedLanguage()

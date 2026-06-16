@@ -1,3 +1,12 @@
+/*
+ * Copyright 2026 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 @file:OptIn(ExperimentalSerializationApi::class, ExperimentalSettingsApi::class)
 
 package org.mifospay.core.datastore
@@ -17,27 +26,16 @@ import org.mifospay.core.model.widget.WidgetData
 
 private const val WIDGET_DATA_KEY = "widget_data"
 
-/**
- * Persistence layer for home screen widget data.
- *
- * Follows the same pattern as [UserPreferencesDataSource]:
- *   - [encodeValue] / [decodeValue] for kotlinx.serialization integration
- *   - [MutableStateFlow] seeded from storage on construction
- *   - All writes run on [dispatcher] via [withContext]
- *   - Private [Settings] extension functions per stored type
- *
- * Lives in :core:datastore alongside [UserPreferencesDataSource].
- */
-class WidgetPreferencesDataSource(
+class WidgetPreferenceDataSource(
     private val settings: Settings,
     private val dispatcher: CoroutineDispatcher,
 ) {
     private val _widgetData = MutableStateFlow(
         settings.decodeValue(
             key = WIDGET_DATA_KEY,
-            serializer   = WidgetData.serializer(),
+            serializer = WidgetData.serializer(),
             defaultValue = settings.decodeValueOrNull(
-                key        = WIDGET_DATA_KEY,
+                key = WIDGET_DATA_KEY,
                 serializer = WidgetData.serializer(),
             ) ?: WidgetData.DEFAULT,
         ),
@@ -62,8 +60,8 @@ class WidgetPreferencesDataSource(
 
 private fun Settings.putWidgetData(data: WidgetData) {
     encodeValue(
-        key        = WIDGET_DATA_KEY,
+        key = WIDGET_DATA_KEY,
         serializer = WidgetData.serializer(),
-        value      = data,
+        value = data,
     )
 }

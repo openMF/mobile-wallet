@@ -1,3 +1,12 @@
+/*
+ * Copyright 2026 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay.shared
 
 import android.app.Activity
@@ -15,15 +24,14 @@ private fun Context.findActivity(): Activity? = when (this) {
     else -> null
 }
 
-
 @Composable
 actual fun HandleDeepLinks(navController: NavHostController) {
-    val context  = LocalContext.current
+    val context = LocalContext.current
     val activity = context.findActivity()
 
     LaunchedEffect(activity?.intent) {
         val intent = activity?.intent ?: return@LaunchedEffect
-        val uri    = intent.data ?: return@LaunchedEffect
+        val uri = intent.data ?: return@LaunchedEffect
 
         // Store the URI string — no Android type leaks into shared code.
         // Consumed by RootNavGraph once MAIN_GRAPH composes (post-passcode).

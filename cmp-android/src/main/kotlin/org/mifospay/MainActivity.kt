@@ -112,5 +112,4 @@ class MainActivity : AppCompatActivity() {
         super.onNewIntent(intent)
         setIntent(intent)
     }
-
 }

@@ -1,3 +1,12 @@
+/*
+ * Copyright 2026 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay.core.data.repositoryImpl
 
 import kotlinx.coroutines.CoroutineDispatcher
@@ -8,7 +17,7 @@ import org.mifospay.core.common.DataState
 import org.mifospay.core.data.repository.AccountRepository
 import org.mifospay.core.data.repository.WidgetRepository
 import org.mifospay.core.datastore.UserPreferencesRepository
-import org.mifospay.core.datastore.WidgetPreferencesDataSource
+import org.mifospay.core.datastore.WidgetPreferenceDataSource
 import org.mifospay.core.model.widget.WidgetData
 
 /**
@@ -19,10 +28,10 @@ import org.mifospay.core.model.widget.WidgetData
  *   - Flow methods apply [flowOn] at the end of the chain
  *   - Suspend methods wrap the call body in [withContext]
  *
- * Thin delegation layer — all real persistence is in [WidgetPreferencesDataSource].
+ * Thin delegation layer — all real persistence is in [WidgetPreferenceDataSource].
  */
 class WidgetRepositoryImpl(
-    private val widgetDataSource: WidgetPreferencesDataSource,
+    private val widgetDataSource: WidgetPreferenceDataSource,
     private val userPreferencesRepository: UserPreferencesRepository,
     private val accountRepository: AccountRepository,
     private val ioDispatcher: CoroutineDispatcher,
@@ -33,7 +42,6 @@ class WidgetRepositoryImpl(
 
     override suspend fun getWidgetData(): WidgetData =
         withContext(ioDispatcher) {
-
             val widgetData = widgetDataSource.widgetData.value
 
             val defaultAccountId = userPreferencesRepository.defaultAccount.value?.accountId

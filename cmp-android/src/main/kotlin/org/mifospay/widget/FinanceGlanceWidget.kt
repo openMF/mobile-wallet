@@ -4,6 +4,8 @@
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
  */
 package org.mifospay.widget
 
@@ -14,7 +16,9 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.glance.*
+import androidx.glance.GlanceId
+import androidx.glance.GlanceModifier
+import androidx.glance.LocalSize
 import androidx.glance.action.Action
 import androidx.glance.action.clickable
 import androidx.glance.appwidget.GlanceAppWidget
@@ -22,9 +26,21 @@ import androidx.glance.appwidget.SizeMode
 import androidx.glance.appwidget.action.actionRunCallback
 import androidx.glance.appwidget.cornerRadius
 import androidx.glance.appwidget.provideContent
+import androidx.glance.background
 import androidx.glance.color.ColorProvider
-import androidx.glance.layout.*
-import androidx.glance.text.*
+import androidx.glance.layout.Alignment
+import androidx.glance.layout.Box
+import androidx.glance.layout.Column
+import androidx.glance.layout.Row
+import androidx.glance.layout.Spacer
+import androidx.glance.layout.fillMaxSize
+import androidx.glance.layout.fillMaxWidth
+import androidx.glance.layout.height
+import androidx.glance.layout.padding
+import androidx.glance.layout.width
+import androidx.glance.text.FontWeight
+import androidx.glance.text.Text
+import androidx.glance.text.TextStyle
 import androidx.glance.unit.ColorProvider
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -38,26 +54,19 @@ import org.mifospay.widget.ui.AddExpenseAction
 import org.mifospay.widget.ui.AddIncomeAction
 import org.mifospay.widget.ui.OpenDashboardAction
 
-// ─── KptTheme-aligned ColorProviders ──────────────────────────────────────
-// Uses the same lightKptColorScheme / darkKptColorScheme that MifosTheme uses,
-// so the widget always stays in sync with the app's colour palette.
-
 private val L = lightKptColorScheme
 private val D = darkKptColorScheme
 
-private val cpPrimary          = ColorProvider(day = L.primary,               night = D.primary)
-private val cpOnPrimary        = ColorProvider(day = L.onPrimary,             night = D.onPrimary)
-private val cpSurface          = ColorProvider(day = L.surface,               night = D.surface)
-private val cpOnSurface        = ColorProvider(day = L.onSurface,             night = D.onSurface)
-private val cpOnSurfaceVariant = ColorProvider(day = L.onSurfaceVariant,      night = D.onSurfaceVariant)
-private val cpContainer        = ColorProvider(day = L.surfaceContainerHigh,  night = D.surfaceContainerHigh)
-private val cpOutlineVariant   = ColorProvider(day = L.outlineVariant,        night = D.outlineVariant)
-private val cpPrimaryContainer    = ColorProvider(day = L.primaryContainer,   night = D.primaryContainer)
-private val cpOnPrimaryContainer  = ColorProvider(day = L.onPrimaryContainer, night = D.onPrimaryContainer)
-private val cpErrorContainer      = ColorProvider(day = L.errorContainer,     night = D.errorContainer)
-private val cpOnErrorContainer    = ColorProvider(day = L.onErrorContainer,   night = D.onErrorContainer)
-
-// ──────────────────────────────────────────────────────────────────────────
+private val cpPrimary = ColorProvider(day = L.primary, night = D.primary)
+private val cpOnPrimary = ColorProvider(day = L.onPrimary, night = D.onPrimary)
+private val cpSurface = ColorProvider(day = L.surface, night = D.surface)
+private val cpOnSurface = ColorProvider(day = L.onSurface, night = D.onSurface)
+private val cpOnSurfaceVariant = ColorProvider(day = L.onSurfaceVariant, night = D.onSurfaceVariant)
+private val cpPrimaryContainer = ColorProvider(day = L.primaryContainer, night = D.primaryContainer)
+private val cpOnPrimaryContainer =
+    ColorProvider(day = L.onPrimaryContainer, night = D.onPrimaryContainer)
+private val cpErrorContainer = ColorProvider(day = L.errorContainer, night = D.errorContainer)
+private val cpOnErrorContainer = ColorProvider(day = L.onErrorContainer, night = D.onErrorContainer)
 
 object FinanceGlanceWidget : GlanceAppWidget(), KoinComponent {
 
@@ -96,7 +105,6 @@ private fun UnauthenticatedWidget() {
         Column(
             modifier = GlanceModifier.fillMaxSize(),
         ) {
-
             Text(
                 text = "MifosPay",
                 style = TextStyle(
@@ -160,6 +168,7 @@ private fun UnauthenticatedWidget() {
         }
     }
 }
+
 @SuppressLint("RestrictedApi")
 @Composable
 private fun ErrorWidget() {
@@ -173,7 +182,11 @@ private fun ErrorWidget() {
         Column(modifier = GlanceModifier.fillMaxSize()) {
             Text(
                 text = "MifosPay",
-                style = TextStyle(color = cpPrimary, fontSize = 18.sp, fontWeight = FontWeight.Bold),
+                style = TextStyle(
+                    color = cpPrimary,
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Bold,
+                ),
             )
             Spacer(GlanceModifier.height(2.dp))
             Text(
@@ -183,7 +196,11 @@ private fun ErrorWidget() {
             Spacer(GlanceModifier.height(20.dp))
             Text(
                 text = "Failed to fetch balance",
-                style = TextStyle(color = cpOnSurface, fontSize = 16.sp, fontWeight = FontWeight.Bold),
+                style = TextStyle(
+                    color = cpOnSurface,
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Bold,
+                ),
             )
             Spacer(GlanceModifier.height(4.dp))
             Text(
@@ -202,7 +219,11 @@ private fun ErrorWidget() {
             ) {
                 Text(
                     text = "Open App",
-                    style = TextStyle(color = cpOnPrimary, fontSize = 13.sp, fontWeight = FontWeight.Bold),
+                    style = TextStyle(
+                        color = cpOnPrimary,
+                        fontSize = 13.sp,
+                        fontWeight = FontWeight.Bold,
+                    ),
                 )
             }
         }
@@ -224,18 +245,13 @@ private fun FullWidget(data: WidgetData) {
                 .fillMaxSize()
                 .padding(horizontal = 18.dp, vertical = 14.dp),
         ) {
-
-            // ───────────── Header ─────────────
-
             Row(
                 modifier = GlanceModifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-
                 Column(
                     modifier = GlanceModifier.defaultWeight(),
                 ) {
-
                     Text(
                         text = "MifosPay",
                         style = TextStyle(
@@ -275,8 +291,6 @@ private fun FullWidget(data: WidgetData) {
 
             Spacer(GlanceModifier.height(14.dp))
 
-            // ───────────── Balance ─────────────
-
             Text(
                 text = "Available Balance",
                 style = TextStyle(
@@ -290,7 +304,6 @@ private fun FullWidget(data: WidgetData) {
             Row(
                 verticalAlignment = Alignment.Bottom,
             ) {
-
                 Text(
                     text = data.currency,
                     style = TextStyle(
@@ -325,12 +338,9 @@ private fun FullWidget(data: WidgetData) {
 
             Spacer(GlanceModifier.height(14.dp))
 
-            // ───────────── Actions ─────────────
-
             Row(
                 modifier = GlanceModifier.fillMaxWidth(),
             ) {
-
                 PremiumActionButton(
                     label = "+ Income",
                     fg = cpOnPrimaryContainer,
@@ -380,6 +390,7 @@ private fun PremiumActionButton(
         )
     }
 }
+
 @SuppressLint("RestrictedApi")
 @Composable
 private fun CompactWidget(data: WidgetData) {
@@ -394,12 +405,10 @@ private fun CompactWidget(data: WidgetData) {
         Column(
             modifier = GlanceModifier.fillMaxSize(),
         ) {
-
             Row(
                 modifier = GlanceModifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-
                 Text(
                     text = "MifosPay",
                     style = TextStyle(
@@ -463,20 +472,3 @@ private fun CompactWidget(data: WidgetData) {
         }
     }
 }
-
-@Composable
-private fun ChipButton(
-    label: String,
-    fg: ColorProvider,
-    bg: ColorProvider,
-    action: Action,
-    modifier: GlanceModifier = GlanceModifier,
-) {
-    Box(
-        modifier = modifier.height(34.dp).background(bg).cornerRadius(10.dp).clickable(action),
-        contentAlignment = Alignment.Center,
-    ) {
-        Text(text = label, style = TextStyle(color = fg, fontSize = 12.sp, fontWeight = FontWeight.Medium))
-    }
-}
-

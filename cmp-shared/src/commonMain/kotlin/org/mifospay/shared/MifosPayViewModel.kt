@@ -21,7 +21,6 @@ import org.mifos.authenticator.passcode.PasscodeStorageAdapter
 import org.mifospay.core.data.repository.AppLockRepository
 import org.mifospay.core.data.repository.WidgetManagerRepository
 import org.mifospay.core.datastore.UserPreferencesRepository
-import org.mifospay.core.datastore.WidgetPreferencesDataSource
 import org.mifospay.core.model.user.UserInfo
 
 /**

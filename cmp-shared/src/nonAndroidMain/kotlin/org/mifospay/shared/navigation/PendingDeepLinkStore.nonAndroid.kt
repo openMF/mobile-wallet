@@ -7,14 +7,16 @@
  *
  * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
  */
-package org.mifospay.widget
+package org.mifospay.shared.navigation
 
-import org.koin.dsl.module
-import org.mifospay.core.data.util.WidgetSyncService
+actual object PendingDeepLinkStore {
+    actual fun store(uri: String) {
+    }
 
-val androidWidgetModule = module {
+    actual fun consume(): String? {
+        TODO("Not yet implemented")
+    }
 
-    single<WidgetSyncService> {
-        AndroidWidgetSyncService(context = get(), widgetDataProvider = get())
+    actual fun clear() {
     }
 }

@@ -1,3 +1,12 @@
+/*
+ * Copyright 2026 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay.shared.widget
 
 import kotlinx.coroutines.flow.Flow
@@ -12,19 +21,17 @@ class WidgetDataProviderImpl(
     private val widgetRepository: WidgetRepository,
 ) : WidgetDataProvider {
 
-    // Emits Unit whenever invalidate() is called (e.g. after a transfer).
     private val refreshTrigger = MutableSharedFlow<Unit>(extraBufferCapacity = 1)
 
     override fun invalidate() {
         refreshTrigger.tryEmit(Unit)
     }
 
-    // Re-fetches balance when token, clientId, defaultAccount, OR a manual refresh changes.
     override val widgetStateFlow: Flow<WidgetState> = combine(
         userPreferencesRepository.token,
         userPreferencesRepository.clientId,
         userPreferencesRepository.defaultAccount,
-        refreshTrigger.onStart { emit(Unit) }, // seed so combine starts immediately
+        refreshTrigger.onStart { emit(Unit) },
     ) { token, clientId, defaultAccount, _ ->
         if (token.isNullOrBlank() || clientId == null || defaultAccount == null) {
             WidgetState.Unauthenticated

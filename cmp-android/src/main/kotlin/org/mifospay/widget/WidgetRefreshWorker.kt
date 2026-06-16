@@ -1,22 +1,29 @@
+/*
+ * Copyright 2026 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay.widget
 
 import android.content.Context
-import androidx.work.*
+import androidx.work.BackoffPolicy
+import androidx.work.Constraints
+import androidx.work.CoroutineWorker
+import androidx.work.ExistingPeriodicWorkPolicy
+import androidx.work.NetworkType
+import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.WorkManager
+import androidx.work.WorkRequest
+import androidx.work.WorkerParameters
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import org.mifospay.core.data.repository.WidgetManagerRepository
 import java.util.concurrent.TimeUnit
 
-/**
- * WorkManager background refresh worker.
- *
- * Imports from:
- *   • androidx.work.*          (WorkManager)
- *   • org.koin.*               (DI)
- *   • org.mifospay.shared.*    (:cmp-shared — WidgetSyncCoordinator)
- *
- * Does NOT import from :core:domain.
- */
 class WidgetRefreshWorker(
     context: Context,
     workerParams: WorkerParameters,
@@ -27,20 +34,15 @@ class WidgetRefreshWorker(
 
     override suspend fun doWork(): Result {
         return try {
-
             widgetManager.refresh()
 
             Result.success()
-
         } catch (e: Exception) {
-
             Result.retry()
         }
     }
     companion object {
-        private const val WORK_NAME   = "mifospay_widget_refresh_periodic"
-        private const val MAX_RETRIES = 3
-
+        private const val WORK_NAME = "mifospay_widget_refresh_periodic"
         fun schedule(context: Context) {
             WorkManager.getInstance(context).enqueueUniquePeriodicWork(
                 WORK_NAME,

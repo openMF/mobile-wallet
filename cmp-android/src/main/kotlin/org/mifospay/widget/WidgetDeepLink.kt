@@ -9,12 +9,10 @@
  */
 package org.mifospay.widget
 
-import org.koin.dsl.module
-import org.mifospay.core.data.util.WidgetSyncService
+object WidgetDeepLink {
+    const val SCHEME = "mifospay"
 
-val androidWidgetModule = module {
-
-    single<WidgetSyncService> {
-        AndroidWidgetSyncService(context = get(), widgetDataProvider = get())
-    }
+    const val URI_ADD_INCOME = "$SCHEME://add"
+    const val URI_ADD_EXPENSE = "$SCHEME://expense"
+    const val URI_DASHBOARD = "$SCHEME://dashboard"
 }
