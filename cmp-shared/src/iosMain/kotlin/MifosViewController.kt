@@ -7,9 +7,9 @@
  *
  * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
  */
-package org.mifospay.shared
 
 import androidx.compose.ui.window.ComposeUIViewController
+import org.mifospay.shared.MifosPaySharedApp
 import org.mifospay.shared.di.initKoin
 import platform.Foundation.NSUserDefaults
 
@@ -23,7 +23,10 @@ fun MifosViewController() = ComposeUIViewController(
         handleAppLocale = { languageTag ->
             if (languageTag != null) {
                 // Set specific language
-                NSUserDefaults.standardUserDefaults.setObject(listOf(languageTag), forKey = "AppleLanguages")
+                NSUserDefaults.standardUserDefaults.setObject(
+                    listOf(languageTag),
+                    forKey = "AppleLanguages"
+                )
             } else {
                 // System Default: remove app-specific language setting
                 NSUserDefaults.standardUserDefaults.removeObjectForKey("AppleLanguages")
