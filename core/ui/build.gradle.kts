@@ -24,6 +24,9 @@ kotlin {
             implementation(libs.androidx.browser)
             implementation(libs.androidx.compose.runtime)
             implementation(libs.accompanist.pager)
+            implementation(libs.vico.compose)
+            implementation(libs.vico.compose.m3)
+
         }
         commonMain.dependencies {
             api(projects.core.analytics)
@@ -49,6 +52,26 @@ kotlin {
         }
         androidInstrumentedTest.dependencies {
             implementation(libs.bundles.androidx.compose.ui.test)
+        }
+
+        desktopMain.dependencies {
+            implementation(libs.vico.compose)
+            implementation(libs.vico.compose.m3)
+        }
+
+        jsMain.dependencies {
+            implementation(libs.vico.compose)
+            implementation(libs.vico.compose.m3)
+        }
+
+        wasmJsMain.dependencies {
+            implementation(libs.vico.compose)
+            implementation(libs.vico.compose.m3)
+        }
+
+        nativeMain.dependencies {
+            implementation(libs.vico.compose)
+            implementation(libs.vico.compose.m3)
         }
     }
 }

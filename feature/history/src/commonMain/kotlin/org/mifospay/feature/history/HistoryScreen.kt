@@ -11,6 +11,7 @@ package org.mifospay.feature.history
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -48,6 +49,7 @@ import org.mifospay.core.designsystem.component.MifosScaffold
 import org.mifospay.core.designsystem.icon.MifosIcons
 import org.mifospay.core.model.savingsaccount.TransactionType
 import org.mifospay.core.ui.EmptyContentScreen
+import org.mifospay.core.ui.MifosPieIncomeExpense
 import org.mifospay.core.ui.MifosProgressIndicator
 import org.mifospay.core.ui.TransactionFilterBottomSheet
 import org.mifospay.core.ui.utils.EventsEffect
@@ -133,11 +135,19 @@ internal fun HistoryScreenContent(
                                 .fillMaxSize(),
                         )
                     } else {
-                        TransactionList(
-                            transactions = state.viewState.list,
-                            onAction = onAction,
-                            modifier = modifier,
-                        )
+                        Column(
+                            verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.md),
+                        ) {
+                            MifosPieIncomeExpense(
+                                totalCredit = state.totalCredit ?: 0.0,
+                                totalDebit = state.totalDebit ?: 0.0,
+                            )
+                            TransactionList(
+                                transactions = state.viewState.list,
+                                onAction = onAction,
+                                modifier = modifier,
+                            )
+                        }
                     }
                 }
                 if (state.showFilter) {

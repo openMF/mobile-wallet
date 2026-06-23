@@ -75,6 +75,7 @@ class HistoryViewModel(
 
                 is DataState.Success -> {
                     val transactions = result.data
+                    calculateSummary(transactions)
                     if (transactions.isNotEmpty()) {
                         mutableStateFlow.update {
                             it.copy(
@@ -197,6 +198,25 @@ class HistoryViewModel(
             )
         }
     }
+
+    fun calculateSummary(
+        transactions: List<Transaction>,
+    ) {
+        val totalCredit = transactions.sumOf {
+            if (it.transactionType == TransactionType.CREDIT) it.amount else 0.0
+        }
+
+        val totalDebit = transactions.sumOf {
+            if (it.transactionType == TransactionType.DEBIT) it.amount else 0.0
+        }
+
+        mutableStateFlow.update {
+            it.copy(
+                totalCredit = totalCredit,
+                totalDebit = totalDebit,
+            )
+        }
+    }
 }
 
 data class HistoryState(
@@ -207,6 +227,8 @@ data class HistoryState(
     val accounts: List<Account> = emptyList(),
     val selectedAccount: Account? = null,
     val showFilter: Boolean = false,
+    val totalCredit: Double? = null,
+    val totalDebit: Double? = null,
 ) {
     sealed interface ViewState {
         data object Loading : ViewState

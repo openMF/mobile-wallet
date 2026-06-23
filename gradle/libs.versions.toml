@@ -138,7 +138,13 @@ packageVersion = "1.0.0"
 mifosAuthenticatorPasscode="2.3.0-beta"
 mifosAuthenticatorBiometrics="2.3.0-beta"
 
+vico = "3.2.2"
+
 [libraries]
+
+vico-compose = { group = "com.patrykandpatrick.vico", name = "compose", version.ref = "vico" }
+vico-compose-m3 = { group = "com.patrykandpatrick.vico", name = "compose-m3", version.ref = "vico" }
+
 accompanist-pager = { group = "com.google.accompanist", name = "accompanist-pager", version.ref = "accompanist" }
 accompanist-permissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanist" }
 
