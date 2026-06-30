@@ -9,11 +9,11 @@
  */
 package org.mifos.lib.loan.core
 
-import org.mifospay.core.common.DataState
 import org.mifos.lib.loan.core.model.Loan
 import org.mifos.lib.loan.core.model.LoanPayment
 import org.mifos.lib.loan.core.model.LoanProduct
 import org.mifos.lib.loan.core.model.LoanSchedule
+import org.mifospay.core.common.DataState
 
 interface LoanProvider {
 
