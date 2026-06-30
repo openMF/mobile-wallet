@@ -14,7 +14,7 @@ plugins {
 
 
 android {
-    namespace = "com.mifos.lib.loan"
+    namespace = "org.mifos.lib.loan"
 }
 
 dependencies {
