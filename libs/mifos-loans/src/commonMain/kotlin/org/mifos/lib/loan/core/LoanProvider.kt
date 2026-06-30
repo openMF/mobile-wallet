@@ -7,13 +7,13 @@
  *
  * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
  */
-package org.mifospay.mifos.loans.core
+package org.mifos.lib.loan.core
 
 import org.mifospay.core.common.DataState
-import org.mifospay.mifos.loans.core.model.Loan
-import org.mifospay.mifos.loans.core.model.LoanPayment
-import org.mifospay.mifos.loans.core.model.LoanProduct
-import org.mifospay.mifos.loans.core.model.LoanSchedule
+import org.mifos.lib.loan.core.model.Loan
+import org.mifos.lib.loan.core.model.LoanPayment
+import org.mifos.lib.loan.core.model.LoanProduct
+import org.mifos.lib.loan.core.model.LoanSchedule
 
 interface LoanProvider {
 

@@ -7,16 +7,14 @@
  *
  * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
  */
-package org.mifospay.mifos.loans.core.model
+package org.mifos.lib.loan.core.model
 
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class Loan(
-    val id: Long,
-    val productId: Long,
-    val principal: Double,
-    val interestRate: Double,
-    val status: String,
-    val schedule: LoanSchedule? = null,
+data class LoanSchedule(
+    val loanId: Long,
+    val totalDue: Double,
+    val totalPaid: Double,
+    val nextDueDate: String?,
 )

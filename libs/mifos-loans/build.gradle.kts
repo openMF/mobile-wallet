@@ -14,7 +14,7 @@ plugins {
 
 
 android {
-    namespace = "com.mifospay.mifos.lonas"
+    namespace = "com.mifos.lib.loan"
 }
 
 dependencies {
