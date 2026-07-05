@@ -103,7 +103,7 @@ class CardsScreenViewModel(
                 }
             }
 
-            is CardAction.RefreshCards -> refreshTrigger.tryEmit(Unit)
+            is CardAction.RefreshCards -> requestRefresh()
 
             is CardAction.DeleteCardClicked -> {
                 mutableStateFlow.update {
@@ -156,9 +156,15 @@ class CardsScreenViewModel(
                 mutableStateFlow.update {
                     it.copy(dialogState = null)
                 }
-                refreshTrigger.tryEmit(Unit)
+                requestRefresh()
                 sendEvent(CardEvent.ShowToast(action.result.data))
             }
+        }
+    }
+
+    private fun requestRefresh() {
+        viewModelScope.launch {
+            refreshTrigger.emit(Unit)
         }
     }
 }
