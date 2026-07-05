@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copyright 2024 Mifos Initiative
+
+    This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+    If a copy of the MPL was not distributed with this file,
+    You can obtain one at https://mozilla.org/MPL/2.0/.
+
+    See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+-->
+<resources>
+    <string name="feature_request_money_enter_valid_amount">অনুগ্রহ করে একটি বৈধ পরিমাণ লিখুন</string>
+    <string name="feature_request_money_enter_currency">মুদ্রা লিখুন</string>
+    <string name="feature_request_money_set_amount">পরিমাণ নির্ধারণ করুন</string>
+    <string name="feature_request_money_currency">মুদ্রা নির্ধারণ করুন</string>
+    <string name="feature_request_money_cancel">বাতিল</string>
+    <string name="feature_request_money_confirm">নিশ্চিত করুন</string>
+    <string name="feature_request_money_qr_code_details">QR কোড বিবরণ</string>
+    <string name="feature_request_money_vpa">VPA</string>
+    <string name="feature_request_money_amount">পরিমাণ</string>
+    <string name="feature_request_money_usd">USD</string>
+    <string name="feature_request_money_request">অনুরোধ</string>
+    <string name="feature_request_money_loading">লোড হচ্ছে</string>
+    <string name="feature_request_money_nothing_to_notify">জানানোর কিছু নেই</string>
+    <string name="feature_request_money_there_is_nothing_to_show">দেখানোর কিছু নেই</string>
+    <string name="feature_request_money_error_oops">ওহ!</string>
+    <string name="feature_request_money_unexpected_error_subtitle">একটি অপ্রত্যাশিত ত্রুটি ঘটেছে। অনুগ্রহ করে আবার চেষ্টা করুন।</string>
+    <string name="feature_mpay_qr_receive_money">টাকা গ্রহণ করুন</string>
+    <string name="feature_mpay_qr_intra_bank">ইন্ট্রা-ব্যাংক QR</string>
+    <string name="feature_mpay_qr_inter_bank">ইন্টার-ব্যাংক QR</string>
+    <string name="feature_mpay_qr_share">শেয়ার করুন</string>
+    <string name="feature_mpay_qr_unable_to_generate">QR কোড তৈরি করা সম্ভব হয়নি</string>
+    <string name="feature_mpay_qr_go_back">ফিরে যান</string>
+    <string name="feature_mpay_qr_unknown">অজানা</string>
+    <string name="feature_mpay_qr_no_default_account">কোনো ডিফল্ট অ্যাকাউন্ট সেট করা নেই। অনুগ্রহ করে প্রথমে একটি ডিফল্ট অ্যাকাউন্ট সেট করুন।</string>
+    <string name="feature_mpay_qr_failed_to_generate">QR কোড তৈরি করতে ব্যর্থ</string>
+    <string name="feature_mpay_qr_no_currency_found">কোনো মুদ্রা পাওয়া যায়নি</string>
+
+    <!-- Header -->
+    <string name="feature_mpay_qr_scan_to_pay">যেকোনো পেমেন্ট অ্যাপ দিয়ে আমাকে পেমেন্ট করতে স্ক্যান করুন</string>
+
+    <!-- Account Card -->
+    <string name="feature_mpay_qr_primary">প্রাথমিক</string>
+
+    <!-- QR Actions -->
+    <string name="feature_mpay_qr_share_qr">শেয়ার</string>
+    <string name="feature_mpay_qr_download_qr">ডাউনলোড</string>
+
+    <!-- Account IDs -->
+    <string name="feature_mpay_qr_account_ids">অ্যাকাউন্ট আইডি</string>
+    <string name="feature_mpay_qr_account_number">অ্যাকাউন্ট নম্বর</string>
+    <string name="feature_mpay_qr_external_id">বহিরাগত আইডি</string>
+    <string name="feature_mpay_qr_copy">কপি</string>
+    <string name="feature_mpay_qr_copied">ক্লিপবোর্ডে কপি করা হয়েছে</string>
+
+    <!-- QR Card -->
+    <string name="feature_mpay_qr_scan_instruction">যেকোনো পেমেন্ট অ্যাপ দিয়ে স্ক্যান করুন</string>
+    <string name="feature_mpay_qr_downloaded">QR কোড ডাউনলোড হয়েছে</string>
+
+    <!-- Inter-Bank QR Placeholder -->
+    <string name="feature_mpay_qr_inter_bank_unavailable">ইন্টার-ব্যাংক QR উপলব্ধ নেই</string>
+    <string name="feature_mpay_qr_external_id_required">আপনার অ্যাকাউন্টে বহিরাগত আইডি কনফিগার করা নেই। ইন্টার-ব্যাংক ট্রান্সফার সক্রিয় করতে আপনার ব্যাংকে যোগাযোগ করুন।</string>
+
+    <!-- Account Picker -->
+    <string name="feature_mpay_qr_select_account">অ্যাকাউন্ট নির্বাচন করুন</string>
+    <string name="feature_mpay_qr_has_external_id">ইন্টার-ব্যাংক সক্রিয়</string>
+    <string name="feature_mpay_qr_no_external_id">ইন্টার-ব্যাংক উপলব্ধ নেই</string>
+    <string name="feature_mpay_qr_account_selected">অ্যাকাউন্ট নির্বাচিত</string>
+</resources>

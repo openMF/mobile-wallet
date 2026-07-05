@@ -31,6 +31,17 @@ import org.mifospay.feature.accounts.savingsaccount.addEditSavingAccountScreen
 import org.mifospay.feature.accounts.savingsaccount.details.navigateToSavingAccountDetails
 import org.mifospay.feature.accounts.savingsaccount.details.savingAccountDetailRoute
 import org.mifospay.feature.accounts.savingsaccount.navigateToSavingAccountAddEdit
+import org.mifospay.feature.autopay.AutoPayScreen
+import org.mifospay.feature.autopay.autoPayGraph
+import org.mifospay.feature.autopay.navigateToAddBill
+import org.mifospay.feature.autopay.navigateToAddBiller
+import org.mifospay.feature.autopay.navigateToAutoPay
+import org.mifospay.feature.autopay.navigateToAutoPayHistory
+import org.mifospay.feature.autopay.navigateToAutoPayPreferences
+import org.mifospay.feature.autopay.navigateToAutoPayScheduleDetails
+import org.mifospay.feature.autopay.navigateToBillList
+import org.mifospay.feature.autopay.navigateToBillerList
+import org.mifospay.feature.autopay.navigateToScheduleManagement
 import org.mifospay.feature.beneficiary.addupdatebeneficiary.BeneficiaryAddEditType
 import org.mifospay.feature.beneficiary.addupdatebeneficiary.addEditBeneficiaryScreen
 import org.mifospay.feature.beneficiary.addupdatebeneficiary.navigateToBeneficiaryAddEdit
@@ -68,6 +79,7 @@ import org.mifospay.feature.mpay.qr.scan.navigation.scanQrScreen
 import org.mifospay.feature.notification.navigateToNotification
 import org.mifospay.feature.notification.notificationScreen
 import org.mifospay.feature.payments.PAYMENTS_ROUTE
+import org.mifospay.feature.payments.PaymentsScreenContents
 import org.mifospay.feature.payments.RequestScreen
 import org.mifospay.feature.payments.paymentsScreen
 import org.mifospay.feature.payments.selectTransferType.SelectTransferTypeScreen
@@ -76,6 +88,37 @@ import org.mifospay.feature.profile.navigation.profileNavGraph
 import org.mifospay.feature.receipt.navigation.receiptScreen
 import org.mifospay.feature.savedcards.createOrUpdate.addEditCardScreen
 import org.mifospay.feature.savedcards.details.cardDetailRoute
+import org.mifospay.feature.send.money.AmountUtils
+import org.mifospay.feature.send.money.SendMoneyScreen
+import org.mifospay.feature.send.money.navigation.PAYMENT_SUCCESS_ROUTE
+import org.mifospay.feature.send.money.navigation.PAY_ANYONE_ROUTE
+import org.mifospay.feature.send.money.navigation.SEND_MONEY_OPTIONS_ROUTE
+import org.mifospay.feature.send.money.navigation.bankTransferScreen
+import org.mifospay.feature.send.money.navigation.contactsPickerScreen
+import org.mifospay.feature.send.money.navigation.navigateToBankTransferScreen
+import org.mifospay.feature.send.money.navigation.navigateToContactsPickerScreen
+import org.mifospay.feature.send.money.navigation.navigateToPayAnyoneScreen
+import org.mifospay.feature.send.money.navigation.navigateToPayeeDetailsScreen
+import org.mifospay.feature.send.money.navigation.navigateToPaymentChatHistoryScreen
+import org.mifospay.feature.send.money.navigation.navigateToPaymentDetailsScreen
+import org.mifospay.feature.send.money.navigation.navigateToPaymentProcessingScreen
+import org.mifospay.feature.send.money.navigation.navigateToPaymentSuccessScreen
+import org.mifospay.feature.send.money.navigation.navigateToSearchIfscScreen
+import org.mifospay.feature.send.money.navigation.navigateToSendMoneyOptionsScreen
+import org.mifospay.feature.send.money.navigation.navigateToSendMoneyScreen
+import org.mifospay.feature.send.money.navigation.navigateToUpiPinScreen
+import org.mifospay.feature.send.money.navigation.navigateToUpiTransactionHistoryScreen
+import org.mifospay.feature.send.money.navigation.payAnyoneScreen
+import org.mifospay.feature.send.money.navigation.payeeDetailsScreen
+import org.mifospay.feature.send.money.navigation.paymentChatHistoryScreen
+import org.mifospay.feature.send.money.navigation.paymentDetailsScreen
+import org.mifospay.feature.send.money.navigation.paymentProcessingScreen
+import org.mifospay.feature.send.money.navigation.paymentSuccessScreen
+import org.mifospay.feature.send.money.navigation.searchIfscScreen
+import org.mifospay.feature.send.money.navigation.sendMoneyOptionsScreen
+import org.mifospay.feature.send.money.navigation.sendMoneyScreen
+import org.mifospay.feature.send.money.navigation.upiPinScreen
+import org.mifospay.feature.send.money.navigation.upiTransactionHistoryScreen
 import org.mifospay.feature.settings.navigation.settingsScreen
 import org.mifospay.feature.standing.instruction.createOrUpdate.addEditSIScreen
 import org.mifospay.feature.standing.instruction.details.siDetailsScreen
@@ -93,12 +136,45 @@ import org.mifospay.feature.upi.setup.navigation.setupUpiPinScreen
 import org.mifospay.shared.ui.MifosAppState
 import mobile_wallet.cmp_shared.generated.resources.Res as SharedRes
 
+/**
+ * `SavedStateHandle` key used by callers of [internalMifosPasscodeScreen] for
+ * the round-trip "did the user verify their passcode?" boolean. Currently
+ * consumed by the intra-bank transfer auth gate
+ * (`TransferConfirmScreen` → `TransferConfirmViewModel`); the settings
+ * disable-biometrics flow uses its own
+ * `DISABLE_BIOMETRICS_VERIFICATION_KEY` from `:feature:settings`.
+ */
 const val AUTHENTICATION_VERIFICATION_KEY = "org.mifospay.mifos.authentication_verification_success"
 
+/**
+ * Authenticated-area navigation host hung off `MifosNavGraph.MAIN_GRAPH` from
+ * [RootNavGraph]. Composes every in-app feature destination plus the
+ * **internal passcode screen** that backs sensitive-operation gates.
+ *
+ * The internal passcode wiring is the only library-touching piece in this
+ * file:
+ *  - `internalMifosPasscodeScreen(...)` is registered with
+ *    `onAuthenticationSuccess` / `onAuthenticationFailed` callbacks that
+ *    write `true` / `false` to the **previous** back-stack entry's
+ *    `SavedStateHandle` under the verification-key the caller passed via
+ *    [navigateToInternalMifosPasscodeScreen]. On success, also calls
+ *    [UserVerificationRepository.recordVerification] to mint a 30-second
+ *    one-shot token that the caller must consume on its side
+ *    (`consumeVerification()`) before performing the protected action.
+ *  - Two callers currently use this gate:
+ *      * The **settings** flow (change-passcode + disable-biometrics) —
+ *        unconditionally passes `allowBiometricAuth = false` when navigating
+ *        to the internal passcode screen, since both flows would be defeated
+ *        by allowing biometric bypass.
+ *      * The **intra-bank** `transferConfirmScreen`'s
+ *        `navigateForPasscodeVerification` callback — does not override
+ *        `allowBiometricAuth`, so biometric is allowed there.
+ */
 @Composable
 internal fun MifosNavHost(
     appState: MifosAppState,
     onClickLogout: () -> Unit,
+    handleAppLocale: (locale: String?) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val navController = appState.navController
@@ -115,6 +191,17 @@ internal fun MifosNavHost(
                 },
             )
         },
+        // from send money pr
+        TabContent(PaymentsScreenContents.SEND.name) {
+            SendMoneyScreen(
+                onBackClick = navController::navigateUp,
+                // TODO Need clarification
+                navigateToTransferScreen = navController::navigateToSendMoneyScreen,
+                navigateToScanQrScreen = navController::navigateToScanQr,
+                navigateToPayeeDetails = navController::navigateToPayeeDetailsScreen,
+                showTopBar = false,
+            )
+        },
         TabContent(stringResource(Res.string.feature_payments_request)) {
             RequestScreen(
                 showQr = navController::navigateToMpayQrScreen,
@@ -122,7 +209,7 @@ internal fun MifosNavHost(
         },
         TabContent(stringResource(Res.string.feature_payments_history)) {
             HistoryScreen(
-                viewTransferDetail = navController::navigateToTransactionDetail,
+                viewTransferDetail = navController::navigateToSpecificTransaction,
             )
         },
 //        TabContent(PaymentsScreenContents.SI.name) {
@@ -136,6 +223,43 @@ internal fun MifosNavHost(
 //                navigateToInvoiceDetailScreen = navController::navigateToInvoiceDetail,
 //            )
 //        },
+
+        TabContent(PaymentsScreenContents.AUTOPAY.name) {
+            AutoPayScreen(
+                onNavigateToScheduleManagement = {
+                    navController.navigateToScheduleManagement()
+                },
+//                onNavigateToSetup = {
+//                    navController.navigateToAutoPaySetup()
+//                },
+//                onNavigateToRules = {
+//                    navController.navigateToAutoPayRules()
+//                },
+                onNavigateToPreferences = {
+                    navController.navigateToAutoPayPreferences()
+                },
+                onNavigateToHistory = {
+                    navController.navigateToAutoPayHistory()
+                },
+                onNavigateToScheduleDetails = { scheduleId ->
+                    navController.navigateToAutoPayScheduleDetails(scheduleId)
+                },
+
+                onNavigateToAddBiller = {
+                    navController.navigateToAddBiller()
+                },
+                onNavigateToBillerList = {
+                    navController.navigateToBillerList()
+                },
+                onNavigateToAddBill = {
+                    navController.navigateToAddBill()
+                },
+                onNavigateToBillList = {
+                    navController.navigateToBillList()
+                },
+                showTopBar = false,
+            )
+        },
     )
 
 //    TODO Cards and Merchants are not using self api
@@ -178,7 +302,7 @@ internal fun MifosNavHost(
         modifier = modifier,
     ) {
         internalMifosPasscodeScreen(
-            onForgotButton = onClickLogout,
+            navigateToLogin = onClickLogout,
             onAuthenticationSuccess = { verificationKey ->
                 userVerificationRepository.recordVerification()
                 verificationKey?.let {
@@ -199,7 +323,7 @@ internal fun MifosNavHost(
             onPasscodeChanged = {
                 navController.popBackStack()
             },
-            onDisableBiometrics = {
+            onBackPress = {
                 navController.popBackStack()
             },
         )
@@ -210,6 +334,9 @@ internal fun MifosNavHost(
                 navController.navigateToMpayQrScreen()
             },
             onPay = navController::navigateToTransferOptions,
+            onAutoPay = {
+                navController.navigateToAutoPay()
+            },
             navigateToTransactionDetail = navController::navigateToSpecificTransaction,
             navigateToAccountDetail = navController::navigateToSavingAccountDetails,
             navigateToHistory = navController::navigateToHistory,
@@ -218,7 +345,13 @@ internal fun MifosNavHost(
         settingsScreen(
             onBackPress = navController::navigateUp,
             onLogout = onClickLogout,
-            navigateToPasscodeScreen = navController::navigateToInternalMifosPasscodeScreen,
+            handleAppLocale = { handleAppLocale(it) },
+            navigateToPasscodeScreen = { verificationKey ->
+                navController.navigateToInternalMifosPasscodeScreen(
+                    verificationKey = verificationKey,
+                    allowBiometricAuth = false,
+                )
+            },
             navigateToEditPasswordScreen = navController::navigateToEditPassword,
             navigateToFaqScreen = navController::navigateToFAQ,
             navigateToNotificationScreen = navController::navigateToNotification,
@@ -236,15 +369,15 @@ internal fun MifosNavHost(
 
         profileNavGraph(
             navController = navController,
-            navigateBack = navController::navigateUp,
             onLinkBankAccount = {
                 navController.navigateToSavingAccountAddEdit(SavingsAddEditType.AddItem)
             },
             showQrCode = navController::navigateToMpayQrScreen,
+            navigateBack = navController::popBackStack,
         )
 
         historyNavigation(
-            viewTransactionDetail = navController::navigateToTransactionDetail,
+            viewTransactionDetail = navController::navigateToSpecificTransaction,
         )
 
         paymentsScreen(tabContents = paymentsTabContents)
@@ -351,6 +484,238 @@ internal fun MifosNavHost(
 
         mpayQrScreen(
             navigateBack = navController::navigateUp,
+            // from #1906 pr
+            navigateToSendScreen = {},
+            navigateToPayeeDetailsScreen = {},
+        )
+
+        sendMoneyOptionsScreen(
+            onBackClick = navController::popBackStack,
+            onScanQrClick = {
+                // This is now handled by the ViewModel using ML Kit scanner
+            },
+            onPayAnyoneClick = {
+                // TODO: Navigate to Pay Anyone screen
+                navController.navigateToPayAnyoneScreen()
+            },
+            onBankTransferClick = {
+                navController.navigateToBankTransferScreen()
+            },
+            onFineractPaymentsClick = {
+                navController.navigateToSendMoneyScreen()
+            },
+            onAutoPayClick = {
+                navController.navigateToAutoPay()
+            },
+            onQrCodeScanned = { qrData ->
+                navController.navigateToSendMoneyScreen(
+                    requestData = qrData,
+                    navOptions = navOptions {
+                        popUpTo(SEND_MONEY_OPTIONS_ROUTE) {
+                            inclusive = true
+                        }
+                    },
+                )
+            },
+            onNavigateToPayeeDetails = { qrCodeData ->
+                navController.navigateToPayeeDetailsScreen(qrCodeData)
+            },
+            onPaymentHistoryClick = {
+                navController.navigateToPaymentChatHistoryScreen()
+            },
+            onUpiTransactionHistoryClick = {
+                navController.navigateToUpiTransactionHistoryScreen()
+            },
+        )
+
+        sendMoneyScreen(
+            onBackClick = navController::popBackStack,
+            navigateToTransferScreen = navController::navigateToSendMoneyScreen,
+            navigateToPayeeDetailsScreen = navController::navigateToPayeeDetailsScreen,
+            navigateToScanQrScreen = navController::navigateToScanQr,
+        )
+
+        paymentChatHistoryScreen(
+            onBackClick = navController::popBackStack,
+            onPaymentClick = {
+                navController.navigateToSendMoneyOptionsScreen()
+            },
+            onTransactionClick = { transactionId ->
+                navController.navigateToPaymentDetailsScreen(transactionId)
+            },
+        )
+
+        upiTransactionHistoryScreen(
+            onBackClick = navController::popBackStack,
+        )
+
+        paymentDetailsScreen(
+            onBackClick = navController::popBackStack,
+            onPayAgainClick = {
+                navController.navigateToSendMoneyOptionsScreen()
+            },
+            onRetryClick = {
+                navController.popBackStack()
+            },
+            onShareScreenshot = {
+                // Screenshot functionality is handled by the Android-specific PaymentDetailsScreen implementation
+                // The actual screenshot and sharing is done within the screen itself
+                // This callback is used by the Android-specific implementation to trigger the screenshot
+            },
+        )
+
+        payeeDetailsScreen(
+            onBackClick = navController::popBackStack,
+            onNavigateToUpiPin = { state ->
+                navController.navigateToUpiPinScreen(
+                    payeeName = state.payeeName,
+                    amount = state.amount,
+                    isUpiCode = state.isUpiCode,
+                    bankName = state.selectedAccount?.bankName ?: "Bank",
+                    accountNo = state.selectedAccount?.accountNumber ?: "1234567890123456",
+                    refId = state.refId,
+                )
+            },
+            onNavigateToUpiPayment = {},
+            onNavigateToFineractPayment = {},
+        )
+
+        upiPinScreen(
+            onBackClick = navController::popBackStack,
+            onNavigateToPaymentProcessing = { payeeName, amount, isUpiCode ->
+                val amountInPaise = AmountUtils.rupeesToPaise(amount)
+                navController.navigateToPaymentProcessingScreen(
+                    payeeName = payeeName,
+                    amount = amountInPaise,
+                    isUpiCode = isUpiCode,
+                )
+            },
+        )
+
+        paymentProcessingScreen(
+            onPaymentComplete = { payeeName, amount, upiName, transactionTimestamp ->
+                navController.navigateToPaymentSuccessScreen(
+                    payeeName = payeeName,
+                    amount = amount,
+                    upiName = upiName,
+                    transactionTimestamp = transactionTimestamp,
+                )
+            },
+            onPaymentFailed = { errorMessage ->
+                navController.popBackStack()
+            },
+        )
+
+        paymentSuccessScreen(
+            onShareScreenshot = {
+                // Screenshot functionality is handled by the Android-specific PaymentSuccessScreen implementation
+                // The actual screenshot and sharing is done within the screen itself
+                // This callback is used by the Android-specific implementation to trigger the screenshot
+            },
+            onDone = {
+                navController.navigate(HOME_ROUTE) {
+                    popUpTo(HOME_ROUTE) {
+                        inclusive = false
+                    }
+                    launchSingleTop = true
+                }
+            },
+            onNavigateToSendMoneyOptions = {
+                navController.navigateToSendMoneyOptionsScreen(
+                    navOptions {
+                        popUpTo(PAYMENT_SUCCESS_ROUTE) {
+                            inclusive = true
+                        }
+                        launchSingleTop = true
+                    },
+                )
+            },
+        )
+
+        payAnyoneScreen(
+            onBackClick = navController::popBackStack,
+            onContactPickerClick = {
+                navController.navigateToContactsPickerScreen()
+            },
+            onContactSelected = { phoneNumber ->
+                // Contact selection updates the input field via ViewModel
+                // No navigation needed - user stays on Pay Anyone screen
+            },
+        )
+
+        contactsPickerScreen(
+            onBackClick = navController::popBackStack,
+            onContactSelected = { phoneNumber ->
+                // Navigate back to Pay Anyone screen with selected phone number
+                navController.navigateToPayAnyoneScreen(
+                    selectedContactPhone = phoneNumber,
+                    navOptions = navOptions {
+                        popUpTo(PAY_ANYONE_ROUTE) { inclusive = true }
+                    },
+                )
+            },
+        )
+
+        payeeDetailsScreen(
+            onBackClick = navController::popBackStack,
+            onNavigateToUpiPin = { state ->
+                navController.navigateToUpiPinScreen(
+                    payeeName = state.payeeName,
+                    amount = state.amount,
+                    isUpiCode = state.isUpiCode,
+                    bankName = state.selectedAccount?.bankName ?: "Bank",
+                    accountNo = state.selectedAccount?.accountNumber ?: "1234567890123456",
+                    refId = state.refId,
+                )
+            },
+            onNavigateToUpiPayment = { state ->
+                // TODO: Handle UPI payment navigation
+            },
+            onNavigateToFineractPayment = { state ->
+                // TODO: Handle Fineract payment navigation
+            },
+        )
+
+        sendMoneyScreen(
+            onBackClick = navController::popBackStack,
+            navigateToTransferScreen = navController::navigateToSendMoneyScreen,
+            navigateToPayeeDetailsScreen = navController::navigateToPayeeDetailsScreen,
+            navigateToScanQrScreen = navController::navigateToScanQr,
+        )
+
+        bankTransferScreen(
+            onBackClick = navController::popBackStack,
+            onSearchIfscClick = {
+                navController.navigateToSearchIfscScreen()
+            },
+        )
+
+        searchIfscScreen(
+            onBackClick = navController::popBackStack,
+            onIfscSelected = { ifscCode ->
+                // The IFSC code will be handled by the BankTransferViewModel
+                // when the user returns to the Bank Transfer screen
+            },
+        )
+
+        payeeDetailsScreen(
+            onBackClick = navController::popBackStack,
+            onNavigateToUpiPin = { state ->
+                navController.navigateToUpiPinScreen(
+                    payeeName = state.payeeName,
+                    amount = state.amount,
+                    isUpiCode = state.isUpiCode,
+                    bankName = state.selectedAccount?.bankName ?: "Bank",
+                    accountNo = state.selectedAccount?.accountNumber ?: "1234567890123456",
+                    refId = state.refId,
+                )
+            },
+            onNavigateToUpiPayment = { state ->
+                // TODO: Handle UPI payment navigation
+            },
+            onNavigateToFineractPayment = { state ->
+                // TODO: Handle Fineract payment navigation
+            },
         )
 
         fastMpayScreen(
@@ -552,6 +917,18 @@ internal fun MifosNavHost(
                     },
                 )
             },
+            // from send money pr
+
+//            navigateToPayeeDetailsScreen = {
+//                navController.navigateToPayeeDetailsScreen(
+//                    qrCodeData = it,
+//                    navOptions = navOptions {
+//                        popUpTo(SCAN_QR_ROUTE) {
+//                            inclusive = true
+//                        }
+//                    },
+//                )
+//            },
         )
 
         merchantTransferScreen(
@@ -563,9 +940,15 @@ internal fun MifosNavHost(
             navigateBack = navController::navigateUp,
         )
 
+        autoPayGraph(
+            navController = navController,
+            onNavigateBack = navController::navigateUp,
+        )
+
         transferOptionsDialog(
             onIntraBankTransferClick = navController::navigateToIntraBankHub,
             onInterBankTransferClick = navController::navigateToInterbankTransfer,
+            onUpiSendMoney = navController::navigateToSendMoneyOptionsScreen,
             onDismiss = {
                 navController.popBackStack()
             },

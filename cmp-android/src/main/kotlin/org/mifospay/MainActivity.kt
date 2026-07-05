@@ -9,13 +9,16 @@
  */
 package org.mifospay
 
+import android.content.res.Resources
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.core.os.LocaleListCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.Lifecycle
@@ -31,9 +34,10 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.mifospay.core.data.util.NetworkMonitor
 import org.mifospay.core.data.util.TimeZoneMonitor
 import org.mifospay.core.ui.utils.ShareUtils
-import org.mifospay.shared.MainUiState
 import org.mifospay.shared.MifosPaySharedApp
 import org.mifospay.shared.MifosPayViewModel
+import org.mifospay.shared.UserState
+import java.util.Locale
 
 class MainActivity : AppCompatActivity() {
     private val networkMonitor: NetworkMonitor by inject()
@@ -51,12 +55,12 @@ class MainActivity : AppCompatActivity() {
         // Initialize FileKit
         FileKit.init(this)
 
-        var uiState: MainUiState by mutableStateOf(MainUiState.Loading)
+        var uiState: UserState by mutableStateOf(UserState.UnAuthenticated)
 
         // Update the uiState
         lifecycleScope.launch {
             lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.uiState
+                viewModel.userState
                     .onEach { uiState = it }
                     .collect()
             }
@@ -64,8 +68,8 @@ class MainActivity : AppCompatActivity() {
 
         splashScreen.setKeepOnScreenCondition {
             when (uiState) {
-                MainUiState.Loading -> true
-                is MainUiState.Success -> false
+                UserState.UnAuthenticated -> true
+                is UserState.Authenticated -> false
             }
         }
 
@@ -75,6 +79,30 @@ class MainActivity : AppCompatActivity() {
             MifosPaySharedApp(
                 networkMonitor = networkMonitor,
                 timeZoneMonitor = timeZoneMonitor,
+                handleAppLocale = { localeTag ->
+                    val currentLocales = AppCompatDelegate.getApplicationLocales()
+                    val newLocales = if (localeTag != null) {
+                        LocaleListCompat.forLanguageTags(localeTag)
+                    } else {
+                        // System Default: clear app-specific locale
+                        LocaleListCompat.getEmptyLocaleList()
+                    }
+
+                    // Only update if the locale has actually changed
+                    if (currentLocales != newLocales) {
+                        AppCompatDelegate.setApplicationLocales(newLocales)
+                        // Update Locale.setDefault for non-UI formatting
+                        if (localeTag != null) {
+                            // Use forLanguageTag to properly parse locales like "en-GB", "pt-BR"
+                            Locale.setDefault(Locale.forLanguageTag(localeTag))
+                        } else {
+                            // Reset to true system default locale from device configuration
+                            // Use Resources.getSystem() to get device locale unaffected by app overrides
+                            val systemLocale = Resources.getSystem().configuration.locales[0]
+                            Locale.setDefault(systemLocale)
+                        }
+                    }
+                },
             )
         }
     }

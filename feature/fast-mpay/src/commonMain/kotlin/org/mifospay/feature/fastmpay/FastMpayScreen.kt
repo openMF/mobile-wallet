@@ -73,6 +73,8 @@ fun FastMpayScreen(
     val result by viewModel.resultFlow.collectAsStateWithLifecycle()
     val error by viewModel.errorFlow.collectAsStateWithLifecycle()
 
+    val isLoading by viewModel.isLoading.collectAsStateWithLifecycle()
+
     // State for bank mismatch bottom sheet
     var showBankMismatchSheet by remember { mutableStateOf(false) }
     var bankMismatchData by remember { mutableStateOf<QrProcessResult.BankMismatch?>(null) }
@@ -182,16 +184,18 @@ fun FastMpayScreen(
     }
 
     // Show brief loading indicator while processing
-    Box(
-        modifier = modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center,
-    ) {
-        CircularProgressIndicator()
+    if (isLoading) {
+        Box(
+            modifier = modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center,
+        ) {
+            CircularProgressIndicator()
+        }
     }
 
     // Bank mismatch info bottom sheet
     if (showBankMismatchSheet && bankMismatchData != null) {
-        val mismatchData = bankMismatchData!!
+        val mismatchData = bankMismatchData
         InfoBottomSheet(
             title = stringResource(Res.string.core_ui_different_bank_title),
             message = stringResource(Res.string.core_ui_different_bank_message),
@@ -202,7 +206,7 @@ fun FastMpayScreen(
             },
             primaryActionText = stringResource(Res.string.core_ui_try_interbank),
             onPrimaryAction = {
-                val accountExternalId = mismatchData.qrData.accountExternalId
+                val accountExternalId = mismatchData?.qrData?.accountExternalId
                 if (!accountExternalId.isNullOrBlank()) {
                     onNavigateToInterbankTransfer(
                         accountExternalId,
@@ -271,20 +275,19 @@ fun FastMpayScreen(
             primaryActionText = stringResource(Res.string.core_ui_proceed_payment),
             onPrimaryAction = {
                 showAmountConfirmation = false
-                when (val p = pendingAmountConfirmation) {
+                when (pending) {
                     is PendingAmountConfirmation.MakeTransfer -> {
-                        onNavigateToMakeTransfer(p.qrData, p.beneficiaryName)
+                        onNavigateToMakeTransfer(pending.qrData, pending.beneficiaryName)
                     }
                     is PendingAmountConfirmation.InterbankTransfer -> {
-                        onNavigateToInterbankTransfer(p.accountExternalId, p.recipientName, p.amount)
+                        onNavigateToInterbankTransfer(pending.accountExternalId, pending.recipientName, pending.amount)
                     }
                     is PendingAmountConfirmation.IntraBankTransfer -> {
-                        onNavigateToIntraBankTransfer(p.qrData)
+                        onNavigateToIntraBankTransfer(pending.qrData)
                     }
                     is PendingAmountConfirmation.MerchantPayment -> {
-                        onNavigateToMerchantPayment(p.qrData)
+                        onNavigateToMerchantPayment(pending.qrData)
                     }
-                    null -> {}
                 }
                 pendingAmountConfirmation = null
             },

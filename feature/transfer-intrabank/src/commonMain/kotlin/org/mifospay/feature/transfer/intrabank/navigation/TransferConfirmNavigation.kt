@@ -18,6 +18,11 @@ import org.mifospay.feature.transfer.intrabank.confirm.TransferConfirmScreen
 import org.mifospay.feature.transfer.intrabank.confirm.TransferResult
 import template.core.base.ui.composableWithSlideTransitions
 
+/**
+ * Type-safe route for the intra-bank transfer confirmation screen. Carries
+ * the source/destination account snapshot and the post-success destination
+ * the caller wants to return to (`home` or `payments`).
+ */
 @Serializable
 data class TransferConfirmRoute(
     val amount: Int,
@@ -30,6 +35,10 @@ data class TransferConfirmRoute(
     val returnDestination: String = "home",
 )
 
+/**
+ * Push the transfer-confirm screen with a fully-populated
+ * [TransferConfirmRoute].
+ */
 fun NavController.navigateToTransferConfirm(
     toOfficeId: Int?,
     toClientId: Long?,
@@ -56,6 +65,17 @@ fun NavController.navigateToTransferConfirm(
     )
 }
 
+/**
+ * Registers the transfer-confirm destination. Hoists the destination's own
+ * `SavedStateHandle` into [TransferConfirmScreen] so the
+ * `INTRA_BANK_TRANSFER_VERIFICATION_KEY` round-trip channel works.
+ *
+ * @param navigateForPasscodeVerification `(verificationKey) -> Unit` —
+ *        bind to `navController::navigateToInternalMifosPasscodeScreen`.
+ *        The screen forwards `INTRA_BANK_TRANSFER_VERIFICATION_KEY` so the
+ *        passcode-screen success/failure callbacks write the boolean back to
+ *        this destination's saved-state-handle.
+ */
 fun NavGraphBuilder.transferConfirmScreen(
     navigateBack: () -> Unit,
     onTransferSuccess: (TransferResult, String) -> Unit,

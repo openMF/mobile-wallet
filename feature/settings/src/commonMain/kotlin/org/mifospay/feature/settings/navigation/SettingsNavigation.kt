@@ -15,30 +15,46 @@ import androidx.navigation.NavOptions
 import org.mifospay.core.ui.composableWithSlideTransitions
 import org.mifospay.feature.settings.SettingsScreenRoute
 
+/** Route string for the settings destination. */
 const val SETTINGS_ROUTE = "settings_route"
 
+/** Pushes [SETTINGS_ROUTE]. */
 fun NavController.navigateToSettings(navOptions: NavOptions? = null) {
     this.navigate(SETTINGS_ROUTE, navOptions)
 }
 
+/**
+ * Registers the settings destination. Hoists the destination's own
+ * [androidx.lifecycle.SavedStateHandle] into [SettingsScreenRoute] so the
+ * disable-biometrics round-trip channel
+ * (`DISABLE_BIOMETRICS_VERIFICATION_KEY`) works.
+ *
+ * @param navigateToPasscodeScreen `(verificationKey?) -> Unit` — bind to
+ *        `navController::navigateToInternalMifosPasscodeScreen`. A non-null
+ *        key triggers the round-trip flow (disable biometrics); null means
+ *        no channel needed (change passcode).
+ */
 fun NavGraphBuilder.settingsScreen(
     onBackPress: () -> Unit,
     onLogout: () -> Unit,
-    navigateToPasscodeScreen: () -> Unit,
+    handleAppLocale: (String) -> Unit,
+    navigateToPasscodeScreen: (verificationKey: String?) -> Unit,
     navigateToEditPasswordScreen: () -> Unit,
     navigateToFaqScreen: () -> Unit,
     navigateToNotificationScreen: () -> Unit,
     navigateToProfile: () -> Unit,
 ) {
-    composableWithSlideTransitions(route = SETTINGS_ROUTE) {
+    composableWithSlideTransitions(route = SETTINGS_ROUTE) { entry ->
         SettingsScreenRoute(
             backPress = onBackPress,
             onEditPassword = navigateToEditPasswordScreen,
             onLogout = onLogout,
+            handleAppLocale = handleAppLocale,
             navigateToPasscodeScreen = navigateToPasscodeScreen,
             navigateToFaqScreen = navigateToFaqScreen,
             navigateToNotificationScreen = navigateToNotificationScreen,
             navigateToProfile = navigateToProfile,
+            entryStateHandle = entry.savedStateHandle,
         )
     }
 }

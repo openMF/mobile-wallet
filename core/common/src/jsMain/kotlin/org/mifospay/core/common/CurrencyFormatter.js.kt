@@ -33,4 +33,25 @@ actual object CurrencyFormatter {
             balance.toString()
         }
     }
+
+    actual fun format(
+        balance: Double?,
+        maximumFractionDigits: Int?,
+    ): String {
+        if (balance == null) {
+            return ""
+        }
+        val options = js("{}").unsafeCast<dynamic>()
+        if (maximumFractionDigits != null) {
+            options.maximumFractionDigits = maximumFractionDigits
+            options.minimumFractionDigits = maximumFractionDigits
+        }
+        return try {
+            js("new Intl.NumberFormat('en-US', options).format(balance)")
+                .toString()
+        } catch (e: Exception) {
+            console.error("Error formatting number: ${e.message}")
+            balance.toString()
+        }
+    }
 }

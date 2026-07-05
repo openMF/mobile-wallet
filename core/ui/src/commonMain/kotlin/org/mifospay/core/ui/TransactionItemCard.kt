@@ -27,6 +27,7 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import mobile_wallet.core.ui.generated.resources.Res
@@ -174,11 +175,14 @@ fun TransactionItem(
             }
 
             Row(verticalAlignment = Alignment.CenterVertically) {
-                val formattedAmount = CurrencyFormatter.format(
-                    balance = transaction.amount,
-                    currencyCode = transaction.currency.code,
-                    maximumFractionDigits = 2,
-                )
+                val formattedAmount =
+                    "${transaction.currency.displaySymbol}${
+                        CurrencyFormatter.format(
+                            balance = transaction.amount,
+                            maximumFractionDigits = 2,
+                        )
+                    }"
+
                 val amount = when (transaction.transactionType) {
                     TransactionType.DEBIT -> "- $formattedAmount"
                     TransactionType.CREDIT -> "+ $formattedAmount"
@@ -191,22 +195,31 @@ fun TransactionItem(
                     style = TextStyle(
                         fontSize = 16.sp,
                         fontWeight = FontWeight.Normal,
-                        color = when (transaction.transactionType) {
-                            TransactionType.CREDIT -> KptTheme.colorScheme.onTertiaryContainer.copy(
-                                red = 0f,
-                                green = 0.51f,
-                                blue = 0.21f,
-                            )
+                        color = if (transaction.reversed) {
+                            Color.Blue
+                        } else {
+                            when (transaction.transactionType) {
+                                TransactionType.CREDIT -> KptTheme.colorScheme.onTertiaryContainer.copy(
+                                    red = 0f,
+                                    green = 0.51f,
+                                    blue = 0.21f,
+                                )
 
-                            TransactionType.DEBIT -> KptTheme.colorScheme.error.copy(
-                                red = 0.8f,
-                                green = 0f,
-                                blue = 0f,
-                            )
+                                TransactionType.DEBIT -> KptTheme.colorScheme.error.copy(
+                                    red = 0.8f,
+                                    green = 0f,
+                                    blue = 0f,
+                                )
 
-                            else -> KptTheme.colorScheme.onSurface
+                                else -> KptTheme.colorScheme.onSurface
+                            }
                         },
                         textAlign = TextAlign.End,
+                        textDecoration = if (transaction.reversed) {
+                            TextDecoration.LineThrough
+                        } else {
+                            TextDecoration.None
+                        },
                     ),
                 )
             }

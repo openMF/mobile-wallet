@@ -87,5 +87,5 @@
     <!-- QR Amount Confirmation -->
     <string name="core_ui_confirm_qr_amount_title">Confirm Payment Amount</string>
     <string name="core_ui_confirm_qr_amount_message">This QR code contains a pre-filled amount of %1$s %2$s.\n\nPlease verify this is the correct amount before proceeding with the payment.</string>
-    <string name="core_ui_proceed_payment">Proceed with Payment</string>
+    <string name="core_ui_proceed_payment">Proceed</string>
 </resources>

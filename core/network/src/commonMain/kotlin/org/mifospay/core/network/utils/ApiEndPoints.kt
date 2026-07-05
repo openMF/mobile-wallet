@@ -26,6 +26,14 @@ object ApiEndPoints {
     const val TWOFACTOR = "twofactor"
     const val RUN_REPORT = "runreports"
     const val USER = "users"
+
+    const val USER_SELF = "user"
     const val STANDING_INSTRUCTION = "standinginstructions"
     const val OFFICES = "offices"
+
+    // TODO: Verify with backend team and update according to finalized API contract
+    const val AUTO_PAY = "autopay"
+
+    // TODO: Update endpoint path when backend APIs are finalized
+    const val BILLERS = "billers"
 }

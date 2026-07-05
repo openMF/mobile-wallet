@@ -11,6 +11,7 @@ package org.mifospay.core.common
 
 expect object CurrencyFormatter {
     fun format(balance: Double?, currencyCode: String?, maximumFractionDigits: Int?): String
+    fun format(balance: Double?, maximumFractionDigits: Int?): String
 }
 
 fun <T> List<T>.toArrayList(): ArrayList<T> {

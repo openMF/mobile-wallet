@@ -11,8 +11,12 @@ package org.mifospay.core.designsystem.icon
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
+import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.automirrored.filled.OpenInNew
+import androidx.compose.material.icons.automirrored.filled.Rule
+import androidx.compose.material.icons.automirrored.filled.Send
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.filled.ArrowOutward
 import androidx.compose.material.icons.filled.AttachMoney
@@ -20,15 +24,20 @@ import androidx.compose.material.icons.filled.Badge
 import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material.icons.filled.Camera
 import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.ChevronLeft
 import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.ContentCopy
+import androidx.compose.material.icons.filled.CreditCard
+import androidx.compose.material.icons.filled.CurrencyRupee
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Description
 import androidx.compose.material.icons.filled.Download
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Error
+import androidx.compose.material.icons.filled.ExpandLess
+import androidx.compose.material.icons.filled.ExpandMore
 import androidx.compose.material.icons.filled.FilterList
 import androidx.compose.material.icons.filled.Fingerprint
 import androidx.compose.material.icons.filled.FlashOff
@@ -37,14 +46,23 @@ import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
+import androidx.compose.material.icons.filled.Language
+import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.PersonAdd
 import androidx.compose.material.icons.filled.Photo
 import androidx.compose.material.icons.filled.PhotoLibrary
+import androidx.compose.material.icons.filled.Power
 import androidx.compose.material.icons.filled.QrCode
 import androidx.compose.material.icons.filled.QrCode2
 import androidx.compose.material.icons.filled.RadioButtonChecked
 import androidx.compose.material.icons.filled.RadioButtonUnchecked
+import androidx.compose.material.icons.filled.Receipt
+import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material.icons.filled.Repeat
+import androidx.compose.material.icons.filled.Schedule
+import androidx.compose.material.icons.filled.Security
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
@@ -55,6 +73,7 @@ import androidx.compose.material.icons.outlined.CheckCircle
 import androidx.compose.material.icons.outlined.DeleteOutline
 import androidx.compose.material.icons.outlined.DoneAll
 import androidx.compose.material.icons.outlined.Edit
+import androidx.compose.material.icons.outlined.Email
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.Lock
@@ -69,6 +88,7 @@ import androidx.compose.material.icons.rounded.AccountBalance
 import androidx.compose.material.icons.rounded.AccountBalanceWallet
 import androidx.compose.material.icons.rounded.AccountCircle
 import androidx.compose.material.icons.rounded.Add
+import androidx.compose.material.icons.rounded.Check
 import androidx.compose.material.icons.rounded.Contacts
 import androidx.compose.material.icons.rounded.History
 import androidx.compose.material.icons.rounded.Home
@@ -102,6 +122,8 @@ object MifosIcons {
     val Check: ImageVector = Icons.Default.Check
     val KeyboardArrowDown: ImageVector = Icons.Default.KeyboardArrowDown
     val KeyboardArrowUp: ImageVector = Icons.Default.KeyboardArrowUp
+    val DropDown: ImageVector = Icons.Default.ExpandMore
+    val DropUp: ImageVector = Icons.Default.ExpandLess
     val Home = Icons.Outlined.Home
     val HomeBoarder = Icons.Rounded.Home
     val Payment = Icons.Rounded.SwapHoriz
@@ -141,11 +163,19 @@ object MifosIcons {
     val CalenderMonth = Icons.Filled.CalendarMonth
     val OutlinedDoneAll = Icons.Outlined.DoneAll
     val Person = Icons.Filled.Person
+    val PersonAdd = Icons.Filled.PersonAdd
     val Badge = Icons.Filled.Badge
     val DataInfo = Icons.Filled.Description
     val Scan = Icons.Outlined.QrCodeScanner
     val RadioButtonUnchecked = Icons.Default.RadioButtonUnchecked
     val RadioButtonChecked = Icons.Filled.RadioButtonChecked
+
+    val ArrowForward = Icons.AutoMirrored.Filled.ArrowForward
+
+    val CurrencyRupee = Icons.Filled.CurrencyRupee
+    val CheckRounded = Icons.Rounded.Check
+
+    val Send = Icons.AutoMirrored.Filled.Send
     val History = Icons.Default.History
     val HistoryBoarder = Icons.Rounded.History
     val Filter = Icons.Default.FilterList
@@ -157,4 +187,24 @@ object MifosIcons {
     val CheckCircle = Icons.Outlined.CheckCircle
     val ArrowRight = Icons.AutoMirrored.Filled.KeyboardArrowRight
     val Download = Icons.Filled.Download
+
+    // AutoPay specific icons
+    val Schedule = Icons.Filled.Schedule
+    val Security = Icons.Filled.Security
+    val Power = Icons.Filled.Power
+    val CreditCard = Icons.Filled.CreditCard
+    val Rule = Icons.AutoMirrored.Filled.Rule
+    val Receipt = Icons.Filled.Receipt
+    val List = Icons.AutoMirrored.Filled.List
+
+    val Email = Icons.Outlined.Email
+
+    val Repeat = Icons.Filled.Repeat
+
+    val Refresh = Icons.Filled.Refresh
+
+    val ExpandLess = Icons.Filled.ExpandLess
+    val ExpandMore = Icons.Filled.ExpandMore
+
+    val Language = Icons.Default.Language
 }

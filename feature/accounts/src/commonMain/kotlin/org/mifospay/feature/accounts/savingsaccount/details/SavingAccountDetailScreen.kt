@@ -72,7 +72,6 @@ import org.mifospay.core.model.account.Account
 import org.mifospay.core.model.savingsaccount.SavingAccountDetail
 import org.mifospay.core.model.savingsaccount.Status
 import org.mifospay.core.model.savingsaccount.Summary
-import org.mifospay.core.model.savingsaccount.formatAmount
 import org.mifospay.core.model.savingsaccount.toAccount
 import org.mifospay.core.ui.EmptyContentScreen
 import org.mifospay.core.ui.MifosDivider
@@ -246,7 +245,10 @@ private fun SavingAccountSummaryCard(
             RowBlock {
                 Text(text = stringResource(Res.string.feature_accounts_detail_account_balance))
                 Text(
-                    text = summary.formatAmount(summary.accountBalance),
+                    text = "${summary.currency.displaySymbol}${CurrencyFormatter.format(
+                        balance = summary.accountBalance,
+                        maximumFractionDigits = 2,
+                    )}",
                     style = KptTheme.typography.bodyMedium,
                     fontWeight = FontWeight.SemiBold,
                     color = KptTheme.colorScheme.onSurface,
@@ -258,7 +260,10 @@ private fun SavingAccountSummaryCard(
             RowBlock {
                 Text(text = stringResource(Res.string.feature_accounts_detail_total_deposits))
                 Text(
-                    text = summary.formatAmount(summary.totalDeposits),
+                    text = "${summary.currency.displaySymbol}${CurrencyFormatter.format(
+                        balance = summary.totalDeposits,
+                        maximumFractionDigits = 2,
+                    )}",
                     style = KptTheme.typography.bodyMedium,
                     fontWeight = FontWeight.SemiBold,
                     color = KptTheme.colorScheme.onSurface,
@@ -270,7 +275,10 @@ private fun SavingAccountSummaryCard(
             RowBlock {
                 Text(text = stringResource(Res.string.feature_accounts_detail_total_withdrawals))
                 Text(
-                    text = summary.formatAmount(summary.totalWithdrawals),
+                    text = "${summary.currency.displaySymbol}${CurrencyFormatter.format(
+                        balance = summary.totalWithdrawals,
+                        maximumFractionDigits = 2,
+                    )}",
                     style = KptTheme.typography.bodyMedium,
                     fontWeight = FontWeight.SemiBold,
                     color = KptTheme.colorScheme.onSurface,
@@ -282,7 +290,10 @@ private fun SavingAccountSummaryCard(
             RowBlock {
                 Text(text = stringResource(Res.string.feature_accounts_detail_available_balance))
                 Text(
-                    text = summary.formatAmount(summary.availableBalance),
+                    text = "${summary.currency.displaySymbol}${CurrencyFormatter.format(
+                        balance = summary.availableBalance,
+                        maximumFractionDigits = 2,
+                    )}",
                     style = KptTheme.typography.bodyMedium,
                     fontWeight = FontWeight.SemiBold,
                     color = KptTheme.colorScheme.onSurface,
@@ -294,7 +305,10 @@ private fun SavingAccountSummaryCard(
             RowBlock {
                 Text(text = stringResource(Res.string.feature_accounts_detail_total_interest_posted))
                 Text(
-                    text = summary.totalInterestPosted.toString(),
+                    text = "${summary.currency.displaySymbol}${CurrencyFormatter.format(
+                        balance = summary.totalInterestPosted,
+                        maximumFractionDigits = 2,
+                    )}",
                     style = KptTheme.typography.bodyMedium,
                     fontWeight = FontWeight.SemiBold,
                     color = KptTheme.colorScheme.onSurface,
@@ -306,7 +320,10 @@ private fun SavingAccountSummaryCard(
             RowBlock {
                 Text(text = stringResource(Res.string.feature_accounts_detail_total_overdraft))
                 Text(
-                    text = summary.totalOverdraftInterestDerived.toString(),
+                    text = "${summary.currency.displaySymbol}${CurrencyFormatter.format(
+                        balance = summary.totalOverdraftInterestDerived,
+                        maximumFractionDigits = 2,
+                    )}",
                     style = KptTheme.typography.bodyMedium,
                     fontWeight = FontWeight.SemiBold,
                     color = KptTheme.colorScheme.onSurface,
@@ -318,7 +335,10 @@ private fun SavingAccountSummaryCard(
             RowBlock {
                 Text(text = stringResource(Res.string.feature_accounts_detail_interest_not_posted))
                 Text(
-                    text = summary.interestNotPosted.toString(),
+                    text = "${summary.currency.displaySymbol}${CurrencyFormatter.format(
+                        balance = summary.interestNotPosted,
+                        maximumFractionDigits = 2,
+                    )}",
                     style = KptTheme.typography.bodyMedium,
                     fontWeight = FontWeight.SemiBold,
                     color = KptTheme.colorScheme.onSurface,
@@ -422,11 +442,10 @@ private fun SavingAccountCard(
                         color = KptTheme.colorScheme.surface,
                     )
 
-                    val accountBalance = CurrencyFormatter.format(
+                    val accountBalance = "${account.currency.code} ${account.currency.displaySymbol}${CurrencyFormatter.format(
                         balance = account.balance,
-                        currencyCode = account.currency.code,
-                        maximumFractionDigits = null,
-                    )
+                        maximumFractionDigits = 2,
+                    )}"
 
                     Text(
                         text = accountBalance,

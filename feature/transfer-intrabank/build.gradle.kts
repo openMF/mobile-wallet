@@ -26,10 +26,17 @@ kotlin {
             implementation(compose.materialIconsExtended)
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
+            implementation(projects.core.designsystem)
+            implementation(libs.ui.backhandler)
         }
 
         androidMain.dependencies {
             implementation(libs.google.play.services.code.scanner)
+            implementation(libs.accompanist.permissions)
         }
     }
+}
+
+dependencies {
+    debugImplementation(compose.uiTooling)
 }

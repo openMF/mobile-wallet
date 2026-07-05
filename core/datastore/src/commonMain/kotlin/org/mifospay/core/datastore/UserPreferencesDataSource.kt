@@ -31,6 +31,7 @@ import org.mifospay.core.model.client.Client
 import org.mifospay.core.model.client.UpdatedClient
 import org.mifospay.core.model.instance.InterbankServer
 import org.mifospay.core.model.instance.ServerInstance
+import org.mifospay.core.model.user.Language
 import org.mifospay.core.model.user.UserInfo
 
 private const val USER_INFO_KEY = "userInfo"
@@ -38,6 +39,7 @@ private const val CLIENT_INFO_KEY = "clientInfo"
 private const val SELECTED_INSTANCE_KEY = "selectedInstance"
 private const val SELECTED_INTERBANK_INSTANCE_KEY = "selectedInterbankInstance"
 private const val ACCOUNT_EXTERNAL_IDS_KEY = "accountExternalIds"
+private const val LANGUAGE_KEY = "language"
 
 @OptIn(ExperimentalSerializationApi::class)
 class UserPreferencesDataSource(
@@ -97,6 +99,12 @@ class UserPreferencesDataSource(
             serializer = MapSerializer(Long.serializer(), String.serializer()),
         ) ?: emptyMap(),
     )
+    private val selectedLanguage = MutableStateFlow(
+        settings.decodeValueOrNull(
+            key = LANGUAGE_KEY,
+            serializer = Language.serializer(),
+        ) ?: Language.DEFAULT,
+    )
 
     val token = _userInfo.map {
         it.base64EncodedAuthenticationKey
@@ -114,6 +122,8 @@ class UserPreferencesDataSource(
     val selectedInterbankInstance = _selectedInterbankInstance
 
     val accountExternalIds = _accountExternalIds
+
+    val language = selectedLanguage
 
     suspend fun updateClientInfo(client: Client) {
         withContext(dispatcher) {
@@ -142,6 +152,13 @@ class UserPreferencesDataSource(
 
             settings.putClientPreference(updatedClient)
             _clientInfo.value = updatedClient
+        }
+    }
+
+    suspend fun setLanguage(language: Language) {
+        withContext(dispatcher) {
+            settings.putLanguageConfig(language)
+            selectedLanguage.value = language
         }
     }
 
@@ -254,5 +271,13 @@ private fun Settings.putAccountExternalIds(accountExternalIds: Map<Long, String>
         key = ACCOUNT_EXTERNAL_IDS_KEY,
         serializer = MapSerializer(Long.serializer(), String.serializer()),
         value = accountExternalIds,
+    )
+}
+
+private fun Settings.putLanguageConfig(language: Language) {
+    encodeValue(
+        key = LANGUAGE_KEY,
+        serializer = Language.serializer(),
+        value = language,
     )
 }

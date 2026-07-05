@@ -76,6 +76,7 @@ internal fun MifosApp(
     networkMonitor: NetworkMonitor,
     timeZoneMonitor: TimeZoneMonitor,
     onClickLogout: () -> Unit,
+    handleAppLocale: (locale: String?) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     MifosGradientBackground(
@@ -166,6 +167,7 @@ internal fun MifosApp(
 
                     MifosNavHost(
                         appState = appState,
+                        handleAppLocale = handleAppLocale,
                         onClickLogout = onClickLogout,
                     )
                 }
