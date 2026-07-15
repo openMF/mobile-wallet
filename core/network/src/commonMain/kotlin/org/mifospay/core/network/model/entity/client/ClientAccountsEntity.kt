@@ -11,10 +11,14 @@ package org.mifospay.core.network.model.entity.client
 
 import kotlinx.serialization.Serializable
 import org.mifospay.core.model.savingsaccount.SavingAccountEntity
+import org.mifospay.core.network.model.entity.loanAccount.LoanAccountResponseDto
+import org.mifospay.core.network.model.entity.shareAccount.ShareAccountResponseDto
 
 @Serializable
 data class ClientAccountsEntity(
     var savingsAccounts: List<SavingAccountEntity> = emptyList(),
+    val loanAccounts: List<LoanAccountResponseDto> = emptyList(),
+    val shareAccounts: List<ShareAccountResponseDto> = emptyList(),
     val groupLoanIndividualMonitoringAccounts: List<String?> = emptyList(),
     val guarantorAccounts: List<GuarantorAccountEntity> = emptyList(),
 ) {

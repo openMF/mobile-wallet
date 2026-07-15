@@ -29,4 +29,8 @@ class SelfServiceApiManager(
     val officeApi by lazy { ktorfitClient.officeApi }
 
     val userApi by lazy { ktorfitClient.userApi }
+
+    val pocketApi by lazy { ktorfitClient.pocketApi }
+
+    val shareAccountApi by lazy { ktorfitClient.shareAccountApi }
 }
