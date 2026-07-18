@@ -145,6 +145,7 @@ class PocketRepositoryImp(
     ): Flow<DataState<List<DetailedPocketAccount>>> {
         return networkMonitor.withNetworkCheck(
             flow {
+                emit(DataState.Loading)
                 syncPockets(clientId, forceRefresh)
 
                 detailedPocketCache.collect { state ->

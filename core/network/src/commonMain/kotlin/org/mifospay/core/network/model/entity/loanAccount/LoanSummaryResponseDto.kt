@@ -38,7 +38,7 @@ data class LoanSummaryResponseDto(
 
     val totalOutstanding: Double = 0.0,
 
-    private val overdueSinceDate: List<Int>? = null,
+    val overdueSinceDate: List<Int>? = null,
 
     val currency: CurrencyResponseDto? = null,
 )

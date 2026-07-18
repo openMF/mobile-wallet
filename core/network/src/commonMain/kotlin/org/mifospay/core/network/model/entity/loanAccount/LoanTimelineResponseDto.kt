@@ -15,29 +15,29 @@ import kotlinx.serialization.Serializable
 data class LoanTimelineResponseDto(
     val submittedOnDate: List<Int>? = null,
 
-    val submittedByUsername: String?,
+    val submittedByUsername: String? = null,
 
-    val submittedByFirstname: String?,
+    val submittedByFirstname: String? = null,
 
-    val submittedByLastname: String?,
+    val submittedByLastname: String? = null,
 
     val approvedOnDate: List<Int>? = null,
 
-    val approvedByUsername: String?,
+    val approvedByUsername: String? = null,
 
-    val approvedByFirstname: String?,
+    val approvedByFirstname: String? = null,
 
-    val approvedByLastname: String?,
+    val approvedByLastname: String? = null,
 
     val expectedDisbursementDate: List<Int>? = null,
 
     val actualDisbursementDate: List<Int>? = null,
 
-    val disbursedByUsername: String?,
+    val disbursedByUsername: String? = null,
 
-    val disbursedByFirstname: String?,
+    val disbursedByFirstname: String? = null,
 
-    val disbursedByLastname: String?,
+    val disbursedByLastname: String? = null,
 
     val closedOnDate: List<Int>? = null,
 

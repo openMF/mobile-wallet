@@ -49,7 +49,7 @@ data class LoanAccountResponseDto(
 
     val amountPaid: Double = 0.0,
 
-    val currency: CurrencyResponseDto?,
+    val currency: CurrencyResponseDto? = null,
 
     val inArrears: Boolean? = null,
 
@@ -57,5 +57,5 @@ data class LoanAccountResponseDto(
 
     val loanPurposeName: String? = null,
 
-    val timeline: LoanTimelineResponseDto?,
+    val timeline: LoanTimelineResponseDto? = null,
 )
