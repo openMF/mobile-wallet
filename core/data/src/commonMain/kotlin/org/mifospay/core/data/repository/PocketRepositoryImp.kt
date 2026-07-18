@@ -222,7 +222,7 @@ class PocketRepositoryImp(
                     if (loan.id !in alreadyLinkedAccountIds) {
                         availableAccounts.add(
                             LinkableAccount(
-                                accountId = loan.id,
+                                accountId = loan.id ?: 0L,
                                 productName = loan.productName,
                                 accountNumber = loan.accountNo,
                                 accountType = AccountType.LOAN,
@@ -260,7 +260,7 @@ class PocketRepositoryImp(
 
                         try {
                             val shareAccountDetails = dataManager.shareAccountApi
-                                .getShareAccountDetails(share.id).first()
+                                .getShareAccountDetails(share.id ?: 0L).first()
                             val approvedShares = shareAccountDetails.summary?.totalApprovedShares ?: 0
                             val currentMarketPrice = shareAccountDetails.currentMarketPrice ?: 0.0
                             balance = approvedShares * currentMarketPrice
@@ -273,7 +273,7 @@ class PocketRepositoryImp(
 
                         availableAccounts.add(
                             LinkableAccount(
-                                accountId = share.id,
+                                accountId = share.id ?: 0L,
                                 productName = share.productName,
                                 accountNumber = share.accountNo,
                                 accountType = AccountType.SHARE,

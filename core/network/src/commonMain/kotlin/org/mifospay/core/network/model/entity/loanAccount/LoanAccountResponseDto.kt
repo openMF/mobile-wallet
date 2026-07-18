@@ -15,13 +15,13 @@ import org.mifospay.core.network.model.entity.common.TypeResponseDto
 
 @Serializable
 data class LoanAccountResponseDto(
-    val id: Long = 0,
+    val id: Long? = null,
 
-    val loanProductId: Long = 0,
+    val loanProductId: Long? = null,
 
     val externalId: String? = null,
 
-    val numberOfRepayments: Long = 0,
+    val numberOfRepayments: Long? = null,
 
     val accountNo: String? = null,
 
@@ -35,9 +35,9 @@ data class LoanAccountResponseDto(
 
     val loanProductDescription: String? = null,
 
-    val principal: Double = 0.0,
+    val principal: Double? = null,
 
-    val annualInterestRate: Double = 0.0,
+    val annualInterestRate: Double? = null,
 
     val status: LoanStatusResponseDto? = null,
 
@@ -45,9 +45,9 @@ data class LoanAccountResponseDto(
 
     val loanCycle: Int? = null,
 
-    val loanBalance: Double = 0.0,
+    val loanBalance: Double? = null,
 
-    val amountPaid: Double = 0.0,
+    val amountPaid: Double? = null,
 
     val currency: CurrencyResponseDto? = null,
 

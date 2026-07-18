@@ -15,7 +15,7 @@ import org.mifospay.core.network.model.entity.common.CurrencyResponseDto
 @Serializable
 data class ShareAccountResponseDto(
 
-    val id: Long = 0,
+    val id: Long? = null,
 
     val accountNo: String? = null,
 

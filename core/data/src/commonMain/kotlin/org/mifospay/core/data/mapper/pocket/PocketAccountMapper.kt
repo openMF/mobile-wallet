@@ -25,11 +25,11 @@ fun PocketResponseDto.toDomainList(): List<PocketAccount> {
 }
 
 private fun PocketAccountDto.toDomain(type: AccountType) = PocketAccount(
-    id = this.id,
-    pocketId = this.pocketId,
-    accountId = this.accountId,
+    id = this.id ?: 0L,
+    pocketId = this.pocketId ?: 0L,
+    accountId = this.accountId ?: 0L,
     accountType = type,
-    accountNumber = this.accountNumber,
+    accountNumber = this.accountNumber ?: "",
 )
 
 fun org.mifospay.core.network.model.entity.loanAccount.LoanStatusResponseDto.toAccountStatus(): org.mifospay.core.model.pocket.AccountStatus =

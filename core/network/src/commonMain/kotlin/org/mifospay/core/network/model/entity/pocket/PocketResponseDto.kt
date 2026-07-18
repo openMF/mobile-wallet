@@ -20,9 +20,9 @@ data class PocketResponseDto(
 
 @Serializable
 data class PocketAccountDto(
-    val pocketId: Long,
-    val accountId: Long,
-    val accountType: Int,
-    val accountNumber: String,
-    val id: Long,
+    val pocketId: Long? = null,
+    val accountId: Long? = null,
+    val accountType: Int? = null,
+    val accountNumber: String? = null,
+    val id: Long? = null,
 )

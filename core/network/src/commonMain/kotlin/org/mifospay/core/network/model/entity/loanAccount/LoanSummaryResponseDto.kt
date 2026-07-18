@@ -14,29 +14,29 @@ import org.mifospay.core.network.model.entity.common.CurrencyResponseDto
 
 @Serializable
 data class LoanSummaryResponseDto(
-    val principalDisbursed: Double = 0.0,
+    val principalDisbursed: Double? = null,
 
-    val principalPaid: Double = 0.0,
+    val principalPaid: Double? = null,
 
-    val interestCharged: Double = 0.0,
+    val interestCharged: Double? = null,
 
-    val interestPaid: Double = 0.0,
+    val interestPaid: Double? = null,
 
-    val feeChargesCharged: Double = 0.0,
+    val feeChargesCharged: Double? = null,
 
-    val penaltyChargesCharged: Double = 0.0,
+    val penaltyChargesCharged: Double? = null,
 
-    val penaltyChargesWaived: Double = 0.0,
+    val penaltyChargesWaived: Double? = null,
 
-    val totalExpectedRepayment: Double = 0.0,
+    val totalExpectedRepayment: Double? = null,
 
-    val interestWaived: Double = 0.0,
+    val interestWaived: Double? = null,
 
-    val totalRepayment: Double = 0.0,
+    val totalRepayment: Double? = null,
 
-    val feeChargesWaived: Double = 0.0,
+    val feeChargesWaived: Double? = null,
 
-    val totalOutstanding: Double = 0.0,
+    val totalOutstanding: Double? = null,
 
     val overdueSinceDate: List<Int>? = null,
 
