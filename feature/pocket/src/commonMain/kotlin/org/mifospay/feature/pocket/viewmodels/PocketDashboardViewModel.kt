@@ -10,11 +10,7 @@
 package org.mifospay.feature.pocket.viewmodels
 
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import mobile_wallet.feature.pocket.generated.resources.Res
@@ -32,7 +28,6 @@ import org.mifospay.core.model.pocket.AccountStatus
 import org.mifospay.core.model.pocket.DetailedPocketAccount
 import org.mifospay.core.ui.utils.BaseViewModel
 
-@OptIn(ExperimentalCoroutinesApi::class)
 internal class PocketDashboardViewModel(
     private val pocketRepository: PocketRepository,
     private val userPreferencesRepository: UserPreferencesRepository,
@@ -41,26 +36,31 @@ internal class PocketDashboardViewModel(
         clientId = requireNotNull(userPreferencesRepository.clientId.value),
     ),
 ) {
-    private val refreshTrigger = MutableSharedFlow<Boolean>(extraBufferCapacity = 1)
+    private var loadJob: Job? = null
 
     init {
-        viewModelScope.launch {
-            refreshTrigger.onStart { emit(false) }
-                .flatMapLatest { forceRefresh ->
-                    pocketRepository.getDetailedPocketAccounts(state.clientId, forceRefresh)
-                }
-                .collectLatest { dataState ->
-                    handleDataState(dataState)
-                }
-        }
+        loadPocketData()
     }
 
     private fun updateState(update: (PocketDashboardState) -> PocketDashboardState) {
         mutableStateFlow.update(update)
     }
 
+    private fun loadPocketData(forceRefresh: Boolean = false) {
+        loadJob?.cancel()
+
+        loadJob = viewModelScope.launch {
+            val clientId = state.clientId
+            pocketRepository.getDetailedPocketAccounts(clientId, forceRefresh)
+                .collect { dataState ->
+                    trySendAction(PocketDashboardAction.Internal.ReceiveAccounts(dataState))
+                }
+        }
+    }
+
     override fun handleAction(action: PocketDashboardAction) {
         when (action) {
+            is PocketDashboardAction.Internal.ReceiveAccounts -> handleReceivedAccounts(action.dataState)
             PocketDashboardAction.NavigateBack -> sendEvent(PocketDashboardEvent.NavigateBack)
             PocketDashboardAction.ManagePocket -> sendEvent(PocketDashboardEvent.ManagePocket)
             PocketDashboardAction.LinkFirstAccount -> sendEvent(PocketDashboardEvent.ManagePocket)
@@ -80,97 +80,99 @@ internal class PocketDashboardViewModel(
 
     private fun refresh() {
         updateState { it.copy(isRefreshing = true) }
-        refreshTrigger.tryEmit(true)
+        loadPocketData(forceRefresh = true)
     }
 
     private fun retry() {
         updateState { it.copy(uiState = PocketDashboardUiState.Loading) }
-        refreshTrigger.tryEmit(true)
+        loadPocketData(forceRefresh = true)
     }
 
-    private suspend fun handleDataState(dataState: DataState<List<DetailedPocketAccount>>) {
-        when (dataState) {
-            is DataState.Loading -> {
-                if (!state.isRefreshing) {
-                    updateState { it.copy(uiState = PocketDashboardUiState.Loading) }
+    private fun handleReceivedAccounts(dataState: DataState<List<DetailedPocketAccount>>) {
+        viewModelScope.launch {
+            when (dataState) {
+                is DataState.Loading -> {
+                    if (!state.isRefreshing) {
+                        updateState { it.copy(uiState = PocketDashboardUiState.Loading) }
+                    }
                 }
-            }
 
-            is DataState.Error -> {
-                updateState {
-                    it.copy(
-                        uiState = PocketDashboardUiState.Error(Res.string.feature_pocket_error_load_accounts),
-                        isRefreshing = false,
-                    )
+                is DataState.Error -> {
+                    updateState {
+                        it.copy(
+                            uiState = PocketDashboardUiState.Error(Res.string.feature_pocket_error_load_accounts),
+                            isRefreshing = false,
+                        )
+                    }
                 }
-            }
 
-            is DataState.Success -> {
-                val detailedAccounts = dataState.data
+                is DataState.Success -> {
+                    val detailedAccounts = dataState.data
 
-                suspend fun mapToUiModel(detailed: DetailedPocketAccount): DetailedPocket {
-                    val balanceStr = if (detailed.status == AccountStatus.ACTIVE) {
-                        if (detailed.balance != null) {
-                            CurrencyFormatter.format(
-                                detailed.balance,
-                                detailed.currencyCode,
-                                detailed.decimalPlaces,
-                            )
+                    suspend fun mapToUiModel(detailed: DetailedPocketAccount): DetailedPocket {
+                        val balanceStr = if (detailed.status == AccountStatus.ACTIVE) {
+                            if (detailed.balance != null) {
+                                CurrencyFormatter.format(
+                                    detailed.balance,
+                                    detailed.currencyCode,
+                                    detailed.decimalPlaces,
+                                )
+                            } else {
+                                ""
+                            }
                         } else {
-                            ""
+                            detailed.status?.name ?: getString(Res.string.feature_pocket_unknown_status)
+                        }
+
+                        return DetailedPocket(
+                            accountId = detailed.pocket.accountId,
+                            name = detailed.productName ?: getString(Res.string.feature_pocket_unknown_account),
+                            accountNumber = detailed.pocket.accountNumber,
+                            balanceOrStatus = balanceStr,
+                            status = detailed.status ?: AccountStatus.UNKNOWN,
+                        )
+                    }
+
+                    val loanList = mutableListOf<DetailedPocket>()
+                    val savingsList = mutableListOf<DetailedPocket>()
+                    val shareList = mutableListOf<DetailedPocket>()
+                    for (account in detailedAccounts) {
+                        when (account.pocket.accountType) {
+                            AccountType.LOAN -> loanList.add(mapToUiModel(account))
+                            AccountType.SAVINGS -> savingsList.add(mapToUiModel(account))
+                            AccountType.SHARE -> shareList.add(mapToUiModel(account))
+                        }
+                    }
+
+                    val totalSum = detailedAccounts
+                        .filter { it.status == AccountStatus.ACTIVE && it.balance != null }
+                        .sumOf { it.balance ?: 0.0 }
+
+                    val sampleAccount = detailedAccounts.firstOrNull { it.currencyCode != null }
+                    val formattedTotal = CurrencyFormatter.format(
+                        totalSum,
+                        sampleAccount?.currencyCode,
+                        sampleAccount?.decimalPlaces,
+                    )
+
+                    if (loanList.isEmpty() && shareList.isEmpty() && savingsList.isEmpty()) {
+                        updateState {
+                            it.copy(
+                                uiState = PocketDashboardUiState.Empty,
+                                isRefreshing = false,
+                            )
                         }
                     } else {
-                        detailed.status?.name ?: getString(Res.string.feature_pocket_unknown_status)
-                    }
-
-                    return DetailedPocket(
-                        accountId = detailed.pocket.accountId,
-                        name = detailed.productName ?: getString(Res.string.feature_pocket_unknown_account),
-                        accountNumber = detailed.pocket.accountNumber,
-                        balanceOrStatus = balanceStr,
-                        status = detailed.status ?: AccountStatus.UNKNOWN,
-                    )
-                }
-
-                val loanList = mutableListOf<DetailedPocket>()
-                val savingsList = mutableListOf<DetailedPocket>()
-                val shareList = mutableListOf<DetailedPocket>()
-                for (account in detailedAccounts) {
-                    when (account.pocket.accountType) {
-                        AccountType.LOAN -> loanList.add(mapToUiModel(account))
-                        AccountType.SAVINGS -> savingsList.add(mapToUiModel(account))
-                        AccountType.SHARE -> shareList.add(mapToUiModel(account))
-                    }
-                }
-
-                val totalSum = detailedAccounts
-                    .filter { it.status == AccountStatus.ACTIVE && it.balance != null }
-                    .sumOf { it.balance ?: 0.0 }
-
-                val sampleAccount = detailedAccounts.firstOrNull { it.currencyCode != null }
-                val formattedTotal = CurrencyFormatter.format(
-                    totalSum,
-                    sampleAccount?.currencyCode,
-                    sampleAccount?.decimalPlaces,
-                )
-
-                if (loanList.isEmpty() && shareList.isEmpty() && savingsList.isEmpty()) {
-                    updateState {
-                        it.copy(
-                            uiState = PocketDashboardUiState.Empty,
-                            isRefreshing = false,
-                        )
-                    }
-                } else {
-                    updateState {
-                        it.copy(
-                            uiState = PocketDashboardUiState.Success,
-                            totalBalance = formattedTotal,
-                            loanAccounts = loanList,
-                            savingsAccounts = savingsList,
-                            shareAccounts = shareList,
-                            isRefreshing = false,
-                        )
+                        updateState {
+                            it.copy(
+                                uiState = PocketDashboardUiState.Success,
+                                totalBalance = formattedTotal,
+                                loanAccounts = loanList,
+                                savingsAccounts = savingsList,
+                                shareAccounts = shareList,
+                                isRefreshing = false,
+                            )
+                        }
                     }
                 }
             }
@@ -219,4 +221,10 @@ internal sealed interface PocketDashboardAction {
     data object LinkFirstAccount : PocketDashboardAction
     data object Refresh : PocketDashboardAction
     data object Retry : PocketDashboardAction
+
+    sealed interface Internal : PocketDashboardAction {
+        data class ReceiveAccounts(
+            val dataState: DataState<List<DetailedPocketAccount>>,
+        ) : Internal
+    }
 }
