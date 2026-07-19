@@ -9,25 +9,20 @@
  */
 package org.mifos.lib.loan.core
 
-import org.mifos.lib.loan.core.model.Loan
-import org.mifos.lib.loan.core.model.LoanPayment
-import org.mifos.lib.loan.core.model.LoanProduct
-import org.mifos.lib.loan.core.model.LoanSchedule
+import kotlinx.coroutines.flow.Flow
+import org.mifos.lib.loan.core.model.LoanState
+import org.mifos.lib.loan.core.model.LoanTemplate
+import org.mifos.lib.loan.core.model.LoansPayload
 import org.mifospay.core.common.DataState
 
 interface LoanProvider {
+    fun getLoanTemplate(clientId: Long): Flow<DataState<LoanTemplate>>
 
-    suspend fun getProducts(): DataState<List<LoanProduct>>
+    fun getLoanTemplateByProduct(clientId: Long, productId: Long): Flow<DataState<LoanTemplate>>
 
-    suspend fun getLoanDetails(
+    suspend fun submitLoanApplication(
+        loanState: LoanState,
+        payload: LoansPayload,
         loanId: Long,
-    ): DataState<Loan>
-
-    suspend fun applyForLoan(
-        request: Loan,
-    ): DataState<Loan>
-
-    suspend fun makePayment(
-        payment: LoanPayment,
-    ): DataState<LoanSchedule>
+    ): DataState<String>
 }

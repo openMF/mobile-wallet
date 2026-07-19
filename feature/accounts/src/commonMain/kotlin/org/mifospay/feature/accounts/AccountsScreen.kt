@@ -50,6 +50,7 @@ import mobile_wallet.feature.accounts.generated.resources.Res
 import mobile_wallet.feature.accounts.generated.resources.baseline_check
 import mobile_wallet.feature.accounts.generated.resources.baseline_unchecked
 import mobile_wallet.feature.accounts.generated.resources.feature_accounts_add
+import mobile_wallet.feature.accounts.generated.resources.feature_accounts_apply_for_loan
 import mobile_wallet.feature.accounts.generated.resources.feature_accounts_check
 import mobile_wallet.feature.accounts.generated.resources.feature_accounts_default
 import mobile_wallet.feature.accounts.generated.resources.feature_accounts_edit
@@ -97,6 +98,7 @@ fun AccountsScreen(
     onViewSavingAccountDetails: (Long) -> Unit,
     onAddEditSavingsAccount: (SavingsAddEditType) -> Unit,
     onAddOrEditBeneficiary: (BeneficiaryAddEditType) -> Unit,
+    onApplyForLoanClick: (Long) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: AccountViewModel = koinViewModel(),
 ) {
@@ -118,6 +120,10 @@ fun AccountsScreen(
 
             is AccountEvent.OnAddOrEditTPTBeneficiary -> {
                 onAddOrEditBeneficiary(event.type)
+            }
+
+            is AccountEvent.OnApplyForLoan -> {
+                onApplyForLoanClick(event.clientId)
             }
 
             is AccountEvent.ShowToast -> {
@@ -225,6 +231,9 @@ internal fun AccountsScreenContent(
         onClickViewAccount = {
             onAction(AccountAction.ViewAccountDetails(it))
         },
+        onApplyForLoanClick = {
+            onAction(AccountAction.ApplyForLoan)
+        },
     )
 }
 
@@ -235,6 +244,7 @@ private fun AccountsList(
     onAccountClicked: (Long, String) -> Unit,
     onClickEditAccount: (Long) -> Unit,
     onClickViewAccount: (Long) -> Unit,
+    onApplyForLoanClick: () -> Unit,
     modifier: Modifier = Modifier,
     lazyListState: LazyListState = rememberLazyListState(),
 ) {
@@ -245,6 +255,10 @@ private fun AccountsList(
         contentPadding = PaddingValues(KptTheme.spacing.md),
         verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.md),
     ) {
+        item {
+            ApplyForLoanCard(onClick = onApplyForLoanClick)
+        }
+
         item {
             Text(
                 text = stringResource(Res.string.feature_accounts_savings_account),
@@ -399,6 +413,35 @@ private fun AccountItem(
                 ),
             )
         }
+    }
+}
+
+@Composable
+private fun ApplyForLoanCard(
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Card(
+        onClick = onClick,
+        modifier = modifier.fillMaxWidth(),
+        colors = CardDefaults.cardColors(
+            containerColor = KptTheme.colorScheme.secondaryContainer,
+        ),
+    ) {
+        ListItem(
+            headlineContent = {
+                Text(text = stringResource(Res.string.feature_accounts_apply_for_loan))
+            },
+            leadingContent = {
+                AvatarBox(
+                    icon = MifosIcons.CreditCard,
+                    backgroundColor = KptTheme.colorScheme.tertiaryContainer,
+                )
+            },
+            colors = ListItemDefaults.colors(
+                containerColor = Color.Transparent,
+            ),
+        )
     }
 }
 

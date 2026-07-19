@@ -59,6 +59,7 @@
     <string name="feature_accounts_default">Default</string>
     <string name="feature_accounts_edit_beneficiary">Edit Beneficiary</string>
     <string name="feature_accounts_delete_beneficiary">Delete Beneficiary</string>
+    <string name="feature_accounts_apply_for_loan">Apply for Loan</string>
 
     <!-- Status chips -->
     <string name="feature_accounts_status_pending_approval">Pending Approval</string>

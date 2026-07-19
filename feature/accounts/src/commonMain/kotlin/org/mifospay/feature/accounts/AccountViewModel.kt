@@ -137,6 +137,12 @@ class AccountViewModel(
 
             is AccountAction.SetDefaultAccount -> handleSetDefaultAccount(action)
 
+            is AccountAction.ApplyForLoan -> {
+                state.clientId?.let { clientId ->
+                    sendEvent(AccountEvent.OnApplyForLoan(clientId))
+                }
+            }
+
             is DeleteBeneficiary -> handleDeleteBeneficiary(action)
 
             is BeneficiaryDeleteResultReceived -> handleBeneficiaryDeleteResult(action)
@@ -238,6 +244,7 @@ sealed interface AccountEvent {
     data class OnAddEditSavingsAccount(val type: SavingsAddEditType) : AccountEvent
     data class OnNavigateToAccountDetail(val accountId: Long) : AccountEvent
     data class OnAddOrEditTPTBeneficiary(val type: BeneficiaryAddEditType) : AccountEvent
+    data class OnApplyForLoan(val clientId: Long) : AccountEvent
 
     data class ShowToast(val message: StringResource) : AccountEvent
 }
@@ -251,6 +258,7 @@ sealed interface AccountAction {
     data class EditSavingsAccount(val accountId: Long) : AccountAction
     data class ViewAccountDetails(val accountId: Long) : AccountAction
     data class SetDefaultAccount(val accountId: Long, val accountNo: String) : AccountAction
+    data object ApplyForLoan : AccountAction
 
     data object DismissDialog : AccountAction
 

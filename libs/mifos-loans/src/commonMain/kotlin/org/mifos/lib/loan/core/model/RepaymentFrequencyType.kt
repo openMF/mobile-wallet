@@ -12,11 +12,10 @@ package org.mifos.lib.loan.core.model
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class Loan(
-    val id: Long,
-    val productId: Long,
-    val principal: Double,
-    val interestRate: Double,
-    val status: String,
-    val schedule: LoanSchedule? = null,
+data class RepaymentFrequencyType(
+    val id: Int? = null,
+
+    val code: String? = null,
+
+    val value: String? = null,
 )

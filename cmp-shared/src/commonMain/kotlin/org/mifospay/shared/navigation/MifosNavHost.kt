@@ -23,6 +23,8 @@ import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.koinInject
 import org.mifos.feature.passcode.internalMifosPasscodeScreen
 import org.mifos.feature.passcode.navigateToInternalMifosPasscodeScreen
+import org.mifos.lib.loan.navigation.loanApplicationGraph
+import org.mifos.lib.loan.navigation.navigateToLoanApplicationGraph
 import org.mifospay.core.data.repository.UserVerificationRepository
 import org.mifospay.core.ui.utility.TabContent
 import org.mifospay.feature.accounts.AccountsScreen
@@ -269,6 +271,9 @@ internal fun MifosNavHost(
                 onAddEditSavingsAccount = navController::navigateToSavingAccountAddEdit,
                 onViewSavingAccountDetails = navController::navigateToSavingAccountDetails,
                 onAddOrEditBeneficiary = navController::navigateToBeneficiaryAddEdit,
+                onApplyForLoanClick = { clientId ->
+                    navController.navigateToLoanApplicationGraph(clientId)
+                },
             )
         },
 
@@ -855,6 +860,22 @@ internal fun MifosNavHost(
                     toAccountNo = beneficiary.accountNumber,
                     returnDestination = "home",
                 )
+            },
+        )
+
+        loanApplicationGraph(
+            navController = navController,
+            navigateBack = navController::navigateUp,
+            navigateForPasscodeVerification = { verificationKey ->
+                navController.navigateToInternalMifosPasscodeScreen(verificationKey)
+            },
+            onSubmitSuccess = {
+                navController.navigate(FINANCE_ROUTE) {
+                    popUpTo(FINANCE_ROUTE) {
+                        inclusive = false
+                    }
+                    launchSingleTop = true
+                }
             },
         )
 
