@@ -33,6 +33,8 @@ import org.mifospay.core.data.repository.KycLevelRepository
 import org.mifospay.core.data.repository.LocalAssetRepository
 import org.mifospay.core.data.repository.NotificationRepository
 import org.mifospay.core.data.repository.OfficeRepository
+import org.mifospay.core.data.repository.PocketRepository
+import org.mifospay.core.data.repository.PocketRepositoryImp
 import org.mifospay.core.data.repository.RecentPayeeRepository
 import org.mifospay.core.data.repository.RegistrationRepository
 import org.mifospay.core.data.repository.RunReportRepository
@@ -120,6 +122,7 @@ val RepositoryModule = module {
     single<UserRepository> { UserRepositoryImpl(get(), get(ioDispatcher)) }
     single<AutoPayRepository> { AutoPayRepositoryImpl(get(), get(ioDispatcher)) }
     single<OfficeRepository> { OfficeRepositoryImpl(get(), get(ioDispatcher)) }
+    single<PocketRepository> { PocketRepositoryImp(get(), get(), get(ioDispatcher)) }
 
     // Passcode/biometrics surface — the four bindings below are required by the
     // mifos-authenticator-passcode and mifos-authenticator-biometrics libraries
