@@ -83,6 +83,8 @@ import org.mifospay.feature.payments.PaymentsScreenContents
 import org.mifospay.feature.payments.RequestScreen
 import org.mifospay.feature.payments.paymentsScreen
 import org.mifospay.feature.payments.selectTransferType.SelectTransferTypeScreen
+import org.mifospay.feature.pocket.navigation.navigateToPocketDashboard
+import org.mifospay.feature.pocket.navigation.pocketDashboardScreen
 import org.mifospay.feature.profile.navigation.navigateToProfile
 import org.mifospay.feature.profile.navigation.profileNavGraph
 import org.mifospay.feature.receipt.navigation.receiptScreen
@@ -337,9 +339,18 @@ internal fun MifosNavHost(
             onAutoPay = {
                 navController.navigateToAutoPay()
             },
+            navigateToPocketDashboard = navController::navigateToPocketDashboard,
             navigateToTransactionDetail = navController::navigateToSpecificTransaction,
             navigateToAccountDetail = navController::navigateToSavingAccountDetails,
             navigateToHistory = navController::navigateToHistory,
+        )
+
+        pocketDashboardScreen(
+            navigateBack = navController::navigateUp,
+            navigateToManagePocket = { /* TODO: Implement manage pocket */ },
+            navigateToLoanAccountDetail = { /* TODO: Implement loan account detail */ },
+            navigateToShareAccountDetail = { /* TODO: Implement share account detail */ },
+            navigateToSavingsAccountDetail = navController::navigateToSavingAccountDetails,
         )
 
         settingsScreen(
