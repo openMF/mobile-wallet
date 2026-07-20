@@ -31,6 +31,7 @@
 :feature:notification
 :feature:passcode
 :feature:payments
+:feature:pocket
 :feature:profile
 :feature:receipt
 :feature:savedcards
@@ -344,6 +345,8 @@ io.github.jan-tennert.supabase:postgrest-kt-android:3.1.1
 io.github.jan-tennert.supabase:postgrest-kt:3.1.1
 io.github.jan-tennert.supabase:supabase-kt-android:3.1.1
 io.github.jan-tennert.supabase:supabase-kt:3.1.1
+io.github.niyajali:fluentui-system-icons-android:1.0.0
+io.github.niyajali:fluentui-system-icons:1.0.0
 io.github.openmf:mifos-authenticator-biometrics-android:2.3.0-beta
 io.github.openmf:mifos-authenticator-biometrics:2.3.0-beta
 io.github.openmf:mifos-authenticator-passcode-android:2.3.0-beta
