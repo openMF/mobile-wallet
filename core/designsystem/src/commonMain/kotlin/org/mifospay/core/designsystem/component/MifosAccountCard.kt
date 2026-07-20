@@ -48,7 +48,7 @@ fun MifosAccountCard(
         modifier = modifier
             .fillMaxWidth()
             .clickable { onAccountClick(accountId) }
-            .padding(vertical = 16.dp),
+            .padding(vertical = 12.dp),
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -74,7 +74,7 @@ fun MifosAccountCard(
             ) {
                 Text(
                     text = accountNumber ?: "",
-                    style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold),
+                    style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.SemiBold),
                     color = MaterialTheme.colorScheme.onBackground,
                 )
                 Text(

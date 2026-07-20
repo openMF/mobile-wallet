@@ -11,8 +11,10 @@ package org.mifospay.feature.pocket.di
 
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
+import org.mifospay.feature.pocket.viewmodels.ManagePocketViewModel
 import org.mifospay.feature.pocket.viewmodels.PocketDashboardViewModel
 
 val PocketModule = module {
     viewModelOf(::PocketDashboardViewModel)
+    viewModelOf(::ManagePocketViewModel)
 }

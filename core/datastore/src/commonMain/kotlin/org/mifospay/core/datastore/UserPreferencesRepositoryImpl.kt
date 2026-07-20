@@ -28,6 +28,7 @@ import org.mifospay.core.model.user.UserInfo
 
 class UserPreferencesRepositoryImpl(
     private val preferenceManager: UserPreferencesDataSource,
+    private val pocketPreferencesDataSource: PocketPreferencesDataSource,
     private val ioDispatcher: CoroutineDispatcher,
     unconfinedDispatcher: CoroutineDispatcher,
 ) : UserPreferencesRepository {
@@ -192,6 +193,7 @@ class UserPreferencesRepositoryImpl(
     }
 
     override suspend fun logOut() {
+        pocketPreferencesDataSource.clearAllPocketData()
         preferenceManager.clearInfo()
     }
 }

@@ -24,6 +24,7 @@ data class DetailedPocketAccount(
     val productName: String?,
     val balance: Double?,
     val currencyCode: String?,
+    val currencyDisplaySymbol: String?,
     val decimalPlaces: Int?,
     val status: AccountStatus?,
 )
@@ -35,6 +36,7 @@ data class LinkableAccount(
     val accountType: AccountType,
     val balance: Double?,
     val currencyCode: String?,
+    val currencyDisplaySymbol: String?,
     val decimalPlaces: Int?,
     val status: AccountStatus?,
 )
