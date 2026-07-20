@@ -33,10 +33,12 @@ val PreferencesModule = module {
     factory { AutoPayPreferencesDataSource(get(), get(named(MifosDispatchers.IO.name))) }
     factory { BillerDataSource(get(), get(named(MifosDispatchers.IO.name))) }
     factory { BillDataSource(get(), get(named(MifosDispatchers.IO.name))) }
+    factory { org.mifospay.core.datastore.PocketPreferencesDataSource(get(), get(named(MifosDispatchers.IO.name))) }
 
     single<UserPreferencesRepository> {
         UserPreferencesRepositoryImpl(
             preferenceManager = get(),
+            pocketPreferencesDataSource = get(),
             ioDispatcher = get(named(MifosDispatchers.IO.name)),
             unconfinedDispatcher = get(named(MifosDispatchers.Unconfined.name)),
         )

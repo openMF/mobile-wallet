@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
@@ -142,19 +143,19 @@ internal fun PocketDashboardContent(
                         modifier = Modifier
                             .fillMaxSize()
                             .verticalScroll(rememberScrollState())
-                            .padding(24.dp),
+                            .padding(KptTheme.spacing.lg),
                     ) {
                         PocketDashboardCard(
                             totalBalance = state.totalBalance,
                             onManageClick = { onAction(PocketDashboardAction.ManagePocket) },
                         )
 
-                        Spacer(modifier = Modifier.height(32.dp))
+                        Spacer(modifier = Modifier.height(KptTheme.spacing.xl))
 
                         if (state.savingsAccounts.isNotEmpty()) {
                             PocketSectionHeader(title = Res.string.feature_pocket_dashboard_savings_accounts)
-                            Spacer(modifier = Modifier.height(16.dp))
-                            Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                            Spacer(modifier = Modifier.height(KptTheme.spacing.md))
+                            Column(verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.md)) {
                                 state.savingsAccounts.forEach { account ->
                                     MifosAccountCard(
                                         accountId = account.accountId,
@@ -169,13 +170,13 @@ internal fun PocketDashboardContent(
                                     )
                                 }
                             }
-                            Spacer(modifier = Modifier.height(32.dp))
+                            Spacer(modifier = Modifier.height(KptTheme.spacing.xl))
                         }
 
                         if (state.loanAccounts.isNotEmpty()) {
                             PocketSectionHeader(title = Res.string.feature_pocket_dashboard_loan_accounts)
-                            Spacer(modifier = Modifier.height(16.dp))
-                            Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                            Spacer(modifier = Modifier.height(KptTheme.spacing.md))
+                            Column(verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.md)) {
                                 state.loanAccounts.forEach { account ->
                                     MifosAccountCard(
                                         accountId = account.accountId,
@@ -190,13 +191,13 @@ internal fun PocketDashboardContent(
                                     )
                                 }
                             }
-                            Spacer(modifier = Modifier.height(32.dp))
+                            Spacer(modifier = Modifier.height(KptTheme.spacing.xl))
                         }
 
                         if (state.shareAccounts.isNotEmpty()) {
                             PocketSectionHeader(title = Res.string.feature_pocket_dashboard_share_accounts)
-                            Spacer(modifier = Modifier.height(16.dp))
-                            Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                            Spacer(modifier = Modifier.height(KptTheme.spacing.md))
+                            Column(verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.md)) {
                                 state.shareAccounts.forEach { account ->
                                     MifosAccountCard(
                                         accountId = account.accountId,
@@ -211,7 +212,7 @@ internal fun PocketDashboardContent(
                                     )
                                 }
                             }
-                            Spacer(modifier = Modifier.height(32.dp))
+                            Spacer(modifier = Modifier.height(KptTheme.spacing.xl))
                         }
                     }
                 }
@@ -228,7 +229,7 @@ internal fun PocketSectionHeader(
     Text(
         text = stringResource(title),
         modifier = modifier.fillMaxWidth(),
-        style = KptTheme.typography.titleMedium,
+        style = KptTheme.typography.titleSmall,
         color = KptTheme.colorScheme.primary,
         fontWeight = FontWeight.Bold,
     )
@@ -243,20 +244,20 @@ internal fun PocketDashboardCard(
     Box(
         modifier = modifier
             .clip(KptTheme.shapes.large)
-            .height(112.dp)
+            .heightIn(min = 112.dp)
             .fillMaxWidth()
             .background(KptTheme.colorScheme.primary),
     ) {
         Row(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(24.dp),
+                .padding(KptTheme.spacing.lg),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             Column(
                 modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.spacedBy(8.dp),
+                verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.sm),
             ) {
                 Text(
                     text = stringResource(Res.string.feature_pocket_dashboard_total_balance),
@@ -266,7 +267,7 @@ internal fun PocketDashboardCard(
 
                 Text(
                     text = totalBalance,
-                    style = KptTheme.typography.headlineLarge,
+                    style = KptTheme.typography.headlineSmall,
                     fontWeight = FontWeight.Bold,
                     color = KptTheme.colorScheme.onPrimary,
                 )
@@ -324,7 +325,7 @@ internal fun EmptyPocketContent(
     Column(
         modifier = modifier
             .fillMaxSize()
-            .padding(24.dp),
+            .padding(KptTheme.spacing.lg),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
     ) {
@@ -343,7 +344,7 @@ internal fun EmptyPocketContent(
             }
         }
 
-        Spacer(modifier = Modifier.height(32.dp))
+        Spacer(modifier = Modifier.height(KptTheme.spacing.xl))
 
         Text(
             text = stringResource(Res.string.feature_pocket_empty_title),
@@ -353,7 +354,7 @@ internal fun EmptyPocketContent(
             textAlign = TextAlign.Center,
         )
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(KptTheme.spacing.md))
 
         Text(
             text = stringResource(Res.string.feature_pocket_empty_description),
@@ -362,7 +363,7 @@ internal fun EmptyPocketContent(
             textAlign = TextAlign.Center,
         )
 
-        Spacer(modifier = Modifier.height(32.dp))
+        Spacer(modifier = Modifier.height(KptTheme.spacing.xl))
 
         MifosButton(
             onClick = onLinkFirstAccount,
@@ -386,7 +387,7 @@ internal fun EmptyPocketContent(
 internal fun PocketDashboardContentPreview() {
     PocketDashboardContent(
         state = PocketDashboardState(
-            totalBalance = "$ 18,750.00",
+            totalBalance = "MX$ 10,000.00\n$ 8,750.00",
             savingsAccounts = listOf(
                 DetailedPocket(
                     accountId = 1L,
@@ -408,7 +409,7 @@ internal fun PocketDashboardContentPreview() {
                     accountId = 3L,
                     name = "Personal Loan",
                     accountNumber = "3009284756",
-                    balanceOrStatus = "$ 10,000.00",
+                    balanceOrStatus = "MX$ 10,000.00",
                     status = AccountStatus.ACTIVE,
                 ),
                 DetailedPocket(
