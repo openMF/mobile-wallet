@@ -84,6 +84,7 @@ firebaseBom = "34.7.0"
 gitliveFirebase = "2.1.0"
 firebaseCrashlyticsPlugin = "3.0.6"
 firebasePerfPlugin = "2.0.2"
+fluentui-icons = "1.0.0"
 
 # Kotlin KMP Dependencies
 kotlin = "2.2.21"
@@ -157,6 +158,7 @@ androidx-activity-ktx = { group = "androidx.activity", name = "activity-ktx", ve
 
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompatVersion" }
 androidx-browser = { group = "androidx.browser", name = "browser", version.ref = "androidxBrowser" }
+fluentui-system-icons = { module = "io.github.niyajali:fluentui-system-icons", version.ref = "fluentui-icons" }
 
 androidx-camera-camera2 = { module = "androidx.camera:camera-camera2", version.ref = "cameraViewVersion" }
 androidx-camera-lifecycle = { group = "androidx.camera", name = "camera-lifecycle", version.ref = "cameraLifecycleVersion" }

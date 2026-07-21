@@ -36,4 +36,7 @@ object ApiEndPoints {
 
     // TODO: Update endpoint path when backend APIs are finalized
     const val BILLERS = "billers"
+
+    const val POCKETS = "pockets"
+    const val SHARE_ACCOUNTS = "shareaccounts"
 }
