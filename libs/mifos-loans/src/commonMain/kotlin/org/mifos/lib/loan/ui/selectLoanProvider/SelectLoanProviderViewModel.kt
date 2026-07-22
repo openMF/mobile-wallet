@@ -43,9 +43,10 @@ internal class SelectLoanProviderViewModel(
 
             is SelectLoanProviderAction.ProviderClicked -> {
                 sendEvent(
-                    SelectLoanProviderEvent.NavigateToSelectLoanType(
+                    SelectLoanProviderEvent.NavigateToLoanProvider(
                         clientId = state.clientId,
                         providerId = action.providerId,
+                        url = action.url,
                     ),
                 )
             }
@@ -64,18 +65,23 @@ internal class SelectLoanProviderViewModel(
  *
  * @property id A stable identifier for the provider.
  * @property name The provider's display name.
+ * @property url
  */
-internal data class LoanProviderOption(val id: String, val name: String)
+data class LoanProviderOption(
+    val id: String,
+    val name: String,
+    val url: String,
+)
 
 /**
  * The static placeholder list of loan providers. See [LoanProviderOption] for why this is
  * hardcoded rather than fetched.
  */
 internal val defaultLoanProviders = listOf(
-    LoanProviderOption(id = "hdfc", name = "HDFC Bank"),
-    LoanProviderOption(id = "sbi", name = "SBI"),
-    LoanProviderOption(id = "icici", name = "ICICI Bank"),
-    LoanProviderOption(id = "axis", name = "Axis Bank"),
+    LoanProviderOption(id = "hdfc", name = "HDFC Bank", url = "https://applyonline.hdfc.bank.in/personal-loans"),
+    LoanProviderOption(id = "sbi", name = "SBI", url = "https://sbi.bank.in/web/personal-banking/loans/personal-loans"),
+    LoanProviderOption(id = "icici", name = "ICICI Bank", url = "https://www.icici.bank.in/personal-banking/loans"),
+    LoanProviderOption(id = "axis", name = "Axis Bank", url = "https://www.axis.bank.in/loans/personal-loan"),
 )
 
 /**
@@ -92,10 +98,15 @@ internal data class SelectLoanProviderState(
 /**
  * One-shot navigation events emitted by [SelectLoanProviderViewModel].
  */
-internal sealed interface SelectLoanProviderEvent {
+sealed interface SelectLoanProviderEvent {
+
     data object NavigateBack : SelectLoanProviderEvent
 
-    data class NavigateToSelectLoanType(val clientId: Long, val providerId: String) : SelectLoanProviderEvent
+    data class NavigateToLoanProvider(
+        val clientId: Long,
+        val providerId: String,
+        val url: String,
+    ) : SelectLoanProviderEvent
 }
 
 /**
@@ -104,5 +115,8 @@ internal sealed interface SelectLoanProviderEvent {
 internal sealed interface SelectLoanProviderAction {
     data object NavigateBack : SelectLoanProviderAction
 
-    data class ProviderClicked(val providerId: String) : SelectLoanProviderAction
+    data class ProviderClicked(
+        val providerId: String,
+        val url: String,
+    ) : SelectLoanProviderAction
 }

@@ -36,6 +36,14 @@ kotlin {
             implementation(projects.coreBase.common)
             implementation(projects.coreBase.network)
         }
+
+        androidMain.dependencies {
+            implementation(libs.compose.webview.multiplatform)
+        }
+
+        nativeMain.dependencies {
+            implementation(libs.compose.webview.multiplatform)
+        }
     }
 }
 

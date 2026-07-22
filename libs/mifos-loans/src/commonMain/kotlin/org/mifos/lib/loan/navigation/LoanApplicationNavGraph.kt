@@ -18,9 +18,11 @@ import org.mifos.lib.loan.ui.loanApply.loanApplyScreen
 import org.mifos.lib.loan.ui.loanApply.navigateToLoanApply
 import org.mifos.lib.loan.ui.loanProductDetails.loanProductDetailsScreen
 import org.mifos.lib.loan.ui.loanProductDetails.navigateToLoanProductDetails
+import org.mifos.lib.loan.ui.providerWebView.loanProviderWebViewScreen
+import org.mifos.lib.loan.ui.providerWebView.navigateToLoanProviderWebView
+import org.mifos.lib.loan.ui.providerWebView.urlForLoanProvider
 import org.mifos.lib.loan.ui.selectLoanProvider.navigateToSelectLoanProvider
 import org.mifos.lib.loan.ui.selectLoanProvider.selectLoanProviderScreen
-import org.mifos.lib.loan.ui.selectLoanType.navigateToSelectLoanType
 import org.mifos.lib.loan.ui.selectLoanType.selectLoanTypeScreen
 import org.mifos.lib.loan.ui.uploadDocs.navigateToUploadDocs
 import org.mifos.lib.loan.ui.uploadDocs.uploadDocsScreen
@@ -40,11 +42,11 @@ fun NavController.navigateToLoanApplicationGraph(clientId: Long, navOptions: Nav
 }
 
 /**
- * Registers all six destinations of the loan-application wizard — Select Loan Provider, Select
- * Loan Type, Loan Product Details, Loan Apply, Upload Docs, and Confirm Details — and wires their
- * forward/back navigation together internally, mirroring how this app registers destinations
- * flatly inside a single shared `NavHost` (no nested `navigation<T>{ ... }` sub-graph is used
- * anywhere in this codebase).
+ * Registers the loan-application wizard's destinations — Select Loan Provider, Loan Provider
+ * Website, Select Loan Type, Loan Product Details, Loan Apply, Upload Docs, and Confirm Details —
+ * and wires their forward/back navigation together internally, mirroring how this app registers
+ * destinations flatly inside a single shared `NavHost` (no nested `navigation<T>{ ... }`
+ * sub-graph is used anywhere in this codebase).
  *
  * Only the wizard's boundary callbacks are exposed to the caller:
  *  - [navigateBack] exits the wizard entirely from its first screen (Select Loan Provider).
@@ -53,9 +55,12 @@ fun NavController.navigateToLoanApplicationGraph(clientId: Long, navOptions: Nav
  *    contract. [navigateForPasscodeVerification] is expected to eventually be bound to
  *    `navController.navigateToInternalMifosPasscodeScreen(verificationKey)` by the caller.
  *
- * Every other transition between the six screens (Select Loan Provider -> Select Loan Type ->
- * Loan Product Details -> Loan Apply -> Upload Docs -> Confirm Details, and each screen's own
- * "back") is wired here using [navController], via each screen's own `navigateToX` extension.
+ * Picking a provider on Select Loan Provider currently opens Loan Provider Website (rendering
+ * that provider's, for now identical, test URL — see
+ * [org.mifos.lib.loan.ui.providerWebView.urlForLoanProvider]) instead of continuing into Select
+ * Loan Type onwards; the rest of the wizard (Select Loan Type -> Loan Product Details -> Loan
+ * Apply -> Upload Docs -> Confirm Details, and each screen's own "back") stays registered and
+ * wired exactly as before, via each screen's own `navigateToX` extension, using [navController].
  *
  * @param navController The app's shared nav controller, used to drive the internal forward/back
  * transitions between this wizard's own screens.
@@ -74,9 +79,17 @@ fun NavGraphBuilder.loanApplicationGraph(
 ) {
     selectLoanProviderScreen(
         navigateBack = navigateBack,
-        navigateToSelectLoanType = { clientId, providerId ->
-            navController.navigateToSelectLoanType(clientId, providerId)
+        navigateToLoanProviderWebView = { clientId, providerId, providerUrl ->
+            navController.navigateToLoanProviderWebView(
+                clientId = clientId,
+                providerId = providerId,
+                url = providerUrl,
+            )
         },
+    )
+
+    loanProviderWebViewScreen(
+        navigateBack = navController::popBackStack,
     )
 
     selectLoanTypeScreen(

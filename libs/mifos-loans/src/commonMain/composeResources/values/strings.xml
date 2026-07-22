@@ -101,6 +101,7 @@
     <!-- New Flow   -->
     <string name="feature_select_loan_provider_top_bar_title">Select Loan Provider</string>
     <string name="feature_select_loan_provider_choose_provider">Choose a Loan Provider</string>
+    <string name="feature_loan_provider_web_view_top_bar_title">Loan Provider</string>
     <string name="feature_select_loan_type_top_bar_title">Apply New Loan</string>
     <string name="feature_select_loan_type_choose_loan">Choose Type of Loan</string>
     <string name="feature_select_loan_type_empty">Currently Loan Products are not available</string>

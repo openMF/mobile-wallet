@@ -21,6 +21,7 @@ import org.mifos.lib.loan.repository.LoansRepositoryImpl
 import org.mifos.lib.loan.ui.confirmDetails.ConfirmDetailsViewModel
 import org.mifos.lib.loan.ui.loanApply.LoanApplyViewModel
 import org.mifos.lib.loan.ui.loanProductDetails.LoanProductDetailsViewModel
+import org.mifos.lib.loan.ui.providerWebView.LoanProviderWebViewViewModel
 import org.mifos.lib.loan.ui.selectLoanProvider.SelectLoanProviderViewModel
 import org.mifos.lib.loan.ui.selectLoanType.SelectLoanTypeViewModel
 import org.mifos.lib.loan.ui.uploadDocs.UploadDocsViewModel
@@ -59,6 +60,7 @@ val LoanApplicationModule = module {
     single<LoansRepository> { LoansRepositoryImpl(get()) }
 
     viewModelOf(::SelectLoanProviderViewModel)
+    viewModelOf(::LoanProviderWebViewViewModel)
     viewModelOf(::SelectLoanTypeViewModel)
     viewModelOf(::LoanProductDetailsViewModel)
     viewModelOf(::LoanApplyViewModel)

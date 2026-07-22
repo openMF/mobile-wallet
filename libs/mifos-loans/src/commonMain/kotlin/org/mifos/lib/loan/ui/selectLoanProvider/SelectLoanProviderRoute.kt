@@ -40,12 +40,16 @@ fun NavController.navigateToSelectLoanProvider(clientId: Long, navOptions: NavOp
  */
 fun NavGraphBuilder.selectLoanProviderScreen(
     navigateBack: () -> Unit,
-    navigateToSelectLoanType: (clientId: Long, providerId: String) -> Unit,
+    navigateToLoanProviderWebView: (
+        clientId: Long,
+        providerId: String,
+        url: String,
+    ) -> Unit,
 ) {
     composableWithSlideTransitions<SelectLoanProviderRoute> {
         SelectLoanProviderScreen(
             navigateBack = navigateBack,
-            navigateToSelectLoanType = navigateToSelectLoanType,
+            navigateToLoanProviderWebView = navigateToLoanProviderWebView,
         )
     }
 }

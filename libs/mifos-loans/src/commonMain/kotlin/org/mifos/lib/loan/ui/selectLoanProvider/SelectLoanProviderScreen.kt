@@ -40,13 +40,17 @@ import template.core.base.designsystem.theme.KptTheme
  * the existing wizard starting at Select Loan Type.
  *
  * @param navigateBack Callback to return to the previous screen.
- * @param navigateToSelectLoanType Callback to proceed into the existing loan-type selection step.
+ * @param navigateToLoanProviderWebView Callback to proceed into the existing loan-type selection step.
  * @param viewModel The state holder responsible for the (static) provider list.
  */
 @Composable
 internal fun SelectLoanProviderScreen(
     navigateBack: () -> Unit,
-    navigateToSelectLoanType: (clientId: Long, providerId: String) -> Unit,
+    navigateToLoanProviderWebView: (
+        clientId: Long,
+        providerId: String,
+        url: String,
+    ) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: SelectLoanProviderViewModel = koinViewModel(),
 ) {
@@ -56,8 +60,12 @@ internal fun SelectLoanProviderScreen(
         when (event) {
             SelectLoanProviderEvent.NavigateBack -> navigateBack()
 
-            is SelectLoanProviderEvent.NavigateToSelectLoanType -> {
-                navigateToSelectLoanType(event.clientId, event.providerId)
+            is SelectLoanProviderEvent.NavigateToLoanProvider -> {
+                navigateToLoanProviderWebView(
+                    event.clientId,
+                    event.providerId,
+                    event.url,
+                )
             }
         }
     }
@@ -102,7 +110,12 @@ private fun SelectLoanProviderContent(
                     LoanProviderCard(
                         provider = provider,
                         onClick = {
-                            onAction(SelectLoanProviderAction.ProviderClicked(provider.id))
+                            onAction(
+                                SelectLoanProviderAction.ProviderClicked(
+                                    providerId = provider.id,
+                                    url = provider.url,
+                                ),
+                            )
                         },
                     )
                 }

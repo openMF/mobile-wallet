@@ -114,6 +114,7 @@ okioVersion = "3.16.4"
 kermit = "2.0.8"
 fileKit = "0.12.0"
 composeSignature = "1.0.1"
+webviewMultiplatform = "2.0.3"
 wire = "5.4.0"
 uiBackhandler = "1.9.3"
 
@@ -360,6 +361,7 @@ filekit-compose = { module = "io.github.vinceglb:filekit-dialogs-compose", versi
 filekit-dialogs = { module = "io.github.vinceglb:filekit-dialogs", version.ref = "fileKit" }
 filekit-dialogs-compose = { module = "io.github.vinceglb:filekit-dialogs-compose", version.ref = "fileKit" }
 filekit-coil = { module = "io.github.vinceglb:filekit-coil", version.ref = "fileKit" }
+compose-webview-multiplatform = { module = "io.github.kevinnzou:compose-webview-multiplatform", version.ref = "webviewMultiplatform" }
 compose-signature = { module = "io.github.niyajali:compose-signature", version.ref = "composeSignature" }
 qrose = { group = "io.github.alexzhirkevich", name="qrose", version.ref = "qroseVersion" }
 lottie-compose = { group = "com.airbnb.android", name = "lottie-compose", version.ref = "lottie" }
