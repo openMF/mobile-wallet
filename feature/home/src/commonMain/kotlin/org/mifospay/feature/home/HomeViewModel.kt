@@ -315,6 +315,10 @@ class HomeViewModel(
                     )
                 }
             }
+
+            is HomeAction.PocketDashboardClicked -> {
+                sendEvent(HomeEvent.NavigateToPocketDashboard)
+            }
         }
     }
 
@@ -383,6 +387,7 @@ sealed interface HomeEvent {
     data object NavigateBack : HomeEvent
     data object NavigateToSendScreen : HomeEvent
     data object NavigateToAutoPayScreen : HomeEvent
+    data object NavigateToPocketDashboard : HomeEvent
     data object NavigateToTransactionScreen : HomeEvent
     data object NavigateToClientDetailScreen : HomeEvent
     data class NavigateToRequestScreen(val vpa: String) : HomeEvent
@@ -396,6 +401,7 @@ sealed interface HomeAction {
     data object RequestClicked : HomeAction
     data object SendClicked : HomeAction
     data object AutoPayClicked : HomeAction
+    data object PocketDashboardClicked : HomeAction
     data object ClientDetailsClicked : HomeAction
     data object OnClickSeeAllTransactions : HomeAction
     data object OnDismissDialog : HomeAction

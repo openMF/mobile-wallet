@@ -61,6 +61,7 @@ kotlin {
             implementation(projects.feature.autopay)
             implementation(projects.feature.sendMoney)
             implementation(projects.libs.mifosLoans)
+            implementation(projects.feature.pocket)
         }
 
         desktopMain.dependencies {

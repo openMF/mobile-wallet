@@ -7,7 +7,7 @@
  *
  * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
  */
-package org.mifospay.core.data.repository
+package org.mifospay.core.data.repositoryImpl
 
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
@@ -19,6 +19,7 @@ import org.mifospay.core.common.DataState
 import org.mifospay.core.common.asDataStateFlow
 import org.mifospay.core.data.mapper.pocket.toAccountStatus
 import org.mifospay.core.data.mapper.pocket.toDomainList
+import org.mifospay.core.data.repository.PocketRepository
 import org.mifospay.core.data.util.NetworkMonitor
 import org.mifospay.core.data.util.runAsDataState
 import org.mifospay.core.data.util.withNetworkCheck

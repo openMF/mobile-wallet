@@ -1,5 +1,4 @@
 :cmp-shared
-:core-base:common
 :core-base:datastore
 :core-base:designsystem
 :core-base:network
@@ -32,6 +31,7 @@
 :feature:notification
 :feature:passcode
 :feature:payments
+:feature:pocket
 :feature:profile
 :feature:receipt
 :feature:savedcards
@@ -41,7 +41,6 @@
 :feature:transfer-interbank
 :feature:transfer-intrabank
 :feature:upi-setup
-:libs:mifos-loans
 androidx.activity:activity-compose:1.12.2
 androidx.activity:activity-ktx:1.12.2
 androidx.activity:activity:1.12.2
@@ -346,8 +345,8 @@ io.github.jan-tennert.supabase:postgrest-kt-android:3.1.1
 io.github.jan-tennert.supabase:postgrest-kt:3.1.1
 io.github.jan-tennert.supabase:supabase-kt-android:3.1.1
 io.github.jan-tennert.supabase:supabase-kt:3.1.1
-io.github.niyajali:compose-signature-android:1.0.1
-io.github.niyajali:compose-signature:1.0.1
+io.github.niyajali:fluentui-system-icons-android:1.0.0
+io.github.niyajali:fluentui-system-icons:1.0.0
 io.github.openmf:mifos-authenticator-biometrics-android:2.3.0-beta
 io.github.openmf:mifos-authenticator-biometrics:2.3.0-beta
 io.github.openmf:mifos-authenticator-passcode-android:2.3.0-beta

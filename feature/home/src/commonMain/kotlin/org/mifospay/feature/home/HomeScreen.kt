@@ -90,6 +90,8 @@ import mobile_wallet.feature.home.generated.resources.feature_home_coin_image
 import mobile_wallet.feature.home.generated.resources.feature_home_desc
 import mobile_wallet.feature.home.generated.resources.feature_home_mark_default
 import mobile_wallet.feature.home.generated.resources.feature_home_no_account
+import mobile_wallet.feature.home.generated.resources.feature_home_pocket_desc
+import mobile_wallet.feature.home.generated.resources.feature_home_pocket_title
 import mobile_wallet.feature.home.generated.resources.feature_home_request
 import mobile_wallet.feature.home.generated.resources.feature_home_request_money
 import mobile_wallet.feature.home.generated.resources.feature_home_send
@@ -143,6 +145,7 @@ internal fun HomeScreen(
     onRequest: (String) -> Unit,
     onPay: () -> Unit,
     onAutoPay: () -> Unit,
+    navigateToPocketDashboard: () -> Unit,
     navigateToTransactionDetail: (Long, Long) -> Unit,
     navigateToAccountDetail: (Long) -> Unit,
     navigateToHistory: () -> Unit,
@@ -165,6 +168,7 @@ internal fun HomeScreen(
             is HomeEvent.NavigateToRequestScreen -> onRequest(event.vpa)
             is HomeEvent.NavigateToSendScreen -> onPay()
             is HomeEvent.NavigateToAutoPayScreen -> onAutoPay.invoke()
+            is HomeEvent.NavigateToPocketDashboard -> navigateToPocketDashboard.invoke()
             is HomeEvent.NavigateToClientDetailScreen -> {}
             is HomeEvent.NavigateToTransactionDetail -> {
                 navigateToTransactionDetail(event.accountId, event.transactionId)
@@ -330,6 +334,9 @@ private fun HomeScreenContent(
                     },
                     onAutoPay = {
                         onAction(HomeAction.AutoPayClicked)
+                    },
+                    onPocketClick = {
+                        onAction(HomeAction.PocketDashboardClicked)
                     },
                 )
             }
@@ -594,6 +601,7 @@ private fun PayRequestScreen(
     onRequest: () -> Unit,
     onSend: () -> Unit,
     onAutoPay: () -> Unit,
+    onPocketClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -651,11 +659,63 @@ private fun PayRequestScreen(
             leadingIcon = {
                 Icon(
                     modifier = Modifier.size(26.dp),
-                    imageVector = MifosIcons.Payment,
+                    imageVector = MifosIcons.Schedule,
                     contentDescription = stringResource(Res.string.feature_home_autopay),
                 )
             },
         )
+
+        PocketNavigationCard(onClick = onPocketClick)
+    }
+}
+
+@Composable
+private fun PocketNavigationCard(
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit,
+) {
+    Card(
+        modifier = modifier
+            .fillMaxWidth()
+            .height(80.dp)
+            .clickable { onClick() },
+        shape = KptTheme.shapes.medium,
+        colors = CardDefaults.cardColors(
+            containerColor = KptTheme.colorScheme.surface,
+        ),
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Start,
+        ) {
+            Icon(
+                imageVector = MifosIcons.Pocket,
+                contentDescription = null,
+                tint = KptTheme.colorScheme.primary,
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .padding(end = 16.dp)
+                    .size(40.dp),
+            )
+            Column(
+                verticalArrangement = Arrangement.Center,
+            ) {
+                Text(
+                    text = stringResource(Res.string.feature_home_pocket_title),
+                    style = KptTheme.typography.bodyLarge,
+                    fontWeight = FontWeight(500),
+                    color = KptTheme.colorScheme.primary,
+                )
+                Text(
+                    text = stringResource(Res.string.feature_home_pocket_desc),
+                    style = KptTheme.typography.bodySmall,
+                    fontWeight = FontWeight(300),
+                )
+            }
+        }
     }
 }
 
