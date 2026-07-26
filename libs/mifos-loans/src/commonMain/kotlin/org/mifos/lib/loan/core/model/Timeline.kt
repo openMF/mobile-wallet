@@ -12,9 +12,6 @@ package org.mifos.lib.loan.core.model
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class LoanSchedule(
-    val loanId: Long,
-    val totalDue: Double,
-    val totalPaid: Double,
-    val nextDueDate: String?,
+data class Timeline(
+    val expectedDisbursementDate: List<Int>,
 )

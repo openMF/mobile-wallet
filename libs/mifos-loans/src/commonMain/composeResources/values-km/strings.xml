@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copyright 2026 Mifos Initiative
+
+    This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+    If a copy of the MPL was not distributed with this file,
+    You can obtain one at https://mozilla.org/MPL/2.0/.
+
+    See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+-->
+<resources>
+
+    <!-- Titles -->
+    <string name="feature_apply_loan_title">ដាក់ពាក្យស្នើសុំប្រាក់កម្ចីថ្មី</string>
+
+    <!-- Sections -->
+    <string name="feature_apply_loan_section_fill_details">ពាក្យស្នើសុំប្រាក់កម្ចី</string>
+
+    <!-- Labels -->
+    <string name="feature_apply_loan_label_applicant_name">ឈ្មោះអ្នកស្នើសុំ</string>
+    <string name="feature_apply_loan_label_loan_product">ផលិតផលប្រាក់កម្ចី</string>
+    <string name="feature_apply_loan_label_purpose">គោលបំណងនៃប្រាក់កម្ចី</string>
+    <string name="feature_apply_loan_label_disbursement_date">កាលបរិច្ឆេទបញ្ចេញប្រាក់</string>
+    <string name="feature_apply_loan_label_principal_amount">ចំនួនប្រាក់ដើម</string>
+    <string name="feature_apply_loan_label_currency">រូបិយប័ណ្ណ</string>
+
+    <!-- Buttons -->
+    <string name="feature_apply_loan_button_continue">បន្ត</string>
+    <string name="feature_apply_loan_button_ok">យល់ព្រម</string>
+    <string name="feature_apply_loan_button_cancel">បោះបង់</string>
+    <string name="feature_apply_loan_button_apply">អនុវត្តប្រាក់កម្ចី</string>
+    <string name="feature_button_next">បន្ទាប់</string>
+
+    <!-- Applicant Name Validation -->
+    <string name="feature_apply_loan_error_name_empty">ឈ្មោះអ្នកស្នើសុំត្រូវបានទាមទារ</string>
+    <string name="feature_apply_loan_error_name_too_short">ឈ្មោះអ្នកស្នើសុំត្រូវមានយ៉ាងហោចណាស់ ៤ តួអក្សរ</string>
+    <string name="feature_apply_loan_error_name_too_long">ឈ្មោះអ្នកស្នើសុំមិនអាចលើសពី ១០០ តួអក្សរ</string>
+    <string name="feature_apply_loan_error_name_invalid_format">ឈ្មោះអ្នកស្នើសុំមានតួអក្សរមិនត្រឹមត្រូវ</string>
+
+    <!-- Loan Product Validation -->
+    <string name="feature_apply_loan_error_product_empty">ផលិតផលប្រាក់កម្ចីត្រូវបានទាមទារ</string>
+
+    <!-- Principal Amount Validation -->
+    <string name="feature_apply_loan_error_amount_empty">ចំនួនប្រាក់ដើមត្រូវបានទាមទារ</string>
+    <string name="feature_apply_loan_error_amount_invalid_format">សូមបញ្ចូលទម្រង់ចំនួនទឹកប្រាក់ត្រឹមត្រូវ</string>
+    <string name="feature_apply_loan_error_amount_too_small">ចំនួនប្រាក់ដើមតូចពេក</string>
+    <string name="feature_apply_loan_error_amount_too_large">ចំនួនប្រាក់ដើមលើសពីដែនកំណត់អតិបរមា</string>
+    <string name="feature_apply_loan_error_amount_invalid_decimal">ចំនួនទឹកប្រាក់មានខ្ទង់ទសភាគច្រើនពេកសម្រាប់រូបិយប័ណ្ណដែលបានជ្រើសរើស</string>
+    <string name="feature_apply_loan_error_amount_multiple">ចំនួនទឹកប្រាក់មិនស្ថិតនៅក្នុងពហុគុណត្រឹមត្រូវទេ</string>
+
+    <!-- Disbursement Date Validation -->
+    <string name="feature_apply_loan_error_date_empty">កាលបរិច្ឆេទបញ្ចេញប្រាក់ត្រូវបានទាមទារ</string>
+    <string name="feature_apply_loan_error_date_invalid_format">សូមបញ្ចូលទម្រង់កាលបរិច្ឆេទត្រឹមត្រូវ (DD/MM/YYYY)</string>
+    <string name="feature_apply_loan_error_date_future">កាលបរិច្ឆេទបញ្ចេញប្រាក់ត្រូវតែនៅថ្ងៃអនាគត</string>
+    <string name="feature_apply_loan_error_date_out_of_range">កាលបរិច្ឆេទបញ្ចេញប្រាក់ឆ្ងាយពេកនៅថ្ងៃអនាគត (អតិបរមា ១០ ឆ្នាំ)</string>
+
+    <!-- Error Dialogs -->
+    <string name="feature_apply_loan_error_server">បញ្ហាម៉ាស៊ីនមេពីខាងយើងមិនអាចបន្តទៀតបានទេ សូមព្យាយាមម្តងទៀតបន្ទាប់ពីមួយសន្ទុះ</string>
+    <string name="feature_apply_loan_error_too_many_attempts">ការប៉ុនប៉ងបរាជ័យច្រើនពេក។ សូមព្យាយាមម្តងទៀតនៅពេលក្រោយ។</string>
+    <string name="feature_apply_loan_error_submit_failed">ការដាក់ពាក្យស្នើសុំប្រាក់កម្ចីបានបរាជ័យ។ សូម​ព្យាយាម​ម្តង​ទៀត។</string>
+
+    <!-- Success Messages -->
+    <string name="feature_apply_loan_success_submit">ពាក្យស្នើសុំប្រាក់កម្ចីត្រូវបានដាក់ជូនដោយជោគជ័យ!</string>
+    <string name="feature_apply_loan_success_draft_saved">សេចក្តីព្រាងកម្មវិធីបានរក្សាទុកដោយជោគជ័យ</string>
+
+    <!-- Dialog Titles & Messages -->
+    <string name="feature_apply_loan_unsaved_changes_title">ការផ្លាស់ប្តូរមិនបានរក្សាទុក!</string>
+    <string name="feature_apply_loan_unsaved_changes_message">អ្នកមានការផ្លាស់ប្តូរដែលមិនបានរក្សាទុក។ តើអ្នកប្រាកដថាចង់ត្រឡប់ក្រោយទេ?</string>
+
+    <!-- Dialog Actions -->
+    <string name="feature_apply_loan_action_discard">បោះចោល</string>
+    <string name="feature_apply_loan_action_save_draft">រក្សាទុកសេចក្តីព្រាង</string>
+    <string name="feature_apply_loan_action_retry">ព្យាយាមម្តងទៀត</string>
+    <string name="feature_apply_loan_action_cancel">បោះបង់</string>
+    <string name="feature_apply_loan_action_continue">បន្ត</string>
+
+    <!-- Hints -->
+    <string name="feature_apply_loan_hint_applicant_name">បញ្ចូលឈ្មោះពេញរបស់អ្នក</string>
+    <string name="feature_apply_loan_hint_loan_product">ជ្រើសរើសផលិតផលប្រាក់កម្ចី</string>
+    <string name="feature_apply_loan_hint_principal_amount">បញ្ចូលចំនួនប្រាក់កម្ចី</string>
+    <string name="feature_apply_loan_hint_disbursement_date">ជ្រើសរើសកាលបរិច្ឆេទបញ្ចេញប្រាក់</string>
+    <string name="feature_apply_loan_hint_purpose">ពណ៌នាដោយសង្ខេបអំពីគោលបំណង</string>
+
+    <!-- Info -->
+    <string name="feature_apply_loan_info_currency_revalidation">រូបិយប័ណ្ណត្រូវបានផ្លាស់ប្តូរ។ ចំនួនទឹកប្រាក់នឹងត្រូវបានធ្វើឱ្យមានសុពលភាពឡើងវិញ។</string>
+    <string name="feature_apply_loan_info_min_amount">ចំនួនប្រាក់កម្ចីអប្បបរមា៖ %1$s</string>
+    <string name="feature_apply_loan_info_max_amount">ចំនួនប្រាក់កម្ចីអតិបរមា៖ %1$s</string>
+    <string name="feature_apply_loan_info_confirm_details">បញ្ជាក់ព័ត៌មានលម្អិត</string>
+
+    <string name="feature_apply_loan_status_success">សំណើត្រូវបានដាក់ជូនដោយជោគជ័យ</string>
+    <string name="feature_apply_loan_status_success_tip">ពាក្យស្នើសុំប្រាក់កម្ចីរបស់អ្នកត្រូវបានដាក់ជូន។ អ្នកនឹងត្រូវបានជូនដំណឹងនៅពេលវាត្រូវបានពិនិត្យ។</string>
+    <string name="feature_apply_loan_status_success_action">ត្រឡប់ទៅផ្ទះវិញ</string>
+
+    <string name="feature_apply_loan_status_failure">បរាជ័យក្នុងការដាក់សំណើ</string>
+    <string name="feature_apply_loan_status_failure_tip">មានបញ្ហាក្នុងការដាក់ពាក្យស្នើសុំប្រាក់កម្ចីរបស់អ្នក។ សូម​ព្យាយាម​ម្តង​ទៀត។</string>
+    <string name="feature_apply_loan_status_failure_action">ព្យាយាមម្តងទៀត</string>
+
+
+    <!-- New Flow   -->
+    <string name="feature_select_loan_type_top_bar_title">ដាក់ពាក្យស្នើសុំប្រាក់កម្ចីថ្មី</string>
+    <string name="feature_select_loan_type_choose_loan">ជ្រើសរើសប្រភេទប្រាក់កម្ចី</string>
+    <string name="feature_select_loan_type_empty">បច្ចុប្បន្នផលិតផលប្រាក់កម្ចីមិនមានទេ</string>
+    <string name="feature_select_loan_type_network_issue">សូមប្រាកដថាអ្នកបានភ្ជាប់អ៊ីនធឺណិត</string>
+    <string name="feature_loan_product_details_terms">ទទួលយកលក្ខខណ្ឌ</string>
+
+
+    <string name="feature_loan_apply_loan">ដាក់ពាក្យស្នើសុំប្រាក់កម្ចី %1$s</string>
+    <string name="feature_loan_get_loan">ទទួលបានប្រាក់កម្ចី %1$s</string>
+    <string name="feature_loan_up_to">រហូតដល់ %1$s</string>
+    <string name="feature_loan_interest_rate_in_numbers">%1$s ទៅ %2$s ការប្រាក់</string>
+    <string name="feature_loan_terms_and_conditions">លក្ខខណ្ឌ</string>
+
+    <string name="feature_loan_sanction_and_disbursement">ការអនុម័ត និងការបញ្ចេញប្រាក់កម្ចី</string>
+    <string name="feature_loan_interest_rate">អត្រាការប្រាក់</string>
+    <string name="feature_loan_continue">បន្ត</string>
+    <string name="feature_loan_repayment">ការសងត្រលប់</string>
+    <string name="feature_loan_security_and_collateral">សន្តិសុខ និងទ្រព្យបញ្ចាំ</string>
+    <string name="feature_loan_insurance">ការធានារ៉ាប់រង</string>
+    <string name="feature_loan_default">ការខកខាន</string>
+    <string name="feature_loan_documentation">ឯកសារ</string>
+    <string name="feature_loan_continue_legal_compliance">ការអនុលោមតាមច្បាប់</string>
+    <string name="feature_loan_amendments_and_termination">វិសោធនកម្ម និងការបញ្ចប់</string>
+    <string name="feature_loan_jurisdiction">ដែនសមត្ថកិច្ច</string>
+
+
+    <string name="feature_personal_loan_sanction_and_disbursement_details">ប្រាក់កម្ចីផ្ទាល់ខ្លួននឹងត្រូវបានអនុម័តដោយផ្អែកលើសិទ្ធិរបស់អ្នកដាក់ពាក្យ ស្ថិរភាពប្រាក់ចំណូល ភាពសក្តិសមនៃឥណទាន និងគោលនយោបាយឥណទានផ្ទៃក្នុងរបស់អ្នកផ្តល់ប្រាក់កម្ចី។ អ្នកផ្តល់ប្រាក់កម្ចីរក្សាសិទ្ធិក្នុងការអនុម័ត ឬបដិសេធរាល់ពាក្យស្នើសុំប្រាក់កម្ចីផ្ទាល់ខ្លួនតាមឆន្ទានុសិទ្ធិរបស់ខ្លួន ដោយមិនផ្តល់ហេតុផលណាមួយឡើយ។ ចំនួនប្រាក់កម្ចីដែលត្រូវបានអនុម័តអាចត្រូវបានបញ្ចេញពេញលេញ ឬមួយផ្នែក អាស្រ័យលើកិច្ចព្រមព្រៀងប្រាក់កម្ចី និងតម្រូវការឯកសារ។ ការបញ្ចេញប្រាក់គឺស្ថិតនៅក្រោមការបញ្ចប់នីតិវិធី KYC ដោយជោគជ័យ ការផ្ទៀងផ្ទាត់ឯកសារដែលបានដាក់ជូន និងការប្រកាន់ខ្ជាប់នូវលក្ខខណ្ឌទាំងអស់ដែលបានបញ្ជាក់នៅក្នុងលិខិតអនុម័ត។</string>
+    <string name="feature_personal_loan_interest_rate_description">ប្រាក់កម្ចីផ្ទាល់ខ្លួនអាចមានអត្រាការប្រាក់ថេរ ឬអថេរ ដូចដែលបានជ្រើសរើសដោយអ្នកខ្ចីនៅពេលនៃកិច្ចព្រមព្រៀងប្រាក់កម្ចី។ នៅក្នុងករណីនៃប្រាក់កម្ចីអត្រាការប្រាក់អថេរ អត្រាដែលត្រូវអនុវត្តគឺស្ថិតនៅក្រោមការកែសម្រួលតាមកាលកំណត់ដោយផ្អែកលើការផ្លាស់ប្តូរនៅក្នុងស្តង់ដារ ឬអត្រាយោងរបស់អ្នកផ្តល់ប្រាក់កម្ចី។ ការផ្លាស់ប្តូរបែបនេះនឹងមានកាតព្វកិច្ចលើអ្នកខ្ចី ហើយអាចនាំឱ្យមានការប្រែប្រួលនៃចំនួន EMI និង/ឬរយៈពេលនៃប្រាក់កម្ចី ដូចដែលបានចាត់ទុកថាចាំបាច់ដោយអ្នកផ្តល់ប្រាក់កម្ចី។</string>
+    <string name="feature_personal_loan_repayment_details">ការសងត្រលប់នៃប្រាក់កម្ចីផ្ទាល់ខ្លួននឹងធ្វើឡើងតាមរយៈការបង់រំលស់ប្រចាំខែស្មើៗគ្នា (EMIs) ដែលរួមមានទាំងប្រាក់ដើម និងការប្រាក់។ EMIs នឹងចាប់ផ្តើមពីកាលបរិច្ឆេទដែលបានបញ្ជាក់នៅក្នុងកិច្ចព្រមព្រៀងប្រាក់កម្ចី ហើយនឹងបន្តជារៀងរាល់ខែរហូតដល់ចំនួនប្រាក់កម្ចីពេញលេញ រួមជាមួយនឹងការប្រាក់ដែលត្រូវអនុវត្ត ត្រូវបានសងវិញ។ ការទូទាត់ជាមុន ឬការទូទាត់ដោយផ្នែកអាចត្រូវបានអនុញ្ញាតដោយអនុលោមតាមគោលនយោបាយដែលមានស្រាប់របស់អ្នកផ្តល់ប្រាក់កម្ចី ហើយអាចទាក់ទាញការគិតថ្លៃជាក់លាក់ ជាពិសេសសម្រាប់ប្រាក់កម្ចីអត្រាថេរ។</string>
+    <string name="feature_personal_loan_security_and_collateral_details">ប្រាក់កម្ចីផ្ទាល់ខ្លួនជាធម្មតាគ្មានការធានានៅក្នុងធម្មជាតិ និងមិនទាមទារទ្រព្យបញ្ចាំទេ។ ទោះជាយ៉ាងណាក៏ដោយ អ្នកផ្តល់ប្រាក់កម្ចីរក្សាសិទ្ធិក្នុងការស្នើសុំការធានា ឬសន្តិសុខបន្ថែមក្នុងករណីពិសេស អាស្រ័យលើប្រវត្តិឥណទានរបស់អ្នកខ្ចី និងចំនួនប្រាក់កម្ចី។ តម្រូវការបែបនេះនឹងត្រូវបានបញ្ជាក់យ៉ាងច្បាស់នៅក្នុងលិខិតអនុម័ត។ អ្នកខ្ចីនឹងទទួលរាល់ចំណាយដែលទាក់ទងនឹងឯកសារ ឬបែបបទផ្លូវច្បាប់ ប្រសិនបើសមស្រប។</string>
+    <string name="feature_personal_loan_insurance_details">ខណៈពេលដែលប្រាក់កម្ចីផ្ទាល់ខ្លួនជាទូទៅមិនទាមទារការធានារ៉ាប់រងលើទ្រព្យសកម្ម អ្នកផ្តល់ប្រាក់កម្ចីអាចណែនាំអោយអ្នកខ្ចីជ្រើសរើសយកគោលនយោបាយធានារ៉ាប់រងអាយុជីវិតដើម្បីការពារចំនួនប្រាក់កម្ចីដែលនៅសល់ក្នុងករណីមានមរណភាពរបស់អ្នកខ្ចី។ នេះមិនមែនជាការចាំបាច់ទេ ប៉ុន្តែត្រូវបានណែនាំជាវិធានការការពារហិរញ្ញវត្ថុសម្រាប់គ្រួសារអ្នកខ្ចី ឬអ្នកនៅក្នុងបន្ទុក។</string>
+    <string name="feature_personal_loan_default_details">ការមិនទូទាត់ ឬការទូទាត់យឺតយ៉ាវនៃ EMIs នឹងបង្កើតជាការខកខាន។ ក្នុងករណីបែបនេះ អ្នកផ្តល់ប្រាក់កម្ចីអាចចាប់ផ្តើមនីតិវិធីស្តារឡើងវិញដើម្បីប្រមូលបំណុលដែលនៅសល់ ដែលអាចរួមបញ្ចូលទាំងចំណាត់ការផ្លូវច្បាប់។ ការប្រាក់ពិន័យ និងការគិតថ្លៃផ្សេងទៀតអាចត្រូវបានអនុវត្តលើចំនួនទឹកប្រាក់ដែលហួសកាលកំណត់។ ការខកខានជាបន្តបន្ទាប់ ឬម្តងហើយម្តងទៀតអាចជះឥទ្ធិពលអវិជ្ជមានដល់ពិន្ទុឥណទានរបស់អ្នកខ្ចី និងសមត្ថភាពខ្ចីនាពេលអនាគត។</string>
+    <string name="feature_personal_loan_documentation_details">អ្នកខ្ចីតម្រូវឱ្យដាក់ឯកសារត្រឹមត្រូវ និងពេញលេញ រួមទាំងប៉ុន្តែមិនកំណត់ចំពោះភស្តុតាងអត្តសញ្ញាណ ភស្តុតាងអាសយដ្ឋាន ព័ត៌មានលម្អិតអំពីប្រាក់ចំណូល របាយការណ៍ធនាគារ និងឯកសារផ្សេងទៀតដែលស្នើសុំដោយអ្នកផ្តល់ប្រាក់កម្ចី។ រាល់ភាពមិនស្របគ្នា ការបង្ហាញខុស ឬការក្លែងបន្លំនៅក្នុងឯកសារដែលបានដាក់ជូនអាចបណ្តាលឱ្យមានការបដិសេធពាក្យស្នើសុំប្រាក់កម្ចី ឬការបញ្ចប់កិច្ចព្រមព្រៀងប្រាក់កម្ចី ព្រមទាំងផលវិបាកផ្លូវច្បាប់ដែលអាចកើតមាន។</string>
+    <string name="feature_personal_loan_continue_legal_compliance_details">អ្នកខ្ចីត្រូវធានានូវការអនុលោមតាមច្បាប់ពេញលេញជាមួយនឹងច្បាប់ក្នុងតំបន់ រដ្ឋ និងថ្នាក់ជាតិជាធរមានទាំងអស់ទាក់ទងនឹងកាតព្វកិច្ចហិរញ្ញវត្ថុរបស់ពួកគេ។ នេះរួមបញ្ចូលទាំងការទូទាត់ពន្ធទាន់ពេលវេលា ការប្រកាន់ខ្ជាប់នូវតម្រូវការបទប្បញ្ញត្តិ និងការដាក់ឯកសារត្រឹមត្រូវ។ អ្នកផ្តល់ប្រាក់កម្ចីនឹងមិនទទួលខុសត្រូវចំពោះការរំលោភច្បាប់ណាមួយដែលប្រព្រឹត្តដោយអ្នកខ្ចីឡើយ។</string>
+    <string name="feature_personal_loan_amendments_and_termination_details">អ្នកផ្តល់ប្រាក់កម្ចីអាចកែសម្រួល ឬធ្វើបច្ចុប្បន្នភាពលក្ខខណ្ឌទាំងនេះ ដោយផ្តល់ជូនការជូនដំណឹងជាមុនសមរម្យដល់អ្នកខ្ចី។ កិច្ចព្រមព្រៀងប្រាក់កម្ចីនឹងត្រូវបានចាត់ទុកថាបានបញ្ចប់នៅពេលសងប្រាក់កម្ចីពេញលេញ ឬតាមរយៈនីតិវិធីរឹបអូសដែលបានចាប់ផ្តើមដោយសារតែការខកខាន។</string>
+    <string name="feature_personal_loan_jurisdiction_details">រាល់វិវាទដែលកើតចេញពី ឬទាក់ទងនឹងកិច្ចព្រមព្រៀងប្រាក់កម្ចីផ្ទាល់ខ្លួននឹងស្ថិតនៅក្រោមដែនសមត្ថកិច្ចផ្តាច់មុខរបស់តុលាការនៅទីតាំងការិយាល័យចុះបញ្ជីរបស់អ្នកផ្តល់ប្រាក់កម្ចី លើកលែងតែមានការបញ្ជាក់ផ្សេងពីនេះនៅក្នុងកិច្ចព្រមព្រៀង។</string>
+
+
+    <!-- Upload docs   -->
+
+    <string name="feature_upload_docs_bank_account">បង្ហោះរបាយការណ៍គណនីធនាគារ</string>
+    <string name="feature_upload_docs_collateral">បង្ហោះឯកសារទ្រព្យបញ្ចាំ</string>
+    <string name="feature_upload_docs_signature">បង្ហោះហត្ថលេខា</string>
+
+    <string name="feature_upload_file_error">មានអ្វីខុស! មិនអាចបង្ហោះឯកសារបានទេ</string>
+    <string name="feature_upload_statement_error">សូមបង្ហោះរបាយការណ៍ធនាគារ</string>
+    <string name="feature_upload_property_document_error">សូមបង្ហោះឯកសារទ្រព្យសម្បត្តិ</string>
+    <string name="feature_upload_signature_error">សូមបង្ហោះហត្ថលេខា</string>
+    <string name="feature_upload_documents_success_title">ឯកសារត្រូវបានបង្ហោះដោយជោគជ័យ!</string>
+
+    <string name="sign_here">ចុះហត្ថលេខានៅទីនេះ</string>
+    <string name="reset">កំណត់ឡើងវិញ</string>
+    <string name="sign">ហត្ថលេខា</string>
+    <string name="capture">ចាប់យក</string>
+    <string name="attach">ភ្ជាប់</string>
+    <string name="upload_signature">បង្ហោះហត្ថលេខា</string>
+    <string name="save_and_submit">រក្សាទុក &amp; ដាក់ជូន</string>
+</resources>

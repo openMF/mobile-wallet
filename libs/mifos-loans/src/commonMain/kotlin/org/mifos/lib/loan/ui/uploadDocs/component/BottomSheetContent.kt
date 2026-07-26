@@ -1,0 +1,301 @@
+/*
+ * Copyright 2026 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
+package org.mifos.lib.loan.ui.uploadDocs.component
+
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
+import androidx.compose.animation.togetherWith
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.toSize
+import com.niyajali.compose.sign.ComposeSign
+import com.niyajali.compose.sign.exportSignature
+import com.niyajali.compose.sign.rememberSignatureState
+import io.github.vinceglb.filekit.dialogs.compose.util.encodeToByteArray
+import kotlinx.coroutines.launch
+import mobile_wallet.libs.mifos_loans.generated.resources.Res
+import mobile_wallet.libs.mifos_loans.generated.resources.attach
+import mobile_wallet.libs.mifos_loans.generated.resources.capture
+import mobile_wallet.libs.mifos_loans.generated.resources.reset
+import mobile_wallet.libs.mifos_loans.generated.resources.save_and_submit
+import mobile_wallet.libs.mifos_loans.generated.resources.sign
+import mobile_wallet.libs.mifos_loans.generated.resources.sign_here
+import org.jetbrains.compose.resources.StringResource
+import org.jetbrains.compose.resources.stringResource
+import org.mifos.lib.loan.component.SignatureUploadType
+import org.mifos.lib.loan.ui.uploadDocs.UploadDocsAction
+import org.mifospay.core.designsystem.component.MifosButton
+import org.mifospay.core.designsystem.component.MifosCard
+import org.mifospay.core.designsystem.component.MifosScaffold
+import org.mifospay.core.designsystem.component.MifosTopBar
+import org.mifospay.core.designsystem.icon.MifosIcons
+import template.core.base.common.toBase64DataUri
+import template.core.base.designsystem.theme.KptTheme
+
+/**
+ * Orchestrates the bottom sheet UI, transitioning between the document upload method selection
+ * and the digital signature drawing canvas based on the current mode.
+ *
+ * @param onAction Callback to handle upload selection or signature submission events.
+ * @param isSignatureMode Determines whether to display the drawing canvas (true) or selection grid (false).
+ */
+@Composable
+internal fun BottomSheetContent(
+    onAction: (UploadDocsAction) -> Unit,
+    modifier: Modifier = Modifier,
+    isSignatureMode: Boolean = false,
+) {
+    AnimatedContent(
+        targetState = isSignatureMode,
+        transitionSpec = {
+            slideInVertically(
+                initialOffsetY = { it },
+                animationSpec = tween(durationMillis = 400, easing = FastOutSlowInEasing),
+            ) + fadeIn(
+                animationSpec = tween(durationMillis = 300, delayMillis = 100),
+            ) togetherWith slideOutVertically(
+                targetOffsetY = { -it },
+                animationSpec = tween(durationMillis = 300, easing = FastOutSlowInEasing),
+            ) + fadeOut(
+                animationSpec = tween(durationMillis = 200),
+            )
+        },
+        modifier = modifier,
+    ) { isSignature ->
+        if (isSignature) {
+            SignatureContent(
+                onAction = onAction,
+            )
+        } else {
+            Column(
+                modifier = Modifier.padding(horizontal = KptTheme.spacing.md),
+            ) {
+                Row {
+                    BottomSheetIconContainer(
+                        text = Res.string.sign,
+                        icon = MifosIcons.Edit,
+                        onClick = {
+                            onAction(UploadDocsAction.UploadSignature(SignatureUploadType.SIGN))
+                        },
+                    )
+
+                    BottomSheetIconContainer(
+                        text = Res.string.capture,
+                        icon = MifosIcons.Camera,
+                        onClick = {
+                            onAction(UploadDocsAction.UploadSignature(SignatureUploadType.CAPTURE))
+                        },
+                    )
+
+                    BottomSheetIconContainer(
+                        text = Res.string.attach,
+                        icon = MifosIcons.PhotoLibrary,
+                        onClick = {
+                            onAction(UploadDocsAction.UploadSignature(SignatureUploadType.GALLERY))
+                        },
+                    )
+                }
+            }
+        }
+    }
+}
+
+/**
+ * Renders a single action item (Icon + Label) within the upload method selection grid.
+ *
+ * @param text The label resource to display below the icon.
+ * @param icon The icon vector to display.
+ * @param onClick Action to perform when this item is selected.
+ */
+@Composable
+internal fun BottomSheetIconContainer(
+    text: StringResource,
+    icon: ImageVector,
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit,
+) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = modifier.padding(horizontal = KptTheme.spacing.md),
+    ) {
+        Box(
+            modifier = Modifier.size(56.dp)
+                .border(
+                    1.dp,
+                    KptTheme.colorScheme.secondaryContainer,
+                    KptTheme.shapes.medium,
+                )
+                .clickable { onClick() },
+            contentAlignment = Alignment.Center,
+        ) {
+            Image(
+                modifier = Modifier.size(24.dp),
+                imageVector = icon,
+                contentDescription = null,
+            )
+        }
+
+        Spacer(modifier = Modifier.height(KptTheme.spacing.sm))
+
+        Text(
+            text = stringResource(text),
+            style = KptTheme.typography.bodySmall,
+            color = KptTheme.colorScheme.onBackground,
+        )
+    }
+}
+
+/**
+ * Provides an interactive canvas for capturing the user's digital signature.
+ * Handles the logic for clearing the canvas and exporting the drawing to a Base64 string.
+ *
+ * @param onAction Callback to send the generated signature data or dismiss the screen.
+ */
+@Composable
+private fun SignatureContent(
+    modifier: Modifier = Modifier,
+    onAction: (UploadDocsAction) -> Unit,
+) {
+    MifosScaffold(
+        modifier = modifier,
+        topBar = {
+            MifosTopBar(
+                topBarTitle = stringResource(Res.string.sign_here),
+                backPress = {
+                    onAction(UploadDocsAction.DismissDialog)
+                },
+            )
+        },
+    ) { paddingValues ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues)
+                .padding(KptTheme.spacing.md),
+            verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.md),
+        ) {
+            val signatureState = rememberSignatureState()
+            var size = remember { Size.Zero }
+
+            AnimatedVisibility(
+                visible = true,
+                enter = scaleIn(
+                    animationSpec = tween(durationMillis = 500, delayMillis = 200),
+                    initialScale = 0.8f,
+                ) + fadeIn(
+                    animationSpec = tween(durationMillis = 400, delayMillis = 200),
+                ),
+                modifier = Modifier.weight(1f),
+            ) {
+                MifosCard(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .border(
+                            1.dp,
+                            KptTheme.colorScheme.secondaryContainer,
+                            KptTheme.shapes.medium,
+                        ),
+                    shape = KptTheme.shapes.medium,
+                ) {
+                    ComposeSign(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .onGloballyPositioned {
+                                size = it.size.toSize()
+                            },
+                        state = signatureState,
+                        backgroundColor = Color.Transparent,
+                        showGrid = true,
+                        onSignatureUpdate = {},
+                    )
+                }
+            }
+
+            AnimatedVisibility(
+                visible = true,
+                enter = slideInVertically(
+                    initialOffsetY = { it },
+                    animationSpec = tween(durationMillis = 400, delayMillis = 300),
+                ) + fadeIn(
+                    animationSpec = tween(durationMillis = 300, delayMillis = 300),
+                ),
+            ) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(KptTheme.spacing.md),
+                ) {
+                    MifosButton(
+                        modifier = Modifier.weight(0.4f),
+                        shape = KptTheme.shapes.medium,
+                        onClick = signatureState::clear,
+                    ) {
+                        Text(
+                            text = stringResource(Res.string.reset),
+                            style = KptTheme.typography.titleMedium,
+                        )
+                    }
+
+                    val scope = rememberCoroutineScope()
+                    MifosButton(
+                        modifier = Modifier.weight(0.4f),
+                        shape = KptTheme.shapes.medium,
+                        onClick = {
+                            scope.launch {
+                                val data = signatureState.exportSignature(
+                                    width = size.width.toInt(),
+                                    height = size.height.toInt(),
+                                    backgroundColor = Color.White,
+                                )
+                                if (data != null) {
+                                    val encoded = data.encodeToByteArray().toBase64DataUri()
+                                    onAction(UploadDocsAction.UploadSign(encoded))
+                                }
+                            }
+                        },
+                    ) {
+                        Text(
+                            text = stringResource(Res.string.save_and_submit),
+                            style = KptTheme.typography.titleMedium,
+                        )
+                    }
+                }
+            }
+        }
+    }
+}
