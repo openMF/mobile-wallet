@@ -23,7 +23,9 @@ actual object CurrencyFormatter {
         val numberFormatter = NSNumberFormatter()
         numberFormatter.numberStyle = NSNumberFormatterCurrencyStyle
         numberFormatter.currencyCode = currencyCode ?: "$"
-        numberFormatter.maximumFractionDigits = (maximumFractionDigits ?: 0).toULong()
+        val fractionDigits = (maximumFractionDigits ?: 0).toULong()
+        numberFormatter.maximumFractionDigits = fractionDigits
+        numberFormatter.minimumFractionDigits = fractionDigits
         return numberFormatter.stringFromNumber(NSNumber(balance ?: 0.0)) ?: ""
     }
 
@@ -33,8 +35,9 @@ actual object CurrencyFormatter {
     ): String {
         val numberFormatter = NSNumberFormatter()
         numberFormatter.numberStyle = NSNumberFormatterDecimalStyle
-        numberFormatter.maximumFractionDigits =
-            (maximumFractionDigits ?: 0).toULong()
+        val fractionDigits = (maximumFractionDigits ?: 0).toULong()
+        numberFormatter.maximumFractionDigits = fractionDigits
+        numberFormatter.minimumFractionDigits = fractionDigits
         return numberFormatter
             .stringFromNumber(NSNumber(balance ?: 0.0))
             ?: ""

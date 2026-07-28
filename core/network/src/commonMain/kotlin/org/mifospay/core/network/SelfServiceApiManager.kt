@@ -11,10 +11,10 @@ package org.mifospay.core.network
 
 class SelfServiceApiManager(
     private val ktorfitClient: KtorfitClient,
-) {
+) : PocketDataManager {
     val authenticationApi by lazy { ktorfitClient.authenticationApi }
 
-    val clientsApi by lazy { ktorfitClient.clientsApi }
+    override val clientsApi by lazy { ktorfitClient.clientsApi }
 
     val savingAccountsListApi by lazy { ktorfitClient.savingsAccountsApi }
 
@@ -30,7 +30,7 @@ class SelfServiceApiManager(
 
     val userApi by lazy { ktorfitClient.userApi }
 
-    val pocketApi by lazy { ktorfitClient.pocketApi }
+    override val pocketApi by lazy { ktorfitClient.pocketApi }
 
-    val shareAccountApi by lazy { ktorfitClient.shareAccountApi }
+    override val shareAccountApi by lazy { ktorfitClient.shareAccountApi }
 }
