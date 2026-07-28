@@ -26,6 +26,8 @@ object ApiEndPoints {
     const val TWOFACTOR = "twofactor"
     const val RUN_REPORT = "runreports"
     const val USER = "users"
+
+    const val USER_SELF = "user"
     const val STANDING_INSTRUCTION = "standinginstructions"
     const val OFFICES = "offices"
 
@@ -34,4 +36,7 @@ object ApiEndPoints {
 
     // TODO: Update endpoint path when backend APIs are finalized
     const val BILLERS = "billers"
+
+    const val POCKETS = "pockets"
+    const val SHARE_ACCOUNTS = "shareaccounts"
 }

@@ -16,6 +16,7 @@ import org.koin.dsl.koinApplication
 import org.koin.dsl.module
 import org.mifos.authenticator.passcode.PasscodeManager
 import org.mifos.feature.passcode.MifosAuthenticatorModule
+import org.mifos.lib.loan.di.LoanApplicationModule
 import org.mifospay.core.common.di.DispatchersModule
 import org.mifospay.core.common.di.stringProviderModule
 import org.mifospay.core.data.di.RepositoryModule
@@ -39,6 +40,7 @@ import org.mifospay.feature.mpay.qr.di.MpayQrModule
 import org.mifospay.feature.mpay.qr.scan.di.MpayQrScanModule
 import org.mifospay.feature.notification.di.NotificationModule
 import org.mifospay.feature.payments.di.PaymentsModule
+import org.mifospay.feature.pocket.di.PocketModule
 import org.mifospay.feature.profile.di.ProfileModule
 import org.mifospay.feature.receipt.di.ReceiptModule
 import org.mifospay.feature.savedcards.di.SavedCardsModule
@@ -118,6 +120,8 @@ object KoinModules {
             MifosAuthenticatorModule,
             AutoPayModule,
             SendMoneyModule,
+            LoanApplicationModule,
+            PocketModule,
         )
     }
 

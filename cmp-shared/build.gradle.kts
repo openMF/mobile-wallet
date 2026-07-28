@@ -34,7 +34,6 @@ kotlin {
             implementation(libs.window.size)
 
             implementation(projects.feature.auth)
-            implementation(projects.libs.mifosPasscode)
             implementation(projects.feature.home)
             implementation(projects.feature.settings)
             implementation(projects.feature.faq)
@@ -61,6 +60,8 @@ kotlin {
             implementation(projects.feature.passcode)
             implementation(projects.feature.autopay)
             implementation(projects.feature.sendMoney)
+            implementation(projects.libs.mifosLoans)
+            implementation(projects.feature.pocket)
         }
 
         desktopMain.dependencies {

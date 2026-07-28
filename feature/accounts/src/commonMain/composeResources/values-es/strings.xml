@@ -58,6 +58,7 @@
     <string name="feature_accounts_default">Predeterminada</string>
     <string name="feature_accounts_edit_beneficiary">Editar beneficiario</string>
     <string name="feature_accounts_delete_beneficiary">Eliminar beneficiario</string>
+    <string name="feature_accounts_apply_for_loan">Solicitar préstamo</string>
 
     <string name="feature_accounts_status_pending_approval">Pendiente de aprobación</string>
     <string name="feature_accounts_status_approved">Aprobada</string>

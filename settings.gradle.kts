@@ -89,5 +89,6 @@ include(":feature:mpay-qr")
 include(":feature:mpay-qr-scan")
 include(":feature:fast-mpay")
 include(":feature:passcode")
-
-include(":libs:mifos-passcode")
+include(":libs")
+include(":libs:mifos-loans")
+include(":feature:pocket")

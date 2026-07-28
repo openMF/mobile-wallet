@@ -23,6 +23,8 @@ import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.koinInject
 import org.mifos.feature.passcode.internalMifosPasscodeScreen
 import org.mifos.feature.passcode.navigateToInternalMifosPasscodeScreen
+import org.mifos.lib.loan.navigation.loanApplicationGraph
+import org.mifos.lib.loan.navigation.navigateToLoanApplicationGraph
 import org.mifospay.core.data.repository.UserVerificationRepository
 import org.mifospay.core.ui.utility.TabContent
 import org.mifospay.feature.accounts.AccountsScreen
@@ -83,6 +85,8 @@ import org.mifospay.feature.payments.PaymentsScreenContents
 import org.mifospay.feature.payments.RequestScreen
 import org.mifospay.feature.payments.paymentsScreen
 import org.mifospay.feature.payments.selectTransferType.SelectTransferTypeScreen
+import org.mifospay.feature.pocket.navigation.navigateToPocketDashboard
+import org.mifospay.feature.pocket.navigation.pocketDashboardScreen
 import org.mifospay.feature.profile.navigation.navigateToProfile
 import org.mifospay.feature.profile.navigation.profileNavGraph
 import org.mifospay.feature.receipt.navigation.receiptScreen
@@ -174,6 +178,7 @@ const val AUTHENTICATION_VERIFICATION_KEY = "org.mifospay.mifos.authentication_v
 internal fun MifosNavHost(
     appState: MifosAppState,
     onClickLogout: () -> Unit,
+    handleAppLocale: (locale: String?) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val navController = appState.navController
@@ -268,6 +273,9 @@ internal fun MifosNavHost(
                 onAddEditSavingsAccount = navController::navigateToSavingAccountAddEdit,
                 onViewSavingAccountDetails = navController::navigateToSavingAccountDetails,
                 onAddOrEditBeneficiary = navController::navigateToBeneficiaryAddEdit,
+                onApplyForLoanClick = { clientId ->
+                    navController.navigateToLoanApplicationGraph(clientId)
+                },
             )
         },
 
@@ -336,14 +344,24 @@ internal fun MifosNavHost(
             onAutoPay = {
                 navController.navigateToAutoPay()
             },
+            navigateToPocketDashboard = navController::navigateToPocketDashboard,
             navigateToTransactionDetail = navController::navigateToSpecificTransaction,
             navigateToAccountDetail = navController::navigateToSavingAccountDetails,
             navigateToHistory = navController::navigateToHistory,
         )
 
+        pocketDashboardScreen(
+            navigateBack = navController::navigateUp,
+            navigateToManagePocket = { /* TODO: Implement manage pocket */ },
+            navigateToLoanAccountDetail = { /* TODO: Implement loan account detail */ },
+            navigateToShareAccountDetail = { /* TODO: Implement share account detail */ },
+            navigateToSavingsAccountDetail = navController::navigateToSavingAccountDetails,
+        )
+
         settingsScreen(
             onBackPress = navController::navigateUp,
             onLogout = onClickLogout,
+            handleAppLocale = { handleAppLocale(it) },
             navigateToPasscodeScreen = { verificationKey ->
                 navController.navigateToInternalMifosPasscodeScreen(
                     verificationKey = verificationKey,
@@ -853,6 +871,22 @@ internal fun MifosNavHost(
                     toAccountNo = beneficiary.accountNumber,
                     returnDestination = "home",
                 )
+            },
+        )
+
+        loanApplicationGraph(
+            navController = navController,
+            navigateBack = navController::navigateUp,
+            navigateForPasscodeVerification = { verificationKey ->
+                navController.navigateToInternalMifosPasscodeScreen(verificationKey)
+            },
+            onSubmitSuccess = {
+                navController.navigate(FINANCE_ROUTE) {
+                    popUpTo(FINANCE_ROUTE) {
+                        inclusive = false
+                    }
+                    launchSingleTop = true
+                }
             },
         )
 

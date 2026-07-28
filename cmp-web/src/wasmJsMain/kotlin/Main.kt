@@ -1,5 +1,8 @@
 import androidx.compose.ui.ExperimentalComposeUiApi
-import androidx.compose.ui.window.CanvasBasedWindow
+import androidx.compose.ui.window.ComposeViewport
+import kotlinx.browser.document
+import kotlinx.browser.localStorage
+import kotlinx.browser.window
 import org.jetbrains.compose.resources.configureWebResources
 import org.mifospay.shared.MifosPaySharedApp
 import org.mifospay.shared.di.initKoin
@@ -12,10 +15,27 @@ fun main() {
         resourcePathMapping { path -> "./$path" }
     }
 
-    CanvasBasedWindow(
-        title = "MifosWallet",
-        canvasElementId = "ComposeTarget",
-    ) {
-        MifosPaySharedApp()
-    }
+    ComposeViewport(
+        content = {
+            MifosPaySharedApp(
+                handleAppLocale = { languageTag ->
+                    if (languageTag != null) {
+                        // Store language preference in localStorage
+                        localStorage.setItem("app_language", languageTag)
+                        // Set HTML lang attribute for accessibility
+                        document.documentElement?.setAttribute("lang", languageTag)
+                    } else {
+                        // System Default: remove stored language preference
+                        localStorage.removeItem("app_language")
+                        // Reset to browser's default language
+                        val browserLang = window.navigator.language
+                        document.documentElement?.setAttribute("lang", browserLang)
+                    }
+                    // Reload page to apply language changes (required for web)
+                    // Note: This will reload the page, and locale selection depends on browser settings
+                    // window.location.reload()
+                },
+            )
+        }
+    )
 }

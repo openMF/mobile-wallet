@@ -37,4 +37,8 @@
     <string name="feature_home_failed_to_load_accounts">Failed to load accounts. Please try again.</string>
     <string name="feature_home_account_number">A/c No: %1$s</string>
 
+
+    <string name="feature_home_pocket_title">Pocket</string>
+    <string name="feature_home_pocket_desc">Quickly access your favourite accounts</string>
+
 </resources>

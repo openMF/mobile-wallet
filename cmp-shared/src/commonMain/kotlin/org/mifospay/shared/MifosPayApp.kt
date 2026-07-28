@@ -62,6 +62,7 @@ import kotlin.time.TimeSource
 @Composable
 fun MifosPaySharedApp(
     modifier: Modifier = Modifier,
+    handleAppLocale: (locale: String?) -> Unit,
     networkMonitor: NetworkMonitor = koinInject(),
     timeZoneMonitor: TimeZoneMonitor = koinInject(),
 ) {
@@ -69,7 +70,7 @@ fun MifosPaySharedApp(
     PlatformAuthenticatorCompositionProvider(
         biometricStorageAdapter = biometricStorageAdapter,
     ) {
-        MifosPayApp(modifier, networkMonitor, timeZoneMonitor)
+        MifosPayApp(modifier, networkMonitor, timeZoneMonitor, handleAppLocale)
     }
 }
 
@@ -108,6 +109,7 @@ private fun MifosPayApp(
     modifier: Modifier = Modifier,
     networkMonitor: NetworkMonitor,
     timeZoneMonitor: TimeZoneMonitor,
+    handleAppLocale: (locale: String?) -> Unit,
     passcodeManager: PasscodeManager = koinInject(),
     viewModel: MifosPayViewModel = koinViewModel(),
 ) {
@@ -129,7 +131,7 @@ private fun MifosPayApp(
     val onStopMark = remember { mutableStateOf<TimeSource.Monotonic.ValueTimeMark?>(null) }
 
     LaunchedEffect(isUnauthorized) {
-        if (isUnauthorized) {
+        if (isUnauthorized && userState !is Authenticated) {
             showErrorDialog.value = true
         }
     }
@@ -213,6 +215,7 @@ private fun MifosPayApp(
             navHostController = navController,
             startDestination = navDestination,
             modifier = modifier,
+            handleAppLocale = handleAppLocale,
             onClickLogout = {
                 viewModel.logOut()
                 navController.navigate(LOGIN_GRAPH) {

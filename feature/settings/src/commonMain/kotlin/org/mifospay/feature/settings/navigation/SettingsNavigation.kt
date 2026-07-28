@@ -37,6 +37,7 @@ fun NavController.navigateToSettings(navOptions: NavOptions? = null) {
 fun NavGraphBuilder.settingsScreen(
     onBackPress: () -> Unit,
     onLogout: () -> Unit,
+    handleAppLocale: (String) -> Unit,
     navigateToPasscodeScreen: (verificationKey: String?) -> Unit,
     navigateToEditPasswordScreen: () -> Unit,
     navigateToFaqScreen: () -> Unit,
@@ -48,6 +49,7 @@ fun NavGraphBuilder.settingsScreen(
             backPress = onBackPress,
             onEditPassword = navigateToEditPasswordScreen,
             onLogout = onLogout,
+            handleAppLocale = handleAppLocale,
             navigateToPasscodeScreen = navigateToPasscodeScreen,
             navigateToFaqScreen = navigateToFaqScreen,
             navigateToNotificationScreen = navigateToNotificationScreen,

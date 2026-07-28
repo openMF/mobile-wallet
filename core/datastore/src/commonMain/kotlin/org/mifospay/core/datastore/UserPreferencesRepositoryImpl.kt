@@ -23,6 +23,7 @@ import org.mifospay.core.model.client.Client
 import org.mifospay.core.model.client.UpdatedClient
 import org.mifospay.core.model.instance.InterbankServer
 import org.mifospay.core.model.instance.ServerInstance
+import org.mifospay.core.model.user.Language
 import org.mifospay.core.model.user.UserInfo
 
 class UserPreferencesRepositoryImpl(
@@ -92,6 +93,13 @@ class UserPreferencesRepositoryImpl(
         get() = preferenceManager.accountExternalIds.stateIn(
             scope = unconfinedScope,
             initialValue = emptyMap(),
+            started = SharingStarted.Eagerly,
+        )
+
+    override val language: StateFlow<Language>
+        get() = preferenceManager.language.stateIn(
+            scope = unconfinedScope,
+            initialValue = Language.DEFAULT,
             started = SharingStarted.Eagerly,
         )
 
@@ -165,6 +173,14 @@ class UserPreferencesRepositoryImpl(
         }
     }
 
+    override suspend fun setLanguage(language: Language): DataState<Unit> {
+        return try {
+            preferenceManager.setLanguage(language)
+            DataState.Success(Unit)
+        } catch (e: Exception) {
+            DataState.Error(e)
+        }
+    }
     override suspend fun updateUserInfo(user: UserInfo): DataState<Unit> {
         return try {
             val result = preferenceManager.updateUserInfo(user)

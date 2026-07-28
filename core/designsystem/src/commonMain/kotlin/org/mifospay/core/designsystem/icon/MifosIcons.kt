@@ -28,6 +28,7 @@ import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.ChevronLeft
 import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.CollectionsBookmark
 import androidx.compose.material.icons.filled.ContentCopy
 import androidx.compose.material.icons.filled.CreditCard
 import androidx.compose.material.icons.filled.CurrencyRupee
@@ -46,6 +47,7 @@ import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
+import androidx.compose.material.icons.filled.Language
 import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Person
@@ -100,6 +102,10 @@ import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.material.icons.rounded.SwapHoriz
 import androidx.compose.material.icons.rounded.Wallet
 import androidx.compose.ui.graphics.vector.ImageVector
+import fluent.ui.system.icons.FluentIcons
+import fluent.ui.system.icons.filled.CoinMultiple
+import fluent.ui.system.icons.filled.PersonAccounts
+import fluent.ui.system.icons.filled.Wallet
 
 /**
  * Mifos icons. Material icons are [ImageVector]s, custom icons are drawable resource IDs.
@@ -181,7 +187,7 @@ object MifosIcons {
     val OpenInNew = Icons.AutoMirrored.Filled.OpenInNew
     val Warning = Icons.Default.Warning
     val Location = Icons.Filled.LocationOn
-    val Savings = Icons.Rounded.AccountBalanceWallet
+
     val Transfer = Icons.Rounded.Money
     val CheckCircle = Icons.Outlined.CheckCircle
     val ArrowRight = Icons.AutoMirrored.Filled.KeyboardArrowRight
@@ -204,4 +210,11 @@ object MifosIcons {
 
     val ExpandLess = Icons.Filled.ExpandLess
     val ExpandMore = Icons.Filled.ExpandMore
+
+    val Pocket = Icons.Default.CollectionsBookmark
+    val PersonAccounts = FluentIcons.Filled.PersonAccounts
+    val CoinMultiple = FluentIcons.Filled.CoinMultiple
+    val Savings = Icons.Rounded.AccountBalanceWallet
+
+    val Language = Icons.Default.Language
 }
