@@ -9,7 +9,16 @@
  */
 package org.mifospay.feature.send.money
 
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.emptyFlow
+import org.koin.core.module.Module
 import org.koin.dsl.module
 
-actual val ScannerModule: org.koin.core.module.Module
-    get() = module { }
+private object NoOpQrScanner : QrScanner {
+    override fun startScanning(): Flow<String?> = emptyFlow()
+}
+
+actual val ScannerModule: Module
+    get() = module {
+        single<QrScanner> { NoOpQrScanner }
+    }
