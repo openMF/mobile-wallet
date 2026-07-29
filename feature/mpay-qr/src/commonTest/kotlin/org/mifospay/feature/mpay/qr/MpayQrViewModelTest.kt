@@ -48,6 +48,7 @@ import org.mifospay.core.model.user.Language
 import org.mifospay.core.model.user.UserInfo
 import org.mifospay.core.model.utils.CurrencyCode
 import org.mifospay.core.model.utils.Locale
+import org.mifospay.core.model.utils.QrCodeType
 import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test
@@ -311,7 +312,7 @@ class MpayQrViewModelTest {
 
         // Then
         val interBankQr = viewModel.stateFlow.value.interBankQrData
-        assertEquals(org.mifospay.core.model.utils.QrCodeType.INTER_BANK, interBankQr.type)
+        assertEquals(QrCodeType.INTER_BANK, interBankQr.type)
         assertEquals(0L, interBankQr.clientId)
         assertEquals(0L, interBankQr.accountId)
         assertEquals("", interBankQr.accountNo)

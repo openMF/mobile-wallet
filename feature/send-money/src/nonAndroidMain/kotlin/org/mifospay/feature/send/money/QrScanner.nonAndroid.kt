@@ -9,5 +9,7 @@
  */
 package org.mifospay.feature.send.money
 
+import org.koin.dsl.module
+
 actual val ScannerModule: org.koin.core.module.Module
-    get() = TODO("Not yet implemented")
+    get() = module { }
