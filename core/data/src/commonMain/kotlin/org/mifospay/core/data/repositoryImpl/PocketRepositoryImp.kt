@@ -51,63 +51,58 @@ class PocketRepositoryImp(
             val serverBasicPockets = dataManager.pocketApi.getPocketAccounts().toDomainList()
             var localBasicPockets = pocketPreferencesDataSource.getPocketAccountsSync().map { it.toDomain() }
 
-            if (!pocketPreferencesDataSource.hasSyncedPockets) {
-                localBasicPockets = serverBasicPockets
-                pocketPreferencesDataSource.updatePocketAccounts(localBasicPockets.map { it.toEntity() })
-                pocketPreferencesDataSource.hasSyncedPockets = true
-            } else {
-                val accountsToLink = localBasicPockets.filter { local ->
-                    serverBasicPockets.none { it.accountId == local.accountId && it.accountType == local.accountType }
-                }
+            val accountsToLink = localBasicPockets.filter { local ->
+                serverBasicPockets.none { it.accountId == local.accountId && it.accountType == local.accountType }
+            }
 
-                val accountsToDelink = serverBasicPockets.filter { server ->
-                    localBasicPockets.none { it.accountId == server.accountId && it.accountType == server.accountType }
-                }
+            val accountsToDelink = serverBasicPockets.filter { server ->
+                localBasicPockets.none { it.accountId == server.accountId && it.accountType == server.accountType }
+            }
 
-                if (accountsToDelink.isNotEmpty()) {
-                    val delinkIds = accountsToDelink.map { it.id }.filter { it > 0 }
-                    if (delinkIds.isNotEmpty()) {
-                        try {
-                            dataManager.pocketApi.delinkAccounts(request = PocketDelinkRequest(delinkIds))
-                        } catch (e: Exception) {
-                            // do nothing
-                        }
-                    }
-                }
-
-                if (accountsToLink.isNotEmpty()) {
-                    val linkRequest = PocketLinkRequest(
-                        accountsDetail = accountsToLink.map {
-                            PocketLinkRequest.AccountDetail(accountId = it.accountId.toString(), accountType = it.accountType.name)
-                        },
-                    )
+            if (accountsToDelink.isNotEmpty()) {
+                val delinkIds = accountsToDelink.map { it.id }.filter { it > 0 }
+                if (delinkIds.isNotEmpty()) {
                     try {
-                        dataManager.pocketApi.linkAccounts(request = linkRequest)
+                        dataManager.pocketApi.delinkAccounts(request = PocketDelinkRequest(delinkIds))
                     } catch (e: Exception) {
                         // do nothing
                     }
                 }
+            }
 
-                val updatedServerPockets = try {
-                    if (accountsToLink.isNotEmpty() || accountsToDelink.isNotEmpty()) {
-                        dataManager.pocketApi.getPocketAccounts().toDomainList()
-                    } else {
-                        serverBasicPockets
-                    }
+            if (accountsToLink.isNotEmpty()) {
+                val linkRequest = PocketLinkRequest(
+                    accountsDetail = accountsToLink.map {
+                        PocketLinkRequest.AccountDetail(accountId = it.accountId.toString(), accountType = it.accountType.name)
+                    },
+                )
+                try {
+                    dataManager.pocketApi.linkAccounts(request = linkRequest)
                 } catch (e: Exception) {
+                    // do nothing
+                }
+            }
+
+            val updatedServerPockets = try {
+                if (accountsToLink.isNotEmpty() || accountsToDelink.isNotEmpty()) {
+                    dataManager.pocketApi.getPocketAccounts().toDomainList()
+                } else {
                     serverBasicPockets
                 }
-
-                localBasicPockets = localBasicPockets.map { local ->
-                    val matchedServer = updatedServerPockets.find { it.accountId == local.accountId && it.accountType == local.accountType }
-                    if (matchedServer != null) {
-                        local.copy(id = matchedServer.id, pocketId = matchedServer.pocketId)
-                    } else {
-                        local
-                    }
-                }
-                pocketPreferencesDataSource.updatePocketAccounts(localBasicPockets.map { it.toEntity() })
+            } catch (e: Exception) {
+                // do nothing
+                serverBasicPockets
             }
+
+            localBasicPockets = localBasicPockets.map { local ->
+                val matchedServer = updatedServerPockets.find { it.accountId == local.accountId && it.accountType == local.accountType }
+                if (matchedServer != null) {
+                    local.copy(id = matchedServer.id, pocketId = matchedServer.pocketId)
+                } else {
+                    local
+                }
+            }
+            pocketPreferencesDataSource.updatePocketAccounts(localBasicPockets.map { it.toEntity() })
         } catch (e: Exception) {
             // do nothing
         }
@@ -250,8 +245,6 @@ class PocketRepositoryImp(
         clientId: Long,
     ): DataState<Unit> {
         return try {
-            pocketPreferencesDataSource.hasSyncedPockets = true
-
             val localDetailed = pocketPreferencesDataSource.getDetailedPocketAccountsSync().map { it.toDomain() }.toMutableList()
             explicitlyAddedAccounts.forEach { added ->
                 localDetailed.removeAll { it.pocket.accountId == added.pocket.accountId && it.pocket.accountType == added.pocket.accountType }
@@ -291,8 +284,6 @@ class PocketRepositoryImp(
 
     override suspend fun delinkAccounts(pocketAccountMappingIds: List<Long>, clientId: Long): DataState<Unit> {
         return try {
-            pocketPreferencesDataSource.hasSyncedPockets = true
-
             val localDetailed = pocketPreferencesDataSource.getDetailedPocketAccountsSync().map { it.toDomain() }.toMutableList()
             localDetailed.removeAll { it.pocket.id in pocketAccountMappingIds }
             pocketPreferencesDataSource.updateDetailedPocketAccounts(localDetailed.map { it.toEntity() })
@@ -406,13 +397,8 @@ class PocketRepositoryImp(
                     }
                 }
 
-                if (availableAccounts.isEmpty()) {
-                    val local = pocketPreferencesDataSource.getLinkableAccountsSync().map { it.toDomain() }
-                    emit(DataState.Success(local))
-                } else {
-                    pocketPreferencesDataSource.updateLinkableAccounts(availableAccounts.map { it.toEntity() })
-                    emit(DataState.Success(availableAccounts))
-                }
+                pocketPreferencesDataSource.updateLinkableAccounts(availableAccounts.map { it.toEntity() })
+                emit(DataState.Success(availableAccounts))
             } catch (e: Exception) {
                 val local = pocketPreferencesDataSource.getLinkableAccountsSync().map { it.toDomain() }
                 if (local.isNotEmpty()) {

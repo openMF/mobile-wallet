@@ -302,10 +302,11 @@ internal class ManagePocketViewModel(
     }
 
     private fun AvailablePocketAccount.toDetailedPocketAccount(): DetailedPocketAccount {
+        val temporaryId = -kotlin.random.Random.nextLong(1L, Long.MAX_VALUE)
         return DetailedPocketAccount(
             pocket = PocketAccount(
-                pocketId = -1,
-                id = -1,
+                pocketId = temporaryId,
+                id = temporaryId,
                 accountId = accountId,
                 accountType = accountType,
                 accountNumber = accountNumber,

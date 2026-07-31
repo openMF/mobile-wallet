@@ -22,6 +22,7 @@ import org.mifospay.core.datastore.BillRepositoryImpl
 import org.mifospay.core.datastore.BillerDataSource
 import org.mifospay.core.datastore.BillerRepository
 import org.mifospay.core.datastore.BillerRepositoryImpl
+import org.mifospay.core.datastore.PocketPreferencesDataSource
 import org.mifospay.core.datastore.UserPreferencesDataSource
 import org.mifospay.core.datastore.UserPreferencesRepository
 import org.mifospay.core.datastore.UserPreferencesRepositoryImpl
@@ -33,7 +34,7 @@ val PreferencesModule = module {
     factory { AutoPayPreferencesDataSource(get(), get(named(MifosDispatchers.IO.name))) }
     factory { BillerDataSource(get(), get(named(MifosDispatchers.IO.name))) }
     factory { BillDataSource(get(), get(named(MifosDispatchers.IO.name))) }
-    factory { org.mifospay.core.datastore.PocketPreferencesDataSource(get(), get(named(MifosDispatchers.IO.name))) }
+    single { PocketPreferencesDataSource(get(), get(named(MifosDispatchers.IO.name))) }
 
     single<UserPreferencesRepository> {
         UserPreferencesRepositoryImpl(

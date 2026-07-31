@@ -56,10 +56,6 @@ class PocketPreferencesDataSource(
         ),
     )
 
-    var hasSyncedPockets: Boolean
-        get() = settings.getBoolean("has_synced_pockets", false)
-        set(value) = settings.putBoolean("has_synced_pockets", value)
-
     val pocketAccounts: Flow<List<PocketAccountEntity>> = _pocketAccounts
     val detailedPocketAccounts: Flow<List<DetailedPocketAccountEntity>> = _detailedPocketAccounts
     val linkableAccounts: Flow<List<LinkableAccountEntity>> = _linkableAccounts
