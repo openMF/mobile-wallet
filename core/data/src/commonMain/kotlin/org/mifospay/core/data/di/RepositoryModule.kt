@@ -122,7 +122,7 @@ val RepositoryModule = module {
     single<UserRepository> { UserRepositoryImpl(get(), get(ioDispatcher)) }
     single<AutoPayRepository> { AutoPayRepositoryImpl(get(), get(ioDispatcher)) }
     single<OfficeRepository> { OfficeRepositoryImpl(get(), get(ioDispatcher)) }
-    single<PocketRepository> { PocketRepositoryImp(get(), get(), get(ioDispatcher)) }
+    single<PocketRepository> { PocketRepositoryImp(get(), get(), get(), get(named(MifosDispatchers.IO.name))) }
 
     // Passcode/biometrics surface — the four bindings below are required by the
     // mifos-authenticator-passcode and mifos-authenticator-biometrics libraries

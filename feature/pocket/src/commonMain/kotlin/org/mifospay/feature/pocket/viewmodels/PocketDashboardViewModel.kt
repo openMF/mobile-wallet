@@ -10,11 +10,7 @@
 package org.mifospay.feature.pocket.viewmodels
 
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import mobile_wallet.feature.pocket.generated.resources.Res
@@ -32,7 +28,6 @@ import org.mifospay.core.model.pocket.AccountStatus
 import org.mifospay.core.model.pocket.DetailedPocketAccount
 import org.mifospay.core.ui.utils.BaseViewModel
 
-@OptIn(ExperimentalCoroutinesApi::class)
 internal class PocketDashboardViewModel(
     private val pocketRepository: PocketRepository,
     private val userPreferencesRepository: UserPreferencesRepository,
@@ -41,26 +36,34 @@ internal class PocketDashboardViewModel(
         clientId = requireNotNull(userPreferencesRepository.clientId.value),
     ),
 ) {
-    private val refreshTrigger = MutableSharedFlow<Boolean>(extraBufferCapacity = 1)
+    private var loadJob: Job? = null
 
     init {
-        viewModelScope.launch {
-            refreshTrigger.onStart { emit(false) }
-                .flatMapLatest { forceRefresh ->
-                    pocketRepository.getDetailedPocketAccounts(state.clientId, forceRefresh)
-                }
-                .collectLatest { dataState ->
-                    handleDataState(dataState)
-                }
-        }
+        loadPocketData()
     }
 
     private fun updateState(update: (PocketDashboardState) -> PocketDashboardState) {
         mutableStateFlow.update(update)
     }
 
+    private fun loadPocketData(forceRefresh: Boolean = false) {
+        loadJob?.cancel()
+
+        loadJob = viewModelScope.launch {
+            val unknownStatus = getString(Res.string.feature_pocket_unknown_status)
+            val unknownAccount = getString(Res.string.feature_pocket_unknown_account)
+
+            val clientId = state.clientId
+            pocketRepository.getDetailedPocketAccounts(clientId, forceRefresh)
+                .collect { dataState ->
+                    trySendAction(PocketDashboardAction.Internal.ReceiveAccounts(dataState, unknownStatus, unknownAccount))
+                }
+        }
+    }
+
     override fun handleAction(action: PocketDashboardAction) {
         when (action) {
+            is PocketDashboardAction.Internal.ReceiveAccounts -> handleReceivedAccounts(action.dataState, action.unknownStatus, action.unknownAccount)
             PocketDashboardAction.NavigateBack -> sendEvent(PocketDashboardEvent.NavigateBack)
             PocketDashboardAction.ManagePocket -> sendEvent(PocketDashboardEvent.ManagePocket)
             PocketDashboardAction.LinkFirstAccount -> sendEvent(PocketDashboardEvent.ManagePocket)
@@ -80,15 +83,19 @@ internal class PocketDashboardViewModel(
 
     private fun refresh() {
         updateState { it.copy(isRefreshing = true) }
-        refreshTrigger.tryEmit(true)
+        loadPocketData(forceRefresh = true)
     }
 
     private fun retry() {
         updateState { it.copy(uiState = PocketDashboardUiState.Loading) }
-        refreshTrigger.tryEmit(true)
+        loadPocketData(forceRefresh = true)
     }
 
-    private suspend fun handleDataState(dataState: DataState<List<DetailedPocketAccount>>) {
+    private fun handleReceivedAccounts(
+        dataState: DataState<List<DetailedPocketAccount>>,
+        unknownStatus: String,
+        unknownAccount: String,
+    ) {
         when (dataState) {
             is DataState.Loading -> {
                 if (!state.isRefreshing) {
@@ -108,24 +115,23 @@ internal class PocketDashboardViewModel(
             is DataState.Success -> {
                 val detailedAccounts = dataState.data
 
-                suspend fun mapToUiModel(detailed: DetailedPocketAccount): DetailedPocket {
+                fun mapToUiModel(detailed: DetailedPocketAccount): DetailedPocket {
                     val balanceStr = if (detailed.status == AccountStatus.ACTIVE) {
                         if (detailed.balance != null) {
-                            CurrencyFormatter.format(
-                                detailed.balance,
-                                detailed.currencyCode,
-                                detailed.decimalPlaces,
-                            )
+                            val code = detailed.currencyCode.orEmpty()
+                            val displaySymbol = detailed.currencyDisplaySymbol.orEmpty()
+                            val formattedNum = CurrencyFormatter.format(detailed.balance, detailed.decimalPlaces)
+                            if (code.isNotEmpty()) "$code $displaySymbol$formattedNum" else "$displaySymbol$formattedNum"
                         } else {
                             ""
                         }
                     } else {
-                        detailed.status?.name ?: getString(Res.string.feature_pocket_unknown_status)
+                        detailed.status?.name ?: unknownStatus
                     }
 
                     return DetailedPocket(
                         accountId = detailed.pocket.accountId,
-                        name = detailed.productName ?: getString(Res.string.feature_pocket_unknown_account),
+                        name = detailed.productName ?: unknownAccount,
                         accountNumber = detailed.pocket.accountNumber,
                         balanceOrStatus = balanceStr,
                         status = detailed.status ?: AccountStatus.UNKNOWN,
@@ -143,16 +149,30 @@ internal class PocketDashboardViewModel(
                     }
                 }
 
-                val totalSum = detailedAccounts
-                    .filter { it.status == AccountStatus.ACTIVE && it.balance != null }
-                    .sumOf { it.balance ?: 0.0 }
+                val balancesByCurrency = detailedAccounts
+                    .filter { it.status == AccountStatus.ACTIVE && it.balance != null && it.currencyCode != null }
+                    .groupBy { it.currencyCode!! }
+                    .map { (currencyCode, accounts) ->
+                        val sum = accounts.sumOf { it.balance ?: 0.0 }
+                        val decimalPlaces = accounts.first().decimalPlaces
+                        val displaySymbol = accounts.first().currencyDisplaySymbol.orEmpty()
+                        val formattedNum = CurrencyFormatter.format(sum, decimalPlaces)
+                        if (currencyCode.isNotEmpty()) "$currencyCode $displaySymbol$formattedNum" else "$displaySymbol$formattedNum"
+                    }
 
-                val sampleAccount = detailedAccounts.firstOrNull { it.currencyCode != null }
-                val formattedTotal = CurrencyFormatter.format(
-                    totalSum,
-                    sampleAccount?.currencyCode,
-                    sampleAccount?.decimalPlaces,
-                )
+                val formattedTotal = if (balancesByCurrency.isNotEmpty()) {
+                    balancesByCurrency.joinToString("\n")
+                } else {
+                    val sampleAccount = detailedAccounts.firstOrNull { it.currencyCode != null }
+                    if (sampleAccount != null) {
+                        val code = sampleAccount.currencyCode.orEmpty()
+                        val displaySymbol = sampleAccount.currencyDisplaySymbol.orEmpty()
+                        val formattedNum = CurrencyFormatter.format(0.0, sampleAccount.decimalPlaces)
+                        if (code.isNotEmpty()) "$code $displaySymbol$formattedNum" else "$displaySymbol$formattedNum"
+                    } else {
+                        "0.00"
+                    }
+                }
 
                 if (loanList.isEmpty() && shareList.isEmpty() && savingsList.isEmpty()) {
                     updateState {
@@ -219,4 +239,12 @@ internal sealed interface PocketDashboardAction {
     data object LinkFirstAccount : PocketDashboardAction
     data object Refresh : PocketDashboardAction
     data object Retry : PocketDashboardAction
+
+    sealed interface Internal : PocketDashboardAction {
+        data class ReceiveAccounts(
+            val dataState: DataState<List<DetailedPocketAccount>>,
+            val unknownStatus: String,
+            val unknownAccount: String,
+        ) : Internal
+    }
 }
