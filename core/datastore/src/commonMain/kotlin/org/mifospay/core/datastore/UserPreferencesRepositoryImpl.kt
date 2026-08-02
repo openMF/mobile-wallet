@@ -28,7 +28,18 @@ import org.mifospay.core.model.user.UserInfo
 
 class UserPreferencesRepositoryImpl(
     private val preferenceManager: UserPreferencesDataSource,
-    private val pocketPreferencesDataSource: PocketPreferencesDataSource,
+    // manage-pocket linkable-accounts Store5 migration: the pre-migration
+    // `pocketPreferencesDataSource` constructor arg (upstream PR #2057
+    // multiplatform-settings cache for pocket_accounts / detailed_pocket_accounts /
+    // linkable_accounts) is REMOVED. This branch never wired that DataSource
+    // into the pocket read path — the Store5 architecture serves the same reads
+    // through Room SoT. Logout cache-drain is handled uniformly by
+    // `StoreCacheManager.clearAll()` (invoked by `UserLogoutManagerImpl`) which
+    // drains every registered store — the `pocket` store's `wallet_pockets`
+    // table AND the new `linkableAccounts` store's `wallet_linkable_accounts`
+    // table both flush on session end. No separate `clearAllPocketData()` call
+    // is needed from `logOut()` below (there is no settings-backed pocket cache
+    // to clear anymore).
     private val ioDispatcher: CoroutineDispatcher,
     unconfinedDispatcher: CoroutineDispatcher,
 ) : UserPreferencesRepository {
@@ -193,7 +204,14 @@ class UserPreferencesRepositoryImpl(
     }
 
     override suspend fun logOut() {
-        pocketPreferencesDataSource.clearAllPocketData()
+        // manage-pocket linkable-accounts Store5 migration: the pre-migration
+        // `pocketPreferencesDataSource.clearAllPocketData()` call is REMOVED
+        // — see rationale on the constructor arg above. Logout cache-drain
+        // for pocket data now happens through `StoreCacheManager.clearAll()`
+        // in `UserLogoutManagerImpl.clearUserData()`, which drains BOTH the
+        // Room-backed `wallet_pockets` LEDGER (via the `pocket` Store5 store)
+        // and the Room-backed `wallet_linkable_accounts` LEDGER (via the
+        // new `linkableAccounts` Store5 store).
         preferenceManager.clearInfo()
     }
 }

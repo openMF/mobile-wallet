@@ -30,6 +30,7 @@ import org.mifospay.core.model.client.Client
 import org.mifospay.core.model.client.UpdatedClient
 import org.mifospay.core.model.instance.InterbankServer
 import org.mifospay.core.model.instance.ServerInstance
+import org.mifospay.core.model.user.Language
 import org.mifospay.core.model.user.UserInfo
 import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
@@ -348,9 +349,11 @@ private class FakeUserPreferencesRepository : UserPreferencesRepository {
     override val defaultAccountId: StateFlow<Long?> = MutableStateFlow(null)
     override val selectedInterbankInstance: StateFlow<InterbankServer?> = MutableStateFlow(null)
     override val accountExternalIds: StateFlow<Map<Long, String>> = MutableStateFlow(emptyMap())
+    override val language: StateFlow<Language> = MutableStateFlow(Language.DEFAULT)
 
     override suspend fun updateToken(token: String): DataState<Unit> = DataState.Success(Unit)
     override suspend fun updateUserInfo(user: UserInfo): DataState<Unit> = DataState.Success(Unit)
+    override suspend fun setLanguage(language: Language): DataState<Unit> = DataState.Success(Unit)
     override suspend fun updateClientInfo(client: Client): DataState<Unit> = DataState.Success(Unit)
     override suspend fun updateClientProfile(client: UpdatedClient): DataState<Unit> = DataState.Success(Unit)
     override suspend fun updateDefaultAccount(account: DefaultAccount): DataState<Unit> = DataState.Success(Unit)

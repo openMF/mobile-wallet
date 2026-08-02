@@ -44,7 +44,7 @@ import kotlin.test.assertTrue
 class FastMpayViewModelTest {
 
     private val testDispatcher = StandardTestDispatcher()
-    private lateinit var fakeBeneficiaryRepository: FakeBeneficiaryRepository
+    private lateinit var fakeSelfServiceRepository: FakeSelfServiceRepository
     private lateinit var fakeUserPreferencesRepository: FakeUserPreferencesRepository
     private lateinit var fakeOfficeRepository: FakeOfficeRepository
     private lateinit var processor: FastMpayProcessor
@@ -52,11 +52,15 @@ class FastMpayViewModelTest {
     @BeforeTest
     fun setUp() {
         Dispatchers.setMain(testDispatcher)
-        fakeBeneficiaryRepository = FakeBeneficiaryRepository()
+        fakeSelfServiceRepository = FakeSelfServiceRepository()
         fakeUserPreferencesRepository = FakeUserPreferencesRepository()
+        // Non-null clientId so the store-backed beneficiary read path is
+        // exercised (see FastMpayProcessor.processIntraBankQr — a null
+        // clientId short-circuits to AddBeneficiary).
+        fakeUserPreferencesRepository.setClientId(1L)
         fakeOfficeRepository = FakeOfficeRepository()
         processor = FastMpayProcessor(
-            beneficiaryRepository = fakeBeneficiaryRepository,
+            selfServiceRepository = fakeSelfServiceRepository,
             userPreferencesRepository = fakeUserPreferencesRepository,
             officeRepository = fakeOfficeRepository,
         )
@@ -81,7 +85,7 @@ class FastMpayViewModelTest {
                 label = "Test Bank",
             ),
         )
-        fakeBeneficiaryRepository.setBeneficiaryList(emptyList())
+        fakeSelfServiceRepository.setBeneficiaryList(emptyList())
 
         val qrString = "mpay://pay?qt=0&fsp=mifos-bank&ci=123&am=100&cn=John&an=ACC001&ai=456&cu=USD&oi=1&pi=2"
         val encodedQr = qrString.encodeBase64()
@@ -165,7 +169,7 @@ class FastMpayViewModelTest {
                 label = "Test Bank",
             ),
         )
-        fakeBeneficiaryRepository.setBeneficiaryList(emptyList())
+        fakeSelfServiceRepository.setBeneficiaryList(emptyList())
 
         val qrString = "mpay://pay?qt=0&fsp=mifos-bank&ci=123&am=100&cn=John&an=ACC001&ai=456&cu=USD&oi=1&pi=2"
         val encodedQr = qrString.encodeBase64()

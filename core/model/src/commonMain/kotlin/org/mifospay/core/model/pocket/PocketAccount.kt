@@ -27,6 +27,14 @@ data class DetailedPocketAccount(
     val currencyDisplaySymbol: String?,
     val decimalPlaces: Int?,
     val status: AccountStatus?,
+    // Upstream PR #2057 (manage-pocket) added the per-currency display symbol
+    // (e.g. "$"/"₹") separately from the ISO `currencyCode`. Defaulted to null so
+    // pre-manage-pocket call sites (PocketStore, PocketEntityMapper, Store5 fetcher
+    // decoders that were written before this field existed) continue to compile
+    // without change; those paths surface `null` here and the UI falls back to the
+    // pre-manage-pocket rendering (code-only). Fresh network fetches that pass the
+    // symbol through populate it end-to-end.
+    val currencyDisplaySymbol: String? = null,
 )
 
 data class LinkableAccount(
@@ -39,6 +47,8 @@ data class LinkableAccount(
     val currencyDisplaySymbol: String?,
     val decimalPlaces: Int?,
     val status: AccountStatus?,
+    // See rationale on [DetailedPocketAccount.currencyDisplaySymbol].
+    val currencyDisplaySymbol: String? = null,
 )
 
 enum class AccountStatus {

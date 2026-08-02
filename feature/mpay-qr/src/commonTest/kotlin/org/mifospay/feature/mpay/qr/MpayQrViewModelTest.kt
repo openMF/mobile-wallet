@@ -22,14 +22,23 @@ import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
+import kotlinx.coroutines.CoroutineScope
 import org.mifospay.core.common.DataState
+import org.mifospay.core.common.ScreenState
+import org.mifospay.core.data.repository.AccountRepository
 import org.mifospay.core.data.repository.LocalAssetRepository
 import org.mifospay.core.datastore.UserPreferencesRepository
+import org.mifospay.core.model.account.Account
+import org.mifospay.core.model.account.AccountTransferPayload
 import org.mifospay.core.model.account.DefaultAccount
+import org.mifospay.core.model.savingsaccount.Transaction
+import org.mifospay.core.model.savingsaccount.TransferDetail
+import org.mifospay.core.model.search.AccountResult
 import org.mifospay.core.model.client.Client
 import org.mifospay.core.model.client.UpdatedClient
 import org.mifospay.core.model.instance.InterbankServer
 import org.mifospay.core.model.instance.ServerInstance
+import org.mifospay.core.model.user.Language
 import org.mifospay.core.model.user.UserInfo
 import org.mifospay.core.model.utils.CurrencyCode
 import org.mifospay.core.model.utils.Locale
@@ -58,6 +67,7 @@ class MpayQrViewModelTest {
     private val testDispatcher = StandardTestDispatcher()
     private lateinit var fakeUserPreferencesRepository: FakeUserPreferencesRepository
     private lateinit var fakeLocalAssetRepository: FakeLocalAssetRepository
+    private lateinit var fakeAccountRepository: FakeAccountRepository
     private lateinit var savedStateHandle: SavedStateHandle
 
     @BeforeTest
@@ -70,6 +80,7 @@ class MpayQrViewModelTest {
             initialSelectedInstance = createTestServerInstance(),
         )
         fakeLocalAssetRepository = FakeLocalAssetRepository()
+        fakeAccountRepository = FakeAccountRepository()
         savedStateHandle = SavedStateHandle()
     }
 
@@ -82,6 +93,7 @@ class MpayQrViewModelTest {
         return MpayQrViewModel(
             localRepository = fakeLocalAssetRepository,
             repository = fakeUserPreferencesRepository,
+            accountRepository = fakeAccountRepository,
             savedStateHandle = savedStateHandle,
             ioDispatcher = testDispatcher,
         )
@@ -414,9 +426,11 @@ private class FakeUserPreferencesRepository(
     override val authToken: String? = null
     override val defaultAccountId: StateFlow<Long?> = MutableStateFlow(null)
     override val selectedInterbankInstance: StateFlow<InterbankServer?> = MutableStateFlow(null)
+    override val language: StateFlow<Language> = MutableStateFlow(Language.DEFAULT)
 
     override suspend fun updateToken(token: String): DataState<Unit> = DataState.Success(Unit)
     override suspend fun updateUserInfo(user: UserInfo): DataState<Unit> = DataState.Success(Unit)
+    override suspend fun setLanguage(language: Language): DataState<Unit> = DataState.Success(Unit)
     override suspend fun updateClientInfo(client: Client): DataState<Unit> = DataState.Success(Unit)
     override suspend fun updateClientProfile(client: UpdatedClient): DataState<Unit> =
         DataState.Success(Unit)
@@ -438,4 +452,37 @@ private class FakeUserPreferencesRepository(
         _accountExternalIds.value[accountId]
 
     override suspend fun logOut() {}
+}
+
+/**
+ * Fake implementation of [AccountRepository] for testing.
+ *
+ * The MpayQr ViewModel only reads accounts via [getSelfAccountsScreen] (the
+ * Phase-5 Batch-3 store-backed reader). The other methods are stubbed with
+ * safe empty defaults — sufficient for the tests in this file and preserving
+ * "still generate QR with default account" fallback (Empty state) as the
+ * default emission.
+ */
+private class FakeAccountRepository : AccountRepository {
+    override fun getTransaction(
+        accountId: Long,
+        transactionId: Long,
+    ): Flow<ScreenState<Transaction>> = flowOf(ScreenState.Empty)
+
+    override fun getAccountTransfer(transferId: Long): Flow<ScreenState<TransferDetail>> =
+        flowOf(ScreenState.Empty)
+
+    override fun searchAccounts(query: String): Flow<ScreenState<List<AccountResult>>> =
+        flowOf(ScreenState.Empty)
+
+    override fun getSelfAccounts(clientId: Long): Flow<ScreenState<List<Account>>> =
+        flowOf(ScreenState.Empty)
+
+    override fun getSelfAccountsScreen(
+        clientId: Long,
+        scope: CoroutineScope,
+    ): Flow<ScreenState<List<Account>>> = flowOf(ScreenState.Empty)
+
+    override suspend fun makeTransfer(payload: AccountTransferPayload): DataState<String> =
+        DataState.Success("Success")
 }

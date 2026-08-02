@@ -232,6 +232,13 @@ private suspend fun addPocketDetails(
             balance = detail?.loanBalance,
             productName = detail?.productName,
             currencyCode = detail?.currency?.code,
+            // Upstream PR #2057 (manage-pocket) surfaces per-currency display glyph
+            // (`"$"`/`"₹"`/…) so the dashboard + manage-pocket sheets render matching
+            // symbols. Value flows through the store fetcher into
+            // `DetailedPocketAccount.currencyDisplaySymbol`; the Room mirror
+            // (`PocketEntity`) does NOT yet carry the column so the SoT-decoded
+            // path surfaces `null` — the store's `fetcher` write wins on next SWR.
+            currencyDisplaySymbol = detail?.currency?.displaySymbol,
             decimalPlaces = detail?.currency?.decimalPlaces,
             status = detail?.status?.toAccountStatus(),
         )
@@ -244,6 +251,7 @@ private suspend fun addPocketDetails(
             balance = detail?.accountBalance,
             productName = detail?.productName,
             currencyCode = detail?.currency?.code,
+            currencyDisplaySymbol = detail?.currency?.displaySymbol,
             decimalPlaces = detail?.currency?.decimalPlaces,
             status = detail?.status?.toAccountStatus(),
         )
@@ -253,6 +261,7 @@ private suspend fun addPocketDetails(
         var balance = 0.0
         var productName: String?
         var currencyCode: String?
+        var currencyDisplaySymbol: String?
         var decimalPlaces: Int?
         var accountStatus: AccountStatus?
 
@@ -261,6 +270,7 @@ private suspend fun addPocketDetails(
                 .getShareAccountDetails(pocket.accountId).first()
             productName = shareAccountDetails.productName
             currencyCode = shareAccountDetails.currency?.code
+            currencyDisplaySymbol = shareAccountDetails.currency?.displaySymbol
             decimalPlaces = shareAccountDetails.currency?.decimalPlaces
             accountStatus = shareAccountDetails.status?.toAccountStatus()
 
@@ -271,6 +281,7 @@ private suspend fun addPocketDetails(
             val detail = clientAccounts.shareAccounts.find { it.id == pocket.accountId }
             productName = detail?.productName
             currencyCode = detail?.currency?.code
+            currencyDisplaySymbol = detail?.currency?.displaySymbol
             decimalPlaces = detail?.currency?.decimalPlaces
             accountStatus = detail?.status?.toAccountStatus()
         }
@@ -280,6 +291,7 @@ private suspend fun addPocketDetails(
             balance = balance,
             productName = productName,
             currencyCode = currencyCode,
+            currencyDisplaySymbol = currencyDisplaySymbol,
             decimalPlaces = decimalPlaces,
             status = accountStatus,
         )
