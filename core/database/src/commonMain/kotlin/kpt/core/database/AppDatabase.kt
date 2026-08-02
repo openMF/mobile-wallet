@@ -32,6 +32,8 @@ import kpt.core.database.wallet.client.ClientDetailDao
 import kpt.core.database.wallet.client.ClientDetailEntity
 import kpt.core.database.wallet.invoice.InvoiceDao
 import kpt.core.database.wallet.invoice.InvoiceEntity
+import kpt.core.database.wallet.linkableaccount.LinkableAccountDao
+import kpt.core.database.wallet.linkableaccount.LinkableAccountEntity
 import kpt.core.database.wallet.notification.NotificationDao
 import kpt.core.database.wallet.notification.NotificationEntity
 import kpt.core.database.wallet.office.OfficeDao
@@ -80,6 +82,7 @@ expect object AppDatabaseConstructor : RoomDatabaseConstructor<AppDatabase> {
  * | v3 → v4 | Phase-5 Batch-2 read-cache stores — adds `wallet_invoices` (LEDGER, GOAL D13), `wallet_notifications` (LEDGER, GOAL D13), `wallet_client_details` (SINGLE-ROW-PER-KEY, GOAL D13), `wallet_pockets` (LEDGER, GOAL D13; replaces the in-memory `detailedPocketCache` MutableStateFlow in `PocketRepositoryImp`). Purely additive; auto-migration handles it. |
  * | v4 → v5 | Phase-5 Batch-3 read-cache stores — adds `wallet_standing_instructions` (LEDGER, GOAL D13), `wallet_offices` (LEDGER — global singleton-keyed reference data, GOAL D13), `wallet_self_accounts` (LEDGER, GOAL D13). Purely additive; auto-migration handles it. Batch-3 also delivers the `receipt` feature WITHOUT its own store (per GOAL D13 — reads off the existing `wallet_transactions` LEDGER; see `ReceiptViewModel` KDoc). |
  * | v5 → v6 | Phase-5 Batch-4 offline / local-derived stores — adds `wallet_autopay_billers` (OFFLINE_LOCAL_ONLY — user-authored biller catalog, GOAL D12; mirrors the `wallet_autopay_bills` shape) and `wallet_recent_payees` (LOCAL-DERIVED — persist-on-derive cache of recent-payees derived from transaction history, replaces the N+1 walk in `RecentPayeeRepositoryImpl` on cache hits, GOAL D12/D13 hybrid). Purely additive; auto-migration handles it. Batch-4 also folds in the store-native `getAccountAndBeneficiaryListScreen` combinator in `SelfServiceRepository` (no new table — uses the existing `wallet_beneficiaries` + the network account stream through `combineScreenStates`), and records a STUB verdict for the `merchants` feature (no server counterpart today; no store emitted). |
+ * | v6 → v7 | manage-pocket linkable-accounts Store5 migration — adds `wallet_linkable_accounts` (LEDGER — derived read-cache of accounts a client CAN link into a pocket, GOAL D13). Replaces upstream PR #2057's multiplatform-settings `linkable_accounts` cache in `PocketPreferencesDataSource`; this branch's Store5 architecture serves the same read offline-first through Room SoT + CACHE_FIRST_SWR (matches `PocketStore` / `BeneficiaryStore` / `SelfAccountsStore` recipe). Purely additive; auto-migration handles it. |
  *
  * ## Stale-schema-JSON note
  *
@@ -117,6 +120,8 @@ expect object AppDatabaseConstructor : RoomDatabaseConstructor<AppDatabase> {
         // Phase-5 Batch-4 offline / local-derived stores (v6) — fork-owned tables
         BillerEntity::class,
         RecentPayeeEntity::class,
+        // manage-pocket linkable-accounts Store5 migration (v7) — fork-owned table
+        LinkableAccountEntity::class,
     ],
     version = AppDatabase.VERSION,
     exportSchema = true,
@@ -132,6 +137,12 @@ expect object AppDatabaseConstructor : RoomDatabaseConstructor<AppDatabase> {
         // Any device that shipped on an intermediate version (2..5) is caught by the
         // .addMigrations(...) fallback wired in DatabaseModule (see MIGRATION_1_6).
         AutoMigration(from = 1, to = 6),
+        // v6 → v7: purely-additive migration for the manage-pocket linkable-accounts
+        // Store5 migration — adds ONE net-new table `wallet_linkable_accounts`. Room
+        // diffs schemas/6.json vs schemas/7.json and emits `CREATE TABLE
+        // wallet_linkable_accounts (...)`. Safe as a standalone AutoMigration
+        // because no v1..v6 column is altered (only a new table appears in v7).
+        AutoMigration(from = 6, to = 7),
     ],
 )
 @ConstructedBy(AppDatabaseConstructor::class)
@@ -166,12 +177,17 @@ abstract class AppDatabase : RoomDatabase() {
     abstract val billerDao: BillerDao
     abstract val recentPayeeDao: RecentPayeeDao
 
+    // manage-pocket linkable-accounts Store5 migration — fork-owned wallet DAO
+    abstract val linkableAccountDao: LinkableAccountDao
+
     companion object {
-        // Bumped from 5 → 6 in Phase-5 Batch-4 to introduce the two Batch-4
-        // tables (`wallet_autopay_billers` OFFLINE_LOCAL_ONLY,
-        // `wallet_recent_payees` LOCAL-DERIVED).
-        // Additive migration (see @AutoMigration(from = 5, to = 6) above).
-        const val VERSION = 6
+        // Bumped from 6 → 7 for the manage-pocket linkable-accounts Store5
+        // migration. Introduces ONE net-new table (`wallet_linkable_accounts`
+        // — LEDGER derived read-cache of accounts a client CAN link into a
+        // pocket) that REPLACES upstream PR #2057's multiplatform-settings
+        // `linkable_accounts` cache in `PocketPreferencesDataSource`.
+        // Additive migration (see @AutoMigration(from = 6, to = 7) above).
+        const val VERSION = 7
 
         /** Fork-unique on-disk DB filename — single source of truth is [DatabaseConfig.NAME]
          *  (appId-derived, regenerated by `syncForkConfig`). All platform builders read this. */

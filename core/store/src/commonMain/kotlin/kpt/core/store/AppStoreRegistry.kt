@@ -132,6 +132,20 @@ object AppStoreRegistry : StoreRegistry() {
     val AutoPayBillers = store("autoPayBillers")
     val RecentPayee = store("recentPayee")
 
+    /**
+     * manage-pocket linkable-accounts LEDGER read (`createStore` +
+     * CACHE_FIRST_SWR + atomic replacePage). Keys on
+     * `LinkableAccountKey(clientId)`; consumed by
+     * `PocketRepositoryImp.getAvailableAccountsToLinkScreen(...)`.
+     *
+     * REPLACES upstream PR #2057's multiplatform-settings `linkable_accounts`
+     * cache in `PocketPreferencesDataSource` — this branch's Store5
+     * architecture serves the same read offline-first through Room SoT
+     * (mirrors `PocketStore` / `BeneficiaryStore` / `SelfAccountsStore`
+     * recipe). GOAL D13.
+     */
+    val LinkableAccounts = store("linkableAccounts")
+
     /** TTL durations — financial-read freshness windows. */
     object Ttl {
         /**
@@ -232,6 +246,17 @@ object AppStoreRegistry : StoreRegistry() {
          * up-to-date balances after any transaction posts.
          */
         val SELF_ACCOUNTS: Duration = 2.minutes
+
+        /**
+         * `linkableAccounts` LEDGER TTL — 2 minutes. Same cadence as
+         * [SELF_ACCOUNTS] because the linkable-accounts derivation source is
+         * the SAME `clientsApi.getClientAccounts` endpoint (plus a per-SHARE
+         * market-price round-trip and a snapshot-filter against the
+         * `wallet_pockets` LEDGER). Keeping the two TTLs in lockstep means a
+         * user opening the link-accounts sheet immediately after a balance
+         * change on the dashboard sees matching balance figures.
+         */
+        val LINKABLE_ACCOUNTS: Duration = 2.minutes
     }
 
     /**
@@ -259,5 +284,6 @@ object AppStoreRegistry : StoreRegistry() {
         "standingInstruction" to Ttl.STANDING_INSTRUCTION,
         "offices" to Ttl.OFFICES,
         "selfAccounts" to Ttl.SELF_ACCOUNTS,
+        "linkableAccounts" to Ttl.LINKABLE_ACCOUNTS,
     )
 }

@@ -20,6 +20,7 @@ import kpt.core.store.wallet.biller.provideAutoPayBillerStore
 import kpt.core.store.wallet.client.provideClientDetailStore
 import kpt.core.store.wallet.history.provideHistoryStore
 import kpt.core.store.wallet.invoice.provideInvoiceStore
+import kpt.core.store.wallet.linkableaccount.provideLinkableAccountsStore
 import kpt.core.store.wallet.notification.provideNotificationStore
 import kpt.core.store.wallet.office.provideOfficeStore
 import kpt.core.store.wallet.pocket.providePocketStore
@@ -84,6 +85,15 @@ import org.koin.dsl.module
  *   hybrid). Injects `RecentPayeeDao` only (no fetcher). The derive walk
  *   still lives at the `RecentPayeeRepositoryImpl` layer and writes into the
  *   store via `notifyingWrite` + `RecentPayeeDao.replacePage(sourceAccountId, rows)`.
+ * - [AppStoreRegistry.LinkableAccounts] — LEDGER read store (GOAL D13),
+ *   manage-pocket linkable-accounts Store5 migration. Injects
+ *   `SelfServiceApiManager` (compound fetch: clientsApi + N shareAccountApi
+ *   round-trips) + `LinkableAccountDao` + `PocketDao` (snapshot the
+ *   already-linked accountIds at fetch time — Room read only, no fetcher-side
+ *   write to `wallet_pockets`). Writer performs atomic
+ *   `replacePage(clientId, entities)`. REPLACES upstream PR #2057's
+ *   multiplatform-settings `linkable_accounts` cache in
+ *   `PocketPreferencesDataSource`.
  *
  * All stores register with [StoreCacheManagerImpl] at start-up so a logout
  * cascades `Store.clear()` → SoT `deleteAll` → DAO `deleteAll`.
@@ -124,6 +134,8 @@ val appStoreModule: Module = module {
     // Phase-5 Batch-4 DAOs
     single { get<AppDatabase>().billerDao }
     single { get<AppDatabase>().recentPayeeDao }
+    // manage-pocket linkable-accounts Store5 migration DAO
+    single { get<AppDatabase>().linkableAccountDao }
 
     // Phase-4 pilots
     single(AppStoreRegistry.History) {
@@ -193,6 +205,22 @@ val appStoreModule: Module = module {
         provideRecentPayeeStore(dao = get())
     }
 
+    // manage-pocket linkable-accounts Store5 migration (replaces upstream PR
+    // #2057's multiplatform-settings `linkable_accounts` cache in
+    // `PocketPreferencesDataSource`).
+    single(AppStoreRegistry.LinkableAccounts) {
+        // Uses SelfServiceApiManager — the source `clientsApi.getClientAccounts`
+        // + per-SHARE-account `shareAccountApi.getShareAccountDetails` both
+        // route through the self-service mount (parity with PocketStore). The
+        // PocketDao is injected to snapshot the already-linked set at fetch
+        // time (Room read only; no fetcher-side write to `wallet_pockets`).
+        provideLinkableAccountsStore(
+            apiManager = get(),
+            dao = get(),
+            pocketDao = get(),
+        )
+    }
+
     // Register stores with StoreCacheManager for logout clearing (GOAL D7).
     single(createdAtStart = true) {
         val mgr = get<StoreCacheManager>() as StoreCacheManagerImpl
@@ -215,5 +243,7 @@ val appStoreModule: Module = module {
         // Phase-5 Batch-4 offline / local-derived stores
         mgr.register(get(AppStoreRegistry.AutoPayBillers))
         mgr.register(get(AppStoreRegistry.RecentPayee))
+        // manage-pocket linkable-accounts Store5 migration
+        mgr.register(get(AppStoreRegistry.LinkableAccounts))
     }
 }
