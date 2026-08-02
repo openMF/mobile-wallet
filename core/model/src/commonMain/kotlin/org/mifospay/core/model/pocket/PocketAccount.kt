@@ -24,7 +24,6 @@ data class DetailedPocketAccount(
     val productName: String?,
     val balance: Double?,
     val currencyCode: String?,
-    val currencyDisplaySymbol: String?,
     val decimalPlaces: Int?,
     val status: AccountStatus?,
     // Upstream PR #2057 (manage-pocket) added the per-currency display symbol
@@ -44,7 +43,6 @@ data class LinkableAccount(
     val accountType: AccountType,
     val balance: Double?,
     val currencyCode: String?,
-    val currencyDisplaySymbol: String?,
     val decimalPlaces: Int?,
     val status: AccountStatus?,
     // See rationale on [DetailedPocketAccount.currencyDisplaySymbol].
