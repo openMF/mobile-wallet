@@ -16,13 +16,7 @@ import org.mifospay.core.common.MifosDispatchers
 import org.mifospay.core.datastore.AutoPayPreferencesDataSource
 import org.mifospay.core.datastore.AutoPayPreferencesRepository
 import org.mifospay.core.datastore.AutoPayPreferencesRepositoryImpl
-import org.mifospay.core.datastore.BillDataSource
-import org.mifospay.core.datastore.BillRepository
-import org.mifospay.core.datastore.BillRepositoryImpl
 import org.mifospay.core.datastore.BillerDataSource
-import org.mifospay.core.datastore.BillerRepository
-import org.mifospay.core.datastore.BillerRepositoryImpl
-import org.mifospay.core.datastore.PocketPreferencesDataSource
 import org.mifospay.core.datastore.UserPreferencesDataSource
 import org.mifospay.core.datastore.UserPreferencesRepository
 import org.mifospay.core.datastore.UserPreferencesRepositoryImpl
@@ -33,13 +27,35 @@ val PreferencesModule = module {
     factory { UserPreferencesDataSource(get(), get(named(MifosDispatchers.IO.name))) }
     factory { AutoPayPreferencesDataSource(get(), get(named(MifosDispatchers.IO.name))) }
     factory { BillerDataSource(get(), get(named(MifosDispatchers.IO.name))) }
-    factory { BillDataSource(get(), get(named(MifosDispatchers.IO.name))) }
-    single { PocketPreferencesDataSource(get(), get(named(MifosDispatchers.IO.name))) }
+    // BillDataSource intentionally NOT bound — Phase-4 Batch-A migrated the
+    // OFFLINE_LOCAL_ONLY Bill store to Room (`kpt.core.database.wallet.bill.BillDao`).
+    // The multiplatform-settings-backed `BillDataSource` + `BillRepositoryImpl` in
+    // this module are dead code kept only for one release; delete in Phase-6 follow-up.
+    // NOTE: `BillerDataSource` is still bound above because — until Phase-6 GC —
+    // the old `BillerRepositoryImpl` class (multiplatform-settings-backed) is
+    // reachable on the classpath and constructs a `BillerDataSource` via its
+    // primary constructor if a caller ever creates it directly. In the wired
+    // app path nothing instantiates it (see the DI cut below).
+
+    // manage-pocket linkable-accounts Store5 migration:
+    //  - Upstream PR #2057 (manage-pocket) shipped `PocketPreferencesDataSource`
+    //    (multiplatform-settings-backed cache of pocket_accounts,
+    //    detailed_pocket_accounts, linkable_accounts) as its offline-cache layer
+    //    for the pocket read path.
+    //  - This branch's Store5 architecture already served pocket_accounts +
+    //    detailed_pocket_accounts through the `pocket` Store5 store (Phase-5
+    //    Batch-2 — Room SoT); the linkable_accounts read is NOW served through
+    //    the new `linkableAccounts` Store5 store (Room SoT — see
+    //    `AppStoreRegistry.LinkableAccounts` + `provideLinkableAccountsStore`).
+    //  - The `PocketPreferencesDataSource` binding + backing DataSource +
+    //    entities + mapper are DELETED; `UserPreferencesRepositoryImpl` no
+    //    longer depends on it (logout cache-drain is handled uniformly by
+    //    `StoreCacheManager.clearAll()`, which drains every registered store
+    //    including the new `linkableAccounts` store).
 
     single<UserPreferencesRepository> {
         UserPreferencesRepositoryImpl(
             preferenceManager = get(),
-            pocketPreferencesDataSource = get(),
             ioDispatcher = get(named(MifosDispatchers.IO.name)),
             unconfinedDispatcher = get(named(MifosDispatchers.Unconfined.name)),
         )
@@ -53,15 +69,12 @@ val PreferencesModule = module {
         )
     }
 
-    single<BillerRepository> {
-        BillerRepositoryImpl(
-            billerDataSource = get(),
-        )
-    }
-
-    single<BillRepository> {
-        BillRepositoryImpl(
-            billDataSource = get(),
-        )
-    }
+    // BillRepository binding moved to `core/data/di/RepositoryModule.kt` —
+    // Phase-4 Batch-A OFFLINE_LOCAL_ONLY Room-backed impl
+    // (`org.mifospay.core.data.repositoryImpl.BillOfflineRepositoryImpl`, GOAL D12).
+    // BillerRepository binding moved to `core/data/di/RepositoryModule.kt` —
+    // Phase-5 Batch-4 OFFLINE_LOCAL_ONLY Room-backed impl
+    // (`org.mifospay.core.data.repositoryImpl.BillerOfflineRepositoryImpl`, GOAL D12).
+    // The old multiplatform-settings-backed `BillerRepositoryImpl` in this module
+    // is dead code kept only for one release; delete in Phase-6 follow-up.
 }

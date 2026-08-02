@@ -1,0 +1,43 @@
+# deployment/desktop/microsoft-store/workflow-snippet.yml
+name: desktop-microsoft-store-deploy
+on:
+  workflow_dispatch:
+    inputs:
+      flavor:
+        type: string
+        required: false
+        default: "prod"
+      confirm:
+        description: "Type CONFIRM"
+        required: true
+        type: string
+
+jobs:
+  submit:
+    if: ${{ inputs.confirm == 'CONFIRM' }}
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup JDK
+        uses: actions/setup-java@v4
+        with: { distribution: temurin, java-version: '17' }
+
+      - name: Build + package MSIX
+        shell: bash
+        env:
+          FLAVOR:                            ${{ inputs.flavor }}
+          MAKEAPPX:                          'C:\Program Files (x86)\Windows Kits\10\bin\10.0.22621.0\x64\MakeAppx.exe'
+          MS_PARTNER_CENTER_TENANT_ID:       ${{ secrets.MS_PARTNER_CENTER_TENANT_ID }}
+          MS_PARTNER_CENTER_CLIENT_ID:       ${{ secrets.MS_PARTNER_CENTER_CLIENT_ID }}
+          MS_PARTNER_CENTER_CLIENT_SECRET:   ${{ secrets.MS_PARTNER_CENTER_CLIENT_SECRET }}
+          MS_APP_ID:                         ${{ secrets.MS_APP_ID }}
+        run: bash deployment/desktop/microsoft-store/script.sh
+
+      - name: Submit to Partner Center via StoreBroker
+        uses: microsoft/StoreBroker-Action@v1
+        with:
+          tenant-id:      ${{ secrets.MS_PARTNER_CENTER_TENANT_ID }}
+          client-id:      ${{ secrets.MS_PARTNER_CENTER_CLIENT_ID }}
+          client-secret:  ${{ secrets.MS_PARTNER_CENTER_CLIENT_SECRET }}
+          config-path:    deployment/desktop/microsoft-store/StoreBroker.config.json

@@ -9,8 +9,10 @@
  */
 package org.mifospay.core.data.repository
 
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import org.mifospay.core.common.DataState
+import org.mifospay.core.common.ScreenState
 import org.mifospay.core.model.payload.PocketLinkPayload
 import org.mifospay.core.model.pocket.DetailedPocketAccount
 import org.mifospay.core.model.pocket.LinkableAccount
@@ -20,10 +22,51 @@ interface PocketRepository {
 
     suspend fun getPocketAccounts(): DataState<List<PocketAccount>>
 
-    fun getDetailedPocketAccounts(
+    /**
+     * Phase-5 Batch-2 **LEDGER read** for the `pocket` archetype (GOAL D13) —
+     * returns an offline-first `Flow<ScreenState<List<DetailedPocketAccount>>>`
+     * consumed through the `pocket` Store5
+     * [`Store`][org.mobilenativefoundation.store.store5.Store]
+     * (`createStore` + Room [`SourceOfTruth`][org.mobilenativefoundation.store.store5.SourceOfTruth]
+     * + atomic
+     * [`replacePage`][kpt.core.database.wallet.pocket.PocketDao.replacePage]
+     * writer) via
+     * [`Store.asScreenStream`][kpt.core.base.store.screen.asScreenStream].
+     *
+     * The store is driven by
+     * [`FetchPolicy.CACHE_FIRST_SWR`][kpt.core.base.store.screen.FetchPolicy.CACHE_FIRST_SWR]
+     * (Phase-5 T10 default) — subscribers see the cached page instantly and a
+     * background revalidation fires on the Stale/VeryStale band edge.
+     *
+     * ### Migration from the in-memory cache
+     *
+     * This method REPLACES the pre-store
+     * `getDetailedPocketAccounts(clientId, forceRefresh): Flow<DataState<List<DetailedPocketAccount>>>`
+     * that was Phase-4-deferred out of a Store5 migration. The `forceRefresh`
+     * parameter is gone — callers refresh by RE-SUBSCRIBING (i.e. wrapping this
+     * call in a `MutableSharedFlow<Unit>().flatMapLatest { ... }` in the VM,
+     * the same pattern `BeneficiaryListViewModel` uses). The in-memory
+     * `MutableStateFlow<DataState<...>>` cache in `PocketRepositoryImp` is
+     * REMOVED — Room is the SoT.
+     *
+     * ### Write path (GOAL D1)
+     *
+     * This is a READ path. Pocket CRUD writes ([linkAccounts], [delinkAccounts])
+     * continue to flow through their existing online paths and appear here on
+     * the next refresh cycle. The pre-store optimistic in-memory cache update
+     * inside those writes is REMOVED — the momentary "already-updated"
+     * impression is replaced by an SWR / manual re-subscribe pull through
+     * this store.
+     *
+     * @param clientId owning client id — the store's page key AND the API path
+     *   parameter for the per-client accounts join.
+     * @param scope Coroutine scope for the stream's internal helper coroutines
+     *   (typically `viewModelScope`).
+     */
+    fun getDetailedPocketAccountsScreen(
         clientId: Long,
-        forceRefresh: Boolean = false,
-    ): Flow<DataState<List<DetailedPocketAccount>>>
+        scope: CoroutineScope,
+    ): Flow<ScreenState<List<DetailedPocketAccount>>>
 
     fun getAvailableAccountsToLink(
         clientId: Long,

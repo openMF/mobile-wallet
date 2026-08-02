@@ -9,8 +9,8 @@
  */
 package org.mifospay.core.data.repository
 
-import kotlinx.coroutines.flow.Flow
 import org.mifospay.core.common.DataState
+import org.mifospay.core.common.ScreenStateStream
 import org.mifospay.core.model.autopay.AutoPay
 import org.mifospay.core.model.autopay.AutoPayHistory
 import org.mifospay.core.model.autopay.AutoPayPayload
@@ -20,25 +20,29 @@ import org.mifospay.core.model.autopay.UpcomingPayment
 import org.mifospay.core.network.model.entity.Page
 
 interface AutoPayRepository {
+    // Phase-3 cutover — Flow-shaped reads on ScreenState.
+
     /**
      * Get AutoPay template for creating new AutoPay schedules
      */
     fun getAutoPayTemplate(
         clientId: Long,
         sourceAccountId: Long,
-    ): Flow<DataState<AutoPayTemplate>>
+    ): ScreenStateStream<AutoPayTemplate>
 
     /**
      * Get all AutoPay schedules for a client
      */
     fun getAllAutoPaySchedules(
         clientId: Long,
-    ): Flow<DataState<List<AutoPay>>>
+    ): ScreenStateStream<List<AutoPay>>
 
     /**
      * Get AutoPay schedule by ID
      */
-    fun getAutoPaySchedule(autoPayId: Long): Flow<DataState<AutoPay>>
+    fun getAutoPaySchedule(autoPayId: Long): ScreenStateStream<AutoPay>
+
+    // Writes stay on DataState (Phase-3 D1).
 
     /**
      * Create a new AutoPay schedule
@@ -71,12 +75,14 @@ interface AutoPayRepository {
     suspend fun resumeAutoPaySchedule(autoPayId: Long): DataState<String>
 
     /**
-     * Get AutoPay payment history
+     * Get AutoPay payment history. Keeps the [Page] wrapper inside Content
+     * (mirrors `AutoPayHistoryRepository.getAutoPayHistoryWithPagination`
+     * treatment).
      */
     fun getAutoPayHistory(
         autoPayId: Long,
         limit: Int = 20,
-    ): Flow<DataState<Page<AutoPayHistory>>>
+    ): ScreenStateStream<Page<AutoPayHistory>>
 
     /**
      * Get upcoming payments for all AutoPay schedules
@@ -84,17 +90,18 @@ interface AutoPayRepository {
     fun getUpcomingPayments(
         clientId: Long,
         limit: Int = 10,
-    ): Flow<DataState<List<UpcomingPayment>>>
+    ): ScreenStateStream<List<UpcomingPayment>>
 
     /**
      * Get AutoPay statistics for dashboard
      */
     fun getAutoPayStatistics(
         clientId: Long,
-    ): Flow<DataState<AutoPayStatistics>>
+    ): ScreenStateStream<AutoPayStatistics>
 
     /**
-     * Validate AutoPay payload before submission
+     * Validate AutoPay payload before submission (pure-local validation,
+     * no I/O; stays on DataState).
      */
     suspend fun validateAutoPayPayload(payload: AutoPayPayload): DataState<Boolean>
 }

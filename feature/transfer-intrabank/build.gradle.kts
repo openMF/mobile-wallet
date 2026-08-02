@@ -12,10 +12,7 @@ plugins {
     alias(libs.plugins.kotlin.serialization)
 }
 
-android {
-    namespace = "org.mifospay.feature.transfer.intrabank"
-}
-
+// namespace auto-derives from baseNamespace + module path via kmp.library.convention.
 kotlin {
     sourceSets {
         commonMain.dependencies {
@@ -37,6 +34,6 @@ kotlin {
     }
 }
 
-dependencies {
-    debugImplementation(compose.uiTooling)
-}
+// Top-level `dependencies { debugImplementation(compose.uiTooling) }` is not valid on
+// AGP-9 KMP-library modules — dropped. UI tooling is already available in preview via
+// compose.components.uiToolingPreview in commonMain.

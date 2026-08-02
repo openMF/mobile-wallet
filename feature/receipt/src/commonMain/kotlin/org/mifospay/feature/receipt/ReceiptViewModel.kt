@@ -20,6 +20,18 @@ import org.mifospay.core.model.savingsaccount.TransferDetail
 class ReceiptViewModel(
     savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
+    // TODO(phase-5-batch-3): reads off the existing history / transaction store
+    //   per GOAL D13 — the receipt screen renders a `Transaction` +
+    //   `receiptLink` (see `ReceiptUiState.Success`), which is a projection of
+    //   the same transaction data the batch-4 `AppStoreRegistry.History`
+    //   LEDGER store already caches (`wallet_transactions`). No dedicated
+    //   `ReceiptEntity` / `ReceiptStore` is emitted for this feature — the
+    //   implementation should thread `transactionId` (from savedStateHandle)
+    //   into `SelfServiceRepository.getTransactionsScreen(...)` or a future
+    //   `getTransactionByIdScreen(...)` variant on top of the same store, then
+    //   project the row into `ReceiptUiState.Success`. Kept as an
+    //   Error("Not implemented yet") stub until that wiring lands (existing
+    //   pre-batch-3 behavior — not a Batch-3 regression).
     private val mReceiptState =
         MutableStateFlow<ReceiptUiState>(ReceiptUiState.Error("Not implemented yet"))
     val receiptUiState: StateFlow<ReceiptUiState> = mReceiptState.asStateFlow()

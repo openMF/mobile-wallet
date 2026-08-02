@@ -17,6 +17,7 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 import org.mifospay.core.common.DataState
 import org.mifospay.core.common.DateHelper
+import org.mifospay.core.common.ScreenState
 import org.mifospay.core.data.repository.InterBankRepository
 import org.mifospay.core.data.repository.SelfServiceRepository
 import org.mifospay.core.datastore.UserPreferencesRepository
@@ -169,26 +170,26 @@ class InterbankTransferViewModel(
             }
 
             selfServiceRepository.getActiveAccountsWithAccountTransferTemplate(state.client.id)
-                .collect { result ->
-                    when (result) {
-                        is DataState.Error -> {
-                            mutableStateFlow.update {
-                                it.copy(
-                                    loadingState = InterbankTransferState.LoadingState.Error(
-                                        result.message ?: "Failed to load accounts",
-                                    ),
-                                )
-                            }
-                        }
-
-                        is DataState.Loading -> {
+                .collect { screenState ->
+                    when (screenState) {
+                        is ScreenState.Loading -> {
                             mutableStateFlow.update {
                                 it.copy(loadingState = InterbankTransferState.LoadingState.Loading)
                             }
                         }
 
-                        is DataState.Success -> {
-                            val accounts = result.data
+                        is ScreenState.Empty -> {
+                            mutableStateFlow.update {
+                                it.copy(
+                                    loadingState = InterbankTransferState.LoadingState.Error(
+                                        "No accounts available",
+                                    ),
+                                )
+                            }
+                        }
+
+                        is ScreenState.Content -> {
+                            val accounts = screenState.data
                             if (accounts.isEmpty()) {
                                 mutableStateFlow.update {
                                     it.copy(
@@ -204,6 +205,36 @@ class InterbankTransferViewModel(
                                         fromAccounts = accounts,
                                     )
                                 }
+                            }
+                        }
+
+                        is ScreenState.Error -> {
+                            mutableStateFlow.update {
+                                it.copy(
+                                    loadingState = InterbankTransferState.LoadingState.Error(
+                                        screenState.error.message ?: "Failed to load accounts",
+                                    ),
+                                )
+                            }
+                        }
+
+                        is ScreenState.NoNetwork -> {
+                            mutableStateFlow.update {
+                                it.copy(
+                                    loadingState = InterbankTransferState.LoadingState.Error(
+                                        "No network. Please check your connection.",
+                                    ),
+                                )
+                            }
+                        }
+
+                        is ScreenState.Unauthenticated -> {
+                            mutableStateFlow.update {
+                                it.copy(
+                                    loadingState = InterbankTransferState.LoadingState.Error(
+                                        "Session expired. Please log in again.",
+                                    ),
+                                )
                             }
                         }
                     }

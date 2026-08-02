@@ -53,6 +53,8 @@ import org.mifospay.core.data.repositoryImpl.AuthenticationRepositoryImpl
 import org.mifospay.core.data.repositoryImpl.AutoPayHistoryRepositoryImpl
 import org.mifospay.core.data.repositoryImpl.AutoPayRepositoryImpl
 import org.mifospay.core.data.repositoryImpl.BeneficiaryRepositoryImpl
+import org.mifospay.core.data.repositoryImpl.BillOfflineRepositoryImpl
+import org.mifospay.core.data.repositoryImpl.BillerOfflineRepositoryImpl
 import org.mifospay.core.data.repositoryImpl.BillerRepositoryImpl
 import org.mifospay.core.data.repositoryImpl.BiometricsSetupAdapterImpl
 import org.mifospay.core.data.repositoryImpl.ClientRepositoryImpl
@@ -88,7 +90,19 @@ val RepositoryModule = module {
     single<Json> { Json { ignoreUnknownKeys = true } }
 
     single<AssetRepository> { AssetRepositoryImpl() }
-    single<AccountRepository> { AccountRepositoryImpl(get(), get(), get(ioDispatcher)) }
+    single<AccountRepository> {
+        AccountRepositoryImpl(
+            apiManager = get(),
+            selfManager = get(),
+            ioDispatcher = get(ioDispatcher),
+            // Phase-5 Batch-3 LEDGER store wiring (GOAL D13). Named-qualifier
+            // from AppStoreRegistry.SelfAccounts; NetworkMonitor +
+            // FetchedAtRepository bound by DataModule.
+            selfAccountsStore = get(kpt.core.store.AppStoreRegistry.SelfAccounts),
+            storeNetworkMonitor = get(),
+            fetchedAtRepository = get(),
+        )
+    }
     single<AuthenticationRepository> {
         AuthenticationRepositoryImpl(get(), get(ioDispatcher))
     }
@@ -98,22 +112,106 @@ val RepositoryModule = module {
             apiManager = get(),
             fineractApiManager = get(),
             ioDispatcher = get(ioDispatcher),
+            // Phase-5 Batch-2 SINGLE-ROW-PER-KEY store wiring (GOAL D13). Named-qualifier
+            // from AppStoreRegistry.ClientDetail; NetworkMonitor + FetchedAtRepository
+            // bound by DataModule (kpt.core.data.di.DataModule).
+            clientDetailStore = get(kpt.core.store.AppStoreRegistry.ClientDetail),
+            storeNetworkMonitor = get(),
+            fetchedAtRepository = get(),
         )
     }
     single<DocumentRepository> { DocumentRepositoryImpl(get(), get(ioDispatcher)) }
-    single<InvoiceRepository> { InvoiceRepositoryImpl(get(), get(ioDispatcher)) }
+    single<InvoiceRepository> {
+        InvoiceRepositoryImpl(
+            apiManager = get(),
+            ioDispatcher = get(ioDispatcher),
+            // Phase-5 Batch-2 LEDGER store wiring (GOAL D13). Named-qualifier from
+            // AppStoreRegistry.Invoice; NetworkMonitor + FetchedAtRepository
+            // bound by DataModule.
+            invoiceStore = get(kpt.core.store.AppStoreRegistry.Invoice),
+            storeNetworkMonitor = get(),
+            fetchedAtRepository = get(),
+        )
+    }
     single<InterBankRepository> { InterBankRepositoryImpl(get(), get(ioDispatcher)) }
     single<KycLevelRepository> { KycLevelRepositoryImpl(get(), get(ioDispatcher)) }
-    single<NotificationRepository> { NotificationRepositoryImpl(get(), get(ioDispatcher)) }
-    single<RecentPayeeRepository> { RecentPayeeRepositoryImpl(get(), get(ioDispatcher)) }
+    single<NotificationRepository> {
+        NotificationRepositoryImpl(
+            apiManager = get(),
+            ioDispatcher = get(ioDispatcher),
+            // Phase-5 Batch-2 LEDGER store wiring (GOAL D13). Named-qualifier from
+            // AppStoreRegistry.Notification; NetworkMonitor + FetchedAtRepository
+            // bound by DataModule.
+            notificationStore = get(kpt.core.store.AppStoreRegistry.Notification),
+            storeNetworkMonitor = get(),
+            fetchedAtRepository = get(),
+        )
+    }
+    single<RecentPayeeRepository> {
+        RecentPayeeRepositoryImpl(
+            selfServiceApiManager = get(),
+            ioDispatcher = get(ioDispatcher),
+            // Phase-5 Batch-4 LOCAL-DERIVED store wiring (GOAL D12/D13
+            // hybrid). The DAO is bound by StoreModule
+            // (`kpt.core.store.di.StoreModule`) via
+            // `get<AppDatabase>().recentPayeeDao`.
+            recentPayeeDao = get(),
+        )
+    }
     single<RegistrationRepository> { RegistrationRepositoryImpl(get(), get(ioDispatcher)) }
     single<RunReportRepository> { RunReportRepositoryImpl(get(), get(ioDispatcher)) }
-    single<SavedCardRepository> { SavedCardRepositoryImpl(get(), get(ioDispatcher)) }
-    single<SavingsAccountRepository> { SavingsAccountRepositoryImpl(get(), get(ioDispatcher)) }
+    single<SavedCardRepository> {
+        SavedCardRepositoryImpl(
+            apiManager = get(),
+            ioDispatcher = get(ioDispatcher),
+            // Phase-5 Batch-1 LEDGER store wiring (GOAL D13). Named-qualifier from
+            // AppStoreRegistry.SavedCards; NetworkMonitor + FetchedAtRepository
+            // bound by DataModule (kpt.core.data.di.DataModule).
+            savedCardStore = get(kpt.core.store.AppStoreRegistry.SavedCards),
+            storeNetworkMonitor = get(),
+            fetchedAtRepository = get(),
+        )
+    }
+    single<SavingsAccountRepository> {
+        SavingsAccountRepositoryImpl(
+            apiManager = get(),
+            ioDispatcher = get(ioDispatcher),
+            // Phase-5 Batch-1 SINGLE-ROW-PER-KEY store wiring (GOAL D13). Named-qualifier from
+            // AppStoreRegistry.AccountDetail; NetworkMonitor + FetchedAtRepository
+            // bound by DataModule (kpt.core.data.di.DataModule).
+            accountDetailStore = get(kpt.core.store.AppStoreRegistry.AccountDetail),
+            storeNetworkMonitor = get(),
+            fetchedAtRepository = get(),
+        )
+    }
     single<SearchRepository> { SearchRepositoryImpl(get(), get(ioDispatcher)) }
-    single<SelfServiceRepository> { SelfServiceRepositoryImpl(get(), get(ioDispatcher)) }
+    single<SelfServiceRepository> {
+        SelfServiceRepositoryImpl(
+            apiManager = get(),
+            dispatcher = get(ioDispatcher),
+            // Phase-4 Batch-A LEDGER store wiring (GOAL D13). Named-qualifier from
+            // AppStoreRegistry.History; NetworkMonitor + FetchedAtRepository bound by
+            // DataModule (kpt.core.data.di.DataModule).
+            historyStore = get(kpt.core.store.AppStoreRegistry.History),
+            storeNetworkMonitor = get(),
+            fetchedAtRepository = get(),
+            // Phase-5 Batch-1 LEDGER store wiring (GOAL D13). Named-qualifier from
+            // AppStoreRegistry.Beneficiary; the same NetworkMonitor + FetchedAtRepository
+            // instances are re-used by every store-backed method on this impl.
+            beneficiaryStore = get(kpt.core.store.AppStoreRegistry.Beneficiary),
+        )
+    }
     single<StandingInstructionRepository> {
-        StandingInstructionRepositoryImpl(get(), get(ioDispatcher))
+        StandingInstructionRepositoryImpl(
+            apiManager = get(),
+            ioDispatcher = get(ioDispatcher),
+            // Phase-5 Batch-3 LEDGER store wiring (GOAL D13). Named-qualifier
+            // from AppStoreRegistry.StandingInstruction; NetworkMonitor +
+            // FetchedAtRepository bound by DataModule.
+            standingInstructionStore = get(kpt.core.store.AppStoreRegistry.StandingInstruction),
+            storeNetworkMonitor = get(),
+            fetchedAtRepository = get(),
+        )
     }
     single<ThirdPartyTransferRepository> {
         ThirdPartyTransferRepositoryImpl(get(), get(ioDispatcher))
@@ -121,8 +219,43 @@ val RepositoryModule = module {
     single<TwoFactorAuthRepository> { TwoFactorAuthRepositoryImpl(get(), get(ioDispatcher)) }
     single<UserRepository> { UserRepositoryImpl(get(), get(ioDispatcher)) }
     single<AutoPayRepository> { AutoPayRepositoryImpl(get(), get(ioDispatcher)) }
-    single<OfficeRepository> { OfficeRepositoryImpl(get(), get(ioDispatcher)) }
-    single<PocketRepository> { PocketRepositoryImp(get(), get(), get(), get(named(MifosDispatchers.IO.name))) }
+    single<OfficeRepository> {
+        OfficeRepositoryImpl(
+            apiManager = get(),
+            ioDispatcher = get(ioDispatcher),
+            // Phase-5 Batch-3 LEDGER store wiring (GOAL D13). Named-qualifier
+            // from AppStoreRegistry.Offices; NetworkMonitor + FetchedAtRepository
+            // bound by DataModule.
+            officesStore = get(kpt.core.store.AppStoreRegistry.Offices),
+            storeNetworkMonitor = get(),
+            fetchedAtRepository = get(),
+        )
+    }
+    single<PocketRepository> {
+        PocketRepositoryImp(
+            dataManager = get(),
+            networkMonitor = get(),
+            ioDispatcher = get(ioDispatcher),
+            // Phase-5 Batch-2 LEDGER store wiring (GOAL D13). Named-qualifier from
+            // AppStoreRegistry.Pocket; NetworkMonitor + FetchedAtRepository bound
+            // by DataModule. The PocketDao is bound by StoreModule
+            // (`kpt.core.store.di.StoreModule`) via `get<AppDatabase>().pocketDao`
+            // and is used by `getAvailableAccountsToLink` to read the already-linked
+            // set from the Room SoT snapshot (pre-store this used the in-memory
+            // detailedPocketCache which is now removed).
+            pocketStore = get(kpt.core.store.AppStoreRegistry.Pocket),
+            storeNetworkMonitor = get(),
+            fetchedAtRepository = get(),
+            pocketDao = get(),
+            // manage-pocket linkable-accounts Store5 wiring (replaces upstream
+            // PR #2057's multiplatform-settings `linkable_accounts` cache in
+            // `PocketPreferencesDataSource`). Named-qualifier from
+            // AppStoreRegistry.LinkableAccounts; the store itself is bound by
+            // StoreModule (`kpt.core.store.di.StoreModule`) and injects
+            // SelfServiceApiManager + LinkableAccountDao + PocketDao.
+            linkableAccountsStore = get(kpt.core.store.AppStoreRegistry.LinkableAccounts),
+        )
+    }
 
     // Passcode/biometrics surface — the four bindings below are required by the
     // mifos-authenticator-passcode and mifos-authenticator-biometrics libraries
@@ -137,12 +270,36 @@ val RepositoryModule = module {
     single { QrTransferRouter(userPreferencesRepository = get()) }
     single<AutoPayHistoryRepository> { AutoPayHistoryRepositoryImpl(get(), get(ioDispatcher)) }
 
-    // TODO: Switch to network-based implementation when APIs are finalized
-    // or use hybrid approach syncing local and remote data
-    // single<BillerRepository> { BillerRepositoryImpl(get(), get(ioDispatcher)) }
-
-    // Current local storage implementation
+    // NOTE: `core/data/BillerRepository` (this line) is the NETWORK-based
+    // Fineract biller interface. The binding is REGISTERED but currently
+    // has NO CONSUMERS in the app — feature ViewModels resolve the
+    // grandfathered `org.mifospay.core.datastore.BillerRepository`
+    // interface, which is bound to the OFFLINE store-backed
+    // `BillerOfflineRepositoryImpl` below. Keeping this binding registered
+    // (a) preserves the imports for the day the Fineract biller-management
+    // endpoints materialize (the `TODO` in `BillerRepositoryImpl`), and
+    // (b) is a no-op at runtime because Koin does not instantiate a
+    // singleton until it is resolved. When the Fineract endpoint lands, a
+    // hybrid impl can bridge both interfaces.
     single<BillerRepository> { BillerRepositoryImpl(get(), get(ioDispatcher)) }
+
+    // Phase-4 Batch-A OFFLINE_LOCAL_ONLY Bill store binding (GOAL D12).
+    // Replaces the multiplatform-settings impl that was previously bound in
+    // `core/datastore/di/PreferenceModule.kt` — that binding is REMOVED in
+    // the same commit to avoid a double-registration on `BillRepository`.
+    single<org.mifospay.core.datastore.BillRepository> {
+        BillOfflineRepositoryImpl(dao = get(), ioDispatcher = get(ioDispatcher))
+    }
+
+    // Phase-5 Batch-4 OFFLINE_LOCAL_ONLY Biller store binding (GOAL D12).
+    // Replaces the multiplatform-settings impl that was previously bound in
+    // `core/datastore/di/PreferenceModule.kt` (line 53) — that binding is
+    // REMOVED in the same commit to avoid a double-registration on
+    // `org.mifospay.core.datastore.BillerRepository`. Mirrors the
+    // `BillOfflineRepositoryImpl` cutover above.
+    single<org.mifospay.core.datastore.BillerRepository> {
+        BillerOfflineRepositoryImpl(dao = get(), ioDispatcher = get(ioDispatcher))
+    }
 
     includes(platformModule)
     single<PlatformDependentDataModule> { getPlatformDataModule }

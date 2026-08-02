@@ -13,6 +13,7 @@ import io.ktor.client.plugins.ClientRequestException
 import io.ktor.client.plugins.ServerResponseException
 import io.ktor.http.HttpStatusCode
 import org.mifospay.core.common.DataState
+import org.mifospay.core.common.ScreenState
 
 object AutoPayErrorHandler {
 
@@ -143,6 +144,26 @@ object AutoPayErrorHandler {
         return DataState.Error(
             exception = Exception(error.message),
             data = null,
+        )
+    }
+
+    /**
+     * Phase-3 cutover — sibling of [createErrorDataState] emitting the
+     * template's [ScreenState] error model. Routes authentication/authorization
+     * classes to [ScreenState.Unauthenticated] and network classes to
+     * [ScreenState.NoNetwork]; everything else lands as [ScreenState.Error].
+     * Callers now on [ScreenState] should prefer this over the DataState variant.
+     */
+    fun <T> createErrorScreenState(error: AutoPayError): ScreenState<T> = when (error) {
+        is AutoPayError.AuthenticationError,
+        is AutoPayError.AuthorizationError,
+        -> ScreenState.Unauthenticated
+
+        is AutoPayError.NetworkError -> ScreenState.NoNetwork(isCaptivePortal = false)
+
+        else -> ScreenState.Error(
+            error = Exception(error.message),
+            isNetworkError = false,
         )
     }
 

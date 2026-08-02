@@ -20,6 +20,7 @@ import mobile_wallet.feature.home.generated.resources.feature_home_failed_to_loa
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.getString
 import org.mifospay.core.common.DataState
+import org.mifospay.core.common.ScreenState
 import org.mifospay.core.data.repository.SelfServiceRepository
 import org.mifospay.core.datastore.UserPreferencesRepository
 import org.mifospay.core.model.account.Account
@@ -50,26 +51,25 @@ class HomeViewModel(
     fun getAccounts() {
         launchIO {
             repository.getActiveAccounts(state.client.id)
-                .collect { result ->
-                    when (result) {
-                        is DataState.Error -> {
-                            val errorMessage = result.exception.message
-                                ?.takeIf { it != "null" && it.isNotBlank() }
-                                ?: getString(Res.string.feature_home_failed_to_load_accounts)
+                .collect { screenState ->
+                    when (screenState) {
+                        is ScreenState.Loading -> {
+                            mutableStateFlow.update { it.copy(viewState = ViewState.Loading) }
+                        }
+
+                        is ScreenState.Empty -> {
                             mutableStateFlow.update {
                                 it.copy(
                                     isRefreshing = false,
-                                    viewState = ViewState.Error(errorMessage),
+                                    accounts = emptyList(),
+                                    accountsWithTransactions = emptyMap(),
+                                    viewState = ViewState.NoAccounts,
                                 )
                             }
                         }
 
-                        is DataState.Loading -> {
-                            mutableStateFlow.update { it.copy(viewState = ViewState.Loading) }
-                        }
-
-                        is DataState.Success -> {
-                            if (result.data.isEmpty()) {
+                        is ScreenState.Content -> {
+                            if (screenState.data.isEmpty()) {
                                 mutableStateFlow.update {
                                     it.copy(
                                         isRefreshing = false,
@@ -79,10 +79,10 @@ class HomeViewModel(
                                     )
                                 }
                             } else {
-                                val selected = result.data.firstOrNull()
+                                val selected = screenState.data.firstOrNull()
 
                                 // Save account external IDs map
-                                val accountExternalIds = result.data
+                                val accountExternalIds = screenState.data
                                     .filter { !it.externalId.isNullOrBlank() }
                                     .associate { it.id to it.externalId!! }
                                 preferencesRepository.updateAccountExternalIds(accountExternalIds)
@@ -91,7 +91,7 @@ class HomeViewModel(
                                     mutableStateFlow.update {
                                         it.copy(
                                             isRefreshing = false,
-                                            accounts = result.data,
+                                            accounts = screenState.data,
                                             accountsWithTransactions = emptyMap(),
                                             viewState = ViewState.Content,
                                             selectedAccount = selected,
@@ -106,6 +106,40 @@ class HomeViewModel(
                                 if (selected != null) {
                                     getAccountBasedOnId(selected)
                                 }
+                            }
+                        }
+
+                        is ScreenState.Error -> {
+                            val errorMessage = screenState.error.message
+                                ?.takeIf { it != "null" && it.isNotBlank() }
+                                ?: getString(Res.string.feature_home_failed_to_load_accounts)
+                            mutableStateFlow.update {
+                                it.copy(
+                                    isRefreshing = false,
+                                    viewState = ViewState.Error(errorMessage),
+                                )
+                            }
+                        }
+
+                        is ScreenState.NoNetwork -> {
+                            mutableStateFlow.update {
+                                it.copy(
+                                    isRefreshing = false,
+                                    viewState = ViewState.Error(
+                                        "No network. Please check your connection.",
+                                    ),
+                                )
+                            }
+                        }
+
+                        is ScreenState.Unauthenticated -> {
+                            mutableStateFlow.update {
+                                it.copy(
+                                    isRefreshing = false,
+                                    viewState = ViewState.Error(
+                                        "Session expired. Please log in again.",
+                                    ),
+                                )
                             }
                         }
                     }
@@ -134,19 +168,9 @@ class HomeViewModel(
                 repository.getTransactions(
                     account.id,
                     TRANSACTION_LIMIT,
-                ).collect { result ->
-                    when (result) {
-                        is DataState.Error -> {
-                            mutableStateFlow.update {
-                                it.copy(
-                                    transactionsLoading = false,
-                                    transactions = emptyList(),
-                                    selectedAccount = account,
-                                    currentSelectedAccount = account,
-                                )
-                            }
-                        }
-                        DataState.Loading -> {
+                ).collect { screenState ->
+                    when (screenState) {
+                        is ScreenState.Loading -> {
                             mutableStateFlow.update {
                                 it.copy(
                                     transactions = emptyList(),
@@ -154,19 +178,50 @@ class HomeViewModel(
                                 )
                             }
                         }
-                        is DataState.Success -> {
+
+                        is ScreenState.Empty -> {
+                            val emptyList = emptyList<Transaction>()
                             val newMap = state.accountsWithTransactions.toMutableMap()
-                            newMap.put(account, result.data)
+                            newMap[account] = emptyList
                             mutableStateFlow.update {
                                 it.copy(
                                     transactionsLoading = false,
-                                    transactions = result.data,
+                                    transactions = emptyList,
                                     selectedAccount = account,
                                     currentSelectedAccount = account,
                                     accountsWithTransactions = newMap,
                                 )
                             }
                             applyFilter()
+                        }
+
+                        is ScreenState.Content -> {
+                            val newMap = state.accountsWithTransactions.toMutableMap()
+                            newMap[account] = screenState.data
+                            mutableStateFlow.update {
+                                it.copy(
+                                    transactionsLoading = false,
+                                    transactions = screenState.data,
+                                    selectedAccount = account,
+                                    currentSelectedAccount = account,
+                                    accountsWithTransactions = newMap,
+                                )
+                            }
+                            applyFilter()
+                        }
+
+                        is ScreenState.Error,
+                        is ScreenState.NoNetwork,
+                        is ScreenState.Unauthenticated,
+                        -> {
+                            mutableStateFlow.update {
+                                it.copy(
+                                    transactionsLoading = false,
+                                    transactions = emptyList(),
+                                    selectedAccount = account,
+                                    currentSelectedAccount = account,
+                                )
+                            }
                         }
                     }
                 }

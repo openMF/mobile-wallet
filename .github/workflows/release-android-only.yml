@@ -1,0 +1,38 @@
+# Minimal Android-only release — bypasses the multi-platform orchestrator's large
+# reusable-workflow graph (which triggers a GitHub-backend startup_failure on the
+# fork). Calls ONLY the publish-android reusable workflow → tiny graph.
+name: Release · Android Only
+on:
+  workflow_dispatch:
+    inputs:
+      android_rung:
+        description: 'Android top rung (lower rungs auto-fire)'
+        type: choice
+        options: [firebase, firebase+internal, internal, beta, production]
+        default: firebase
+      version_tag:
+        description: 'Version (empty → auto YYYY.M.D.run)'
+        default: ''
+
+jobs:
+  version:
+    runs-on: ubuntu-latest
+    outputs:
+      tag: ${{ steps.c.outputs.tag }}
+    steps:
+      - id: c
+        run: |
+          if [ -n "${{ inputs.version_tag }}" ]; then
+            echo "tag=${{ inputs.version_tag }}" >> "$GITHUB_OUTPUT"
+          else
+            echo "tag=$(date -u +%Y.%-m.%-d).${{ github.run_number }}" >> "$GITHUB_OUTPUT"
+          fi
+
+  release-android:
+    needs: version
+    uses: therajanmaurya/mifos-x-actionhub-publish-android-kmp/.github/workflows/release.yaml@v2.0.12
+    with:
+      android_package_name: cmp-android
+      version_tag: ${{ needs.version.outputs.tag }}
+      starting_rung: ${{ inputs.android_rung }}
+    secrets: inherit

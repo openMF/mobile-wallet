@@ -9,8 +9,8 @@
  */
 package org.mifospay.core.data.repository
 
-import kotlinx.coroutines.flow.Flow
 import org.mifospay.core.common.DataState
+import org.mifospay.core.common.ScreenStateStream
 import org.mifospay.core.model.autopay.AutoPayHistory
 import org.mifospay.core.network.model.entity.Page
 
@@ -20,26 +20,29 @@ interface AutoPayHistoryRepository {
     /**
      * Get AutoPay history for a specific AutoPay schedule
      */
-    fun getAutoPayHistory(autoPayId: Long): Flow<DataState<List<AutoPayHistory>>>
+    fun getAutoPayHistory(autoPayId: Long): ScreenStateStream<List<AutoPayHistory>>
 
     /**
-     * Get AutoPay history with pagination
+     * Get AutoPay history with pagination.
+     * Keeps the [Page] wrapper inside [org.mifospay.core.common.ScreenState.Content]
+     * (mirrors the Batch A `SelfServiceRepository.getSelfClientDetails(): Page<Client>`
+     * treatment); consumers read `.data.pageItems` when they need the list.
      */
     fun getAutoPayHistoryWithPagination(
         autoPayId: Long,
         limit: Int = 20,
         offset: Int = 0,
-    ): Flow<DataState<Page<AutoPayHistory>>>
+    ): ScreenStateStream<Page<AutoPayHistory>>
 
     /**
-     * Get AutoPay history by ID
+     * Get AutoPay history by ID (point-lookup, stays on DataState).
      */
     suspend fun getHistoryById(id: Long): DataState<AutoPayHistory>
 
     /**
      * Get AutoPay history by status
      */
-    fun getHistoryByStatus(status: String): Flow<DataState<List<AutoPayHistory>>>
+    fun getHistoryByStatus(status: String): ScreenStateStream<List<AutoPayHistory>>
 
     /**
      * Get AutoPay history by date range
@@ -47,17 +50,17 @@ interface AutoPayHistoryRepository {
     fun getHistoryByDateRange(
         fromDate: String,
         toDate: String,
-    ): Flow<DataState<List<AutoPayHistory>>>
+    ): ScreenStateStream<List<AutoPayHistory>>
 
     /**
      * Search AutoPay history
      */
-    fun searchHistory(query: String): Flow<DataState<List<AutoPayHistory>>>
+    fun searchHistory(query: String): ScreenStateStream<List<AutoPayHistory>>
 
     /**
      * Get history statistics
      */
-    fun getHistoryStatistics(autoPayId: Long): Flow<DataState<AutoPayHistoryStatistics>>
+    fun getHistoryStatistics(autoPayId: Long): ScreenStateStream<AutoPayHistoryStatistics>
 }
 
 data class AutoPayHistoryStatistics(

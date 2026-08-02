@@ -7,6 +7,16 @@
  *
  * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
  */
+// TODO(phase-4): Legacy fork-only shim that predates the KMP template migration.
+//  - Imports `com.mifospay.core.model.domain.{client.Client, user.User}` which no longer exist
+//    in the tree (post-migration models live under `org.mifospay.core.model.*` +
+//    `kpt.core.model.*`).
+//  - Uses `com.google.gson.Gson` — not on the module classpath and not a declared catalog alias;
+//    the KMP-migrated stack serializes via kotlinx.serialization + multiplatform-settings.
+//  - Callers (grep confirms zero remaining references from the compiled call sites) should be
+//    migrated to `UserPreferencesDataSource` / `UserPreferencesRepository` (kpt.core.datastore).
+//  Rewrite deferred to the model-layer phase-4 pass; leave as-is for now (Android-only file, will
+//  fail androidMain compile until phase-4 either rewrites to the kpt API or deletes outright).
 package org.mifospay.core.datastore
 
 import android.content.Context

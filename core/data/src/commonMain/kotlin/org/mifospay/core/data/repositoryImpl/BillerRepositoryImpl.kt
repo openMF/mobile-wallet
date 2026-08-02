@@ -27,6 +27,12 @@ import org.mifospay.core.network.FineractApiManager
  * TODO: This implementation uses placeholder API endpoints. When the backend APIs
  * for biller management are finalized, update the endpoints and request/response
  * models according to the actual API contract.
+ *
+ * TODO(phase-4): Migrate to ScreenState via `createOfflineStore` (Biller
+ * autopay-bills tier). Deferred from Phase-3 Batch B cutover because billers
+ * need a real Store5 offline store (SourceOfTruth = Room, fetcher = Fineract
+ * billers/categories endpoints) before their reads can adopt the fork-wide
+ * `ScreenStateStream<T>` envelope.
  */
 class BillerRepositoryImpl(
     private val apiManager: FineractApiManager,

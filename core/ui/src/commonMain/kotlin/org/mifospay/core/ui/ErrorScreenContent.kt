@@ -27,10 +27,10 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import mobile_wallet.core.ui.generated.resources.Res
-import mobile_wallet.core.ui.generated.resources.core_ui_error_occurred
-import mobile_wallet.core.ui.generated.resources.core_ui_retry
-import mobile_wallet.core.ui.generated.resources.core_ui_try_again
+import kpt.core.ui.generated.resources.Res
+import kpt.core.ui.generated.resources.core_ui_error_occurred
+import kpt.core.ui.generated.resources.core_ui_retry
+import kpt.core.ui.generated.resources.core_ui_try_again
 import org.jetbrains.compose.resources.stringResource
 import org.mifospay.core.designsystem.component.MifosButton
 import org.mifospay.core.designsystem.theme.MifosTheme

@@ -22,7 +22,7 @@ import mobile_wallet.feature.history.generated.resources.Res
 import mobile_wallet.feature.history.generated.resources.feature_history_error
 import mobile_wallet.feature.history.generated.resources.feature_history_no_account
 import org.jetbrains.compose.resources.StringResource
-import org.mifospay.core.common.DataState
+import org.mifospay.core.common.ScreenState
 import org.mifospay.core.data.repository.SelfServiceRepository
 import org.mifospay.core.datastore.UserPreferencesRepository
 import org.mifospay.core.model.account.Account
@@ -73,38 +73,53 @@ constructor(
     }
 
     private fun loadTransactions(accountId: Long) {
-        repository.getTransactions(accountId, null).onEach { result ->
-
+        // Phase-4 Batch-A LEDGER read (GOAL D13) — switched from the transitional
+        // `getTransactions(accountId, null)` (`asScreenStateFlow` shim over the raw
+        // Ktorfit flow) to the store-native `getTransactionsScreen(...)` that consumes
+        // the `history` Store5 read (`createStore` + Room SoT + CACHE_FIRST_SWR).
+        // Same `Flow<ScreenState<List<Transaction>>>` shape; consumer branches
+        // are unchanged. Requires `viewModelScope` for the stream's internal
+        // reconnect + periodic + SWR side-fetch coroutines.
+        //
+        // Fold the 6-branch ScreenState into the existing 4-branch HistoryState
+        // ViewState (Loading/Empty/Error/Content). Content(list) drives the
+        // filter cascade; Empty short-circuits directly to the Empty view.
+        // NoNetwork / Unauthenticated fold into the existing Error surface
+        // until Phase-4 wires per-branch messaging.
+        repository.getTransactionsScreen(accountId, limit = null, scope = viewModelScope).onEach { result ->
             when (result) {
-                is DataState.Error -> {
-                    mutableStateFlow.update {
-                        it.copy(viewState = HistoryState.ViewState.Error(Res.string.feature_history_error))
-                    }
-                }
-
-                DataState.Loading -> {
+                is ScreenState.Loading -> {
                     mutableStateFlow.update {
                         it.copy(viewState = HistoryState.ViewState.Loading)
                     }
                 }
 
-                is DataState.Success -> {
+                is ScreenState.Empty -> {
+                    mutableStateFlow.update {
+                        it.copy(
+                            transactions = emptyList(),
+                            viewState = HistoryState.ViewState.Empty,
+                        )
+                    }
+                }
+
+                is ScreenState.Content -> {
                     val transactions = result.data
-                    if (transactions.isNotEmpty()) {
-                        mutableStateFlow.update {
-                            it.copy(
-                                transactions = transactions,
-                                viewState = HistoryState.ViewState.Content(transactions),
-                            )
-                        }
-                        applyFilter(transactions)
-                    } else {
-                        mutableStateFlow.update {
-                            it.copy(
-                                transactions = transactions,
-                                viewState = HistoryState.ViewState.Empty,
-                            )
-                        }
+                    mutableStateFlow.update {
+                        it.copy(
+                            transactions = transactions,
+                            viewState = HistoryState.ViewState.Content(transactions),
+                        )
+                    }
+                    applyFilter(transactions)
+                }
+
+                is ScreenState.Error,
+                is ScreenState.NoNetwork,
+                is ScreenState.Unauthenticated,
+                -> {
+                    mutableStateFlow.update {
+                        it.copy(viewState = HistoryState.ViewState.Error(Res.string.feature_history_error))
                     }
                 }
             }
@@ -112,34 +127,42 @@ constructor(
     }
 
     private fun loadActiveAccounts() {
+        // Fold the 6-branch ScreenState. Content(non-empty) cascades to
+        // loadTransactions; Empty specifically shows the "no account" surface
+        // (existing feature_history_no_account string). NoNetwork /
+        // Unauthenticated fold into the generic error surface for now — the
+        // "no account" error copy is reserved for the semantic empty case.
         repository.getActiveAccounts(state.clientId).onEach { result ->
             when (result) {
-                is DataState.Error -> {
-                    mutableStateFlow.update {
-                        it.copy(viewState = HistoryState.ViewState.Error(Res.string.feature_history_error))
-                    }
-                }
-
-                DataState.Loading -> {
+                is ScreenState.Loading -> {
                     mutableStateFlow.update {
                         it.copy(viewState = HistoryState.ViewState.Loading)
                     }
                 }
 
-                is DataState.Success -> {
+                is ScreenState.Empty -> {
+                    mutableStateFlow.update {
+                        it.copy(viewState = HistoryState.ViewState.Error(Res.string.feature_history_no_account))
+                    }
+                }
+
+                is ScreenState.Content -> {
                     val accounts = result.data
-                    if (accounts.isNotEmpty()) {
-                        loadTransactions(accounts.first().id)
-                        mutableStateFlow.update { state ->
-                            state.copy(
-                                accounts = accounts,
-                                selectedAccount = accounts.firstOrNull(),
-                            )
-                        }
-                    } else {
-                        mutableStateFlow.update {
-                            it.copy(viewState = HistoryState.ViewState.Error(Res.string.feature_history_no_account))
-                        }
+                    loadTransactions(accounts.first().id)
+                    mutableStateFlow.update { state ->
+                        state.copy(
+                            accounts = accounts,
+                            selectedAccount = accounts.firstOrNull(),
+                        )
+                    }
+                }
+
+                is ScreenState.Error,
+                is ScreenState.NoNetwork,
+                is ScreenState.Unauthenticated,
+                -> {
+                    mutableStateFlow.update {
+                        it.copy(viewState = HistoryState.ViewState.Error(Res.string.feature_history_error))
                     }
                 }
             }

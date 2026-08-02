@@ -19,6 +19,7 @@ import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 import org.mifospay.core.common.DataState
+import org.mifospay.core.common.ScreenState
 import org.mifospay.core.common.getSerialized
 import org.mifospay.core.common.setSerialized
 import org.mifospay.core.data.repository.SavedCardRepository
@@ -229,30 +230,62 @@ internal class AddEditCardViewModel(
     }
 
     private fun handleCardResult(action: HandleCardResult) {
-        when (action.result) {
-            is DataState.Loading -> {
+        // `getSavedCard` was migrated to `Flow<ScreenState<SavedCard>>`.
+        // Content prefills the edit form; the various error branches surface
+        // the same dialog the prior DataState.Error path used. Empty is
+        // defensively surfaced as an error (single-record endpoint shouldn't
+        // emit Empty). NoNetwork / Unauthenticated fold into the existing
+        // Error dialog until Phase-4 wires per-branch surfaces.
+        when (val result = action.result) {
+            is ScreenState.Loading -> {
                 mutableStateFlow.update {
                     it.copy(dialogState = AECardState.DialogState.Loading)
                 }
             }
 
-            is DataState.Error -> {
-                val message = action.result.exception.message.toString()
+            is ScreenState.Empty -> {
+                mutableStateFlow.update {
+                    it.copy(dialogState = AECardState.DialogState.Error("Card not found."))
+                }
+            }
+
+            is ScreenState.Error -> {
+                val message = result.error.message.toString()
 
                 mutableStateFlow.update {
                     it.copy(dialogState = AECardState.DialogState.Error(message))
                 }
             }
 
-            is DataState.Success -> {
+            is ScreenState.NoNetwork -> {
                 mutableStateFlow.update {
                     it.copy(
-                        firstName = action.result.data.firstName,
-                        lastName = action.result.data.lastName,
-                        cardNumber = action.result.data.cardNumber,
-                        cvv = action.result.data.cvv,
-                        expiryDate = action.result.data.expiryDate,
-                        backgroundColor = action.result.data.backgroundColor,
+                        dialogState = AECardState.DialogState.Error(
+                            "No network. Please check your connection.",
+                        ),
+                    )
+                }
+            }
+
+            is ScreenState.Unauthenticated -> {
+                mutableStateFlow.update {
+                    it.copy(
+                        dialogState = AECardState.DialogState.Error(
+                            "Session expired. Please log in again.",
+                        ),
+                    )
+                }
+            }
+
+            is ScreenState.Content -> {
+                mutableStateFlow.update {
+                    it.copy(
+                        firstName = result.data.firstName,
+                        lastName = result.data.lastName,
+                        cardNumber = result.data.cardNumber,
+                        cvv = result.data.cvv,
+                        expiryDate = result.data.expiryDate,
+                        backgroundColor = result.data.backgroundColor,
                         dialogState = null,
                     )
                 }
@@ -335,7 +368,14 @@ internal sealed interface AECardAction {
     data object NavigateBack : AECardAction
 
     sealed interface Internal : AECardAction {
-        data class HandleCardResult(val result: DataState<SavedCard>) : Internal
+        /**
+         * Existing-card load result. Uses [ScreenState] (not [DataState]) —
+         * `getSavedCard` was migrated to `Flow<ScreenState<SavedCard>>` in
+         * Phase-3. The add/edit save-result action below stays on [DataState]
+         * because `addSavedCard` / `updateCard` are one-shot suspend calls
+         * that Phase-3 leaves on [DataState].
+         */
+        data class HandleCardResult(val result: ScreenState<SavedCard>) : Internal
         data class HandleAddEditCardResult(val result: DataState<String>) : Internal
     }
 }

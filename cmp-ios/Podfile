@@ -3,7 +3,18 @@ platform :ios, '16.0'
 use_frameworks!
 
 target 'iosApp' do
-  project 'iosApp.xcodeproj'
+  # kmp-product-flavors adoption replaced the standard Debug/Release build
+  # configurations with the per-variant matrix (demo/prod × debug/staging/release).
+  # CocoaPods only generates its .xcfilelist inputs for configs it knows, so map
+  # each custom configuration to its base type — otherwise xcodebuild fails with
+  # "Unable to load contents of file list: Pods-iosApp-…-prodDebug-….xcfilelist".
+  project 'iosApp.xcodeproj',
+          'demoDebug'   => :debug,
+          'demoStaging' => :release,
+          'demoRelease' => :release,
+          'prodDebug'   => :debug,
+          'prodStaging' => :release,
+          'prodRelease' => :release
   pod 'cmp_shared', :path => '../cmp-shared'
 
   # Native Firebase iOS Pods required by firebase-kotlin-sdk

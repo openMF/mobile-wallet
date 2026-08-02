@@ -5,16 +5,12 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 plugins {
-    alias(libs.plugins.kmp.library.convention)
+    alias(libs.plugins.kmp.core.base.library.convention)
     alias(libs.plugins.jetbrainsCompose)
     alias(libs.plugins.compose.compiler)
-}
-
-android {
-    namespace = "template.core.base.designsystem"
 }
 
 kotlin {
@@ -36,7 +32,6 @@ kotlin {
             api(libs.jetbrains.compose.material3.adaptive.navigation)
 
             implementation(libs.jb.lifecycleViewmodel)
-            implementation(libs.window.size)
             implementation(libs.ui.backhandler)
         }
     }
@@ -45,5 +40,5 @@ kotlin {
 compose.resources {
     publicResClass = true
     generateResClass = always
-    packageOfResClass = "template.core.base.designsystem.generated.resources"
+    packageOfResClass = "kpt.core.base.designsystem.generated.resources"
 }

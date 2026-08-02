@@ -36,6 +36,7 @@ import mobile_wallet.feature.accounts.generated.resources.feature_accounts_savin
 import mobile_wallet.feature.accounts.generated.resources.feature_accounts_saving_title_update
 import org.jetbrains.compose.resources.StringResource
 import org.mifospay.core.common.DataState
+import org.mifospay.core.common.ScreenState
 import org.mifospay.core.common.DateHelper
 import org.mifospay.core.common.getSerialized
 import org.mifospay.core.common.setSerialized
@@ -278,22 +279,45 @@ internal class AddEditSavingViewModel(
     }
 
     private fun handleSavingTemplateResult(action: HandleSavingTemplateResult) {
-        when (action.result) {
-            is DataState.Loading -> {
+        // `getSavingAccountTemplate` was migrated to `ScreenStateStream`.
+        // Content builds the form; Empty is defensively surfaced as an error
+        // (a template endpoint shouldn't emit Empty). NoNetwork /
+        // Unauthenticated fold into the existing Error surface until Phase-4
+        // wires per-branch messaging.
+        when (val result = action.result) {
+            is ScreenState.Loading -> {
                 mutableStateFlow.update {
                     it.copy(viewState = AESState.ViewState.Loading)
                 }
             }
 
-            is DataState.Error -> {
+            is ScreenState.Empty -> {
                 mutableStateFlow.update {
-                    it.copy(viewState = Error(action.result.exception.message.toString()))
+                    it.copy(viewState = Error("Template not available."))
                 }
             }
 
-            is DataState.Success -> {
+            is ScreenState.Error -> {
                 mutableStateFlow.update {
-                    it.copy(viewState = AESState.ViewState.Content(action.result.data))
+                    it.copy(viewState = Error(result.error.message.toString()))
+                }
+            }
+
+            is ScreenState.NoNetwork -> {
+                mutableStateFlow.update {
+                    it.copy(viewState = Error("No network. Please check your connection."))
+                }
+            }
+
+            is ScreenState.Unauthenticated -> {
+                mutableStateFlow.update {
+                    it.copy(viewState = Error("Session expired. Please log in again."))
+                }
+            }
+
+            is ScreenState.Content -> {
+                mutableStateFlow.update {
+                    it.copy(viewState = AESState.ViewState.Content(result.data))
                 }
             }
         }
@@ -457,8 +481,14 @@ internal sealed interface AESAction {
     data object CreateOrUpdateSavingAccount : AESAction
 
     sealed interface Internal : AESAction {
+        /** Save/update result — remains on [DataState] (write path). */
         data class HandleSavingAddEditResult(val result: DataState<String>) : Internal
-        data class HandleSavingTemplateResult(val result: DataState<SavingAccountTemplate>) :
+
+        /**
+         * Template load result. Uses [ScreenState] — Phase-3 migrated
+         * `getSavingAccountTemplate` to a `ScreenStateStream`.
+         */
+        data class HandleSavingTemplateResult(val result: ScreenState<SavingAccountTemplate>) :
             Internal
     }
 }

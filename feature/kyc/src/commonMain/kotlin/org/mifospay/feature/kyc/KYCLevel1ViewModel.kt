@@ -19,14 +19,13 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 import org.mifospay.core.common.DataState
 import org.mifospay.core.common.DateHelper
+import org.mifospay.core.common.ScreenState
 import org.mifospay.core.common.getSerialized
 import org.mifospay.core.common.setSerialized
-import org.mifospay.core.common.takeUntilResultSuccess
 import org.mifospay.core.data.repository.KycLevelRepository
 import org.mifospay.core.datastore.UserPreferencesRepository
 import org.mifospay.core.model.kyc.KYCLevel1Details
 import org.mifospay.core.ui.utils.BaseViewModel
-import org.mifospay.feature.kyc.KycLevel1Action.Internal.HandleLevel1Result
 import org.mifospay.feature.kyc.KycLevel1Action.Internal.KycLevel1DetailsResult
 import org.mifospay.feature.kyc.KycLevel1State.DialogState.Error
 import kotlin.time.Clock
@@ -53,11 +52,53 @@ internal class KYCLevel1ViewModel(
             .onEach { savedStateHandle.setSerialized(key = KEY_STATE, value = it) }
             .launchIn(viewModelScope)
 
+        // Prefill the form from the existing KYCLevel1 record (if any). The
+        // stream naturally terminates after one Content emission from the
+        // ktorfit call, so no takeUntilResultSuccess-equivalent is needed.
+        // Empty / NoNetwork / Unauthenticated / Error simply leave the form
+        // blank and clear any residual Loading dialog.
         kycLevelRepository.fetchKYCLevel1Details(state.clientId)
-            .takeUntilResultSuccess()
-            .onEach {
-                sendAction(HandleLevel1Result(it))
-            }.launchIn(viewModelScope)
+            .observeScreen { screenState ->
+                when (screenState) {
+                    is ScreenState.Loading -> {
+                        mutableStateFlow.update {
+                            it.copy(dialogState = KycLevel1State.DialogState.Loading)
+                        }
+                    }
+
+                    is ScreenState.Content -> {
+                        screenState.data?.let { data ->
+                            mutableStateFlow.update {
+                                it.copy(
+                                    firstNameInput = data.firstName,
+                                    lastNameInput = data.lastName,
+                                    addressLine1Input = data.addressLine1,
+                                    addressLine2Input = data.addressLine2,
+                                    mobileNoInput = data.mobileNo,
+                                    dobInput = data.dob,
+                                    currentLevelInput = data.currentLevel,
+                                    doesExist = true,
+                                    dialogState = null,
+                                )
+                            }
+                        } ?: run {
+                            mutableStateFlow.update {
+                                it.copy(dialogState = null)
+                            }
+                        }
+                    }
+
+                    is ScreenState.Empty,
+                    is ScreenState.Error,
+                    is ScreenState.NoNetwork,
+                    is ScreenState.Unauthenticated,
+                    -> {
+                        mutableStateFlow.update {
+                            it.copy(dialogState = null)
+                        }
+                    }
+                }
+            }
     }
 
     override fun handleAction(action: KycLevel1Action) {
@@ -117,8 +158,6 @@ internal class KYCLevel1ViewModel(
             KycLevel1Action.SubmitClicked -> initiateKycLevel1Submission()
 
             is KycLevel1DetailsResult -> handleKycLevel1DetailsResult(action)
-
-            is HandleLevel1Result -> handleLevel1Result(action)
         }
     }
 
@@ -209,43 +248,6 @@ internal class KYCLevel1ViewModel(
         }
     }
 
-    private fun handleLevel1Result(action: HandleLevel1Result) {
-        when (action.result) {
-            is DataState.Success -> {
-                action.result.data?.let { data ->
-                    mutableStateFlow.update {
-                        it.copy(
-                            firstNameInput = data.firstName,
-                            lastNameInput = data.lastName,
-                            addressLine1Input = data.addressLine1,
-                            addressLine2Input = data.addressLine2,
-                            mobileNoInput = data.mobileNo,
-                            dobInput = data.dob,
-                            currentLevelInput = data.currentLevel,
-                            doesExist = true,
-                            dialogState = null,
-                        )
-                    }
-                } ?: run {
-                    mutableStateFlow.update {
-                        it.copy(dialogState = null)
-                    }
-                }
-            }
-
-            is DataState.Loading -> {
-                mutableStateFlow.update {
-                    it.copy(dialogState = KycLevel1State.DialogState.Loading)
-                }
-            }
-
-            else -> {
-                mutableStateFlow.update {
-                    it.copy(dialogState = null)
-                }
-            }
-        }
-    }
 }
 
 @Serializable
@@ -311,7 +313,6 @@ internal sealed interface KycLevel1Action {
     data object NavigateToKycLevel2 : KycLevel1Action
 
     sealed interface Internal : KycLevel1Action {
-        data class HandleLevel1Result(val result: DataState<KYCLevel1Details?>) : Internal
         data class KycLevel1DetailsResult(val result: DataState<String>) : Internal
     }
 }

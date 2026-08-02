@@ -15,28 +15,56 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.stateIn
-import org.mifospay.core.common.DataState
+import org.mifospay.core.common.ScreenState
 import org.mifospay.core.data.repository.NotificationRepository
+import org.mifospay.core.datastore.UserPreferencesRepository
 import org.mifospay.core.model.notification.Notification
 
 internal class NotificationViewModel(
     repository: NotificationRepository,
+    // Phase-5 Batch-2: injected to source the clientId for the store's cache
+    // key. The Fineract `notifications/` endpoint is session-scoped (no
+    // clientId parameter), but the store still partitions the Room SoT per
+    // client so a logout-then-login as a different client cannot surface the
+    // previous user's cached list. `requireNotNull(...)` because the notification
+    // screen is only reachable behind an authenticated session.
+    userPreferencesRepository: UserPreferencesRepository,
 ) : ViewModel() {
+    private val clientId: Long = requireNotNull(userPreferencesRepository.clientId.value)
+
     @OptIn(ExperimentalCoroutinesApi::class)
-    val notificationUiState = repository.fetchNotifications().mapLatest { result ->
+    val notificationUiState = repository.fetchNotificationsScreen(
+        // Phase-5 Batch-2 LEDGER read (GOAL D13) — switched from the
+        // transitional `fetchNotifications()` (`asScreenStateFlow` shim over
+        // the raw Ktorfit flow) to the store-native `fetchNotificationsScreen(...)`
+        // that consumes the `notification` Store5 read (`createStore` + Room
+        // SoT + CACHE_FIRST_SWR + atomic replacePage). Same
+        // `Flow<ScreenState<List<Notification>>>` shape; consumer branches
+        // are unchanged. Requires `viewModelScope` for the stream's internal
+        // reconnect + periodic + SWR side-fetch coroutines.
+        clientId = clientId,
+        scope = viewModelScope,
+    ).mapLatest { result ->
+        // Fold the 6-branch ScreenState back into the 3-branch feature UiState.
+        // Empty is projected to Success(emptyList) so the Screen's existing
+        // `notificationList.isEmpty()` empty-state renderer still fires. The two
+        // richer error branches (NoNetwork / Unauthenticated) are funnelled into
+        // Error until Phase-4 wires per-branch surfaces.
         when (result) {
-            is DataState.Loading -> {
-                NotificationUiState.Loading
-            }
+            is ScreenState.Loading -> NotificationUiState.Loading
 
-            is DataState.Error -> {
-                val message = result.exception.message.toString()
-                NotificationUiState.Error(message)
-            }
+            is ScreenState.Empty -> NotificationUiState.Success(emptyList())
 
-            is DataState.Success -> {
-                NotificationUiState.Success(result.data)
-            }
+            is ScreenState.Content -> NotificationUiState.Success(result.data)
+
+            is ScreenState.Error ->
+                NotificationUiState.Error(result.error.message.toString())
+
+            is ScreenState.NoNetwork ->
+                NotificationUiState.Error("No network. Please check your connection.")
+
+            is ScreenState.Unauthenticated ->
+                NotificationUiState.Error("Session expired. Please log in again.")
         }
     }.stateIn(
         scope = viewModelScope,

@@ -10,14 +10,21 @@
 package org.mifospay.core.data.repositoryImpl
 
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
+import kpt.core.base.store.infra.FetchedAtRepository
+import kpt.core.base.store.screen.FetchPolicy
+import kpt.core.base.store.screen.asScreenStream
+import kpt.core.data.infra.NetworkMonitor as StoreNetworkMonitor
+import kpt.core.store.AppStoreRegistry
+import kpt.core.store.wallet.account.AccountDetailKey
 import org.mifospay.core.common.Constants
 import org.mifospay.core.common.DataState
-import org.mifospay.core.common.asDataStateFlow
+import org.mifospay.core.common.ScreenStateStream
+import org.mifospay.core.data.util.toForkScreenStateFlow
+import org.mifospay.core.common.asScreenStateFlow
 import org.mifospay.core.data.mapper.toModel
 import org.mifospay.core.data.mapper.toSavingDetail
 import org.mifospay.core.data.repository.SavingsAccountRepository
@@ -30,37 +37,76 @@ import org.mifospay.core.model.savingsaccount.TransactionsEntity
 import org.mifospay.core.model.savingsaccount.UpdateSavingAccountEntity
 import org.mifospay.core.network.SelfServiceApiManager
 import org.mifospay.core.network.model.entity.Page
+import org.mobilenativefoundation.store.store5.Store
 
 class SavingsAccountRepositoryImpl(
     private val apiManager: SelfServiceApiManager,
     private val ioDispatcher: CoroutineDispatcher,
+    // Phase-5 Batch-1 SINGLE-ROW-PER-KEY wiring — injected by RepositoryModule so
+    // the store-backed getAccountDetailScreen(...) can consume Store5 via
+    // asScreenStream(...). Nullable-default so existing unit tests without the
+    // store harness continue to compile; getAccountDetail(...) — the legacy
+    // asScreenStateFlow path — is unaffected.
+    private val accountDetailStore: Store<AccountDetailKey, SavingAccountDetail>? = null,
+    private val storeNetworkMonitor: StoreNetworkMonitor? = null,
+    private val fetchedAtRepository: FetchedAtRepository? = null,
 ) : SavingsAccountRepository {
     override suspend fun getSavingsAccounts(
         limit: Int,
-    ): Flow<DataState<Page<SavingsWithAssociationsEntity>>> {
+    ): ScreenStateStream<Page<SavingsWithAssociationsEntity>> {
         return apiManager.savingAccountsListApi
             .getSavingsAccounts(limit)
-            .asDataStateFlow().flowOn(ioDispatcher)
+            .asScreenStateFlow(isEmpty = { it.pageItems.isEmpty() })
+            .flowOn(ioDispatcher)
     }
 
     override suspend fun getSavingsWithAssociations(
         accountId: Long,
         associationType: String,
-    ): Flow<DataState<SavingsWithAssociationsEntity>> {
+    ): ScreenStateStream<SavingsWithAssociationsEntity> {
         return apiManager.savingAccountsListApi
             .getSavingsWithAssociations(accountId, associationType)
-            .catch { DataState.Error(it, null) }
-            .asDataStateFlow()
+            .asScreenStateFlow()
             .flowOn(ioDispatcher)
     }
 
-    override fun getAccountDetail(accountId: Long): Flow<DataState<SavingAccountDetail>> {
+    override fun getAccountDetail(accountId: Long): ScreenStateStream<SavingAccountDetail> {
         return apiManager.savingAccountsListApi
             .getSavingsWithAssociations(accountId, Constants.TRANSACTIONS)
-            .catch { DataState.Error(it, null) }
             .map(SavingsWithAssociationsEntity::toSavingDetail)
-            .asDataStateFlow()
+            .asScreenStateFlow()
             .flowOn(ioDispatcher)
+    }
+
+    // Phase-5 Batch-1 SINGLE-ROW-PER-KEY read — GOAL D13 (`createStore` + CACHE_FIRST_SWR).
+    //
+    // See the interface KDoc for the shape contract. Requires the three store-adapter
+    // dependencies (accountDetailStore + NetworkMonitor + FetchedAtRepository).
+    // If any is null (test wiring), we IllegalState — production DI in
+    // RepositoryModule wires all three unconditionally.
+    override fun getAccountDetailScreen(
+        accountId: Long,
+        scope: CoroutineScope,
+    ): ScreenStateStream<SavingAccountDetail> {
+        val store = checkNotNull(accountDetailStore) {
+            "getAccountDetailScreen requires the `accountDetail` Store5 wiring. Verify " +
+                "RepositoryModule bound AppStoreRegistry.AccountDetail and injected it here."
+        }
+        val netMon = checkNotNull(storeNetworkMonitor) {
+            "getAccountDetailScreen requires kmptoolkit NetworkMonitor. Verify DataModule bound it."
+        }
+        val fetchedAtRepo = checkNotNull(fetchedAtRepository) {
+            "getAccountDetailScreen requires FetchedAtRepository. Verify DataModule bound it."
+        }
+        return store.asScreenStream(
+            key = AccountDetailKey(accountId),
+            networkMonitor = netMon,
+            fetchedAtRepository = fetchedAtRepo,
+            cacheKey = "wallet_saving_account_details-$accountId",
+            scope = scope,
+            fetchPolicy = FetchPolicy.CACHE_FIRST_SWR,
+            ttl = AppStoreRegistry.Ttl.ACCOUNT_DETAIL,
+        ).state.toForkScreenStateFlow()
     }
 
     override suspend fun createSavingsAccount(
@@ -121,26 +167,26 @@ class SavingsAccountRepositoryImpl(
     override suspend fun getSavingAccountTransaction(
         accountId: Long,
         transactionId: Long,
-    ): Flow<DataState<Transaction>> {
+    ): ScreenStateStream<Transaction> {
         return apiManager.savingAccountsListApi
             .getSavingAccountTransaction(accountId, transactionId)
             .map(TransactionsEntity::toModel)
-            .asDataStateFlow()
+            .asScreenStateFlow()
             .flowOn(ioDispatcher)
     }
 
-    override suspend fun payViaMobile(accountId: Long): Flow<DataState<Transaction>> {
+    override suspend fun payViaMobile(accountId: Long): ScreenStateStream<Transaction> {
         return apiManager.savingAccountsListApi
             .payViaMobile(accountId)
             .map(TransactionsEntity::toModel)
-            .asDataStateFlow().flowOn(ioDispatcher)
+            .asScreenStateFlow()
+            .flowOn(ioDispatcher)
     }
 
-    override fun getSavingAccountTemplate(clientId: Long): Flow<DataState<SavingAccountTemplate>> {
+    override fun getSavingAccountTemplate(clientId: Long): ScreenStateStream<SavingAccountTemplate> {
         return apiManager.savingAccountsListApi
             .getSavingAccountTemplate(clientId)
-            .catch { DataState.Error(it, null) }
-            .asDataStateFlow()
+            .asScreenStateFlow()
             .flowOn(ioDispatcher)
     }
 }

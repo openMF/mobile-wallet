@@ -46,10 +46,10 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import mobile_wallet.core.ui.generated.resources.Res
-import mobile_wallet.core.ui.generated.resources.core_ui_error_icon_description
-import mobile_wallet.core.ui.generated.resources.core_ui_password_requirements
-import mobile_wallet.core.ui.generated.resources.core_ui_password_strength_labels
+import kpt.core.ui.generated.resources.Res
+import kpt.core.ui.generated.resources.core_ui_error_icon_description
+import kpt.core.ui.generated.resources.core_ui_password_requirements
+import kpt.core.ui.generated.resources.core_ui_password_strength_labels
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.stringArrayResource
 import org.jetbrains.compose.resources.stringResource

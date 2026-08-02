@@ -27,8 +27,8 @@ import mobile_wallet.feature.transfer_intrabank.generated.resources.feature_make
 import mobile_wallet.feature.transfer_intrabank.generated.resources.feature_make_transfer_error_select_account
 import mobile_wallet.feature.transfer_intrabank.generated.resources.feature_make_transfer_user_verification_failed
 import org.jetbrains.compose.resources.StringResource
-import org.mifospay.core.common.DataState
 import org.mifospay.core.common.DateHelper
+import org.mifospay.core.common.ScreenState
 import org.mifospay.core.common.StringResourceSerializer
 import org.mifospay.core.common.UiError
 import org.mifospay.core.common.toUiError
@@ -297,9 +297,15 @@ internal class TransferConfirmViewModel(
         mutableStateFlow.update {
             it.copy(dialogState = TransferConfirmState.DialogState.Loading)
         }
+        // Phase-3 fold: `ThirdPartyTransferRepository.makeTransfer` was
+        // migrated to `ScreenStateStream<TPTResponse>`. Content produces the
+        // TransferResult; Empty is defensively surfaced as a generic error (a
+        // submit endpoint should not emit Empty); NoNetwork / Unauthenticated
+        // fold into the existing `Error.ApiError` surface until Phase-4
+        // differentiates them.
         repository.makeTransfer(state.transferPayload).collect { result ->
             when (result) {
-                is DataState.Loading -> {
+                is ScreenState.Loading -> {
                     mutableStateFlow.update {
                         it.copy(
                             isProcessing = true,
@@ -308,9 +314,10 @@ internal class TransferConfirmViewModel(
                     }
                 }
 
-                is DataState.Error -> {
-                    // Use UiError for automatic error message parsing with localized strings
-                    val uiError = result.toUiError(DefaultErrorMessageProvider)
+                is ScreenState.Empty -> {
+                    val uiError = IllegalStateException(
+                        "Transfer submission returned no response.",
+                    ).toUiError(DefaultErrorMessageProvider)
                     mutableStateFlow.update {
                         it.copy(
                             isProcessing = false,
@@ -319,7 +326,42 @@ internal class TransferConfirmViewModel(
                     }
                 }
 
-                is DataState.Success -> {
+                is ScreenState.Error -> {
+                    // Use UiError for automatic error message parsing with localized strings
+                    val uiError = result.error.toUiError(DefaultErrorMessageProvider)
+                    mutableStateFlow.update {
+                        it.copy(
+                            isProcessing = false,
+                            dialogState = TransferConfirmState.DialogState.Error.ApiError(uiError),
+                        )
+                    }
+                }
+
+                is ScreenState.NoNetwork -> {
+                    val uiError = Exception(
+                        "No network. Please check your connection.",
+                    ).toUiError(DefaultErrorMessageProvider)
+                    mutableStateFlow.update {
+                        it.copy(
+                            isProcessing = false,
+                            dialogState = TransferConfirmState.DialogState.Error.ApiError(uiError),
+                        )
+                    }
+                }
+
+                is ScreenState.Unauthenticated -> {
+                    val uiError = Exception(
+                        "Session expired. Please log in again.",
+                    ).toUiError(DefaultErrorMessageProvider)
+                    mutableStateFlow.update {
+                        it.copy(
+                            isProcessing = false,
+                            dialogState = TransferConfirmState.DialogState.Error.ApiError(uiError),
+                        )
+                    }
+                }
+
+                is ScreenState.Content -> {
                     val response = result.data
                     val transferResult = TransferResult(
                         transactionId = response.resourceId ?: "",

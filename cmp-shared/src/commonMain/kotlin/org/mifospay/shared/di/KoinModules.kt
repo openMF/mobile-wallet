@@ -87,12 +87,23 @@ object KoinModules {
     private val networkModules = module {
         includes(LocalModule, NetworkModule)
     }
-    private val sharedModule = module {
+    // Visibility widened to `internal` so the NEW app shell's initKoin
+    // (`cmp.shared.utils.initKoin`, `cmp-shared/utils/KoinExt.kt`) can splice
+    // this list onto `cmp.navigation.di.KoinModules.allModules` at start-up.
+    // The new shell wholesale-bridges the fork's `MifosApp` (which composes
+    // ~60 fork feature screens with `koinViewModel()`-resolved fork VMs); the
+    // template shell's Koin graph carries the fork core/network/data/domain/
+    // passcode modules already (see `cmp-navigation/.../KoinModules.kt`
+    // `forkCommonModule`, `forkNetworkModule`, `forkDataModule`,
+    // `forkDomainModule`, `forkFeatureModule`, `MifosPasscodeModule`,
+    // `PreferencesModule`), but NOT this featureModules aggregate nor the
+    // shared VMs — those get spliced in by `KoinExt.initKoin`.
+    internal val sharedModule = module {
         viewModelOf(::MifosPayViewModel)
         viewModelOf(::InstanceSelectorViewModel)
         viewModelOf(::TransferOptionsViewModel)
     }
-    private val featureModules = module {
+    internal val featureModules = module {
         includes(
             AuthModule,
             HomeModule,

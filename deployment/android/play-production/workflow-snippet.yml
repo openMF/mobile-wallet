@@ -1,0 +1,38 @@
+# deployment/android/play-production/workflow-snippet.yml
+# Reusable GHA snippet for Android → promote beta → production (no build).
+# REQUIRES `requires_confirm: true` — gated by /release approval gate.
+name: android-play-production-promote
+on:
+  workflow_dispatch:
+    inputs:
+      confirm:
+        description: "Type CONFIRM to proceed"
+        required: true
+        type: string
+
+jobs:
+  promote:
+    if: ${{ inputs.confirm == 'CONFIRM' }}
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with: { bundler-cache: true }
+
+      - name: Materialize secrets (vault-mode)
+        if: ${{ secrets.SOPS_AGE_KEY != '' }}
+        env:
+          SOPS_AGE_KEY: ${{ secrets.SOPS_AGE_KEY }}
+        run: bash deployment/_shared/scripts/secrets-pull.sh --required-for android-play-prod-publish
+
+      - name: Materialize secrets (manual-mode)
+        if: ${{ secrets.SOPS_AGE_KEY == '' }}
+        run: |
+          mkdir -p secrets
+          echo '${{ secrets.PLAYSTORE_PUBLISHER_JSON }}' > secrets/live/android/playStorePublishServiceCredentialsFile.json
+
+      - name: Promote to production
+        run: bundle exec fastlane android promote_to_production

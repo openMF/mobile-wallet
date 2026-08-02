@@ -1,0 +1,165 @@
+# Claude Code Ignore File
+# Specifies files and directories that Claude Code should not process
+
+# ==============================================================================
+# Build Outputs & Generated Files
+# ==============================================================================
+**/build/
+**/dist/
+**/.gradle/
+**/.kotlin/
+**/out/
+**/target/
+**/*.class
+**/*.jar
+**/*.war
+**/*.aar
+**/*.apk
+**/*.aab
+**/*.ipa
+**/*.app
+**/*.dmg
+**/*.exe
+**/*.msi
+**/*.deb
+
+# ==============================================================================
+# IDE & Editor Files
+# ==============================================================================
+**/.idea/
+**/.vscode/
+**/.fleet/
+**/*.iml
+**/*.swp
+**/*.swo
+**/*~
+**/.DS_Store
+
+# ==============================================================================
+# Dependency Directories
+# ==============================================================================
+**/node_modules/
+**/Pods/
+**/.cocoapods/
+**/DerivedData/
+**/Carthage/
+**/vendor/
+
+# ==============================================================================
+# Sensitive Files & Secrets (CRITICAL - Never expose)
+# ==============================================================================
+**/secrets/
+**/keystores/
+**/*.keystore
+**/*.jks
+**/*.p12
+**/*.p8
+**/*.pem
+**/*.key
+**/*.mobileprovision
+**/google-services.json
+**/GoogleService-Info.plist
+**/*-key.json
+**/*_key.json
+**/.env
+**/.env.local
+**/.env.*.local
+# **/secrets.env — REMOVED: secrets.env is retired (2026-06-23).
+
+# ==============================================================================
+# CI/CD Artifacts
+# ==============================================================================
+**/.github/actions/
+**/fastlane/report.xml
+**/fastlane/Preview.html
+**/fastlane/screenshots/
+**/fastlane/test_output/
+**/fastlane/README.md
+**/coverage/
+**/.nyc_output/
+
+# ==============================================================================
+# Version Control
+# ==============================================================================
+**/.git/
+**/.gitattributes
+**/.gitignore
+
+# ==============================================================================
+# Platform-Specific
+# ==============================================================================
+
+# Android
+**/lint-results*.xml
+**/lint-results*.html
+**/*.hprof
+**/captures/
+**/mapping.txt
+**/seeds.txt
+**/usage.txt
+
+# iOS/macOS
+**/xcuserdata/
+**/xcshareddata/xcschemes/
+**/*.xcworkspace/
+**/*.dSYM/
+**/*.ipa
+**/Pods/
+**/PrivateHeaders/
+
+# Desktop
+**/.gradle-cache/
+**/libs/
+
+# Web
+**/dist/
+**/.next/
+**/.nuxt/
+
+# ==============================================================================
+# Temporary Files
+# ==============================================================================
+**/tmp/
+**/temp/
+**/*.tmp
+**/*.log
+**/*.pid
+**/*.seed
+**/*.cache
+**/npm-debug.log*
+**/yarn-debug.log*
+**/yarn-error.log*
+
+# ==============================================================================
+# Large Binary Files
+# ==============================================================================
+**/*.mp4
+**/*.mov
+**/*.avi
+**/*.mkv
+**/*.iso
+**/*.zip
+**/*.tar
+**/*.gz
+**/*.7z
+**/*.rar
+**/*.bin
+
+# ==============================================================================
+# Documentation to Keep (Explicitly Include)
+# ==============================================================================
+# Note: These are NOT ignored
+# - *.md files (documentation)
+# - CLAUDE.md files
+# - docs/ directory content
+# - README files
+# - LICENSE files
+
+# ==============================================================================
+# Test Outputs to Minimize
+# ==============================================================================
+**/test-results/
+**/allure-results/
+**/.screenshots/
+**/.recordings/
+**/playwright-report/

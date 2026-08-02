@@ -40,7 +40,7 @@ import kotlinx.serialization.Transient
 import mobile_wallet.feature.mpay_qr.generated.resources.Res
 import mobile_wallet.feature.mpay_qr.generated.resources.logo
 import org.jetbrains.compose.resources.painterResource
-import org.mifospay.core.common.DataState
+import org.mifospay.core.common.ScreenState
 import org.mifospay.core.common.getSerialized
 import org.mifospay.core.common.setSerialized
 import org.mifospay.core.data.repository.AccountRepository
@@ -125,11 +125,24 @@ class MpayQrViewModel(
     }
 
     private fun loadAccounts() {
+        // Phase-5 Batch-3 cutover: switched from the transitional
+        // `getSelfAccounts(clientId)` shim to the store-backed
+        // `getSelfAccountsScreen(clientId, scope)` (GOAL D13,
+        // `AppStoreRegistry.SelfAccounts`, offline-first via
+        // `wallet_self_accounts` Room SoT, CACHE_FIRST_SWR band). Fold
+        // semantics are identical: Content carries the accounts and triggers
+        // QR generation; Empty still falls back to the default account
+        // (existing "Still generate QR" behavior on failure); Error /
+        // NoNetwork / Unauthenticated all log + regenerate with the default
+        // account until Phase-4 differentiates them.
         viewModelScope.launch {
-            accountRepository.getSelfAccounts(state.client.id)
+            accountRepository.getSelfAccountsScreen(
+                clientId = state.client.id,
+                scope = viewModelScope,
+            )
                 .collect { result ->
                     when (result) {
-                        is DataState.Success -> {
+                        is ScreenState.Content -> {
                             val accounts = result.data
                             val defaultAcc = accounts.find { it.id == state.defaultAccount.accountId }
                                 ?: accounts.firstOrNull()
@@ -152,13 +165,28 @@ class MpayQrViewModel(
                             sendAction(MpayQrAction.Internal.GenerateQr)
                         }
 
-                        is DataState.Error -> {
-                            Logger.e { "Failed to load accounts: ${result.exception.message}" }
+                        is ScreenState.Empty -> {
+                            // No accounts returned — fall back to default and generate QR.
+                            sendAction(MpayQrAction.Internal.GenerateQr)
+                        }
+
+                        is ScreenState.Error -> {
+                            Logger.e { "Failed to load accounts: ${result.error.message}" }
                             // Still generate QR with default account
                             sendAction(MpayQrAction.Internal.GenerateQr)
                         }
 
-                        is DataState.Loading -> {
+                        is ScreenState.NoNetwork -> {
+                            Logger.e { "Failed to load accounts: no network" }
+                            sendAction(MpayQrAction.Internal.GenerateQr)
+                        }
+
+                        is ScreenState.Unauthenticated -> {
+                            Logger.e { "Failed to load accounts: unauthenticated" }
+                            sendAction(MpayQrAction.Internal.GenerateQr)
+                        }
+
+                        is ScreenState.Loading -> {
                             // Loading state handled by viewState
                         }
                     }
@@ -479,14 +507,21 @@ data class MpayQrState(
              * QR code colors optimized for maximum scannability.
              * Uses pure black on white for all elements to ensure
              * fastest and most reliable scanning across all devices.
+             *
+             * NOTE (fork-migration 2026-08-01): the pre-migration KptTheme.colorScheme
+             * carried fork-specific `qrBackground` / `qrForeground` extension roles that
+             * the template's M3-native KptColorScheme does not expose. Reverting to
+             * hardcoded Color.White / Color.Black — matches the "pure black on white"
+             * intent already documented above. Restore branded roles by re-adding
+             * them to `core/base/designsystem/theme/KptColorScheme` if needed.
              */
             private val colors: QrColors
                 @Composable
                 get() = QrColors(
-                    light = QrBrush.solid(KptTheme.colorScheme.qrBackground),
-                    dark = QrBrush.solid(KptTheme.colorScheme.qrForeground),
-                    ball = QrBrush.solid(KptTheme.colorScheme.qrForeground),
-                    frame = QrBrush.solid(KptTheme.colorScheme.qrForeground),
+                    light = QrBrush.solid(androidx.compose.ui.graphics.Color.White),
+                    dark = QrBrush.solid(androidx.compose.ui.graphics.Color.Black),
+                    ball = QrBrush.solid(androidx.compose.ui.graphics.Color.Black),
+                    frame = QrBrush.solid(androidx.compose.ui.graphics.Color.Black),
                 )
 
             val options: QrOptions

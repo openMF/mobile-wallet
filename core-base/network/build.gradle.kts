@@ -5,15 +5,10 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 plugins {
-    alias(libs.plugins.kmp.library.convention)
-    alias(libs.plugins.kotlin.serialization)
-}
-
-android {
-    namespace = "org.mifos.corebase.network"
+    alias(libs.plugins.kmp.core.base.library.convention)
 }
 
 kotlin {
@@ -26,6 +21,7 @@ kotlin {
             api(libs.ktor.client.auth)
             api(libs.ktorfit.lib)
             api(libs.kermit.logging)
+            implementation(projects.coreBase.security)
             api(libs.supabase.postgrest)
         }
 

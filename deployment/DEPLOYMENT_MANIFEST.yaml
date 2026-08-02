@@ -1,0 +1,435 @@
+# ═════════════════════════════════════════════════════════════════════════════
+# DEPLOYMENT_MANIFEST.yaml — kmp-project-template
+#
+# Source-of-truth manifest enumerating every deploy target across all platforms.
+# Per-target enable/disable surface — consumers fork this file and flip
+# `enabled: true` for targets they actually ship.
+#
+# Schema:     core/schemas/deployment-manifest.schema.json
+# Validator:  core/scripts/deployment-manifest-validate.sh
+# Rule:       RULE-DEPLOYMENT-MANIFEST-001 (layers/release/rules/)
+# Promotion:  appends to deployment/PROMOTION_LOG.yaml on every deploy
+#
+# Tier convention:
+#   1 = Tier-1 platforms (Android+iOS+Desktop unsigned+Web GH-Pages) — default ON
+#   2 = Tier-2 platforms (signed/notarized desktop, alt web hosts) — default OFF
+#   3 = Reserved (future store-specific or enterprise targets)
+#
+# Per-target subdirectory layout: deployment/<platform>/<target>/
+#   ├── Fastfile            (lane definitions — sub-plans 07-10)
+#   ├── config.yaml         (target-specific config)
+#   ├── secrets-needs.yaml  (vault aliases + manual fallbacks; schema v1)
+#   └── README.md           (operator-facing notes)
+# ═════════════════════════════════════════════════════════════════════════════
+
+schema_version: "1.0"
+project: kmp-project-template
+template_version: "2026.5.0"
+default_runner_ci: "ubuntu-latest"
+
+platforms:
+
+  android:
+    targets:
+      - canonical_name: android-firebase
+        name: android-firebase
+        tier: 1
+        path: "deployment/android/firebase/"
+        platform: android
+        enabled: true
+        requires_confirm: false
+        runners: { local: "darwin", ci: "ubuntu-latest" }
+        required_capabilities:
+          - android-signing
+          - firebase-app-distribute
+
+      - canonical_name: android-play-internal
+        name: android-play-internal
+        tier: 1
+        path: "deployment/android/play-internal/"
+        platform: android
+        enabled: true
+        requires_confirm: false
+        runners: { local: "darwin", ci: "ubuntu-latest" }
+        required_capabilities:
+          - android-signing
+          - android-play-internal-publish
+
+      - canonical_name: android-play-closed
+        name: android-play-closed
+        tier: 1
+        path: "deployment/android/play-closed/"
+        platform: android
+        enabled: true
+        requires_confirm: false
+        runners: { local: "darwin", ci: "ubuntu-latest" }
+        required_capabilities:
+          - android-signing
+          - android-play-internal-publish
+
+      - canonical_name: android-play-beta
+        name: android-play-beta
+        tier: 1
+        path: "deployment/android/play-beta/"
+        platform: android
+        enabled: true
+        requires_confirm: false
+        runners: { local: "darwin", ci: "ubuntu-latest" }
+        required_capabilities:
+          - android-signing
+          - android-play-internal-publish
+
+      - canonical_name: android-play-production
+        name: android-play-production
+        tier: 1
+        path: "deployment/android/play-production/"
+        platform: android
+        enabled: false
+        requires_confirm: true
+        runners: { local: "darwin", ci: "ubuntu-latest" }
+        required_capabilities:
+          - android-signing
+          - android-play-prod-publish
+
+      - canonical_name: android-sync-listing
+        name: android-sync-listing
+        tier: 1
+        path: "deployment/android/sync-listing/"
+        platform: android
+        enabled: true
+        requires_confirm: false
+        lane: syncListing
+        description: "Sync Play Store title/description/screenshots — no binary upload"
+        runners: { local: "darwin", ci: "ubuntu-latest" }
+        required_capabilities:
+          - android-play-prod-publish
+
+  ios:
+    targets:
+      - canonical_name: ios-firebase
+        name: ios-firebase
+        tier: 1
+        path: "deployment/ios/firebase/"
+        platform: ios
+        enabled: true
+        requires_confirm: false
+        runners: { local: "darwin", ci: "macos-14" }
+        required_capabilities:
+          - ios-signing
+          - firebase-app-distribute
+
+      - canonical_name: ios-testflight
+        name: ios-testflight
+        tier: 1
+        path: "deployment/ios/testflight/"
+        platform: ios
+        enabled: true
+        requires_confirm: false
+        runners: { local: "darwin", ci: "macos-14" }
+        required_capabilities:
+          - ios-signing
+          - ios-testflight
+
+      - canonical_name: ios-appstore
+        name: ios-appstore
+        tier: 1
+        path: "deployment/ios/appstore/"
+        platform: ios
+        enabled: false
+        requires_confirm: true
+        runners: { local: "darwin", ci: "macos-14" }
+        required_capabilities:
+          - ios-signing
+          - ios-app-store
+
+      - canonical_name: ios-sync-listing
+        name: ios-sync-listing
+        tier: 1
+        path: "deployment/ios/sync-listing/"
+        platform: ios
+        enabled: true
+        requires_confirm: false
+        lane: syncListing
+        description: "Sync App Store name/subtitle/keywords/description/screenshots — no binary upload, no submission"
+        runners: { local: "darwin", ci: "macos-14" }
+        required_capabilities:
+          - ios-app-store-connect-api
+
+  desktop:
+    targets:
+      # ── Tier 1 — unsigned community-friendly distributions ────────────────
+      - canonical_name: desktop-linux-deb
+        name: desktop-linux-deb
+        tier: 1
+        path: "deployment/desktop/linux-deb/"
+        platform: desktop
+        enabled: true
+        requires_confirm: false
+        runners: { local: "any", ci: "ubuntu-latest" }
+        required_capabilities: []
+
+      - canonical_name: desktop-windows-exe
+        name: desktop-windows-exe
+        tier: 1
+        path: "deployment/desktop/windows-exe/"
+        platform: desktop
+        enabled: true
+        requires_confirm: false
+        runners: { local: "any", ci: "windows-latest" }
+        required_capabilities: []
+
+      - canonical_name: desktop-macos-dmg-unsigned
+        name: desktop-macos-dmg-unsigned
+        tier: 1
+        path: "deployment/desktop/macos-dmg-unsigned/"
+        platform: desktop
+        enabled: true
+        requires_confirm: false
+        runners: { local: "darwin", ci: "macos-14" }
+        required_capabilities: []
+
+      # ── Mac TestFlight (Tier 1 — signing required but no manual confirmation) ─
+      - canonical_name: desktop-mac-testflight
+        name: desktop-mac-testflight
+        tier: 1
+        path: "deployment/desktop/mac-app-store/"
+        platform: desktop
+        enabled: true
+        requires_confirm: false
+        lane: desktop_testflight
+        description: "Build macOS PKG + upload to Mac TestFlight"
+        runners: { local: "darwin", ci: "macos-14" }
+        required_capabilities:
+          - macos-signing
+          - ios-app-store-connect-api
+
+      # ── Tier 2 — signed / notarized / store-distributed ───────────────────
+      - canonical_name: desktop-dmg-notarized
+        name: desktop-dmg-notarized
+        tier: 2
+        path: "deployment/desktop/dmg-notarized/"
+        platform: desktop
+        enabled: false
+        requires_confirm: true
+        runners: { local: "darwin", ci: "macos-14" }
+        # Match-managed Developer ID cert + Fastlane notarize action — see
+        # deployment/desktop/dmg-notarized/lane.rb. ASC API is required for both
+        # Match cert issuance and notarytool submission.
+        required_capabilities:
+          - macos-signing
+          - ios-app-store-connect-api
+
+      - canonical_name: desktop-msi-signed
+        name: desktop-msi-signed
+        tier: 2
+        path: "deployment/desktop/msi-signed/"
+        platform: desktop
+        enabled: false
+        requires_confirm: true
+        runners: { local: "windows", ci: "windows-latest" }
+        required_capabilities:
+          - desktop-azure-trusted-signing
+
+      - canonical_name: desktop-mac-app-store
+        name: desktop-mac-app-store
+        tier: 2
+        path: "deployment/desktop/mac-app-store/"
+        platform: desktop
+        enabled: true
+        requires_confirm: true
+        lane: promoteMacToAppStore
+        description: "Promote existing Mac TestFlight build to Mac App Store — no rebuild"
+        runners: { local: "darwin", ci: "macos-14" }
+        required_capabilities:
+          - ios-app-store-connect-api
+
+      - canonical_name: desktop-microsoft-store
+        name: desktop-microsoft-store
+        tier: 2
+        path: "deployment/desktop/microsoft-store/"
+        platform: desktop
+        enabled: false
+        requires_confirm: true
+        runners: { local: "windows", ci: "windows-latest" }
+        required_capabilities:
+          - desktop-microsoft-store
+
+      - canonical_name: desktop-sync-listing
+        name: desktop-sync-listing
+        tier: 1
+        path: "deployment/desktop/sync-listing/"
+        platform: desktop
+        enabled: true
+        requires_confirm: false
+        lane: syncListing
+        description: "Sync GitHub Release notes + Mac App Store listing — no binary upload"
+        runners: { local: "darwin", ci: "macos-14" }
+        required_capabilities: []
+        sub_targets:
+          github: { description: "Update GitHub Release notes only", requires_confirm: false }
+          mac:    { description: "Sync Mac App Store listing only (requires ASC API key)", requires_confirm: false }
+          all:    { description: "Both GitHub + Mac App Store (default)", requires_confirm: false }
+
+  web:
+    targets:
+      - canonical_name: web-gh-pages
+        name: web-gh-pages
+        tier: 1
+        path: "deployment/web/gh-pages/"
+        platform: web
+        enabled: true
+        requires_confirm: false
+        runners: { local: "any", ci: "ubuntu-latest" }
+        required_capabilities: []
+
+      - canonical_name: web-cloudflare-pages
+        name: web-cloudflare-pages
+        tier: 2
+        path: "deployment/web/cloudflare-pages/"
+        platform: web
+        enabled: false
+        requires_confirm: false
+        runners: { local: "any", ci: "ubuntu-latest" }
+        required_capabilities:
+          - web-cloudflare-pages-publish
+
+      - canonical_name: web-netlify
+        name: web-netlify
+        tier: 2
+        path: "deployment/web/netlify/"
+        platform: web
+        enabled: false
+        requires_confirm: false
+        runners: { local: "any", ci: "ubuntu-latest" }
+        required_capabilities:
+          - web-netlify-publish
+
+      - canonical_name: web-vercel
+        name: web-vercel
+        tier: 2
+        path: "deployment/web/vercel/"
+        platform: web
+        enabled: false
+        requires_confirm: false
+        runners: { local: "any", ci: "ubuntu-latest" }
+        required_capabilities:
+          - web-vercel-publish
+
+# ─── enabled_targets[] (flat denormalized projection for validator DM2/DM7) ───
+# Mirrors platforms.*.targets[] above — kept in lockstep by manifest-sync tooling.
+# Each row's canonical_name MUST appear exactly once across the platforms[] map.
+enabled_targets:
+  - canonical_name: android-firebase
+    enabled: true
+    platform: android
+    tier: 1
+    requires_confirm: false
+    runners: { local: "darwin", ci: "ubuntu-latest" }
+  - canonical_name: android-play-internal
+    enabled: true
+    platform: android
+    tier: 1
+    requires_confirm: false
+    runners: { local: "darwin", ci: "ubuntu-latest" }
+  - canonical_name: android-play-beta
+    enabled: true
+    platform: android
+    tier: 1
+    requires_confirm: false
+    runners: { local: "darwin", ci: "ubuntu-latest" }
+  - canonical_name: android-play-production
+    enabled: false
+    platform: android
+    tier: 1
+    requires_confirm: true
+    runners: { local: "darwin", ci: "ubuntu-latest" }
+  - canonical_name: ios-firebase
+    enabled: true
+    platform: ios
+    tier: 1
+    requires_confirm: false
+    runners: { local: "darwin", ci: "macos-14" }
+  - canonical_name: ios-testflight
+    enabled: true
+    platform: ios
+    tier: 1
+    requires_confirm: false
+    runners: { local: "darwin", ci: "macos-14" }
+  - canonical_name: ios-appstore
+    enabled: false
+    platform: ios
+    tier: 1
+    requires_confirm: true
+    runners: { local: "darwin", ci: "macos-14" }
+  - canonical_name: desktop-linux-deb
+    enabled: true
+    platform: desktop
+    tier: 1
+    requires_confirm: false
+    runners: { local: "any", ci: "ubuntu-latest" }
+  - canonical_name: desktop-windows-exe
+    enabled: true
+    platform: desktop
+    tier: 1
+    requires_confirm: false
+    runners: { local: "any", ci: "windows-latest" }
+  - canonical_name: desktop-macos-dmg-unsigned
+    enabled: true
+    platform: desktop
+    tier: 1
+    requires_confirm: false
+    runners: { local: "darwin", ci: "macos-14" }
+  - canonical_name: desktop-mac-testflight
+    enabled: true
+    platform: desktop
+    tier: 1
+    requires_confirm: false
+    runners: { local: "darwin", ci: "macos-14" }
+  - canonical_name: desktop-dmg-notarized
+    enabled: false
+    platform: desktop
+    tier: 2
+    requires_confirm: true
+    runners: { local: "darwin", ci: "macos-14" }
+  - canonical_name: desktop-msi-signed
+    enabled: false
+    platform: desktop
+    tier: 2
+    requires_confirm: true
+    runners: { local: "windows", ci: "windows-latest" }
+  - canonical_name: desktop-mac-app-store
+    enabled: true
+    platform: desktop
+    tier: 2
+    requires_confirm: true
+    runners: { local: "darwin", ci: "macos-14" }
+  - canonical_name: desktop-microsoft-store
+    enabled: false
+    platform: desktop
+    tier: 2
+    requires_confirm: true
+    runners: { local: "windows", ci: "windows-latest" }
+  - canonical_name: web-gh-pages
+    enabled: true
+    platform: web
+    tier: 1
+    requires_confirm: false
+    runners: { local: "any", ci: "ubuntu-latest" }
+  - canonical_name: web-cloudflare-pages
+    enabled: false
+    platform: web
+    tier: 2
+    requires_confirm: false
+    runners: { local: "any", ci: "ubuntu-latest" }
+  - canonical_name: web-netlify
+    enabled: false
+    platform: web
+    tier: 2
+    requires_confirm: false
+    runners: { local: "any", ci: "ubuntu-latest" }
+  - canonical_name: web-vercel
+    enabled: false
+    platform: web
+    tier: 2
+    requires_confirm: false
+    runners: { local: "any", ci: "ubuntu-latest" }

@@ -1,0 +1,45 @@
+# deployment/fastlane/Fastfile
+#
+# Entry point when lanes are invoked from the deployment/ directory:
+#   (cd deployment && bundle exec fastlane android deployInternal)
+#   (cd deployment && bundle exec fastlane ios beta)
+#
+# WHY this file exists:
+#   Fastlane resolves lanes from a `fastlane/` subdirectory of cwd.
+#   The deployment/ dir has `deployment/Fastfile` (imported by CI scripts) and
+#   this `deployment/fastlane/Fastfile` (invoked locally via `cd deployment`).
+#   Fastlane's `@path ||= path` bug means imports always resolve relative to
+#   the first Fastfile parsed — so all imports here must use absolute paths.
+#
+# HOW cwd is handled:
+#   Fastlane sets cwd to deployment/ (parent of this fastlane/ dir) before
+#   running lanes. We immediately Dir.chdir to repo root so that ./gradlew,
+#   cmp-android/, secrets/, and all other relative paths work correctly.
+
+# ── OpenSSL 3.x fix: Apple's API closes TCP without TLS close_notify ─────────
+# OP_IGNORE_UNEXPECTED_EOF (128) treats server-side EOF as a clean close rather
+# than raising SSL_read: unexpected eof while reading on every metadata PATCH.
+require "openssl"
+if defined?(OpenSSL::SSL::OP_IGNORE_UNEXPECTED_EOF)
+  OpenSSL::SSL::SSLContext.class_eval do
+    alias_method :_orig_initialize, :initialize
+    def initialize(*args)
+      _orig_initialize(*args)
+      self.options |= OpenSSL::SSL::OP_IGNORE_UNEXPECTED_EOF
+    end
+  end
+end
+
+# ── cwd → repo root ──────────────────────────────────────────────────────────
+# Fastlane sets cwd to deployment/fastlane/ when evaluating this file.
+# Two levels up → repo root.
+repo_root = File.expand_path("../..")
+Dir.chdir(repo_root) rescue Dir.chdir(repo_root)  # suppress chdir-in-chdir warning
+
+# ── Shared config (absolute path) ────────────────────────────────────────────
+import File.join(repo_root, "deployment", "_shared", "config.rb")
+
+# ── Per-target lanes (absolute paths — immune to @path ||= resolution) ──────
+Dir[File.join(repo_root, "deployment", "*", "*", "lane.rb")].sort.each do |lane_file|
+  import lane_file
+end

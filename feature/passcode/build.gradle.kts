@@ -11,10 +11,6 @@ plugins {
     alias(libs.plugins.cmp.feature.convention)
 }
 
-android {
-    namespace = "org.mifospay.feature.passcode"
-}
-
 
 kotlin {
     sourceSets {
@@ -28,6 +24,9 @@ kotlin {
             implementation(compose.ui)
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
+            // BiometricsSetupScreen + MifosPasscode use NavigationBackHandler +
+            // rememberNavigationEventState from AndroidX's KMP back-handling API.
+            implementation(libs.androidx.navigationevent.compose)
         }
     }
 }

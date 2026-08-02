@@ -30,6 +30,8 @@ import org.jetbrains.compose.resources.StringResource
 import org.mifos.lib.loan.core.model.LoanTemplate
 import org.mifos.lib.loan.repository.LoansRepository
 import org.mifospay.core.common.DataState
+import org.mifospay.core.common.ScreenState
+import org.mifospay.core.common.dataOrNull as screenStateData
 import org.mifospay.core.common.DateHelper
 import org.mifospay.core.data.repository.SelfServiceRepository
 import org.mifospay.core.data.util.NetworkMonitor
@@ -142,26 +144,33 @@ internal class LoanApplyViewModel(
     }
 
     private fun handleDataLoaded(
-        client: DataState<Client>,
+        client: ScreenState<Client>,
         template: DataState<LoanTemplate>,
         productTemplate: DataState<LoanTemplate>,
     ) {
+        val loanStates = listOf(template, productTemplate)
+        val clientData = client.screenStateData
         when {
-            listOf(client, template, productTemplate).any { it is DataState.Loading } -> {
+            client is ScreenState.Loading || loanStates.any { it is DataState.Loading } -> {
                 mutableStateFlow.update { it.copy(viewState = LoanApplyState.ViewState.Loading) }
             }
 
-            client is DataState.Success &&
+            client is ScreenState.Content &&
                 template is DataState.Success &&
                 productTemplate is DataState.Success -> {
-                populateForm(client.data, template.data, productTemplate.data)
+                populateForm(clientData!!, template.data, productTemplate.data)
             }
 
             else -> {
-                val message = listOf(client, template, productTemplate)
+                val loanMessage = loanStates
                     .filterIsInstance<DataState.Error<*>>()
                     .firstOrNull()
                     ?.message
+                val clientMessage = (client as? ScreenState.Error)
+                    ?.error
+                    ?.message
+                val message = loanMessage
+                    ?: clientMessage
                     ?: "Something went wrong. Please try again."
                 mutableStateFlow.update {
                     it.copy(viewState = LoanApplyState.ViewState.Error(message))
@@ -399,8 +408,12 @@ internal sealed interface LoanApplyAction {
     data class ReceiveNetworkStatus(val isOnline: Boolean) : LoanApplyAction
 
     sealed interface Internal : LoanApplyAction {
+        // NOTE: `client` is a ScreenState (Phase-3 self-service repo returns
+        // Flow<ScreenState<Client>>) while template + productTemplate remain
+        // DataState (loans repository was not migrated to ScreenState). Kept as-is
+        // to avoid churn in the loans repository surface.
         data class DataLoaded(
-            val client: DataState<Client>,
+            val client: ScreenState<Client>,
             val template: DataState<LoanTemplate>,
             val productTemplate: DataState<LoanTemplate>,
         ) : Internal

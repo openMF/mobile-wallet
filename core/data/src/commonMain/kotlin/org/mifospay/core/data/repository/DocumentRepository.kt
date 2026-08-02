@@ -10,12 +10,13 @@
 package org.mifospay.core.data.repository
 
 import io.ktor.http.content.PartData
-import kotlinx.coroutines.flow.Flow
 import org.mifospay.core.common.DataState
+import org.mifospay.core.common.ScreenStateStream
 import org.mifospay.core.network.model.entity.noncore.Document
 
 interface DocumentRepository {
-    suspend fun getDocuments(entityType: String, entityId: Int): Flow<DataState<List<Document>>>
+    // Phase-3 cutover — Flow-shaped surfaces on ScreenState.
+    suspend fun getDocuments(entityType: String, entityId: Int): ScreenStateStream<List<Document>>
 
     suspend fun createDocument(
         entityType: String,
@@ -23,8 +24,9 @@ interface DocumentRepository {
         name: String,
         description: String,
         fileName: PartData.FileItem,
-    ): Flow<DataState<Unit>>
+    ): ScreenStateStream<Unit>
 
+    // Suspend-shape write stays on DataState (Phase-3 D1).
     suspend fun createDocument(
         entityType: String,
         entityId: Long,
@@ -33,9 +35,9 @@ interface DocumentRepository {
         file: ByteArray,
     ): DataState<String>
 
-    suspend fun downloadDocument(entityType: String, entityId: Int, documentId: Int): Flow<DataState<Document>>
+    suspend fun downloadDocument(entityType: String, entityId: Int, documentId: Int): ScreenStateStream<Document>
 
-    suspend fun deleteDocument(entityType: String, entityId: Int, documentId: Int): Flow<DataState<Unit>>
+    suspend fun deleteDocument(entityType: String, entityId: Int, documentId: Int): ScreenStateStream<Unit>
 
     suspend fun updateDocument(
         entityType: String,
@@ -44,5 +46,5 @@ interface DocumentRepository {
         name: String,
         description: String,
         fileName: PartData.FileItem,
-    ): Flow<DataState<Unit>>
+    ): ScreenStateStream<Unit>
 }

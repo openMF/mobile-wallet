@@ -10,19 +10,65 @@
 package org.mifospay.core.data.repositoryImpl
 
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.flowOn
-import org.mifospay.core.common.DataState
-import org.mifospay.core.common.asDataStateFlow
+import kpt.core.base.store.infra.FetchedAtRepository
+import kpt.core.base.store.screen.FetchPolicy
+import kpt.core.base.store.screen.asScreenStream
+import kpt.core.data.infra.NetworkMonitor as StoreNetworkMonitor
+import kpt.core.store.AppStoreRegistry
+import kpt.core.store.wallet.office.OfficesKey
+import org.mifospay.core.common.ScreenStateStream
+import org.mifospay.core.common.asScreenStateFlow
+import org.mifospay.core.data.util.toForkScreenStateFlow
 import org.mifospay.core.data.repository.OfficeRepository
 import org.mifospay.core.model.office.Office
 import org.mifospay.core.network.SelfServiceApiManager
+import org.mobilenativefoundation.store.store5.Store
 
 class OfficeRepositoryImpl(
     private val apiManager: SelfServiceApiManager,
     private val ioDispatcher: CoroutineDispatcher,
+    // Phase-5 Batch-3 LEDGER wiring — injected by RepositoryModule so the
+    // store-backed getOfficesScreen(...) can consume Store5 via asScreenStream(...).
+    // Nullable-default so existing unit tests without the store harness continue
+    // to compile; getOffices() — the legacy asScreenStateFlow path — is unaffected.
+    private val officesStore: Store<OfficesKey, List<Office>>? = null,
+    private val storeNetworkMonitor: StoreNetworkMonitor? = null,
+    private val fetchedAtRepository: FetchedAtRepository? = null,
 ) : OfficeRepository {
-    override fun getOffices(): Flow<DataState<List<Office>>> {
-        return apiManager.officeApi.getOffices().asDataStateFlow().flowOn(ioDispatcher)
+    override fun getOffices(): ScreenStateStream<List<Office>> {
+        return apiManager.officeApi.getOffices()
+            .asScreenStateFlow(isEmpty = { it.isEmpty() })
+            .flowOn(ioDispatcher)
+    }
+
+    // Phase-5 Batch-3 LEDGER read — GOAL D13 (`createStore` + CACHE_FIRST_SWR).
+    //
+    // See the interface KDoc for the shape contract. Requires the three
+    // store-adapter dependencies (officesStore + NetworkMonitor +
+    // FetchedAtRepository). If any is null (test wiring), we IllegalState —
+    // production DI in RepositoryModule wires all three unconditionally.
+    override fun getOfficesScreen(scope: CoroutineScope): ScreenStateStream<List<Office>> {
+        val store = checkNotNull(officesStore) {
+            "getOfficesScreen requires the `offices` Store5 wiring. Verify " +
+                "RepositoryModule bound AppStoreRegistry.Offices and injected it here."
+        }
+        val netMon = checkNotNull(storeNetworkMonitor) {
+            "getOfficesScreen requires kmptoolkit NetworkMonitor. Verify DataModule bound it."
+        }
+        val fetchedAtRepo = checkNotNull(fetchedAtRepository) {
+            "getOfficesScreen requires FetchedAtRepository. Verify DataModule bound it."
+        }
+        return store.asScreenStream(
+            key = OfficesKey,
+            networkMonitor = netMon,
+            fetchedAtRepository = fetchedAtRepo,
+            cacheKey = "wallet_offices",
+            scope = scope,
+            isEmpty = { it.isEmpty() },
+            fetchPolicy = FetchPolicy.CACHE_FIRST_SWR,
+            ttl = AppStoreRegistry.Ttl.OFFICES,
+        ).state.toForkScreenStateFlow()
     }
 }

@@ -53,7 +53,11 @@ class FastMpayViewModel(
 
             try {
                 val qrData = MpayQrCodeProcessor.decodeMpayString(encodedQrData)
-                val result = processor.processQrCode(qrData)
+                // Phase-5 Batch-3: processor now consumes the store-backed
+                // `getBeneficiaryListScreen(clientId, scope)` (batch-1 reuse)
+                // and `getOfficesScreen(scope)` (batch-3 new), so it needs the
+                // caller's CoroutineScope for Store5 refresh-trigger wiring.
+                val result = processor.processQrCode(qrData, viewModelScope)
                 _resultFlow.update { result }
             } catch (e: CancellationException) {
                 throw e

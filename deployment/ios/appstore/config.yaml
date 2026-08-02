@@ -1,0 +1,15 @@
+# deployment/ios/appstore/config.yaml
+target: ios-appstore
+platform: ios
+tier: 3
+owning_capability: ios-app-store
+output_format: ipa
+output_path: "cmp-ios/build/iosApp.ipa"
+version_format: "appstore"
+signing: ios-match-appstore
+distribution_groups: ["production"]
+retention: "indefinite"
+runners:
+  local: { command: "bundle exec fastlane ios release" }
+  ci:    { workflow_snippet: workflow-snippet.yml }
+requires_confirm: true        # production gating

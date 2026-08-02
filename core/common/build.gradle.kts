@@ -1,71 +1,45 @@
 /*
- * Copyright 2024 Mifos Initiative
+ * Copyright 2025 Mifos Initiative
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 plugins {
     alias(libs.plugins.kmp.library.convention)
     alias(libs.plugins.kotlin.parcelize)
-    alias(libs.plugins.compose.compiler)
     alias(libs.plugins.jetbrainsCompose)
-    alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.compose.compiler)
 }
 
-android {
-    namespace = "org.mifospay.common"
-}
+// core/common has no @Composable definitions, only references StringResource + suspend
+// getString(...) from compose-resources. Ensure the compose runtime is on the classpath
+// so the compose compiler plugin's classpath check passes.
 
 kotlin {
-
-    listOf(
-        iosX64(),
-        iosArm64(),
-        iosSimulatorArm64(),
-    ).forEach {
-        it.binaries.framework {
-            isStatic = false
-            export(libs.kermit.simple)
-        }
-    }
-
     sourceSets {
         commonMain.dependencies {
             implementation(libs.kotlinx.coroutines.core)
-            api(libs.coil.kt)
-            api(libs.coil.core)
-            api(libs.coil.svg)
-            api(libs.coil.network.ktor)
             api(libs.kermit.logging)
-            api(libs.squareup.okio)
-            api(libs.jb.kotlin.stdlib)
             api(libs.kotlinx.datetime)
-            implementation(compose.components.resources)
-            implementation(libs.jb.composeRuntime)
-            implementation(libs.jb.lifecycleViewmodelSavedState)
-            implementation(libs.kotlinx.serialization.json)
-            implementation(libs.kotlinx.collections.immutable)
-        }
 
-        androidMain.dependencies {
-            implementation(libs.kotlinx.coroutines.android)
-        }
-        commonTest.dependencies {
-            implementation(libs.kotlinx.coroutines.test)
-        }
-        iosMain.dependencies {
-            api(libs.kermit.simple)
-        }
-        desktopMain.dependencies {
-            implementation(libs.kotlinx.coroutines.swing)
-            implementation(libs.kotlin.reflect)
-        }
-        jsMain.dependencies {
-            api(libs.jb.kotlin.stdlib.js)
-            api(libs.jb.kotlin.dom)
+            // ktor http types used by DataState / SafeApiCall (ClientRequestException,
+            // ServerResponseException, bodyAsText); also brings kotlinx-io transitively
+            // for kotlinx.io.IOException.
+            implementation(libs.ktor.client.core)
+
+            // ImmutableList / persistent collections used by DateAsStringSerializer.
+            implementation(libs.kotlinx.collections.immutable)
+
+            // SavedStateHandle in commonMain (androidx.lifecycle package, KMP artifact).
+            implementation(libs.jb.lifecycleViewmodelSavedState)
+
+            // Compose Multiplatform resources: StringResource + suspend getString(...)
+            // used by StringProvider / StringResourceSerializer / DialogManager.
+            implementation(compose.runtime)
+            implementation(compose.components.resources)
         }
     }
 }

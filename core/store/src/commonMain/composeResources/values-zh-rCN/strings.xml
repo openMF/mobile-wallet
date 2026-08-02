@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copyright 2026 Mifos Initiative
+
+    This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+    If a copy of the MPL was not distributed with this file,
+    You can obtain one at https://mozilla.org/MPL/2.0/.
+
+    See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
+-->
+<resources>
+    <string name="screenstate_empty_title">这里还没有内容</string>
+    <string name="screenstate_empty_message">有数据时将在这里显示。</string>
+    <string name="screenstate_error_title">出了点问题</string>
+    <string name="screenstate_error_retry">重试</string>
+    <string name="screenstate_nonet_title">您已离线</string>
+    <string name="screenstate_nonet_message">重新连接后我们会重试。</string>
+    <string name="screenstate_nonet_retry">立即重试</string>
+    <string name="screenstate_captive_title">登录 WiFi</string>
+    <string name="screenstate_captive_message">连接前需要您登录网络。</string>
+    <string name="screenstate_captive_action">打开登录页面</string>
+    <string name="error_category_network">无法连接到服务器。请检查您的网络连接。</string>
+    <string name="error_category_auth">会话已过期。请重新登录。</string>
+    <string name="error_category_ratelimit">请求过多。请稍候再试。</string>
+    <string name="error_category_server">服务器暂时出现问题。请稍后再试。</string>
+    <string name="error_category_generic">出了点问题</string>
+</resources>

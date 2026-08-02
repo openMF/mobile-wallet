@@ -1,0 +1,20 @@
+# deployment/desktop/msi-signed/config.yaml
+target: desktop-msi-signed
+platform: desktop
+os: windows
+tier: 2
+owning_capability: desktop-azure-trusted-signing
+output_format: msi
+output_path: "cmp-desktop/build/compose/binaries/main-release/msi/"
+version_format: "git"
+signing: azure-trusted-signing
+distribution_groups: ["public"]
+retention: "indefinite"
+runners:
+  local: { command: "bash deployment/desktop/msi-signed/script.sh" }
+  ci:    { workflow_snippet: workflow-snippet.yml }
+requires_confirm: true
+enabled_by_default: false
+dev_fallback:
+  signing_mode: "self-signed-cert"
+  rationale: "Local dev uses a developer-generated self-signed cert to exercise the signing pipeline without Azure costs."

@@ -1,0 +1,23 @@
+{
+  "v1_0": {
+    "ratings": {
+      "violenceCartoonOrFantasy": "NONE",
+      "violenceRealistic": "NONE",
+      "violenceRealisticProlongedGraphicOrSadistic": "NONE",
+      "profanityOrCrudeHumor": "NONE",
+      "matureOrSuggestiveThemes": "NONE",
+      "horrorOrFearThemesForChildren": "NONE",
+      "medicalOrTreatmentInformation": "NONE",
+      "alcoholTobaccoOrDrugUseOrReferences": "NONE",
+      "gamblingAndContests": "NONE",
+      "sexualContentOrNudity": "NONE",
+      "sexualContentGraphicAndNudity": "NONE"
+    },
+    "booleans": {
+      "ageRatingProcess": false,
+      "gamblingAllowed": false,
+      "unrestrictedWebAccess": false,
+      "kidsAgeBand": false
+    }
+  }
+}

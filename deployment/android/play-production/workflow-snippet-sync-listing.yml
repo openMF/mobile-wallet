@@ -1,0 +1,39 @@
+# deployment/android/play-production/workflow-snippet-sync-listing.yml
+# Reusable GHA snippet: sync Play Store store listing (no APK/AAB upload).
+# Uploads title, description, screenshots, and feature graphic from
+# deployment/android/metadata/ via the Google Play Developer API.
+#
+# NOTE: The app must already exist in Play Console before running this.
+#       Create it by uploading an initial release via the UI or deployInternal lane.
+name: android-sync-play-listing
+on:
+  workflow_call:
+  workflow_dispatch:
+
+jobs:
+  sync_listing:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with: { bundler-cache: true }
+
+      - name: Materialize secrets (vault-mode)
+        if: ${{ secrets.SOPS_AGE_KEY != '' }}
+        env:
+          SOPS_AGE_KEY: ${{ secrets.SOPS_AGE_KEY }}
+        run: bash deployment/_shared/scripts/secrets-pull.sh --required-for android-play-internal-publish
+
+      - name: Materialize secrets (manual-mode)
+        if: ${{ secrets.SOPS_AGE_KEY == '' }}
+        env:
+          PLAYSTORE_SERVICE_ACCOUNT_JSON: ${{ secrets.PLAYSTORECREDS }}
+        run: |
+          KEY_PATH="$(deployment/scripts/build-secrets path play_service_account)"   # LAYOUT SoT — no static path
+          mkdir -p "$(dirname "$KEY_PATH")"
+          printf '%s' "$PLAYSTORE_SERVICE_ACCOUNT_JSON" > "$KEY_PATH"
+
+      - name: Sync Play Store listing
+        run: bash scripts/store/sync-play-listing.sh

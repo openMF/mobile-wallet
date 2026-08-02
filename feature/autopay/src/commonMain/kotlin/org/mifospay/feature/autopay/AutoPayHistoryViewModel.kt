@@ -21,7 +21,7 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import org.mifospay.core.common.DataState
+import org.mifospay.core.common.ScreenState
 import org.mifospay.core.data.repository.AutoPayHistoryRepository
 import org.mifospay.core.data.repository.AutoPayHistoryStatistics
 import org.mifospay.core.model.autopay.AutoPayHistory
@@ -95,25 +95,49 @@ class AutoPayHistoryViewModel(
 
         viewModelScope.launch {
             autoPayHistoryRepository.getAutoPayHistoryWithPagination(autoPayId, limit, offset)
-                .onEach { dataState ->
-                    when (dataState) {
-                        is DataState.Loading -> {
+                .onEach { screenState ->
+                    when (screenState) {
+                        is ScreenState.Loading -> {
                             _uiState.value = _uiState.value.copy(isLoading = true, error = null)
                         }
-                        is DataState.Success -> {
+
+                        is ScreenState.Empty -> {
                             _uiState.value = _uiState.value.copy(
                                 isLoading = false,
-                                historyPage = dataState.data,
+                                historyPage = null,
                                 error = null,
                             )
-                            Logger.d("AUTOPAY_HISTORY AutoPayHistoryViewModel Successfully loaded paginated history: ${dataState.data.pageItems.size} entries")
                         }
-                        is DataState.Error -> {
+
+                        is ScreenState.Content -> {
                             _uiState.value = _uiState.value.copy(
                                 isLoading = false,
-                                error = dataState.exception.message ?: "Failed to load history",
+                                historyPage = screenState.data,
+                                error = null,
                             )
-                            Logger.e("AUTOPAY_HISTORY AutoPayHistoryViewModel Error loading paginated history: ${dataState.exception.message}")
+                            Logger.d("AUTOPAY_HISTORY AutoPayHistoryViewModel Successfully loaded paginated history: ${screenState.data.pageItems.size} entries")
+                        }
+
+                        is ScreenState.Error -> {
+                            _uiState.value = _uiState.value.copy(
+                                isLoading = false,
+                                error = screenState.error.message ?: "Failed to load history",
+                            )
+                            Logger.e("AUTOPAY_HISTORY AutoPayHistoryViewModel Error loading paginated history: ${screenState.error.message}")
+                        }
+
+                        is ScreenState.NoNetwork -> {
+                            _uiState.value = _uiState.value.copy(
+                                isLoading = false,
+                                error = "No network. Please check your connection.",
+                            )
+                        }
+
+                        is ScreenState.Unauthenticated -> {
+                            _uiState.value = _uiState.value.copy(
+                                isLoading = false,
+                                error = "Session expired. Please log in again.",
+                            )
                         }
                     }
                 }
@@ -156,17 +180,26 @@ class AutoPayHistoryViewModel(
 
         viewModelScope.launch {
             autoPayHistoryRepository.searchHistory(query)
-                .onEach { dataState ->
-                    when (dataState) {
-                        is DataState.Success -> {
-                            _uiState.value = _uiState.value.copy(filteredHistoryList = dataState.data)
-                            Logger.d("AUTOPAY_HISTORY AutoPayHistoryViewModel Search completed: ${dataState.data.size} results")
+                .onEach { screenState ->
+                    when (screenState) {
+                        is ScreenState.Content -> {
+                            _uiState.value = _uiState.value.copy(filteredHistoryList = screenState.data)
+                            Logger.d("AUTOPAY_HISTORY AutoPayHistoryViewModel Search completed: ${screenState.data.size} results")
                         }
-                        is DataState.Error -> {
-                            Logger.e("AUTOPAY_HISTORY AutoPayHistoryViewModel Error searching history: ${dataState.exception.message}")
+
+                        is ScreenState.Empty -> {
+                            _uiState.value = _uiState.value.copy(filteredHistoryList = emptyList())
                         }
-                        is DataState.Loading -> {
-                            // Search loading is handled separately
+
+                        is ScreenState.Error -> {
+                            Logger.e("AUTOPAY_HISTORY AutoPayHistoryViewModel Error searching history: ${screenState.error.message}")
+                        }
+
+                        is ScreenState.Loading,
+                        is ScreenState.NoNetwork,
+                        is ScreenState.Unauthenticated,
+                        -> {
+                            // Search loading + non-fatal transient states handled separately
                         }
                     }
                 }
@@ -189,17 +222,26 @@ class AutoPayHistoryViewModel(
 
         viewModelScope.launch {
             autoPayHistoryRepository.getHistoryByStatus(status)
-                .onEach { dataState ->
-                    when (dataState) {
-                        is DataState.Success -> {
-                            _uiState.value = _uiState.value.copy(filteredHistoryList = dataState.data)
-                            Logger.d("AUTOPAY_HISTORY AutoPayHistoryViewModel Status filter applied: ${dataState.data.size} results")
+                .onEach { screenState ->
+                    when (screenState) {
+                        is ScreenState.Content -> {
+                            _uiState.value = _uiState.value.copy(filteredHistoryList = screenState.data)
+                            Logger.d("AUTOPAY_HISTORY AutoPayHistoryViewModel Status filter applied: ${screenState.data.size} results")
                         }
-                        is DataState.Error -> {
-                            Logger.e("AUTOPAY_HISTORY AutoPayHistoryViewModel Error filtering by status: ${dataState.exception.message}")
+
+                        is ScreenState.Empty -> {
+                            _uiState.value = _uiState.value.copy(filteredHistoryList = emptyList())
                         }
-                        is DataState.Loading -> {
-                            // Filter loading is handled separately
+
+                        is ScreenState.Error -> {
+                            Logger.e("AUTOPAY_HISTORY AutoPayHistoryViewModel Error filtering by status: ${screenState.error.message}")
+                        }
+
+                        is ScreenState.Loading,
+                        is ScreenState.NoNetwork,
+                        is ScreenState.Unauthenticated,
+                        -> {
+                            // Filter loading + non-fatal transient states handled separately
                         }
                     }
                 }
@@ -222,17 +264,26 @@ class AutoPayHistoryViewModel(
 
         viewModelScope.launch {
             autoPayHistoryRepository.getHistoryByDateRange(fromDate, toDate)
-                .onEach { dataState ->
-                    when (dataState) {
-                        is DataState.Success -> {
-                            _uiState.value = _uiState.value.copy(filteredHistoryList = dataState.data)
-                            Logger.d("AUTOPAY_HISTORY AutoPayHistoryViewModel Date range filter applied: ${dataState.data.size} results")
+                .onEach { screenState ->
+                    when (screenState) {
+                        is ScreenState.Content -> {
+                            _uiState.value = _uiState.value.copy(filteredHistoryList = screenState.data)
+                            Logger.d("AUTOPAY_HISTORY AutoPayHistoryViewModel Date range filter applied: ${screenState.data.size} results")
                         }
-                        is DataState.Error -> {
-                            Logger.e("AUTOPAY_HISTORY AutoPayHistoryViewModel Error filtering by date range: ${dataState.exception.message}")
+
+                        is ScreenState.Empty -> {
+                            _uiState.value = _uiState.value.copy(filteredHistoryList = emptyList())
                         }
-                        is DataState.Loading -> {
-                            // Filter loading is handled separately
+
+                        is ScreenState.Error -> {
+                            Logger.e("AUTOPAY_HISTORY AutoPayHistoryViewModel Error filtering by date range: ${screenState.error.message}")
+                        }
+
+                        is ScreenState.Loading,
+                        is ScreenState.NoNetwork,
+                        is ScreenState.Unauthenticated,
+                        -> {
+                            // Filter loading + non-fatal transient states handled separately
                         }
                     }
                 }

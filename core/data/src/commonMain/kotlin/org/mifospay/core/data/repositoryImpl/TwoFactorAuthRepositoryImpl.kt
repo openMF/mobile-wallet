@@ -10,10 +10,9 @@
 package org.mifospay.core.data.repositoryImpl
 
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn
-import org.mifospay.core.common.DataState
-import org.mifospay.core.common.asDataStateFlow
+import org.mifospay.core.common.ScreenStateStream
+import org.mifospay.core.common.asScreenStateFlow
 import org.mifospay.core.data.repository.TwoFactorAuthRepository
 import org.mifospay.core.network.FineractApiManager
 import org.mifospay.core.network.model.twofactor.AccessToken
@@ -23,17 +22,22 @@ class TwoFactorAuthRepositoryImpl(
     private val apiManager: FineractApiManager,
     private val ioDispatcher: CoroutineDispatcher,
 ) : TwoFactorAuthRepository {
-    override suspend fun deliveryMethods(): Flow<DataState<List<DeliveryMethod>>> {
-        return apiManager.twoFactorAuthApi.deliveryMethods().asDataStateFlow().flowOn(ioDispatcher)
+    override suspend fun deliveryMethods(): ScreenStateStream<List<DeliveryMethod>> {
+        return apiManager.twoFactorAuthApi.deliveryMethods()
+            .asScreenStateFlow(isEmpty = { it.isEmpty() })
+            .flowOn(ioDispatcher)
     }
 
-    override suspend fun requestOTP(deliveryMethod: String): Flow<DataState<String>> {
+    override suspend fun requestOTP(deliveryMethod: String): ScreenStateStream<String> {
         return apiManager.twoFactorAuthApi
             .requestOTP(deliveryMethod)
-            .asDataStateFlow().flowOn(ioDispatcher)
+            .asScreenStateFlow()
+            .flowOn(ioDispatcher)
     }
 
-    override suspend fun validateToken(token: String): Flow<DataState<AccessToken>> {
-        return apiManager.twoFactorAuthApi.validateToken(token).asDataStateFlow().flowOn(ioDispatcher)
+    override suspend fun validateToken(token: String): ScreenStateStream<AccessToken> {
+        return apiManager.twoFactorAuthApi.validateToken(token)
+            .asScreenStateFlow()
+            .flowOn(ioDispatcher)
     }
 }

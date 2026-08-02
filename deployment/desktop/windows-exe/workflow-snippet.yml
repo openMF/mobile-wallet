@@ -1,0 +1,34 @@
+# deployment/desktop/windows-exe/workflow-snippet.yml
+name: desktop-windows-exe-deploy
+on:
+  workflow_call:
+    inputs:
+      tag:
+        type: string
+        required: true
+
+jobs:
+  build:
+    runs-on: windows-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup JDK
+        uses: actions/setup-java@v4
+        with: { distribution: temurin, java-version: '17' }
+
+      - name: Materialize secrets (vault-mode)
+        if: ${{ secrets.SOPS_AGE_KEY != '' }}
+        env:
+          SOPS_AGE_KEY: ${{ secrets.SOPS_AGE_KEY }}
+        run: bash deployment/_shared/scripts/secrets-pull.sh --required-for github-releases-publish
+        shell: bash
+
+      - name: Build + upload EXE
+        env:
+          TAG:      ${{ inputs.tag }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        shell: bash
+        run: bash deployment/desktop/windows-exe/script.sh

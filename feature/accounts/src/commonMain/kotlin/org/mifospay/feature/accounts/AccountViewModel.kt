@@ -26,6 +26,7 @@ import mobile_wallet.feature.accounts.generated.resources.feature_accounts_benef
 import mobile_wallet.feature.accounts.generated.resources.feature_accounts_default_account_updated
 import org.jetbrains.compose.resources.StringResource
 import org.mifospay.core.common.DataState
+import org.mifospay.core.common.ScreenState
 import org.mifospay.core.data.repository.SelfServiceRepository
 import org.mifospay.core.datastore.UserPreferencesRepository
 import org.mifospay.core.model.account.Account
@@ -54,28 +55,57 @@ class AccountViewModel(
         )
     },
 ) {
+    // Phase-5 Batch-4: cut over from the transitional
+    // `getAccountAndBeneficiaryList` (Flow<DataState<T>>) to the store-native
+    // `getAccountAndBeneficiaryListScreen` (Flow<ScreenState<T>>), which folds
+    // the network-account stream + store-backed beneficiary stream through a
+    // manual `combine {}` fold over the FORK's ScreenState (priority ladder:
+    // NoNetwork > Loading > Unauthenticated > Error > Empty > Content). See
+    // `SelfServiceRepositoryImpl.foldAccountAndBeneficiary` for the fold's
+    // implementation; the template's `combineScreenStates` helper cannot be
+    // used verbatim because it is typed against the template's ScreenState.
     val accountState = mutableStateFlow
         .flatMapLatest { currentState ->
             val clientId = currentState.clientId
             if (clientId != null) {
-                repository.getAccountAndBeneficiaryList(clientId)
+                repository.getAccountAndBeneficiaryListScreen(clientId, viewModelScope)
             } else {
-                flowOf(DataState.Error(IllegalStateException("Client ID not available")))
+                flowOf(
+                    ScreenState.Error(IllegalStateException("Client ID not available")) as ScreenState<org.mifospay.core.model.account.AccountContent>,
+                )
             }
         }
-        .mapLatest {
-            when (it) {
-                is DataState.Loading -> AccountState.ViewState.Loading
-                is DataState.Error -> AccountState.ViewState.Error(it.exception.message.toString())
-                is DataState.Success -> {
-                    val sortedAccounts = it.data.accounts.sortedWith(
+        .mapLatest { screenState ->
+            when (screenState) {
+                is ScreenState.Loading -> AccountState.ViewState.Loading
+
+                is ScreenState.Empty ->
+                    // Empty account-list branch → render an empty Content
+                    // (screen still shows the FAB + empty-state copy; no
+                    // dedicated Empty ViewState variant exists here).
+                    AccountState.ViewState.Content(
+                        accounts = emptyList(),
+                        beneficiaries = emptyList(),
+                    )
+
+                is ScreenState.NoNetwork ->
+                    AccountState.ViewState.Error("No network connection")
+
+                is ScreenState.Unauthenticated ->
+                    AccountState.ViewState.Error("Session expired — please sign in")
+
+                is ScreenState.Error ->
+                    AccountState.ViewState.Error(screenState.error.message.toString())
+
+                is ScreenState.Content -> {
+                    val sortedAccounts = screenState.data.accounts.sortedWith(
                         compareByDescending<Account> { account -> account.status.active }
                             .thenBy { account -> account.number },
                     )
 
                     AccountState.ViewState.Content(
                         accounts = sortedAccounts,
-                        beneficiaries = it.data.beneficiaries,
+                        beneficiaries = screenState.data.beneficiaries,
                     )
                 }
             }

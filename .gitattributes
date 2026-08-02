@@ -1,0 +1,10 @@
+# Auto-detect text files and normalize line endings on commit.
+* text=auto
+
+# Windows batch files must keep CRLF or cmd.exe label parsing breaks.
+*.bat eol=crlf
+*.cmd eol=crlf
+
+# Shell scripts must keep LF regardless of platform.
+*.sh  eol=lf
+gradlew eol=lf

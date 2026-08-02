@@ -13,11 +13,11 @@ import io.ktor.client.plugins.ClientRequestException
 import io.ktor.client.plugins.ServerResponseException
 import io.ktor.client.statement.bodyAsText
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.withContext
 import org.mifospay.core.common.DataState
-import org.mifospay.core.common.asDataStateFlow
+import org.mifospay.core.common.ScreenStateStream
+import org.mifospay.core.common.asScreenStateFlow
 import org.mifospay.core.data.mapper.toEntity
 import org.mifospay.core.data.repository.UserRepository
 import org.mifospay.core.data.util.parseMifosError
@@ -32,12 +32,16 @@ class UserRepositoryImpl(
     private val selfServiceApiManager: SelfServiceApiManager,
     private val ioDispatcher: CoroutineDispatcher,
 ) : UserRepository {
-    override suspend fun getUsers(): Flow<DataState<List<UserWithRole>>> {
-        return selfServiceApiManager.userApi.users().asDataStateFlow().flowOn(ioDispatcher)
+    override suspend fun getUsers(): ScreenStateStream<List<UserWithRole>> {
+        return selfServiceApiManager.userApi.users()
+            .asScreenStateFlow(isEmpty = { it.isEmpty() })
+            .flowOn(ioDispatcher)
     }
 
-    override suspend fun getUser(): Flow<DataState<UserWithRole>> {
-        return selfServiceApiManager.userApi.getUser().asDataStateFlow().flowOn(ioDispatcher)
+    override suspend fun getUser(): ScreenStateStream<UserWithRole> {
+        return selfServiceApiManager.userApi.getUser()
+            .asScreenStateFlow()
+            .flowOn(ioDispatcher)
     }
 
     override suspend fun createUser(newUser: NewUser): DataState<Int> {
@@ -55,10 +59,11 @@ class UserRepositoryImpl(
     override suspend fun updateUser(
         userId: Int,
         updatedUser: NewUser,
-    ): Flow<DataState<GenericResponse>> {
+    ): ScreenStateStream<GenericResponse> {
         return selfServiceApiManager.userApi
             .updateUser(updatedUser.toEntity())
-            .asDataStateFlow().flowOn(ioDispatcher)
+            .asScreenStateFlow()
+            .flowOn(ioDispatcher)
     }
 
     override suspend fun updateUserPassword(

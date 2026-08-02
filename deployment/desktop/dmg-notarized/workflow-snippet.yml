@@ -1,0 +1,61 @@
+# deployment/desktop/dmg-notarized/workflow-snippet.yml
+# Tier-2 Apple-notarized macOS DMG — runs `bundle exec fastlane mac buildNotarizedMacDmg`
+# (see lane.rb). Match manages the Developer ID cert; the only secrets this
+# workflow materializes are ASC API key + Match repo access.
+name: desktop-dmg-notarized-deploy
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "GitHub Release tag the DMG attaches to (must already exist)"
+        required: true
+        type: string
+      confirm:
+        description: "Type CONFIRM to proceed"
+        required: true
+        type: string
+
+jobs:
+  build:
+    if: ${{ inputs.confirm == 'CONFIRM' }}
+    runs-on: macos-14
+    environment: production
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup JDK
+        uses: actions/setup-java@v4
+        with: { distribution: temurin, java-version: '17' }
+
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with: { bundler-cache: true, working-directory: deployment }
+
+      - name: Materialize secrets (vault-mode)
+        if: ${{ secrets.SOPS_AGE_KEY != '' }}
+        env:
+          SOPS_AGE_KEY: ${{ secrets.SOPS_AGE_KEY }}
+        run: bash deployment/_shared/scripts/secrets-pull.sh --required-for macos-signing,desktop-dmg-notarized
+
+      - name: Materialize secrets (manual-mode)
+        if: ${{ secrets.SOPS_AGE_KEY == '' }}
+        run: |
+          mkdir -p secrets/live/apple/appstore secrets/live/apple/match
+          echo "${{ secrets.APPSTORE_AUTH_KEY_B64 }}" | base64 -d > secrets/live/apple/appstore/AuthKey.p8
+          printf '%s' "${{ secrets.APPSTORE_KEY_ID }}"    > secrets/live/apple/appstore/key_id
+          printf '%s' "${{ secrets.APPSTORE_ISSUER_ID }}" > secrets/live/apple/appstore/issuer_id
+          echo "${{ secrets.MATCH_SSH_PRIVATE_KEY_B64 }}" | base64 -d > secrets/live/apple/match/match_ci_key
+          printf '%s' "${{ secrets.MATCH_PASSWORD }}" > secrets/live/apple/match/.match_password
+          chmod 600 secrets/live/apple/match/match_ci_key
+          chmod 600 secrets/live/apple/match/.match_password
+
+      - name: Build + sign + notarize + staple + upload via Fastlane
+        env:
+          GIT_TAG:           ${{ inputs.tag }}
+          GH_TOKEN:          ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN:      ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          MATCH_PASSWORD:    ${{ secrets.MATCH_PASSWORD }}
+        run: (cd deployment && bundle exec fastlane mac buildNotarizedMacDmg)

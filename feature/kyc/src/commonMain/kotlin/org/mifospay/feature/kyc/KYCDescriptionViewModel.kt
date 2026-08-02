@@ -19,7 +19,7 @@ import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.serialization.Serializable
-import org.mifospay.core.common.DataState
+import org.mifospay.core.common.ScreenState
 import org.mifospay.core.common.getSerialized
 import org.mifospay.core.common.setSerialized
 import org.mifospay.core.data.repository.KycLevelRepository
@@ -43,23 +43,28 @@ class KYCDescriptionViewModel(
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    val kycState = kycLevelRepository.fetchKYCLevel1Details(state.clientId).mapLatest { result ->
-        when (result) {
-            is DataState.Loading -> {
-                KYCDescriptionUiState.Loading
-            }
+    val kycState = kycLevelRepository.fetchKYCLevel1Details(state.clientId).mapLatest { screenState ->
+        // Fold ScreenState → the existing 3-branch KYCDescriptionUiState.
+        // Empty is treated as Content(currentLevel = null) — no KYC record yet
+        // means the user hasn't started onboarding. NoNetwork / Unauthenticated
+        // fold into Error until Phase-4 differentiates them.
+        when (screenState) {
+            is ScreenState.Loading -> KYCDescriptionUiState.Loading
 
-            is DataState.Error -> {
-                KYCDescriptionUiState.Error
-            }
+            is ScreenState.Empty -> KYCDescriptionUiState.Content(currentLevel = null)
 
-            is DataState.Success -> {
-                val currentLevel = result.data?.let {
+            is ScreenState.Content -> {
+                val currentLevel = screenState.data?.let {
                     KycLevel.valueOf(it.currentLevel)
                 }
-
                 KYCDescriptionUiState.Content(currentLevel)
             }
+
+            is ScreenState.Error -> KYCDescriptionUiState.Error
+
+            is ScreenState.NoNetwork -> KYCDescriptionUiState.Error
+
+            is ScreenState.Unauthenticated -> KYCDescriptionUiState.Error
         }
     }.stateIn(
         scope = viewModelScope,

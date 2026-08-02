@@ -10,11 +10,10 @@
 package org.mifospay.core.data.repositoryImpl
 
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
-import org.mifospay.core.common.DataState
-import org.mifospay.core.common.asDataStateFlow
+import org.mifospay.core.common.ScreenStateStream
+import org.mifospay.core.common.asScreenStateFlow
 import org.mifospay.core.data.mapper.toModel
 import org.mifospay.core.data.repository.RunReportRepository
 import org.mifospay.core.model.savingsaccount.Transaction
@@ -27,11 +26,11 @@ class RunReportRepositoryImpl(
     override suspend fun getTransactionReceipt(
         outputType: String,
         transactionId: String,
-    ): Flow<DataState<Transaction>> {
+    ): ScreenStateStream<Transaction> {
         return apiManager.runReportApi
             .getTransactionReceipt(outputType, transactionId)
             .map { it.toModel() }
-            .asDataStateFlow()
+            .asScreenStateFlow()
             .flowOn(ioDispatcher)
     }
 }

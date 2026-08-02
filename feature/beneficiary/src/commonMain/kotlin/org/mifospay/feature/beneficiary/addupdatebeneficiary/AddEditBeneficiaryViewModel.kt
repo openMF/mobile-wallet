@@ -37,6 +37,7 @@ import mobile_wallet.feature.beneficiary.generated.resources.feature_beneficiary
 import mobile_wallet.feature.beneficiary.generated.resources.feature_beneficiary_title_update
 import org.jetbrains.compose.resources.StringResource
 import org.mifospay.core.common.DataState
+import org.mifospay.core.common.ScreenState
 import org.mifospay.core.common.getSerialized
 import org.mifospay.core.common.setSerialized
 import org.mifospay.core.data.repository.LocalAssetRepository
@@ -130,10 +131,14 @@ internal class AddEditBeneficiaryViewModel(
         started = SharingStarted.WhileSubscribed(5_000),
     )
 
+    // `getOffices` was migrated to a ScreenState stream in Phase-3. This VM
+    // only needs the successful list projection — every non-Content branch
+    // collapses to an empty list (same behaviour as the prior DataState.else
+    // fallthrough).
     val officeList = officeRepository.getOffices()
-        .mapLatest { dataState ->
-            when (dataState) {
-                is DataState.Success -> dataState.data
+        .mapLatest { screenState ->
+            when (screenState) {
+                is ScreenState.Content -> screenState.data
                 else -> emptyList()
             }
         }

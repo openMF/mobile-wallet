@@ -9,10 +9,27 @@
  */
 package org.mifospay.core.data.repository
 
-import kotlinx.coroutines.flow.Flow
-import org.mifospay.core.common.DataState
+import kotlinx.coroutines.CoroutineScope
+import org.mifospay.core.common.ScreenStateStream
 import org.mifospay.core.model.office.Office
 
 interface OfficeRepository {
-    fun getOffices(): Flow<DataState<List<Office>>>
+    // Phase-3 cutover — reads on ScreenState.
+    fun getOffices(): ScreenStateStream<List<Office>>
+
+    /**
+     * Phase-5 Batch-3 LEDGER read — GOAL D13 (`createStore` + CACHE_FIRST_SWR).
+     *
+     * Store-backed alternative to [getOffices] — reads through the
+     * `AppStoreRegistry.Offices` Store5 (offline-first via `wallet_offices`
+     * Room SoT, SWR revalidation once the TTL elapses).
+     *
+     * The office list is global reference data (not client-scoped), so the
+     * store uses a value-less singleton key (`OfficesKey`) and there is exactly
+     * one cache slot per app install. See `OfficesKey` KDoc for the rationale.
+     *
+     * @param scope the caller's [CoroutineScope] (typically `viewModelScope`)
+     *   — Store5 subscribes its internal refresh trigger to this scope.
+     */
+    fun getOfficesScreen(scope: CoroutineScope): ScreenStateStream<List<Office>>
 }

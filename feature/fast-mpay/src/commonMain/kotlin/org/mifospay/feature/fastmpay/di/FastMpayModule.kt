@@ -16,8 +16,13 @@ import org.mifospay.feature.fastmpay.FastMpayViewModel
 
 val FastMpayModule = module {
     factory {
+        // Phase-5 Batch-3: BeneficiaryRepository → SelfServiceRepository so the
+        // processor's beneficiary read walks the batch-1 store-backed
+        // getBeneficiaryListScreen(...) reader (offline-first via
+        // wallet_beneficiaries Room SoT). No new BeneficiaryStore is created
+        // for the fast-mpay surface — the batch-1 store is REUSED.
         FastMpayProcessor(
-            beneficiaryRepository = get(),
+            selfServiceRepository = get(),
             userPreferencesRepository = get(),
             officeRepository = get(),
         )

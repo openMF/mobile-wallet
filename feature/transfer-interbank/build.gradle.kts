@@ -12,10 +12,6 @@ plugins {
     alias(libs.plugins.kotlin.serialization)
 }
 
-android {
-    namespace = "org.mifospay.feature.transfer.interbank"
-}
-
 kotlin {
     sourceSets {
         commonMain.dependencies {

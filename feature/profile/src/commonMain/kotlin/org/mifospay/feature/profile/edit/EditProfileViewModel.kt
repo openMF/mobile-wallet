@@ -32,6 +32,7 @@ import mobile_wallet.feature.profile.generated.resources.feature_profile_profile
 import mobile_wallet.feature.profile.generated.resources.feature_profile_profile_updated_successfully
 import org.jetbrains.compose.resources.StringResource
 import org.mifospay.core.common.DataState
+import org.mifospay.core.common.ScreenState
 import org.mifospay.core.common.StringResourceSerializer
 import org.mifospay.core.common.getSerialized
 import org.mifospay.core.common.setSerialized
@@ -134,20 +135,45 @@ internal class EditProfileViewModel(
     }
 
     private fun handleLoadClientImageResult(action: HandleLoadClientImageResult) {
-        when (action.result) {
-            is DataState.Success -> {
+        // `getClientImage` now returns a `ScreenState<String>` stream. Fold
+        // the 6 branches back onto the existing dialog/state surface. The
+        // Success (Content) branch decodes to bytes for the profile image;
+        // Error variants surface a dialog matching the prior behaviour.
+        // Empty is defensively surfaced as an error (single-record endpoint
+        // shouldn't emit Empty). NoNetwork / Unauthenticated fold into the
+        // existing Error dialog until Phase-4 differentiates.
+        when (val result = action.result) {
+            is ScreenState.Content -> {
                 mutableStateFlow.update {
-                    it.copy(profileImage = action.result.data.encodeToByteArray())
+                    it.copy(profileImage = result.data.encodeToByteArray())
                 }
             }
 
-            is DataState.Error -> {
+            is ScreenState.Empty -> {
                 mutableStateFlow.update {
-                    it.copy(dialogState = Error.StringMessage(action.result.exception.message ?: ""))
+                    it.copy(dialogState = Error.StringMessage("Profile image not available."))
                 }
             }
 
-            is DataState.Loading -> {
+            is ScreenState.Error -> {
+                mutableStateFlow.update {
+                    it.copy(dialogState = Error.StringMessage(result.error.message ?: ""))
+                }
+            }
+
+            is ScreenState.NoNetwork -> {
+                mutableStateFlow.update {
+                    it.copy(dialogState = Error.StringMessage("No network. Please check your connection."))
+                }
+            }
+
+            is ScreenState.Unauthenticated -> {
+                mutableStateFlow.update {
+                    it.copy(dialogState = Error.StringMessage("Session expired. Please log in again."))
+                }
+            }
+
+            is ScreenState.Loading -> {
                 mutableStateFlow.update {
                     it.copy(dialogState = EditProfileState.DialogState.Loading)
                 }
@@ -371,7 +397,15 @@ sealed interface EditProfileAction {
 
     sealed interface Internal : EditProfileAction {
         data class LoadClientImage(val clientId: Long) : Internal
-        data class HandleLoadClientImageResult(val result: DataState<String>) : Internal
+
+        /**
+         * Client-image load result. Uses [ScreenState] (not [DataState]) — the
+         * `getClientImage` read path was migrated to `Flow<ScreenState<String>>`
+         * during the Phase-3 cutover. The write-path actions below stay on
+         * [DataState] because `updateClient` / `updateClientImage` are one-shot
+         * suspend calls that Phase-3 leaves on [DataState].
+         */
+        data class HandleLoadClientImageResult(val result: ScreenState<String>) : Internal
 
         data class OnUpdateProfileResult(val result: DataState<String>) : Internal
 

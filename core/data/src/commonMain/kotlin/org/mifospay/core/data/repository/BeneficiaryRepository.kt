@@ -11,16 +11,19 @@ package org.mifospay.core.data.repository
 
 import kotlinx.coroutines.flow.Flow
 import org.mifospay.core.common.DataState
+import org.mifospay.core.common.ScreenState
 import org.mifospay.core.model.beneficiary.Beneficiary
 import org.mifospay.core.model.beneficiary.BeneficiaryPayload
 import org.mifospay.core.model.beneficiary.BeneficiaryUpdatePayload
 import org.mifospay.core.network.model.entity.templates.beneficiary.BeneficiaryTemplate
 
 interface BeneficiaryRepository {
-    suspend fun getBeneficiaryList(): Flow<DataState<List<Beneficiary>>>
+    // Phase-3 cutover — reads on ScreenState.
+    suspend fun getBeneficiaryList(): Flow<ScreenState<List<Beneficiary>>>
 
-    suspend fun getBeneficiaryTemplate(): Flow<DataState<BeneficiaryTemplate>>
+    suspend fun getBeneficiaryTemplate(): Flow<ScreenState<BeneficiaryTemplate>>
 
+    // Writes stay on DataState per Phase-3 D1 (no offline write stores yet).
     suspend fun createBeneficiary(beneficiaryPayload: BeneficiaryPayload): DataState<String>
 
     suspend fun updateBeneficiary(

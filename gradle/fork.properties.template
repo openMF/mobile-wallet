@@ -1,0 +1,312 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# gradle/fork.properties.template
+#
+# Fork-specific deployment identity and store metadata — non-secret values only.
+#
+# HOW TO USE:
+#   1. Copy:  cp gradle/fork.properties.template gradle/fork.properties
+#   2. Fill in every value below with your actual values.
+#   3. Run:   ./gradlew syncForkConfig
+#      Propagates values to: xcconfig, local.properties (Fastlane bridge),
+#      and ALL store metadata files (App Store, Play Store, Mac App Store).
+#
+# COMMITTED vs GITIGNORED:
+#   gradle/fork.properties.template  — committed (this file — the schema)
+#   gradle/fork.properties           — gitignored (your filled-in values)
+#
+# APP BUILD-TIME VALUES (appId, appDisplayName, projectName, iosTeamId, etc.)
+# also live in gradle/libs.versions.toml — Gradle reads them at compile time.
+# Keep both files consistent. syncForkConfig validates they match.
+#
+# CI SETUP: Set ENV vars directly — fork.properties is not needed on CI.
+#           See each key for its ENV var. The 6 TOML values are always available
+#           (they're committed). The Fastlane bridge (local.properties) is
+#           written by syncForkConfig on CI before Fastlane runs.
+#
+# WHAT BELONGS HERE (non-secret identifiers):
+#   Firebase App IDs, Apple Team ID, Match repo URL, org contact info,
+#   store titles, descriptions, keywords, URLs, copyright, categories.
+#
+# WHAT DOES NOT BELONG HERE (real secrets):
+#   API keys, passwords, keystores, .p8 files, service-account JSON.
+#   Those go in secrets/ — see deployment/BOOTSTRAP.md.
+# ─────────────────────────────────────────────────────────────────────────────
+
+# ── Apple Platform ────────────────────────────────────────────────────────────
+
+# Apple Developer Team ID (10 alphanumeric characters).
+# Find at: developer.apple.com → Account → Membership Details → Team ID
+# Example: A1B2C3D4E5
+# ENV: APPLE_TEAM_ID
+apple.team.id=YOUR_TEAM_ID
+
+# Fastlane Match git repo (SSH URL).
+# Private GitHub/GitLab repo that stores encrypted certificates + profiles.
+# Step 1: Create a private repo (e.g. acme/ios-provisioning).
+# Step 2: Add secrets/apple/match/match_ci_key.pub as a deploy key with write access.
+# Step 3: Run: bundle exec fastlane match init --git_url <this-value>
+# Guide: deployment/BOOTSTRAP.md → Fastlane Match setup
+# ENV: MATCH_GIT_URL
+apple.match.git.url=git@github.com:YOUR_ORG/ios-provisioning.git
+# Branch in the Match certificate repo — single source of truth is `dev`.
+# ENV: MATCH_GIT_BRANCH
+apple.match.git.branch=dev
+
+# ══ BETA TESTERS ═══════════════════════════════════════════════════════════════
+# Tester GROUPS are pre-created on each store; deployment/ attaches EVERY build to them
+# automatically. iOS internal testers must be Apple-team members (ASC → Users & Access);
+# everyone else is an iOS EXTERNAL tester (Apple beta review ~24h) and self-joins via the
+# group's PUBLIC LINK. macOS shares the same ASC groups. Manage Android testers in a Google Group.
+#
+# iOS + macOS · App Store Connect (TestFlight) — groups auto-created by deployment/ if missing.
+# Values are the ASC beta-group NAMES.
+apple.testers.internal.group=Internal Testers
+apple.testers.external.group=External Beta
+# Enable a self-join public TestFlight link on the external group (share it / site "Join beta").
+apple.testers.external.public.link=true
+#
+# Android · Play Store — Google Group email attached to each testing track (Play native;
+# manage members in the Google Group). Leave blank to skip. e.g. beta@your-domain.com
+play.testers.internal.googlegroup=
+play.testers.closed.googlegroup=
+
+# ── Firebase App Distribution ─────────────────────────────────────────────────
+# App IDs are NOT secrets — safe to commit. They identify your Firebase app.
+# Find at: Firebase Console → Project Settings → General → Your apps → App ID
+# Format:  1:PROJECT_NUMBER:platform:HEX_STRING
+# Example: 1:728434912738:android:3902eb3363b0938f1a1dbb
+
+# Android prod flavor App ID — Firebase console → Android prod app
+# ENV: FIREBASE_ANDROID_PROD_APP_ID
+firebase.android.prod.app.id=1:000000000000:android:aaaaaaaaaaaaaaaa
+
+# Android demo flavor App ID — Firebase console → Android demo app
+# ENV: FIREBASE_ANDROID_DEMO_APP_ID
+firebase.android.demo.app.id=1:000000000000:android:bbbbbbbbbbbbbbbb
+
+# iOS App ID — Firebase console → iOS app (legacy single-flavor key; prod takes precedence when set)
+# ENV: FIREBASE_IOS_APP_ID
+firebase.ios.app.id=1:000000000000:ios:cccccccccccccccc
+
+# iOS prod flavor App ID — Firebase console → iOS prod app
+# ENV: FIREBASE_IOS_PROD_APP_ID
+firebase.ios.prod.app.id=1:000000000000:ios:cccccccccccccccc
+
+# iOS demo flavor App ID — Firebase console → iOS demo app
+# Register a separate iOS app in Firebase console for the demo flavor.
+# ENV: FIREBASE_IOS_DEMO_APP_ID
+firebase.ios.demo.app.id=1:000000000000:ios:dddddddddddddddd
+
+# Firebase App Distribution tester group(s).
+# Find at: Firebase Console → App Distribution → Testers & Groups tab
+# Comma-separated for multiple groups.
+# ENV: FIREBASE_GROUPS
+firebase.groups=internal-testers
+
+# ── Organization Identity ─────────────────────────────────────────────────────
+# Used for: App Store review contact, TestFlight beta review info,
+# store metadata (URLs, copyright), and review_information/ txt files.
+
+# Organization display name (App Store / TestFlight review contact).
+# ENV: ORGANIZATION_NAME
+org.name=Your Organization Name
+
+# Review contact email address.
+# Apple will email this during App Store review — must be monitored.
+# Also used as TestFlight beta feedback email.
+# ENV: APPSTORE_REVIEW_EMAIL / BETA_FEEDBACK_EMAIL
+org.email=appstore@example.com
+
+# Review contact name. Shown in TestFlight beta review submission.
+# ENV: APPSTORE_REVIEW_FIRST_NAME / TESTFLIGHT_FIRST_NAME
+org.first.name=Jane
+# ENV: APPSTORE_REVIEW_LAST_NAME / TESTFLIGHT_LAST_NAME
+org.last.name=Smith
+
+# Review contact phone (E.164 format — +country-code-number).
+# Apple may call this number during review for high-priority apps.
+# ENV: APPSTORE_REVIEW_PHONE / TESTFLIGHT_PHONE
+org.phone=+12125551234
+
+# App marketing URL shown in App Store / TestFlight listing.
+# Must be publicly accessible at submission time.
+# ENV: APP_MARKETING_URL
+org.marketing.url=https://example.com
+
+# Privacy policy URL. Required for App Store submission.
+# Must be a publicly accessible, working URL.
+# ENV: APP_PRIVACY_URL
+org.privacy.url=https://example.com/privacy
+
+# Support URL shown in store metadata. Typically your GitHub repo or docs site.
+org.support.url=https://github.com/YOUR_ORG/YOUR_REPO
+
+# ── Legal Documents ───────────────────────────────────────────────────────────
+# Used by: bash legal/generate.sh → legal/output/privacy-policy.md + terms.md
+#
+# After filling these in, run:
+#   bash legal/generate.sh
+#   git add legal/output/ && git commit -m "docs(legal): generate privacy policy + terms"
+#
+# Then set org.privacy.url (above) to the raw GitHub URL of the generated file:
+#   https://raw.githubusercontent.com/YOUR_ORG/YOUR_REPO/main/legal/output/privacy-policy.md
+# Run ./gradlew syncForkConfig to propagate to all store metadata.
+
+# Legal entity name (may differ from org.name / app display name).
+# Appears in "operated by <COMPANY_NAME>" in legal documents.
+legal.company.name=Your Legal Entity Name
+
+# Jurisdiction governing the legal documents (e.g. "India", "California, USA").
+# Appears in the governing law clause of both documents.
+legal.jurisdiction=Your Jurisdiction
+
+# Effective date for legal documents (human-readable, e.g. "June 1, 2026").
+# Update this whenever the documents change.
+legal.effective.date=January 1, 2026
+
+# Privacy contact email. Shown in the privacy policy as the point of contact
+# for data-related questions. May be the same as org.email.
+legal.contact.email=privacy@example.com
+
+# ── Android Keystore Distinguished Name (DN) — NON-SECRET ────────────────────
+# These values are the certificate identity baked into the keystore at generation
+# time. They are NOT secrets (no passwords here — those go in
+# secrets/android/keystores/{keystore_password,keystore_alias,keystore_alias_password}).
+# Read by: deployment/_shared/scripts/keystore-manager.sh (generate subcommand)
+#
+# CN — Common Name: inherited from legal.company.name (no separate key needed).
+# keystore.dn.org_unit — Organisational Unit (OU); e.g. "Mobile" or "Engineering".
+# keystore.dn.city     — Locality / City (L field in the DN).
+# keystore.dn.state    — State or Province (ST field).
+# keystore.dn.country  — Two-letter ISO 3166-1 country code (C field); default US.
+
+keystore.dn.org_unit=Mobile
+keystore.dn.city=Your City
+keystore.dn.state=Your State
+keystore.dn.country=US
+
+# ── Web Platform ──────────────────────────────────────────────────────────────
+
+# Cloudflare Pages project name (created in Cloudflare Dashboard → Pages).
+# Also set as a GitHub Actions variable (not a secret):
+#   Repo → Settings → Secrets and variables → Variables → CLOUDFLARE_PAGES_PROJECT_NAME
+# ENV: CLOUDFLARE_PAGES_PROJECT_NAME
+web.cloudflare.project=your-app-web
+
+# ── Store Metadata — Shared across iOS, macOS, and Android ───────────────────
+# syncForkConfig writes these to all platform metadata directories automatically.
+
+# App name on the store listing page.
+# iOS / macOS App Store: max 30 characters (shown below icon on device).
+# Android Play Store: max 50 characters.
+store.title=Your App Name
+
+# Tagline / subtitle shown below the app name (iOS and macOS App Store only).
+# Max 30 characters. Make it descriptive and keyword-rich.
+store.subtitle=Your App Tagline Here
+
+# Short promotional text shown in TestFlight above the description.
+# Max 170 characters. Can be updated anytime without a new app version.
+store.promotional.text=Your app's one-line promotional pitch for TestFlight.
+
+# What's new text shown in the App Store and Google Play update dialog.
+# Shown to existing users when they see an update notification.
+store.release.notes=Bug fixes and performance improvements.
+
+# Changelog shown in Play Store (Android only). Can be same as release.notes
+# or more detailed. Written to changelogs/default.txt.
+store.android.changelog=Bug fixes and performance improvements.
+
+# Copyright line shown in App Store listing.
+# Convention: Copyright © YEAR Your Organization Name
+store.copyright=Copyright © 2025 Your Organization Name
+
+# Short note for App Store review team explaining how to access the app.
+# Max 4000 characters. Explain if no login is required, demo credentials, etc.
+store.review.notes=No login required. All features are accessible without an account.
+
+# ── Store Metadata — Android (Google Play Store) ─────────────────────────────
+
+# Short description shown in Play Store search results (max 80 characters).
+# This is the first thing users see — make it compelling and keyword-rich.
+store.android.short.description=Your short Play Store description here. Max 80 chars.
+
+# Play Store primary category.
+# Common values: Finance, Productivity, Tools, Education, Business
+# Full list: https://support.google.com/googleplay/android-developer/answer/113475
+store.android.category=Finance
+
+# ── Store Metadata — iOS App Store ───────────────────────────────────────────
+
+# Keywords used by App Store search algorithm (max 100 characters total).
+# Comma-separated. Do NOT repeat words from app name or subtitle —
+# they're already indexed. Focus on related terms users search for.
+store.ios.keywords=keyword1,keyword2,keyword3,keyword4
+
+# iOS App Store primary category.
+# Common values: Finance, Productivity, Utilities, Business, Education
+# Full list: https://developer.apple.com/app-store/categories/
+store.ios.category=Finance
+
+# ── Store locale (primary listing language) ──────────────────────────────────
+
+# Primary store-listing locale (BCP-47, e.g. en-US, fr-FR). The metadata subdir
+# name under deployment/<platform>/metadata/, and the locale the sync-listing lane
+# targets. Read by FastlaneConfig::AndroidConfig::PRIMARY_LOCALE (falls back to en-US).
+# ENV: STORE_PRIMARY_LOCALE
+store.primary.locale=en-US
+
+# ── Store Metadata — macOS App Store ─────────────────────────────────────────
+
+# Keywords for Mac App Store search (comma-separated, same rules as iOS).
+store.macos.keywords=keyword1,keyword2,keyword3,keyword4
+
+# Mac App Store primary category.
+# Common values: Finance, Productivity, Utilities, Business
+store.macos.category=Productivity
+
+# ── Windows / Microsoft Store (MSIX) — NON-SECRET identity ───────────────────
+# The MSIX you ship to the Store must declare an <Identity> that EXACTLY matches
+# what Partner Center reserved for this app, or the submission is rejected. These
+# values are fork-specific and PUBLIC (embedded in every shipped package), so they
+# live here — never hardcoded in the workflow/action. The actual API credential
+# (client secret) is NOT here — it goes in secrets/ (see LAYOUT.yaml).
+#
+# Find all four at: Partner Center → your app → Product management → Product identity
+#   https://partner.microsoft.com/dashboard/apps-and-games/overview
+# Consumed by: ./gradlew syncForkConfig → deployment/desktop/microsoft-store/
+#   StoreBroker.config.json (${ENV:MS_APP_ID}) AND the generated AppxManifest.xml.
+# CI: set each ENV var directly (these are non-secret → GitHub Actions *variables*,
+#   not secrets). fork.properties is gitignored and not read on CI.
+
+# Store ID — the product's Store ID (e.g. 9NBLGGH4XXXX). Used as the submission
+# API's applicationId. Public (it's in your store URL).
+# ENV: MS_APP_ID
+windows.store.id=YOUR_STORE_ID
+
+# MSIX package identity Name — Partner Center "Package/Identity/Name"
+# (e.g. 12345YourPublisher.YourApp). Goes into AppxManifest <Identity Name="…">.
+# ENV: WINDOWS_MSIX_IDENTITY_NAME
+windows.msix.identity.name=YOUR_PUBLISHER.YOUR_APP
+
+# MSIX publisher — Partner Center "Package/Identity/Publisher"
+# (e.g. CN=ABCD1234-AB12-...). Goes into AppxManifest <Identity Publisher="…">.
+# ENV: WINDOWS_MSIX_PUBLISHER
+windows.msix.identity.publisher=CN=YOUR_PUBLISHER_ID
+
+# MSIX publisher display name — Partner Center "PublisherDisplayName".
+# Goes into AppxManifest <Properties><PublisherDisplayName>.
+# ENV: WINDOWS_MSIX_PUBLISHER_DISPLAY_NAME
+windows.msix.publisher.display.name=Your Display Name
+
+# Partner Center submission-API credential — the tenant + client are NON-SECRET
+# GUIDs (they appear in tokens/URLs), so they live here; ONLY the client SECRET is
+# a real secret → secrets/ (alias ms_partner_center_client_secret).
+# Find at: Partner Center → Account settings → User management → Azure AD applications
+#   https://partner.microsoft.com/dashboard/account/v3/usermanagement
+# AAD app tenant (Directory) GUID.
+# ENV: MS_PARTNER_CENTER_TENANT_ID
+windows.partner.center.tenant.id=YOUR_TENANT_GUID
+# AAD app (client) GUID — must have the Partner Center "Manager" role.
+# ENV: MS_PARTNER_CENTER_CLIENT_ID
+windows.partner.center.client.id=YOUR_CLIENT_GUID

@@ -14,7 +14,8 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.withContext
 import org.mifospay.core.common.DataState
-import org.mifospay.core.common.asDataStateFlow
+import org.mifospay.core.common.ScreenState
+import org.mifospay.core.common.asScreenStateFlow
 import org.mifospay.core.data.repository.BeneficiaryRepository
 import org.mifospay.core.model.beneficiary.Beneficiary
 import org.mifospay.core.model.beneficiary.BeneficiaryPayload
@@ -26,12 +27,16 @@ class BeneficiaryRepositoryImpl(
     private val apiManager: SelfServiceApiManager,
     private val ioDispatcher: CoroutineDispatcher,
 ) : BeneficiaryRepository {
-    override suspend fun getBeneficiaryList(): Flow<DataState<List<Beneficiary>>> {
-        return apiManager.beneficiaryApi.beneficiaryList().asDataStateFlow().flowOn(ioDispatcher)
+    override suspend fun getBeneficiaryList(): Flow<ScreenState<List<Beneficiary>>> {
+        return apiManager.beneficiaryApi.beneficiaryList()
+            .asScreenStateFlow(isEmpty = { it.isEmpty() })
+            .flowOn(ioDispatcher)
     }
 
-    override suspend fun getBeneficiaryTemplate(): Flow<DataState<BeneficiaryTemplate>> {
-        return apiManager.beneficiaryApi.beneficiaryTemplate().asDataStateFlow().flowOn(ioDispatcher)
+    override suspend fun getBeneficiaryTemplate(): Flow<ScreenState<BeneficiaryTemplate>> {
+        return apiManager.beneficiaryApi.beneficiaryTemplate()
+            .asScreenStateFlow()
+            .flowOn(ioDispatcher)
     }
 
     override suspend fun createBeneficiary(

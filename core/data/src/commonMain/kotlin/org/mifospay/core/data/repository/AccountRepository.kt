@@ -9,8 +9,10 @@
  */
 package org.mifospay.core.data.repository
 
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import org.mifospay.core.common.DataState
+import org.mifospay.core.common.ScreenState
 import org.mifospay.core.model.account.Account
 import org.mifospay.core.model.account.AccountTransferPayload
 import org.mifospay.core.model.savingsaccount.Transaction
@@ -18,13 +20,31 @@ import org.mifospay.core.model.savingsaccount.TransferDetail
 import org.mifospay.core.model.search.AccountResult
 
 interface AccountRepository {
-    fun getTransaction(accountId: Long, transactionId: Long): Flow<DataState<Transaction>>
+    // Phase-3 cutover — reads on ScreenState.
+    fun getTransaction(accountId: Long, transactionId: Long): Flow<ScreenState<Transaction>>
 
-    fun getAccountTransfer(transferId: Long): Flow<DataState<TransferDetail>>
+    fun getAccountTransfer(transferId: Long): Flow<ScreenState<TransferDetail>>
 
-    fun searchAccounts(query: String): Flow<DataState<List<AccountResult>>>
+    fun searchAccounts(query: String): Flow<ScreenState<List<AccountResult>>>
 
-    fun getSelfAccounts(clientId: Long): Flow<DataState<List<Account>>>
+    fun getSelfAccounts(clientId: Long): Flow<ScreenState<List<Account>>>
 
+    /**
+     * Phase-5 Batch-3 LEDGER read — GOAL D13 (`createStore` + CACHE_FIRST_SWR).
+     *
+     * Store-backed alternative to [getSelfAccounts] — reads through the
+     * `AppStoreRegistry.SelfAccounts` Store5 (offline-first via
+     * `wallet_self_accounts` Room SoT, SWR revalidation once the TTL elapses).
+     *
+     * @param clientId the store's page key AND the API path parameter.
+     * @param scope the caller's [CoroutineScope] (typically `viewModelScope`)
+     *   — Store5 subscribes its internal refresh trigger to this scope.
+     */
+    fun getSelfAccountsScreen(
+        clientId: Long,
+        scope: CoroutineScope,
+    ): Flow<ScreenState<List<Account>>>
+
+    // Writes stay on DataState (Phase-3 D1).
     suspend fun makeTransfer(payload: AccountTransferPayload): DataState<String>
 }

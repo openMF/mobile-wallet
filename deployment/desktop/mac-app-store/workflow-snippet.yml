@@ -1,0 +1,49 @@
+# deployment/desktop/mac-app-store/workflow-snippet.yml
+name: desktop-mac-app-store-deploy
+on:
+  workflow_dispatch:
+    inputs:
+      lane:
+        description: "desktop_testflight | desktop_release"
+        required: true
+        type: string
+      confirm:
+        description: "Type CONFIRM to proceed"
+        required: true
+        type: string
+
+jobs:
+  deploy:
+    if: ${{ inputs.confirm == 'CONFIRM' }}
+    runs-on: macos-14
+    environment: production
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with: { bundler-cache: true }
+
+      - name: Materialize secrets (vault-mode)
+        if: ${{ secrets.SOPS_AGE_KEY != '' }}
+        env:
+          SOPS_AGE_KEY: ${{ secrets.SOPS_AGE_KEY }}
+        run: bash deployment/_shared/scripts/secrets-pull.sh --required-for macos-signing,desktop-mac-app-store
+
+      - name: Materialize secrets (manual-mode)
+        if: ${{ secrets.SOPS_AGE_KEY == '' }}
+        run: |
+          mkdir -p secrets
+          echo "${{ secrets.APPSTORE_AUTH_KEY_B64 }}" | base64 -d > secrets/live/apple/appstore/AuthKey.p8
+          echo "${{ secrets.MAC_APP_STORE_CERT_B64 }}" | base64 -d > secrets/live/desktop/macos/app_store.p12
+          echo "${{ secrets.MAC_INSTALLER_CERT_B64 }}" | base64 -d > secrets/live/desktop/macos/installer.p12
+
+      - name: Build macOS distributable
+        run: ./gradlew :cmp-desktop:packageReleaseDmg
+
+      - name: Run Fastlane lane
+        env:
+          FASTLANE_APPLE_ID: ${{ secrets.FASTLANE_APPLE_ID }}
+          APPLE_TEAM_ID:     ${{ secrets.APPLE_TEAM_ID }}
+          APP_STORE_CONNECT_APP_ID: ${{ secrets.APP_STORE_CONNECT_APP_ID }}
+        run: bundle exec fastlane mac ${{ inputs.lane }}

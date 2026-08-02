@@ -9,8 +9,9 @@
  */
 package org.mifospay.core.data.repository
 
-import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.CoroutineScope
 import org.mifospay.core.common.DataState
+import org.mifospay.core.common.ScreenStateStream
 import org.mifospay.core.model.savingsaccount.CreateNewSavingEntity
 import org.mifospay.core.model.savingsaccount.SavingAccountDetail
 import org.mifospay.core.model.savingsaccount.SavingAccountTemplate
@@ -20,15 +21,62 @@ import org.mifospay.core.model.savingsaccount.UpdateSavingAccountEntity
 import org.mifospay.core.network.model.entity.Page
 
 interface SavingsAccountRepository {
-    suspend fun getSavingsAccounts(limit: Int): Flow<DataState<Page<SavingsWithAssociationsEntity>>>
+    // Phase-3 cutover — Flow-shaped reads on ScreenState.
+    // Page<T> is preserved inside Content (mirrors
+    // `SelfServiceRepository.getSelfClientDetails(): Page<Client>` treatment).
+    suspend fun getSavingsAccounts(limit: Int): ScreenStateStream<Page<SavingsWithAssociationsEntity>>
 
     suspend fun getSavingsWithAssociations(
         accountId: Long,
         associationType: String,
-    ): Flow<DataState<SavingsWithAssociationsEntity>>
+    ): ScreenStateStream<SavingsWithAssociationsEntity>
 
-    fun getAccountDetail(accountId: Long): Flow<DataState<SavingAccountDetail>>
+    fun getAccountDetail(accountId: Long): ScreenStateStream<SavingAccountDetail>
 
+    /**
+     * Phase-5 Batch-1 **SINGLE-ROW-PER-KEY read** for the `accountDetail` archetype
+     * (GOAL D13) — returns an offline-first `ScreenStateStream<SavingAccountDetail>`
+     * consumed through the `accountDetail` Store5
+     * [`Store`][org.mobilenativefoundation.store.store5.Store]
+     * (`createStore` + Room
+     * [`SourceOfTruth`][org.mobilenativefoundation.store.store5.SourceOfTruth]
+     * + single-row upsert writer) via
+     * [`Store.asScreenStream`][kpt.core.base.store.screen.asScreenStream].
+     *
+     * The store is driven by
+     * [`FetchPolicy.CACHE_FIRST_SWR`][kpt.core.base.store.screen.FetchPolicy.CACHE_FIRST_SWR]
+     * (Phase-5 T10 default). Distinct from the transitional
+     * [`asScreenStateFlow`][org.mifospay.core.common.asScreenStateFlow] the
+     * legacy [getAccountDetail] path uses; both signatures return
+     * `ScreenStateStream<SavingAccountDetail>` so a consumer can swap between
+     * them without any downstream shape change.
+     *
+     * ### Write path (GOAL D1)
+     *
+     * This is a READ path. Account management writes ([blockAccount],
+     * [unblockAccount], [createSavingsAccount], [updateSavingsAccount]) continue
+     * to flow through their existing online paths and appear here on the next
+     * refresh cycle.
+     *
+     * @param accountId Fineract savings-account id (SoT key).
+     * @param scope Coroutine scope for the stream's internal helper coroutines
+     *   (typically `viewModelScope`).
+     */
+    fun getAccountDetailScreen(
+        accountId: Long,
+        scope: CoroutineScope,
+    ): ScreenStateStream<SavingAccountDetail>
+
+    suspend fun getSavingAccountTransaction(
+        accountId: Long,
+        transactionId: Long,
+    ): ScreenStateStream<Transaction>
+
+    suspend fun payViaMobile(accountId: Long): ScreenStateStream<Transaction>
+
+    fun getSavingAccountTemplate(clientId: Long): ScreenStateStream<SavingAccountTemplate>
+
+    // Writes stay on DataState (Phase-3 D1).
     suspend fun createSavingsAccount(savingAccount: CreateNewSavingEntity): DataState<String>
 
     suspend fun updateSavingsAccount(
@@ -43,13 +91,4 @@ interface SavingsAccountRepository {
     suspend fun blockAccount(
         accountId: Long,
     ): DataState<String>
-
-    suspend fun getSavingAccountTransaction(
-        accountId: Long,
-        transactionId: Long,
-    ): Flow<DataState<Transaction>>
-
-    suspend fun payViaMobile(accountId: Long): Flow<DataState<Transaction>>
-
-    fun getSavingAccountTemplate(clientId: Long): Flow<DataState<SavingAccountTemplate>>
 }

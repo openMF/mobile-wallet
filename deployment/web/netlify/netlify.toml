@@ -1,0 +1,16 @@
+# deployment/web/netlify/netlify.toml
+[build]
+  publish = "cmp-web/build/dist/js/productionExecutable"
+  command = "./gradlew :cmp-web:jsBrowserDistribution"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Cross-Origin-Embedder-Policy = "require-corp"
+    Cross-Origin-Opener-Policy = "same-origin"
+    X-Content-Type-Options = "nosniff"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

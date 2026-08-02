@@ -1,0 +1,30 @@
+# deployment/android/play-closed/workflow-snippet.yml
+# Reusable GHA snippet for Android → promote internal → closed/alpha (no build).
+name: android-play-closed-promote
+on:
+  workflow_call:
+
+jobs:
+  promote:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with: { bundler-cache: true }
+
+      - name: Materialize secrets (vault-mode)
+        if: ${{ secrets.SOPS_AGE_KEY != '' }}
+        env:
+          SOPS_AGE_KEY: ${{ secrets.SOPS_AGE_KEY }}
+        run: bash deployment/_shared/scripts/secrets-pull.sh --required-for android-play-internal-publish
+
+      - name: Materialize secrets (manual-mode)
+        if: ${{ secrets.SOPS_AGE_KEY == '' }}
+        run: |
+          mkdir -p secrets
+          echo '${{ secrets.PLAYSTORE_PUBLISHER_JSON }}' > secrets/live/android/playStorePublishServiceCredentialsFile.json
+
+      - name: Promote to closed/alpha
+        run: bundle exec fastlane android promoteToClosed

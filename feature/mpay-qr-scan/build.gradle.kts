@@ -11,14 +11,8 @@ plugins {
     alias(libs.plugins.cmp.feature.convention)
 }
 
-android {
-    namespace = "org.mifospay.feature.mpay.qr.scan"
-
-    defaultConfig {
-        consumerProguardFiles("consumer-rules.pro")
-    }
-}
-
+// namespace auto-derives from baseNamespace + module path via kmp.library.convention;
+// consumer-rules.pro is auto-registered by the convention plugin when the file exists.
 kotlin {
     sourceSets {
         commonMain.dependencies {

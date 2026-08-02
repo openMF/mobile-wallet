@@ -11,10 +11,6 @@ plugins {
     alias(libs.plugins.cmp.feature.convention)
 }
 
-android {
-    namespace = "org.mifospay.feature.fastmpay"
-}
-
 kotlin {
     sourceSets {
         commonMain.dependencies {
@@ -25,6 +21,9 @@ kotlin {
             implementation(compose.material3)
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
+            // FastMpayNavigation uses io.ktor.http.encodeURLPathPart for URL-encoding
+            // QR-encoded Base64 payloads in nav routes.
+            implementation(libs.ktor.client.core)
         }
 
         commonTest.dependencies {

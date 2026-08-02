@@ -11,10 +11,6 @@ plugins {
     alias(libs.plugins.cmp.feature.convention)
 }
 
-android {
-    namespace = "org.mifospay.feature.accounts"
-}
-
 kotlin {
     sourceSets {
         commonMain.dependencies {

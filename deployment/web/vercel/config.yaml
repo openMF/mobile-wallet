@@ -1,0 +1,17 @@
+# deployment/web/vercel/config.yaml
+target: web-vercel
+platform: web
+host: vercel
+tier: 2
+owning_capability: web-vercel-publish
+output_format: web
+output_path: "cmp-web/build/dist/js/productionExecutable/"
+version_format: "git"
+signing: none
+distribution_groups: ["public"]
+retention: "indefinite"
+runners:
+  local: { command: "vercel deploy --prod --token $VERCEL_TOKEN cmp-web/build/dist/js/productionExecutable" }
+  ci:    { workflow_snippet: workflow-snippet.yml }
+requires_confirm: false
+enabled_by_default: false

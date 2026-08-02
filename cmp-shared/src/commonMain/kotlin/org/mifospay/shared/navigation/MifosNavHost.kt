@@ -13,8 +13,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.navOptions
-import mobile_wallet.cmp_shared.generated.resources.feature_finance_accounts
-import mobile_wallet.cmp_shared.generated.resources.feature_finance_beneficiaries
+import cmp.shared.generated.resources.feature_finance_accounts
+import cmp.shared.generated.resources.feature_finance_beneficiaries
 import mobile_wallet.feature.payments.generated.resources.Res
 import mobile_wallet.feature.payments.generated.resources.feature_payments_history
 import mobile_wallet.feature.payments.generated.resources.feature_payments_request
@@ -140,7 +140,7 @@ import org.mifospay.feature.transfer.intrabank.success.navigateTransferSuccess
 import org.mifospay.feature.transfer.intrabank.success.transferSuccessScreen
 import org.mifospay.feature.upi.setup.navigation.setupUpiPinScreen
 import org.mifospay.shared.ui.MifosAppState
-import mobile_wallet.cmp_shared.generated.resources.Res as SharedRes
+import cmp.shared.generated.resources.Res as SharedRes
 
 /**
  * `SavedStateHandle` key used by callers of [internalMifosPasscodeScreen] for
@@ -176,6 +176,17 @@ const val AUTHENTICATION_VERIFICATION_KEY = "org.mifospay.mifos.authentication_v
  *        `navigateForPasscodeVerification` callback — does not override
  *        `allowBiometricAuth`, so biometric is allowed there.
  */
+// TODO(phase-2-nav): migrate ~60 feature nav-extensions to cmp-navigation type-safe
+// routes (Phase 2 T2 of 02-topology-reconciliation.md). Until then this ~1000-line
+// string-route nav host stays in place — retiring it in this chunk would strand
+// every feature composable that still resolves via its string route. The template
+// shell (`cmp.navigation.ComposeApp` → `RootNavScreen` → `authenticatedGraph`) is
+// wired for the four HOME/PAYMENTS/FINANCE/HISTORY top-level tabs (see
+// `cmp/navigation/authenticated/AuthenticatedNavigation.kt`) but does not yet
+// register the fork's ~60 feature destinations; the T2 rewrite converts each
+// `composable(route = "…/{arg}")` here into `composable<AppRoute.X> { … }` under
+// `:cmp-navigation`, then this file becomes deletable. Shell-security behaviors
+// and the Supabase instance selector already live in `:cmp-navigation` per T4/T5.
 @Composable
 internal fun MifosNavHost(
     appState: MifosAppState,

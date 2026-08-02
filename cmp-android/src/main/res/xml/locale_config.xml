@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copyright 2025 Mifos Initiative
+
+    This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+    If a copy of the MPL was not distributed with this file,
+    You can obtain one at https://mozilla.org/MPL/2.0/.
+
+    See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
+-->
+<locale-config xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- European Languages -->
+    <locale android:name="af"/>     <!-- Afrikaans -->
+    <locale android:name="be"/>     <!-- Belarusian -->
+    <locale android:name="bg"/>     <!-- Bulgarian -->
+    <locale android:name="ca"/>     <!-- Catalan -->
+    <locale android:name="cs"/>     <!-- Czech -->
+    <locale android:name="da"/>     <!-- Danish -->
+    <locale android:name="de"/>     <!-- German -->
+    <locale android:name="el"/>     <!-- Greek -->
+    <locale android:name="en"/>     <!-- English -->
+    <locale android:name="en-GB"/>  <!-- English (British) -->
+    <locale android:name="es"/>     <!-- Spanish -->
+    <locale android:name="et"/>     <!-- Estonian -->
+    <locale android:name="fi"/>     <!-- Finnish -->
+    <locale android:name="fr"/>     <!-- French -->
+    <locale android:name="hr"/>     <!-- Croatian -->
+    <locale android:name="hu"/>     <!-- Hungarian -->
+    <locale android:name="it"/>     <!-- Italian -->
+    <locale android:name="lv"/>     <!-- Latvian -->
+    <locale android:name="nb"/>     <!-- Norwegian (Bokmål) -->
+    <locale android:name="nl"/>     <!-- Dutch -->
+    <locale android:name="pl"/>     <!-- Polish -->
+    <locale android:name="pt-BR"/>  <!-- Portuguese (Brazilian) -->
+    <locale android:name="pt-PT"/>  <!-- Portuguese (Portugal) -->
+    <locale android:name="ro"/>     <!-- Romanian -->
+    <locale android:name="ru"/>     <!-- Russian -->
+    <locale android:name="sk"/>     <!-- Slovak -->
+    <locale android:name="sv"/>     <!-- Swedish -->
+    <locale android:name="tr"/>     <!-- Turkish -->
+    <locale android:name="uk"/>     <!-- Ukrainian -->
+
+    <!-- Middle Eastern Languages -->
+    <locale android:name="fa"/>     <!-- Persian -->
+    <locale android:name="he"/>     <!-- Hebrew (Note: iw is legacy code, he is preferred) -->
+
+    <!-- Asian Languages -->
+    <locale android:name="hi"/>     <!-- Hindi -->
+    <locale android:name="id"/>     <!-- Indonesian (Note: in is legacy code, id is preferred) -->
+    <locale android:name="ja"/>     <!-- Japanese -->
+    <locale android:name="ko"/>     <!-- Korean -->
+    <locale android:name="ml"/>     <!-- Malayalam -->
+    <locale android:name="th"/>     <!-- Thai -->
+    <locale android:name="vi"/>     <!-- Vietnamese -->
+    <locale android:name="zh-CN"/>  <!-- Chinese (Simplified) -->
+    <locale android:name="zh-TW"/>  <!-- Chinese (Traditional) -->
+</locale-config>

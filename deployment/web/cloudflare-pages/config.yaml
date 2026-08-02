@@ -1,0 +1,17 @@
+# deployment/web/cloudflare-pages/config.yaml
+target: web-cloudflare-pages
+platform: web
+host: cloudflare-pages
+tier: 2
+owning_capability: web-cloudflare-pages-publish
+output_format: web
+output_path: "cmp-web/build/dist/js/productionExecutable/"
+version_format: "git"
+signing: none
+distribution_groups: ["public"]
+retention: "indefinite"
+runners:
+  local: { command: "wrangler pages deploy ./cmp-web/build/dist/js/productionExecutable --project-name=mifos-x-web" }
+  ci:    { workflow_snippet: workflow-snippet.yml }
+requires_confirm: false
+enabled_by_default: false

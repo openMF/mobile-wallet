@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+# deployment/desktop/microsoft-store/script.sh
+# Tier-2 Microsoft Store MSIX → Partner Center submission.
+# Runs under Git Bash on windows-latest. Assumes MakeAppx.exe is on PATH or
+# its absolute path is provided via MAKEAPPX env var.
+set -euo pipefail
+
+FLAVOR="${FLAVOR:-prod}"
+MAKEAPPX="${MAKEAPPX:?MAKEAPPX env var required (path to MakeAppx.exe)}"
+MS_PARTNER_CENTER_TENANT_ID="${MS_PARTNER_CENTER_TENANT_ID:?ms_partner_center_tenant_id required}"
+MS_PARTNER_CENTER_CLIENT_ID="${MS_PARTNER_CENTER_CLIENT_ID:?ms_partner_center_client_id required}"
+MS_PARTNER_CENTER_CLIENT_SECRET="${MS_PARTNER_CENTER_CLIENT_SECRET:?ms_partner_center_client_secret required}"
+MS_APP_ID="${MS_APP_ID:?ms_app_id required}"
+
+# 1. Build app payload (createReleaseDistributable produces /app/<App>.app).
+./gradlew :cmp-desktop:createReleaseDistributable -PflavorDimension="$FLAVOR"
+
+# 2. Stage MSIX layout: copy app payload + Package.appxmanifest into a single tree.
+STAGE="cmp-desktop/build/compose/binaries/main-release/msix-stage"
+APP_LAYOUT="cmp-desktop/build/compose/binaries/main-release/app"
+MANIFEST="$(dirname "$0")/Package.appxmanifest"
+OUTPUT="cmp-desktop/build/compose/binaries/main-release/msix/mifos.msix"
+mkdir -p "$STAGE" "$(dirname "$OUTPUT")"
+cp -R "$APP_LAYOUT/." "$STAGE/"
+cp -f "$MANIFEST" "$STAGE/AppxManifest.xml"
+
+# 3. Pack via MakeAppx.exe.
+"$MAKEAPPX" pack /d "$STAGE" /p "$OUTPUT" /overwrite
+
+# 4. Submit to Partner Center (StoreBroker config is at ./StoreBroker.config.json).
+# In CI we invoke microsoft/StoreBroker-Action; locally invoke `Submit-StoreBrokerSubmission`
+# via PowerShell. This bash path documents the contract; PS variant is preferred locally.
+echo "Submission step is wired through GH Action (CI) or PowerShell StoreBroker module (local)."
+echo "Package built at: $OUTPUT"

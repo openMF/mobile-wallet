@@ -99,7 +99,7 @@ internal fun QrCodeCard(
             Box(
                 modifier = Modifier
                     .clip(RoundedCornerShape(KptTheme.spacing.md))
-                    .background(KptTheme.colorScheme.qrBackground)
+                    .background(androidx.compose.ui.graphics.Color.White)
                     .padding(KptTheme.spacing.md),
                 contentAlignment = Alignment.Center,
             ) {
@@ -166,7 +166,7 @@ private fun MifosLogoOverlay(
         modifier = modifier
             .size(LogoOverlaySize)
             .clip(CircleShape)
-            .background(KptTheme.colorScheme.qrBackground)
+            .background(androidx.compose.ui.graphics.Color.White)
             .border(
                 width = KptTheme.spacing.xs / 2,
                 color = KptTheme.colorScheme.primary,

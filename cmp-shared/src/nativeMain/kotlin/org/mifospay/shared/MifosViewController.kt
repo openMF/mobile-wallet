@@ -10,7 +10,15 @@
 package org.mifospay.shared
 
 import androidx.compose.ui.window.ComposeUIViewController
-import org.mifospay.shared.di.initKoin
+// Phase 2 T4 entry-point switch: nativeMain ViewController now launches the
+// template-shape `cmp.shared.SharedApp` (which composes
+// `cmp.navigation.ComposeApp` via the re-homed shell) instead of the legacy
+// `org.mifospay.shared.MifosPaySharedApp`. Koin is initialized via
+// `cmp.shared.utils.initKoin` which loads `cmp.navigation.di.KoinModules.allModules`
+// (fork surface wired in via Phase 2 T6/T7 — see
+// `cmp-navigation/src/.../di/KoinModules.kt`).
+import cmp.shared.SharedApp
+import cmp.shared.utils.initKoin
 import platform.Foundation.NSUserDefaults
 
 @Suppress("ktlint:standard:function-naming")
@@ -19,7 +27,13 @@ fun MifosViewController() = ComposeUIViewController(
         initKoin()
     },
 ) {
-    MifosPaySharedApp(
+    SharedApp(
+        // Native shell has no screen-capture / activity-recreate / dark-mode-broadcast
+        // primitives to wire — supply no-ops. Locale handling stays as before
+        // (writes AppleLanguages user-defaults + synchronize).
+        updateScreenCapture = {},
+        handleRecreate = {},
+        handleThemeMode = {},
         handleAppLocale = { languageTag ->
             if (languageTag != null) {
                 // Set specific language
@@ -33,5 +47,6 @@ fun MifosViewController() = ComposeUIViewController(
             }
             NSUserDefaults.standardUserDefaults.synchronize()
         },
+        onSplashScreenRemoved = {},
     )
 }

@@ -9,21 +9,23 @@
  */
 package org.mifospay.core.data.repository
 
-import kotlinx.coroutines.flow.Flow
 import org.mifospay.core.common.DataState
+import org.mifospay.core.common.ScreenStateStream
 import org.mifospay.core.model.user.NewUser
 import org.mifospay.core.network.model.CommonResponse
 import org.mifospay.core.network.model.GenericResponse
 import org.mifospay.core.network.model.entity.UserWithRole
 
 interface UserRepository {
-    suspend fun getUsers(): Flow<DataState<List<UserWithRole>>>
+    // Phase-3 cutover — Flow-shaped surfaces on ScreenState.
+    suspend fun getUsers(): ScreenStateStream<List<UserWithRole>>
 
-    suspend fun getUser(): Flow<DataState<UserWithRole>>
+    suspend fun getUser(): ScreenStateStream<UserWithRole>
 
+    suspend fun updateUser(userId: Int, updatedUser: NewUser): ScreenStateStream<GenericResponse>
+
+    // Writes stay on DataState (Phase-3 D1).
     suspend fun createUser(newUser: NewUser): DataState<Int>
-
-    suspend fun updateUser(userId: Int, updatedUser: NewUser): Flow<DataState<GenericResponse>>
 
     suspend fun updateUserPassword(userId: Long, password: String): DataState<String>
 

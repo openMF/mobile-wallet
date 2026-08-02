@@ -10,13 +10,12 @@
 package org.mifospay.core.data.repositoryImpl
 
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import org.mifospay.core.common.DataState
-import org.mifospay.core.common.asDataStateFlow
+import org.mifospay.core.common.ScreenStateStream
+import org.mifospay.core.common.asScreenStateFlow
 import org.mifospay.core.data.repository.KycLevelRepository
 import org.mifospay.core.model.kyc.KYCLevel1Details
 import org.mifospay.core.network.FineractApiManager
@@ -27,12 +26,12 @@ class KycLevelRepositoryImpl(
 ) : KycLevelRepository {
     override fun fetchKYCLevel1Details(
         clientId: Long,
-    ): Flow<DataState<KYCLevel1Details?>> {
+    ): ScreenStateStream<KYCLevel1Details?> {
         return apiManager.kycLevel1Api
             .fetchKYCLevel1Details(clientId)
-            .catch { DataState.Error(it, null) }
             .map { it.firstOrNull() }
-            .asDataStateFlow().flowOn(ioDispatcher)
+            .asScreenStateFlow()
+            .flowOn(ioDispatcher)
     }
 
     override suspend fun addKYCLevel1Details(

@@ -9,13 +9,18 @@
  */
 package org.mifospay.core.data.repository
 
-import kotlinx.coroutines.flow.Flow
 import org.mifospay.core.common.DataState
+import org.mifospay.core.common.ScreenStateStream
 import org.mifospay.core.model.kyc.KYCLevel1Details
 
 interface KycLevelRepository {
-    fun fetchKYCLevel1Details(clientId: Long): Flow<DataState<KYCLevel1Details?>>
+    // Phase-3 cutover — reads on ScreenState.
+    // `null` payload is legal here (client has not yet submitted KYC); screens
+    // treat Content(null) as "empty form" — not Empty (which would render a
+    // blocking empty-state message).
+    fun fetchKYCLevel1Details(clientId: Long): ScreenStateStream<KYCLevel1Details?>
 
+    // Writes stay on DataState (Phase-3 D1).
     suspend fun addKYCLevel1Details(
         clientId: Long,
         kycLevel1Details: KYCLevel1Details,

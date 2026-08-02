@@ -18,7 +18,7 @@ import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.serialization.Serializable
-import org.mifospay.core.common.DataState
+import org.mifospay.core.common.ScreenState
 import org.mifospay.core.common.setSerialized
 import org.mifospay.core.data.repository.InvoiceRepository
 import org.mifospay.core.datastore.UserPreferencesRepository
@@ -48,17 +48,36 @@ class InvoicesViewModel(
             .launchIn(viewModelScope)
     }
 
-    val invoiceUiState = invoiceRepository.getInvoices(state.clientId).mapLatest { result ->
+    val invoiceUiState = invoiceRepository.getInvoicesScreen(
+        // Phase-5 Batch-2 LEDGER read (GOAL D13) — switched from the
+        // transitional `getInvoices(clientId)` (`asScreenStateFlow` shim over
+        // the raw Ktorfit flow) to the store-native `getInvoicesScreen(...)`
+        // that consumes the `invoice` Store5 read (`createStore` + Room SoT +
+        // CACHE_FIRST_SWR + atomic replacePage). Same `Flow<ScreenState<List<Invoice>>>`
+        // shape; consumer branches are unchanged. Requires `viewModelScope`
+        // for the stream's internal reconnect + periodic + SWR side-fetch
+        // coroutines.
+        clientId = state.clientId,
+        scope = viewModelScope,
+    ).mapLatest { result ->
+        // Fold ScreenState → the existing 4-branch UiState. Repo emits
+        // ScreenState.Empty when the underlying list is empty, so we route it
+        // directly to InvoicesUiState.Empty and drop the ex `isEmpty()` check.
+        // NoNetwork/Unauthenticated → Error until Phase-4 differentiates.
         when (result) {
-            is DataState.Loading -> InvoicesUiState.Loading
-            is DataState.Error -> InvoicesUiState.Error(result.exception.message.toString())
-            is DataState.Success -> {
-                if (result.data.isEmpty()) {
-                    InvoicesUiState.Empty
-                } else {
-                    InvoicesUiState.InvoiceList(result.data)
-                }
-            }
+            is ScreenState.Loading -> InvoicesUiState.Loading
+
+            is ScreenState.Empty -> InvoicesUiState.Empty
+
+            is ScreenState.Content -> InvoicesUiState.InvoiceList(result.data)
+
+            is ScreenState.Error -> InvoicesUiState.Error(result.error.message.toString())
+
+            is ScreenState.NoNetwork ->
+                InvoicesUiState.Error("No network. Please check your connection.")
+
+            is ScreenState.Unauthenticated ->
+                InvoicesUiState.Error("Session expired. Please log in again.")
         }
     }.stateIn(
         scope = viewModelScope,

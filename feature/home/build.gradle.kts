@@ -11,10 +11,6 @@ plugins {
     alias(libs.plugins.cmp.feature.convention)
 }
 
-android {
-    namespace = "org.mifospay.feature.home"
-}
-
 kotlin {
     sourceSets {
         commonMain.dependencies {
@@ -24,6 +20,10 @@ kotlin {
             implementation(compose.materialIconsExtended)
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
+            // HomeScreen uses androidx.compose.material3.windowsizeclass.* for
+            // calculateWindowSizeClass()/WindowWidthSizeClass adaptive-layout branching.
+            // The multi-platform port lives at dev.chrisbanes.material3:material3-window-size-class-multiplatform.
+            implementation(libs.window.size)
         }
     }
 }

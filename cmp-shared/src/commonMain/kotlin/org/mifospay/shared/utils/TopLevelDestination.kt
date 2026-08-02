@@ -10,13 +10,13 @@
 package org.mifospay.shared.utils
 
 import androidx.compose.ui.graphics.vector.ImageVector
-import mobile_wallet.cmp_shared.generated.resources.Res
-import mobile_wallet.cmp_shared.generated.resources.app_name
-import mobile_wallet.cmp_shared.generated.resources.finance
-import mobile_wallet.cmp_shared.generated.resources.history
-import mobile_wallet.cmp_shared.generated.resources.home
-import mobile_wallet.cmp_shared.generated.resources.payments
-import mobile_wallet.cmp_shared.generated.resources.transaction_history
+import cmp.shared.generated.resources.Res
+import cmp.shared.generated.resources.app_name
+import cmp.shared.generated.resources.finance
+import cmp.shared.generated.resources.history
+import cmp.shared.generated.resources.home
+import cmp.shared.generated.resources.payments
+import cmp.shared.generated.resources.transaction_history
 import org.jetbrains.compose.resources.StringResource
 import org.mifospay.core.designsystem.icon.MifosIcons
 

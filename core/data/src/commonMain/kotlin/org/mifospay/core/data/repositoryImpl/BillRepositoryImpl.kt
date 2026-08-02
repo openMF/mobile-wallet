@@ -9,6 +9,12 @@
  */
 package org.mifospay.core.data.repositoryImpl
 
+// TODO(phase-4): Migrate to ScreenState via `createOfflineStore` (Bill
+// autopay-bills tier). Deferred from Phase-3 Batch B cutover because bills
+// need a real Store5 offline store (SourceOfTruth = Room, fetcher = Fineract
+// bills endpoint, bookkeeper for scheduled payment reconciliation) before
+// their reads can adopt the fork-wide `ScreenStateStream<T>` envelope.
+
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first

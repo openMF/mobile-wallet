@@ -1,0 +1,42 @@
+# deployment/android/firebase/workflow-snippet.yml
+# Reusable GHA snippet for Android → Firebase App Distribution.
+# Dual-flavor: prod + demo via matrix; dual-mode: vault + manual per AC90.
+name: android-firebase-deploy
+on:
+  workflow_call:
+    inputs:
+      flavor:
+        type: string
+        required: true
+        description: "prod or demo"
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with: { bundler-cache: true }
+
+      - name: Materialize secrets (vault-mode)
+        if: ${{ secrets.SOPS_AGE_KEY != '' }}
+        env:
+          SOPS_AGE_KEY: ${{ secrets.SOPS_AGE_KEY }}
+        run: bash deployment/_shared/scripts/secrets-pull.sh --required-for android-signing,android-firebase-distribute
+
+      - name: Materialize secrets (manual-mode)
+        if: ${{ secrets.SOPS_AGE_KEY == '' }}
+        run: |
+          mkdir -p secrets/live/android/keystores secrets
+          echo "${{ secrets.ANDROID_RELEASE_KEYSTORE_B64 }}" | base64 -d > keystores/upload_keystore.keystore
+          echo '${{ secrets.FIREBASE_SERVICE_ACCOUNT_JSON }}' > secrets/live/android/firebaseAppDistributionServiceCredentialsFile.json
+
+      - name: Run Fastlane (prod)
+        if: ${{ inputs.flavor == 'prod' }}
+        run: bundle exec fastlane android deployReleaseApkOnFirebase
+
+      - name: Run Fastlane (demo)
+        if: ${{ inputs.flavor == 'demo' }}
+        run: bundle exec fastlane android deployDemoApkOnFirebase

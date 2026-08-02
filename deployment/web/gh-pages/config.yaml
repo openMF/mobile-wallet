@@ -1,0 +1,18 @@
+# deployment/web/gh-pages/config.yaml
+target: web-gh-pages
+platform: web
+host: github-pages
+tier: 1
+owning_capability: github-pages-publish
+output_format: web
+output_path: "cmp-web/build/dist/js/productionExecutable/"
+version_format: "git"
+signing: none
+distribution_groups: ["public"]
+retention: "indefinite"
+runners:
+  local: { command: "bash deployment/web/gh-pages/script.sh" }
+  ci:    { workflow_snippet: workflow-snippet.yml }
+requires_confirm: false
+enabled_by_default: true
+deploy_cli: "actions/deploy-pages@v4"

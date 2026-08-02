@@ -9,26 +9,47 @@
  */
 package org.mifospay.core.data.repository
 
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import org.mifospay.core.common.DataState
+import org.mifospay.core.common.ScreenState
 import org.mifospay.core.model.standinginstruction.SITemplate
 import org.mifospay.core.model.standinginstruction.SIUpdatePayload
 import org.mifospay.core.model.standinginstruction.StandingInstruction
 import org.mifospay.core.model.standinginstruction.StandingInstructionPayload
 
 interface StandingInstructionRepository {
+    // Phase-3 cutover — reads on ScreenState.
     fun getStandingInstructionTemplate(
         fromOfficeId: Long,
         fromClientId: Long,
         fromAccountType: Long,
-    ): Flow<DataState<SITemplate>>
+    ): Flow<ScreenState<SITemplate>>
 
     fun getAllStandingInstructions(
         clientId: Long,
-    ): Flow<DataState<List<StandingInstruction>>>
+    ): Flow<ScreenState<List<StandingInstruction>>>
 
-    fun getStandingInstruction(instructionId: Long): Flow<DataState<StandingInstruction>>
+    /**
+     * Phase-5 Batch-3 LEDGER read — GOAL D13 (`createStore` + CACHE_FIRST_SWR).
+     *
+     * Store-backed alternative to [getAllStandingInstructions] — reads through
+     * the `AppStoreRegistry.StandingInstruction` Store5 (offline-first via
+     * `wallet_standing_instructions` Room SoT, SWR revalidation once the TTL
+     * elapses).
+     *
+     * @param clientId the store's page key AND the API query parameter.
+     * @param scope the caller's [CoroutineScope] (typically `viewModelScope`)
+     *   — Store5 subscribes its internal refresh trigger to this scope.
+     */
+    fun getAllStandingInstructionsScreen(
+        clientId: Long,
+        scope: CoroutineScope,
+    ): Flow<ScreenState<List<StandingInstruction>>>
 
+    fun getStandingInstruction(instructionId: Long): Flow<ScreenState<StandingInstruction>>
+
+    // Writes stay on DataState (Phase-3 D1).
     suspend fun createStandingInstruction(
         payload: StandingInstructionPayload,
     ): DataState<String>

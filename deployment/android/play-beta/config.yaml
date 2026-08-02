@@ -1,0 +1,17 @@
+# deployment/android/play-beta/config.yaml
+target: android-play-beta
+platform: android
+tier: 2
+owning_capability: android-play-internal-publish
+output_format: none   # promotion-only, no build
+version_format: "playstore"
+signing: none
+distribution_groups: ["beta"]
+retention: "180 days"
+runners:
+  local: { command: "bundle exec fastlane android promoteToBeta" }
+  ci:    { workflow_snippet: workflow-snippet.yml }
+requires_confirm: false
+promotion_only: true
+source_track: internal
+target_track: beta

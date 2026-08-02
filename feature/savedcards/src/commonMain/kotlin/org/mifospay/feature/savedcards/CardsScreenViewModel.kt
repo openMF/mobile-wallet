@@ -27,6 +27,7 @@ import mobile_wallet.feature.savedcards.generated.resources.feature_savedcards_c
 import mobile_wallet.feature.savedcards.generated.resources.feature_savedcards_delete_card
 import org.jetbrains.compose.resources.StringResource
 import org.mifospay.core.common.DataState
+import org.mifospay.core.common.ScreenState
 import org.mifospay.core.common.getSerialized
 import org.mifospay.core.common.setSerialized
 import org.mifospay.core.data.repository.SavedCardRepository
@@ -54,14 +55,35 @@ class CardsScreenViewModel(
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    val cardState = repository.getSavedCards(state.clientId)
+    val cardState = repository
+        // Phase-5 Batch-1 LEDGER read (GOAL D13) — switched from the transitional
+        // `getSavedCards(clientId)` (`asScreenStateFlow` shim over the raw Ktorfit
+        // flow) to the store-native `getSavedCardsScreen(...)` that consumes the
+        // `savedCards` Store5 read (`createStore` + Room SoT + CACHE_FIRST_SWR +
+        // atomic replacePage). Same `Flow<ScreenState<List<SavedCard>>>` shape;
+        // consumer branches (Loading/Empty/Content/Error) are unchanged. Requires
+        // `viewModelScope` for the stream's internal reconnect + periodic + SWR
+        // side-fetch coroutines.
+        .getSavedCardsScreen(state.clientId, scope = viewModelScope)
         .mapLatest { result ->
+            // Fold ScreenState → existing 4-branch ViewState. Repo emits
+            // ScreenState.Empty when the underlying list is empty, so we map
+            // it directly to the feature's real Empty branch (add-card CTA).
+            // NoNetwork/Unauthenticated → Error until Phase-4 differentiates.
             when (result) {
-                is DataState.Loading -> ViewState.Loading
-                is DataState.Error -> ViewState.Error(result.exception.message.toString())
-                is DataState.Success -> {
-                    if (result.data.isEmpty()) ViewState.Empty else ViewState.Content(result.data)
-                }
+                is ScreenState.Loading -> ViewState.Loading
+
+                is ScreenState.Empty -> ViewState.Empty
+
+                is ScreenState.Content -> ViewState.Content(result.data)
+
+                is ScreenState.Error -> ViewState.Error(result.error.message.toString())
+
+                is ScreenState.NoNetwork ->
+                    ViewState.Error("No network. Please check your connection.")
+
+                is ScreenState.Unauthenticated ->
+                    ViewState.Error("Session expired. Please log in again.")
             }
         }
         .stateIn(

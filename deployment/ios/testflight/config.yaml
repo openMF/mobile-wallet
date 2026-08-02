@@ -1,0 +1,15 @@
+# deployment/ios/testflight/config.yaml
+target: ios-testflight
+platform: ios
+tier: 1
+owning_capability: ios-testflight
+output_format: ipa
+output_path: "cmp-ios/build/iosApp.ipa"
+version_format: "appstore"
+signing: ios-match-appstore
+distribution_groups: ["mifos-mobile-apps"]
+retention: "indefinite"
+runners:
+  local: { command: "bundle exec fastlane ios beta" }
+  ci:    { workflow_snippet: workflow-snippet.yml }
+requires_confirm: false

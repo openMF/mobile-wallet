@@ -1,0 +1,16 @@
+# deployment/android/play-internal/config.yaml
+target: android-play-internal
+platform: android
+tier: 1
+owning_capability: android-play-internal-publish
+output_format: aab
+gradle_task: bundleProdRelease
+output_path: "cmp-android/build/outputs/bundle/prodRelease/"
+version_format: "playstore"
+signing: android-keystore
+distribution_groups: ["internal"]
+retention: "90 days"
+runners:
+  local: { command: "bundle exec fastlane android deployInternal" }
+  ci:    { workflow_snippet: workflow-snippet.yml }
+requires_confirm: false

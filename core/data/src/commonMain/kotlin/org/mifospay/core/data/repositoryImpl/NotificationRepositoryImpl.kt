@@ -10,23 +10,73 @@
 package org.mifospay.core.data.repositoryImpl
 
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
-import org.mifospay.core.common.DataState
-import org.mifospay.core.common.asDataStateFlow
+import kpt.core.base.store.infra.FetchedAtRepository
+import kpt.core.base.store.screen.FetchPolicy
+import kpt.core.base.store.screen.asScreenStream
+import kpt.core.data.infra.NetworkMonitor as StoreNetworkMonitor
+import kpt.core.store.AppStoreRegistry
+import kpt.core.store.wallet.notification.NotificationKey
+import org.mifospay.core.common.ScreenState
+import org.mifospay.core.common.asScreenStateFlow
+import org.mifospay.core.data.util.toForkScreenStateFlow
 import org.mifospay.core.data.repository.NotificationRepository
 import org.mifospay.core.model.notification.Notification
 import org.mifospay.core.network.FineractApiManager
+import org.mobilenativefoundation.store.store5.Store
 
 class NotificationRepositoryImpl(
     private val apiManager: FineractApiManager,
     private val ioDispatcher: CoroutineDispatcher,
+    // Phase-5 Batch-2 LEDGER wiring — injected by RepositoryModule so the
+    // store-backed fetchNotificationsScreen(...) can consume Store5 via
+    // asScreenStream(...). Nullable-default so existing unit tests without
+    // the store harness continue to compile; fetchNotifications() — the legacy
+    // asScreenStateFlow path — is unaffected.
+    private val notificationStore: Store<NotificationKey, List<Notification>>? = null,
+    private val storeNetworkMonitor: StoreNetworkMonitor? = null,
+    private val fetchedAtRepository: FetchedAtRepository? = null,
 ) : NotificationRepository {
-    override fun fetchNotifications(): Flow<DataState<List<Notification>>> {
+    override fun fetchNotifications(): Flow<ScreenState<List<Notification>>> {
         return apiManager.notificationApi
             .fetchNotifications(true)
             .map { it.pageItems }
-            .asDataStateFlow().flowOn(ioDispatcher)
+            .asScreenStateFlow(isEmpty = { it.isEmpty() })
+            .flowOn(ioDispatcher)
+    }
+
+    // Phase-5 Batch-2 LEDGER read — GOAL D13 (`createStore` + CACHE_FIRST_SWR).
+    //
+    // See the interface KDoc for the shape contract. Requires the three store-adapter
+    // dependencies (notificationStore + NetworkMonitor + FetchedAtRepository).
+    // If any is null (test wiring), we IllegalState — production DI in
+    // RepositoryModule wires all three unconditionally.
+    override fun fetchNotificationsScreen(
+        clientId: Long,
+        scope: CoroutineScope,
+    ): Flow<ScreenState<List<Notification>>> {
+        val store = checkNotNull(notificationStore) {
+            "fetchNotificationsScreen requires the `notification` Store5 wiring. Verify " +
+                "RepositoryModule bound AppStoreRegistry.Notification and injected it here."
+        }
+        val netMon = checkNotNull(storeNetworkMonitor) {
+            "fetchNotificationsScreen requires kmptoolkit NetworkMonitor. Verify DataModule bound it."
+        }
+        val fetchedAtRepo = checkNotNull(fetchedAtRepository) {
+            "fetchNotificationsScreen requires FetchedAtRepository. Verify DataModule bound it."
+        }
+        return store.asScreenStream(
+            key = NotificationKey(clientId),
+            networkMonitor = netMon,
+            fetchedAtRepository = fetchedAtRepo,
+            cacheKey = "wallet_notifications-$clientId",
+            scope = scope,
+            isEmpty = { it.isEmpty() },
+            fetchPolicy = FetchPolicy.CACHE_FIRST_SWR,
+            ttl = AppStoreRegistry.Ttl.NOTIFICATION,
+        ).state.toForkScreenStateFlow()
     }
 }

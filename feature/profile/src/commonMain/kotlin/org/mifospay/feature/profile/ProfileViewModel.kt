@@ -11,20 +11,15 @@ package org.mifospay.feature.profile
 
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.StringResource
-import org.mifospay.core.common.DataState
+import org.mifospay.core.common.ScreenState
 import org.mifospay.core.data.repository.ClientRepository
 import org.mifospay.core.datastore.UserPreferencesRepository
 import org.mifospay.core.model.client.Client
 import org.mifospay.core.ui.utils.BaseViewModel
-import org.mifospay.feature.profile.ProfileAction.Internal.HandleLoadClientImageResult
-import org.mifospay.feature.profile.ProfileAction.Internal.LoadClientImage
 
 internal class ProfileViewModel(
     private val preferencesRepository: UserPreferencesRepository,
@@ -35,11 +30,41 @@ internal class ProfileViewModel(
         ProfileState(clientId = clientId)
     },
 ) {
-    val clientState = clientRepository.getClientInfo(state.clientId).map {
+    val clientState = clientRepository.getClientInfoScreen(
+        // Phase-5 Batch-2 SINGLE-ROW-PER-KEY read (GOAL D13) — switched from
+        // the transitional `getClientInfo(clientId)` (`asScreenStateFlow` shim
+        // over the raw Ktorfit flow) to the store-native
+        // `getClientInfoScreen(...)` that consumes the `clientDetail` Store5
+        // read (`createStore` + Room SoT + CACHE_FIRST_SWR + single-row
+        // upsert). Same `Flow<ScreenState<Client>>` shape; consumer branches
+        // are unchanged. Requires `viewModelScope` for the stream's internal
+        // reconnect + periodic + SWR side-fetch coroutines.
+        //
+        // NOTE — `getClientImage(...)` (the image blob-URL stream, observed
+        // in the `init` block below) intentionally stays on the transitional
+        // shim; its caching story (Coil vs Room blob) is out of scope for
+        // this batch.
+        clientId = state.clientId,
+        scope = viewModelScope,
+    ).map {
+        // Fold ScreenState → the existing 3-branch ProfileState.ViewState.
+        // Empty is defensively projected to Error (single-record endpoint
+        // shouldn't emit Empty). NoNetwork / Unauthenticated fold into Error
+        // until Phase-4 differentiates.
         when (it) {
-            is DataState.Loading -> ProfileState.ViewState.Loading
-            is DataState.Error -> ProfileState.ViewState.Error(it.exception.message.toString())
-            is DataState.Success -> ProfileState.ViewState.Success(it.data)
+            is ScreenState.Loading -> ProfileState.ViewState.Loading
+
+            is ScreenState.Empty -> ProfileState.ViewState.Error("Client not found.")
+
+            is ScreenState.Content -> ProfileState.ViewState.Success(it.data)
+
+            is ScreenState.Error -> ProfileState.ViewState.Error(it.error.message.toString())
+
+            is ScreenState.NoNetwork ->
+                ProfileState.ViewState.Error("No network. Please check your connection.")
+
+            is ScreenState.Unauthenticated ->
+                ProfileState.ViewState.Error("Session expired. Please log in again.")
         }
     }.stateIn(
         scope = viewModelScope,
@@ -48,8 +73,17 @@ internal class ProfileViewModel(
     )
 
     init {
-        viewModelScope.launch {
-            sendAction(LoadClientImage(state.clientId))
+        // Load the client image side-stream. The prior implementation shuttled
+        // a `DataState<String>` through an internal action; with `getClientImage`
+        // now returning a ScreenState stream we fold it inline via the
+        // `observeScreen` bridge. Only success updates `clientImage` — the
+        // image tile silently falls back to the placeholder for all other
+        // branches (matches prior behaviour, which suppressed error dialogs
+        // for image failures per the commented-out lines in the old code).
+        clientRepository.getClientImage(state.clientId).observeScreen { screenState ->
+            if (screenState is ScreenState.Content) {
+                mutableStateFlow.update { it.copy(clientImage = screenState.data) }
+            }
         }
     }
 
@@ -73,42 +107,10 @@ internal class ProfileViewModel(
                 }
             }
 
-            is HandleLoadClientImageResult -> handleLoadClientImageResult(action)
-
-            is LoadClientImage -> loadClientImage(action)
-
             is ProfileAction.NavigateBack -> {
                 sendEvent(ProfileEvent.OnNavigateBack)
             }
         }
-    }
-
-    private fun handleLoadClientImageResult(action: HandleLoadClientImageResult) {
-        when (action.result) {
-            is DataState.Success -> {
-                mutableStateFlow.update {
-                    it.copy(clientImage = action.result.data)
-                }
-            }
-
-            is DataState.Error -> {
-//                mutableStateFlow.update {
-//                    it.copy(dialogState = Error(action.result.exception.message ?: ""))
-//                }
-            }
-
-            is DataState.Loading -> {
-                mutableStateFlow.update {
-                    it.copy(dialogState = ProfileState.DialogState.Loading)
-                }
-            }
-        }
-    }
-
-    private fun loadClientImage(action: LoadClientImage) {
-        clientRepository.getClientImage(action.clientId).onEach {
-            sendAction(HandleLoadClientImageResult(it))
-        }.launchIn(viewModelScope)
     }
 }
 
@@ -143,9 +145,5 @@ internal sealed interface ProfileAction {
 
     data object DismissErrorDialog : ProfileAction
 
-    sealed interface Internal : ProfileAction {
-        data class LoadClientImage(val clientId: Long) : Internal
-        data class HandleLoadClientImageResult(val result: DataState<String>) : Internal
-    }
     data object NavigateBack : ProfileAction
 }

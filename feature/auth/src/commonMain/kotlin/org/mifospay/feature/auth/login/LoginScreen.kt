@@ -55,7 +55,7 @@ import org.mifospay.core.ui.MifosPasswordField
 import org.mifospay.core.ui.MifosProgressIndicatorOverlay
 import org.mifospay.core.ui.utils.EventsEffect
 import template.core.base.designsystem.theme.KptTheme
-import template.core.base.platform.PlatformBuildConfig
+import kpt.core.base.platform.PlatformBuildConfig
 import template.core.base.ui.detectMultiTapGesture
 
 @Composable

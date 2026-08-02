@@ -1,0 +1,32 @@
+# deployment/desktop/linux-deb/workflow-snippet.yml
+name: desktop-linux-deb-deploy
+on:
+  workflow_call:
+    inputs:
+      tag:
+        type: string
+        required: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup JDK
+        uses: actions/setup-java@v4
+        with: { distribution: temurin, java-version: '17' }
+
+      - name: Materialize secrets (vault-mode)
+        if: ${{ secrets.SOPS_AGE_KEY != '' }}
+        env:
+          SOPS_AGE_KEY: ${{ secrets.SOPS_AGE_KEY }}
+        run: bash deployment/_shared/scripts/secrets-pull.sh --required-for github-releases-publish
+
+      - name: Build + upload DEB
+        env:
+          TAG:      ${{ inputs.tag }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: bash deployment/desktop/linux-deb/script.sh

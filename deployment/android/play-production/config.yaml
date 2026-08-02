@@ -1,0 +1,31 @@
+# deployment/android/play-production/config.yaml
+target: android-play-production
+platform: android
+tier: 3
+owning_capability: android-play-prod-publish
+output_format: none
+version_format: "playstore"
+signing: none
+distribution_groups: ["production"]
+retention: "indefinite"
+lanes:
+  syncListing:
+    description: "Sync Play Store store listing (title, description, screenshots, feature graphic)"
+    requires_confirm: false
+    runners:
+      local: { command: "bundle exec fastlane android syncListing" }
+      ci:    { workflow_snippet: workflow-snippet.yml }
+  promote_to_production:
+    description: "Promote beta track to production"
+    requires_confirm: true        # AC34 — prod push gated
+    runners:
+      local: { command: "bundle exec fastlane android promote_to_production" }
+      ci:    { workflow_snippet: workflow-snippet.yml }
+# Legacy flat runners (for backwards compat with existing CI snippets)
+runners:
+  local: { command: "bundle exec fastlane android promote_to_production" }
+  ci:    { workflow_snippet: workflow-snippet.yml }
+requires_confirm: true        # AC34 — prod push gated
+promotion_only: true
+source_track: beta
+target_track: production

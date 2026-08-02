@@ -1,0 +1,5 @@
+First release of Money Toolkit.
+
+Includes: Loan Tracker, EMI Calculator, Affordability Calculator, Bill Reminders, Amortization Schedule, Loan Comparison, Live Interest Rates (FRED), Country Macro Indicators, and Currency Exchange Rates.
+
+Everything works offline. No account or login required.

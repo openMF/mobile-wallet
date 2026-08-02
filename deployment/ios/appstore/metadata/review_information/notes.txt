@@ -1,0 +1,14 @@
+No login or account is required. All features work fully offline.
+
+App features available for review:
+• Loan Tracker — add personal loans, track principal, EMI amounts, and due dates locally
+• EMI Calculator — compute monthly payments for any loan amount, rate, and tenure
+• Affordability Calculator — determine the maximum loan amount based on income and EMI budget
+• Bill Reminders — set recurring bill reminders with in-app notification scheduling
+• Amortization Schedule — view the full month-by-month payment breakdown for any loan
+• Loan Comparison — side-by-side total-cost comparison for up to two loan scenarios
+• Interest Rates — US Federal Reserve rate data (FRED API; a free key is needed for live data — the screen shows a clear empty state without it)
+• Country Macro Indicators — GDP, CPI, and unemployment data from World Bank Open Data (no key needed)
+• Currency Rates — live foreign exchange rates by base currency
+
+No demo credentials are needed. No backend. No personal data is collected or transmitted. This is an open-source Kotlin Multiplatform reference implementation.

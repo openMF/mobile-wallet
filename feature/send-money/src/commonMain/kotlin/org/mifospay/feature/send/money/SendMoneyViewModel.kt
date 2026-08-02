@@ -35,7 +35,7 @@ import mobile_wallet.feature.send_money.generated.resources.feature_send_money_e
 import mobile_wallet.feature.send_money.generated.resources.feature_send_money_error_requesting_payment_qr_data_missing
 import mobile_wallet.feature.send_money.generated.resources.feature_send_money_upi_qr_parsed_successfully
 import org.jetbrains.compose.resources.StringResource
-import org.mifospay.core.common.DataState
+import org.mifospay.core.common.ScreenState
 import org.mifospay.core.common.StringResourceSerializer
 import org.mifospay.core.common.getSerialized
 import org.mifospay.core.common.setSerialized
@@ -69,17 +69,30 @@ class SendMoneyViewModel(
         .filter { it.length >= 4 }
         .flatMapLatest {
             repository.searchAccounts(it)
-        }.mapLatest { result ->
-            when (result) {
-                is DataState.Loading -> ViewState.Loading
-                is DataState.Error -> ViewState.Error(result.message)
-                is DataState.Success -> {
-                    if (result.data.isEmpty()) {
+        }.mapLatest { screenState ->
+            // Fold ScreenState → the existing 5-branch ViewState. Empty maps to
+            // the dedicated ViewState.Empty branch (no accounts found). NoNetwork
+            // / Unauthenticated fold into Error until Phase-4 differentiates.
+            when (screenState) {
+                is ScreenState.Loading -> ViewState.Loading
+
+                is ScreenState.Empty -> ViewState.Empty
+
+                is ScreenState.Content -> {
+                    if (screenState.data.isEmpty()) {
                         ViewState.Empty
                     } else {
-                        ViewState.Content(result.data)
+                        ViewState.Content(screenState.data)
                     }
                 }
+
+                is ScreenState.Error -> ViewState.Error(screenState.error.message.toString())
+
+                is ScreenState.NoNetwork ->
+                    ViewState.Error("No network. Please check your connection.")
+
+                is ScreenState.Unauthenticated ->
+                    ViewState.Error("Session expired. Please log in again.")
             }
         }.stateIn(
             scope = viewModelScope,

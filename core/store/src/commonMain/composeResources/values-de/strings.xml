@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copyright 2026 Mifos Initiative
+
+    This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+    If a copy of the MPL was not distributed with this file,
+    You can obtain one at https://mozilla.org/MPL/2.0/.
+
+    See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
+-->
+<resources>
+    <string name="screenstate_empty_title">Hier ist noch nichts</string>
+    <string name="screenstate_empty_message">Wenn Daten vorhanden sind, erscheinen sie hier.</string>
+    <string name="screenstate_error_title">Etwas ist schiefgelaufen</string>
+    <string name="screenstate_error_retry">Erneut versuchen</string>
+    <string name="screenstate_nonet_title">Sie sind offline</string>
+    <string name="screenstate_nonet_message">Wir versuchen es erneut, sobald Sie wieder verbunden sind.</string>
+    <string name="screenstate_nonet_retry">Jetzt erneut versuchen</string>
+    <string name="screenstate_captive_title">Beim WLAN anmelden</string>
+    <string name="screenstate_captive_message">Ihr Netzwerk verlangt eine Anmeldung vor der Verbindung.</string>
+    <string name="screenstate_captive_action">Anmeldeseite öffnen</string>
+    <string name="error_category_network">Server nicht erreichbar. Bitte Verbindung prüfen.</string>
+    <string name="error_category_auth">Ihre Sitzung ist abgelaufen. Bitte erneut anmelden.</string>
+    <string name="error_category_ratelimit">Zu viele Anfragen. Bitte warten und erneut versuchen.</string>
+    <string name="error_category_server">Unsere Server haben gerade Probleme. Bitte später erneut versuchen.</string>
+    <string name="error_category_generic">Etwas ist schiefgelaufen</string>
+</resources>

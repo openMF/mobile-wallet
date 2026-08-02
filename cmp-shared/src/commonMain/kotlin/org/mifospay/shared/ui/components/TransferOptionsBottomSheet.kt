@@ -24,7 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import mobile_wallet.cmp_shared.generated.resources.upi_and_autopay
+import cmp.shared.generated.resources.upi_and_autopay
 import mobile_wallet.feature.payments.generated.resources.Res
 import mobile_wallet.feature.payments.generated.resources.feature_payments_inter_bank_transfer_description
 import mobile_wallet.feature.payments.generated.resources.feature_payments_inter_bank_transfer_title
@@ -38,7 +38,7 @@ import org.mifospay.core.designsystem.component.MifosBottomSheet
 import org.mifospay.core.designsystem.theme.MifosTheme
 import org.mifospay.shared.TransferOptionsViewModel
 import template.core.base.designsystem.theme.KptTheme
-import mobile_wallet.cmp_shared.generated.resources.Res as SharedRes
+import cmp.shared.generated.resources.Res as SharedRes
 
 @Composable
 fun TransferOptionsBottomSheet(

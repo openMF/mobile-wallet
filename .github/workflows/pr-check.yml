@@ -1,93 +1,64 @@
-## Overview
+# .github/workflows/pr-check.yml — v2 multi-platform PR validation
 #
-# This reusable GitHub Actions workflow provides a comprehensive Continuous Integration (CI) pipeline
-# for multi-platform mobile and desktop applications, specifically designed for projects using Gradle and Java/Kotlin.
+# Runs Android + iOS + Desktop + Web checks in parallel on every PR + push to main/dev.
 #
-### Key Features
-# - Automated code quality checks
-# - Dependency management and verification
-# - Cross-platform desktop application builds (Windows, Linux, MacOS)
-# - Android APK build generation
-# - Artifact generation and storage
-#
-### Workflow Jobs
-# 1. **Setup**: Prepares the build environment
-#   - Checks out repository code
-#   - Sets up Java 17
-#   - Configures Gradle
-#   - Manages dependency caching
-#
-# 2. **Code Quality Checks**:
-#   - Build logic verification
-#   - Code formatting checks (Spotless)
-#   - Static code analysis (Detekt)
-#
-# 3. **Dependency Guard**:
-#   - Verifies dependencies against baseline
-#   - Prevents unauthorized dependency changes
-#   - Supports automatic baseline updates
-#
-# 4. **Android App Build**:
-#   - Builds debug APK for demo flavor
-#   - Uploads APK artifacts
-#
-# 5. **Desktop App Build**:
-#   - Builds applications for Windows, Linux, and MacOS
-#   - Generates platform-specific executables and packages
-#
-### Prerequisites
-#   - Java 17
-#   - Gradle
-#   - Configured build scripts for:
-#       - Android module
-#       - Desktop module
-#   - Installed Gradle plugins:
-#       - Spotless
-#       - Detekt
-#       - Dependency Guard
-#
-### Configuration Parameters
-# The workflow requires two input parameters:
-#
-#   |         Parameter      |              Description           |  Type  | Required |
-#   |------------------------|------------------------------------|--------|----------|
-#   | `android_package_name` | Name of the Android project module | String |    Yes   |
-#   | `desktop_package_name` | Name of the Desktop project module | String |    Yes   |
-#
+# iOS is invoked LOCALLY (not via actionhub) because the actionhub's reusable
+# workflow calls `:cmp-shared:compileKotlin` which doesn't exist in modern KMP —
+# the task is ambiguous (resolves to compileKotlinIosArm64, compileKotlinJs, etc.).
+# We route iOS through a thin local job that calls the correct platform task.
+# Track removal of this local override at: openMF/mifos-x-actionhub PR (TBD).
+name: PR Check
+run-name: "🔍 PR Check · #${{ github.event.pull_request.number || github.ref_name }} · ${{ github.event.pull_request.title || github.event.head_commit.message }}"
 
-# https://github.com/openMF/mifos-x-actionhub/blob/main/.github/workflows/pr-check.yaml
-
-# ##############################################################################
-#                 DON'T EDIT THIS FILE UNLESS NECESSARY                        #
-# ##############################################################################
-
-
-name: PR Checks
-
-# Trigger conditions for the workflow
 on:
-  push:
-    branches: [ dev, development ]
   pull_request:
-    branches: [ dev, development ]  # Runs on pushes to dev branch
-
-# Concurrency settings to prevent multiple simultaneous workflow runs
-concurrency:
-  group: pr-${{ github.ref }}
-  cancel-in-progress: true  # Cancels previous runs if a new one is triggered
-
-permissions:
-  contents: write
+    branches: [main, dev]
+  push:
+    branches: [main, dev]
 
 jobs:
-  pr_checks:
-    name: PR Checks
-    uses: openMF/mifos-x-actionhub/.github/workflows/pr-check.yaml@v1.0.11
+  validate:
+    uses: openMF/mifos-x-actionhub/.github/workflows/pr-check-v2.yaml@v1.0.21
     with:
-      android_package_name: 'cmp-android' # <-- Change Your Android Package Name
-      desktop_package_name: 'cmp-desktop' # <-- Change Your Desktop Package Name
-      web_package_name: 'cmp-web' # <-- Change Your Web Package Name
-      ios_package_name: 'cmp-ios' # <-- Change Your iOS Package Name
-      build_ios: true # <-- Change to 'false' if you don't want to build iOS
-      use_cocoapods: true
-      shared_module: ':cmp-shared'
+      # iOS handled locally below (actionhub iOS step is broken on KMP).
+      platforms:            'android,desktop,web'
+      android_package_name: cmp-android
+      ios_package_name:     cmp-ios
+      shared_module:        cmp-shared
+      desktop_package_name: cmp-desktop
+      web_package_name:     cmp-web
+    secrets: inherit
+
+  ios:
+    # macos-15 (arm64) is the image PR #185 (Jun 3, last green iOS) ran on. It
+    # ships Xcode 26.0.1 which has the iOS 26 SDK — the iOS 26 SDK exports
+    # _OBJC_CLASS_$_UIViewLayoutRegion that compose-multiplatform 1.11.x's
+    # CMPLayoutRegion references. The earlier macos-14 image ships Xcode 16.1
+    # max (iOS 18 SDK) which does NOT export the symbol → link fails. Per
+    # actions/runner-images macos-15-arm64-Readme.md, Xcode 26.0/26.1/26.2/26.3
+    # are all available on macos-15. (macos-14 deprecation begins 2026-07-06.)
+    name: PR Check · iOS
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with: { distribution: zulu, java-version: '17' }
+      - uses: gradle/actions/setup-gradle@v3
+      - uses: maxim-lobanov/setup-xcode@v1
+        # Xcode 26.0 = exact pin PR #185's actionhub action used (the action
+        # source comments "Builds on PR #47 (Xcode 26 fix, currently shipped
+        # as v1.0.13)"). Resolves to 26.0.1 on macos-15.
+        with: { xcode-version: '26.0' }
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.3'
+          bundler-cache: true
+      - name: Generate podspec + placeholder framework
+        # podspec has a raise-if-missing check on
+        # build/cocoapods/framework/ComposeApp.framework. generateDummyFramework
+        # produces a placeholder so `pod install` passes; xcodebuild's
+        # script_phase later swaps in the real framework via syncFramework.
+        run: ./gradlew :cmp-shared:podspec :cmp-shared:generateDummyFramework
+      - name: fastlane ios build_ios (unsigned)
+        # Canonical PR-check lane in fastlane/Fastfile. Same path PR #185 used.
+        run: bundle exec fastlane ios build_ios

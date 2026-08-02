@@ -10,13 +10,12 @@
 package org.mifospay.core.data.repositoryImpl
 
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import org.mifospay.core.common.DataState
-import org.mifospay.core.common.asDataStateFlow
+import org.mifospay.core.common.ScreenStateStream
+import org.mifospay.core.common.asScreenStateFlow
 import org.mifospay.core.data.repository.AutoPayRepository
 import org.mifospay.core.data.repository.AutoPayStatistics
 import org.mifospay.core.data.util.AutoPayValidator
@@ -27,6 +26,7 @@ import org.mifospay.core.model.autopay.AutoPayTemplate
 import org.mifospay.core.model.autopay.AutoPayUpdatePayload
 import org.mifospay.core.model.autopay.UpcomingPayment
 import org.mifospay.core.network.FineractApiManager
+import org.mifospay.core.network.model.entity.Page
 
 class AutoPayRepositoryImpl(
     private val apiManager: FineractApiManager,
@@ -36,29 +36,29 @@ class AutoPayRepositoryImpl(
     override fun getAutoPayTemplate(
         clientId: Long,
         sourceAccountId: Long,
-    ): Flow<DataState<AutoPayTemplate>> {
+    ): ScreenStateStream<AutoPayTemplate> {
         return apiManager.autoPayApi
             .getAutoPayTemplate(clientId, sourceAccountId)
-            .catch { DataState.Error(it, null) }
-            .asDataStateFlow().flowOn(ioDispatcher)
+            .asScreenStateFlow()
+            .flowOn(ioDispatcher)
     }
 
     override fun getAllAutoPaySchedules(
         clientId: Long,
-    ): Flow<DataState<List<AutoPay>>> {
+    ): ScreenStateStream<List<AutoPay>> {
         return apiManager.autoPayApi
             .getAllAutoPaySchedules(clientId)
-            .catch { DataState.Error(it, null) }
-            .asDataStateFlow().flowOn(ioDispatcher)
+            .asScreenStateFlow(isEmpty = { it.isEmpty() })
+            .flowOn(ioDispatcher)
     }
 
     override fun getAutoPaySchedule(
         autoPayId: Long,
-    ): Flow<DataState<AutoPay>> {
+    ): ScreenStateStream<AutoPay> {
         return apiManager.autoPayApi
             .getAutoPaySchedule(autoPayId)
-            .catch { DataState.Error(it, null) }
-            .asDataStateFlow().flowOn(ioDispatcher)
+            .asScreenStateFlow()
+            .flowOn(ioDispatcher)
     }
 
     override suspend fun createAutoPaySchedule(
@@ -133,29 +133,28 @@ class AutoPayRepositoryImpl(
     override fun getAutoPayHistory(
         autoPayId: Long,
         limit: Int,
-    ): Flow<DataState<org.mifospay.core.network.model.entity.Page<AutoPayHistory>>> {
+    ): ScreenStateStream<Page<AutoPayHistory>> {
         return apiManager.autoPayApi
             .getAutoPayHistory(autoPayId, limit)
-            .catch { DataState.Error(it, null) }
-            .asDataStateFlow().flowOn(ioDispatcher)
+            .asScreenStateFlow(isEmpty = { it.pageItems.isEmpty() })
+            .flowOn(ioDispatcher)
     }
 
     override fun getUpcomingPayments(
         clientId: Long,
         limit: Int,
-    ): Flow<DataState<List<UpcomingPayment>>> {
+    ): ScreenStateStream<List<UpcomingPayment>> {
         return apiManager.autoPayApi
             .getUpcomingPayments(clientId, limit)
-            .catch { DataState.Error(it, null) }
-            .asDataStateFlow().flowOn(ioDispatcher)
+            .asScreenStateFlow(isEmpty = { it.isEmpty() })
+            .flowOn(ioDispatcher)
     }
 
     override fun getAutoPayStatistics(
         clientId: Long,
-    ): Flow<DataState<AutoPayStatistics>> {
+    ): ScreenStateStream<AutoPayStatistics> {
         return apiManager.autoPayApi
             .getAutoPayStatistics(clientId)
-            .catch { DataState.Error(it, null) }
             .map { response ->
                 AutoPayStatistics(
                     totalActiveSchedules = response.totalActiveSchedules,
@@ -166,7 +165,8 @@ class AutoPayRepositoryImpl(
                     currency = response.currency,
                 )
             }
-            .asDataStateFlow().flowOn(ioDispatcher)
+            .asScreenStateFlow()
+            .flowOn(ioDispatcher)
     }
 
     override suspend fun validateAutoPayPayload(

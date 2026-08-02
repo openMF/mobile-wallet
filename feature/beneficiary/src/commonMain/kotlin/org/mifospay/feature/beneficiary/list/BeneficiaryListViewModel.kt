@@ -19,7 +19,7 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
 import org.jetbrains.compose.resources.StringResource
-import org.mifospay.core.common.DataState
+import org.mifospay.core.common.ScreenState
 import org.mifospay.core.data.repository.SelfServiceRepository
 import org.mifospay.core.datastore.UserPreferencesRepository
 import org.mifospay.core.model.beneficiary.Beneficiary
@@ -52,17 +52,46 @@ class BeneficiaryListViewModel(
 
     val accountState = refreshTrigger
         .flatMapLatest {
-            repository.getBeneficiaryList()
+            // Phase-5 Batch-1 LEDGER read (GOAL D13) — switched from the
+            // transitional `getBeneficiaryList()` (`asScreenStateFlow` shim over
+            // the raw Ktorfit flow) to the store-native `getBeneficiaryListScreen(...)`
+            // that consumes the `beneficiary` Store5 read (`createStore` + Room SoT
+            // + CACHE_FIRST_SWR + atomic replacePage). Same `Flow<ScreenState<List<Beneficiary>>>`
+            // shape; consumer branches are unchanged. Requires `viewModelScope` for
+            // the stream's internal reconnect + periodic + SWR side-fetch coroutines.
+            //
+            // Note: the VM's explicit refreshTrigger still fires on `RefreshList`
+            // action — each refresh re-subscribes to a new `asScreenStream(...)`
+            // stream which triggers a fetch via the store's onStart-emit;
+            // asScreenStream's own auto-refresh (reconnect, periodic) coexists
+            // with the manual refresh cleanly.
+            repository.getBeneficiaryListScreen(state.clientId, scope = viewModelScope)
         }
         .mapLatest {
+            // Fold the 6-branch ScreenState back into the feature's 3-branch
+            // ViewState (Loading/Error/Content). Empty projects to Content with
+            // an empty list so the Screen's existing empty-list rendering path
+            // continues to fire. NoNetwork/Unauthenticated are folded into the
+            // Error branch until Phase-4 wires per-branch surfaces.
             when (it) {
-                is DataState.Loading -> BeneficiaryListState.ViewState.Loading
-                is DataState.Error -> BeneficiaryListState.ViewState.Error(it.exception.message.toString())
-                is DataState.Success -> {
-                    BeneficiaryListState.ViewState.Content(
-                        beneficiaries = it.data,
-                    )
-                }
+                is ScreenState.Loading -> BeneficiaryListState.ViewState.Loading
+
+                is ScreenState.Empty -> BeneficiaryListState.ViewState.Content(
+                    beneficiaries = emptyList(),
+                )
+
+                is ScreenState.Content -> BeneficiaryListState.ViewState.Content(
+                    beneficiaries = it.data,
+                )
+
+                is ScreenState.Error ->
+                    BeneficiaryListState.ViewState.Error(it.error.message.toString())
+
+                is ScreenState.NoNetwork ->
+                    BeneficiaryListState.ViewState.Error("No network. Please check your connection.")
+
+                is ScreenState.Unauthenticated ->
+                    BeneficiaryListState.ViewState.Error("Session expired. Please log in again.")
             }
         }
         .stateIn(

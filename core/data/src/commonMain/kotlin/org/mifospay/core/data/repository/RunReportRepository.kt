@@ -9,13 +9,13 @@
  */
 package org.mifospay.core.data.repository
 
-import kotlinx.coroutines.flow.Flow
-import org.mifospay.core.common.DataState
+import org.mifospay.core.common.ScreenStateStream
 import org.mifospay.core.model.savingsaccount.Transaction
 
 interface RunReportRepository {
+    // Phase-3 cutover — reads on ScreenState.
     suspend fun getTransactionReceipt(
         outputType: String,
         transactionId: String,
-    ): Flow<DataState<Transaction>>
+    ): ScreenStateStream<Transaction>
 }

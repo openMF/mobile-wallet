@@ -1,0 +1,18 @@
+# deployment/desktop/mac-app-store/config.yaml
+target: desktop-mac-app-store
+platform: desktop
+tier: 2
+owning_capability: desktop-mac-app-store
+output_format: pkg
+output_path: "cmp-desktop/build/release/main/pkg/"
+version_format: "appstore"
+signing: mac-app-store
+distribution_groups: ["testflight-mac", "mac-app-store"]
+retention: "indefinite"
+runners:
+  local: { command: "bundle exec fastlane mac desktop_testflight" }
+  ci:    { workflow_snippet: workflow-snippet.yml }
+requires_confirm: true
+dev_fallback:
+  signing_mode: "skip-codesigning"
+  rationale: "MAS distribution flow requires real certs + sandbox provisioning; local dev runs build only, no upload."

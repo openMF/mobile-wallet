@@ -27,6 +27,7 @@ import mobile_wallet.feature.standing_instruction.generated.resources.feature_st
 import mobile_wallet.feature.standing_instruction.generated.resources.feature_standing_instruction_delete_message
 import org.jetbrains.compose.resources.StringResource
 import org.mifospay.core.common.DataState
+import org.mifospay.core.common.ScreenState
 import org.mifospay.core.common.getSerialized
 import org.mifospay.core.common.setSerialized
 import org.mifospay.core.data.repository.StandingInstructionRepository
@@ -53,17 +54,36 @@ class StandingInstructionViewModel(
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    val viewState = siRepository.getAllStandingInstructions(state.clientId).mapLatest { result ->
+    // Phase-5 Batch-3 cutover — switched from the transitional
+    // `getAllStandingInstructions(clientId)` shim to the store-backed
+    // `getAllStandingInstructionsScreen(clientId, scope)` (GOAL D13,
+    // `AppStoreRegistry.StandingInstruction`, offline-first via
+    // `wallet_standing_instructions` Room SoT, CACHE_FIRST_SWR band). The
+    // stateIn(...) 5-second WhileSubscribed keep-alive is preserved so a
+    // Compose-tab-away / return round-trip still hits the same live stream
+    // rather than resubscribing.
+    val viewState = siRepository.getAllStandingInstructionsScreen(
+        clientId = state.clientId,
+        scope = viewModelScope,
+    ).mapLatest { result ->
+        // Fold ScreenState → the existing 4-branch SIViewState. Repo emits
+        // ScreenState.Empty when the underlying list is empty, so we route it
+        // to the feature's real Empty branch (add-SI CTA). NoNetwork /
+        // Unauthenticated → Error until Phase-4 differentiates.
         when (result) {
-            is DataState.Loading -> SIViewState.Loading
-            is DataState.Error -> SIViewState.Error(result.exception.message.toString())
-            is DataState.Success -> {
-                if (result.data.isEmpty()) {
-                    SIViewState.Empty
-                } else {
-                    SIViewState.Content(result.data)
-                }
-            }
+            is ScreenState.Loading -> SIViewState.Loading
+
+            is ScreenState.Empty -> SIViewState.Empty
+
+            is ScreenState.Content -> SIViewState.Content(result.data)
+
+            is ScreenState.Error -> SIViewState.Error(result.error.message.toString())
+
+            is ScreenState.NoNetwork ->
+                SIViewState.Error("No network. Please check your connection.")
+
+            is ScreenState.Unauthenticated ->
+                SIViewState.Error("Session expired. Please log in again.")
         }
     }.stateIn(
         scope = viewModelScope,

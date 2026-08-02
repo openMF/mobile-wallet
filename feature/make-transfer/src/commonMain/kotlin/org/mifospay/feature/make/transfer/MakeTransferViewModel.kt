@@ -32,6 +32,7 @@ import mobile_wallet.feature.make_transfer.generated.resources.feature_make_tran
 import org.jetbrains.compose.resources.StringResource
 import org.mifospay.core.common.DataState
 import org.mifospay.core.common.DateHelper
+import org.mifospay.core.common.ScreenState
 import org.mifospay.core.common.getSerialized
 import org.mifospay.core.common.setSerialized
 import org.mifospay.core.common.utils.capitalizeWords
@@ -69,21 +70,37 @@ internal class MakeTransferViewModel(
         private const val KEY_STATE = "make_transfer_state"
     }
 
+    // Phase-3 fold: `getSelfAccounts` was migrated to `Flow<ScreenState<List<Account>>>`;
+    // fold the 6-branch ScreenState into the existing 4-branch ViewState.
+    // Content(emptyList) is defensively mapped to Empty (repo already emits
+    // ScreenState.Empty for empty responses, but the guard preserves prior
+    // behavior). NoNetwork / Unauthenticated fold into Error until Phase-4
+    // differentiates.
     @OptIn(ExperimentalCoroutinesApi::class)
     val accountsState = accountRepository.getSelfAccounts(state.fromClientId)
         .mapLatest { result ->
             when (result) {
-                is DataState.Loading -> ViewState.Loading
-                is DataState.Error -> ViewState.Error(result.message)
-                is DataState.Success -> {
+                is ScreenState.Loading -> ViewState.Loading
+                is ScreenState.Empty -> ViewState.Empty
+                is ScreenState.Content -> {
                     if (result.data.isEmpty()) {
                         ViewState.Empty
                     } else {
-                        val account = result.data.first { it.id == state.defaultAccountId }
+                        val account = result.data.firstOrNull { it.id == state.defaultAccountId }
+                            ?: result.data.first()
                         sendAction(MakeTransferAction.SelectAccount(account))
                         ViewState.Content(result.data)
                     }
                 }
+                is ScreenState.Error -> ViewState.Error(
+                    result.error.message ?: "Failed to load accounts",
+                )
+                is ScreenState.NoNetwork -> ViewState.Error(
+                    "No network. Please check your connection.",
+                )
+                is ScreenState.Unauthenticated -> ViewState.Error(
+                    "Session expired. Please log in again.",
+                )
             }
         }.stateIn(
             scope = viewModelScope,

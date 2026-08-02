@@ -22,6 +22,35 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import org.mifospay.core.model.savingsaccount.SavingsWithAssociationsEntity
 
+// STUB VERDICT (Phase-5 Batch-4, 2026-08-01):
+// -----------------------------------------------------------------------------
+// The `merchants` feature has NO backend endpoint today. Neither
+// `SelfServiceApiManager` nor `FineractApiManager` exposes a `merchantApi`
+// property (verified by grep across `core/network`), and this ViewModel returns
+// a hardcoded `emptyList()` without depending on any repository. Consequently
+// there is no data source to cache and no store to build.
+//
+// Phase-5 Batch-4 therefore emits NO store for merchants — no `MerchantEntity`,
+// no `MerchantDao`, no `MerchantStore`, no DI wiring. When a Fineract-side
+// merchant list endpoint materializes (or a fork-side directory is authored),
+// add:
+//   1. `core/model/src/.../merchant/Merchant.kt` (domain).
+//   2. `core/network/.../services/MerchantService.kt` +
+//      `SelfServiceApiManager.merchantApi` (or the Fineract mount if that is
+//      where the endpoint lives).
+//   3. `core/database/.../wallet/merchant/{MerchantEntity,MerchantDao,MerchantEntityMapper}.kt`.
+//   4. `core/store/.../wallet/merchant/{MerchantKey,MerchantStore}.kt` — LEDGER
+//      read (`createStore` + CACHE_FIRST_SWR + `replacePage`) mirroring the
+//      Batch-1 `beneficiary` / `savedCards` shape (client-scoped) OR the
+//      Batch-3 `offices` shape (global singleton-keyed reference data) —
+//      whichever the endpoint semantics dictate.
+//   5. AppDatabase v-bump + AutoMigration; AppStoreRegistry + StoreModule
+//      qualifier + register; MerchantRepository / MerchantRepositoryImpl;
+//      RepositoryModule wiring; MerchantViewModel cutover to a store-backed
+//      `Flow<ScreenState<List<Merchant>>>` (drop the `arrayListOf()` stub).
+//
+// TODO: merchants has no backend endpoint; add MerchantStore when the API materializes.
+// -----------------------------------------------------------------------------
 class MerchantViewModel(
     private val savedStateHandle: SavedStateHandle,
 ) : ViewModel() {

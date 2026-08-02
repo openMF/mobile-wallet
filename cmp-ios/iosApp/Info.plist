@@ -17,17 +17,15 @@
 	<key>CFBundlePackageType</key>
 	<string>$(PRODUCT_BUNDLE_PACKAGE_TYPE)</string>
 	<key>CFBundleShortVersionString</key>
-	<string>2025.10.14</string>
+	<string>2026.1.20</string>
 	<key>CFBundleVersion</key>
-	<string>4</string>
+	<string>54</string>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSBluetoothAlwaysUsageDescription</key>
 	<string>This app does not use Bluetooth. This message is required for compliance only.</string>
-	<key>NSCameraUsageDescription</key>
-	<string>We use the camera to scan QR codes to send and receive payments.</string>
 	<key>NSContactsUsageDescription</key>
 	<string>This app does not access your contacts. This message is required for compliance only.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
