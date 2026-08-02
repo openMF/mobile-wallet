@@ -16,27 +16,16 @@ import org.koin.dsl.module
 import org.mifospay.core.common.MifosDispatchers
 import org.mifospay.core.data.util.ConnectivityManagerNetworkMonitor
 import org.mifospay.core.data.util.NetworkMonitor
-import org.mifospay.core.data.util.SeededNetworkMonitor
 import org.mifospay.core.data.util.TimeZoneBroadcastMonitor
 import org.mifospay.core.data.util.TimeZoneMonitor
-import kpt.core.data.infra.NetworkMonitor as StoreNetworkMonitor
 
 val AndroidDataModule = module {
+    // Legacy fork NetworkMonitor (org.mifospay.core.data.util) for DataState `withNetworkCheck`.
+    // The Store5 `kpt.core.data.infra.NetworkMonitor` is now bound cross-platform to
+    // JordondNetworkMonitor in DataModule — the former Android-only SeededNetworkMonitor
+    // override is gone (jordond seeds current state natively on Android too).
     single<NetworkMonitor> {
         ConnectivityManagerNetworkMonitor(androidContext(), get(named(MifosDispatchers.IO.name)))
-    }
-
-    // Fix kmptoolkit cmp-network-monitor v3.5.3 initial-seed bug: the store + shell
-    // resolve the kmptoolkit `NetworkMonitor` (StoreNetworkMonitor), whose
-    // `NetworkMonitorProvider.install()` reports offline-forever when already connected
-    // at launch. Bind it to a fork-backed monitor that seeds current connectivity. This
-    // module is includes()d after the template's install() binding, so it wins on Android.
-    single<StoreNetworkMonitor> {
-        SeededNetworkMonitor(
-            context = androidContext(),
-            ioDispatcher = get(named(MifosDispatchers.IO.name)),
-            scope = get(named("ApplicationScope")),
-        )
     }
 
     single<TimeZoneMonitor> {

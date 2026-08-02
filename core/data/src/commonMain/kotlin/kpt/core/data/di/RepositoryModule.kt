@@ -9,7 +9,6 @@
  */
 package kpt.core.data.di
 
-import io.github.mobilebytelabs.kmptoolkit.networkmonitor.NetworkMonitorProvider
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -18,6 +17,8 @@ import kpt.core.base.store.infra.FetchedAtRepository
 import kpt.core.base.store.submit.OfflineSubmitSyncer
 import kpt.core.base.store.submit.SubmitOutbox
 import kpt.core.data.infra.NetworkMonitor
+import kpt.core.data.infra.impl.JordondNetworkMonitor
+import kpt.core.data.infra.impl.platformConnectivity
 import kpt.core.data.infra.impl.RoomBookkeeper
 import kpt.core.data.infra.impl.RoomFetchedAtRepository
 import kpt.core.data.infra.impl.RoomSubmitOutbox
@@ -38,7 +39,11 @@ import org.mobilenativefoundation.store.store5.Bookkeeper
 val DataModule = module {
     includes(platformModule, CommonModule, DatabaseModule, DatastoreModule, NetworkModule)
 
-    single<NetworkMonitor> { NetworkMonitorProvider.install() }
+    // Cross-platform network monitor backed by jordond/connectivity — seeds current state
+    // correctly on every target (fixes the kmptoolkit cmp-network-monitor v3.5.3 seed bug).
+    // Supersedes both the template `NetworkMonitorProvider.install()` and the former
+    // Android-only SeededNetworkMonitor override. Root fix tracked upstream in KmpToolkit.
+    single<NetworkMonitor> { JordondNetworkMonitor(platformConnectivity(get()), get()) }
     singleOf(::UserDataRepositoryImpl) bind UserDataRepository::class
 
     // Framework FetchedAtRepository — durable lastFetchedAt persistence backing

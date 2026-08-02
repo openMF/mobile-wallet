@@ -62,6 +62,12 @@ kotlin {
             implementation(libs.kotlinx.datetime)
             api(libs.cmp.network.monitor)
 
+            // jordond/connectivity: cross-platform engine for kpt.core.data.infra.NetworkMonitor
+            // (JordondNetworkMonitor). Core = interface + Status in commonMain; the platform
+            // engine is supplied per source set (device on android/ios, http on desktop/js/wasmJs)
+            // via the platformConnectivity() expect/actual.
+            implementation(libs.jordond.connectivity.core)
+
             // Kermit: co.touchlab.kermit.Logger is used directly in
             // network monitor / store adapters.
             implementation(libs.kermit.logging)
@@ -92,6 +98,28 @@ kotlin {
             implementation(libs.androidx.core.ktx)
             implementation(libs.androidx.tracing.ktx)
             implementation(libs.koin.android)
+            // jordond device engine (ConnectivityManager callbacks; auto-provides app Context
+            // via androidx.startup — no manual Context needed).
+            implementation(libs.jordond.connectivity.device)
+        }
+
+        iosMain.dependencies {
+            // jordond device engine (NWPathMonitor) for iosArm64 + iosSimulatorArm64.
+            implementation(libs.jordond.connectivity.device)
+        }
+
+        desktopMain.dependencies {
+            // jordond http engine (URL polling; bundles ktor-client-okhttp).
+            implementation(libs.jordond.connectivity.http)
+        }
+
+        jsMain.dependencies {
+            // jordond http engine (bundles ktor-client-js).
+            implementation(libs.jordond.connectivity.http)
+        }
+
+        wasmJsMain.dependencies {
+            implementation(libs.jordond.connectivity.http)
         }
 
         commonTest.dependencies {
