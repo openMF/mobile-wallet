@@ -45,9 +45,8 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.launch
-import mobile_wallet.feature.savedcards.generated.resources.Res
-import mobile_wallet.feature.savedcards.generated.resources.feature_savedcards_error_oops
-import mobile_wallet.feature.savedcards.generated.resources.feature_savedcards_subtitle
+import kpt.core.base.store.screen.ScreenState
+import kpt.core.base.ui.screen.ScreenContent
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.resources.vectorResource
 import org.koin.compose.viewmodel.koinViewModel
@@ -59,7 +58,6 @@ import org.mifospay.core.designsystem.component.MifosScaffold
 import org.mifospay.core.designsystem.icon.MifosIcons
 import org.mifospay.core.model.savedcards.SavedCard
 import org.mifospay.core.ui.EmptyContentScreen
-import org.mifospay.core.ui.MifosProgressIndicator
 import org.mifospay.core.ui.utils.EventsEffect
 import org.mifospay.feature.savedcards.createOrUpdate.CardAddEditType
 import org.mifospay.feature.savedcards.utils.CreditCardUtils.detectCardType
@@ -109,6 +107,7 @@ fun CardsScreen(
         modifier = modifier,
         state = cartState,
         snackbarHostState = snackbarHostState,
+        onRetry = viewModel::retry,
         onAction = remember(viewModel) {
             { viewModel.trySendAction(it) }
         },
@@ -147,8 +146,9 @@ private fun SavedCardDialogs(
 
 @Composable
 internal fun CardsScreen(
-    state: ViewState,
+    state: ScreenState<List<SavedCard>>,
     snackbarHostState: SnackbarHostState,
+    onRetry: () -> Unit,
     modifier: Modifier = Modifier,
     onAction: (CardAction) -> Unit,
 ) {
@@ -158,7 +158,10 @@ internal fun CardsScreen(
         modifier = modifier,
         floatingActionButton = {
             AnimatedVisibility(
-                visible = state.hasFab,
+                // FAB shows only when a card list is on screen — matches the
+                // retired `ViewState.Content.hasFab`. The Empty state carries its
+                // own inline "Add New Card" CTA below.
+                visible = state is ScreenState.Content,
                 enter = scaleIn(),
                 exit = scaleOut(),
             ) {
@@ -172,51 +175,39 @@ internal fun CardsScreen(
             }
         },
     ) { paddingValues ->
-        Box(
+        // Template idiom: `ScreenContent` (core-base/ui) owns every render branch —
+        // loading / empty / no-network / unauthenticated / error+retry — driven by
+        // the stream's pre-decided `ScreenState`. Only the Empty CTA + the per-item
+        // Content body are authored here; the empty copy keeps the feature's text.
+        ScreenContent(
+            state = state,
+            onRetry = onRetry,
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues),
-            contentAlignment = Alignment.Center,
-        ) {
-            when (state) {
-                is ViewState.Loading -> MifosProgressIndicator()
-
-                is ViewState.Empty -> {
-                    EmptyContentScreen(
-                        title = state.title,
-                        subTitle = state.message,
-                        btnText = state.btnText,
-                        btnIcon = state.btnIcon,
-                        onClick = {
-                            onAction(CardAction.AddNewCard)
-                        },
-                        modifier = Modifier,
-                    )
-                }
-
-                is ViewState.Error -> {
-                    EmptyContentScreen(
-                        title = stringResource(Res.string.feature_savedcards_error_oops),
-                        subTitle = stringResource(Res.string.feature_savedcards_subtitle),
-                        modifier = Modifier,
-                        iconTint = KptTheme.colorScheme.error,
-                    )
-                }
-
-                is ViewState.Content -> {
-                    CardsScreenContent(
-                        state = state,
-                        onAction = onAction,
-                    )
-                }
-            }
+            empty = {
+                EmptyContentScreen(
+                    title = "No Saved Cards",
+                    subTitle = "No saved cards found, click the button below to add a new card",
+                    btnText = "Add New Card",
+                    btnIcon = MifosIcons.Add,
+                    onClick = {
+                        onAction(CardAction.AddNewCard)
+                    },
+                )
+            },
+        ) { cards, _ ->
+            CardsScreenContent(
+                cards = cards,
+                onAction = onAction,
+            )
         }
     }
 }
 
 @Composable
 private fun CardsScreenContent(
-    state: ViewState.Content,
+    cards: List<SavedCard>,
     modifier: Modifier = Modifier,
     onAction: (CardAction) -> Unit,
 ) {
@@ -226,7 +217,7 @@ private fun CardsScreenContent(
         verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.md),
     ) {
         items(
-            items = state.cards,
+            items = cards,
             key = { it.id },
         ) { savedCard ->
             SavedCardItem(

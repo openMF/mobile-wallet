@@ -46,6 +46,7 @@ import org.mifospay.core.common.setSerialized
 import org.mifospay.core.data.repository.AccountRepository
 import org.mifospay.core.data.repository.LocalAssetRepository
 import org.mifospay.core.data.util.MpayQrCodeProcessor
+import org.mifospay.core.data.util.toForkScreenStateFlow
 import org.mifospay.core.datastore.UserPreferencesRepository
 import org.mifospay.core.model.account.Account
 import org.mifospay.core.model.account.DefaultAccount
@@ -136,10 +137,12 @@ class MpayQrViewModel(
         // NoNetwork / Unauthenticated all log + regenerate with the default
         // account until Phase-4 differentiates them.
         viewModelScope.launch {
-            accountRepository.getSelfAccountsScreen(
+            accountRepository.getSelfAccountsStream(
                 clientId = state.client.id,
                 scope = viewModelScope,
             )
+                .state
+                .toForkScreenStateFlow()
                 .collect { result ->
                     when (result) {
                         is ScreenState.Content -> {

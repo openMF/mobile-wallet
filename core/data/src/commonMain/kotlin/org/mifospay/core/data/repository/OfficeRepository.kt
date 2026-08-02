@@ -10,6 +10,7 @@
 package org.mifospay.core.data.repository
 
 import kotlinx.coroutines.CoroutineScope
+import kpt.core.base.store.screen.ScreenDataStream
 import org.mifospay.core.common.ScreenStateStream
 import org.mifospay.core.model.office.Office
 
@@ -31,5 +32,5 @@ interface OfficeRepository {
      * @param scope the caller's [CoroutineScope] (typically `viewModelScope`)
      *   — Store5 subscribes its internal refresh trigger to this scope.
      */
-    fun getOfficesScreen(scope: CoroutineScope): ScreenStateStream<List<Office>>
+    fun getOfficesStream(scope: CoroutineScope): ScreenDataStream<List<Office>>
 }

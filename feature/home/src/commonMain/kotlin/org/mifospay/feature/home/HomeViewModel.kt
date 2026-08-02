@@ -9,10 +9,15 @@
  */
 package org.mifospay.feature.home
 
+import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.serialization.Serializable
+import kpt.core.base.store.submit.SubmitState
+import kpt.core.base.store.submit.submitHandler
 import mobile_wallet.feature.home.generated.resources.Res
 import mobile_wallet.feature.home.generated.resources.feature_home_account_error
 import mobile_wallet.feature.home.generated.resources.feature_home_account_success
@@ -21,7 +26,9 @@ import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.getString
 import org.mifospay.core.common.DataState
 import org.mifospay.core.common.ScreenState
+import org.mifospay.core.data.repository.AccountRepository
 import org.mifospay.core.data.repository.SelfServiceRepository
+import org.mifospay.core.data.util.toForkScreenStateFlow
 import org.mifospay.core.datastore.UserPreferencesRepository
 import org.mifospay.core.model.account.Account
 import org.mifospay.core.model.account.DefaultAccount
@@ -36,6 +43,7 @@ private const val TRANSACTION_LIMIT = 5
 class HomeViewModel(
     private val preferencesRepository: UserPreferencesRepository,
     private val repository: SelfServiceRepository,
+    private val accountRepository: AccountRepository,
 ) : BaseViewModel<HomeState, HomeEvent, HomeAction>(
     initialState = run {
         val client = requireNotNull(preferencesRepository.client.value)
@@ -48,9 +56,47 @@ class HomeViewModel(
     },
 ) {
 
+    // Template idiom (core-base/store): the one-shot "mark account as default" write
+    // goes through a SubmitHandler instead of a hand-folded DataState result. The
+    // handler owns the Submitting/Submitted/Failed lifecycle; we observe it below to
+    // drive this screen's existing state update + success/error toast. The result
+    // carried by Submitted is the account id that was made default.
+    private val submitDefaultAccount = viewModelScope.submitHandler<Long>()
+
+    init {
+        submitDefaultAccount.state
+            .onEach { submitState ->
+                when (submitState) {
+                    is SubmitState.Submitting -> Unit
+
+                    is SubmitState.Submitted -> {
+                        mutableStateFlow.update {
+                            it.copy(defaultAccountId = submitState.result)
+                        }
+                        sendEvent(HomeEvent.ShowToast(Res.string.feature_home_account_success))
+                        submitDefaultAccount.reset()
+                    }
+
+                    is SubmitState.Failed -> {
+                        sendEvent(HomeEvent.ShowToast(Res.string.feature_home_account_error))
+                        submitDefaultAccount.reset()
+                    }
+
+                    SubmitState.Idle -> Unit
+                }
+            }
+            .launchIn(viewModelScope)
+    }
+
     fun getAccounts() {
         launchIO {
-            repository.getActiveAccounts(state.client.id)
+            // Offline-first: read the self-accounts through the Store5 SelfAccounts
+            // store (Room SoT + CACHE_FIRST_SWR) so cached accounts render when the
+            // device is offline. The store returns ALL savings accounts, so we
+            // preserve the previous `getActiveAccounts` semantics by filtering
+            // `status.active` client-side in the Content branch.
+            accountRepository.getSelfAccountsStream(state.client.id, viewModelScope)
+                .state.toForkScreenStateFlow()
                 .collect { screenState ->
                     when (screenState) {
                         is ScreenState.Loading -> {
@@ -69,7 +115,8 @@ class HomeViewModel(
                         }
 
                         is ScreenState.Content -> {
-                            if (screenState.data.isEmpty()) {
+                            val activeAccounts = screenState.data.filter { it.status.active }
+                            if (activeAccounts.isEmpty()) {
                                 mutableStateFlow.update {
                                     it.copy(
                                         isRefreshing = false,
@@ -79,10 +126,10 @@ class HomeViewModel(
                                     )
                                 }
                             } else {
-                                val selected = screenState.data.firstOrNull()
+                                val selected = activeAccounts.firstOrNull()
 
                                 // Save account external IDs map
-                                val accountExternalIds = screenState.data
+                                val accountExternalIds = activeAccounts
                                     .filter { !it.externalId.isNullOrBlank() }
                                     .associate { it.id to it.externalId!! }
                                 preferencesRepository.updateAccountExternalIds(accountExternalIds)
@@ -91,7 +138,7 @@ class HomeViewModel(
                                     mutableStateFlow.update {
                                         it.copy(
                                             isRefreshing = false,
-                                            accounts = screenState.data,
+                                            accounts = activeAccounts,
                                             accountsWithTransactions = emptyMap(),
                                             viewState = ViewState.Content,
                                             selectedAccount = selected,
@@ -165,10 +212,13 @@ class HomeViewModel(
 
             // launch a new job
             loadTransactionsJob = launchIO {
-                repository.getTransactions(
+                // Offline-first: read recent transactions through the Store5 ledger
+                // store (Room SoT + CACHE_FIRST_SWR) so cached history renders offline.
+                repository.getTransactionsStream(
                     account.id,
                     TRANSACTION_LIMIT,
-                ).collect { screenState ->
+                    viewModelScope,
+                ).state.toForkScreenStateFlow().collect { screenState ->
                     when (screenState) {
                         is ScreenState.Loading -> {
                             mutableStateFlow.update {
@@ -196,12 +246,16 @@ class HomeViewModel(
                         }
 
                         is ScreenState.Content -> {
+                            // The new getTransactionsStream ignores its `limit`
+                            // param (returns the full LEDGER list), so apply the
+                            // TRANSACTION_LIMIT here to preserve the old behavior.
+                            val limitedTransactions = screenState.data.take(TRANSACTION_LIMIT)
                             val newMap = state.accountsWithTransactions.toMutableMap()
-                            newMap[account] = screenState.data
+                            newMap[account] = limitedTransactions
                             mutableStateFlow.update {
                                 it.copy(
                                     transactionsLoading = false,
-                                    transactions = screenState.data,
+                                    transactions = limitedTransactions,
                                     selectedAccount = account,
                                     currentSelectedAccount = account,
                                     accountsWithTransactions = newMap,
@@ -276,26 +330,23 @@ class HomeViewModel(
             }
 
             is HomeAction.MarkAsDefault -> {
-                launchIO {
-                    val result = preferencesRepository.updateDefaultAccount(
-                        DefaultAccount(
-                            accountId = action.accountId,
-                            accountNo = action.accountNo,
-                        ),
-                    )
-
-                    when (result) {
-                        is DataState.Loading -> {}
-                        is DataState.Error -> {
-                            sendEvent(HomeEvent.ShowToast(Res.string.feature_home_account_error))
-                        }
-
-                        is DataState.Success -> {
-                            mutableStateFlow.update {
-                                it.copy(defaultAccountId = action.accountId)
-                            }
-                            sendEvent(HomeEvent.ShowToast(Res.string.feature_home_account_success))
-                        }
+                // Submit through the handler — it drives Submitting/Submitted/Failed,
+                // observed in `init`. The block unwraps the repository's transitional
+                // DataState result: return the account id on success (so the observer
+                // can update `defaultAccountId`), throw on error so the handler reports
+                // Failed and the error toast fires.
+                submitDefaultAccount.submit {
+                    when (
+                        val result = preferencesRepository.updateDefaultAccount(
+                            DefaultAccount(
+                                accountId = action.accountId,
+                                accountNo = action.accountNo,
+                            ),
+                        )
+                    ) {
+                        is DataState.Success -> action.accountId
+                        is DataState.Error -> throw result.exception
+                        DataState.Loading -> error("updateDefaultAccount must not emit Loading")
                     }
                 }
             }

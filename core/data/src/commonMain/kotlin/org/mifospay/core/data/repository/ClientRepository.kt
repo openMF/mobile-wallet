@@ -11,6 +11,7 @@ package org.mifospay.core.data.repository
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
+import kpt.core.base.store.screen.ScreenDataStream
 import org.mifospay.core.common.DataState
 import org.mifospay.core.common.ScreenState
 import org.mifospay.core.model.account.Account
@@ -55,10 +56,10 @@ interface ClientRepository {
      * @param scope Coroutine scope for the stream's internal helper coroutines
      *   (typically `viewModelScope`).
      */
-    fun getClientInfoScreen(
+    fun getClientInfoStream(
         clientId: Long,
         scope: CoroutineScope,
-    ): Flow<ScreenState<Client>>
+    ): ScreenDataStream<Client>
 
     suspend fun getClients(): Flow<ScreenState<Page<Client>>>
 

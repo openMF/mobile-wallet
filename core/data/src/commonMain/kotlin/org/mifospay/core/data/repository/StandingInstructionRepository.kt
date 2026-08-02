@@ -11,6 +11,7 @@ package org.mifospay.core.data.repository
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
+import kpt.core.base.store.screen.ScreenDataStream
 import org.mifospay.core.common.DataState
 import org.mifospay.core.common.ScreenState
 import org.mifospay.core.model.standinginstruction.SITemplate
@@ -42,10 +43,10 @@ interface StandingInstructionRepository {
      * @param scope the caller's [CoroutineScope] (typically `viewModelScope`)
      *   — Store5 subscribes its internal refresh trigger to this scope.
      */
-    fun getAllStandingInstructionsScreen(
+    fun getAllStandingInstructionsStream(
         clientId: Long,
         scope: CoroutineScope,
-    ): Flow<ScreenState<List<StandingInstruction>>>
+    ): ScreenDataStream<List<StandingInstruction>>
 
     fun getStandingInstruction(instructionId: Long): Flow<ScreenState<StandingInstruction>>
 

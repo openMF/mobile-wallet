@@ -14,7 +14,6 @@ import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -43,15 +42,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.launch
+import kpt.core.base.store.screen.ScreenState
+import kpt.core.base.ui.screen.ScreenContent
 import mobile_wallet.feature.beneficiary.generated.resources.Res
 import mobile_wallet.feature.beneficiary.generated.resources.feature_beneficiary_add
 import mobile_wallet.feature.beneficiary.generated.resources.feature_beneficiary_add_beneficiary
 import mobile_wallet.feature.beneficiary.generated.resources.feature_beneficiary_add_beneficiary_hint
 import mobile_wallet.feature.beneficiary.generated.resources.feature_beneficiary_delete_beneficiary
 import mobile_wallet.feature.beneficiary.generated.resources.feature_beneficiary_edit_beneficiary
-import mobile_wallet.feature.beneficiary.generated.resources.feature_beneficiary_error_oops
 import mobile_wallet.feature.beneficiary.generated.resources.feature_beneficiary_no_beneficiaries
-import mobile_wallet.feature.beneficiary.generated.resources.feature_beneficiary_unexpected_error_subtitle
 import org.jetbrains.compose.resources.getString
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
@@ -62,7 +61,6 @@ import org.mifospay.core.designsystem.theme.MifosTheme
 import org.mifospay.core.model.beneficiary.Beneficiary
 import org.mifospay.core.ui.AvatarBox
 import org.mifospay.core.ui.EmptyContentScreen
-import org.mifospay.core.ui.MifosProgressIndicator
 import org.mifospay.core.ui.MifosProgressIndicatorOverlay
 import org.mifospay.core.ui.utils.EventsEffect
 import org.mifospay.feature.beneficiary.addupdatebeneficiary.BeneficiaryAddEditType
@@ -81,7 +79,7 @@ fun BeneficiaryListScreen(
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
 
-    val accountState by viewModel.accountState.collectAsStateWithLifecycle()
+    val listState by viewModel.listState.collectAsStateWithLifecycle()
     val deleteState by deleteViewModel.state.collectAsStateWithLifecycle()
 
     // Observe delete success and trigger list refresh
@@ -117,7 +115,10 @@ fun BeneficiaryListScreen(
 
     Box(modifier = modifier.fillMaxSize()) {
         BeneficiaryListScreenContent(
-            state = accountState,
+            state = listState,
+            onRetry = remember(viewModel) {
+                { viewModel.retry() }
+            },
             onAction = remember(viewModel) {
                 { viewModel.trySendAction(it) }
             },
@@ -136,7 +137,8 @@ fun BeneficiaryListScreen(
 
 @Composable
 private fun BeneficiaryListScreenContent(
-    state: BeneficiaryListState.ViewState,
+    state: ScreenState<List<Beneficiary>>,
+    onRetry: () -> Unit,
     onAction: (BeneficiaryListAction) -> Unit,
     onDeleteBeneficiary: (Long, String) -> Unit,
     snackbarHostState: SnackbarHostState,
@@ -147,8 +149,10 @@ private fun BeneficiaryListScreenContent(
         floatingActionButtonPosition = FabPosition.EndOverlay,
         snackbarHostState = snackbarHostState,
         floatingActionButton = {
+            // FAB only when the list is actually rendered (Content) — mirrors the
+            // pre-migration `state.hasFab` gate that hid the FAB in Loading/Error.
             AnimatedVisibility(
-                visible = state.hasFab,
+                visible = state is ScreenState.Content,
                 enter = scaleIn(),
                 exit = scaleOut(),
             ) {
@@ -169,66 +173,53 @@ private fun BeneficiaryListScreenContent(
             }
         },
     ) { paddingValues ->
-        BeneficiariesList(
-            modifier = Modifier.padding(paddingValues),
+        // Template idiom: `ScreenContent` (core-base/ui) owns every render branch —
+        // loading / empty / no-network / unauthenticated / error+retry — driven by
+        // the stream's pre-decided `ScreenState`. Only the Content list body is
+        // authored here; the empty state keeps the feature's existing copy.
+        ScreenContent(
             state = state,
-            onAction = onAction,
-            onDeleteBeneficiary = onDeleteBeneficiary,
-        )
+            onRetry = onRetry,
+            modifier = Modifier
+                .padding(paddingValues)
+                .fillMaxSize(),
+            empty = {
+                EmptyContentScreen(
+                    title = stringResource(Res.string.feature_beneficiary_no_beneficiaries),
+                    subTitle = stringResource(Res.string.feature_beneficiary_add_beneficiary_hint),
+                    modifier = Modifier.fillMaxSize(),
+                )
+            },
+        ) { beneficiaries, _ ->
+            BeneficiariesList(
+                beneficiaries = beneficiaries,
+                onAction = onAction,
+                onDeleteBeneficiary = onDeleteBeneficiary,
+            )
+        }
     }
 }
 
 @Composable
 fun BeneficiariesList(
-    state: BeneficiaryListState.ViewState,
+    beneficiaries: List<Beneficiary>,
     onAction: (BeneficiaryListAction) -> Unit,
     onDeleteBeneficiary: (Long, String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    when (state) {
-        is BeneficiaryListState.ViewState.Loading -> {
-            Column(
-                modifier = modifier.fillMaxSize(),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally,
-            ) {
-                MifosProgressIndicator()
-            }
-        }
-
-        is BeneficiaryListState.ViewState.Content -> {
-            if (state.beneficiaries.isEmpty()) {
-                EmptyContentScreen(
-                    title = stringResource(Res.string.feature_beneficiary_no_beneficiaries),
-                    subTitle = stringResource(Res.string.feature_beneficiary_add_beneficiary_hint),
-                    modifier = modifier.fillMaxSize(),
-                )
-            } else {
-                LazyColumn(
-                    modifier = modifier.fillMaxSize(),
-                    contentPadding = PaddingValues(KptTheme.spacing.md),
-                    verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.sm),
-                ) {
-                    items(
-                        items = state.beneficiaries,
-                        key = { it.id },
-                    ) { beneficiary ->
-                        BeneficiaryItem(
-                            beneficiary = beneficiary,
-                            onClickEdit = { onAction(BeneficiaryListAction.EditBeneficiary(it)) },
-                            onClickDelete = onDeleteBeneficiary,
-                        )
-                    }
-                }
-            }
-        }
-
-        is BeneficiaryListState.ViewState.Error -> {
-            EmptyContentScreen(
-                title = stringResource(Res.string.feature_beneficiary_error_oops),
-                subTitle = stringResource(Res.string.feature_beneficiary_unexpected_error_subtitle),
-                modifier = modifier.fillMaxSize(),
-                iconTint = KptTheme.colorScheme.error,
+    LazyColumn(
+        modifier = modifier.fillMaxSize(),
+        contentPadding = PaddingValues(KptTheme.spacing.md),
+        verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.sm),
+    ) {
+        items(
+            items = beneficiaries,
+            key = { it.id },
+        ) { beneficiary ->
+            BeneficiaryItem(
+                beneficiary = beneficiary,
+                onClickEdit = { onAction(BeneficiaryListAction.EditBeneficiary(it)) },
+                onClickDelete = onDeleteBeneficiary,
             )
         }
     }
@@ -311,11 +302,28 @@ fun BeneficiaryItem(
 fun PreviewBeneficiaryListScreen() {
     MifosTheme {
         BeneficiaryListScreenContent(
-            state = BeneficiaryListState.ViewState.Loading,
+            state = ScreenState.Content(sampleBeneficiaryList),
+            onRetry = { },
             onAction = { },
             onDeleteBeneficiary = { _, _ -> },
             snackbarHostState = remember { SnackbarHostState() },
             modifier = Modifier,
         )
     }
+}
+
+internal val sampleBeneficiaryList: List<Beneficiary> = List(6) {
+    Beneficiary(
+        id = it.toLong(),
+        name = "Beneficiary $it",
+        officeName = "Head Office",
+        clientName = "Client $it",
+        accountType = Beneficiary.AccountType(
+            id = 1,
+            code = "savings",
+            value = "Savings",
+        ),
+        accountNumber = "00000000$it",
+        transferLimit = 1000,
+    )
 }

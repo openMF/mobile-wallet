@@ -11,6 +11,7 @@ package org.mifospay.core.data.repository
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
+import kpt.core.base.store.screen.ScreenDataStream
 import org.mifospay.core.common.DataState
 import org.mifospay.core.common.ScreenState
 import org.mifospay.core.model.datatables.invoice.Invoice
@@ -52,10 +53,10 @@ interface InvoiceRepository {
      * @param scope Coroutine scope for the stream's internal helper coroutines
      *   (typically `viewModelScope`).
      */
-    fun getInvoicesScreen(
+    fun getInvoicesStream(
         clientId: Long,
         scope: CoroutineScope,
-    ): Flow<ScreenState<List<Invoice>>>
+    ): ScreenDataStream<List<Invoice>>
 
     // Writes stay on DataState (Phase-3 D1).
     suspend fun createInvoice(clientId: Long, invoice: InvoiceEntity): DataState<String>

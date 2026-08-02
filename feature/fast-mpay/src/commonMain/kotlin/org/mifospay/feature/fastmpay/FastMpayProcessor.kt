@@ -15,6 +15,7 @@ import kotlinx.serialization.json.Json
 import org.mifospay.core.common.ScreenState
 import org.mifospay.core.data.repository.OfficeRepository
 import org.mifospay.core.data.repository.SelfServiceRepository
+import org.mifospay.core.data.util.toForkScreenStateFlow
 import org.mifospay.core.datastore.UserPreferencesRepository
 import org.mifospay.core.model.beneficiary.Beneficiary
 import org.mifospay.core.model.utils.QrCodeData
@@ -30,13 +31,13 @@ import org.mifospay.feature.fastmpay.model.QrProcessResult
  * Phase-5 Batch-3 rewiring:
  * - The beneficiary read used to walk `BeneficiaryRepository.getBeneficiaryList()`
  *   (a non-store transitional shim). It now walks
- *   [SelfServiceRepository.getBeneficiaryListScreen] — the Phase-5 Batch-1
+ *   [SelfServiceRepository.getBeneficiaryListStream] — the Phase-5 Batch-1
  *   store-backed reader (offline-first via the `wallet_beneficiaries` Room SoT,
  *   CACHE_FIRST_SWR band) — so the beneficiary lookup is offline-first + cheap
  *   on repeated QR scans within the freshness band. No new BeneficiaryStore is
  *   emitted for the fast-mpay surface; the batch-1 store is REUSED.
  * - The office read used to walk `OfficeRepository.getOffices()` (a non-store
- *   transitional shim). It now walks [OfficeRepository.getOfficesScreen] — the
+ *   transitional shim). It now walks [OfficeRepository.getOfficesStream] — the
  *   Phase-5 Batch-3 store-backed reader (offline-first via `wallet_offices`
  *   Room SoT, 60-minute TTL because office reference data is effectively
  *   static). One cache slot per app install (singleton-keyed on `OfficesKey`).
@@ -73,8 +74,8 @@ class FastMpayProcessor(
      *
      * @param qrData The decoded QR code data.
      * @param scope The caller's [CoroutineScope] (typically `viewModelScope`).
-     *   Store5's [SelfServiceRepository.getBeneficiaryListScreen] and
-     *   [OfficeRepository.getOfficesScreen] subscribe their internal refresh
+     *   Store5's [SelfServiceRepository.getBeneficiaryListStream] and
+     *   [OfficeRepository.getOfficesStream] subscribe their internal refresh
      *   triggers to this scope.
      * @return [QrProcessResult] indicating where to navigate.
      */
@@ -123,7 +124,7 @@ class FastMpayProcessor(
      * If different bank, returns BankMismatch result.
      * If same bank, checks if beneficiary already exists by matching accountNumber
      * (reading through the batch-1 `AppStoreRegistry.Beneficiary` store-backed
-     * `SelfServiceRepository.getBeneficiaryListScreen(clientId, scope)`).
+     * `SelfServiceRepository.getBeneficiaryListStream(clientId, scope)`).
      * If found, navigates to MakeTransfer with the existing beneficiary.
      * If not found, navigates to AddBeneficiary with pre-filled data.
      */
@@ -150,7 +151,7 @@ class FastMpayProcessor(
 
         return try {
             // Read the beneficiary list through the batch-1 store-backed reader
-            // (SelfServiceRepository.getBeneficiaryListScreen). ScreenState
+            // (SelfServiceRepository.getBeneficiaryListStream). ScreenState
             // discipline: skip Loading; treat Empty as "no existing beneficiary"
             // (fall through to AddBeneficiary); Content carries the list.
             // Error/NoNetwork/Unauthenticated fall back to AddBeneficiary — the
@@ -163,7 +164,8 @@ class FastMpayProcessor(
                 buildAddBeneficiaryResult(qrData, officeName, QrCodeType.INTRA_BANK)
             } else {
                 val beneficiaryResult = selfServiceRepository
-                    .getBeneficiaryListScreen(clientId = clientId, scope = scope)
+                    .getBeneficiaryListStream(clientId = clientId, scope = scope)
+                    .state.toForkScreenStateFlow()
                     .first { it !is ScreenState.Loading }
 
                 when (beneficiaryResult) {
@@ -206,7 +208,7 @@ class FastMpayProcessor(
      *
      * Uses officeName directly from QR if available (new QR format).
      * Falls back to looking up by officeId for backward compatibility (old QR format),
-     * consulting the batch-3 store-backed `OfficeRepository.getOfficesScreen(scope)`.
+     * consulting the batch-3 store-backed `OfficeRepository.getOfficesStream(scope)`.
      *
      * @param qrData The QR code data containing office info.
      * @param scope The caller's [CoroutineScope] — threaded to the store-backed
@@ -225,7 +227,8 @@ class FastMpayProcessor(
         // Fallback: resolve from officeId (backward compatibility with old QR codes),
         // reading through the batch-3 offices store.
         return try {
-            val result = officeRepository.getOfficesScreen(scope)
+            val result = officeRepository.getOfficesStream(scope)
+                .state.toForkScreenStateFlow()
                 .first { it !is ScreenState.Loading }
             when (result) {
                 is ScreenState.Content -> {

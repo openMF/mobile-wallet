@@ -11,6 +11,7 @@ package org.mifospay.core.data.repository
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
+import kpt.core.base.store.screen.ScreenDataStream
 import org.mifospay.core.common.DataState
 import org.mifospay.core.common.ScreenState
 import org.mifospay.core.model.account.Account
@@ -108,11 +109,11 @@ interface SelfServiceRepository {
      * @param scope Coroutine scope for the stream's internal helper coroutines
      *   (typically `viewModelScope`).
      */
-    fun getTransactionsScreen(
+    fun getTransactionsStream(
         accountId: Long,
         limit: Int?,
         scope: CoroutineScope,
-    ): Flow<ScreenState<List<Transaction>>>
+    ): ScreenDataStream<List<Transaction>>
 
     /**
      * Phase-5 Batch-1 **LEDGER read** for the `beneficiary` archetype (GOAL D13) —
@@ -153,10 +154,10 @@ interface SelfServiceRepository {
      * @param scope Coroutine scope for the stream's internal helper coroutines
      *   (typically `viewModelScope`).
      */
-    fun getBeneficiaryListScreen(
+    fun getBeneficiaryListStream(
         clientId: Long,
         scope: CoroutineScope,
-    ): Flow<ScreenState<List<Beneficiary>>>
+    ): ScreenDataStream<List<Beneficiary>>
 
     // Dashboard-style aggregation of two upstream streams — the transitional
     // DataState path is kept for one release for BC (a small number of

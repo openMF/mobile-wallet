@@ -17,6 +17,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import kpt.core.base.store.infra.FetchedAtRepository
 import kpt.core.base.store.screen.FetchPolicy
+import kpt.core.base.store.screen.ScreenDataStream
 import kpt.core.base.store.screen.asScreenStream
 import kpt.core.data.infra.NetworkMonitor as StoreNetworkMonitor
 import kpt.core.store.AppStoreRegistry
@@ -24,7 +25,6 @@ import kpt.core.store.wallet.selfaccounts.SelfAccountsKey
 import org.mifospay.core.common.DataState
 import org.mifospay.core.common.ScreenState
 import org.mifospay.core.common.asScreenStateFlow
-import org.mifospay.core.data.util.toForkScreenStateFlow
 import org.mifospay.core.data.mapper.toAccount
 import org.mifospay.core.data.mapper.toModel
 import org.mifospay.core.data.repository.AccountRepository
@@ -92,19 +92,19 @@ class AccountRepositoryImpl(
     // store-adapter dependencies (selfAccountsStore + NetworkMonitor +
     // FetchedAtRepository). If any is null (test wiring), we IllegalState —
     // production DI in RepositoryModule wires all three unconditionally.
-    override fun getSelfAccountsScreen(
+    override fun getSelfAccountsStream(
         clientId: Long,
         scope: CoroutineScope,
-    ): Flow<ScreenState<List<Account>>> {
+    ): ScreenDataStream<List<Account>> {
         val store = checkNotNull(selfAccountsStore) {
-            "getSelfAccountsScreen requires the `selfAccounts` Store5 wiring. Verify " +
+            "getSelfAccountsStream requires the `selfAccounts` Store5 wiring. Verify " +
                 "RepositoryModule bound AppStoreRegistry.SelfAccounts and injected it here."
         }
         val netMon = checkNotNull(storeNetworkMonitor) {
-            "getSelfAccountsScreen requires kmptoolkit NetworkMonitor. Verify DataModule bound it."
+            "getSelfAccountsStream requires kmptoolkit NetworkMonitor. Verify DataModule bound it."
         }
         val fetchedAtRepo = checkNotNull(fetchedAtRepository) {
-            "getSelfAccountsScreen requires FetchedAtRepository. Verify DataModule bound it."
+            "getSelfAccountsStream requires FetchedAtRepository. Verify DataModule bound it."
         }
         return store.asScreenStream(
             key = SelfAccountsKey(clientId),
@@ -115,7 +115,7 @@ class AccountRepositoryImpl(
             isEmpty = { it.isEmpty() },
             fetchPolicy = FetchPolicy.CACHE_FIRST_SWR,
             ttl = AppStoreRegistry.Ttl.SELF_ACCOUNTS,
-        ).state.toForkScreenStateFlow()
+        )
     }
 
     override suspend fun makeTransfer(payload: AccountTransferPayload): DataState<String> {

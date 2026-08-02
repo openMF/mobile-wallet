@@ -11,11 +11,12 @@ package org.mifospay.feature.profile
 
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
+import kpt.core.base.store.screen.ScreenState
 import org.jetbrains.compose.resources.StringResource
-import org.mifospay.core.common.ScreenState
+import org.mifospay.core.common.ScreenState as CommonScreenState
 import org.mifospay.core.data.repository.ClientRepository
 import org.mifospay.core.datastore.UserPreferencesRepository
 import org.mifospay.core.model.client.Client
@@ -30,47 +31,35 @@ internal class ProfileViewModel(
         ProfileState(clientId = clientId)
     },
 ) {
-    val clientState = clientRepository.getClientInfoScreen(
-        // Phase-5 Batch-2 SINGLE-ROW-PER-KEY read (GOAL D13) — switched from
-        // the transitional `getClientInfo(clientId)` (`asScreenStateFlow` shim
-        // over the raw Ktorfit flow) to the store-native
-        // `getClientInfoScreen(...)` that consumes the `clientDetail` Store5
-        // read (`createStore` + Room SoT + CACHE_FIRST_SWR + single-row
-        // upsert). Same `Flow<ScreenState<Client>>` shape; consumer branches
-        // are unchanged. Requires `viewModelScope` for the stream's internal
-        // reconnect + periodic + SWR side-fetch coroutines.
-        //
-        // NOTE — `getClientImage(...)` (the image blob-URL stream, observed
-        // in the `init` block below) intentionally stays on the transitional
-        // shim; its caching story (Coil vs Room blob) is out of scope for
-        // this batch.
+    // Template idiom (core-base/store): hold the native ScreenDataStream and
+    // expose its pre-decided `state` straight to the screen's `ScreenContent`.
+    // No fork-ScreenState fold, no 6→3 `when` mapping — the DecisionEngine
+    // inside the stream owns every Loading / Empty / NoNetwork / Unauthenticated
+    // / Error / Content transition, and `refresh()` drives retry. Switched from
+    // the fork-shim `getClientInfoScreen(...): Flow<ScreenState<Client>>` to the
+    // store-native `getClientInfoStream(...): ScreenDataStream<Client>`
+    // (`clientDetail` Store5: createStore + Room SoT + CACHE_FIRST_SWR +
+    // single-row upsert). Requires `viewModelScope` for the stream's internal
+    // reconnect + periodic + SWR side-fetch coroutines.
+    //
+    // Named `clientState` (not `state`) because BaseViewModel already exposes a
+    // protected `state: ProfileState`; this is the Client read stream.
+    //
+    // NOTE — `getClientImage(...)` (the image blob-URL stream, observed in the
+    // `init` block below) intentionally stays on the transitional shim; its
+    // caching story (Coil vs Room blob) is out of scope for this batch.
+    private val stream = clientRepository.getClientInfoStream(
         clientId = state.clientId,
         scope = viewModelScope,
-    ).map {
-        // Fold ScreenState → the existing 3-branch ProfileState.ViewState.
-        // Empty is defensively projected to Error (single-record endpoint
-        // shouldn't emit Empty). NoNetwork / Unauthenticated fold into Error
-        // until Phase-4 differentiates.
-        when (it) {
-            is ScreenState.Loading -> ProfileState.ViewState.Loading
+    )
 
-            is ScreenState.Empty -> ProfileState.ViewState.Error("Client not found.")
-
-            is ScreenState.Content -> ProfileState.ViewState.Success(it.data)
-
-            is ScreenState.Error -> ProfileState.ViewState.Error(it.error.message.toString())
-
-            is ScreenState.NoNetwork ->
-                ProfileState.ViewState.Error("No network. Please check your connection.")
-
-            is ScreenState.Unauthenticated ->
-                ProfileState.ViewState.Error("Session expired. Please log in again.")
-        }
-    }.stateIn(
+    val clientState: StateFlow<ScreenState<Client>> = stream.state.stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5_000),
-        initialValue = ProfileState.ViewState.Loading,
+        initialValue = ScreenState.Loading,
     )
+
+    fun retry() = stream.refresh()
 
     init {
         // Load the client image side-stream. The prior implementation shuttled
@@ -81,7 +70,10 @@ internal class ProfileViewModel(
         // branches (matches prior behaviour, which suppressed error dialogs
         // for image failures per the commented-out lines in the old code).
         clientRepository.getClientImage(state.clientId).observeScreen { screenState ->
-            if (screenState is ScreenState.Content) {
+            // Image stream stays on the transitional fork ScreenState shim
+            // (aliased to avoid colliding with the store-native ScreenState the
+            // `clientState` read above now uses).
+            if (screenState is CommonScreenState.Content) {
                 mutableStateFlow.update { it.copy(clientImage = screenState.data) }
             }
         }
@@ -119,12 +111,6 @@ internal data class ProfileState(
     val clientImage: String? = null,
     val dialogState: DialogState? = null,
 ) {
-    sealed interface ViewState {
-        data object Loading : ViewState
-        data class Error(val message: String) : ViewState
-        data class Success(val client: Client) : ViewState
-    }
-
     sealed interface DialogState {
         data object Loading : DialogState
         data class Error(val message: StringResource) : DialogState

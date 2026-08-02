@@ -26,6 +26,7 @@ kotlin {
             implementation(projects.core.domain)
             implementation(projects.coreBase.ui)
             implementation(projects.coreBase.platform)
+            implementation(projects.coreBase.store)
             implementation(compose.material3)
             implementation(compose.materialIconsExtended)
             implementation(compose.foundation)

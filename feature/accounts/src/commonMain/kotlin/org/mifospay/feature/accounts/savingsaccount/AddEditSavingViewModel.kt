@@ -16,9 +16,10 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
+import kpt.core.base.store.submit.SubmitState
+import kpt.core.base.store.submit.submitHandler
 import mobile_wallet.feature.accounts.generated.resources.Res
 import mobile_wallet.feature.accounts.generated.resources.feature_accounts_error_account_id_required
 import mobile_wallet.feature.accounts.generated.resources.feature_accounts_error_client_id_required
@@ -48,7 +49,6 @@ import org.mifospay.core.model.savingsaccount.SavingAccountTemplate
 import org.mifospay.core.model.savingsaccount.UpdateSavingAccountEntity
 import org.mifospay.core.ui.utils.BaseViewModel
 import org.mifospay.feature.accounts.savingsaccount.AESAction.CreateOrUpdateSavingAccount
-import org.mifospay.feature.accounts.savingsaccount.AESAction.Internal.HandleSavingAddEditResult
 import org.mifospay.feature.accounts.savingsaccount.AESAction.Internal.HandleSavingTemplateResult
 import org.mifospay.feature.accounts.savingsaccount.AESState.ViewState.Error
 import org.mifospay.feature.accounts.savingsaccount.AESState.DialogState.Error as DialogStateError
@@ -82,6 +82,13 @@ internal class AddEditSavingViewModel(
         initialValue = emptyList(),
     )
 
+    // Template idiom (core-base/store): the create/update savings-account write goes
+    // through a SubmitHandler instead of a hand-folded DataState result action. The
+    // handler owns the Submitting/Submitted/Failed lifecycle; we observe it here to
+    // drive this screen's existing loading/error dialog + toast + back-navigation,
+    // so the Screen is unchanged.
+    private val submitSavingAccount = viewModelScope.submitHandler<String>()
+
     init {
         stateFlow
             .onEach { savedStateHandle.setSerialized(key = ADD_EDIT_SAVING_STATE_KEY, value = it) }
@@ -90,6 +97,35 @@ internal class AddEditSavingViewModel(
         repository.getSavingAccountTemplate(state.clientId).onEach {
             sendAction(HandleSavingTemplateResult(it))
         }.launchIn(viewModelScope)
+
+        submitSavingAccount.state
+            .onEach { submitState ->
+                when (submitState) {
+                    is SubmitState.Submitting -> {
+                        mutableStateFlow.update {
+                            it.copy(dialogState = AESState.DialogState.Loading)
+                        }
+                    }
+
+                    is SubmitState.Submitted -> {
+                        mutableStateFlow.update { it.copy(dialogState = null) }
+                        sendEvent(AESEvent.ShowToast(submitState.result))
+                        sendEvent(AESEvent.OnNavigateBack)
+                        submitSavingAccount.reset()
+                    }
+
+                    is SubmitState.Failed -> {
+                        val message = submitState.error.message.toString()
+                        mutableStateFlow.update {
+                            it.copy(dialogState = DialogStateError.StringMessage(message))
+                        }
+                        submitSavingAccount.reset()
+                    }
+
+                    SubmitState.Idle -> Unit
+                }
+            }
+            .launchIn(viewModelScope)
     }
 
     override fun handleAction(action: AESAction) {
@@ -169,8 +205,6 @@ internal class AddEditSavingViewModel(
             }
 
             is CreateOrUpdateSavingAccount -> initiateCreateOrUpdateSavingAccount()
-
-            is HandleSavingAddEditResult -> handleSavingAddEditResult(action)
 
             is HandleSavingTemplateResult -> handleSavingTemplateResult(action)
         }
@@ -258,9 +292,15 @@ internal class AddEditSavingViewModel(
 
     private fun initiateCreateSavingAccount() {
         onContent { content ->
-            viewModelScope.launch {
-                val result = repository.createSavingsAccount(content.createSavingEntity)
-                sendAction(HandleSavingAddEditResult(result))
+            // Submit through the handler — it drives Submitting/Submitted/Failed,
+            // observed in `init`. The block unwraps the repository's transitional
+            // DataState: return the value on success, throw on error.
+            submitSavingAccount.submit {
+                when (val result = repository.createSavingsAccount(content.createSavingEntity)) {
+                    is DataState.Success -> result.data
+                    is DataState.Error -> throw result.exception
+                    DataState.Loading -> error("createSavingsAccount must not emit Loading")
+                }
             }
         }
     }
@@ -271,9 +311,15 @@ internal class AddEditSavingViewModel(
                 Res.string.feature_accounts_error_account_id_required
             }
 
-            viewModelScope.launch {
-                val result = repository.updateSavingsAccount(accountId, content.updateSavingEntity)
-                sendAction(HandleSavingAddEditResult(result))
+            submitSavingAccount.submit {
+                when (
+                    val result =
+                        repository.updateSavingsAccount(accountId, content.updateSavingEntity)
+                ) {
+                    is DataState.Success -> result.data
+                    is DataState.Error -> throw result.exception
+                    DataState.Loading -> error("updateSavingsAccount must not emit Loading")
+                }
             }
         }
     }
@@ -319,32 +365,6 @@ internal class AddEditSavingViewModel(
                 mutableStateFlow.update {
                     it.copy(viewState = AESState.ViewState.Content(result.data))
                 }
-            }
-        }
-    }
-
-    private fun handleSavingAddEditResult(action: HandleSavingAddEditResult) {
-        when (action.result) {
-            is DataState.Loading -> {
-                mutableStateFlow.update {
-                    it.copy(dialogState = AESState.DialogState.Loading)
-                }
-            }
-
-            is DataState.Error -> {
-                val message = action.result.exception.message
-                    .toString()
-                mutableStateFlow.update {
-                    it.copy(dialogState = DialogStateError.StringMessage(message))
-                }
-            }
-
-            is DataState.Success -> {
-                mutableStateFlow.update {
-                    it.copy(dialogState = null)
-                }
-                sendEvent(AESEvent.ShowToast(action.result.data))
-                sendEvent(AESEvent.OnNavigateBack)
             }
         }
     }
@@ -481,9 +501,6 @@ internal sealed interface AESAction {
     data object CreateOrUpdateSavingAccount : AESAction
 
     sealed interface Internal : AESAction {
-        /** Save/update result — remains on [DataState] (write path). */
-        data class HandleSavingAddEditResult(val result: DataState<String>) : Internal
-
         /**
          * Template load result. Uses [ScreenState] — Phase-3 migrated
          * `getSavingAccountTemplate` to a `ScreenStateStream`.

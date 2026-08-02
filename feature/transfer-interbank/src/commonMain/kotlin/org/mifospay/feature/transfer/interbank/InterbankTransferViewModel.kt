@@ -10,11 +10,16 @@
 package org.mifospay.feature.transfer.interbank
 
 import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.todayIn
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
+import kpt.core.base.store.submit.SubmitState
+import kpt.core.base.store.submit.submitHandler
 import org.mifospay.core.common.DataState
 import org.mifospay.core.common.DateHelper
 import org.mifospay.core.common.ScreenState
@@ -26,6 +31,7 @@ import org.mifospay.core.model.client.Client
 import org.mifospay.core.model.interbank.Amount
 import org.mifospay.core.model.interbank.InterBankPartyInfoResponse
 import org.mifospay.core.model.interbank.InterBankTransferRequest
+import org.mifospay.core.model.interbank.InterBankTransferResponse
 import org.mifospay.core.model.interbank.Party
 import org.mifospay.core.model.interbank.TransactionType
 import org.mifospay.core.ui.utils.BaseViewModel
@@ -52,10 +58,57 @@ class InterbankTransferViewModel(
     },
 ) {
 
+    // Template idiom (core-base/store): the money-movement write goes through a
+    // SubmitHandler instead of a hand-folded DataState result action. The handler owns
+    // the Submitting/Submitted/Failed lifecycle; we observe it to drive this flow's
+    // existing processing/success/failed steps + events, so the Screens are unchanged.
+    private val submitTransfer = viewModelScope.submitHandler<InterBankTransferResponse>()
+
     init {
         launchIO {
             loadFromAccounts()
         }
+
+        submitTransfer.state
+            .onEach { submitState ->
+                when (submitState) {
+                    is SubmitState.Submitting -> {
+                        mutableStateFlow.update {
+                            it.copy(isProcessing = true)
+                        }
+                    }
+
+                    is SubmitState.Submitted -> {
+                        val transferResponse = submitState.result
+                        val responseMessage = "Transfer ID: ${transferResponse.transactionId}"
+                        mutableStateFlow.update {
+                            it.copy(
+                                isProcessing = false,
+                                currentStep = InterbankTransferState.Step.TransferSuccess,
+                                transferResponse = responseMessage,
+                            )
+                        }
+                        sendEvent(InterbankTransferEvent.OnTransferSuccess)
+                        submitTransfer.reset()
+                    }
+
+                    is SubmitState.Failed -> {
+                        val message = submitState.error.message.toString()
+                        mutableStateFlow.update {
+                            it.copy(
+                                isProcessing = false,
+                                currentStep = InterbankTransferState.Step.TransferFailed,
+                                errorMessage = message,
+                            )
+                        }
+                        sendEvent(InterbankTransferEvent.OnTransferFailed(message))
+                        submitTransfer.reset()
+                    }
+
+                    SubmitState.Idle -> Unit
+                }
+            }
+            .launchIn(viewModelScope)
     }
 
     override fun handleAction(action: InterbankTransferAction) {
@@ -151,10 +204,6 @@ class InterbankTransferViewModel(
                 mutableStateFlow.update {
                     it.copy(errorMessage = null)
                 }
-            }
-
-            is InterbankTransferAction.Internal.HandleTransferResult -> {
-                handleTransferResult(action)
             }
 
             is InterbankTransferAction.SearchRecipient -> {
@@ -260,43 +309,48 @@ class InterbankTransferViewModel(
             return
         }
 
-        launchIO {
-            mutableStateFlow.update {
-                it.copy(isProcessing = true)
+        // Validation above guarantees a non-null participant.
+        val participantInfo = state.selectedParticipantInfo ?: return
+
+        // Build InterBank transfer request from participantInfo and selected account
+        val transferRequest = InterBankTransferRequest(
+            homeTransactionId = Uuid.random().toString(),
+            from = Party(
+                fspId = participantInfo.sourceFspId,
+                idType = participantInfo.partyIdType,
+                idValue = state.selectedFromAccount?.externalId
+                    ?: state.selectedFromAccount?.number ?: "",
+            ),
+            to = Party(
+                fspId = participantInfo.destinationFspId,
+                idType = participantInfo.partyIdType,
+                idValue = participantInfo.partyId,
+            ),
+            amountType = "SEND",
+            amount = Amount(
+                currencyCode = state.selectedFromAccount?.currency?.code
+                    ?: participantInfo.currencyCode,
+                amount = state.transferAmount.toDoubleOrNull() ?: 0.0,
+            ),
+            transactionType = TransactionType(
+                scenario = "TRANSFER",
+                subScenario = "DOMESTIC",
+                initiator = "PAYER",
+                initiatorType = "CUSTOMER",
+            ),
+            note = state.transferDescription,
+        )
+
+        // Submit through the handler — it drives Submitting/Submitted/Failed, observed
+        // in `init`, and no-ops on a re-tap while Submitting (double-submit protection).
+        // The block unwraps the repository's transitional DataState: return the value on
+        // success, throw on error so the handler reports Failed.
+        submitTransfer.submit {
+            when (val result = interBankRepository.interBankMakeTransfer(transferRequest)) {
+                is DataState.Success -> result.data
+                is DataState.Error -> throw result.exception
+                DataState.Loading -> error("interBankMakeTransfer must not emit Loading")
             }
-
-            // Build InterBank transfer request from participantInfo and selected account
-            val participantInfo = state.selectedParticipantInfo ?: return@launchIO
-            val transferRequest = InterBankTransferRequest(
-                homeTransactionId = Uuid.random().toString(),
-                from = Party(
-                    fspId = participantInfo.sourceFspId,
-                    idType = participantInfo.partyIdType,
-                    idValue = state.selectedFromAccount?.externalId
-                        ?: state.selectedFromAccount?.number ?: "",
-                ),
-                to = Party(
-                    fspId = participantInfo.destinationFspId,
-                    idType = participantInfo.partyIdType,
-                    idValue = participantInfo.partyId,
-                ),
-                amountType = "SEND",
-                amount = Amount(
-                    currencyCode = state.selectedFromAccount?.currency?.code
-                        ?: participantInfo.currencyCode,
-                    amount = state.transferAmount.toDoubleOrNull() ?: 0.0,
-                ),
-                transactionType = TransactionType(
-                    scenario = "TRANSFER",
-                    subScenario = "DOMESTIC",
-                    initiator = "PAYER",
-                    initiatorType = "CUSTOMER",
-                ),
-                note = state.transferDescription,
-            )
-
-            val result = interBankRepository.interBankMakeTransfer(transferRequest)
-            sendAction(InterbankTransferAction.Internal.HandleTransferResult(result))
         }
     }
 
@@ -366,46 +420,6 @@ class InterbankTransferViewModel(
         }
     }
 
-    private fun handleTransferResult(action: InterbankTransferAction.Internal.HandleTransferResult) {
-        when (action.result) {
-            is DataState.Loading -> {
-                mutableStateFlow.update {
-                    it.copy(isProcessing = true)
-                }
-            }
-
-            is DataState.Success -> {
-                val transferResponse = action.result.data
-                val responseMessage = when (transferResponse) {
-                    is org.mifospay.core.model.interbank.InterBankTransferResponse -> {
-                        "Transfer ID: ${transferResponse.transactionId}"
-                    }
-
-                    else -> "Transfer completed successfully"
-                }
-
-                mutableStateFlow.update {
-                    it.copy(
-                        isProcessing = false,
-                        currentStep = InterbankTransferState.Step.TransferSuccess,
-                        transferResponse = responseMessage,
-                    )
-                }
-                sendEvent(InterbankTransferEvent.OnTransferSuccess)
-            }
-
-            is DataState.Error -> {
-                mutableStateFlow.update {
-                    it.copy(
-                        isProcessing = false,
-                        currentStep = InterbankTransferState.Step.TransferFailed,
-                        errorMessage = action.result.message,
-                    )
-                }
-                sendEvent(InterbankTransferEvent.OnTransferFailed(action.result.message))
-            }
-        }
-    }
 }
 
 @OptIn(ExperimentalTime::class)
@@ -510,9 +524,4 @@ sealed interface InterbankTransferAction {
     data object ConfirmTransfer : InterbankTransferAction
     data object RetryTransfer : InterbankTransferAction
     data object DismissError : InterbankTransferAction
-
-    // Internal
-    sealed interface Internal : InterbankTransferAction {
-        data class HandleTransferResult(val result: DataState<Any>) : Internal
-    }
 }

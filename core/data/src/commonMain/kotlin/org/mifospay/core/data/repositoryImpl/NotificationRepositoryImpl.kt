@@ -16,13 +16,13 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kpt.core.base.store.infra.FetchedAtRepository
 import kpt.core.base.store.screen.FetchPolicy
+import kpt.core.base.store.screen.ScreenDataStream
 import kpt.core.base.store.screen.asScreenStream
 import kpt.core.data.infra.NetworkMonitor as StoreNetworkMonitor
 import kpt.core.store.AppStoreRegistry
 import kpt.core.store.wallet.notification.NotificationKey
 import org.mifospay.core.common.ScreenState
 import org.mifospay.core.common.asScreenStateFlow
-import org.mifospay.core.data.util.toForkScreenStateFlow
 import org.mifospay.core.data.repository.NotificationRepository
 import org.mifospay.core.model.notification.Notification
 import org.mifospay.core.network.FineractApiManager
@@ -54,20 +54,23 @@ class NotificationRepositoryImpl(
     // dependencies (notificationStore + NetworkMonitor + FetchedAtRepository).
     // If any is null (test wiring), we IllegalState — production DI in
     // RepositoryModule wires all three unconditionally.
-    override fun fetchNotificationsScreen(
+    override fun fetchNotificationsStream(
         clientId: Long,
         scope: CoroutineScope,
-    ): Flow<ScreenState<List<Notification>>> {
+    ): ScreenDataStream<List<Notification>> {
         val store = checkNotNull(notificationStore) {
-            "fetchNotificationsScreen requires the `notification` Store5 wiring. Verify " +
+            "fetchNotificationsStream requires the `notification` Store5 wiring. Verify " +
                 "RepositoryModule bound AppStoreRegistry.Notification and injected it here."
         }
         val netMon = checkNotNull(storeNetworkMonitor) {
-            "fetchNotificationsScreen requires kmptoolkit NetworkMonitor. Verify DataModule bound it."
+            "fetchNotificationsStream requires kmptoolkit NetworkMonitor. Verify DataModule bound it."
         }
         val fetchedAtRepo = checkNotNull(fetchedAtRepository) {
-            "fetchNotificationsScreen requires FetchedAtRepository. Verify DataModule bound it."
+            "fetchNotificationsStream requires FetchedAtRepository. Verify DataModule bound it."
         }
+        // Template idiom: return the native ScreenDataStream directly — no
+        // `.state.toForkScreenStateFlow()` bridge. The ViewModel exposes
+        // `stream.state` to `ScreenContent` and `stream.refresh()` for retry.
         return store.asScreenStream(
             key = NotificationKey(clientId),
             networkMonitor = netMon,
@@ -77,6 +80,6 @@ class NotificationRepositoryImpl(
             isEmpty = { it.isEmpty() },
             fetchPolicy = FetchPolicy.CACHE_FIRST_SWR,
             ttl = AppStoreRegistry.Ttl.NOTIFICATION,
-        ).state.toForkScreenStateFlow()
+        )
     }
 }

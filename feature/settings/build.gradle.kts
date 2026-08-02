@@ -23,6 +23,9 @@ kotlin {
             implementation(libs.koin.compose.viewmodel)
             implementation(libs.koin.compose)
 
+            // Template idiom: SubmitHandler (core-base/store) for one-shot writes.
+            implementation(projects.coreBase.store)
+
             // For BiometricErrorMessages / BiometricPromptStrings used by
             // SettingsViewModel's enable-biometrics path (v2.3.0-beta requires
             // caller-supplied prompt strings + BiometricError mapping).

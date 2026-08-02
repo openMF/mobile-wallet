@@ -17,13 +17,13 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import kpt.core.base.store.infra.FetchedAtRepository
 import kpt.core.base.store.screen.FetchPolicy
+import kpt.core.base.store.screen.ScreenDataStream
 import kpt.core.base.store.screen.asScreenStream
 import kpt.core.data.infra.NetworkMonitor as StoreNetworkMonitor
 import kpt.core.store.AppStoreRegistry
 import kpt.core.store.wallet.savedcards.SavedCardKey
 import org.mifospay.core.common.DataState
 import org.mifospay.core.common.ScreenState
-import org.mifospay.core.data.util.toForkScreenStateFlow
 import org.mifospay.core.common.asScreenStateFlow
 import org.mifospay.core.data.repository.SavedCardRepository
 import org.mifospay.core.model.savedcards.CardPayload
@@ -56,19 +56,19 @@ class SavedCardRepositoryImpl(
     // dependencies (savedCardStore + NetworkMonitor + FetchedAtRepository).
     // If any is null (test wiring), we IllegalState — production DI in
     // RepositoryModule wires all three unconditionally.
-    override fun getSavedCardsScreen(
+    override fun getSavedCardsStream(
         clientId: Long,
         scope: CoroutineScope,
-    ): Flow<ScreenState<List<SavedCard>>> {
+    ): ScreenDataStream<List<SavedCard>> {
         val store = checkNotNull(savedCardStore) {
-            "getSavedCardsScreen requires the `savedCards` Store5 wiring. Verify " +
+            "getSavedCardsStream requires the `savedCards` Store5 wiring. Verify " +
                 "RepositoryModule bound AppStoreRegistry.SavedCards and injected it here."
         }
         val netMon = checkNotNull(storeNetworkMonitor) {
-            "getSavedCardsScreen requires kmptoolkit NetworkMonitor. Verify DataModule bound it."
+            "getSavedCardsStream requires kmptoolkit NetworkMonitor. Verify DataModule bound it."
         }
         val fetchedAtRepo = checkNotNull(fetchedAtRepository) {
-            "getSavedCardsScreen requires FetchedAtRepository. Verify DataModule bound it."
+            "getSavedCardsStream requires FetchedAtRepository. Verify DataModule bound it."
         }
         return store.asScreenStream(
             key = SavedCardKey(clientId),
@@ -79,7 +79,7 @@ class SavedCardRepositoryImpl(
             isEmpty = { it.isEmpty() },
             fetchPolicy = FetchPolicy.CACHE_FIRST_SWR,
             ttl = AppStoreRegistry.Ttl.SAVED_CARDS,
-        ).state.toForkScreenStateFlow()
+        )
     }
 
     override fun getSavedCard(clientId: Long, cardId: Long): Flow<ScreenState<SavedCard>> {

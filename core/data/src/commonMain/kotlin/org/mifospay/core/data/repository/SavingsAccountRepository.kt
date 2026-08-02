@@ -10,6 +10,7 @@
 package org.mifospay.core.data.repository
 
 import kotlinx.coroutines.CoroutineScope
+import kpt.core.base.store.screen.ScreenDataStream
 import org.mifospay.core.common.DataState
 import org.mifospay.core.common.ScreenStateStream
 import org.mifospay.core.model.savingsaccount.CreateNewSavingEntity
@@ -62,10 +63,10 @@ interface SavingsAccountRepository {
      * @param scope Coroutine scope for the stream's internal helper coroutines
      *   (typically `viewModelScope`).
      */
-    fun getAccountDetailScreen(
+    fun getAccountDetailStream(
         accountId: Long,
         scope: CoroutineScope,
-    ): ScreenStateStream<SavingAccountDetail>
+    ): ScreenDataStream<SavingAccountDetail>
 
     suspend fun getSavingAccountTransaction(
         accountId: Long,

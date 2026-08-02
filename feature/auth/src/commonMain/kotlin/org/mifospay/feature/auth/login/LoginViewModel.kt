@@ -14,9 +14,10 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
+import kpt.core.base.store.submit.SubmitState
+import kpt.core.base.store.submit.submitHandler
 import org.mifospay.core.common.DataState
 import org.mifospay.core.common.getSerialized
 import org.mifospay.core.common.setSerialized
@@ -38,7 +39,44 @@ class LoginViewModel(
         private const val KEY_STATE = "state"
     }
 
+    // Template idiom (core-base/store): the login (authenticate) write goes through a
+    // SubmitHandler instead of a hand-folded DataState result action. The handler owns the
+    // Submitting/Submitted/Failed lifecycle; we observe it below to drive this screen's
+    // existing loading/error dialog + passcode navigation, so the Screen is unchanged.
+    private val submitLogin = viewModelScope.submitHandler<UserInfo>()
+
     init {
+        submitLogin.state
+            .onEach { submitState ->
+                when (submitState) {
+                    is SubmitState.Submitting -> {
+                        mutableStateFlow.update {
+                            it.copy(dialogState = LoginState.DialogState.Loading)
+                        }
+                    }
+
+                    is SubmitState.Submitted -> {
+                        mutableStateFlow.update { it.copy(dialogState = null) }
+                        sendEvent(LoginEvent.NavigateToMifosPasscodeScreen)
+                        submitLogin.reset()
+                    }
+
+                    is SubmitState.Failed -> {
+                        mutableStateFlow.update {
+                            it.copy(
+                                dialogState = LoginState.DialogState.Error(
+                                    submitState.error.message.toString(),
+                                ),
+                            )
+                        }
+                        submitLogin.reset()
+                    }
+
+                    SubmitState.Idle -> Unit
+                }
+            }
+            .launchIn(viewModelScope)
+
         stateFlow
             .onEach { savedStateHandle.setSerialized(key = KEY_STATE, value = it) }
             .launchIn(viewModelScope)
@@ -85,10 +123,6 @@ class LoginViewModel(
                 loginUser(state.username, state.password)
             }
 
-            is LoginAction.Internal.ReceiveLoginResult -> {
-                handleLoginResult(action)
-            }
-
             is LoginAction.SignupClicked -> {
                 sendEvent(LoginEvent.NavigateToSignup)
             }
@@ -99,40 +133,19 @@ class LoginViewModel(
         }
     }
 
-    private fun handleLoginResult(action: LoginAction.Internal.ReceiveLoginResult) {
-        when (action.loginResult) {
-            is DataState.Error -> {
-                mutableStateFlow.update {
-                    it.copy(dialogState = LoginState.DialogState.Error(action.loginResult.message))
-                }
-            }
-
-            is DataState.Loading -> {
-                mutableStateFlow.update {
-                    it.copy(dialogState = LoginState.DialogState.Loading)
-                }
-            }
-
-            is DataState.Success -> {
-                mutableStateFlow.update {
-                    it.copy(dialogState = null)
-                }
-                sendEvent(LoginEvent.NavigateToMifosPasscodeScreen)
-            }
-        }
-    }
-
     private fun loginUser(
         username: String,
         password: String,
     ) {
-        mutableStateFlow.update {
-            it.copy(dialogState = LoginState.DialogState.Loading)
-        }
-
-        viewModelScope.launch {
-            val result = loginUseCase(username, password)
-            sendAction(LoginAction.Internal.ReceiveLoginResult(result))
+        // Submit through the handler — it drives Submitting/Submitted/Failed, observed in
+        // `init`. The block unwraps the use-case's transitional DataState result: return the
+        // value on success, throw on error so the handler reports Failed.
+        submitLogin.submit {
+            when (val result = loginUseCase(username, password)) {
+                is DataState.Success -> result.data
+                is DataState.Error -> throw result.exception
+                DataState.Loading -> error("loginUseCase must not emit Loading")
+            }
         }
     }
 }
@@ -170,10 +183,4 @@ sealed class LoginAction {
     data object ErrorDialogDismiss : LoginAction()
     data object LoginClicked : LoginAction()
     data object SignupClicked : LoginAction()
-
-    sealed class Internal : LoginAction() {
-        data class ReceiveLoginResult(
-            val loginResult: DataState<UserInfo>,
-        ) : Internal()
-    }
 }

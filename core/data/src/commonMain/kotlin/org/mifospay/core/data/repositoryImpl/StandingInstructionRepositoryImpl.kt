@@ -17,13 +17,13 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import kpt.core.base.store.infra.FetchedAtRepository
 import kpt.core.base.store.screen.FetchPolicy
+import kpt.core.base.store.screen.ScreenDataStream
 import kpt.core.base.store.screen.asScreenStream
 import kpt.core.data.infra.NetworkMonitor as StoreNetworkMonitor
 import kpt.core.store.AppStoreRegistry
 import kpt.core.store.wallet.standinginstruction.StandingInstructionKey
 import org.mifospay.core.common.DataState
 import org.mifospay.core.common.ScreenState
-import org.mifospay.core.data.util.toForkScreenStateFlow
 import org.mifospay.core.common.asScreenStateFlow
 import org.mifospay.core.data.repository.StandingInstructionRepository
 import org.mifospay.core.model.standinginstruction.SITemplate
@@ -72,19 +72,19 @@ class StandingInstructionRepositoryImpl(
     // dependencies (standingInstructionStore + NetworkMonitor + FetchedAtRepository).
     // If any is null (test wiring), we IllegalState — production DI in
     // RepositoryModule wires all three unconditionally.
-    override fun getAllStandingInstructionsScreen(
+    override fun getAllStandingInstructionsStream(
         clientId: Long,
         scope: CoroutineScope,
-    ): Flow<ScreenState<List<StandingInstruction>>> {
+    ): ScreenDataStream<List<StandingInstruction>> {
         val store = checkNotNull(standingInstructionStore) {
-            "getAllStandingInstructionsScreen requires the `standingInstruction` Store5 wiring. Verify " +
+            "getAllStandingInstructionsStream requires the `standingInstruction` Store5 wiring. Verify " +
                 "RepositoryModule bound AppStoreRegistry.StandingInstruction and injected it here."
         }
         val netMon = checkNotNull(storeNetworkMonitor) {
-            "getAllStandingInstructionsScreen requires kmptoolkit NetworkMonitor. Verify DataModule bound it."
+            "getAllStandingInstructionsStream requires kmptoolkit NetworkMonitor. Verify DataModule bound it."
         }
         val fetchedAtRepo = checkNotNull(fetchedAtRepository) {
-            "getAllStandingInstructionsScreen requires FetchedAtRepository. Verify DataModule bound it."
+            "getAllStandingInstructionsStream requires FetchedAtRepository. Verify DataModule bound it."
         }
         return store.asScreenStream(
             key = StandingInstructionKey(clientId),
@@ -95,7 +95,7 @@ class StandingInstructionRepositoryImpl(
             isEmpty = { it.isEmpty() },
             fetchPolicy = FetchPolicy.CACHE_FIRST_SWR,
             ttl = AppStoreRegistry.Ttl.STANDING_INSTRUCTION,
-        ).state.toForkScreenStateFlow()
+        )
     }
 
     override fun getStandingInstruction(

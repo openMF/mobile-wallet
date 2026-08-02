@@ -9,9 +9,6 @@
  */
 package org.mifospay.feature.standing.instruction
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.scaleIn
-import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -51,9 +48,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.launch
-import mobile_wallet.feature.standing_instruction.generated.resources.Res
-import mobile_wallet.feature.standing_instruction.generated.resources.feature_standing_instruction_error_fetching_si_list
-import mobile_wallet.feature.standing_instruction.generated.resources.feature_standing_instruction_error_oops
+import kpt.core.base.store.screen.ScreenState
+import kpt.core.base.ui.screen.ScreenContent
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.mifospay.core.common.CurrencyFormatter
@@ -66,7 +62,6 @@ import org.mifospay.core.designsystem.icon.MifosIcons
 import org.mifospay.core.designsystem.theme.toRoundedCornerShape
 import org.mifospay.core.model.standinginstruction.StandingInstruction
 import org.mifospay.core.ui.EmptyContentScreen
-import org.mifospay.core.ui.MifosProgressIndicator
 import org.mifospay.core.ui.RevealDirection
 import org.mifospay.core.ui.RevealSwipe
 import org.mifospay.core.ui.rememberRevealState
@@ -111,6 +106,7 @@ fun StandingInstructionsScreen(
         state = viewState,
         snackbarHostState = snackbarHostState,
         modifier = modifier,
+        onRetry = viewModel::retry,
         onAction = viewModel::trySendAction,
     )
 }
@@ -147,9 +143,10 @@ private fun SIDialogs(
 
 @Composable
 internal fun StandingInstructionScreen(
-    state: SIViewState,
+    state: ScreenState<List<StandingInstruction>>,
     snackbarHostState: SnackbarHostState,
     modifier: Modifier = Modifier,
+    onRetry: () -> Unit,
     onAction: (SIAction) -> Unit,
 ) {
     MifosScaffold(
@@ -157,66 +154,48 @@ internal fun StandingInstructionScreen(
         floatingActionButtonPosition = FabPosition.EndOverlay,
         modifier = modifier,
         floatingActionButton = {
-            AnimatedVisibility(
-                visible = state.hasFab,
-                enter = scaleIn(),
-                exit = scaleOut(),
+            FloatingActionButton(
+                onClick = {
+                    onAction(SIAction.AddNewSI)
+                },
             ) {
-                FloatingActionButton(
+                Icon(imageVector = MifosIcons.Add, "Add")
+            }
+        },
+    ) { padding ->
+        // Template idiom: `ScreenContent` (core-base/ui) owns every render branch —
+        // loading / empty / no-network / unauthenticated / error+retry — driven by
+        // the stream's pre-decided `ScreenState`. Only the per-item Content body is
+        // authored here; the empty state keeps the feature's add-SI CTA copy.
+        ScreenContent(
+            state = state,
+            onRetry = onRetry,
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(padding),
+            empty = {
+                EmptyContentScreen(
+                    title = "No Standing Instructions",
+                    subTitle = "No standing instructions found for this client.",
+                    btnText = "Add New SI",
+                    btnIcon = MifosIcons.Add,
                     onClick = {
                         onAction(SIAction.AddNewSI)
                     },
-                ) {
-                    Icon(imageVector = MifosIcons.Add, "Add")
-                }
-            }
-        },
-    ) {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(it),
-            contentAlignment = Alignment.Center,
-        ) {
-            when (state) {
-                is SIViewState.Loading -> MifosProgressIndicator()
-
-                is SIViewState.Error -> {
-                    EmptyContentScreen(
-                        title = stringResource(Res.string.feature_standing_instruction_error_oops),
-                        subTitle = stringResource(Res.string.feature_standing_instruction_error_fetching_si_list),
-                        modifier = Modifier,
-                        iconTint = KptTheme.colorScheme.error,
-                    )
-                }
-
-                is SIViewState.Empty -> {
-                    EmptyContentScreen(
-                        title = state.title,
-                        subTitle = state.message,
-                        btnText = state.btnText,
-                        btnIcon = state.btnIcon,
-                        onClick = {
-                            onAction(SIAction.AddNewSI)
-                        },
-                        modifier = Modifier,
-                    )
-                }
-
-                is SIViewState.Content -> {
-                    StandingInstructionScreenContent(
-                        state = state,
-                        onAction = onAction,
-                    )
-                }
-            }
+                )
+            },
+        ) { instructions, _ ->
+            StandingInstructionScreenContent(
+                list = instructions,
+                onAction = onAction,
+            )
         }
     }
 }
 
 @Composable
 private fun StandingInstructionScreenContent(
-    state: SIViewState.Content,
+    list: List<StandingInstruction>,
     modifier: Modifier = Modifier,
     onAction: (SIAction) -> Unit,
     lazyListState: LazyListState = rememberLazyListState(),
@@ -228,7 +207,7 @@ private fun StandingInstructionScreenContent(
         verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.md),
     ) {
         items(
-            items = state.list,
+            items = list,
             key = { item -> item.id ?: item.hashCode() },
         ) { item ->
             SIItem(

@@ -11,21 +11,19 @@ package org.mifospay.feature.invoices
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.serialization.Serializable
-import org.mifospay.core.common.ScreenState
+import kpt.core.base.store.screen.ScreenState
 import org.mifospay.core.common.setSerialized
 import org.mifospay.core.data.repository.InvoiceRepository
 import org.mifospay.core.datastore.UserPreferencesRepository
 import org.mifospay.core.model.datatables.invoice.Invoice
 import org.mifospay.core.ui.utils.BaseViewModel
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class InvoicesViewModel(
     invoiceRepository: InvoiceRepository,
     repository: UserPreferencesRepository,
@@ -48,42 +46,24 @@ class InvoicesViewModel(
             .launchIn(viewModelScope)
     }
 
-    val invoiceUiState = invoiceRepository.getInvoicesScreen(
-        // Phase-5 Batch-2 LEDGER read (GOAL D13) — switched from the
-        // transitional `getInvoices(clientId)` (`asScreenStateFlow` shim over
-        // the raw Ktorfit flow) to the store-native `getInvoicesScreen(...)`
-        // that consumes the `invoice` Store5 read (`createStore` + Room SoT +
-        // CACHE_FIRST_SWR + atomic replacePage). Same `Flow<ScreenState<List<Invoice>>>`
-        // shape; consumer branches are unchanged. Requires `viewModelScope`
-        // for the stream's internal reconnect + periodic + SWR side-fetch
-        // coroutines.
+    // Template idiom (core-base/store): hold the native ScreenDataStream and
+    // expose its pre-decided `state` straight to the Screen's `ScreenContent`.
+    // No fork-ScreenState fold, no 6→4 `when` — DecisionEngine inside the stream
+    // owns every Loading / Empty / NoNetwork / Unauthenticated / Error / Content
+    // transition, and `refresh()` drives retry. Named `invoiceUiState` (not
+    // `state`) because BaseViewModel already owns a `protected val state: S`.
+    private val stream = invoiceRepository.getInvoicesStream(
         clientId = state.clientId,
         scope = viewModelScope,
-    ).mapLatest { result ->
-        // Fold ScreenState → the existing 4-branch UiState. Repo emits
-        // ScreenState.Empty when the underlying list is empty, so we route it
-        // directly to InvoicesUiState.Empty and drop the ex `isEmpty()` check.
-        // NoNetwork/Unauthenticated → Error until Phase-4 differentiates.
-        when (result) {
-            is ScreenState.Loading -> InvoicesUiState.Loading
+    )
 
-            is ScreenState.Empty -> InvoicesUiState.Empty
-
-            is ScreenState.Content -> InvoicesUiState.InvoiceList(result.data)
-
-            is ScreenState.Error -> InvoicesUiState.Error(result.error.message.toString())
-
-            is ScreenState.NoNetwork ->
-                InvoicesUiState.Error("No network. Please check your connection.")
-
-            is ScreenState.Unauthenticated ->
-                InvoicesUiState.Error("Session expired. Please log in again.")
-        }
-    }.stateIn(
+    val invoiceUiState: StateFlow<ScreenState<List<Invoice>>> = stream.state.stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5_000),
-        initialValue = InvoicesUiState.Loading,
+        initialValue = ScreenState.Loading,
     )
+
+    fun retry() = stream.refresh()
 
     override fun handleAction(action: InvoiceAction) {
         when (action) {
@@ -92,13 +72,6 @@ class InvoicesViewModel(
             }
         }
     }
-}
-
-sealed interface InvoicesUiState {
-    data object Loading : InvoicesUiState
-    data object Empty : InvoicesUiState
-    data class Error(val message: String) : InvoicesUiState
-    data class InvoiceList(val list: List<Invoice>) : InvoicesUiState
 }
 
 @Serializable

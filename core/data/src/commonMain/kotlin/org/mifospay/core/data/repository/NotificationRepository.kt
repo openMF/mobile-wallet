@@ -11,6 +11,7 @@ package org.mifospay.core.data.repository
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
+import kpt.core.base.store.screen.ScreenDataStream
 import org.mifospay.core.common.ScreenState
 import org.mifospay.core.model.notification.Notification
 
@@ -46,12 +47,18 @@ interface NotificationRepository {
      * so a logout-then-login as a different client never surfaces the previous
      * user's cached list.
      *
+     * Returns the native [ScreenDataStream] (template idiom) — the ViewModel holds
+     * it directly and exposes `stream.state` to the Screen (rendered by
+     * `core-base/ui` `ScreenContent`) and `stream.refresh()` for pull-to-refresh /
+     * retry. No fork-`ScreenState` bridge, no per-ViewModel `when` fold —
+     * `DecisionEngine` inside the stream pre-decides every render branch.
+     *
      * @param clientId owning client id — the store's page key.
      * @param scope Coroutine scope for the stream's internal helper coroutines
      *   (typically `viewModelScope`).
      */
-    fun fetchNotificationsScreen(
+    fun fetchNotificationsStream(
         clientId: Long,
         scope: CoroutineScope,
-    ): Flow<ScreenState<List<Notification>>>
+    ): ScreenDataStream<List<Notification>>
 }

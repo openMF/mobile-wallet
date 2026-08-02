@@ -20,6 +20,12 @@ kotlin {
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
             implementation(libs.constraint.layout)
+
+            // Template idiom: ScreenDataStream (core-base/store) + ScreenContent
+            // (core-base/ui) so the saved-cards list consumes the store's
+            // pre-decided ScreenState directly instead of a fork-ScreenState fold.
+            implementation(projects.coreBase.store)
+            implementation(projects.coreBase.ui)
         }
     }
 }

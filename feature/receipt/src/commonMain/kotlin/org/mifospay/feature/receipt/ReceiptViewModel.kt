@@ -27,8 +27,9 @@ class ReceiptViewModel(
     //   LEDGER store already caches (`wallet_transactions`). No dedicated
     //   `ReceiptEntity` / `ReceiptStore` is emitted for this feature — the
     //   implementation should thread `transactionId` (from savedStateHandle)
-    //   into `SelfServiceRepository.getTransactionsScreen(...)` or a future
-    //   `getTransactionByIdScreen(...)` variant on top of the same store, then
+    //   into `SelfServiceRepository.getTransactionsStream(...).state` or a
+    //   future `getTransactionByIdStream(...)` variant on top of the same
+    //   store, then
     //   project the row into `ReceiptUiState.Success`. Kept as an
     //   Error("Not implemented yet") stub until that wiring lands (existing
     //   pre-batch-3 behavior — not a Batch-3 regression).

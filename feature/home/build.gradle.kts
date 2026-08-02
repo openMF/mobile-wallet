@@ -14,6 +14,9 @@ plugins {
 kotlin {
     sourceSets {
         commonMain.dependencies {
+            // Template SubmitHandler idiom (submitHandler / SubmitState) for the
+            // MarkAsDefault one-shot write in HomeViewModel.
+            implementation(projects.coreBase.store)
             implementation(compose.ui)
             implementation(compose.foundation)
             implementation(compose.material3)

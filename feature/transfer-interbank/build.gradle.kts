@@ -22,6 +22,8 @@ kotlin {
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
 
+            // Template idiom: SubmitHandler (core-base/store) for the money-movement write.
+            implementation(projects.coreBase.store)
             implementation(projects.feature.passcode)
         }
 

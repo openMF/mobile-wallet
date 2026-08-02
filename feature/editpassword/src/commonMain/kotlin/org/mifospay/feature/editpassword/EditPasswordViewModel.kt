@@ -20,6 +20,8 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
+import kpt.core.base.store.submit.SubmitState
+import kpt.core.base.store.submit.submitHandler
 import mobile_wallet.feature.editpassword.generated.resources.Res
 import mobile_wallet.feature.editpassword.generated.resources.feature_editpassword_error_empty_current_password
 import mobile_wallet.feature.editpassword.generated.resources.feature_editpassword_error_password_min_length
@@ -41,7 +43,6 @@ import org.mifospay.core.ui.utils.PasswordChecker
 import org.mifospay.core.ui.utils.PasswordStrength
 import org.mifospay.core.ui.utils.PasswordStrengthResult
 import org.mifospay.feature.editpassword.EditPasswordAction.Internal.ReceivePasswordStrengthResult
-import org.mifospay.feature.editpassword.EditPasswordAction.Internal.ReceiveUpdatePasswordResult
 import org.mifospay.feature.editpassword.EditPasswordDialog.Error
 
 internal class EditPasswordViewModel(
@@ -65,7 +66,40 @@ internal class EditPasswordViewModel(
 
     private var passwordStrengthJob: Job = Job().apply { complete() }
 
+    // Template idiom (core-base/store): one-shot writes go through a SubmitHandler
+    // instead of a hand-folded DataState result action. The handler owns the
+    // Submitting/Submitted/Failed lifecycle; we observe it to drive this screen's
+    // existing dialog + toast/logout events, so the Screen is unchanged.
+    private val submitPassword = viewModelScope.submitHandler<String>()
+
     init {
+        submitPassword.state
+            .onEach { submitState ->
+                when (submitState) {
+                    is SubmitState.Submitting -> {
+                        mutableStateFlow.update { it.copy(dialogState = EditPasswordDialog.Loading) }
+                    }
+
+                    is SubmitState.Submitted -> {
+                        mutableStateFlow.update { it.copy(dialogState = null) }
+                        sendEvent(EditPasswordEvent.ShowToast(submitState.result))
+                        sendEvent(EditPasswordEvent.OnLogoutUser)
+                        submitPassword.reset()
+                    }
+
+                    is SubmitState.Failed -> {
+                        val uiError = submitState.error.toUiError(DefaultErrorMessageProvider)
+                        mutableStateFlow.update {
+                            it.copy(dialogState = EditPasswordDialog.ApiError(uiError))
+                        }
+                        submitPassword.reset()
+                    }
+
+                    SubmitState.Idle -> Unit
+                }
+            }
+            .launchIn(viewModelScope)
+
         stateFlow
             .onEach {
                 savedStateHandle.setSerialized(key = KEY_STATE, value = it)
@@ -96,8 +130,6 @@ internal class EditPasswordViewModel(
             }
 
             is ReceivePasswordStrengthResult -> handlePasswordStrengthResult(action)
-
-            is ReceiveUpdatePasswordResult -> handleResult(action)
 
             EditPasswordAction.SubmitClick -> handleSubmitClick()
 
@@ -141,27 +173,6 @@ internal class EditPasswordViewModel(
             }
 
             is PasswordStrengthResult.Error -> {}
-        }
-    }
-
-    private fun handleResult(action: ReceiveUpdatePasswordResult) {
-        when (val result = action.result) {
-            is DataState.Success -> {
-                mutableStateFlow.update { it.copy(dialogState = null) }
-                sendEvent(EditPasswordEvent.ShowToast(result.data))
-                sendEvent(EditPasswordEvent.OnLogoutUser)
-            }
-
-            is DataState.Error -> {
-                val uiError = result.toUiError(DefaultErrorMessageProvider)
-                mutableStateFlow.update {
-                    it.copy(dialogState = EditPasswordDialog.ApiError(uiError))
-                }
-            }
-
-            DataState.Loading -> {
-                mutableStateFlow.update { it.copy(dialogState = EditPasswordDialog.Loading) }
-            }
         }
     }
 
@@ -213,11 +224,16 @@ internal class EditPasswordViewModel(
     }
 
     private fun updatePassword(newPassword: String) {
-        viewModelScope.launch {
-            val userId = requireNotNull(userInfo.value?.userId)
-            val result = userRepository.updateUserPassword(userId, newPassword)
-
-            sendAction(ReceiveUpdatePasswordResult(result))
+        val userId = requireNotNull(userInfo.value?.userId)
+        // Submit through the handler — it drives Submitting/Submitted/Failed, observed
+        // in `init`. The block unwraps the repository's transitional DataState result:
+        // return the value on success, throw on error so the handler reports Failed.
+        submitPassword.submit {
+            when (val result = userRepository.updateUserPassword(userId, newPassword)) {
+                is DataState.Success -> result.data
+                is DataState.Error -> throw result.exception
+                DataState.Loading -> error("updateUserPassword must not emit Loading")
+            }
         }
     }
 }
@@ -277,10 +293,6 @@ internal sealed interface EditPasswordAction {
     data object ErrorDialogDismiss : EditPasswordAction
 
     sealed class Internal : EditPasswordAction {
-        data class ReceiveUpdatePasswordResult(
-            val result: DataState<String>,
-        ) : Internal()
-
         data class ReceivePasswordStrengthResult(
             val result: PasswordStrengthResult,
         ) : Internal()

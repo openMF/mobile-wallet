@@ -22,6 +22,8 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
+import kpt.core.base.store.submit.SubmitState
+import kpt.core.base.store.submit.submitHandler
 import org.mifospay.core.common.DataState
 import org.mifospay.core.common.DateHelper
 import org.mifospay.core.common.ScreenState
@@ -38,7 +40,6 @@ import org.mifospay.core.model.standinginstruction.StandingInstruction
 import org.mifospay.core.model.standinginstruction.StandingInstructionPayload
 import org.mifospay.core.model.standinginstruction.toSIUploadPayload
 import org.mifospay.core.ui.utils.BaseViewModel
-import org.mifospay.feature.standing.instruction.createOrUpdate.AddEditSIAction.Internal.HandleSubmitResult
 import org.mifospay.feature.standing.instruction.createOrUpdate.AddEditSIAction.Internal.HandleTemplateResult
 import org.mifospay.feature.standing.instruction.createOrUpdate.AddEditSIAction.Internal.LoadClientAccount
 import org.mifospay.feature.standing.instruction.createOrUpdate.AddEditSIState.DialogState.Error
@@ -77,7 +78,42 @@ internal class AddEditSIViewModel(
     private val _toClientAccounts = MutableStateFlow<List<Account>>(emptyList())
     val toClientAccounts = _toClientAccounts.asStateFlow()
 
+    // Template idiom (core-base/store): the create/update WRITE goes through a
+    // SubmitHandler instead of a hand-folded DataState result action. The handler
+    // owns the Submitting/Submitted/Failed lifecycle; we observe it to drive this
+    // screen's existing loading/error dialog + success toast + navigate-back.
+    private val submitSI = viewModelScope.submitHandler<String>()
+
     init {
+        submitSI.state
+            .onEach { submitState ->
+                when (submitState) {
+                    is SubmitState.Submitting -> {
+                        mutableStateFlow.update {
+                            it.copy(dialogState = AddEditSIState.DialogState.Loading)
+                        }
+                    }
+
+                    is SubmitState.Submitted -> {
+                        mutableStateFlow.update { it.copy(dialogState = null) }
+                        sendEvent(AddEditSIEvent.ShowToast(submitState.result))
+                        sendEvent(AddEditSIEvent.OnNavigateBack)
+                        submitSI.reset()
+                    }
+
+                    is SubmitState.Failed -> {
+                        val message = submitState.error.message.toString()
+                        mutableStateFlow.update {
+                            it.copy(dialogState = Error(message))
+                        }
+                        submitSI.reset()
+                    }
+
+                    SubmitState.Idle -> Unit
+                }
+            }
+            .launchIn(viewModelScope)
+
         stateFlow
             .onEach { savedStateHandle.setSerialized(key = KEY_STATE, value = it) }
             .launchIn(viewModelScope)
@@ -204,8 +240,6 @@ internal class AddEditSIViewModel(
 
             AddEditSIAction.SubmitClicked -> initiateAddEditSI()
 
-            is HandleSubmitResult -> handleSubmitResult(action)
-
             is HandleTemplateResult -> handleTemplateResult(action)
 
             is LoadClientAccount -> handleClientAccountResult(action)
@@ -274,52 +308,29 @@ internal class AddEditSIViewModel(
         }
     }
 
-    private fun initiateSubmitSI() {
-        mutableStateFlow.update {
-            it.copy(dialogState = AddEditSIState.DialogState.Loading)
-        }
-
-        onContent {
-            viewModelScope.launch {
-                val result = when (state.type) {
-                    is SIAddEditType.AddItem -> {
-                        repository.createStandingInstruction(it.payload)
-                    }
-
-                    is SIAddEditType.EditItem -> {
-                        val insId = requireNotNull(state.type.standingInsId)
-                        val payload = it.payload.toSIUploadPayload()
-
-                        repository.updateStandingInstruction(insId, payload)
-                    }
+    private fun initiateSubmitSI() = onContent { content ->
+        // Submit through the handler — it drives Submitting/Submitted/Failed,
+        // observed in `init`. The block unwraps the repository's transitional
+        // DataState: return the value on success, throw on error so the handler
+        // reports Failed.
+        submitSI.submit {
+            val result = when (state.type) {
+                is SIAddEditType.AddItem -> {
+                    repository.createStandingInstruction(content.payload)
                 }
 
-                sendAction(HandleSubmitResult(result))
-            }
-        }
-    }
+                is SIAddEditType.EditItem -> {
+                    val insId = requireNotNull(state.type.standingInsId)
+                    val payload = content.payload.toSIUploadPayload()
 
-    private fun handleSubmitResult(action: HandleSubmitResult) {
-        when (action.result) {
-            is DataState.Loading -> {
-                mutableStateFlow.update {
-                    it.copy(dialogState = AddEditSIState.DialogState.Loading)
+                    repository.updateStandingInstruction(insId, payload)
                 }
             }
 
-            is DataState.Error -> {
-                mutableStateFlow.update {
-                    it.copy(dialogState = Error(action.result.message))
-                }
-            }
-
-            is DataState.Success -> {
-                mutableStateFlow.update {
-                    it.copy(dialogState = null)
-                }
-
-                sendEvent(AddEditSIEvent.ShowToast(action.result.data))
-                sendEvent(AddEditSIEvent.OnNavigateBack)
+            when (result) {
+                is DataState.Success -> result.data
+                is DataState.Error -> throw result.exception
+                DataState.Loading -> error("create/updateStandingInstruction must not emit Loading")
             }
         }
     }
@@ -717,9 +728,6 @@ sealed interface AddEditSIAction {
          */
         data class HandleTemplateResult(val result: ScreenState<SITemplate>) : Internal
         data class LoadClientAccount(val clientId: Long) : Internal
-
-        /** Submit result — remains on [DataState] (write path). */
-        data class HandleSubmitResult(val result: DataState<String>) : Internal
 
         /**
          * Existing-SI load result (edit mode). Uses [ScreenState] — Phase-3

@@ -11,8 +11,8 @@ package org.mifospay.core.data.repository
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
+import kpt.core.base.store.screen.ScreenDataStream
 import org.mifospay.core.common.DataState
-import org.mifospay.core.common.ScreenState
 import org.mifospay.core.model.payload.PocketLinkPayload
 import org.mifospay.core.model.pocket.DetailedPocketAccount
 import org.mifospay.core.model.pocket.LinkableAccount
@@ -63,10 +63,10 @@ interface PocketRepository {
      * @param scope Coroutine scope for the stream's internal helper coroutines
      *   (typically `viewModelScope`).
      */
-    fun getDetailedPocketAccountsScreen(
+    fun getDetailedPocketAccountsStream(
         clientId: Long,
         scope: CoroutineScope,
-    ): Flow<ScreenState<List<DetailedPocketAccount>>>
+    ): ScreenDataStream<List<DetailedPocketAccount>>
 
     fun getAvailableAccountsToLink(
         clientId: Long,
@@ -111,10 +111,10 @@ interface PocketRepository {
      * @param scope Coroutine scope for the stream's internal helper coroutines
      *   (typically `viewModelScope`).
      */
-    fun getAvailableAccountsToLinkScreen(
+    fun getAvailableAccountsToLinkStream(
         clientId: Long,
         scope: CoroutineScope,
-    ): Flow<ScreenState<List<LinkableAccount>>>
+    ): ScreenDataStream<List<LinkableAccount>>
 
     suspend fun linkAccounts(
         payload: PocketLinkPayload,

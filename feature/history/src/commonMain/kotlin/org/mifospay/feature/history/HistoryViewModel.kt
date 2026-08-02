@@ -23,7 +23,9 @@ import mobile_wallet.feature.history.generated.resources.feature_history_error
 import mobile_wallet.feature.history.generated.resources.feature_history_no_account
 import org.jetbrains.compose.resources.StringResource
 import org.mifospay.core.common.ScreenState
+import org.mifospay.core.data.repository.AccountRepository
 import org.mifospay.core.data.repository.SelfServiceRepository
+import org.mifospay.core.data.util.toForkScreenStateFlow
 import org.mifospay.core.datastore.UserPreferencesRepository
 import org.mifospay.core.model.account.Account
 import org.mifospay.core.model.savingsaccount.Transaction
@@ -37,6 +39,7 @@ constructor(
     private val preferencesRepository: UserPreferencesRepository,
     private val repository: SelfServiceRepository,
     private val pdfGenerator: PdfGenerator,
+    private val accountRepository: AccountRepository,
 ) : BaseViewModel<HistoryState, HistoryEvent, HistoryAction>(
     initialState = run {
         val clientId = requireNotNull(preferencesRepository.clientId.value)
@@ -86,7 +89,8 @@ constructor(
         // filter cascade; Empty short-circuits directly to the Empty view.
         // NoNetwork / Unauthenticated fold into the existing Error surface
         // until Phase-4 wires per-branch messaging.
-        repository.getTransactionsScreen(accountId, limit = null, scope = viewModelScope).onEach { result ->
+        repository.getTransactionsStream(accountId, limit = null, scope = viewModelScope)
+            .state.toForkScreenStateFlow().onEach { result ->
             when (result) {
                 is ScreenState.Loading -> {
                     mutableStateFlow.update {
@@ -132,7 +136,12 @@ constructor(
         // (existing feature_history_no_account string). NoNetwork /
         // Unauthenticated fold into the generic error surface for now — the
         // "no account" error copy is reserved for the semantic empty case.
-        repository.getActiveAccounts(state.clientId).onEach { result ->
+        // Offline-first: read self-accounts through the Store5 SelfAccounts store
+        // (Room SoT + CACHE_FIRST_SWR) so cached accounts render offline. The store
+        // returns ALL accounts, so filter `status.active` to preserve the previous
+        // `getActiveAccounts` semantics.
+        accountRepository.getSelfAccountsStream(state.clientId, viewModelScope)
+            .state.toForkScreenStateFlow().onEach { result ->
             when (result) {
                 is ScreenState.Loading -> {
                     mutableStateFlow.update {
@@ -147,13 +156,23 @@ constructor(
                 }
 
                 is ScreenState.Content -> {
-                    val accounts = result.data
-                    loadTransactions(accounts.first().id)
-                    mutableStateFlow.update { state ->
-                        state.copy(
-                            accounts = accounts,
-                            selectedAccount = accounts.firstOrNull(),
-                        )
+                    val accounts = result.data.filter { it.status.active }
+                    if (accounts.isEmpty()) {
+                        mutableStateFlow.update {
+                            it.copy(
+                                viewState = HistoryState.ViewState.Error(
+                                    Res.string.feature_history_no_account,
+                                ),
+                            )
+                        }
+                    } else {
+                        loadTransactions(accounts.first().id)
+                        mutableStateFlow.update { state ->
+                            state.copy(
+                                accounts = accounts,
+                                selectedAccount = accounts.firstOrNull(),
+                            )
+                        }
                     }
                 }
 

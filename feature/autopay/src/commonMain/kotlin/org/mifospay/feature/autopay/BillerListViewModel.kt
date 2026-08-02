@@ -11,9 +11,13 @@ package org.mifospay.feature.autopay
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
+import kpt.core.base.store.submit.SubmitState
+import kpt.core.base.store.submit.submitHandler
 import org.mifospay.core.common.DataState
 import org.mifospay.core.common.getSerialized
 import org.mifospay.core.datastore.BillerRepository
@@ -27,7 +31,42 @@ class BillerListViewModel(
     initialState = savedStateHandle.getSerialized(KEY_STATE) ?: BillerListState(),
 ) {
 
+    // Template idiom (core-base/store): the one-shot delete goes through a SubmitHandler
+    // instead of a hand-folded DataState result. The handler owns the
+    // Submitting/Submitted/Failed lifecycle; we observe it to drive this screen's
+    // existing loading/success (list-refresh)/error UX, so the Screen is unchanged.
+    // The bills list itself is a continuous READ (getAllBillers Flow), left untouched.
+    private val submitDelete = viewModelScope.submitHandler<Unit>()
+
     init {
+        submitDelete.state
+            .onEach { submitState ->
+                when (submitState) {
+                    is SubmitState.Submitting -> {
+                        mutableStateFlow.update { it.copy(isLoading = true) }
+                    }
+
+                    is SubmitState.Submitted -> {
+                        sendEvent(BillerListEvent.BillerDeleted)
+                        loadBillers() // Reload the list
+                        submitDelete.reset()
+                    }
+
+                    is SubmitState.Failed -> {
+                        mutableStateFlow.update {
+                            it.copy(
+                                isLoading = false,
+                                error = "Failed to delete biller: ${submitState.error.message}",
+                            )
+                        }
+                        submitDelete.reset()
+                    }
+
+                    SubmitState.Idle -> Unit
+                }
+            }
+            .launchIn(viewModelScope)
+
         loadBillers()
     }
 
@@ -103,25 +142,14 @@ class BillerListViewModel(
     }
 
     private fun deleteBiller(billerId: String) {
-        viewModelScope.launch {
-            mutableStateFlow.update { it.copy(isLoading = true) }
-
+        // Submit through the handler — it drives Submitting/Submitted/Failed, observed
+        // in `init`. The block unwraps the repository's transitional DataState result:
+        // return Unit on success, throw on error so the handler reports Failed.
+        submitDelete.submit {
             when (val result = billerRepository.deleteBiller(billerId)) {
-                is DataState.Loading -> {
-                    // Already set loading state above
-                }
-                is DataState.Success -> {
-                    sendEvent(BillerListEvent.BillerDeleted)
-                    loadBillers() // Reload the list
-                }
-                is DataState.Error -> {
-                    mutableStateFlow.update {
-                        it.copy(
-                            isLoading = false,
-                            error = "Failed to delete biller: ${result.exception.message}",
-                        )
-                    }
-                }
+                is DataState.Success -> result.data
+                is DataState.Error -> throw result.exception
+                DataState.Loading -> error("deleteBiller must not emit Loading")
             }
         }
     }

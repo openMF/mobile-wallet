@@ -32,6 +32,7 @@ import kotlinx.coroutines.withContext
 import kotlinx.io.IOException
 import kpt.core.base.store.infra.FetchedAtRepository
 import kpt.core.base.store.screen.FetchPolicy
+import kpt.core.base.store.screen.ScreenDataStream
 import kpt.core.base.store.screen.asScreenStream
 import kpt.core.data.infra.NetworkMonitor as StoreNetworkMonitor
 import kpt.core.store.AppStoreRegistry
@@ -44,16 +45,15 @@ import org.mifospay.core.common.NetworkException
 import org.mifospay.core.common.ScreenState
 import org.mifospay.core.common.asDataStateFlow
 import org.mifospay.core.common.asScreenStateFlow
-import org.mifospay.core.common.map as mapScreenState
 import org.mifospay.core.common.combineResultsWith
 import org.mifospay.core.data.mapper.toAccount
 import org.mifospay.core.data.mapper.toModel
 import org.mifospay.core.data.mapper.toModelAccountType
-import org.mifospay.core.data.util.toForkScreenStateFlow
 import org.mifospay.core.data.mapper.toTransactionList
 import org.mifospay.core.data.repository.SelfServiceRepository
 import org.mifospay.core.data.util.Constants
 import org.mifospay.core.data.util.parseMifosError
+import org.mifospay.core.data.util.toForkScreenStateFlow
 import org.mifospay.core.model.account.Account
 import org.mifospay.core.model.account.AccountContent
 import org.mifospay.core.model.beneficiary.Beneficiary
@@ -275,22 +275,23 @@ class SelfServiceRepositoryImpl(
     // Requires the three store-adapter dependencies (historyStore + NetworkMonitor
     // + FetchedAtRepository). If any is null (test wiring), we IllegalState —
     // production DI in RepositoryModule wires all three unconditionally.
-    override fun getTransactionsScreen(
+    override fun getTransactionsStream(
         accountId: Long,
         limit: Int?,
         scope: CoroutineScope,
-    ): Flow<ScreenState<List<Transaction>>> {
+    ): ScreenDataStream<List<Transaction>> {
         val store = checkNotNull(historyStore) {
-            "getTransactionsScreen requires the LEDGER Store5 wiring. Verify " +
+            "getTransactionsStream requires the LEDGER Store5 wiring. Verify " +
                 "RepositoryModule bound AppStoreRegistry.History and injected it here."
         }
         val netMon = checkNotNull(storeNetworkMonitor) {
-            "getTransactionsScreen requires kmptoolkit NetworkMonitor. Verify DataModule bound it."
+            "getTransactionsStream requires kmptoolkit NetworkMonitor. Verify DataModule bound it."
         }
         val fetchedAtRepo = checkNotNull(fetchedAtRepository) {
-            "getTransactionsScreen requires FetchedAtRepository. Verify DataModule bound it."
+            "getTransactionsStream requires FetchedAtRepository. Verify DataModule bound it."
         }
-        val stream = store.asScreenStream(
+        // TODO(limit): consumer applies take(limit) on Content
+        return store.asScreenStream(
             key = TransactionKey(accountId),
             networkMonitor = netMon,
             fetchedAtRepository = fetchedAtRepo,
@@ -300,12 +301,6 @@ class SelfServiceRepositoryImpl(
             fetchPolicy = FetchPolicy.CACHE_FIRST_SWR,
             ttl = AppStoreRegistry.Ttl.HISTORY,
         )
-        val stateFlow: Flow<ScreenState<List<Transaction>>> = stream.state.toForkScreenStateFlow()
-        return if (limit != null) {
-            stateFlow.map { state -> state.mapScreenState { it.take(limit) } }
-        } else {
-            stateFlow
-        }
     }
 
     override fun getAccountsTransactions(
@@ -339,19 +334,19 @@ class SelfServiceRepositoryImpl(
     // dependencies (beneficiaryStore + NetworkMonitor + FetchedAtRepository).
     // If any is null (test wiring), we IllegalState — production DI in
     // RepositoryModule wires all three unconditionally.
-    override fun getBeneficiaryListScreen(
+    override fun getBeneficiaryListStream(
         clientId: Long,
         scope: CoroutineScope,
-    ): Flow<ScreenState<List<Beneficiary>>> {
+    ): ScreenDataStream<List<Beneficiary>> {
         val store = checkNotNull(beneficiaryStore) {
-            "getBeneficiaryListScreen requires the `beneficiary` Store5 wiring. Verify " +
+            "getBeneficiaryListStream requires the `beneficiary` Store5 wiring. Verify " +
                 "RepositoryModule bound AppStoreRegistry.Beneficiary and injected it here."
         }
         val netMon = checkNotNull(storeNetworkMonitor) {
-            "getBeneficiaryListScreen requires kmptoolkit NetworkMonitor. Verify DataModule bound it."
+            "getBeneficiaryListStream requires kmptoolkit NetworkMonitor. Verify DataModule bound it."
         }
         val fetchedAtRepo = checkNotNull(fetchedAtRepository) {
-            "getBeneficiaryListScreen requires FetchedAtRepository. Verify DataModule bound it."
+            "getBeneficiaryListStream requires FetchedAtRepository. Verify DataModule bound it."
         }
         return store.asScreenStream(
             key = BeneficiaryKey(clientId),
@@ -362,7 +357,7 @@ class SelfServiceRepositoryImpl(
             isEmpty = { it.isEmpty() },
             fetchPolicy = FetchPolicy.CACHE_FIRST_SWR,
             ttl = AppStoreRegistry.Ttl.BENEFICIARY,
-        ).state.toForkScreenStateFlow()
+        )
     }
 
     // Phase-5 Batch-4 combinator read — GOAL D13 (`combine` over two
@@ -384,7 +379,7 @@ class SelfServiceRepositoryImpl(
     ): Flow<ScreenState<AccountContent>> {
         val accountsStream: Flow<ScreenState<List<Account>>> = getSelfAccounts(clientId)
         val beneficiariesStream: Flow<ScreenState<List<Beneficiary>>> =
-            getBeneficiaryListScreen(clientId, scope)
+            getBeneficiaryListStream(clientId, scope).state.toForkScreenStateFlow()
         return combine(accountsStream, beneficiariesStream) { accountsState, beneficiariesState ->
             foldAccountAndBeneficiary(accountsState, beneficiariesState)
         }.flowOn(dispatcher)

@@ -27,6 +27,7 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kpt.core.base.store.infra.FetchedAtRepository
 import kpt.core.base.store.screen.FetchPolicy
+import kpt.core.base.store.screen.ScreenDataStream
 import kpt.core.base.store.screen.asScreenStream
 import kpt.core.data.infra.NetworkMonitor as StoreNetworkMonitor
 import kpt.core.database.wallet.pocket.PocketDao
@@ -35,14 +36,12 @@ import kpt.core.store.AppStoreRegistry
 import kpt.core.store.wallet.linkableaccount.LinkableAccountKey
 import kpt.core.store.wallet.pocket.PocketKey
 import org.mifospay.core.common.DataState
-import org.mifospay.core.common.ScreenState
 import org.mifospay.core.common.asDataStateFlow
 import org.mifospay.core.data.mapper.pocket.toAccountStatus
 import org.mifospay.core.data.mapper.pocket.toDomainList
 import org.mifospay.core.data.repository.PocketRepository
 import org.mifospay.core.data.util.NetworkMonitor
 import org.mifospay.core.data.util.runAsDataState
-import org.mifospay.core.data.util.toForkScreenStateFlow
 import org.mifospay.core.data.util.withNetworkCheck
 import org.mifospay.core.model.enums.AccountType
 import org.mifospay.core.model.payload.PocketLinkPayload
@@ -98,19 +97,19 @@ class PocketRepositoryImp(
     // (`providePocketStore`). This repository method is a pure passthrough
     // to `asScreenStream` — the pre-store `syncPockets` + `addAccountDetails`
     // helpers moved to `kpt.core.store.wallet.pocket.PocketStore.kt`.
-    override fun getDetailedPocketAccountsScreen(
+    override fun getDetailedPocketAccountsStream(
         clientId: Long,
         scope: CoroutineScope,
-    ): Flow<ScreenState<List<DetailedPocketAccount>>> {
+    ): ScreenDataStream<List<DetailedPocketAccount>> {
         val store = checkNotNull(pocketStore) {
-            "getDetailedPocketAccountsScreen requires the `pocket` Store5 wiring. Verify " +
+            "getDetailedPocketAccountsStream requires the `pocket` Store5 wiring. Verify " +
                 "RepositoryModule bound AppStoreRegistry.Pocket and injected it here."
         }
         val netMon = checkNotNull(storeNetworkMonitor) {
-            "getDetailedPocketAccountsScreen requires kmptoolkit NetworkMonitor. Verify DataModule bound it."
+            "getDetailedPocketAccountsStream requires kmptoolkit NetworkMonitor. Verify DataModule bound it."
         }
         val fetchedAtRepo = checkNotNull(fetchedAtRepository) {
-            "getDetailedPocketAccountsScreen requires FetchedAtRepository. Verify DataModule bound it."
+            "getDetailedPocketAccountsStream requires FetchedAtRepository. Verify DataModule bound it."
         }
         return store.asScreenStream(
             key = PocketKey(clientId),
@@ -121,7 +120,7 @@ class PocketRepositoryImp(
             isEmpty = { it.isEmpty() },
             fetchPolicy = FetchPolicy.CACHE_FIRST_SWR,
             ttl = AppStoreRegistry.Ttl.POCKET,
-        ).state.toForkScreenStateFlow()
+        )
     }
 
     override suspend fun linkAccounts(
@@ -188,20 +187,20 @@ class PocketRepositoryImp(
     // (`provideLinkableAccountsStore`). This repository method is a pure
     // passthrough to `asScreenStream` — parity with
     // `getDetailedPocketAccountsScreen` above.
-    override fun getAvailableAccountsToLinkScreen(
+    override fun getAvailableAccountsToLinkStream(
         clientId: Long,
         scope: CoroutineScope,
-    ): Flow<ScreenState<List<LinkableAccount>>> {
+    ): ScreenDataStream<List<LinkableAccount>> {
         val store = checkNotNull(linkableAccountsStore) {
-            "getAvailableAccountsToLinkScreen requires the `linkableAccounts` Store5 wiring. " +
+            "getAvailableAccountsToLinkStream requires the `linkableAccounts` Store5 wiring. " +
                 "Verify RepositoryModule bound AppStoreRegistry.LinkableAccounts and injected it here."
         }
         val netMon = checkNotNull(storeNetworkMonitor) {
-            "getAvailableAccountsToLinkScreen requires kmptoolkit NetworkMonitor. " +
+            "getAvailableAccountsToLinkStream requires kmptoolkit NetworkMonitor. " +
                 "Verify DataModule bound it."
         }
         val fetchedAtRepo = checkNotNull(fetchedAtRepository) {
-            "getAvailableAccountsToLinkScreen requires FetchedAtRepository. " +
+            "getAvailableAccountsToLinkStream requires FetchedAtRepository. " +
                 "Verify DataModule bound it."
         }
         return store.asScreenStream(
@@ -213,7 +212,7 @@ class PocketRepositoryImp(
             isEmpty = { it.isEmpty() },
             fetchPolicy = FetchPolicy.CACHE_FIRST_SWR,
             ttl = AppStoreRegistry.Ttl.LINKABLE_ACCOUNTS,
-        ).state.toForkScreenStateFlow()
+        )
     }
 
     override fun getAvailableAccountsToLink(clientId: Long): Flow<DataState<List<LinkableAccount>>> {

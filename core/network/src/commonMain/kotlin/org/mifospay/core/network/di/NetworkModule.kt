@@ -11,6 +11,7 @@ package org.mifospay.core.network.di
 
 import de.jensklingenberg.ktorfit.Ktorfit
 import io.github.jan.supabase.logging.LogLevel
+import io.ktor.client.plugins.HttpTimeout
 import io.ktor.client.plugins.auth.providers.BasicAuthCredentials
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
@@ -81,6 +82,15 @@ val NetworkModule = module {
                             loggableHosts = DynamicLoggableHosts(configManager),
                         ),
                     ).config {
+                        // Fail-fast connect/request timeouts. The corebase default sets
+                        // request+socket to 60s but no connectTimeout; a shorter connect
+                        // bound + request timeout surfaces a stalled call as an Error/Retry
+                        // the offline-first layer handles, instead of a long spinner.
+                        install(HttpTimeout) {
+                            requestTimeoutMillis = 30_000
+                            connectTimeoutMillis = 20_000
+                            socketTimeoutMillis = 30_000
+                        }
                         install(DynamicBaseUrlPlugin) {
                             multiConfigProvider = configManager
                             urlType = MultiUrlConfigProvider.UrlType.SELF_SERVICE

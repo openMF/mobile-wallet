@@ -21,6 +21,7 @@ import org.mifospay.core.common.ScreenState
 import org.mifospay.core.data.repository.RecentPayeeRepository
 import org.mifospay.core.data.repository.SelfServiceRepository
 import org.mifospay.core.data.repository.ThirdPartyTransferRepository
+import org.mifospay.core.data.util.toForkScreenStateFlow
 import org.mifospay.core.datastore.UserPreferencesRepository
 import org.mifospay.core.model.account.RecentPayee
 import org.mifospay.core.model.beneficiary.Beneficiary
@@ -203,8 +204,12 @@ class IntraBankHubViewModel(
     }
 
     private fun loadBeneficiaries() {
+        val clientId = userPreferencesRepository.client.value?.id ?: return
         viewModelScope.launch {
-            selfServiceRepository.getBeneficiaryList()
+            // Offline-first: read beneficiaries through the Store5 beneficiary store
+            // (Room SoT + CACHE_FIRST_SWR) so the cached list renders offline.
+            selfServiceRepository.getBeneficiaryListStream(clientId, viewModelScope)
+                .state.toForkScreenStateFlow()
                 .onEach { screenState ->
                     when (screenState) {
                         is ScreenState.Loading -> {

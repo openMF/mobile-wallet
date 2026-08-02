@@ -11,8 +11,12 @@ package org.mifospay.feature.settings
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kpt.core.base.store.submit.SubmitState
+import kpt.core.base.store.submit.submitHandler
 import mobile_wallet.feature.settings.generated.resources.Res
 import mobile_wallet.feature.settings.generated.resources.feature_settings_alert_disable_account
 import mobile_wallet.feature.settings.generated.resources.feature_settings_alert_disable_account_desc
@@ -36,7 +40,6 @@ import org.mifospay.core.model.user.Language
 import org.mifospay.core.model.user.LanguageConfig
 import org.mifospay.core.model.user.toLanguage
 import org.mifospay.core.ui.utils.BaseViewModel
-import org.mifospay.feature.settings.SettingsAction.Internal.DisableAccountResult
 
 /**
  * `SavedStateHandle` key written by `internalMifosPasscodeScreen` and read by
@@ -89,6 +92,41 @@ class SettingsViewModel(
         )
     },
 ) {
+
+    // Template idiom (core-base/store): the disable-account one-shot write goes
+    // through a SubmitHandler instead of a hand-folded DataState result action.
+    // The handler owns the Submitting/Submitted/Failed lifecycle; we observe it
+    // to drive this screen's existing Loading/Error dialog + logout navigation,
+    // so the Screen is unchanged.
+    private val submitDisableAccount = viewModelScope.submitHandler<String>()
+
+    init {
+        submitDisableAccount.state
+            .onEach { submitState ->
+                when (submitState) {
+                    is SubmitState.Submitting -> {
+                        mutableStateFlow.update { it.copy(dialogState = DialogState.Loading) }
+                    }
+
+                    is SubmitState.Submitted -> {
+                        mutableStateFlow.update { it.copy(dialogState = null) }
+                        sendEvent(SettingsEvent.OnNavigateToLogout)
+                        submitDisableAccount.reset()
+                    }
+
+                    is SubmitState.Failed -> {
+                        val message = submitState.error.message ?: "Error"
+                        mutableStateFlow.update {
+                            it.copy(dialogState = DialogState.Error(message))
+                        }
+                        submitDisableAccount.reset()
+                    }
+
+                    SubmitState.Idle -> Unit
+                }
+            }
+            .launchIn(viewModelScope)
+    }
 
     override fun handleAction(action: SettingsAction) {
         when (action) {
@@ -165,8 +203,6 @@ class SettingsViewModel(
             }
 
             is SettingsAction.Internal.DisableAccount -> handleDisableAccount()
-
-            is DisableAccountResult -> handleDisableAccountResult(action)
 
             is SettingsAction.ToggleSystemAuth -> {
                 if (action.isCurrentlyRegistered) {
@@ -255,40 +291,15 @@ class SettingsViewModel(
     }
 
     private fun handleDisableAccount() {
-        mutableStateFlow.update {
-            it.copy(dialogState = DialogState.Loading)
-        }
-
         // TODO:: this shouldn't work, we need account id to block account
-        viewModelScope.launch {
-            val result = repository.blockAccount(state.client.id)
-            sendAction(DisableAccountResult(result))
-        }
-    }
-
-    private fun handleDisableAccountResult(action: DisableAccountResult) {
-        when (action.result) {
-            is DataState.Error -> {
-                mutableStateFlow.update {
-                    it.copy(
-                        dialogState = DialogState.Error(
-                            action.result.exception.message ?: "Error",
-                        ),
-                    )
-                }
-            }
-
-            is DataState.Loading -> {
-                mutableStateFlow.update {
-                    it.copy(dialogState = DialogState.Loading)
-                }
-            }
-
-            is DataState.Success -> {
-                mutableStateFlow.update {
-                    it.copy(dialogState = null)
-                }
-                sendEvent(SettingsEvent.OnNavigateToLogout)
+        // Submit through the handler — it drives Submitting/Submitted/Failed, observed
+        // in `init`. The block unwraps the repository's transitional DataState result:
+        // return the value on success, throw on error so the handler reports Failed.
+        submitDisableAccount.submit {
+            when (val result = repository.blockAccount(state.client.id)) {
+                is DataState.Success -> result.data
+                is DataState.Error -> throw result.exception
+                DataState.Loading -> error("blockAccount must not emit Loading")
             }
         }
     }
@@ -421,6 +432,5 @@ sealed interface SettingsAction {
 
     sealed interface Internal : SettingsAction {
         data object DisableAccount : Internal
-        data class DisableAccountResult(val result: DataState<String>) : Internal
     }
 }

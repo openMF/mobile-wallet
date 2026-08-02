@@ -16,6 +16,7 @@ import kotlinx.serialization.Serializable
 import org.mifospay.core.common.ScreenState
 import org.mifospay.core.common.getSerialized
 import org.mifospay.core.data.repository.SavingsAccountRepository
+import org.mifospay.core.data.util.toForkScreenStateFlow
 import org.mifospay.core.model.savingsaccount.SavingAccountDetail
 import org.mifospay.core.ui.utils.BaseViewModel
 import org.mifospay.feature.accounts.savingsaccount.details.SADState.ViewState.Error
@@ -43,7 +44,8 @@ internal class SavingAccountDetailViewModel(
         // + CACHE_FIRST_SWR + single-row upsert). Same `ScreenStateStream<SavingAccountDetail>`
         // shape; consumer branches are unchanged. Requires `viewModelScope` for
         // the stream's internal reconnect + periodic + SWR side-fetch coroutines.
-        repository.getAccountDetailScreen(state.accountId, scope = viewModelScope)
+        repository.getAccountDetailStream(state.accountId, scope = viewModelScope)
+            .state.toForkScreenStateFlow()
             .observeScreen { screenState ->
                 mutableStateFlow.update { it.copy(viewState = screenState.toViewState()) }
             }

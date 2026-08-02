@@ -14,9 +14,10 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
+import kpt.core.base.store.submit.SubmitState
+import kpt.core.base.store.submit.submitHandler
 import org.mifospay.core.common.DataState
 import org.mifospay.core.common.DateHelper
 import org.mifospay.core.common.ScreenState
@@ -26,7 +27,6 @@ import org.mifospay.core.data.repository.KycLevelRepository
 import org.mifospay.core.datastore.UserPreferencesRepository
 import org.mifospay.core.model.kyc.KYCLevel1Details
 import org.mifospay.core.ui.utils.BaseViewModel
-import org.mifospay.feature.kyc.KycLevel1Action.Internal.KycLevel1DetailsResult
 import org.mifospay.feature.kyc.KycLevel1State.DialogState.Error
 import kotlin.time.Clock
 import kotlin.time.ExperimentalTime
@@ -47,7 +47,43 @@ internal class KYCLevel1ViewModel(
         private const val KEY_STATE = "kyc_level_1_state"
     }
 
+    // Template idiom (core-base/store): the one-shot KYCLevel1 write (add/update) goes
+    // through a SubmitHandler instead of a hand-folded DataState result action. The handler
+    // owns the Submitting/Submitted/Failed lifecycle; we observe it below to drive this
+    // screen's existing Loading dialog + toast + navigate-to-level-2 UX, so the Screen is
+    // unchanged. Result type is String (the success toast message the write returns).
+    private val submitKyc = viewModelScope.submitHandler<String>()
+
     init {
+        submitKyc.state
+            .onEach { submitState ->
+                when (submitState) {
+                    is SubmitState.Submitting -> {
+                        mutableStateFlow.update {
+                            it.copy(dialogState = KycLevel1State.DialogState.Loading)
+                        }
+                    }
+
+                    is SubmitState.Submitted -> {
+                        mutableStateFlow.update { it.copy(dialogState = null) }
+                        sendEvent(KycLevel1Event.ShowToast(submitState.result))
+                        sendEvent(KycLevel1Event.NavigateToKycLevel2)
+                        submitKyc.reset()
+                    }
+
+                    is SubmitState.Failed -> {
+                        val message = submitState.error.message.toString()
+                        mutableStateFlow.update {
+                            it.copy(dialogState = Error(message))
+                        }
+                        submitKyc.reset()
+                    }
+
+                    SubmitState.Idle -> Unit
+                }
+            }
+            .launchIn(viewModelScope)
+
         stateFlow
             .onEach { savedStateHandle.setSerialized(key = KEY_STATE, value = it) }
             .launchIn(viewModelScope)
@@ -156,8 +192,6 @@ internal class KYCLevel1ViewModel(
             }
 
             KycLevel1Action.SubmitClicked -> initiateKycLevel1Submission()
-
-            is KycLevel1DetailsResult -> handleKycLevel1DetailsResult(action)
         }
     }
 
@@ -212,42 +246,23 @@ internal class KYCLevel1ViewModel(
             it.copy(dialogState = KycLevel1State.DialogState.Loading)
         }
 
-        viewModelScope.launch {
+        // Submit through the handler — it drives Submitting/Submitted/Failed, observed in
+        // `init`. The block unwraps the repository's transitional DataState result: return
+        // the value on success, throw on error so the handler reports Failed.
+        submitKyc.submit {
             val result = if (state.doesExist) {
                 kycLevelRepository.updateKYCLevel1Details(state.clientId, state.details)
             } else {
                 kycLevelRepository.addKYCLevel1Details(state.clientId, state.details)
             }
 
-            sendAction(KycLevel1DetailsResult(result))
-        }
-    }
-
-    private fun handleKycLevel1DetailsResult(action: KycLevel1DetailsResult) {
-        when (action.result) {
-            is DataState.Success -> {
-                mutableStateFlow.update {
-                    it.copy(dialogState = null)
-                }
-                sendEvent(KycLevel1Event.ShowToast(action.result.data))
-                sendEvent(KycLevel1Event.NavigateToKycLevel2)
-            }
-
-            is DataState.Error -> {
-                val message = action.result.exception.message.toString()
-                mutableStateFlow.update {
-                    it.copy(dialogState = Error(message))
-                }
-            }
-
-            is DataState.Loading -> {
-                mutableStateFlow.update {
-                    it.copy(dialogState = KycLevel1State.DialogState.Loading)
-                }
+            when (result) {
+                is DataState.Success -> result.data
+                is DataState.Error -> throw result.exception
+                DataState.Loading -> error("KYCLevel1 write must not emit Loading")
             }
         }
     }
-
 }
 
 @Serializable
@@ -311,8 +326,4 @@ internal sealed interface KycLevel1Action {
     data object DismissDialog : KycLevel1Action
     data object NavigateBack : KycLevel1Action
     data object NavigateToKycLevel2 : KycLevel1Action
-
-    sealed interface Internal : KycLevel1Action {
-        data class KycLevel1DetailsResult(val result: DataState<String>) : Internal
-    }
 }

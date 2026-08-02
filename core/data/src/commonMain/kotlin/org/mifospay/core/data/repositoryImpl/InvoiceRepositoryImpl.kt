@@ -17,13 +17,13 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import kpt.core.base.store.infra.FetchedAtRepository
 import kpt.core.base.store.screen.FetchPolicy
+import kpt.core.base.store.screen.ScreenDataStream
 import kpt.core.base.store.screen.asScreenStream
 import kpt.core.data.infra.NetworkMonitor as StoreNetworkMonitor
 import kpt.core.store.AppStoreRegistry
 import kpt.core.store.wallet.invoice.InvoiceKey
 import org.mifospay.core.common.DataState
 import org.mifospay.core.common.ScreenState
-import org.mifospay.core.data.util.toForkScreenStateFlow
 import org.mifospay.core.common.asScreenStateFlow
 import org.mifospay.core.data.repository.InvoiceRepository
 import org.mifospay.core.model.datatables.invoice.Invoice
@@ -64,19 +64,19 @@ class InvoiceRepositoryImpl(
     // dependencies (invoiceStore + NetworkMonitor + FetchedAtRepository).
     // If any is null (test wiring), we IllegalState — production DI in
     // RepositoryModule wires all three unconditionally.
-    override fun getInvoicesScreen(
+    override fun getInvoicesStream(
         clientId: Long,
         scope: CoroutineScope,
-    ): Flow<ScreenState<List<Invoice>>> {
+    ): ScreenDataStream<List<Invoice>> {
         val store = checkNotNull(invoiceStore) {
-            "getInvoicesScreen requires the `invoice` Store5 wiring. Verify " +
+            "getInvoicesStream requires the `invoice` Store5 wiring. Verify " +
                 "RepositoryModule bound AppStoreRegistry.Invoice and injected it here."
         }
         val netMon = checkNotNull(storeNetworkMonitor) {
-            "getInvoicesScreen requires kmptoolkit NetworkMonitor. Verify DataModule bound it."
+            "getInvoicesStream requires kmptoolkit NetworkMonitor. Verify DataModule bound it."
         }
         val fetchedAtRepo = checkNotNull(fetchedAtRepository) {
-            "getInvoicesScreen requires FetchedAtRepository. Verify DataModule bound it."
+            "getInvoicesStream requires FetchedAtRepository. Verify DataModule bound it."
         }
         return store.asScreenStream(
             key = InvoiceKey(clientId),
@@ -87,7 +87,7 @@ class InvoiceRepositoryImpl(
             isEmpty = { it.isEmpty() },
             fetchPolicy = FetchPolicy.CACHE_FIRST_SWR,
             ttl = AppStoreRegistry.Ttl.INVOICE,
-        ).state.toForkScreenStateFlow()
+        )
     }
 
     override suspend fun createInvoice(clientId: Long, invoice: InvoiceEntity): DataState<String> {

@@ -11,6 +11,7 @@ package org.mifospay.core.data.repository
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
+import kpt.core.base.store.screen.ScreenDataStream
 import org.mifospay.core.common.DataState
 import org.mifospay.core.common.ScreenState
 import org.mifospay.core.model.savedcards.CardPayload
@@ -50,10 +51,10 @@ interface SavedCardRepository {
      * @param scope Coroutine scope for the stream's internal helper coroutines
      *   (typically `viewModelScope`).
      */
-    fun getSavedCardsScreen(
+    fun getSavedCardsStream(
         clientId: Long,
         scope: CoroutineScope,
-    ): Flow<ScreenState<List<SavedCard>>>
+    ): ScreenDataStream<List<SavedCard>>
 
     fun getSavedCard(clientId: Long, cardId: Long): Flow<ScreenState<SavedCard>>
 

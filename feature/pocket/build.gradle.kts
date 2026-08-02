@@ -19,6 +19,12 @@ kotlin {
             implementation(compose.material3)
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
+
+            // Template idiom: ScreenDataStream + ScreenState (core-base/store) and
+            // ScreenContent (core-base/ui) so the pocket dashboard consumes the
+            // store's pre-decided ScreenState directly instead of a fork fold.
+            implementation(projects.coreBase.store)
+            implementation(projects.coreBase.ui)
         }
     }
 }

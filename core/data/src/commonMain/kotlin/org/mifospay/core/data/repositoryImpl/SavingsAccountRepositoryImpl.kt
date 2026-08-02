@@ -16,6 +16,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import kpt.core.base.store.infra.FetchedAtRepository
 import kpt.core.base.store.screen.FetchPolicy
+import kpt.core.base.store.screen.ScreenDataStream
 import kpt.core.base.store.screen.asScreenStream
 import kpt.core.data.infra.NetworkMonitor as StoreNetworkMonitor
 import kpt.core.store.AppStoreRegistry
@@ -23,7 +24,6 @@ import kpt.core.store.wallet.account.AccountDetailKey
 import org.mifospay.core.common.Constants
 import org.mifospay.core.common.DataState
 import org.mifospay.core.common.ScreenStateStream
-import org.mifospay.core.data.util.toForkScreenStateFlow
 import org.mifospay.core.common.asScreenStateFlow
 import org.mifospay.core.data.mapper.toModel
 import org.mifospay.core.data.mapper.toSavingDetail
@@ -84,19 +84,19 @@ class SavingsAccountRepositoryImpl(
     // dependencies (accountDetailStore + NetworkMonitor + FetchedAtRepository).
     // If any is null (test wiring), we IllegalState — production DI in
     // RepositoryModule wires all three unconditionally.
-    override fun getAccountDetailScreen(
+    override fun getAccountDetailStream(
         accountId: Long,
         scope: CoroutineScope,
-    ): ScreenStateStream<SavingAccountDetail> {
+    ): ScreenDataStream<SavingAccountDetail> {
         val store = checkNotNull(accountDetailStore) {
-            "getAccountDetailScreen requires the `accountDetail` Store5 wiring. Verify " +
+            "getAccountDetailStream requires the `accountDetail` Store5 wiring. Verify " +
                 "RepositoryModule bound AppStoreRegistry.AccountDetail and injected it here."
         }
         val netMon = checkNotNull(storeNetworkMonitor) {
-            "getAccountDetailScreen requires kmptoolkit NetworkMonitor. Verify DataModule bound it."
+            "getAccountDetailStream requires kmptoolkit NetworkMonitor. Verify DataModule bound it."
         }
         val fetchedAtRepo = checkNotNull(fetchedAtRepository) {
-            "getAccountDetailScreen requires FetchedAtRepository. Verify DataModule bound it."
+            "getAccountDetailStream requires FetchedAtRepository. Verify DataModule bound it."
         }
         return store.asScreenStream(
             key = AccountDetailKey(accountId),
@@ -106,7 +106,7 @@ class SavingsAccountRepositoryImpl(
             scope = scope,
             fetchPolicy = FetchPolicy.CACHE_FIRST_SWR,
             ttl = AppStoreRegistry.Ttl.ACCOUNT_DETAIL,
-        ).state.toForkScreenStateFlow()
+        )
     }
 
     override suspend fun createSavingsAccount(

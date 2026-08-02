@@ -14,13 +14,13 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.flowOn
 import kpt.core.base.store.infra.FetchedAtRepository
 import kpt.core.base.store.screen.FetchPolicy
+import kpt.core.base.store.screen.ScreenDataStream
 import kpt.core.base.store.screen.asScreenStream
 import kpt.core.data.infra.NetworkMonitor as StoreNetworkMonitor
 import kpt.core.store.AppStoreRegistry
 import kpt.core.store.wallet.office.OfficesKey
 import org.mifospay.core.common.ScreenStateStream
 import org.mifospay.core.common.asScreenStateFlow
-import org.mifospay.core.data.util.toForkScreenStateFlow
 import org.mifospay.core.data.repository.OfficeRepository
 import org.mifospay.core.model.office.Office
 import org.mifospay.core.network.SelfServiceApiManager
@@ -49,16 +49,16 @@ class OfficeRepositoryImpl(
     // store-adapter dependencies (officesStore + NetworkMonitor +
     // FetchedAtRepository). If any is null (test wiring), we IllegalState —
     // production DI in RepositoryModule wires all three unconditionally.
-    override fun getOfficesScreen(scope: CoroutineScope): ScreenStateStream<List<Office>> {
+    override fun getOfficesStream(scope: CoroutineScope): ScreenDataStream<List<Office>> {
         val store = checkNotNull(officesStore) {
-            "getOfficesScreen requires the `offices` Store5 wiring. Verify " +
+            "getOfficesStream requires the `offices` Store5 wiring. Verify " +
                 "RepositoryModule bound AppStoreRegistry.Offices and injected it here."
         }
         val netMon = checkNotNull(storeNetworkMonitor) {
-            "getOfficesScreen requires kmptoolkit NetworkMonitor. Verify DataModule bound it."
+            "getOfficesStream requires kmptoolkit NetworkMonitor. Verify DataModule bound it."
         }
         val fetchedAtRepo = checkNotNull(fetchedAtRepository) {
-            "getOfficesScreen requires FetchedAtRepository. Verify DataModule bound it."
+            "getOfficesStream requires FetchedAtRepository. Verify DataModule bound it."
         }
         return store.asScreenStream(
             key = OfficesKey,
@@ -69,6 +69,6 @@ class OfficeRepositoryImpl(
             isEmpty = { it.isEmpty() },
             fetchPolicy = FetchPolicy.CACHE_FIRST_SWR,
             ttl = AppStoreRegistry.Ttl.OFFICES,
-        ).state.toForkScreenStateFlow()
+        )
     }
 }

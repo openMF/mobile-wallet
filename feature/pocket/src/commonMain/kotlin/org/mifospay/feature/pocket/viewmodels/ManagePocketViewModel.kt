@@ -28,6 +28,14 @@ package org.mifospay.feature.pocket.viewmodels
 // hierarchy (`ManagePocketState` / `ManagePocketAction` / `ManagePocketDialogState` /
 // `ManagePocketEvent` / `ManagePocketAccount` / `AvailablePocketAccount`) is
 // preserved so `ManagePocketScreen` is untouched by either migration.
+//
+// The write paths (`linkAccounts` / `delinkAccounts`) then follow the template
+// SubmitHandler idiom (core-base/store `submitHandler`): the hand-folded
+// `when (DataState) { Success/Error/Loading }` result branches are replaced by
+// `submitLink` / `submitDelink` one-shot handlers whose Submitting/Submitted/Failed
+// lifecycle is observed in `init` and mapped to the SAME dialog UX (Loading overlay,
+// close-on-success + `refreshTrigger` re-fetch, StringResource Error dialog). The
+// Screen is again untouched — the observers reproduce the exact pre-migration state.
 
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -35,9 +43,13 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kpt.core.base.store.submit.SubmitState
+import kpt.core.base.store.submit.submitHandler
 import mobile_wallet.feature.pocket.generated.resources.Res
 import mobile_wallet.feature.pocket.generated.resources.feature_pocket_error_delink_account
 import mobile_wallet.feature.pocket.generated.resources.feature_pocket_error_link_accounts
@@ -47,6 +59,7 @@ import org.jetbrains.compose.resources.getString
 import org.mifospay.core.common.DataState
 import org.mifospay.core.common.ScreenState
 import org.mifospay.core.data.repository.PocketRepository
+import org.mifospay.core.data.util.toForkScreenStateFlow
 import org.mifospay.core.datastore.UserPreferencesRepository
 import org.mifospay.core.model.enums.AccountType
 import org.mifospay.core.model.payload.PocketLinkPayload
@@ -74,8 +87,94 @@ internal class ManagePocketViewModel(
 
     private var availableAccountsJob: Job? = null
 
+    // Template idiom (core-base/store): the link/delink one-shot WRITEs go through
+    // SubmitHandlers instead of hand-folded `DataState` result branches. Each handler
+    // owns its Submitting/Submitted/Failed lifecycle; the observers below reproduce the
+    // exact pre-migration dialog UX (Loading overlay → close on success → StringResource
+    // Error dialog on failure) so `ManagePocketScreen` is untouched. Two handlers because
+    // the success/error UX differs: link clears the selection + search on success and
+    // surfaces `feature_pocket_error_link_accounts`; delink just closes the dialog and
+    // surfaces `feature_pocket_error_delink_account`. Both re-fire `refreshTrigger` on
+    // success to pull the updated set back through the Store5 read pipe (parity with the
+    // pre-migration folds — the repo write path stays pure-online per D1).
+    private val submitLink = viewModelScope.submitHandler<Unit>()
+    private val submitDelink = viewModelScope.submitHandler<Unit>()
+
     init {
+        observeLinkSubmit()
+        observeDelinkSubmit()
         loadLinkedAccounts()
+    }
+
+    private fun observeLinkSubmit() {
+        submitLink.state
+            .onEach { submitState ->
+                when (submitState) {
+                    is SubmitState.Submitting -> {
+                        updateState { it.copy(dialogState = ManagePocketDialogState.Loading) }
+                    }
+
+                    is SubmitState.Submitted -> {
+                        updateState {
+                            it.copy(
+                                dialogState = null,
+                                selectedAccountIdentifiers = emptySet(),
+                                searchQuery = "",
+                            )
+                        }
+                        // re-fire the read stream so the newly-linked rows flow back
+                        // through the Store5 pipe (Room-write on the next fetch).
+                        refreshTrigger.tryEmit(Unit)
+                        submitLink.reset()
+                    }
+
+                    is SubmitState.Failed -> {
+                        updateState {
+                            it.copy(
+                                dialogState = ManagePocketDialogState.Error(
+                                    Res.string.feature_pocket_error_link_accounts,
+                                ),
+                            )
+                        }
+                        submitLink.reset()
+                    }
+
+                    SubmitState.Idle -> Unit
+                }
+            }
+            .launchIn(viewModelScope)
+    }
+
+    private fun observeDelinkSubmit() {
+        submitDelink.state
+            .onEach { submitState ->
+                when (submitState) {
+                    is SubmitState.Submitting -> {
+                        updateState { it.copy(dialogState = ManagePocketDialogState.Loading) }
+                    }
+
+                    is SubmitState.Submitted -> {
+                        updateState { it.copy(dialogState = null) }
+                        // re-subscribe to pull the updated set through the store.
+                        refreshTrigger.tryEmit(Unit)
+                        submitDelink.reset()
+                    }
+
+                    is SubmitState.Failed -> {
+                        updateState {
+                            it.copy(
+                                dialogState = ManagePocketDialogState.Error(
+                                    Res.string.feature_pocket_error_delink_account,
+                                ),
+                            )
+                        }
+                        submitDelink.reset()
+                    }
+
+                    SubmitState.Idle -> Unit
+                }
+            }
+            .launchIn(viewModelScope)
     }
 
     private fun loadLinkedAccounts() {
@@ -83,10 +182,10 @@ internal class ManagePocketViewModel(
             val unknownAccount = getString(Res.string.feature_pocket_unknown_account)
             refreshTrigger.onStart { emit(Unit) }
                 .flatMapLatest {
-                    pocketRepository.getDetailedPocketAccountsScreen(
+                    pocketRepository.getDetailedPocketAccountsStream(
                         clientId = state.clientId,
                         scope = viewModelScope,
-                    )
+                    ).state.toForkScreenStateFlow()
                 }
                 .collectLatest { screenState ->
                     handleLinkedAccounts(screenState, unknownAccount)
@@ -132,10 +231,10 @@ internal class ManagePocketViewModel(
             // the pre-migration DataState-shaped `getAvailableAccountsToLink`
             // path (which is preserved on the repository interface for any
             // residual caller compat but no longer consumed by this VM).
-            pocketRepository.getAvailableAccountsToLinkScreen(
+            pocketRepository.getAvailableAccountsToLinkStream(
                 clientId = state.clientId,
                 scope = viewModelScope,
-            ).collectLatest { screenState ->
+            ).state.toForkScreenStateFlow().collectLatest { screenState ->
                 handleAvailableAccounts(screenState, unknownAccount)
             }
         }
@@ -184,85 +283,49 @@ internal class ManagePocketViewModel(
 
         if (accountsToLink.isEmpty()) return
 
-        viewModelScope.launch {
-            updateState { it.copy(dialogState = ManagePocketDialogState.Loading) }
+        val payload = PocketLinkPayload(
+            accountsDetail = accountsToLink.map {
+                PocketLinkPayload.AccountDetail(
+                    accountId = it.accountId.toString(),
+                    accountType = it.accountType,
+                )
+            },
+        )
 
-            val payload = PocketLinkPayload(
-                accountsDetail = accountsToLink.map {
-                    PocketLinkPayload.AccountDetail(
-                        accountId = it.accountId.toString(),
-                        accountType = it.accountType,
-                    )
-                },
-            )
+        val explicitAccounts = accountsToLink.map { it.toDetailedPocketAccount() }
 
-            val explicitAccounts = accountsToLink.map { it.toDetailedPocketAccount() }
-
+        // Submit through the handler — it drives Submitting/Submitted/Failed, observed
+        // in `observeLinkSubmit()`. The block unwraps the repository's transitional
+        // DataState result: return the value on success, throw on error so the handler
+        // reports Failed.
+        submitLink.submit {
             when (
-                pocketRepository.linkAccounts(
+                val result = pocketRepository.linkAccounts(
                     payload = payload,
                     explicitlyAddedAccounts = explicitAccounts,
                     clientId = state.clientId,
                 )
             ) {
-                is DataState.Success -> {
-                    updateState {
-                        it.copy(
-                            dialogState = null,
-                            selectedAccountIdentifiers = emptySet(),
-                            searchQuery = "",
-                        )
-                    }
-                    // Phase-5 Batch-2: re-fire the read stream so the newly-linked
-                    // rows flow back through the Store5 pipe (Room-write is done by
-                    // the store's writer on the next fetch — the repo write path is
-                    // pure-online per RULE-GAP-IDEA-FIRST-001 / D1).
-                    refreshTrigger.tryEmit(Unit)
-                }
-
-                is DataState.Error -> {
-                    updateState {
-                        it.copy(
-                            dialogState = ManagePocketDialogState.Error(
-                                Res.string.feature_pocket_error_link_accounts,
-                            ),
-                        )
-                    }
-                }
-
-                DataState.Loading -> Unit
+                is DataState.Success -> result.data
+                is DataState.Error -> throw result.exception
+                DataState.Loading -> error("linkAccounts must not emit Loading")
             }
         }
     }
 
     private fun delinkAccount(account: ManagePocketAccount) {
-        viewModelScope.launch {
-            updateState { it.copy(dialogState = ManagePocketDialogState.Loading) }
-
+        // Submit through the handler — Submitting/Submitted/Failed observed in
+        // `observeDelinkSubmit()`; block unwraps the transitional DataState result.
+        submitDelink.submit {
             when (
-                pocketRepository.delinkAccounts(
+                val result = pocketRepository.delinkAccounts(
                     pocketAccountMappingIds = listOf(account.mappingId),
                     clientId = state.clientId,
                 )
             ) {
-                is DataState.Success -> {
-                    updateState { it.copy(dialogState = null) }
-                    // Phase-5 Batch-2: same rationale as `linkSelectedAccounts` —
-                    // re-subscribe to pull the updated set through the store.
-                    refreshTrigger.tryEmit(Unit)
-                }
-
-                is DataState.Error -> {
-                    updateState {
-                        it.copy(
-                            dialogState = ManagePocketDialogState.Error(
-                                Res.string.feature_pocket_error_delink_account,
-                            ),
-                        )
-                    }
-                }
-
-                DataState.Loading -> Unit
+                is DataState.Success -> result.data
+                is DataState.Error -> throw result.exception
+                DataState.Loading -> error("delinkAccounts must not emit Loading")
             }
         }
     }

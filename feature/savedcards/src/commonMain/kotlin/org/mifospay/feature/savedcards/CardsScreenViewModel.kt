@@ -9,33 +9,30 @@
  */
 package org.mifospay.feature.savedcards
 
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
+import kpt.core.base.store.screen.ScreenState
+import kpt.core.base.store.submit.SubmitState
+import kpt.core.base.store.submit.submitHandler
 import mobile_wallet.feature.savedcards.generated.resources.Res
 import mobile_wallet.feature.savedcards.generated.resources.feature_savedcards_confirm_delete_card
 import mobile_wallet.feature.savedcards.generated.resources.feature_savedcards_delete_card
 import org.jetbrains.compose.resources.StringResource
 import org.mifospay.core.common.DataState
-import org.mifospay.core.common.ScreenState
 import org.mifospay.core.common.getSerialized
 import org.mifospay.core.common.setSerialized
 import org.mifospay.core.data.repository.SavedCardRepository
 import org.mifospay.core.datastore.UserPreferencesRepository
-import org.mifospay.core.designsystem.icon.MifosIcons
 import org.mifospay.core.model.savedcards.SavedCard
 import org.mifospay.core.ui.utils.BaseViewModel
-import org.mifospay.feature.savedcards.CardAction.Internal.HandleCardDeleteResult
 import org.mifospay.feature.savedcards.createOrUpdate.CardAddEditType
 
 class CardsScreenViewModel(
@@ -54,45 +51,61 @@ class CardsScreenViewModel(
         private const val KEY_STATE = "saved_card_state"
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
-    val cardState = repository
-        // Phase-5 Batch-1 LEDGER read (GOAL D13) — switched from the transitional
-        // `getSavedCards(clientId)` (`asScreenStateFlow` shim over the raw Ktorfit
-        // flow) to the store-native `getSavedCardsScreen(...)` that consumes the
-        // `savedCards` Store5 read (`createStore` + Room SoT + CACHE_FIRST_SWR +
-        // atomic replacePage). Same `Flow<ScreenState<List<SavedCard>>>` shape;
-        // consumer branches (Loading/Empty/Content/Error) are unchanged. Requires
-        // `viewModelScope` for the stream's internal reconnect + periodic + SWR
-        // side-fetch coroutines.
-        .getSavedCardsScreen(state.clientId, scope = viewModelScope)
-        .mapLatest { result ->
-            // Fold ScreenState → existing 4-branch ViewState. Repo emits
-            // ScreenState.Empty when the underlying list is empty, so we map
-            // it directly to the feature's real Empty branch (add-card CTA).
-            // NoNetwork/Unauthenticated → Error until Phase-4 differentiates.
-            when (result) {
-                is ScreenState.Loading -> ViewState.Loading
+    // Template idiom (core-base/store): hold the native ScreenDataStream for the
+    // saved-cards list READ and expose its pre-decided `state` straight to the
+    // Screen's `ScreenContent`. No fork-ScreenState fold — DecisionEngine inside
+    // the stream owns every Loading / Empty / NoNetwork / Unauthenticated / Error /
+    // Content transition, and `refresh()` drives retry. The card WRITE actions
+    // (add / edit / delete) + dialog state below are unchanged (BaseViewModel MVI).
+    private val stream = repository.getSavedCardsStream(
+        clientId = state.clientId,
+        scope = viewModelScope,
+    )
 
-                is ScreenState.Empty -> ViewState.Empty
+    val cardState: StateFlow<ScreenState<List<SavedCard>>> = stream.state.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5_000),
+        initialValue = ScreenState.Loading,
+    )
 
-                is ScreenState.Content -> ViewState.Content(result.data)
+    fun retry() = stream.refresh()
 
-                is ScreenState.Error -> ViewState.Error(result.error.message.toString())
-
-                is ScreenState.NoNetwork ->
-                    ViewState.Error("No network. Please check your connection.")
-
-                is ScreenState.Unauthenticated ->
-                    ViewState.Error("Session expired. Please log in again.")
-            }
-        }
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5_000),
-            initialValue = ViewState.Loading,
-        )
+    // Template idiom (core-base/store): the one-shot card WRITE (deleteCard) goes
+    // through a SubmitHandler instead of a hand-folded DataState result action. The
+    // handler owns the Submitting/Submitted/Failed lifecycle; we observe it in `init`
+    // to drive the existing Loading/Error dialog + success toast, so the Screen and
+    // the delete-confirm dialog (DeleteCardClicked) are unchanged.
+    private val submitDelete = viewModelScope.submitHandler<String>()
 
     init {
+        submitDelete.state
+            .onEach { submitState ->
+                when (submitState) {
+                    is SubmitState.Submitting -> {
+                        mutableStateFlow.update {
+                            it.copy(dialogState = CardState.DialogState.Loading)
+                        }
+                    }
+
+                    is SubmitState.Submitted -> {
+                        mutableStateFlow.update { it.copy(dialogState = null) }
+                        sendEvent(CardEvent.ShowToast(submitState.result))
+                        submitDelete.reset()
+                    }
+
+                    is SubmitState.Failed -> {
+                        val message = submitState.error.message.toString()
+                        mutableStateFlow.update {
+                            it.copy(dialogState = CardState.DialogState.Error(message))
+                        }
+                        submitDelete.reset()
+                    }
+
+                    SubmitState.Idle -> Unit
+                }
+            }
+            .launchIn(viewModelScope)
+
         stateFlow
             .onEach { savedStateHandle.setSerialized(key = KEY_STATE, value = it) }
             .launchIn(viewModelScope)
@@ -133,44 +146,18 @@ class CardsScreenViewModel(
             }
 
             is CardAction.Internal.DeleteCard -> deleteCard(action)
-
-            is HandleCardDeleteResult -> handleCardDeleteResult(action)
         }
     }
 
     private fun deleteCard(action: CardAction.Internal.DeleteCard) {
-        mutableStateFlow.update {
-            it.copy(dialogState = CardState.DialogState.Loading)
-        }
-
-        viewModelScope.launch {
-            val result = repository.deleteCard(state.clientId, action.cardId)
-
-            sendAction(HandleCardDeleteResult(result))
-        }
-    }
-
-    private fun handleCardDeleteResult(action: HandleCardDeleteResult) {
-        when (action.result) {
-            is DataState.Loading -> {
-                mutableStateFlow.update {
-                    it.copy(dialogState = CardState.DialogState.Loading)
-                }
-            }
-
-            is DataState.Error -> {
-                val message = action.result.exception.message.toString()
-                mutableStateFlow.update {
-                    it.copy(dialogState = CardState.DialogState.Error(message))
-                }
-            }
-
-            is DataState.Success -> {
-                mutableStateFlow.update {
-                    it.copy(dialogState = null)
-                }
-
-                sendEvent(CardEvent.ShowToast(action.result.data))
+        // Submit through the handler — it drives Submitting/Submitted/Failed, observed
+        // in `init`. The block unwraps the repository's transitional DataState result:
+        // return the value on success, throw on error so the handler reports Failed.
+        submitDelete.submit {
+            when (val result = repository.deleteCard(state.clientId, action.cardId)) {
+                is DataState.Success -> result.data
+                is DataState.Error -> throw result.exception
+                is DataState.Loading -> error("deleteCard must not emit Loading")
             }
         }
     }
@@ -196,38 +183,6 @@ data class CardState(
     }
 }
 
-sealed interface ViewState {
-    val hasFab: Boolean
-    val isPullRefreshEnabled: Boolean
-
-    data object Loading : ViewState {
-        override val hasFab: Boolean get() = false
-        override val isPullRefreshEnabled: Boolean get() = false
-    }
-
-    data class Error(val message: String) : ViewState {
-        override val hasFab: Boolean get() = false
-        override val isPullRefreshEnabled: Boolean get() = false
-    }
-
-    data object Empty : ViewState {
-        val title: String get() = "No Saved Cards"
-        val message: String get() = "No saved cards found, click the button below to add a new card"
-        val btnText: String get() = "Add New Card"
-        val btnIcon: ImageVector get() = MifosIcons.Add
-
-        override val hasFab: Boolean get() = false
-        override val isPullRefreshEnabled: Boolean get() = true
-    }
-
-    data class Content(
-        val cards: List<SavedCard>,
-    ) : ViewState {
-        override val hasFab: Boolean get() = true
-        override val isPullRefreshEnabled: Boolean get() = true
-    }
-}
-
 sealed interface CardEvent {
     data class OnNavigateToCardDetails(val cardId: Long) : CardEvent
     data class OnNavigateToAddEdit(val type: CardAddEditType) : CardEvent
@@ -243,6 +198,5 @@ sealed interface CardAction {
 
     sealed interface Internal : CardAction {
         data class DeleteCard(val cardId: Long) : Internal
-        data class HandleCardDeleteResult(val result: DataState<String>) : Internal
     }
 }

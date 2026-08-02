@@ -9,30 +9,28 @@
  */
 package org.mifospay.feature.standing.instruction
 
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
+import kpt.core.base.store.screen.ScreenState
+import kpt.core.base.store.submit.SubmitState
+import kpt.core.base.store.submit.submitHandler
 import mobile_wallet.feature.standing_instruction.generated.resources.Res
 import mobile_wallet.feature.standing_instruction.generated.resources.feature_standing_instruction_delete
 import mobile_wallet.feature.standing_instruction.generated.resources.feature_standing_instruction_delete_message
 import org.jetbrains.compose.resources.StringResource
 import org.mifospay.core.common.DataState
-import org.mifospay.core.common.ScreenState
 import org.mifospay.core.common.getSerialized
 import org.mifospay.core.common.setSerialized
 import org.mifospay.core.data.repository.StandingInstructionRepository
 import org.mifospay.core.datastore.UserPreferencesRepository
-import org.mifospay.core.designsystem.icon.MifosIcons
 import org.mifospay.core.model.standinginstruction.StandingInstruction
 import org.mifospay.core.ui.utils.BaseViewModel
 import org.mifospay.feature.standing.instruction.createOrUpdate.SIAddEditType
@@ -53,45 +51,64 @@ class StandingInstructionViewModel(
         private const val KEY_STATE = "standing_instruction_state"
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
-    // Phase-5 Batch-3 cutover — switched from the transitional
-    // `getAllStandingInstructions(clientId)` shim to the store-backed
-    // `getAllStandingInstructionsScreen(clientId, scope)` (GOAL D13,
-    // `AppStoreRegistry.StandingInstruction`, offline-first via
-    // `wallet_standing_instructions` Room SoT, CACHE_FIRST_SWR band). The
-    // stateIn(...) 5-second WhileSubscribed keep-alive is preserved so a
-    // Compose-tab-away / return round-trip still hits the same live stream
-    // rather than resubscribing.
-    val viewState = siRepository.getAllStandingInstructionsScreen(
+    // Template idiom (core-base/store): the list READ holds the native
+    // ScreenDataStream and exposes its pre-decided `state` straight to the
+    // Screen's `ScreenContent`. No fork-ScreenState bridge, no 6→4 `when` fold,
+    // no read-only `SIViewState` — DecisionEngine inside the stream owns every
+    // Loading / Empty / NoNetwork / Unauthenticated / Error / Content transition,
+    // and `refresh()` drives pull-to-refresh + retry. The 5-second
+    // WhileSubscribed keep-alive survives a Compose tab-away / return round-trip.
+    // The delete WRITE below goes through a SubmitHandler (see `submitDelete`).
+    private val stream = siRepository.getAllStandingInstructionsStream(
         clientId = state.clientId,
         scope = viewModelScope,
-    ).mapLatest { result ->
-        // Fold ScreenState → the existing 4-branch SIViewState. Repo emits
-        // ScreenState.Empty when the underlying list is empty, so we route it
-        // to the feature's real Empty branch (add-SI CTA). NoNetwork /
-        // Unauthenticated → Error until Phase-4 differentiates.
-        when (result) {
-            is ScreenState.Loading -> SIViewState.Loading
-
-            is ScreenState.Empty -> SIViewState.Empty
-
-            is ScreenState.Content -> SIViewState.Content(result.data)
-
-            is ScreenState.Error -> SIViewState.Error(result.error.message.toString())
-
-            is ScreenState.NoNetwork ->
-                SIViewState.Error("No network. Please check your connection.")
-
-            is ScreenState.Unauthenticated ->
-                SIViewState.Error("Session expired. Please log in again.")
-        }
-    }.stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(5_000),
-        initialValue = SIViewState.Loading,
     )
 
+    val viewState: StateFlow<ScreenState<List<StandingInstruction>>> = stream.state.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5_000),
+        initialValue = ScreenState.Loading,
+    )
+
+    fun retry() = stream.refresh()
+
+    // Template idiom (core-base/store): the delete WRITE goes through a
+    // SubmitHandler instead of a hand-folded DataState result action. The handler
+    // owns the Submitting/Submitted/Failed lifecycle; we observe it to drive this
+    // screen's existing loading/error dialog + success toast. The list refresh is
+    // implicit — the reactive `getAllStandingInstructionsStream` re-emits once the
+    // record is gone, exactly as before.
+    private val submitDelete = viewModelScope.submitHandler<String>()
+
     init {
+        submitDelete.state
+            .onEach { submitState ->
+                when (submitState) {
+                    is SubmitState.Submitting -> {
+                        mutableStateFlow.update {
+                            it.copy(dialogState = SIUiState.DialogState.Loading)
+                        }
+                    }
+
+                    is SubmitState.Submitted -> {
+                        mutableStateFlow.update { it.copy(dialogState = null) }
+                        sendEvent(SIEvent.ShowToast(submitState.result))
+                        submitDelete.reset()
+                    }
+
+                    is SubmitState.Failed -> {
+                        val message = submitState.error.message.toString()
+                        mutableStateFlow.update {
+                            it.copy(dialogState = SIUiState.DialogState.Error(message))
+                        }
+                        submitDelete.reset()
+                    }
+
+                    SubmitState.Idle -> Unit
+                }
+            }
+            .launchIn(viewModelScope)
+
         stateFlow
             .onEach { savedStateHandle.setSerialized(key = KEY_STATE, value = it) }
             .launchIn(viewModelScope)
@@ -132,44 +149,19 @@ class StandingInstructionViewModel(
             }
 
             is SIAction.Internal.DeleteSI -> deleteSI(action)
-
-            is SIAction.Internal.HandleSIDeleteResult -> handleDeleteResult(action)
         }
     }
 
     private fun deleteSI(action: SIAction.Internal.DeleteSI) {
-        mutableStateFlow.update {
-            it.copy(dialogState = SIUiState.DialogState.Loading)
-        }
-
-        viewModelScope.launch {
-            val result = siRepository.deleteStandingInstruction(action.siId)
-
-            sendAction(SIAction.Internal.HandleSIDeleteResult(result))
-        }
-    }
-
-    private fun handleDeleteResult(action: SIAction.Internal.HandleSIDeleteResult) {
-        when (action.result) {
-            is DataState.Loading -> {
-                mutableStateFlow.update {
-                    it.copy(dialogState = SIUiState.DialogState.Loading)
-                }
-            }
-
-            is DataState.Error -> {
-                val message = action.result.exception.message.toString()
-                mutableStateFlow.update {
-                    it.copy(dialogState = SIUiState.DialogState.Error(message))
-                }
-            }
-
-            is DataState.Success -> {
-                mutableStateFlow.update {
-                    it.copy(dialogState = null)
-                }
-
-                sendEvent(SIEvent.ShowToast(action.result.data))
+        // Submit through the handler — it drives Submitting/Submitted/Failed,
+        // observed in `init`. The block unwraps the repository's transitional
+        // DataState: return the value on success, throw on error so the handler
+        // reports Failed.
+        submitDelete.submit {
+            when (val result = siRepository.deleteStandingInstruction(action.siId)) {
+                is DataState.Success -> result.data
+                is DataState.Error -> throw result.exception
+                DataState.Loading -> error("deleteStandingInstruction must not emit Loading")
             }
         }
     }
@@ -195,36 +187,6 @@ data class SIUiState(
     }
 }
 
-sealed interface SIViewState {
-    val hasFab: Boolean
-    val isPullRefreshEnabled: Boolean
-
-    data object Loading : SIViewState {
-        override val hasFab: Boolean get() = false
-        override val isPullRefreshEnabled: Boolean get() = false
-    }
-
-    data class Error(val message: String) : SIViewState {
-        override val hasFab: Boolean get() = false
-        override val isPullRefreshEnabled: Boolean get() = false
-    }
-
-    data object Empty : SIViewState {
-        val title: String get() = "No Standing Instructions"
-        val message: String get() = "No standing instructions found for this client."
-        val btnText: String get() = "Add New SI"
-        val btnIcon: ImageVector get() = MifosIcons.Add
-
-        override val hasFab: Boolean get() = false
-        override val isPullRefreshEnabled: Boolean get() = true
-    }
-
-    data class Content(val list: List<StandingInstruction>) : SIViewState {
-        override val hasFab: Boolean get() = true
-        override val isPullRefreshEnabled: Boolean get() = true
-    }
-}
-
 sealed interface SIEvent {
     data class ShowToast(val message: String) : SIEvent
     data class OnNavigateToSIDetails(val siId: Long) : SIEvent
@@ -241,6 +203,5 @@ sealed interface SIAction {
 
     sealed interface Internal : SIAction {
         data class DeleteSI(val siId: Long) : Internal
-        data class HandleSIDeleteResult(val result: DataState<String>) : Internal
     }
 }

@@ -14,11 +14,15 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.mapLatest
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import kpt.core.base.store.submit.SubmitState
+import kpt.core.base.store.submit.submitHandler
 import mobile_wallet.feature.accounts.generated.resources.Res
 import mobile_wallet.feature.accounts.generated.resources.delete_beneficiary_subtitle
 import mobile_wallet.feature.accounts.generated.resources.delete_beneficiary_title
@@ -33,7 +37,6 @@ import org.mifospay.core.model.account.Account
 import org.mifospay.core.model.account.DefaultAccount
 import org.mifospay.core.model.beneficiary.Beneficiary
 import org.mifospay.core.ui.utils.BaseViewModel
-import org.mifospay.feature.accounts.AccountAction.Internal.BeneficiaryDeleteResultReceived
 import org.mifospay.feature.accounts.AccountAction.Internal.DeleteBeneficiary
 import org.mifospay.feature.accounts.AccountEvent.OnAddEditSavingsAccount
 import org.mifospay.feature.accounts.savingsaccount.SavingsAddEditType
@@ -116,6 +119,44 @@ class AccountViewModel(
             initialValue = AccountState.ViewState.Loading,
         )
 
+    // Template idiom (core-base/store): the beneficiary-delete write goes through a
+    // SubmitHandler instead of a hand-folded DataState result action. The handler owns
+    // the Submitting/Submitted/Failed lifecycle; we observe it here to drive this
+    // screen's existing delete dialog + toast, so the Screen is unchanged.
+    private val submitDeleteBeneficiary = viewModelScope.submitHandler<String>()
+
+    init {
+        submitDeleteBeneficiary.state
+            .onEach { submitState ->
+                when (submitState) {
+                    is SubmitState.Submitting -> {
+                        mutableStateFlow.update {
+                            it.copy(dialogState = AccountState.DialogState.Loading)
+                        }
+                    }
+
+                    is SubmitState.Submitted -> {
+                        mutableStateFlow.update { it.copy(dialogState = null) }
+                        sendEvent(
+                            AccountEvent.ShowToast(Res.string.feature_accounts_beneficiary_deleted),
+                        )
+                        submitDeleteBeneficiary.reset()
+                    }
+
+                    is SubmitState.Failed -> {
+                        val message = submitState.error.message.toString()
+                        mutableStateFlow.update {
+                            it.copy(dialogState = AccountState.DialogState.Error(message))
+                        }
+                        submitDeleteBeneficiary.reset()
+                    }
+
+                    SubmitState.Idle -> Unit
+                }
+            }
+            .launchIn(viewModelScope)
+    }
+
     override fun handleAction(action: AccountAction) {
         when (action) {
             is AccountAction.CreateSavingsAccount -> {
@@ -174,8 +215,6 @@ class AccountViewModel(
             }
 
             is DeleteBeneficiary -> handleDeleteBeneficiary(action)
-
-            is BeneficiaryDeleteResultReceived -> handleBeneficiaryDeleteResult(action)
         }
     }
 
@@ -194,37 +233,14 @@ class AccountViewModel(
     }
 
     private fun handleDeleteBeneficiary(action: DeleteBeneficiary) {
-        mutableStateFlow.update { it.copy(dialogState = AccountState.DialogState.Loading) }
-
-        launchIO {
-            val result = repository.deleteBeneficiary(action.beneficiaryId)
-
-            sendAction(BeneficiaryDeleteResultReceived(result))
-        }
-    }
-
-    private fun handleBeneficiaryDeleteResult(action: BeneficiaryDeleteResultReceived) {
-        when (action.result) {
-            is DataState.Success -> {
-                mutableStateFlow.update {
-                    it.copy(dialogState = null)
-                }
-
-                sendEvent(AccountEvent.ShowToast(Res.string.feature_accounts_beneficiary_deleted))
-            }
-
-            is DataState.Error -> {
-                val message = action.result.exception.message.toString()
-
-                mutableStateFlow.update {
-                    it.copy(dialogState = AccountState.DialogState.Error(message))
-                }
-            }
-
-            DataState.Loading -> {
-                mutableStateFlow.update {
-                    it.copy(dialogState = AccountState.DialogState.Loading)
-                }
+        // Submit through the handler — it drives Submitting/Submitted/Failed, observed
+        // in `init`. The block unwraps the repository's transitional DataState result:
+        // return the value on success, throw on error so the handler reports Failed.
+        submitDeleteBeneficiary.submit {
+            when (val result = repository.deleteBeneficiary(action.beneficiaryId)) {
+                is DataState.Success -> result.data
+                is DataState.Error -> throw result.exception
+                DataState.Loading -> error("deleteBeneficiary must not emit Loading")
             }
         }
     }
@@ -294,6 +310,5 @@ sealed interface AccountAction {
 
     sealed interface Internal : AccountAction {
         data class DeleteBeneficiary(val beneficiaryId: Long) : Internal
-        data class BeneficiaryDeleteResultReceived(val result: DataState<String>) : Internal
     }
 }

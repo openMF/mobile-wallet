@@ -17,13 +17,13 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import kpt.core.base.store.infra.FetchedAtRepository
 import kpt.core.base.store.screen.FetchPolicy
+import kpt.core.base.store.screen.ScreenDataStream
 import kpt.core.base.store.screen.asScreenStream
 import kpt.core.data.infra.NetworkMonitor as StoreNetworkMonitor
 import kpt.core.store.AppStoreRegistry
 import kpt.core.store.wallet.client.ClientDetailKey
 import org.mifospay.core.common.DataState
 import org.mifospay.core.common.ScreenState
-import org.mifospay.core.data.util.toForkScreenStateFlow
 import org.mifospay.core.common.asScreenStateFlow
 import org.mifospay.core.data.mapper.toAccount
 import org.mifospay.core.data.mapper.toEntity
@@ -73,19 +73,19 @@ class ClientRepositoryImpl(
     // dependencies (clientDetailStore + NetworkMonitor + FetchedAtRepository).
     // If any is null (test wiring), we IllegalState — production DI in
     // RepositoryModule wires all three unconditionally.
-    override fun getClientInfoScreen(
+    override fun getClientInfoStream(
         clientId: Long,
         scope: CoroutineScope,
-    ): Flow<ScreenState<Client>> {
+    ): ScreenDataStream<Client> {
         val store = checkNotNull(clientDetailStore) {
-            "getClientInfoScreen requires the `clientDetail` Store5 wiring. Verify " +
+            "getClientInfoStream requires the `clientDetail` Store5 wiring. Verify " +
                 "RepositoryModule bound AppStoreRegistry.ClientDetail and injected it here."
         }
         val netMon = checkNotNull(storeNetworkMonitor) {
-            "getClientInfoScreen requires kmptoolkit NetworkMonitor. Verify DataModule bound it."
+            "getClientInfoStream requires kmptoolkit NetworkMonitor. Verify DataModule bound it."
         }
         val fetchedAtRepo = checkNotNull(fetchedAtRepository) {
-            "getClientInfoScreen requires FetchedAtRepository. Verify DataModule bound it."
+            "getClientInfoStream requires FetchedAtRepository. Verify DataModule bound it."
         }
         return store.asScreenStream(
             key = ClientDetailKey(clientId),
@@ -95,7 +95,7 @@ class ClientRepositoryImpl(
             scope = scope,
             fetchPolicy = FetchPolicy.CACHE_FIRST_SWR,
             ttl = AppStoreRegistry.Ttl.CLIENT_DETAIL,
-        ).state.toForkScreenStateFlow()
+        )
     }
 
     override suspend fun getClient(clientId: Long): DataState<Client> {

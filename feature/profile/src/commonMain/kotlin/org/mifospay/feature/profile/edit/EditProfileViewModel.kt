@@ -21,6 +21,8 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
+import kpt.core.base.store.submit.SubmitState
+import kpt.core.base.store.submit.submitHandler
 import mobile_wallet.feature.profile.generated.resources.Res
 import mobile_wallet.feature.profile.generated.resources.feature_profile_error_empty_email
 import mobile_wallet.feature.profile.generated.resources.feature_profile_error_empty_firstname
@@ -42,9 +44,7 @@ import org.mifospay.core.datastore.UserPreferencesRepository
 import org.mifospay.core.model.client.UpdatedClient
 import org.mifospay.core.ui.utils.BaseViewModel
 import org.mifospay.feature.profile.edit.EditProfileAction.Internal.HandleLoadClientImageResult
-import org.mifospay.feature.profile.edit.EditProfileAction.Internal.HandleUpdateClientImageResult
 import org.mifospay.feature.profile.edit.EditProfileAction.Internal.LoadClientImage
-import org.mifospay.feature.profile.edit.EditProfileAction.Internal.OnUpdateProfileResult
 import org.mifospay.feature.profile.edit.EditProfileState.DialogState.Error
 
 internal class EditProfileViewModel(
@@ -70,9 +70,109 @@ internal class EditProfileViewModel(
         private const val KEY = "edit_profile_state"
     }
 
+    // Template idiom (core-base/store): the one-shot profile writes go through
+    // SubmitHandlers instead of hand-folded DataState result actions. Each handler
+    // owns its own Submitting/Submitted/Failed lifecycle; we observe them in `init`
+    // to drive this screen's existing dialog + toast + navigate-back UX, so the
+    // Screen is unchanged. Three logically-distinct writes → three handlers:
+    //  - submitUpdateProfile  → clientRepository.updateClient (server profile)
+    //  - submitUpdateImage    → clientRepository.updateClientImage (only when an image is picked)
+    //  - submitClientProfile  → preferencesRepository.updateClientProfile (local prefs)
+    // The original chain (updateClient success → image [if any] → local prefs →
+    // toast + navigate-back) is reproduced by kicking the next write off the prior
+    // handler's terminal state.
+    private val submitUpdateProfile = viewModelScope.submitHandler<String>()
+    private val submitUpdateImage = viewModelScope.submitHandler<String>()
+    private val submitClientProfile = viewModelScope.submitHandler<Unit>()
+
     init {
         stateFlow
             .onEach { savedStateHandle.setSerialized(key = KEY, value = it) }
+            .launchIn(viewModelScope)
+
+        // updateClient: on failure surface the error dialog (raw exception message,
+        // matching the prior fold); on success continue to the image + local-prefs
+        // chain. No loading dialog — the prior fold's Loading branch never fired for
+        // this one-shot suspend call, so runtime UX is unchanged.
+        submitUpdateProfile.state
+            .onEach { submitState ->
+                when (submitState) {
+                    is SubmitState.Failed -> {
+                        mutableStateFlow.update {
+                            it.copy(
+                                dialogState = Error.StringMessage(submitState.error.message ?: ""),
+                            )
+                        }
+                        submitUpdateProfile.reset()
+                    }
+
+                    is SubmitState.Submitted -> {
+                        onProfileUpdated()
+                        submitUpdateProfile.reset()
+                    }
+
+                    is SubmitState.Submitting,
+                    SubmitState.Idle,
+                    -> Unit
+                }
+            }
+            .launchIn(viewModelScope)
+
+        // updateClientImage: on success show the image toast; on failure surface the
+        // error dialog. Either way, continue to the local-prefs write — the prior
+        // code ran updateClientProfile regardless of the image result.
+        submitUpdateImage.state
+            .onEach { submitState ->
+                when (submitState) {
+                    is SubmitState.Failed -> {
+                        mutableStateFlow.update {
+                            it.copy(
+                                dialogState = Error.StringMessage(submitState.error.message ?: ""),
+                            )
+                        }
+                        submitClientProfileUpdate()
+                        submitUpdateImage.reset()
+                    }
+
+                    is SubmitState.Submitted -> {
+                        sendEvent(
+                            EditProfileEvent.ShowToast(
+                                Res.string.feature_profile_profile_image_updated_successfully,
+                            ),
+                        )
+                        submitClientProfileUpdate()
+                        submitUpdateImage.reset()
+                    }
+
+                    is SubmitState.Submitting,
+                    SubmitState.Idle,
+                    -> Unit
+                }
+            }
+            .launchIn(viewModelScope)
+
+        // updateClientProfile (local prefs): on success show the profile toast and
+        // navigate back; on failure stay silent (the prior fold's `else -> {}`).
+        submitClientProfile.state
+            .onEach { submitState ->
+                when (submitState) {
+                    is SubmitState.Submitted -> {
+                        sendEvent(
+                            EditProfileEvent.ShowToast(
+                                Res.string.feature_profile_profile_updated_successfully,
+                            ),
+                        )
+                        sendEvent(EditProfileEvent.NavigateBack)
+                        submitClientProfile.reset()
+                    }
+
+                    is SubmitState.Failed -> submitClientProfile.reset()
+
+                    is SubmitState.Submitting,
+                    SubmitState.Idle,
+                    -> Unit
+                }
+            }
             .launchIn(viewModelScope)
 
         trySendAction(LoadClientImage(state.clientId))
@@ -122,15 +222,11 @@ internal class EditProfileViewModel(
 
             is EditProfileAction.PickProfileImage -> handlePickProfileImage(action)
 
-            is OnUpdateProfileResult -> handleUpdateProfileResult(action)
-
             is HandleLoadClientImageResult -> handleLoadClientImageResult(action)
 
             is LoadClientImage -> loadClientImage(action)
 
             is EditProfileAction.UpdateProfile -> handleUpdateProfile()
-
-            is HandleUpdateClientImageResult -> handleUpdateClientImageResult(action)
         }
     }
 
@@ -239,68 +335,49 @@ internal class EditProfileViewModel(
     }
 
     private fun initiateUpdateProfile() {
-        viewModelScope.launch {
-            val result = clientRepository.updateClient(state.clientId, state.updatedClient)
-
-            sendAction(OnUpdateProfileResult(result))
-        }
-    }
-
-    private fun handleUpdateProfileResult(action: OnUpdateProfileResult) {
-        when (action.result) {
-            is DataState.Error -> {
-                mutableStateFlow.update {
-                    it.copy(dialogState = Error.StringMessage(action.result.exception.message ?: ""))
-                }
-            }
-
-            is DataState.Loading -> {
-                mutableStateFlow.update {
-                    it.copy(dialogState = EditProfileState.DialogState.Loading)
-                }
-            }
-
-            is DataState.Success -> {
-                viewModelScope.launch {
-                    if (state.profileImage != null) {
-                        val result = clientRepository.updateClientImage(
-                            state.clientId,
-                            state.profileImage!!.decodeToString(),
-                        )
-                        sendAction(HandleUpdateClientImageResult(result))
-                    }
-
-                    val result = preferencesRepository.updateClientProfile(state.updatedClient)
-
-                    when (result) {
-                        is DataState.Success -> {
-                            sendEvent(EditProfileEvent.ShowToast(Res.string.feature_profile_profile_updated_successfully))
-                            sendEvent(EditProfileEvent.NavigateBack)
-                        }
-
-                        else -> {}
-                    }
-                }
+        // updateClient write → SubmitHandler. Unwrap the transitional DataState: return
+        // the value on success, throw on error so the handler reports Failed. The chain
+        // to the image + local-prefs writes is driven from the handler's terminal state.
+        submitUpdateProfile.submit {
+            when (val result = clientRepository.updateClient(state.clientId, state.updatedClient)) {
+                is DataState.Success -> result.data
+                is DataState.Error -> throw result.exception
+                DataState.Loading -> error("updateClient must not emit Loading")
             }
         }
     }
 
-    private fun handleUpdateClientImageResult(action: HandleUpdateClientImageResult) {
-        when (action.result) {
-            is DataState.Error -> {
-                mutableStateFlow.update {
-                    it.copy(dialogState = Error.StringMessage(action.result.exception.message ?: ""))
+    /**
+     * Runs after [submitUpdateProfile] succeeds. Mirrors the prior success branch:
+     * upload the picked image first (when present), then persist the local profile.
+     * When no image was picked, go straight to the local-prefs write.
+     */
+    private fun onProfileUpdated() {
+        val image = state.profileImage
+        if (image != null) {
+            submitUpdateImage.submit {
+                when (
+                    val result = clientRepository.updateClientImage(
+                        state.clientId,
+                        image.decodeToString(),
+                    )
+                ) {
+                    is DataState.Success -> result.data
+                    is DataState.Error -> throw result.exception
+                    DataState.Loading -> error("updateClientImage must not emit Loading")
                 }
             }
+        } else {
+            submitClientProfileUpdate()
+        }
+    }
 
-            is DataState.Loading -> {
-                mutableStateFlow.update {
-                    it.copy(dialogState = EditProfileState.DialogState.Loading)
-                }
-            }
-
-            is DataState.Success -> {
-                sendEvent(EditProfileEvent.ShowToast(Res.string.feature_profile_profile_image_updated_successfully))
+    private fun submitClientProfileUpdate() {
+        submitClientProfile.submit {
+            when (val result = preferencesRepository.updateClientProfile(state.updatedClient)) {
+                is DataState.Success -> result.data
+                is DataState.Error -> throw result.exception
+                DataState.Loading -> error("updateClientProfile must not emit Loading")
             }
         }
     }
@@ -401,14 +478,10 @@ sealed interface EditProfileAction {
         /**
          * Client-image load result. Uses [ScreenState] (not [DataState]) — the
          * `getClientImage` read path was migrated to `Flow<ScreenState<String>>`
-         * during the Phase-3 cutover. The write-path actions below stay on
-         * [DataState] because `updateClient` / `updateClientImage` are one-shot
-         * suspend calls that Phase-3 leaves on [DataState].
+         * during the Phase-3 cutover. The one-shot profile writes no longer have
+         * result actions here: `updateClient` / `updateClientImage` /
+         * `updateClientProfile` now go through SubmitHandlers in the ViewModel.
          */
         data class HandleLoadClientImageResult(val result: ScreenState<String>) : Internal
-
-        data class OnUpdateProfileResult(val result: DataState<String>) : Internal
-
-        data class HandleUpdateClientImageResult(val result: DataState<String>) : Internal
     }
 }

@@ -22,6 +22,8 @@ kotlin {
 
             implementation(projects.core.common)
             implementation(projects.core.ui)
+            // Template idiom: SubmitHandler (core-base/store) for one-shot writes.
+            implementation(projects.coreBase.store)
         }
     }
 }

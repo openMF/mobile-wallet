@@ -367,6 +367,7 @@ fun <Key : Any, Output : Any> Store<Key, Output>.asScreenStream(
     if (fetchPolicy is FetchPolicy.CACHE_FIRST_SWR) {
         scope.launch {
             var lastBand: FreshnessBand? = null
+            var lastFetchNeeded = false
             storeFlow.collect { storeData ->
                 val band = FreshnessBands.bandFor(
                     now = kotlin.time.Clock.System.now(),
@@ -374,9 +375,21 @@ fun <Key : Any, Output : Any> Store<Key, Output>.asScreenStream(
                     ttl = ttl,
                     lastError = storeData.error,
                 )
-                val isStale = band == FreshnessBand.Stale || band == FreshnessBand.VeryStale
-                val wasStale = lastBand == FreshnessBand.Stale || lastBand == FreshnessBand.VeryStale
-                if (isStale && !wasStale) {
+                // Fire the fetch when the cache is Stale/VeryStale/Initial OR EMPTY.
+                // An empty cache (`isEmpty` — no data yet) ALWAYS needs the first fetch,
+                // even when Store5 stamps a "now" `fetchedAt` on the empty SourceOfTruth
+                // read (which makes `bandFor` return Fresh): freshness is meaningless with
+                // no data. THIS was the on-device hang — every never-synced store emitted
+                // band=Fresh + isEmpty=true and its fetcher never fired, so the offline
+                // layer sat in Loading forever. Edge-detected via `lastFetchNeeded` so it
+                // fires exactly once (data arrives → isEmpty=false → no re-fire; a failed
+                // fetch that stays empty won't thrash — refresh()/retry()/reconnect re-fire
+                // through refreshTrigger).
+                val fetchNeeded = band == FreshnessBand.Stale ||
+                    band == FreshnessBand.VeryStale ||
+                    band == FreshnessBand.Initial ||
+                    storeData.isEmpty
+                if (fetchNeeded && !lastFetchNeeded) {
                     scope.launch {
                         try {
                             this@asScreenStream
@@ -411,6 +424,7 @@ fun <Key : Any, Output : Any> Store<Key, Output>.asScreenStream(
                     }
                 }
                 lastBand = band
+                lastFetchNeeded = fetchNeeded
             }
         }
     }
@@ -567,6 +581,7 @@ fun <Key : Any, Output : Any> Store<Key, Output>.asScreenStream(
     if (fetchPolicy is FetchPolicy.CACHE_FIRST_SWR) {
         scope.launch {
             var lastBand: FreshnessBand? = null
+            var lastFetchNeeded = false
             storeFlow.collect { storeData ->
                 val band = FreshnessBands.bandFor(
                     now = kotlin.time.Clock.System.now(),
@@ -574,9 +589,21 @@ fun <Key : Any, Output : Any> Store<Key, Output>.asScreenStream(
                     ttl = ttl,
                     lastError = storeData.error,
                 )
-                val isStale = band == FreshnessBand.Stale || band == FreshnessBand.VeryStale
-                val wasStale = lastBand == FreshnessBand.Stale || lastBand == FreshnessBand.VeryStale
-                if (isStale && !wasStale) {
+                // Fire the fetch when the cache is Stale/VeryStale/Initial OR EMPTY.
+                // An empty cache (`isEmpty` — no data yet) ALWAYS needs the first fetch,
+                // even when Store5 stamps a "now" `fetchedAt` on the empty SourceOfTruth
+                // read (which makes `bandFor` return Fresh): freshness is meaningless with
+                // no data. THIS was the on-device hang — every never-synced store emitted
+                // band=Fresh + isEmpty=true and its fetcher never fired, so the offline
+                // layer sat in Loading forever. Edge-detected via `lastFetchNeeded` so it
+                // fires exactly once (data arrives → isEmpty=false → no re-fire; a failed
+                // fetch that stays empty won't thrash — refresh()/retry()/reconnect re-fire
+                // through refreshTrigger).
+                val fetchNeeded = band == FreshnessBand.Stale ||
+                    band == FreshnessBand.VeryStale ||
+                    band == FreshnessBand.Initial ||
+                    storeData.isEmpty
+                if (fetchNeeded && !lastFetchNeeded) {
                     val revalidateKey = lastObservedKey
                     val revalidateCacheKey = currentCacheKey
                     if (revalidateKey != null && revalidateCacheKey != null) {
@@ -609,6 +636,7 @@ fun <Key : Any, Output : Any> Store<Key, Output>.asScreenStream(
                     }
                 }
                 lastBand = band
+                lastFetchNeeded = fetchNeeded
             }
         }
     }
