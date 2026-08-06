@@ -68,7 +68,7 @@ internal class SpecificTransactionsViewModel(
 
             is DataState.Error -> {
                 mutableStateFlow.update {
-                    it.copy(viewState = Error(action.result.exception.message.toString()))
+                    it.copy(viewState = Error(action.result.exception.message ?: "Unknown error occurred"))
                 }
             }
 
@@ -79,38 +79,36 @@ internal class SpecificTransactionsViewModel(
     }
 
     private fun handleTransferDetailReceive(transaction: Transaction) {
-        mutableStateFlow.update {
-            it.copy(viewState = Content(transaction, null))
+        transaction.transferId?.let { transferId ->
+            mutableStateFlow.update {
+                it.copy(viewState = Content(transaction, null))
+            }
+            accountRepository.getAccountTransfer(transferId)
+                .onEach { result: DataState<TransferDetail> ->
+                    when (result) {
+                        is DataState.Error -> {
+                            // Keep the already-loaded transaction visible; only the detail card is unavailable.
+                            mutableStateFlow.update {
+                                it.copy(viewState = Content(transaction, null))
+                            }
+                        }
+
+                        is DataState.Loading -> {
+                            // Transaction is already showing via Content(transaction, null); nothing to update.
+                        }
+
+                        is DataState.Success -> {
+                            mutableStateFlow.update {
+                                it.copy(viewState = Content(transaction, result.data))
+                            }
+                        }
+                    }
+                }.launchIn(viewModelScope)
+        } ?: run {
+            mutableStateFlow.update {
+                it.copy(viewState = Content(transaction, null))
+            }
         }
-        // TODO: below api not there for Self So Commented it
-//        transaction.transferId?.let { transferId ->
-//            accountRepository.getAccountTransfer(transferId)
-//                .onEach { result: DataState<TransferDetail> ->
-//                    when (result) {
-//                        is DataState.Error -> {
-//                            mutableStateFlow.update {
-//                                it.copy(viewState = Error(result.exception.message.toString()))
-//                            }
-//                        }
-//
-//                        is DataState.Loading -> {
-//                            mutableStateFlow.update {
-//                                it.copy(viewState = STState.ViewState.Loading)
-//                            }
-//                        }
-//
-//                        is DataState.Success -> {
-//                            mutableStateFlow.update {
-//                                it.copy(viewState = Content(transaction, result.data))
-//                            }
-//                        }
-//                    }
-//                }.launchIn(viewModelScope)
-//        } ?: run {
-//            mutableStateFlow.update {
-//                it.copy(viewState = Content(transaction, null))
-//            }
-//        }
     }
 }
 
