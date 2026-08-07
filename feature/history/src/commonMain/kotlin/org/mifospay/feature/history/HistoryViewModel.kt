@@ -10,9 +10,14 @@
 package org.mifospay.feature.history
 
 import androidx.lifecycle.viewModelScope
+import com.mobilebytelabs.kmptoolkit.pdfgenerator.ExperimentalPdfGeneratorApi
+import com.mobilebytelabs.kmptoolkit.pdfgenerator.PageConfig
+import com.mobilebytelabs.kmptoolkit.pdfgenerator.PdfError
+import com.mobilebytelabs.kmptoolkit.pdfgenerator.PdfGenerator
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import mobile_wallet.feature.history.generated.resources.Res
 import mobile_wallet.feature.history.generated.resources.feature_history_error
 import mobile_wallet.feature.history.generated.resources.feature_history_no_account
@@ -24,10 +29,14 @@ import org.mifospay.core.model.account.Account
 import org.mifospay.core.model.savingsaccount.Transaction
 import org.mifospay.core.model.savingsaccount.TransactionType
 import org.mifospay.core.ui.utils.BaseViewModel
+import org.mifospay.feature.history.components.HistoryHtmlTemplate
 
-class HistoryViewModel(
+class HistoryViewModel
+@OptIn(ExperimentalPdfGeneratorApi::class)
+constructor(
     private val preferencesRepository: UserPreferencesRepository,
     private val repository: SelfServiceRepository,
+    private val pdfGenerator: PdfGenerator,
 ) : BaseViewModel<HistoryState, HistoryEvent, HistoryAction>(
     initialState = run {
         val clientId = requireNotNull(preferencesRepository.clientId.value)
@@ -52,6 +61,12 @@ class HistoryViewModel(
             is HistoryAction.OnApplyFilterClick -> handleApplyFilterClick()
 
             is HistoryAction.SetSelectedAccount -> handleSetSelectedAccount(action.account)
+
+            is HistoryAction.ExportPdf -> {
+                viewModelScope.launch {
+                    exportPdf()
+                }
+            }
 
             HistoryAction.ClearFilters -> handleClearFilters()
         }
@@ -197,6 +212,33 @@ class HistoryViewModel(
             )
         }
     }
+
+    @OptIn(ExperimentalPdfGeneratorApi::class)
+    private suspend fun exportPdf() {
+        if (state.isExportingPdf) return
+        val content = state.viewState as? HistoryState.ViewState.Content ?: return
+
+        mutableStateFlow.update { it.copy(isExportingPdf = true) }
+        try {
+            val html = HistoryHtmlTemplate.generate(
+                accountNumber = state.selectedAccount?.number.orEmpty(),
+                transactionType = state.selectedTransactionType.name,
+                transactions = content.list,
+            )
+
+            try {
+                pdfGenerator.generateAndSharePdf(
+                    htmlContent = html,
+                    fileName = "transaction_history.pdf",
+                    pageConfig = PageConfig(),
+                )
+            } catch (e: PdfError) {
+                sendEvent(HistoryEvent.PdfExportError(message = "Couldn't export PDF: ${e.message}"))
+            }
+        } finally {
+            mutableStateFlow.update { it.copy(isExportingPdf = false) }
+        }
+    }
 }
 
 data class HistoryState(
@@ -207,6 +249,7 @@ data class HistoryState(
     val accounts: List<Account> = emptyList(),
     val selectedAccount: Account? = null,
     val showFilter: Boolean = false,
+    val isExportingPdf: Boolean = false,
 ) {
     sealed interface ViewState {
         data object Loading : ViewState
@@ -218,6 +261,7 @@ data class HistoryState(
 
 sealed interface HistoryEvent {
     data class OnTransactionDetail(val transferId: Long) : HistoryEvent
+    data class PdfExportError(val message: String) : HistoryEvent
 }
 
 sealed interface HistoryAction {
@@ -227,4 +271,6 @@ sealed interface HistoryAction {
     data class SetSelectedAccount(val account: Account) : HistoryAction
     data object OnApplyFilterClick : HistoryAction
     data object ClearFilters : HistoryAction
+
+    data object ExportPdf : HistoryAction
 }

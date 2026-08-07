@@ -22,17 +22,21 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import kotlinx.coroutines.launch
 import mobile_wallet.feature.history.generated.resources.Res
 import mobile_wallet.feature.history.generated.resources.feature_history_empty
 import mobile_wallet.feature.history.generated.resources.feature_history_empty_filter
@@ -61,6 +65,8 @@ fun HistoryScreen(
     viewModel: HistoryViewModel = koinViewModel(),
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
+    val snackbarHostState = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
 
     EventsEffect(viewModel) { event ->
         when (event) {
@@ -69,12 +75,17 @@ fun HistoryScreen(
                     viewTransferDetail.invoke(accountId, event.transferId)
                 }
             }
+
+            is HistoryEvent.PdfExportError -> {
+                scope.launch { snackbarHostState.showSnackbar(event.message) }
+            }
         }
     }
 
     HistoryScreenContent(
         modifier = modifier,
         state = state,
+        snackbarHostState = snackbarHostState,
         onAction = remember(viewModel) {
             { action -> viewModel.trySendAction(action) }
         },
@@ -85,10 +96,12 @@ fun HistoryScreen(
 internal fun HistoryScreenContent(
     state: HistoryState,
     modifier: Modifier = Modifier,
+    snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
     onAction: (HistoryAction) -> Unit,
 ) {
     MifosScaffold(
         modifier = modifier.fillMaxSize(),
+        snackbarHostState = snackbarHostState,
     ) { paddingValues ->
         when (state.viewState) {
             is HistoryState.ViewState.Loading -> MifosProgressIndicator()
@@ -121,8 +134,12 @@ internal fun HistoryScreenContent(
                     HistoryScreenHeader(
                         accountNo = state.selectedAccount?.number ?: "",
                         selectedTransactionType = state.selectedTransactionType,
+                        isExportingPdf = state.isExportingPdf,
                         onFilterClick = {
                             onAction(HistoryAction.OnFilterClick)
+                        },
+                        onExportClick = {
+                            onAction(HistoryAction.ExportPdf)
                         },
                     )
                     if (state.viewState.list.isEmpty()) {
@@ -171,8 +188,10 @@ internal fun HistoryScreenContent(
 private fun HistoryScreenHeader(
     accountNo: String,
     selectedTransactionType: TransactionType,
+    isExportingPdf: Boolean,
     modifier: Modifier = Modifier,
     onFilterClick: () -> Unit,
+    onExportClick: () -> Unit,
 ) {
     Row(
         modifier = modifier
@@ -228,6 +247,23 @@ private fun HistoryScreenHeader(
                         .size(6.dp)
                         .clip(CircleShape)
                         .background(KptTheme.colorScheme.error),
+                )
+            }
+        }
+
+        IconButton(
+            onClick = onExportClick,
+            enabled = !isExportingPdf,
+        ) {
+            if (isExportingPdf) {
+                CircularProgressIndicator(
+                    modifier = Modifier.size(20.dp),
+                    strokeWidth = 2.dp,
+                )
+            } else {
+                Icon(
+                    imageVector = MifosIcons.Download,
+                    contentDescription = "Export PDF",
                 )
             }
         }
