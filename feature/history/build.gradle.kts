@@ -25,8 +25,8 @@ kotlin {
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
             implementation(libs.kotlinx.datetime)
-            implementation("io.github.mobilebytelabs:cmp-pdf-generator:3.5.10")
-            implementation("org.jetbrains.kotlinx:kotlinx-html:0.12.0")
+            implementation(libs.cmp.pdf.generator)
+            implementation(libs.kotlinx.html)
         }
     }
 }
