@@ -18,11 +18,15 @@ android {
 kotlin {
     sourceSets {
         commonMain.dependencies {
+            implementation(projects.core.common)
             implementation(compose.ui)
             implementation(compose.foundation)
             implementation(compose.material3)
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
+            implementation(libs.kotlinx.datetime)
+            implementation(libs.cmp.pdf.generator)
+            implementation(libs.kotlinx.html)
         }
     }
 }

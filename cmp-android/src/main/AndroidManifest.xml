@@ -67,6 +67,17 @@
                 android:resource="@xml/provider_paths" />
         </provider>
 
+        <!-- Required by cmp-pdf-generator's PdfOutput.Share/Uri, which hardcodes this authority -->
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths" />
+        </provider>
+
         <!-- Disable collection of AD_ID for all build variants -->
         <meta-data
             android:name="google_analytics_adid_collection_enabled"
