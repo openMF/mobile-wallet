@@ -9,18 +9,14 @@
  */
 package kpt.core.data.di
 
+import io.github.mobilebytelabs.kmptoolkit.networkmonitor.NetworkMonitorProvider
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kpt.core.base.common.di.CommonModule
 import kpt.core.base.store.infra.FetchedAtRepository
-import kpt.core.base.store.submit.OfflineSubmitSyncer
-import kpt.core.base.store.submit.SubmitOutbox
-import io.github.mobilebytelabs.kmptoolkit.networkmonitor.NetworkMonitorProvider
 import kpt.core.data.infra.NetworkMonitor
-import kpt.core.data.infra.impl.RoomBookkeeper
 import kpt.core.data.infra.impl.RoomFetchedAtRepository
-import kpt.core.data.infra.impl.RoomSubmitOutbox
 import kpt.core.data.user.UserDataRepository
 import kpt.core.data.user.UserLogoutManager
 import kpt.core.data.user.impl.UserDataRepositoryImpl
@@ -33,7 +29,6 @@ import org.koin.core.module.Module
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind
 import org.koin.dsl.module
-import org.mobilenativefoundation.store.store5.Bookkeeper
 
 val DataModule = module {
     includes(platformModule, CommonModule, DatabaseModule, DatastoreModule, NetworkModule)
@@ -54,10 +49,7 @@ val DataModule = module {
     // App-scoped CoroutineScope for cross-VM long-running coroutines (framework infra).
     single<CoroutineScope> { CoroutineScope(SupervisorJob() + Dispatchers.Default) }
 
-
     single<UserLogoutManager> { UserLogoutManagerImpl(get(), get(), get()) }
-
 }
 
 expect val platformModule: Module
-

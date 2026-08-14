@@ -9,12 +9,8 @@
  */
 package kpt.core.network.di
 
-import de.jensklingenberg.ktorfit.Ktorfit
 import kpt.core.base.network.SupabaseConfigClient
 import kpt.core.base.network.SupabaseCredentials
-import kpt.core.base.network.httpClient
-import kpt.core.base.network.setupDefaultHttpClient
-import kpt.core.network.BuildKonfig
 import org.koin.dsl.module
 import kpt.core.network.config.SupabaseCredentials as GeneratedSupabaseCredentials
 
@@ -44,5 +40,4 @@ val NetworkModule = module {
     // file is absent, so the client stays inert until a fork provides a project).
     single<SupabaseCredentials> { GeneratedSupabaseCredentials }
     single { SupabaseConfigClient(credentials = get()) }
-
 }

@@ -5,7 +5,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 package org.mifospay.feature.profile
 
@@ -16,11 +16,11 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kpt.core.base.store.screen.ScreenState
 import org.jetbrains.compose.resources.StringResource
-import org.mifospay.core.common.ScreenState as CommonScreenState
 import org.mifospay.core.data.repository.ClientRepository
 import org.mifospay.core.datastore.UserPreferencesRepository
 import org.mifospay.core.model.client.Client
 import org.mifospay.core.ui.utils.BaseViewModel
+import org.mifospay.core.common.ScreenState as CommonScreenState
 
 internal class ProfileViewModel(
     private val preferencesRepository: UserPreferencesRepository,

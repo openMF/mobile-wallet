@@ -12,6 +12,7 @@ package cmp.navigation
 import cmp.navigation.authenticated.AuthenticatedGraphRoute
 import cmp.navigation.authenticatednavbar.AuthenticatedNavbarRoute
 import cmp.navigation.splash.SplashRoute
+import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.serializer
 import kotlin.test.Test
 import kotlin.test.assertNotNull
@@ -45,6 +46,7 @@ class NavigationGraphSmokeTest {
         AuthenticatedNavbarRoute,
     )
 
+    @OptIn(InternalSerializationApi::class)
     @Test
     fun `every parameterless route is @Serializable`() {
         parameterlessRoutes.forEach { route ->

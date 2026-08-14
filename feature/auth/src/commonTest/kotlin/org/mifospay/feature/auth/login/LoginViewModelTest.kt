@@ -5,25 +5,35 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import dev.mokkery.answering.returns
+import dev.mokkery.every
 import dev.mokkery.everySuspend
+import dev.mokkery.matcher.any
 import dev.mokkery.mock
 import dev.mokkery.verifySuspend
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import org.mifospay.core.common.DataState
+import org.mifospay.core.data.repository.AuthenticationRepository
+import org.mifospay.core.data.repository.ClientRepository
+import org.mifospay.core.datastore.UserPreferencesRepository
 import org.mifospay.core.domain.LoginUseCase
+import org.mifospay.core.model.client.Client
+import org.mifospay.core.model.instance.InterbankServer
+import org.mifospay.core.model.instance.ServerInstance
 import org.mifospay.core.model.user.UserInfo
+import org.mifospay.core.network.config.InstanceConfigManager
 import org.mifospay.feature.auth.login.LoginAction
 import org.mifospay.feature.auth.login.LoginEvent
 import org.mifospay.feature.auth.login.LoginState
@@ -41,16 +51,33 @@ import kotlin.test.assertTrue
 class LoginViewModelTest {
     private val testDispatcher: CoroutineDispatcher = StandardTestDispatcher()
 
-    private val loginUseCase: LoginUseCase = mock()
+    // `LoginUseCase` is a final class (the `@OpenForMokkery` all-open plugin is not
+    // wired in this module), so it cannot be `mock()`ed. Build a REAL use-case over
+    // mocked collaborators and stub the underlying repository calls instead.
+    private val authenticationRepository: AuthenticationRepository = mock()
+    private val clientRepository: ClientRepository = mock()
+    private val userPreferencesRepository: UserPreferencesRepository = mock {
+        every { selectedInstance } returns MutableStateFlow<ServerInstance?>(null)
+        every { selectedInterbankInstance } returns MutableStateFlow<InterbankServer?>(null)
+    }
 
+    private lateinit var loginUseCase: LoginUseCase
     private lateinit var viewModel: LoginViewModel
 
     @BeforeTest
     fun setUp() {
         Dispatchers.setMain(testDispatcher)
 
+        loginUseCase = LoginUseCase(
+            repository = authenticationRepository,
+            clientRepository = clientRepository,
+            userPreferencesRepository = userPreferencesRepository,
+            ioDispatcher = testDispatcher,
+        )
+
         viewModel = LoginViewModel(
             loginUseCase = loginUseCase,
+            instanceConfigManager = InstanceConfigManager(userPreferencesRepository),
             savedStateHandle = SavedStateHandle(),
         )
     }
@@ -110,29 +137,15 @@ class LoginViewModelTest {
     /**
      * Tests that correct credentials result in a success state with no error dialog.
      *
-     * Uses [everySuspend] to mock suspend call and [verifySuspend] to verify usage.
+     * Stubs the repository chain the real [LoginUseCase] walks and verifies the
+     * authenticate call via [verifySuspend].
      */
     @Test
     fun givenCorrectCredentials_whenLoginClicked_thenNoErrorShown() = runTest {
-        /*
-         * Mocks the LoginUseCase to return a successful user info when invoked.
-         */
-        everySuspend {
-            loginUseCase.invoke("Mifos", "MifosPassword")
-        } returns DataState.Success(
-            UserInfo(
-                userId = 1,
-                username = "abc",
-                base64EncodedAuthenticationKey = "fake-auth-key",
-                authenticated = true,
-                officeId = 1,
-                officeName = "Main Office",
-                roles = emptyList(),
-                permissions = emptyList(),
-                clients = listOf(1),
-                shouldRenewPassword = false,
-                isTwoFactorAuthenticationRequired = false,
-            ),
+        stubSuccessfulLogin(
+            username = "Mifos",
+            password = "MifosPassword",
+            userInfo = validUserInfo(username = "abc"),
         )
 
         viewModel.trySendAction(LoginAction.UsernameChanged("Mifos"))
@@ -142,10 +155,10 @@ class LoginViewModelTest {
         advanceUntilIdle()
 
         /*
-         * Verifies that loginUseCase was invoked with the correct credentials.
+         * Verifies that the authentication repository was hit with the correct credentials.
          */
         verifySuspend {
-            loginUseCase.invoke("Mifos", "MifosPassword")
+            authenticationRepository.authenticate("Mifos", "MifosPassword")
         }
 
         assertNull(viewModel.stateFlow.value.dialogState)
@@ -157,10 +170,11 @@ class LoginViewModelTest {
     @Test
     fun givenIncorrectCredentials_whenLoginClicked_thenErrorDialogShown() = runTest {
         /*
-         * Mocks the LoginUseCase to return DataState.Error for wrong credentials.
+         * Mocks the authentication repository to fail — the use-case maps this to a
+         * DataState.Error("Invalid credentials").
          */
         everySuspend {
-            loginUseCase.invoke("Hekmat", "MyPassword")
+            authenticationRepository.authenticate("Hekmat", "MyPassword")
         } returns DataState.Error(Exception("Invalid Credentials"))
 
         viewModel.trySendAction(LoginAction.UsernameChanged("Hekmat"))
@@ -170,15 +184,15 @@ class LoginViewModelTest {
         advanceUntilIdle()
 
         /*
-         * Verifies that loginUseCase was invoked with the provided wrong credentials.
+         * Verifies that authentication was attempted with the provided wrong credentials.
          */
         verifySuspend {
-            loginUseCase.invoke("Hekmat", "MyPassword")
+            authenticationRepository.authenticate("Hekmat", "MyPassword")
         }
 
         val dialog = viewModel.stateFlow.value.dialogState
         assertIs<LoginState.DialogState.Error>(dialog)
-        assertEquals("Invalid Credentials", dialog.message)
+        assertEquals("Invalid credentials", dialog.message)
     }
 
     /**
@@ -197,22 +211,10 @@ class LoginViewModelTest {
      */
     @Test
     fun givenCorrectCredentials_whenLoginSucceeds_thenNavigateToPasscodeScreenEmitted() = runTest {
-        everySuspend {
-            loginUseCase.invoke("validUser", "validPass")
-        } returns DataState.Success(
-            UserInfo(
-                userId = 1,
-                username = "validUser",
-                base64EncodedAuthenticationKey = "auth",
-                authenticated = true,
-                officeId = 1,
-                officeName = "HQ",
-                roles = emptyList(),
-                permissions = emptyList(),
-                clients = listOf(1),
-                shouldRenewPassword = false,
-                isTwoFactorAuthenticationRequired = false,
-            ),
+        stubSuccessfulLogin(
+            username = "validUser",
+            password = "validPass",
+            userInfo = validUserInfo(username = "validUser"),
         )
 
         viewModel.trySendAction(LoginAction.UsernameChanged("validUser"))
@@ -221,15 +223,65 @@ class LoginViewModelTest {
         advanceUntilIdle()
 
         /*
-         * Verifies that loginUseCase was invoked with the correct credentials.
+         * Verifies that authentication was attempted with the correct credentials.
          */
         verifySuspend {
-            loginUseCase.invoke("validUser", "validPass")
+            authenticationRepository.authenticate("validUser", "validPass")
         }
 
         viewModel.eventFlow.test {
-            // Expect NavigateToPasscodeScreen after successful login
+            // Expect NavigateToMifosPasscodeScreen after successful login
             assertTrue(awaitItem() is LoginEvent.NavigateToMifosPasscodeScreen)
         }
     }
+
+    /**
+     * Stubs the full repository chain the real [LoginUseCase] walks on a successful login:
+     * authenticate → updateToken → getClient → updateClientInfo → updateUserInfo.
+     */
+    private fun stubSuccessfulLogin(username: String, password: String, userInfo: UserInfo) {
+        everySuspend {
+            authenticationRepository.authenticate(username, password)
+        } returns DataState.Success(userInfo)
+        everySuspend { userPreferencesRepository.updateToken(any()) } returns DataState.Success(Unit)
+        everySuspend { clientRepository.getClient(any()) } returns DataState.Success(testClient)
+        everySuspend {
+            userPreferencesRepository.updateClientInfo(any())
+        } returns DataState.Success(Unit)
+        everySuspend {
+            userPreferencesRepository.updateUserInfo(any())
+        } returns DataState.Success(Unit)
+    }
+
+    private fun validUserInfo(username: String): UserInfo = UserInfo(
+        userId = 1,
+        username = username,
+        base64EncodedAuthenticationKey = "fake-auth-key",
+        authenticated = true,
+        officeId = 1,
+        officeName = "Main Office",
+        roles = emptyList(),
+        permissions = emptyList(),
+        clients = listOf(1),
+        shouldRenewPassword = false,
+        isTwoFactorAuthenticationRequired = false,
+    )
+
+    private val testClient = Client(
+        id = 1,
+        accountNo = "CLIENT001",
+        externalId = "",
+        active = true,
+        activationDate = emptyList(),
+        firstname = "John",
+        lastname = "Doe",
+        displayName = "John Doe",
+        mobileNo = "+1234567890",
+        emailAddress = "john@example.com",
+        dateOfBirth = emptyList(),
+        isStaff = false,
+        officeId = 1,
+        officeName = "Head Office",
+        savingsProductName = "",
+    )
 }

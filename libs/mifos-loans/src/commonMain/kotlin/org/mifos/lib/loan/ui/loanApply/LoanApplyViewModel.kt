@@ -5,7 +5,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 package org.mifos.lib.loan.ui.loanApply
 
@@ -30,9 +30,8 @@ import org.jetbrains.compose.resources.StringResource
 import org.mifos.lib.loan.core.model.LoanTemplate
 import org.mifos.lib.loan.repository.LoansRepository
 import org.mifospay.core.common.DataState
-import org.mifospay.core.common.ScreenState
-import org.mifospay.core.common.dataOrNull as screenStateData
 import org.mifospay.core.common.DateHelper
+import org.mifospay.core.common.ScreenState
 import org.mifospay.core.data.repository.SelfServiceRepository
 import org.mifospay.core.data.util.NetworkMonitor
 import org.mifospay.core.datastore.UserPreferencesRepository
@@ -40,6 +39,7 @@ import org.mifospay.core.model.client.Client
 import org.mifospay.core.ui.utils.BaseViewModel
 import kotlin.time.Clock
 import kotlin.time.ExperimentalTime
+import org.mifospay.core.common.dataOrNull as screenStateData
 
 /**
  * `ViewModel` for the Loan Application form screen.

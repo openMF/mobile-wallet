@@ -9,6 +9,22 @@
  */
 package cmp.navigation.di
 
+// ── Fork DI-surface import notes (consolidated ABOVE the import list so ktlint
+//    standard:import-ordering stays green — comments must not interrupt the sorted block):
+//  • kpt.feature.* template-demo modules were stripped (absent from the fork classpath);
+//    fork feature Koin modules are contributed via cmp-shared/.../shared/di/KoinModules.kt,
+//    and Phase 2 T6/T7 folds them into `allModules` below as nav-conversion progresses.
+//  • org.mifos.authenticator.passcode.PasscodeManager — required by AppViewModel +
+//    PlatformAuthenticatorGate (see MifosPasscodeModule below; PasscodeStorageAdapter ctor
+//    arg bound by the fork RepositoryModule).
+//  • org.mifos.feature.passcode.MifosAuthenticatorModule — :feature:passcode ViewModel bindings
+//    (re-auth passcode + biometric-setup destinations).
+//  • ForkDispatchersModule (aliased DispatchersModule) + stringProviderModule — core:common
+//    (named MifosDispatchers.* qualifiers + resource-id → string resolution).
+//  • RepositoryModule — AppLockRepository / BiometricStorageAdapter / PasscodeStorageAdapter +
+//    every fork repository impl. PreferencesModule — UserPreferencesRepository (coexists with
+//    kpt DatastoreModule). DomainModule — fork use-cases.
+//  • LocalModule / NetworkModule — Supabase InstanceConfigLoader + Ktor client + KtorInterceptor.
 import cmp.navigation.AppViewModel
 import cmp.navigation.rootnav.RootNavViewModel
 import kpt.core.base.analytics.di.analyticsModule
@@ -19,50 +35,18 @@ import kpt.core.data.di.DataModule
 import kpt.core.database.di.DatabaseModule
 import kpt.core.datastore.di.DatastoreModule
 import kpt.core.store.di.appStoreModule
-// Template-demo feature modules stripped — Phase 2 nav-chunk (skeleton).
-// The `kpt.feature.{amortization,bills,calculators,crypto,currencyrates,
-// emicalculator,home,loans,macro,rates,settings}.di.*` modules do not exist in
-// the fork's classpath; their imports would prevent compilation. Fork feature
-// Koin modules (`org.mifospay.feature.*.di.*Module`) are still contributed via
-// `cmp-shared/.../org/mifospay/shared/di/KoinModules.kt` for legacy entry
-// points; Phase 2 T6/T7 will fold each fork feature module into `allModules`
-// below as the per-feature nav-conversion progresses.
 import kpt.sync.di.SyncModule
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
-// Fork's PasscodeManager library binding — required by cmp-navigation's
-// AppViewModel + PlatformAuthenticatorGate. See MifosPasscodeModule below for
-// the singleton declaration; the constructor arg (PasscodeStorageAdapter) is
-// bound by the fork's RepositoryModule (org.mifospay.core.data.di).
 import org.mifos.authenticator.passcode.PasscodeManager
-// Fork's :feature:passcode ViewModel bindings — MifosPasscodeViewModel and
-// BiometricSetupScreenViewmodel used by the re-auth passcode + biometric-setup
-// destinations. Registered in feature:passcode/.../PasscodeModule.kt.
 import org.mifos.feature.passcode.MifosAuthenticatorModule
-// Fork's core:common bindings — DispatchersModule provides the named
-// MifosDispatchers.{IO, Main, Unconfined} qualifiers that fork RepositoryModule
-// resolves via `named(MifosDispatchers.IO.name)` etc. stringProviderModule
-// binds resource-id → string resolution used by fork error mappers.
-import org.mifospay.core.common.di.DispatchersModule as ForkDispatchersModule
 import org.mifospay.core.common.di.stringProviderModule
-// Fork's RepositoryModule — binds AppLockRepository (AppViewModel dep),
-// BiometricStorageAdapter (PlatformAuthenticatorGate dep), PasscodeStorageAdapter
-// (constructor arg for MifosPasscodeModule singleton below), plus every fork
-// repository impl (Account, Auth, Beneficiary, Client, ...).
 import org.mifospay.core.data.di.RepositoryModule
-// Fork's PreferencesModule — binds UserPreferencesRepository consumed by
-// RootNavViewModel. Kept alongside kpt DatastoreModule (they bind different
-// interfaces in different packages, so both coexist safely).
 import org.mifospay.core.datastore.di.PreferencesModule
-// Fork's DomainModule — use-cases wired above RepositoryModule (some fork
-// ViewModels resolve these transitively; kept for completeness of the fork
-// data/domain surface per Phase 2 T6/T7 wiring contract).
 import org.mifospay.core.domain.di.DomainModule
-// Fork's core:network bindings — LocalModule binds Supabase InstanceConfigLoader
-// consumed by InstanceSelectorViewModel; NetworkModule binds the Ktor HTTP
-// client + KtorInterceptor (source of GlobalAuthManager 401 flips).
 import org.mifospay.core.network.di.LocalModule
 import org.mifospay.core.network.di.NetworkModule
+import org.mifospay.core.common.di.DispatchersModule as ForkDispatchersModule
 
 object KoinModules {
     private val dataModule = module {

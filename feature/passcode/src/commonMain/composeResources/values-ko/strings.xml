@@ -6,7 +6,7 @@
     If a copy of the MPL was not distributed with this file,
     You can obtain one at https://mozilla.org/MPL/2.0/.
 
-    See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+    See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
 -->
 <resources>
     <string name="feature_passcode_biometric_error_lockout">시도 횟수가 너무 많습니다. 잠시 후 다시 시도해 주세요.</string>

@@ -5,7 +5,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 package org.mifospay.core.data.repositoryImpl
 
@@ -34,7 +34,6 @@ import kpt.core.base.store.infra.FetchedAtRepository
 import kpt.core.base.store.screen.FetchPolicy
 import kpt.core.base.store.screen.ScreenDataStream
 import kpt.core.base.store.screen.asScreenStream
-import kpt.core.data.infra.NetworkMonitor as StoreNetworkMonitor
 import kpt.core.store.AppStoreRegistry
 import kpt.core.store.wallet.beneficiary.BeneficiaryKey
 import kpt.core.store.wallet.history.TransactionKey
@@ -43,7 +42,6 @@ import org.mifospay.core.common.DateHelper
 import org.mifospay.core.common.HttpStatusException
 import org.mifospay.core.common.NetworkException
 import org.mifospay.core.common.ScreenState
-import org.mifospay.core.common.asDataStateFlow
 import org.mifospay.core.common.asScreenStateFlow
 import org.mifospay.core.common.combineResultsWith
 import org.mifospay.core.data.mapper.toAccount
@@ -66,6 +64,7 @@ import org.mifospay.core.network.model.entity.Page
 import org.mifospay.core.network.model.entity.authentication.AuthenticationPayload
 import org.mifospay.core.network.model.entity.user.User
 import org.mobilenativefoundation.store.store5.Store
+import kpt.core.data.infra.NetworkMonitor as StoreNetworkMonitor
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class SelfServiceRepositoryImpl(

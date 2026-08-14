@@ -5,7 +5,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
+ * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 package kpt.core.store.wallet.linkableaccount
 
@@ -20,7 +20,6 @@ import kpt.core.database.wallet.pocket.PocketDao
 import org.mifospay.core.model.enums.AccountType
 import org.mifospay.core.model.pocket.AccountStatus
 import org.mifospay.core.model.pocket.LinkableAccount
-import org.mifospay.core.model.savingsaccount.Status as SavingsStatus
 import org.mifospay.core.network.SelfServiceApiManager
 import org.mifospay.core.network.model.entity.client.ClientAccountsEntity
 import org.mifospay.core.network.model.entity.loanAccount.LoanStatusResponseDto
@@ -29,6 +28,7 @@ import org.mobilenativefoundation.store.store5.Fetcher
 import org.mobilenativefoundation.store.store5.SourceOfTruth
 import org.mobilenativefoundation.store.store5.Store
 import kotlin.time.Clock
+import org.mifospay.core.model.savingsaccount.Status as SavingsStatus
 
 /** Room `@Entity(tableName = …)` for `LinkableAccountEntity`. Shared with the DAO's writes. */
 private const val LINKABLE_ACCOUNTS_TABLE = "wallet_linkable_accounts"

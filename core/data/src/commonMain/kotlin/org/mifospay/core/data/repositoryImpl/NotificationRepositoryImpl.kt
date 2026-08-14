@@ -5,7 +5,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 package org.mifospay.core.data.repositoryImpl
 
@@ -18,7 +18,6 @@ import kpt.core.base.store.infra.FetchedAtRepository
 import kpt.core.base.store.screen.FetchPolicy
 import kpt.core.base.store.screen.ScreenDataStream
 import kpt.core.base.store.screen.asScreenStream
-import kpt.core.data.infra.NetworkMonitor as StoreNetworkMonitor
 import kpt.core.store.AppStoreRegistry
 import kpt.core.store.wallet.notification.NotificationKey
 import org.mifospay.core.common.ScreenState
@@ -27,6 +26,7 @@ import org.mifospay.core.data.repository.NotificationRepository
 import org.mifospay.core.model.notification.Notification
 import org.mifospay.core.network.FineractApiManager
 import org.mobilenativefoundation.store.store5.Store
+import kpt.core.data.infra.NetworkMonitor as StoreNetworkMonitor
 
 class NotificationRepositoryImpl(
     private val apiManager: FineractApiManager,

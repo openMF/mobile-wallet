@@ -5,12 +5,13 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 package org.mifospay.feature.mpay.qr
 
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
@@ -22,7 +23,9 @@ import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
-import kotlinx.coroutines.CoroutineScope
+import kpt.core.base.store.screen.ExperimentalScreenDataStreamTestingApi
+import kpt.core.base.store.screen.ScreenDataStream
+import kpt.core.base.store.screen.screenDataStreamForTesting
 import org.mifospay.core.common.DataState
 import org.mifospay.core.common.ScreenState
 import org.mifospay.core.data.repository.AccountRepository
@@ -31,13 +34,13 @@ import org.mifospay.core.datastore.UserPreferencesRepository
 import org.mifospay.core.model.account.Account
 import org.mifospay.core.model.account.AccountTransferPayload
 import org.mifospay.core.model.account.DefaultAccount
-import org.mifospay.core.model.savingsaccount.Transaction
-import org.mifospay.core.model.savingsaccount.TransferDetail
-import org.mifospay.core.model.search.AccountResult
 import org.mifospay.core.model.client.Client
 import org.mifospay.core.model.client.UpdatedClient
 import org.mifospay.core.model.instance.InterbankServer
 import org.mifospay.core.model.instance.ServerInstance
+import org.mifospay.core.model.savingsaccount.Transaction
+import org.mifospay.core.model.savingsaccount.TransferDetail
+import org.mifospay.core.model.search.AccountResult
 import org.mifospay.core.model.user.Language
 import org.mifospay.core.model.user.UserInfo
 import org.mifospay.core.model.utils.CurrencyCode
@@ -49,6 +52,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertIs
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
+import kpt.core.base.store.screen.ScreenState as StoreScreenState
 
 /**
  * Unit tests for [MpayQrViewModel].
@@ -472,16 +476,25 @@ private class FakeAccountRepository : AccountRepository {
     override fun getAccountTransfer(transferId: Long): Flow<ScreenState<TransferDetail>> =
         flowOf(ScreenState.Empty)
 
+    @OptIn(ExperimentalScreenDataStreamTestingApi::class)
+    override fun getAccountTransferStream(
+        transferId: Long,
+        scope: CoroutineScope,
+    ): ScreenDataStream<TransferDetail> =
+        screenDataStreamForTesting(state = flowOf(StoreScreenState.Empty))
+
     override fun searchAccounts(query: String): Flow<ScreenState<List<AccountResult>>> =
         flowOf(ScreenState.Empty)
 
     override fun getSelfAccounts(clientId: Long): Flow<ScreenState<List<Account>>> =
         flowOf(ScreenState.Empty)
 
-    override fun getSelfAccountsScreen(
+    @OptIn(ExperimentalScreenDataStreamTestingApi::class)
+    override fun getSelfAccountsStream(
         clientId: Long,
         scope: CoroutineScope,
-    ): Flow<ScreenState<List<Account>>> = flowOf(ScreenState.Empty)
+    ): ScreenDataStream<List<Account>> =
+        screenDataStreamForTesting(state = flowOf(StoreScreenState.Empty))
 
     override suspend fun makeTransfer(payload: AccountTransferPayload): DataState<String> =
         DataState.Success("Success")

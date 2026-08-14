@@ -142,3 +142,34 @@ moduleGraphAssert {
     configurations += setOf("nativeMainImplementation", "nativeMainApi")
     configurations += setOf("wasmJsMainImplementation", "wasmJsMainApi")
 }
+
+// ── Detekt baseline (fork) ────────────────────────────────────────────────────────────────────
+// The offline-first template migration adopted the template's stricter detekt config
+// (detekt-formatting + twitter-detekt-compose), surfacing ~544 pre-existing violations across the
+// fork's existing code (MaxLineLength, ComposableParamOrder, ViewModelForwarding,
+// CyclomaticComplexMethod, ModifierReused, LongMethod, …). A committed baseline accepts the CURRENT
+// set so CI is green while NEW violations still fail — the standard detekt "adopt-on-existing-
+// codebase" mechanism. Wired HERE (not in the template-mirrored build-logic/.../Detekt.kt) so that
+// convention file stays canonical. Regenerate after fixing violations: `./gradlew detektBaseline`.
+allprojects {
+    tasks.matching { it.name == "detekt" }.configureEach {
+        (this as? io.gitlab.arturbosch.detekt.Detekt)?.baseline?.set(
+            rootProject.file("config/detekt/baseline.xml"),
+        )
+    }
+    tasks.matching { it.name == "detektBaseline" }.configureEach {
+        (this as? io.gitlab.arturbosch.detekt.DetektCreateBaselineTask)?.apply {
+            setSource(rootProject.files(rootProject.rootDir))
+            baseline.set(rootProject.file("config/detekt/baseline.xml"))
+            include("**/*.kt")
+            exclude("**/*.kts")
+            exclude("**/resources/**")
+            exclude("**/build/**")
+            exclude("**/generated/**")
+            exclude("**/build-logic/**")
+            exclude("**/spotless/**")
+            exclude("core-base/designsystem/**")
+            exclude("feature/home/**")
+        }
+    }
+}

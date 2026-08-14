@@ -5,7 +5,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 package org.mifospay.feature.fastmpay
 
@@ -14,6 +14,9 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.flowOf
+import kpt.core.base.store.screen.ExperimentalScreenDataStreamTestingApi
+import kpt.core.base.store.screen.ScreenDataStream
+import kpt.core.base.store.screen.screenDataStreamForTesting
 import org.mifospay.core.common.DataState
 import org.mifospay.core.common.ScreenState
 import org.mifospay.core.data.repository.OfficeRepository
@@ -36,6 +39,7 @@ import org.mifospay.core.model.user.UserInfo
 import org.mifospay.core.network.model.entity.Page
 import org.mifospay.core.network.model.entity.authentication.AuthenticationPayload
 import org.mifospay.core.network.model.entity.user.User
+import kpt.core.base.store.screen.ScreenState as StoreScreenState
 
 /**
  * Fake implementation of [OfficeRepository] for testing.
@@ -69,8 +73,15 @@ internal class FakeOfficeRepository : OfficeRepository {
         }
     }
 
-    override fun getOfficesScreen(scope: CoroutineScope): Flow<ScreenState<List<Office>>> {
-        return getOffices()
+    @OptIn(ExperimentalScreenDataStreamTestingApi::class)
+    override fun getOfficesStream(scope: CoroutineScope): ScreenDataStream<List<Office>> {
+        return screenDataStreamForTesting(
+            state = if (shouldReturnError) {
+                flowOf(StoreScreenState.Error(Throwable("Network error")))
+            } else {
+                flowOf(StoreScreenState.Content(officeList))
+            },
+        )
     }
 }
 
@@ -149,21 +160,26 @@ internal class FakeSelfServiceRepository : SelfServiceRepository {
         limit: Int?,
     ): Flow<ScreenState<List<Transaction>>> = flowOf(ScreenState.Empty)
 
-    override fun getTransactionsScreen(
+    @OptIn(ExperimentalScreenDataStreamTestingApi::class)
+    override fun getTransactionsStream(
         accountId: Long,
         limit: Int?,
         scope: CoroutineScope,
-    ): Flow<ScreenState<List<Transaction>>> = flowOf(ScreenState.Empty)
+    ): ScreenDataStream<List<Transaction>> =
+        screenDataStreamForTesting(state = flowOf(StoreScreenState.Empty))
 
-    override fun getBeneficiaryListScreen(
+    @OptIn(ExperimentalScreenDataStreamTestingApi::class)
+    override fun getBeneficiaryListStream(
         clientId: Long,
         scope: CoroutineScope,
-    ): Flow<ScreenState<List<Beneficiary>>> {
-        return if (shouldReturnError) {
-            flowOf(ScreenState.Error(Throwable("Network error")))
-        } else {
-            flowOf(ScreenState.Content(beneficiaryList))
-        }
+    ): ScreenDataStream<List<Beneficiary>> {
+        return screenDataStreamForTesting(
+            state = if (shouldReturnError) {
+                flowOf(StoreScreenState.Error(Throwable("Network error")))
+            } else {
+                flowOf(StoreScreenState.Content(beneficiaryList))
+            },
+        )
     }
 
     override fun getAccountAndBeneficiaryList(

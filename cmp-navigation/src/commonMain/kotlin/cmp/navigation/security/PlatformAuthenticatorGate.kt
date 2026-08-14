@@ -9,15 +9,15 @@
  */
 package cmp.navigation.security
 
+// `platformAuthenticationProvider` is imported below aliased to `LocalBiometricAuthenticator`
+// (a rename-only alias so downstream call sites + the T4 grep contract in
+// `02-topology-reconciliation.md` read consistently; underlying object identity unchanged).
+// Kept above the import list so ktlint standard:import-ordering stays green.
 import androidx.compose.runtime.Composable
 import org.koin.compose.koinInject
 import org.mifos.authenticator.biometrics.BiometricStorageAdapter
-// Rename the library's top-level `platformAuthenticationProvider` composition-local
-// to a fork-conventional alias so downstream call sites (and the T4 grep contract in
-// `02-topology-reconciliation.md`) read as `LocalBiometricAuthenticator` — the
-// underlying object identity is unchanged; this is a rename-only alias.
-import org.mifos.authenticator.biometrics.platformAuthenticationProvider as LocalBiometricAuthenticator
 import org.mifos.authenticator.biometrics.PlatformAuthenticatorCompositionProvider
+import org.mifos.authenticator.biometrics.platformAuthenticationProvider as LocalBiometricAuthenticator
 
 /**
  * Fork shell wrapper around the biometrics library's

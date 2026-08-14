@@ -9,28 +9,24 @@
  */
 package cmp.shared.utils
 
+// Fork feature Koin surface. The template shell's `cmp.navigation.di.KoinModules.allModules`
+// carries the fork's core/network/data/domain/passcode/preferences modules. The pieces MISSING
+// from that list — and REQUIRED by the bridged fork `MifosApp` which composes ~60 fork feature
+// screens with `koinViewModel()`-resolved VMs — are the fork's per-feature Koin modules aggregate
+// (`featureModules`: Auth, Home, Payments, History, AutoPay, Accounts, Beneficiary, Pocket,
+// Profile, IntraBank, interbankTransfer, MpayQr, MpayQrScan, FastMpay, Merchants, UpiSetup,
+// SendMoney, LoanApplication, Notification, SavedCards, KYC, Invoices, EditPassword, Faq,
+// Settings, StandingInstruction, Receipt + MifosAuthenticatorModule — Koin's `includes()` is
+// identity-deduplicated so re-registration is a no-op) plus the fork's shared VM module
+// (`sharedModule`: MifosPayViewModel, InstanceSelectorViewModel, TransferOptionsViewModel). Both
+// are `internal val` in `org.mifospay.shared.di.KoinModules` (same `:cmp-shared` module) and are
+// imported below aliased as `ForkKoinModules`.
 import cmp.navigation.di.KoinModules
 import cmp.shared.generated.WorkerKmpAuto
 import kpt.sync.infra.initSyncNotifier
 import org.koin.core.context.startKoin
 import org.koin.dsl.KoinAppDeclaration
 import org.koin.dsl.koinApplication
-// Fork feature Koin surface. The template shell's `cmp.navigation.di.KoinModules.allModules`
-// carries the fork's core/network/data/domain/passcode/preferences modules (see
-// `cmp-navigation/.../KoinModules.kt` — forkCommonModule/forkNetworkModule/
-// forkDataModule/forkDomainModule/forkFeatureModule/MifosPasscodeModule/PreferencesModule).
-// The pieces MISSING from that list — and REQUIRED by the bridged fork `MifosApp` which
-// composes ~60 fork feature screens with `koinViewModel()`-resolved VMs — are the fork's
-// per-feature Koin modules aggregate (`featureModules`: Auth, Home, Payments, History,
-// AutoPay, Accounts, Beneficiary, Pocket, Profile, IntraBank, interbankTransfer, MpayQr,
-// MpayQrScan, FastMpay, Merchants, UpiSetup, SendMoney, LoanApplication, Notification,
-// SavedCards, KYC, Invoices, EditPassword, Faq, Settings, StandingInstruction, Receipt +
-// MifosAuthenticatorModule — the last already covered by `forkFeatureModule` in cmp-navigation
-// but Koin's `includes()` is identity-deduplicated so re-registration is a no-op) plus the
-// fork's shared VM module (`sharedModule`: MifosPayViewModel used by `SharedApp.onSessionLogOut`,
-// InstanceSelectorViewModel used by the multi-instance overlay in T5,
-// TransferOptionsViewModel used by `TransferOptionsBottomSheet`). Both are `internal val` in
-// `org.mifospay.shared.di.KoinModules` (same `:cmp-shared` compilation module).
 import org.mifospay.shared.di.KoinModules as ForkKoinModules
 
 // One splice list — kept as a `val` (not inlined below) so `koinConfiguration()` and

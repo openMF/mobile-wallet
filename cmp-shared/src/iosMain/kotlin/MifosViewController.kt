@@ -5,16 +5,9 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 import androidx.compose.ui.window.ComposeUIViewController
-// Phase 2 T4 entry-point switch: iOS root ViewController now launches the
-// template-shape `cmp.shared.SharedApp` (which composes
-// `cmp.navigation.ComposeApp` via the re-homed shell) instead of the legacy
-// `org.mifospay.shared.MifosPaySharedApp`. Koin is initialized via
-// `cmp.shared.utils.initKoin` which loads `cmp.navigation.di.KoinModules.allModules`
-// (fork surface wired in via Phase 2 T6/T7 — see
-// `cmp-navigation/src/.../di/KoinModules.kt`).
 import cmp.shared.SharedApp
 import cmp.shared.utils.initKoin
 import platform.Foundation.NSUserDefaults

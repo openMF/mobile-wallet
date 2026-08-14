@@ -5,7 +5,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
+ * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 package kpt.core.store.wallet.history
 
@@ -17,7 +17,6 @@ import kpt.core.database.wallet.transaction.TransactionDao
 import kpt.core.database.wallet.transaction.toDomain
 import kpt.core.database.wallet.transaction.toEntity
 import org.mifospay.core.common.DateHelper
-import org.mifospay.core.model.savingsaccount.PaymentType as ModelPaymentType
 import org.mifospay.core.model.savingsaccount.SavingsWithAssociationsEntity
 import org.mifospay.core.model.savingsaccount.Transaction
 import org.mifospay.core.model.savingsaccount.TransactionType
@@ -27,6 +26,7 @@ import org.mobilenativefoundation.store.store5.Fetcher
 import org.mobilenativefoundation.store.store5.SourceOfTruth
 import org.mobilenativefoundation.store.store5.Store
 import kotlin.time.Clock
+import org.mifospay.core.model.savingsaccount.PaymentType as ModelPaymentType
 
 /** Room `@Entity(tableName = …)` for [kpt.core.database.wallet.transaction.TransactionEntity]. Shared with the DAO's writes. */
 private const val TRANSACTIONS_TABLE = "wallet_transactions"

@@ -9,8 +9,6 @@
  */
 package kpt.core.data.di
 
-import org.koin.core.qualifier.named
-
 /**
  * Named qualifiers for the four `SubmitOutbox<*>` bindings.
  *
@@ -43,5 +41,4 @@ import org.koin.core.qualifier.named
  * `:core:data:desktopTest`, catching the regression class long before the
  * `ClassCastException-at-first-save` shows up at runtime.
  */
-object OutboxQualifiers {
-}
+object OutboxQualifiers

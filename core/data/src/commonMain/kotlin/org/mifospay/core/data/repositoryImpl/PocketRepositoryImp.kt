@@ -5,7 +5,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 package org.mifospay.core.data.repositoryImpl
 
@@ -29,7 +29,6 @@ import kpt.core.base.store.infra.FetchedAtRepository
 import kpt.core.base.store.screen.FetchPolicy
 import kpt.core.base.store.screen.ScreenDataStream
 import kpt.core.base.store.screen.asScreenStream
-import kpt.core.data.infra.NetworkMonitor as StoreNetworkMonitor
 import kpt.core.database.wallet.pocket.PocketDao
 import kpt.core.database.wallet.pocket.toDomain
 import kpt.core.store.AppStoreRegistry
@@ -52,6 +51,7 @@ import org.mifospay.core.network.SelfServiceApiManager
 import org.mifospay.core.network.model.entity.pocket.PocketDelinkRequest
 import org.mifospay.core.network.model.entity.pocket.PocketLinkRequest
 import org.mobilenativefoundation.store.store5.Store
+import kpt.core.data.infra.NetworkMonitor as StoreNetworkMonitor
 
 class PocketRepositoryImp(
     private val dataManager: SelfServiceApiManager,

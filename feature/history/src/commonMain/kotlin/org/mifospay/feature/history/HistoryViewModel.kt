@@ -5,7 +5,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 package org.mifospay.feature.history
 
@@ -91,43 +91,43 @@ constructor(
         // until Phase-4 wires per-branch messaging.
         repository.getTransactionsStream(accountId, limit = null, scope = viewModelScope)
             .state.toForkScreenStateFlow().onEach { result ->
-            when (result) {
-                is ScreenState.Loading -> {
-                    mutableStateFlow.update {
-                        it.copy(viewState = HistoryState.ViewState.Loading)
+                when (result) {
+                    is ScreenState.Loading -> {
+                        mutableStateFlow.update {
+                            it.copy(viewState = HistoryState.ViewState.Loading)
+                        }
                     }
-                }
 
-                is ScreenState.Empty -> {
-                    mutableStateFlow.update {
-                        it.copy(
-                            transactions = emptyList(),
-                            viewState = HistoryState.ViewState.Empty,
-                        )
+                    is ScreenState.Empty -> {
+                        mutableStateFlow.update {
+                            it.copy(
+                                transactions = emptyList(),
+                                viewState = HistoryState.ViewState.Empty,
+                            )
+                        }
                     }
-                }
 
-                is ScreenState.Content -> {
-                    val transactions = result.data
-                    mutableStateFlow.update {
-                        it.copy(
-                            transactions = transactions,
-                            viewState = HistoryState.ViewState.Content(transactions),
-                        )
+                    is ScreenState.Content -> {
+                        val transactions = result.data
+                        mutableStateFlow.update {
+                            it.copy(
+                                transactions = transactions,
+                                viewState = HistoryState.ViewState.Content(transactions),
+                            )
+                        }
+                        applyFilter(transactions)
                     }
-                    applyFilter(transactions)
-                }
 
-                is ScreenState.Error,
-                is ScreenState.NoNetwork,
-                is ScreenState.Unauthenticated,
-                -> {
-                    mutableStateFlow.update {
-                        it.copy(viewState = HistoryState.ViewState.Error(Res.string.feature_history_error))
+                    is ScreenState.Error,
+                    is ScreenState.NoNetwork,
+                    is ScreenState.Unauthenticated,
+                    -> {
+                        mutableStateFlow.update {
+                            it.copy(viewState = HistoryState.ViewState.Error(Res.string.feature_history_error))
+                        }
                     }
                 }
-            }
-        }.launchIn(viewModelScope)
+            }.launchIn(viewModelScope)
     }
 
     private fun loadActiveAccounts() {
@@ -142,50 +142,50 @@ constructor(
         // `getActiveAccounts` semantics.
         accountRepository.getSelfAccountsStream(state.clientId, viewModelScope)
             .state.toForkScreenStateFlow().onEach { result ->
-            when (result) {
-                is ScreenState.Loading -> {
-                    mutableStateFlow.update {
-                        it.copy(viewState = HistoryState.ViewState.Loading)
-                    }
-                }
-
-                is ScreenState.Empty -> {
-                    mutableStateFlow.update {
-                        it.copy(viewState = HistoryState.ViewState.Error(Res.string.feature_history_no_account))
-                    }
-                }
-
-                is ScreenState.Content -> {
-                    val accounts = result.data.filter { it.status.active }
-                    if (accounts.isEmpty()) {
+                when (result) {
+                    is ScreenState.Loading -> {
                         mutableStateFlow.update {
-                            it.copy(
-                                viewState = HistoryState.ViewState.Error(
-                                    Res.string.feature_history_no_account,
-                                ),
-                            )
-                        }
-                    } else {
-                        loadTransactions(accounts.first().id)
-                        mutableStateFlow.update { state ->
-                            state.copy(
-                                accounts = accounts,
-                                selectedAccount = accounts.firstOrNull(),
-                            )
+                            it.copy(viewState = HistoryState.ViewState.Loading)
                         }
                     }
-                }
 
-                is ScreenState.Error,
-                is ScreenState.NoNetwork,
-                is ScreenState.Unauthenticated,
-                -> {
-                    mutableStateFlow.update {
-                        it.copy(viewState = HistoryState.ViewState.Error(Res.string.feature_history_error))
+                    is ScreenState.Empty -> {
+                        mutableStateFlow.update {
+                            it.copy(viewState = HistoryState.ViewState.Error(Res.string.feature_history_no_account))
+                        }
+                    }
+
+                    is ScreenState.Content -> {
+                        val accounts = result.data.filter { it.status.active }
+                        if (accounts.isEmpty()) {
+                            mutableStateFlow.update {
+                                it.copy(
+                                    viewState = HistoryState.ViewState.Error(
+                                        Res.string.feature_history_no_account,
+                                    ),
+                                )
+                            }
+                        } else {
+                            loadTransactions(accounts.first().id)
+                            mutableStateFlow.update { state ->
+                                state.copy(
+                                    accounts = accounts,
+                                    selectedAccount = accounts.firstOrNull(),
+                                )
+                            }
+                        }
+                    }
+
+                    is ScreenState.Error,
+                    is ScreenState.NoNetwork,
+                    is ScreenState.Unauthenticated,
+                    -> {
+                        mutableStateFlow.update {
+                            it.copy(viewState = HistoryState.ViewState.Error(Res.string.feature_history_error))
+                        }
                     }
                 }
-            }
-        }.launchIn(viewModelScope)
+            }.launchIn(viewModelScope)
     }
 
     private fun handleClearFilters() {

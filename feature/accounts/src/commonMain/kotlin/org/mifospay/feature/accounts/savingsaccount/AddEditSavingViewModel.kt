@@ -5,7 +5,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 package org.mifospay.feature.accounts.savingsaccount
 
@@ -37,8 +37,8 @@ import mobile_wallet.feature.accounts.generated.resources.feature_accounts_savin
 import mobile_wallet.feature.accounts.generated.resources.feature_accounts_saving_title_update
 import org.jetbrains.compose.resources.StringResource
 import org.mifospay.core.common.DataState
-import org.mifospay.core.common.ScreenState
 import org.mifospay.core.common.DateHelper
+import org.mifospay.core.common.ScreenState
 import org.mifospay.core.common.getSerialized
 import org.mifospay.core.common.setSerialized
 import org.mifospay.core.data.repository.LocalAssetRepository
