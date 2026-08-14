@@ -50,6 +50,8 @@ import kpt.core.database.wallet.standinginstruction.StandingInstructionDao
 import kpt.core.database.wallet.standinginstruction.StandingInstructionEntity
 import kpt.core.database.wallet.transaction.TransactionDao
 import kpt.core.database.wallet.transaction.TransactionEntity
+import kpt.core.database.wallet.transferdetail.TransferDetailDao
+import kpt.core.database.wallet.transferdetail.TransferDetailEntity
 
 /**
  * KSP-generated constructor bridge for [AppDatabase].
@@ -83,6 +85,7 @@ expect object AppDatabaseConstructor : RoomDatabaseConstructor<AppDatabase> {
  * | v4 → v5 | Phase-5 Batch-3 read-cache stores — adds `wallet_standing_instructions` (LEDGER, GOAL D13), `wallet_offices` (LEDGER — global singleton-keyed reference data, GOAL D13), `wallet_self_accounts` (LEDGER, GOAL D13). Purely additive; auto-migration handles it. Batch-3 also delivers the `receipt` feature WITHOUT its own store (per GOAL D13 — reads off the existing `wallet_transactions` LEDGER; see `ReceiptViewModel` KDoc). |
  * | v5 → v6 | Phase-5 Batch-4 offline / local-derived stores — adds `wallet_autopay_billers` (OFFLINE_LOCAL_ONLY — user-authored biller catalog, GOAL D12; mirrors the `wallet_autopay_bills` shape) and `wallet_recent_payees` (LOCAL-DERIVED — persist-on-derive cache of recent-payees derived from transaction history, replaces the N+1 walk in `RecentPayeeRepositoryImpl` on cache hits, GOAL D12/D13 hybrid). Purely additive; auto-migration handles it. Batch-4 also folds in the store-native `getAccountAndBeneficiaryListScreen` combinator in `SelfServiceRepository` (no new table — uses the existing `wallet_beneficiaries` + the network account stream through `combineScreenStates`), and records a STUB verdict for the `merchants` feature (no server counterpart today; no store emitted). |
  * | v6 → v7 | manage-pocket linkable-accounts Store5 migration — adds `wallet_linkable_accounts` (LEDGER — derived read-cache of accounts a client CAN link into a pocket, GOAL D13). Replaces upstream PR #2057's multiplatform-settings `linkable_accounts` cache in `PocketPreferencesDataSource`; this branch's Store5 architecture serves the same read offline-first through Room SoT + CACHE_FIRST_SWR (matches `PocketStore` / `BeneficiaryStore` / `SelfAccountsStore` recipe). Purely additive; auto-migration handles it. |
+ * | v7 → v8 | transfer-detail Store5 vertical — adds `wallet_transfer_details` (SINGLE-ROW-PER-KEY read-cache of one account-transfer detail per transferId, GOAL D13). Makes the transaction-detail drill-down offline-first; mirrors the `wallet_saving_account_details` recipe (`createStore` + Room SoT + CACHE_FIRST_SWR + single-row upsert). Purely additive; auto-migration handles it. |
  *
  * ## Stale-schema-JSON note
  *
@@ -122,6 +125,8 @@ expect object AppDatabaseConstructor : RoomDatabaseConstructor<AppDatabase> {
         RecentPayeeEntity::class,
         // manage-pocket linkable-accounts Store5 migration (v7) — fork-owned table
         LinkableAccountEntity::class,
+        // transfer-detail Store5 vertical (v8) — fork-owned table
+        TransferDetailEntity::class,
     ],
     version = AppDatabase.VERSION,
     exportSchema = true,
@@ -143,6 +148,12 @@ expect object AppDatabaseConstructor : RoomDatabaseConstructor<AppDatabase> {
         // wallet_linkable_accounts (...)`. Safe as a standalone AutoMigration
         // because no v1..v6 column is altered (only a new table appears in v7).
         AutoMigration(from = 6, to = 7),
+        // v7 → v8: purely-additive migration for the transfer-detail Store5
+        // vertical — adds ONE net-new table `wallet_transfer_details`. Room diffs
+        // schemas/7.json vs schemas/8.json and emits `CREATE TABLE
+        // wallet_transfer_details (...)`. Safe as a standalone AutoMigration
+        // because no v1..v7 column is altered (only a new table appears in v8).
+        AutoMigration(from = 7, to = 8),
     ],
 )
 @ConstructedBy(AppDatabaseConstructor::class)
@@ -180,14 +191,17 @@ abstract class AppDatabase : RoomDatabase() {
     // manage-pocket linkable-accounts Store5 migration — fork-owned wallet DAO
     abstract val linkableAccountDao: LinkableAccountDao
 
+    // transfer-detail Store5 vertical — fork-owned wallet DAO
+    abstract val transferDetailDao: TransferDetailDao
+
     companion object {
-        // Bumped from 6 → 7 for the manage-pocket linkable-accounts Store5
-        // migration. Introduces ONE net-new table (`wallet_linkable_accounts`
-        // — LEDGER derived read-cache of accounts a client CAN link into a
-        // pocket) that REPLACES upstream PR #2057's multiplatform-settings
-        // `linkable_accounts` cache in `PocketPreferencesDataSource`.
-        // Additive migration (see @AutoMigration(from = 6, to = 7) above).
-        const val VERSION = 7
+        // Bumped from 7 → 8 for the transfer-detail Store5 vertical. Introduces
+        // ONE net-new table (`wallet_transfer_details` — SINGLE-ROW-PER-KEY
+        // read-cache of one account-transfer detail per transferId) that makes
+        // the transaction-detail drill-down offline-first (mirrors the
+        // `wallet_saving_account_details` recipe). Additive migration (see
+        // @AutoMigration(from = 7, to = 8) above).
+        const val VERSION = 8
 
         /** Fork-unique on-disk DB filename — single source of truth is [DatabaseConfig.NAME]
          *  (appId-derived, regenerated by `syncForkConfig`). All platform builders read this. */

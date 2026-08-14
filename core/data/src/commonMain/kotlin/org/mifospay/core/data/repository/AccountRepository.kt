@@ -26,6 +26,23 @@ interface AccountRepository {
 
     fun getAccountTransfer(transferId: Long): Flow<ScreenState<TransferDetail>>
 
+    /**
+     * transfer-detail Store5 vertical — GOAL D13 (`createStore` + CACHE_FIRST_SWR).
+     *
+     * Store-backed, offline-first alternative to [getAccountTransfer] — reads
+     * through the `AppStoreRegistry.TransferDetail` Store5 (offline-first via
+     * `wallet_transfer_details` Room SoT, SWR revalidation once the TTL elapses).
+     * Mirrors [getSelfAccountsStream].
+     *
+     * @param transferId the store's page key AND the API path parameter.
+     * @param scope the caller's [CoroutineScope] (typically `viewModelScope`)
+     *   — Store5 subscribes its internal refresh trigger to this scope.
+     */
+    fun getAccountTransferStream(
+        transferId: Long,
+        scope: CoroutineScope,
+    ): ScreenDataStream<TransferDetail>
+
     fun searchAccounts(query: String): Flow<ScreenState<List<AccountResult>>>
 
     fun getSelfAccounts(clientId: Long): Flow<ScreenState<List<Account>>>

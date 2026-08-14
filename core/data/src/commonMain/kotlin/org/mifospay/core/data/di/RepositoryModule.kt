@@ -101,6 +101,14 @@ val RepositoryModule = module {
             selfAccountsStore = get(kpt.core.store.AppStoreRegistry.SelfAccounts),
             storeNetworkMonitor = get(),
             fetchedAtRepository = get(),
+            // transfer-detail Store5 vertical (GOAL D13) — makes the
+            // transaction-detail drill-down offline-first. Named-qualifier from
+            // AppStoreRegistry.TransferDetail; the TransactionDao is bound by
+            // StoreModule (`kpt.core.store.di.StoreModule`) via
+            // `get<AppDatabase>().transactionDao` and is used by getTransaction(...)
+            // to read the cached ledger row offline-first.
+            transferDetailStore = get(kpt.core.store.AppStoreRegistry.TransferDetail),
+            transactionDao = get(),
         )
     }
     single<AuthenticationRepository> {

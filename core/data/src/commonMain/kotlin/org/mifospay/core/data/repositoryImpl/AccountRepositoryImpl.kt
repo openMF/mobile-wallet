@@ -11,7 +11,10 @@ package org.mifospay.core.data.repositoryImpl
 
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
@@ -20,8 +23,11 @@ import kpt.core.base.store.screen.FetchPolicy
 import kpt.core.base.store.screen.ScreenDataStream
 import kpt.core.base.store.screen.asScreenStream
 import kpt.core.data.infra.NetworkMonitor as StoreNetworkMonitor
+import kpt.core.database.wallet.transaction.TransactionDao
+import kpt.core.database.wallet.transaction.toDomain
 import kpt.core.store.AppStoreRegistry
 import kpt.core.store.wallet.selfaccounts.SelfAccountsKey
+import kpt.core.store.wallet.transferdetail.TransferDetailKey
 import org.mifospay.core.common.DataState
 import org.mifospay.core.common.ScreenState
 import org.mifospay.core.common.asScreenStateFlow
@@ -51,16 +57,45 @@ class AccountRepositoryImpl(
     private val selfAccountsStore: Store<SelfAccountsKey, List<Account>>? = null,
     private val storeNetworkMonitor: StoreNetworkMonitor? = null,
     private val fetchedAtRepository: FetchedAtRepository? = null,
+    // transfer-detail Store5 vertical (GOAL D13) — makes the transaction-detail
+    // drill-down offline-first. Nullable-default so existing unit tests without the
+    // store harness continue to compile; the legacy getAccountTransfer(...) —
+    // asScreenStateFlow shim over the raw Ktorfit flow — is unaffected.
+    private val transferDetailStore: Store<TransferDetailKey, TransferDetail>? = null,
+    // Existing wallet_transactions LEDGER DAO (populated by provideHistoryStore) —
+    // injected so getTransaction(...) can read the cached row offline-first before
+    // hitting the network. Nullable-default for the same test-harness reason.
+    private val transactionDao: TransactionDao? = null,
 ) : AccountRepository {
 
+    // Offline-first single-transaction read — prefers the cached `wallet_transactions`
+    // LEDGER row (populated by provideHistoryStore) and falls back to the network
+    // `getTransaction` endpoint on a cold cache. The Room flow re-emits once the
+    // history store later populates the row, so the screen upgrades from network to
+    // cache transparently. If the DAO is not wired (test harness), the legacy
+    // network-only path is used unchanged.
+    @OptIn(ExperimentalCoroutinesApi::class)
     override fun getTransaction(
         accountId: Long,
         transactionId: Long,
     ): Flow<ScreenState<Transaction>> {
-        return selfManager.accountTransfersApi
+        val dao = transactionDao ?: return selfManager.accountTransfersApi
             .getTransaction(accountId, transactionId)
             .map { it.toModel() }
             .asScreenStateFlow()
+            .flowOn(ioDispatcher)
+
+        return dao.observeByTransactionId(transactionId)
+            .flatMapLatest { cached ->
+                if (cached != null) {
+                    flowOf(cached.toDomain()).asScreenStateFlow()
+                } else {
+                    selfManager.accountTransfersApi
+                        .getTransaction(accountId, transactionId)
+                        .map { it.toModel() }
+                        .asScreenStateFlow()
+                }
+            }
             .flowOn(ioDispatcher)
     }
 
@@ -115,6 +150,38 @@ class AccountRepositoryImpl(
             isEmpty = { it.isEmpty() },
             fetchPolicy = FetchPolicy.CACHE_FIRST_SWR,
             ttl = AppStoreRegistry.Ttl.SELF_ACCOUNTS,
+        )
+    }
+
+    // transfer-detail Store5 vertical — GOAL D13 (`createStore` + CACHE_FIRST_SWR).
+    //
+    // See the interface KDoc for the shape contract. Requires the three
+    // store-adapter dependencies (transferDetailStore + NetworkMonitor +
+    // FetchedAtRepository). If any is null (test wiring), we IllegalState —
+    // production DI in RepositoryModule wires all three unconditionally. Mirrors
+    // getSelfAccountsStream + SavingsAccountRepositoryImpl.getAccountDetailStream.
+    override fun getAccountTransferStream(
+        transferId: Long,
+        scope: CoroutineScope,
+    ): ScreenDataStream<TransferDetail> {
+        val store = checkNotNull(transferDetailStore) {
+            "getAccountTransferStream requires the `transferDetail` Store5 wiring. Verify " +
+                "RepositoryModule bound AppStoreRegistry.TransferDetail and injected it here."
+        }
+        val netMon = checkNotNull(storeNetworkMonitor) {
+            "getAccountTransferStream requires kmptoolkit NetworkMonitor. Verify DataModule bound it."
+        }
+        val fetchedAtRepo = checkNotNull(fetchedAtRepository) {
+            "getAccountTransferStream requires FetchedAtRepository. Verify DataModule bound it."
+        }
+        return store.asScreenStream(
+            key = TransferDetailKey(transferId),
+            networkMonitor = netMon,
+            fetchedAtRepository = fetchedAtRepo,
+            cacheKey = "wallet_transfer_details-$transferId",
+            scope = scope,
+            fetchPolicy = FetchPolicy.CACHE_FIRST_SWR,
+            ttl = AppStoreRegistry.Ttl.TRANSFER_DETAIL,
         )
     }
 

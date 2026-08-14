@@ -67,6 +67,19 @@ interface TransactionDao {
     fun observeByAccount(accountId: Long): Flow<List<TransactionEntity>>
 
     /**
+     * Observe the single cached transaction with the given [transactionId], or
+     * `null` on cold cache. Keys on the PK, so it is account-agnostic — the
+     * transaction-detail drill-down reads a specific row offline-first via
+     * `AccountRepositoryImpl.getTransaction(...)`.
+     *
+     * The returned [Flow] re-emits on every write to `wallet_transactions` (e.g.
+     * when `provideHistoryStore` populates the ledger), letting the detail screen
+     * upgrade from a network read to the cached row transparently.
+     */
+    @Query("SELECT * FROM wallet_transactions WHERE transactionId = :transactionId")
+    fun observeByTransactionId(transactionId: Long): Flow<TransactionEntity?>
+
+    /**
      * SINCE cursor for delta fetches — the newest cached `dateEpochMs` for the
      * given [accountId], or `null` when the page is empty (cold cache).
      *

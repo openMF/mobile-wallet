@@ -28,6 +28,7 @@ import kpt.core.store.wallet.recentpayee.provideRecentPayeeStore
 import kpt.core.store.wallet.savedcards.provideSavedCardStore
 import kpt.core.store.wallet.selfaccounts.provideSelfAccountsStore
 import kpt.core.store.wallet.standinginstruction.provideStandingInstructionStore
+import kpt.core.store.wallet.transferdetail.provideTransferDetailStore
 import org.koin.core.module.Module
 import org.koin.dsl.module
 
@@ -136,6 +137,8 @@ val appStoreModule: Module = module {
     single { get<AppDatabase>().recentPayeeDao }
     // manage-pocket linkable-accounts Store5 migration DAO
     single { get<AppDatabase>().linkableAccountDao }
+    // transfer-detail Store5 vertical DAO
+    single { get<AppDatabase>().transferDetailDao }
 
     // Phase-4 pilots
     single(AppStoreRegistry.History) {
@@ -221,6 +224,13 @@ val appStoreModule: Module = module {
         )
     }
 
+    // transfer-detail Store5 vertical — SINGLE-ROW-PER-KEY read store (GOAL D13).
+    single(AppStoreRegistry.TransferDetail) {
+        // Uses SelfServiceApiManager — parity with AccountRepositoryImpl.getAccountTransfer
+        // which routes through the self-service accountTransfersApi mount.
+        provideTransferDetailStore(selfManager = get(), dao = get())
+    }
+
     // Register stores with StoreCacheManager for logout clearing (GOAL D7).
     single(createdAtStart = true) {
         val mgr = get<StoreCacheManager>() as StoreCacheManagerImpl
@@ -245,5 +255,7 @@ val appStoreModule: Module = module {
         mgr.register(get(AppStoreRegistry.RecentPayee))
         // manage-pocket linkable-accounts Store5 migration
         mgr.register(get(AppStoreRegistry.LinkableAccounts))
+        // transfer-detail Store5 vertical
+        mgr.register(get(AppStoreRegistry.TransferDetail))
     }
 }

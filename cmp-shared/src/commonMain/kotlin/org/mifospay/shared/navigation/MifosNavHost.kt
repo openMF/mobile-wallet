@@ -27,6 +27,7 @@ import org.mifos.lib.loan.navigation.loanApplicationGraph
 import org.mifos.lib.loan.navigation.navigateToLoanApplicationGraph
 import org.mifospay.core.data.repository.UserVerificationRepository
 import org.mifospay.core.ui.utility.TabContent
+import org.mifospay.core.ui.utils.RootTransitionProviders
 import org.mifospay.feature.accounts.AccountsScreen
 import org.mifospay.feature.accounts.savingsaccount.SavingsAddEditType
 import org.mifospay.feature.accounts.savingsaccount.addEditSavingAccountScreen
@@ -320,6 +321,16 @@ internal fun MifosNavHost(
         startDestination = HOME_ROUTE,
         navController = navController,
         modifier = modifier,
+        // Explicit lightweight fade for every destination that does NOT declare its own
+        // transition (the four bottom-nav tabs + ~10 other plain composables). Without this the
+        // JetBrains nav lib falls back to a 700ms fadeIn/fadeOut crossfade that keeps two heavy
+        // screens alpha-composited for 0.7s — the primary source of the transition lag. Fade (not
+        // slide) is the correct motion for sibling bottom-nav tabs; per-destination slide/push
+        // transitions (composableWithSlideTransitions/…PushTransitions) still override this default.
+        enterTransition = { RootTransitionProviders.Enter.fadeIn(this) },
+        exitTransition = { RootTransitionProviders.Exit.fadeOut(this) },
+        popEnterTransition = { RootTransitionProviders.Enter.fadeIn(this) },
+        popExitTransition = { RootTransitionProviders.Exit.fadeOut(this) },
     ) {
         internalMifosPasscodeScreen(
             navigateToLogin = onClickLogout,

@@ -10,12 +10,14 @@
 package org.mifospay.feature.history.detail
 
 import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.update
 import mobile_wallet.feature.history.generated.resources.Res
 import mobile_wallet.feature.history.generated.resources.feature_history_error_fallback
 import org.jetbrains.compose.resources.StringResource
 import org.mifospay.core.common.ScreenState
 import org.mifospay.core.data.repository.AccountRepository
+import org.mifospay.core.data.util.toForkScreenStateFlow
 import org.mifospay.core.model.savingsaccount.TransferDetail
 import org.mifospay.core.ui.utils.BaseViewModel
 import org.mifospay.feature.history.detail.TransactionDetailState.ViewState.Content
@@ -34,12 +36,21 @@ internal class TransactionDetailViewModel(
 
     init {
         savedStateHandle.get<Long>(TRANSFER_ID_KEY)?.let { transferId ->
-            // Use the BaseViewModel `observeScreen` bridge to fold the
-            // ScreenState stream inline; the internal `TransferDetailReceive`
-            // action (which used to shuttle DataState) is removed.
-            accountRepository.getAccountTransfer(transferId).observeScreen { screenState ->
-                mutableStateFlow.update { it.copy(viewState = screenState.toViewState()) }
-            }
+            // transfer-detail Store5 vertical (GOAL D13) — switched from the
+            // transitional `getAccountTransfer(transferId)` (`asScreenStateFlow`
+            // shim over the raw Ktorfit flow) to the store-native
+            // `getAccountTransferStream(...)` that consumes the `transferDetail`
+            // Store5 read (`createStore` + Room SoT + CACHE_FIRST_SWR + single-row
+            // upsert), making the transaction-detail drill-down offline-first. The
+            // `.state` Flow is bridged to the fork ScreenState and folded through
+            // the same `observeScreen` reducer; consumer branches are unchanged.
+            // Requires `viewModelScope` for the stream's internal reconnect +
+            // periodic + SWR side-fetch coroutines.
+            accountRepository.getAccountTransferStream(transferId, viewModelScope)
+                .state.toForkScreenStateFlow()
+                .observeScreen { screenState ->
+                    mutableStateFlow.update { it.copy(viewState = screenState.toViewState()) }
+                }
         }
     }
 

@@ -146,6 +146,15 @@ object AppStoreRegistry : StoreRegistry() {
      */
     val LinkableAccounts = store("linkableAccounts")
 
+    /**
+     * transfer-detail SINGLE-ROW-PER-KEY read (`createStore` + CACHE_FIRST_SWR +
+     * single-row upsert). Keys on `TransferDetailKey(transferId)`; consumed by
+     * `AccountRepositoryImpl.getAccountTransferStream(...)`. Makes the
+     * transaction-detail drill-down offline-first — mirrors the [AccountDetail]
+     * recipe for the `getAccountTransfer` endpoint. GOAL D13.
+     */
+    val TransferDetail = store("transferDetail")
+
     /** TTL durations — financial-read freshness windows. */
     object Ttl {
         /**
@@ -257,6 +266,16 @@ object AppStoreRegistry : StoreRegistry() {
          * change on the dashboard sees matching balance figures.
          */
         val LINKABLE_ACCOUNTS: Duration = 2.minutes
+
+        /**
+         * `transferDetail` SINGLE-ROW-PER-KEY TTL — 2 minutes. Same cadence as
+         * [ACCOUNT_DETAIL] because the transfer-detail record derives from the
+         * same financial-read family as the account detail it drills into;
+         * keeping the two TTLs in lockstep means a user opening a transaction
+         * detail immediately after viewing the account sees a coherent freshness
+         * band.
+         */
+        val TRANSFER_DETAIL: Duration = 2.minutes
     }
 
     /**
@@ -285,5 +304,6 @@ object AppStoreRegistry : StoreRegistry() {
         "offices" to Ttl.OFFICES,
         "selfAccounts" to Ttl.SELF_ACCOUNTS,
         "linkableAccounts" to Ttl.LINKABLE_ACCOUNTS,
+        "transferDetail" to Ttl.TRANSFER_DETAIL,
     )
 }
