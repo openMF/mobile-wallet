@@ -21,9 +21,9 @@ import org.mifospay.core.data.util.TimeZoneMonitor
 
 val AndroidDataModule = module {
     // Legacy fork NetworkMonitor (org.mifospay.core.data.util) for DataState `withNetworkCheck`.
-    // The Store5 `kpt.core.data.infra.NetworkMonitor` is now bound cross-platform to
-    // JordondNetworkMonitor in DataModule — the former Android-only SeededNetworkMonitor
-    // override is gone (jordond seeds current state natively on Android too).
+    // The Store5 `kpt.core.data.infra.NetworkMonitor` is bound in DataModule via kmptoolkit's
+    // `NetworkMonitorProvider.install()` (cmp-network-monitor 3.6.0+, which carries the
+    // AndroidNetworkMonitor cold-start seed fix) — no per-platform override needed here.
     single<NetworkMonitor> {
         ConnectivityManagerNetworkMonitor(androidContext(), get(named(MifosDispatchers.IO.name)))
     }

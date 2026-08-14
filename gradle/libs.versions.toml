@@ -115,12 +115,10 @@ mokkeryVersion = "3.4.2"
 mokkery = "3.4.2"
 
 # KMP Toolkit Libraries
-kmptoolkit = "3.5.3"
-
-# jordond/connectivity — cross-platform network monitor engine (device callbacks on
-# Android/iOS, HTTP polling on Desktop/JS/WasmJs). Backs kpt.core.data.infra.NetworkMonitor
-# to fix the kmptoolkit cmp-network-monitor v3.5.3 initial-seed bug on EVERY target.
-jordondConnectivity = "2.5.0"
+# 3.5.9: cmp-network-monitor accuracy overhaul (seed fix incl. no-plan/captive-portal, HTTP-204
+# validation, injectable ConnectivityProvider) — MobileByteLabs/KmpToolkit#150. Replaces the
+# mifos-pay-local jordond experiment.
+kmptoolkit = "3.5.9"
 
 # CMP Libraries
 compose-plugin = "1.11.1"
@@ -417,13 +415,6 @@ cmp-intent-launcher = { module = "io.github.mobilebytelabs:cmp-intent-launcher",
 cmp-share = { module = "io.github.mobilebytelabs:cmp-share", version.ref = "kmptoolkit" }
 cmp-network-monitor = { module = "io.github.mobilebytelabs:cmp-network-monitor", version.ref = "kmptoolkit" }
 cmp-network-monitor-compose = { module = "io.github.mobilebytelabs:cmp-network-monitor-compose", version.ref = "kmptoolkit" }
-
-# jordond/connectivity — engine behind JordondNetworkMonitor (core/data). core = interface + Status
-# (commonMain); device = native callbacks (Android + iOS); http = URL polling (Desktop/JS/WasmJs,
-# bundles its own ktor engine per platform).
-jordond-connectivity-core = { module = "dev.jordond.connectivity:connectivity-core", version.ref = "jordondConnectivity" }
-jordond-connectivity-device = { module = "dev.jordond.connectivity:connectivity-device", version.ref = "jordondConnectivity" }
-jordond-connectivity-http = { module = "dev.jordond.connectivity:connectivity-http", version.ref = "jordondConnectivity" }
 
 firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics" }
 firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebaseBom" }

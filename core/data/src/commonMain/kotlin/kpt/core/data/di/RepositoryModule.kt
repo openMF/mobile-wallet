@@ -16,9 +16,8 @@ import kpt.core.base.common.di.CommonModule
 import kpt.core.base.store.infra.FetchedAtRepository
 import kpt.core.base.store.submit.OfflineSubmitSyncer
 import kpt.core.base.store.submit.SubmitOutbox
+import io.github.mobilebytelabs.kmptoolkit.networkmonitor.NetworkMonitorProvider
 import kpt.core.data.infra.NetworkMonitor
-import kpt.core.data.infra.impl.JordondNetworkMonitor
-import kpt.core.data.infra.impl.platformConnectivity
 import kpt.core.data.infra.impl.RoomBookkeeper
 import kpt.core.data.infra.impl.RoomFetchedAtRepository
 import kpt.core.data.infra.impl.RoomSubmitOutbox
@@ -39,11 +38,10 @@ import org.mobilenativefoundation.store.store5.Bookkeeper
 val DataModule = module {
     includes(platformModule, CommonModule, DatabaseModule, DatastoreModule, NetworkModule)
 
-    // Cross-platform network monitor backed by jordond/connectivity — seeds current state
-    // correctly on every target (fixes the kmptoolkit cmp-network-monitor v3.5.3 seed bug).
-    // Supersedes both the template `NetworkMonitorProvider.install()` and the former
-    // Android-only SeededNetworkMonitor override. Root fix tracked upstream in KmpToolkit.
-    single<NetworkMonitor> { JordondNetworkMonitor(platformConnectivity(get()), get()) }
+    // Backed by kmptoolkit cmp-network-monitor 3.6.0+ (AndroidNetworkMonitor seed fix: seeds
+    // online on INTERNET presence while Android's async VALIDATED probe is pending — cold-start
+    // no longer reads offline). The former mifos-pay-local jordond experiment is retired.
+    single<NetworkMonitor> { NetworkMonitorProvider.install() }
     singleOf(::UserDataRepositoryImpl) bind UserDataRepository::class
 
     // Framework FetchedAtRepository — durable lastFetchedAt persistence backing

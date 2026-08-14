@@ -385,10 +385,19 @@ fun <Key : Any, Output : Any> Store<Key, Output>.asScreenStream(
                 // fires exactly once (data arrives → isEmpty=false → no re-fire; a failed
                 // fetch that stays empty won't thrash — refresh()/retry()/reconnect re-fire
                 // through refreshTrigger).
-                val fetchNeeded = band == FreshnessBand.Stale ||
-                    band == FreshnessBand.VeryStale ||
-                    band == FreshnessBand.Initial ||
-                    storeData.isEmpty
+                // Gate on ONLINE: never launch a doomed fetch when there's no usable network.
+                // Offline + empty already renders NoNetwork via DecisionEngine; firing a fetch that
+                // can't reach the server just hangs (no data, no error) — and if the monitor is
+                // momentarily 'Available' the screen would sit on Loading forever waiting for it.
+                // The reconnect trigger (Unavailable→Available) re-emits storeFlow and re-fires this
+                // gate once the network is back, so nothing is lost.
+                val isOnline = networkStatusFlow.value is NetworkStatus.Available
+                val fetchNeeded = isOnline && (
+                    band == FreshnessBand.Stale ||
+                        band == FreshnessBand.VeryStale ||
+                        band == FreshnessBand.Initial ||
+                        storeData.isEmpty
+                    )
                 if (fetchNeeded && !lastFetchNeeded) {
                     scope.launch {
                         try {
@@ -599,10 +608,19 @@ fun <Key : Any, Output : Any> Store<Key, Output>.asScreenStream(
                 // fires exactly once (data arrives → isEmpty=false → no re-fire; a failed
                 // fetch that stays empty won't thrash — refresh()/retry()/reconnect re-fire
                 // through refreshTrigger).
-                val fetchNeeded = band == FreshnessBand.Stale ||
-                    band == FreshnessBand.VeryStale ||
-                    band == FreshnessBand.Initial ||
-                    storeData.isEmpty
+                // Gate on ONLINE: never launch a doomed fetch when there's no usable network.
+                // Offline + empty already renders NoNetwork via DecisionEngine; firing a fetch that
+                // can't reach the server just hangs (no data, no error) — and if the monitor is
+                // momentarily 'Available' the screen would sit on Loading forever waiting for it.
+                // The reconnect trigger (Unavailable→Available) re-emits storeFlow and re-fires this
+                // gate once the network is back, so nothing is lost.
+                val isOnline = networkStatusFlow.value is NetworkStatus.Available
+                val fetchNeeded = isOnline && (
+                    band == FreshnessBand.Stale ||
+                        band == FreshnessBand.VeryStale ||
+                        band == FreshnessBand.Initial ||
+                        storeData.isEmpty
+                    )
                 if (fetchNeeded && !lastFetchNeeded) {
                     val revalidateKey = lastObservedKey
                     val revalidateCacheKey = currentCacheKey
