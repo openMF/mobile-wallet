@@ -9,14 +9,20 @@
  */
 package org.mifospay.core.network.config
 
+import kpt.core.network.config.SupabaseCredentials as GeneratedSupabaseCredentials
 import org.mifos.corebase.network.SupabaseCredentials as GenericSupabaseCredentials
 
 /**
  * Implementation of SupabaseCredentials that bridges the generated
  * SupabaseCredentials object with the generic interface.
+ *
+ * The concrete credentials object is emitted by SupabaseConfigConventionPlugin into the
+ * module-scoped package configured in build.gradle.kts (`supabaseConfig.packageName =
+ * "kpt.core.network.config"`), so we read the generated `url`/`anonKey` from there rather
+ * than assuming a same-package object. `isConfigured` is derived locally from those values.
  */
 internal object SupabaseCredentialsImpl : GenericSupabaseCredentials {
-    override val url: String get() = SupabaseCredentials.URL
-    override val anonKey: String get() = SupabaseCredentials.ANON_KEY
-    override val isConfigured: Boolean get() = SupabaseCredentials.isConfigured
+    override val url: String get() = GeneratedSupabaseCredentials.url
+    override val anonKey: String get() = GeneratedSupabaseCredentials.anonKey
+    override val isConfigured: Boolean get() = url.isNotBlank() && anonKey.isNotBlank()
 }
