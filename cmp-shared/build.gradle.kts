@@ -8,7 +8,10 @@
  * See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 
+@file:OptIn(org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeCacheApi::class)
+
 import com.mobilebytelabs.kmpflavors.KmpFlavorExtension
+import org.jetbrains.kotlin.gradle.plugin.mpp.DisableCacheInKotlinVersion
 import org.jetbrains.kotlin.gradle.plugin.mpp.NativeBuildType
 
 plugins {
@@ -36,6 +39,19 @@ kotlin {
             // KGP rejects debuggable=true + optimized=true on the same binary
             // (kotlin:kgp:misconfiguration:incompatible-binary-configuration).
             optimized = buildType == NativeBuildType.RELEASE
+        }
+        // compose-signature:1.0.1 ships an iosArm64 klib that fails Kotlin/Native
+        // static-cache generation on Kotlin 2.4.0 — the CI iOS build aborts with
+        // "error: Failed to build cache for .../compose-signature-iosArm64Main-1.0.1.klib".
+        // Disable the native cache for every binary of this target (framework + the
+        // CocoaPods-plugin framework the CI xcodebuild links) so the klib is linked
+        // directly. The `kotlin.native.cacheKind.<target>` gradle property that used to
+        // do this was removed in 2.3.20; this per-binary DSL is its replacement.
+        iosTarget.binaries.configureEach {
+            disableNativeCache(
+                DisableCacheInKotlinVersion.`2_4_0`,
+                reason = "compose-signature:1.0.1 iosArm64 klib fails static-cache build on Kotlin 2.4.0",
+            )
         }
     }
 
