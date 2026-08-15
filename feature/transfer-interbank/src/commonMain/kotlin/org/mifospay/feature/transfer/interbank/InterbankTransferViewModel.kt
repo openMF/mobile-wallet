@@ -20,7 +20,13 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 import kpt.core.base.store.submit.SubmitState
 import kpt.core.base.store.submit.submitHandler
-import org.mifospay.core.common.DataState
+import mobile_wallet.feature.transfer_interbank.generated.resources.Res
+import mobile_wallet.feature.transfer_interbank.generated.resources.feature_send_interbank_error_failed_to_search_recipient
+import mobile_wallet.feature.transfer_interbank.generated.resources.feature_send_interbank_error_no_network
+import mobile_wallet.feature.transfer_interbank.generated.resources.feature_send_interbank_error_phone_number_digits
+import mobile_wallet.feature.transfer_interbank.generated.resources.feature_send_interbank_error_session_expired
+import mobile_wallet.feature.transfer_interbank.generated.resources.feature_send_interbank_no_recipients_found
+import org.jetbrains.compose.resources.getString
 import org.mifospay.core.common.DateHelper
 import org.mifospay.core.common.ScreenState
 import org.mifospay.core.data.repository.InterBankRepository
@@ -59,7 +65,7 @@ class InterbankTransferViewModel(
 ) {
 
     // Template idiom (core-base/store): the money-movement write goes through a
-    // SubmitHandler instead of a hand-folded DataState result action. The handler owns
+    // SubmitHandler instead of a hand-folded result action. The handler owns
     // the Submitting/Submitted/Failed lifecycle; we observe it to drive this flow's
     // existing processing/success/failed steps + events, so the Screens are unchanged.
     private val submitTransfer = viewModelScope.submitHandler<InterBankTransferResponse>()
@@ -343,14 +349,9 @@ class InterbankTransferViewModel(
 
         // Submit through the handler — it drives Submitting/Submitted/Failed, observed
         // in `init`, and no-ops on a re-tap while Submitting (double-submit protection).
-        // The block unwraps the repository's transitional DataState: return the value on
-        // success, throw on error so the handler reports Failed.
+        // The repository throws on failure, which the handler reports as Failed.
         submitTransfer.submit {
-            when (val result = interBankRepository.interBankMakeTransfer(transferRequest)) {
-                is DataState.Success -> result.data
-                is DataState.Error -> throw result.exception
-                DataState.Loading -> error("interBankMakeTransfer must not emit Loading")
-            }
+            interBankRepository.interBankMakeTransfer(transferRequest)
         }
     }
 
@@ -367,53 +368,82 @@ class InterbankTransferViewModel(
     }
 
     private fun searchRecipient(phoneNumber: String) {
-        if (phoneNumber.length < 10) {
-            mutableStateFlow.update {
-                it.copy(
-                    searchRecipientState = InterbankTransferState.SearchRecipientState.Error(
-                        "Phone number must be at least 10 digits",
-                    ),
-                    searchResults = emptyList(),
-                )
-            }
-            return
-        }
-
         launchIO {
-            mutableStateFlow.update {
-                it.copy(searchRecipientState = InterbankTransferState.SearchRecipientState.Loading)
+            if (phoneNumber.length < 10) {
+                mutableStateFlow.update {
+                    it.copy(
+                        searchRecipientState = InterbankTransferState.SearchRecipientState.Error(
+                            getString(Res.string.feature_send_interbank_error_phone_number_digits),
+                        ),
+                        searchResults = emptyList(),
+                    )
+                }
+                return@launchIO
             }
 
-            val result = interBankRepository.findParticipant(
+            interBankRepository.findParticipant(
                 partyId = phoneNumber,
                 currencyCode = mutableStateFlow.value.selectedFromAccount?.currency?.code ?: "MXN",
-            )
-
-            when (result) {
-                is DataState.Success -> {
-                    val partyInfo = result.data
-                    mutableStateFlow.update {
-                        it.copy(
-                            searchRecipientState = InterbankTransferState.SearchRecipientState.Success,
-                            searchResults = listOf(partyInfo),
-                        )
+            ).collect { screenState ->
+                when (screenState) {
+                    is ScreenState.Loading -> {
+                        mutableStateFlow.update {
+                            it.copy(searchRecipientState = InterbankTransferState.SearchRecipientState.Loading)
+                        }
                     }
-                }
 
-                is DataState.Error -> {
-                    mutableStateFlow.update {
-                        it.copy(
-                            searchRecipientState = InterbankTransferState.SearchRecipientState.Error(
-                                result.message ?: "Failed to search recipient",
-                            ),
-                            searchResults = emptyList(),
-                        )
+                    is ScreenState.Content -> {
+                        val partyInfo = screenState.data
+                        mutableStateFlow.update {
+                            it.copy(
+                                searchRecipientState = InterbankTransferState.SearchRecipientState.Success,
+                                searchResults = listOf(partyInfo),
+                            )
+                        }
                     }
-                }
 
-                is DataState.Loading -> {
-                    mutableStateFlow.update {
-                        it.copy(searchRecipientState = InterbankTransferState.SearchRecipientState.Loading)
+                    is ScreenState.Empty -> {
+                        mutableStateFlow.update {
+                            it.copy(
+                                searchRecipientState = InterbankTransferState.SearchRecipientState.Error(
+                                    getString(Res.string.feature_send_interbank_no_recipients_found),
+                                ),
+                                searchResults = emptyList(),
+                            )
+                        }
+                    }
+
+                    is ScreenState.Error -> {
+                        val message = screenState.error.message
+                            ?: getString(Res.string.feature_send_interbank_error_failed_to_search_recipient)
+                        mutableStateFlow.update {
+                            it.copy(
+                                searchRecipientState = InterbankTransferState.SearchRecipientState.Error(message),
+                                searchResults = emptyList(),
+                            )
+                        }
+                    }
+
+                    is ScreenState.NoNetwork -> {
+                        mutableStateFlow.update {
+                            it.copy(
+                                searchRecipientState = InterbankTransferState.SearchRecipientState.Error(
+                                    getString(Res.string.feature_send_interbank_error_no_network),
+                                ),
+                                searchResults = emptyList(),
+                            )
+                        }
+                    }
+
+                    is ScreenState.Unauthenticated -> {
+                        mutableStateFlow.update {
+                            it.copy(
+                                searchRecipientState = InterbankTransferState.SearchRecipientState.Error(
+                                    getString(Res.string.feature_send_interbank_error_session_expired),
+                                ),
+                                searchResults = emptyList(),
+                            )
+                        }
                     }
                 }
             }

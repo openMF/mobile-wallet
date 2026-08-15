@@ -43,6 +43,7 @@ import kotlinx.coroutines.launch
 import mobile_wallet.feature.kyc.generated.resources.Res
 import mobile_wallet.feature.kyc.generated.resources.feature_kyc_file_name
 import mobile_wallet.feature.kyc.generated.resources.feature_kyc_submit
+import org.jetbrains.compose.resources.getString
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.mifospay.core.designsystem.component.BasicDialogState
@@ -76,7 +77,7 @@ internal fun KYCLevel2Screen(
             KycLevel2Event.OnNavigateToLevel3 -> navigateToLevel3.invoke()
             is KycLevel2Event.ShowToast -> {
                 scope.launch {
-                    snackbarHostState.showSnackbar(event.message)
+                    snackbarHostState.showSnackbar(getString(event.message))
                 }
             }
         }

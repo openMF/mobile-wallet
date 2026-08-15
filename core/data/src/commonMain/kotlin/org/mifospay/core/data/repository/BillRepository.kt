@@ -9,8 +9,7 @@
  */
 package org.mifospay.core.data.repository
 
-import kotlinx.coroutines.flow.Flow
-import org.mifospay.core.common.DataState
+import org.mifospay.core.common.ScreenStateStream
 import org.mifospay.core.model.autopay.Bill
 import org.mifospay.core.model.autopay.BillStatus
 import org.mifospay.core.model.autopay.RecurrencePattern
@@ -19,27 +18,27 @@ interface BillRepository {
     /**
      * Get all bills for a client
      */
-    fun getAllBills(clientId: Long): Flow<DataState<List<Bill>>>
+    fun getAllBills(clientId: Long): ScreenStateStream<List<Bill>>
 
     /**
-     * Get bill by ID
+     * Get bill by ID. Returns the bill or throws on failure.
      */
-    suspend fun getBillById(id: String): DataState<Bill>
+    suspend fun getBillById(id: String): Bill
 
     /**
-     * Create a new bill
+     * Create a new bill. Returns the created bill or throws on failure.
      */
-    suspend fun createBill(bill: Bill): DataState<Bill>
+    suspend fun createBill(bill: Bill): Bill
 
     /**
-     * Update an existing bill
+     * Update an existing bill. Returns the updated bill or throws on failure.
      */
-    suspend fun updateBill(bill: Bill): DataState<Bill>
+    suspend fun updateBill(bill: Bill): Bill
 
     /**
-     * Delete a bill
+     * Delete a bill. Throws on failure.
      */
-    suspend fun deleteBill(id: String): DataState<Unit>
+    suspend fun deleteBill(id: String)
 
     /**
      * Get bills by status
@@ -72,24 +71,24 @@ interface BillRepository {
     suspend fun getUpcomingBills(fromDate: Long, toDate: Long): List<Bill>
 
     /**
-     * Update bill status
+     * Update bill status. Returns the updated bill or throws on failure.
      */
-    suspend fun updateBillStatus(billId: String, status: BillStatus): DataState<Bill>
+    suspend fun updateBillStatus(billId: String, status: BillStatus): Bill
 
     /**
-     * Validate bill data before submission
+     * Validate bill data before submission. Throws on invalid input.
      */
-    suspend fun validateBill(bill: Bill): DataState<Boolean>
+    suspend fun validateBill(bill: Bill)
 
     /**
      * Get bill statistics for dashboard
      */
-    fun getBillStatistics(clientId: Long): Flow<DataState<BillStatistics>>
+    fun getBillStatistics(clientId: Long): ScreenStateStream<BillStatistics>
 
     /**
-     * Clear all bills
+     * Clear all bills. Throws on failure.
      */
-    suspend fun clearAllBills(): DataState<Unit>
+    suspend fun clearAllBills()
 }
 
 data class BillStatistics(

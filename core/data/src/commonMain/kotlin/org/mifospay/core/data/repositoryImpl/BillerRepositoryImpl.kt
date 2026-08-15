@@ -15,7 +15,6 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.withContext
-import org.mifospay.core.common.DataState
 import org.mifospay.core.data.repository.BillerRepository
 import org.mifospay.core.model.autopay.Biller
 import org.mifospay.core.model.autopay.BillerCategory
@@ -59,37 +58,22 @@ class BillerRepositoryImpl(
         }
     }
 
-    override suspend fun saveBiller(biller: Biller): DataState<Biller> {
-        return try {
-            val result = withContext(ioDispatcher) {
-                apiManager.billerApi.createBiller(biller).first()
-            }
-            DataState.Success(result)
-        } catch (e: Exception) {
-            DataState.Error(e)
+    override suspend fun saveBiller(biller: Biller): Biller {
+        return withContext(ioDispatcher) {
+            apiManager.billerApi.createBiller(biller).first()
         }
     }
 
-    override suspend fun updateBiller(biller: Biller): DataState<Biller> {
-        return try {
-            val billerId = biller.id ?: return DataState.Error(Exception("Biller ID is required for update"))
-            val result = withContext(ioDispatcher) {
-                apiManager.billerApi.updateBiller(billerId, biller).first()
-            }
-            DataState.Success(result)
-        } catch (e: Exception) {
-            DataState.Error(e)
+    override suspend fun updateBiller(biller: Biller): Biller {
+        val billerId = requireNotNull(biller.id) { "Biller ID is required for update" }
+        return withContext(ioDispatcher) {
+            apiManager.billerApi.updateBiller(billerId, biller).first()
         }
     }
 
-    override suspend fun deleteBiller(id: String): DataState<Unit> {
-        return try {
-            withContext(ioDispatcher) {
-                apiManager.billerApi.deleteBiller(id).first()
-            }
-            DataState.Success(Unit)
-        } catch (e: Exception) {
-            DataState.Error(e)
+    override suspend fun deleteBiller(id: String) {
+        withContext(ioDispatcher) {
+            apiManager.billerApi.deleteBiller(id).first()
         }
     }
 
@@ -123,14 +107,9 @@ class BillerRepositoryImpl(
         }
     }
 
-    override suspend fun clearAllBillers(): DataState<Unit> {
-        return try {
-            withContext(ioDispatcher) {
-                apiManager.billerApi.clearAllBillers().first()
-            }
-            DataState.Success(Unit)
-        } catch (e: Exception) {
-            DataState.Error(e)
+    override suspend fun clearAllBillers() {
+        withContext(ioDispatcher) {
+            apiManager.billerApi.clearAllBillers().first()
         }
     }
 }

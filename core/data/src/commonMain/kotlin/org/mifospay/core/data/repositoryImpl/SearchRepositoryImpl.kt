@@ -11,7 +11,6 @@ package org.mifospay.core.data.repositoryImpl
 
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
-import org.mifospay.core.common.DataState
 import org.mifospay.core.data.mapper.toSearchResult
 import org.mifospay.core.data.repository.SearchRepository
 import org.mifospay.core.model.search.SearchResult
@@ -25,15 +24,9 @@ class SearchRepositoryImpl(
         query: String,
         resources: String,
         exactMatch: Boolean,
-    ): DataState<List<SearchResult>> {
-        return try {
-            val result = withContext(ioDispatcher) {
-                apiManager.searchApi.searchResources(query, resources, exactMatch)
-            }
-
-            DataState.Success(result.toSearchResult())
-        } catch (e: Exception) {
-            DataState.Error(e)
+    ): List<SearchResult> {
+        return withContext(ioDispatcher) {
+            apiManager.searchApi.searchResources(query, resources, exactMatch).toSearchResult()
         }
     }
 }

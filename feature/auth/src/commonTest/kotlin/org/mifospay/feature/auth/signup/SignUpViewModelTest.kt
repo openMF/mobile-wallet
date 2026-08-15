@@ -12,20 +12,23 @@ package org.mifospay.feature.auth.signup
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import dev.mokkery.answering.returns
+import dev.mokkery.every
 import dev.mokkery.everySuspend
 import dev.mokkery.matcher.any
 import dev.mokkery.matcher.logical.or
 import dev.mokkery.mock
+import dev.mokkery.verify
 import dev.mokkery.verifySuspend
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
-import org.mifospay.core.common.DataState
+import org.mifospay.core.common.ScreenState
 import org.mifospay.core.common.StringProvider
 import org.mifospay.core.data.repository.AssetRepository
 import org.mifospay.core.data.repository.ClientRepository
@@ -73,13 +76,15 @@ class SignUpViewModelTest {
     fun setup() {
         Dispatchers.setMain(testDispatcher)
 
-        everySuspend { mockAssetRepository.getCountriesWithStates() } returns DataState.Success(
-            mapOf(
-                "Afghanistan" to listOf(
-                    "Badakhshān", "Baghlān", "Balkh", "Bādghīs", "Bāmyān",
-                ),
-                "Albania" to listOf(
-                    "Berat", "Dibër", "Durrës", "Elbasan", "Fier",
+        every { mockAssetRepository.getCountriesWithStates() } returns flowOf(
+            ScreenState.Content(
+                mapOf(
+                    "Afghanistan" to listOf(
+                        "Badakhshān", "Baghlān", "Balkh", "Bādghīs", "Bāmyān",
+                    ),
+                    "Albania" to listOf(
+                        "Berat", "Dibër", "Durrës", "Elbasan", "Fier",
+                    ),
                 ),
             ),
         )
@@ -245,7 +250,7 @@ class SignUpViewModelTest {
         advanceUntilIdle()
 
         // Verifies that getCountriesWithStates() was called exactly once during the process
-        verifySuspend { mockAssetRepository.getCountriesWithStates() }
+        verify { mockAssetRepository.getCountriesWithStates() }
 
         assertEquals(
             listOf("Badakhshān", "Baghlān", "Balkh", "Bādghīs", "Bāmyān"),
@@ -274,17 +279,17 @@ class SignUpViewModelTest {
                 any(),
                 any(),
             )
-        } returns DataState.Success(emptyList())
+        } returns emptyList()
         everySuspend {
             mockSearchRepository.searchResources(
                 "9876543210",
                 any(),
                 any(),
             )
-        } returns DataState.Success(emptyList())
+        } returns emptyList()
 
         // Mock user creation to return a user ID
-        everySuspend { mockUserRepository.createUser(any()) } returns DataState.Success(123)
+        everySuspend { mockUserRepository.createUser(any()) } returns 123
 
         // Mock client creation to return a client ID
         everySuspend { mockClientRepository.createClient(any()) } returns 456
@@ -295,7 +300,7 @@ class SignUpViewModelTest {
                 any(),
                 any(),
             )
-        } returns DataState.Success(Unit)
+        } returns Unit
 
         enterAllFields()
 
@@ -338,16 +343,16 @@ class SignUpViewModelTest {
                 any(),
                 any(),
             )
-        } returns DataState.Success(emptyList())
+        } returns emptyList()
 
         // Mock user creation
-        everySuspend { mockUserRepository.createUser(any()) } returns DataState.Success(101)
+        everySuspend { mockUserRepository.createUser(any()) } returns 101
 
         // Mock client creation
         everySuspend { mockClientRepository.createClient(any()) } returns 202
 
         // Mock client-user assignment
-        everySuspend { mockUserRepository.assignClientToUser(101, 202) } returns DataState.Success(Unit)
+        everySuspend { mockUserRepository.assignClientToUser(101, 202) } returns Unit
 
         enterAllFields()
 
@@ -407,10 +412,8 @@ class SignUpViewModelTest {
             mockSearchRepository.searchResources(
                 or("SameUserName", "9876543210"), any(), any(),
             )
-        } returns DataState.Success(
-            listOf(
-                fakeSearchResult,
-            ),
+        } returns listOf(
+            fakeSearchResult,
         )
 
         enterAllFields()
@@ -454,10 +457,8 @@ class SignUpViewModelTest {
                 resources = any(),
                 exactMatch = any(),
             )
-        } returns DataState.Success(
-            listOf(
-                fakeSearchResult,
-            ),
+        } returns listOf(
+            fakeSearchResult,
         )
 
         enterAllFields()
@@ -505,10 +506,8 @@ class SignUpViewModelTest {
                     any(),
                     any(),
                 )
-            } returns DataState.Success(
-                listOf(
-                    fakeSearchResult,
-                ),
+            } returns listOf(
+                fakeSearchResult,
             )
 
             enterAllFields()

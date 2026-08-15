@@ -17,7 +17,6 @@ import io.ktor.http.content.PartData
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.withContext
-import org.mifospay.core.common.DataState
 import org.mifospay.core.common.ScreenStateStream
 import org.mifospay.core.common.asScreenStateFlow
 import org.mifospay.core.data.repository.DocumentRepository
@@ -57,37 +56,31 @@ class DocumentRepositoryImpl(
         name: String,
         description: String,
         file: ByteArray,
-    ): DataState<String> {
-        return try {
-            val formData = MultiPartFormDataContent(
-                formData {
-                    // File part
-                    append(
-                        "file",
-                        file,
-                        Headers.build {
-                            append(HttpHeaders.ContentType, "multipart/form-data")
-                            append(HttpHeaders.ContentDisposition, "filename=\"$name\"")
-                        },
-                    )
-
-                    // Name and description fields
-                    append("name", name)
-                    append("description", description)
-                },
-            )
-
-            withContext(ioDispatcher) {
-                apiManager.documentApi.createDocumentFile(
-                    entityType = entityType,
-                    entityId = entityId,
-                    file = formData,
+    ) {
+        val formData = MultiPartFormDataContent(
+            formData {
+                // File part
+                append(
+                    "file",
+                    file,
+                    Headers.build {
+                        append(HttpHeaders.ContentType, "multipart/form-data")
+                        append(HttpHeaders.ContentDisposition, "filename=\"$name\"")
+                    },
                 )
-            }
 
-            DataState.Success("Document Uploaded Successfully")
-        } catch (e: Exception) {
-            DataState.Error(e)
+                // Name and description fields
+                append("name", name)
+                append("description", description)
+            },
+        )
+
+        withContext(ioDispatcher) {
+            apiManager.documentApi.createDocumentFile(
+                entityType = entityType,
+                entityId = entityId,
+                file = formData,
+            )
         }
     }
 

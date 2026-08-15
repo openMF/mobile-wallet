@@ -9,7 +9,6 @@
  */
 package org.mifospay.core.data.repository
 
-import org.mifospay.core.common.DataState
 import org.mifospay.core.common.ScreenStateStream
 import org.mifospay.core.model.user.NewUser
 import org.mifospay.core.network.model.CommonResponse
@@ -24,12 +23,12 @@ interface UserRepository {
 
     suspend fun updateUser(userId: Int, updatedUser: NewUser): ScreenStateStream<GenericResponse>
 
-    // Writes stay on DataState (Phase-3 D1).
-    suspend fun createUser(newUser: NewUser): DataState<Int>
+    // Writes throw on failure (DataState-free).
+    suspend fun createUser(newUser: NewUser): Int
 
-    suspend fun updateUserPassword(userId: Long, password: String): DataState<String>
+    suspend fun updateUserPassword(userId: Long, password: String)
 
-    suspend fun deleteUser(userId: Int): DataState<CommonResponse>
+    suspend fun deleteUser(userId: Int): CommonResponse
 
-    suspend fun assignClientToUser(userId: Int, clientId: Int): DataState<Unit>
+    suspend fun assignClientToUser(userId: Int, clientId: Int)
 }

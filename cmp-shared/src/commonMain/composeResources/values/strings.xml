@@ -27,6 +27,7 @@
     <string name="default">Default</string>
     <string name="tenant_value">Tenant: %1$d</string>
     <string name="error_message">Error: %1$d</string>
+    <string name="failed_to_load_instances">Failed to load instances</string>
 
     <!-- Finance Tab Labels -->
     <string name="feature_finance_accounts">Accounts</string>

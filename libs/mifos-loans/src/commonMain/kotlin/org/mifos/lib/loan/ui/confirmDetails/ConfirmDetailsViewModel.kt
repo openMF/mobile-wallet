@@ -19,6 +19,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import mobile_wallet.libs.mifos_loans.generated.resources.Res
 import mobile_wallet.libs.mifos_loans.generated.resources.feature_apply_loan_error_server
+import mobile_wallet.libs.mifos_loans.generated.resources.feature_apply_loan_error_submit_failed
 import mobile_wallet.libs.mifos_loans.generated.resources.feature_apply_loan_label_applicant_name
 import mobile_wallet.libs.mifos_loans.generated.resources.feature_apply_loan_label_disbursement_date
 import mobile_wallet.libs.mifos_loans.generated.resources.feature_apply_loan_label_loan_product
@@ -31,7 +32,7 @@ import org.mifos.lib.loan.core.model.LoanState
 import org.mifos.lib.loan.core.model.LoanTemplate
 import org.mifos.lib.loan.core.model.LoansPayload
 import org.mifos.lib.loan.repository.LoansRepository
-import org.mifospay.core.common.DataState
+import org.mifospay.core.common.ScreenState
 import org.mifospay.core.data.repository.UserVerificationRepository
 import org.mifospay.core.ui.utils.BaseViewModel
 
@@ -164,21 +165,42 @@ internal class ConfirmDetailsViewModel(
     private suspend fun submitLoanApplication() {
         val templateResult = loansRepository
             .getLoanTemplateByProduct(state.providerId, state.clientId, state.productId)
-            .first { it !is DataState.Loading }
+            .first { it !is ScreenState.Loading }
 
         when (templateResult) {
-            is DataState.Success -> {
+            is ScreenState.Content -> {
                 val payload = buildLoanPayload(templateResult.data)
-                val result = loansRepository.submitLoanApplication(
-                    providerId = state.providerId,
-                    loanState = LoanState.CREATE,
-                    payload = payload,
-                    loanId = -1,
-                )
-                handleSubmitResult(result)
+                try {
+                    loansRepository.submitLoanApplication(
+                        providerId = state.providerId,
+                        loanState = LoanState.CREATE,
+                        payload = payload,
+                        loanId = -1,
+                    )
+                    mutableStateFlow.update {
+                        it.copy(
+                            isSubmitting = false,
+                            dialogState = ConfirmDetailsState.DialogState.Success(
+                                getString(Res.string.feature_apply_loan_status_success_tip),
+                            ),
+                        )
+                    }
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    mutableStateFlow.update {
+                        it.copy(
+                            isSubmitting = false,
+                            dialogState = ConfirmDetailsState.DialogState.Error(
+                                getString(Res.string.feature_apply_loan_error_submit_failed),
+                            ),
+                        )
+                    }
+                }
             }
 
-            is DataState.Error -> {
+            // Error / Empty / NoNetwork / Unauthenticated — the template needed to build the
+            // payload could not be fetched, so the submission cannot proceed.
+            else -> {
                 mutableStateFlow.update {
                     it.copy(
                         isSubmitting = false,
@@ -188,34 +210,6 @@ internal class ConfirmDetailsViewModel(
                     )
                 }
             }
-
-            DataState.Loading -> Unit
-        }
-    }
-
-    private suspend fun handleSubmitResult(result: DataState<String>) {
-        when (result) {
-            is DataState.Success -> {
-                mutableStateFlow.update {
-                    it.copy(
-                        isSubmitting = false,
-                        dialogState = ConfirmDetailsState.DialogState.Success(
-                            getString(Res.string.feature_apply_loan_status_success_tip),
-                        ),
-                    )
-                }
-            }
-
-            is DataState.Error -> {
-                mutableStateFlow.update {
-                    it.copy(
-                        isSubmitting = false,
-                        dialogState = ConfirmDetailsState.DialogState.Error(result.message),
-                    )
-                }
-            }
-
-            DataState.Loading -> Unit
         }
     }
 

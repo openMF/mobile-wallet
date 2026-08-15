@@ -19,7 +19,6 @@ import kpt.core.base.database.invalidation.notifyingWrite
 import kpt.core.database.wallet.biller.BillerDao
 import kpt.core.database.wallet.biller.toDomain
 import kpt.core.database.wallet.biller.toEntity
-import org.mifospay.core.common.DataState
 import org.mifospay.core.datastore.BillerRepository
 import org.mifospay.core.model.autopay.Biller
 import org.mifospay.core.model.autopay.BillerCategory
@@ -110,57 +109,37 @@ class BillerOfflineRepositoryImpl(
         }
     }
 
-    override suspend fun saveBiller(biller: Biller): DataState<Biller> {
-        return try {
-            withContext(ioDispatcher) {
-                // Preserve the datastore impl's duplicate-detection semantics —
-                // reject when a biller with the same (name, accountNumber) already exists.
-                val duplicates = dao.countMatching(biller.name, biller.accountNumber)
-                if (duplicates > 0) {
-                    return@withContext DataState.Error(
-                        Exception("Biller with this name and account number already exists"),
-                    )
-                }
-                val toWrite = biller.toEntity(generatedIdFallback = generateBillerId())
-                notifyingWrite(BILLERS_TABLE) {
-                    dao.upsert(toWrite)
-                }
-                DataState.Success(toWrite.toDomain())
+    override suspend fun saveBiller(biller: Biller): Biller {
+        return withContext(ioDispatcher) {
+            // Preserve the datastore impl's duplicate-detection semantics —
+            // reject when a biller with the same (name, accountNumber) already exists.
+            val duplicates = dao.countMatching(biller.name, biller.accountNumber)
+            require(duplicates == 0) { "Biller with this name and account number already exists" }
+            val toWrite = biller.toEntity(generatedIdFallback = generateBillerId())
+            notifyingWrite(BILLERS_TABLE) {
+                dao.upsert(toWrite)
             }
-        } catch (e: Exception) {
-            DataState.Error(Exception("Failed to save biller: ${e.message}"))
+            toWrite.toDomain()
         }
     }
 
-    override suspend fun updateBiller(biller: Biller): DataState<Biller> {
-        return try {
-            withContext(ioDispatcher) {
-                val existingId = biller.id
-                    ?: return@withContext DataState.Error(Exception("Biller ID is required for update"))
-                if (dao.getById(existingId) == null) {
-                    return@withContext DataState.Error(Exception("Biller not found"))
-                }
-                val entity = biller.toEntity(generatedIdFallback = existingId)
-                notifyingWrite(BILLERS_TABLE) {
-                    dao.upsert(entity)
-                }
-                DataState.Success(entity.toDomain())
+    override suspend fun updateBiller(biller: Biller): Biller {
+        return withContext(ioDispatcher) {
+            val existingId = requireNotNull(biller.id) { "Biller ID is required for update" }
+            checkNotNull(dao.getById(existingId)) { "Biller not found" }
+            val entity = biller.toEntity(generatedIdFallback = existingId)
+            notifyingWrite(BILLERS_TABLE) {
+                dao.upsert(entity)
             }
-        } catch (e: Exception) {
-            DataState.Error(Exception("Failed to update biller: ${e.message}"))
+            entity.toDomain()
         }
     }
 
-    override suspend fun deleteBiller(id: String): DataState<Unit> {
-        return try {
-            withContext(ioDispatcher) {
-                notifyingWrite(BILLERS_TABLE) {
-                    dao.deleteById(id)
-                }
+    override suspend fun deleteBiller(id: String) {
+        withContext(ioDispatcher) {
+            notifyingWrite(BILLERS_TABLE) {
+                dao.deleteById(id)
             }
-            DataState.Success(Unit)
-        } catch (e: Exception) {
-            DataState.Error(Exception("Failed to delete biller: ${e.message}"))
         }
     }
 
@@ -198,16 +177,11 @@ class BillerOfflineRepositoryImpl(
         }
     }
 
-    override suspend fun clearAllBillers(): DataState<Unit> {
-        return try {
-            withContext(ioDispatcher) {
-                notifyingWrite(BILLERS_TABLE) {
-                    dao.deleteAll()
-                }
+    override suspend fun clearAllBillers() {
+        withContext(ioDispatcher) {
+            notifyingWrite(BILLERS_TABLE) {
+                dao.deleteAll()
             }
-            DataState.Success(Unit)
-        } catch (e: Exception) {
-            DataState.Error(Exception("Failed to clear billers: ${e.message}"))
         }
     }
 

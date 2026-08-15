@@ -10,6 +10,7 @@
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import dev.mokkery.answering.returns
+import dev.mokkery.answering.throws
 import dev.mokkery.every
 import dev.mokkery.everySuspend
 import dev.mokkery.matcher.any
@@ -24,7 +25,6 @@ import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
-import org.mifospay.core.common.DataState
 import org.mifospay.core.data.repository.AuthenticationRepository
 import org.mifospay.core.data.repository.ClientRepository
 import org.mifospay.core.datastore.UserPreferencesRepository
@@ -170,12 +170,12 @@ class LoginViewModelTest {
     @Test
     fun givenIncorrectCredentials_whenLoginClicked_thenErrorDialogShown() = runTest {
         /*
-         * Mocks the authentication repository to fail — the use-case maps this to a
-         * DataState.Error("Invalid credentials").
+         * Mocks the authentication repository to throw — the use-case wraps this in an
+         * IllegalStateException and the ViewModel maps it to its Failed state.
          */
         everySuspend {
             authenticationRepository.authenticate("Hekmat", "MyPassword")
-        } returns DataState.Error(Exception("Invalid Credentials"))
+        } throws RuntimeException("Invalid Credentials")
 
         viewModel.trySendAction(LoginAction.UsernameChanged("Hekmat"))
         viewModel.trySendAction(LoginAction.PasswordChanged("MyPassword"))
@@ -190,9 +190,11 @@ class LoginViewModelTest {
             authenticationRepository.authenticate("Hekmat", "MyPassword")
         }
 
+        // On a failed authentication the ViewModel surfaces an error dialog whose copy
+        // now comes from the feature StringResource (feature_auth_error_login_failed) —
+        // assert the failure STATE rather than the exact (resource-resolved) message.
         val dialog = viewModel.stateFlow.value.dialogState
         assertIs<LoginState.DialogState.Error>(dialog)
-        assertEquals("Invalid credentials", dialog.message)
     }
 
     /**
@@ -242,15 +244,15 @@ class LoginViewModelTest {
     private fun stubSuccessfulLogin(username: String, password: String, userInfo: UserInfo) {
         everySuspend {
             authenticationRepository.authenticate(username, password)
-        } returns DataState.Success(userInfo)
-        everySuspend { userPreferencesRepository.updateToken(any()) } returns DataState.Success(Unit)
-        everySuspend { clientRepository.getClient(any()) } returns DataState.Success(testClient)
+        } returns userInfo
+        everySuspend { userPreferencesRepository.updateToken(any()) } returns Unit
+        everySuspend { clientRepository.getClient(any()) } returns testClient
         everySuspend {
             userPreferencesRepository.updateClientInfo(any())
-        } returns DataState.Success(Unit)
+        } returns Unit
         everySuspend {
             userPreferencesRepository.updateUserInfo(any())
-        } returns DataState.Success(Unit)
+        } returns Unit
     }
 
     private fun validUserInfo(username: String): UserInfo = UserInfo(

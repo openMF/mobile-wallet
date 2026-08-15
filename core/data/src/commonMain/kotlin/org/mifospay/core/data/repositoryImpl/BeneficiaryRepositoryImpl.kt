@@ -13,7 +13,6 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.withContext
-import org.mifospay.core.common.DataState
 import org.mifospay.core.common.ScreenState
 import org.mifospay.core.common.asScreenStateFlow
 import org.mifospay.core.data.repository.BeneficiaryRepository
@@ -41,42 +40,24 @@ class BeneficiaryRepositoryImpl(
 
     override suspend fun createBeneficiary(
         beneficiaryPayload: BeneficiaryPayload,
-    ): DataState<String> {
-        return try {
-            withContext(ioDispatcher) {
-                apiManager.beneficiaryApi.createBeneficiary(beneficiaryPayload)
-            }
-
-            DataState.Success("Beneficiary created successfully")
-        } catch (e: Exception) {
-            DataState.Error(e)
+    ) {
+        withContext(ioDispatcher) {
+            apiManager.beneficiaryApi.createBeneficiary(beneficiaryPayload)
         }
     }
 
     override suspend fun updateBeneficiary(
         beneficiaryId: Long,
         payload: BeneficiaryUpdatePayload,
-    ): DataState<String> {
-        return try {
-            withContext(ioDispatcher) {
-                apiManager.beneficiaryApi.updateBeneficiary(beneficiaryId, payload)
-            }
-
-            DataState.Success("Beneficiary updated successfully")
-        } catch (e: Exception) {
-            DataState.Error(e)
+    ) {
+        withContext(ioDispatcher) {
+            apiManager.beneficiaryApi.updateBeneficiary(beneficiaryId, payload)
         }
     }
 
-    override suspend fun deleteBeneficiary(beneficiaryId: Long): DataState<String> {
-        return try {
-            withContext(ioDispatcher) {
-                apiManager.beneficiaryApi.deleteBeneficiary(beneficiaryId)
-            }
-
-            DataState.Success("Beneficiary deleted successfully")
-        } catch (e: Exception) {
-            DataState.Error(e)
+    override suspend fun deleteBeneficiary(beneficiaryId: Long) {
+        withContext(ioDispatcher) {
+            apiManager.beneficiaryApi.deleteBeneficiary(beneficiaryId)
         }
     }
 }

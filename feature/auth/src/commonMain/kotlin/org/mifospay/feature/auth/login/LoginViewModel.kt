@@ -18,7 +18,9 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 import kpt.core.base.store.submit.SubmitState
 import kpt.core.base.store.submit.submitHandler
-import org.mifospay.core.common.DataState
+import mobile_wallet.feature.auth.generated.resources.Res
+import mobile_wallet.feature.auth.generated.resources.feature_auth_error_login_failed
+import org.jetbrains.compose.resources.getString
 import org.mifospay.core.common.getSerialized
 import org.mifospay.core.common.setSerialized
 import org.mifospay.core.domain.LoginUseCase
@@ -62,11 +64,10 @@ class LoginViewModel(
                     }
 
                     is SubmitState.Failed -> {
+                        val message = getString(Res.string.feature_auth_error_login_failed)
                         mutableStateFlow.update {
                             it.copy(
-                                dialogState = LoginState.DialogState.Error(
-                                    submitState.error.message.toString(),
-                                ),
+                                dialogState = LoginState.DialogState.Error(message),
                             )
                         }
                         submitLogin.reset()
@@ -138,14 +139,10 @@ class LoginViewModel(
         password: String,
     ) {
         // Submit through the handler — it drives Submitting/Submitted/Failed, observed in
-        // `init`. The block unwraps the use-case's transitional DataState result: return the
-        // value on success, throw on error so the handler reports Failed.
+        // `init`. The use-case returns the UserInfo on success and throws on failure, so
+        // the handler reports Submitted/Failed directly.
         submitLogin.submit {
-            when (val result = loginUseCase(username, password)) {
-                is DataState.Success -> result.data
-                is DataState.Error -> throw result.exception
-                DataState.Loading -> error("loginUseCase must not emit Loading")
-            }
+            loginUseCase(username, password)
         }
     }
 }

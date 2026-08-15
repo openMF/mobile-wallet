@@ -13,7 +13,6 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
-import org.mifospay.core.common.DataState
 import org.mifospay.core.common.ScreenStateStream
 import org.mifospay.core.common.asScreenStateFlow
 import org.mifospay.core.data.repository.AutoPayRepository
@@ -63,70 +62,45 @@ class AutoPayRepositoryImpl(
 
     override suspend fun createAutoPaySchedule(
         payload: AutoPayPayload,
-    ): DataState<String> {
-        return try {
-            withContext(ioDispatcher) {
-                apiManager.autoPayApi.createAutoPaySchedule(payload)
-            }
-            DataState.Success("AutoPay schedule created successfully")
-        } catch (e: Exception) {
-            DataState.Error(e, null)
+    ) {
+        withContext(ioDispatcher) {
+            apiManager.autoPayApi.createAutoPaySchedule(payload)
         }
     }
 
     override suspend fun updateAutoPaySchedule(
         autoPayId: Long,
         payload: AutoPayUpdatePayload,
-    ): DataState<String> {
-        return try {
-            withContext(ioDispatcher) {
-                apiManager.autoPayApi.updateAutoPaySchedule(
-                    autoPayId = autoPayId,
-                    payload = payload,
-                )
-            }
-            DataState.Success("AutoPay schedule updated successfully")
-        } catch (e: Exception) {
-            DataState.Error(e, null)
+    ) {
+        withContext(ioDispatcher) {
+            apiManager.autoPayApi.updateAutoPaySchedule(
+                autoPayId = autoPayId,
+                payload = payload,
+            )
         }
     }
 
     override suspend fun deleteAutoPaySchedule(
         autoPayId: Long,
-    ): DataState<String> {
-        return try {
-            withContext(ioDispatcher) {
-                apiManager.autoPayApi.deleteAutoPaySchedule(autoPayId)
-            }
-            DataState.Success("AutoPay schedule deleted successfully")
-        } catch (e: Exception) {
-            DataState.Error(e, null)
+    ) {
+        withContext(ioDispatcher) {
+            apiManager.autoPayApi.deleteAutoPaySchedule(autoPayId)
         }
     }
 
     override suspend fun pauseAutoPaySchedule(
         autoPayId: Long,
-    ): DataState<String> {
-        return try {
-            withContext(ioDispatcher) {
-                apiManager.autoPayApi.pauseAutoPaySchedule(autoPayId)
-            }
-            DataState.Success("AutoPay schedule paused successfully")
-        } catch (e: Exception) {
-            DataState.Error(e, null)
+    ) {
+        withContext(ioDispatcher) {
+            apiManager.autoPayApi.pauseAutoPaySchedule(autoPayId)
         }
     }
 
     override suspend fun resumeAutoPaySchedule(
         autoPayId: Long,
-    ): DataState<String> {
-        return try {
-            withContext(ioDispatcher) {
-                apiManager.autoPayApi.resumeAutoPaySchedule(autoPayId)
-            }
-            DataState.Success("AutoPay schedule resumed successfully")
-        } catch (e: Exception) {
-            DataState.Error(e, null)
+    ) {
+        withContext(ioDispatcher) {
+            apiManager.autoPayApi.resumeAutoPaySchedule(autoPayId)
         }
     }
 
@@ -171,18 +145,14 @@ class AutoPayRepositoryImpl(
 
     override suspend fun validateAutoPayPayload(
         payload: AutoPayPayload,
-    ): DataState<Boolean> {
-        return try {
-            withContext(ioDispatcher) {
-                when (val validationResult = AutoPayValidator.validateAutoPayPayload(payload)) {
-                    is AutoPayValidator.ValidationResult.Valid -> DataState.Success(true)
-                    is AutoPayValidator.ValidationResult.Invalid -> {
-                        DataState.Error(Exception(validationResult.errorMessage), null)
-                    }
+    ) {
+        withContext(ioDispatcher) {
+            when (val validationResult = AutoPayValidator.validateAutoPayPayload(payload)) {
+                is AutoPayValidator.ValidationResult.Valid -> Unit
+                is AutoPayValidator.ValidationResult.Invalid -> {
+                    throw IllegalArgumentException(validationResult.errorMessage)
                 }
             }
-        } catch (e: Exception) {
-            DataState.Error(e, null)
         }
     }
 }

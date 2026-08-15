@@ -13,16 +13,20 @@ import kotlinx.coroutines.flow.Flow
 import org.mifos.lib.loan.core.model.LoanState
 import org.mifos.lib.loan.core.model.LoanTemplate
 import org.mifos.lib.loan.core.model.LoansPayload
-import org.mifospay.core.common.DataState
+import org.mifospay.core.common.ScreenState
 
 interface LoanProvider {
-    fun getLoanTemplate(clientId: Long): Flow<DataState<LoanTemplate>>
+    fun getLoanTemplate(clientId: Long): Flow<ScreenState<LoanTemplate>>
 
-    fun getLoanTemplateByProduct(clientId: Long, productId: Long): Flow<DataState<LoanTemplate>>
+    fun getLoanTemplateByProduct(clientId: Long, productId: Long): Flow<ScreenState<LoanTemplate>>
 
+    /**
+     * Submits a loan application, throwing on failure. Returns [Unit] because the caller derives
+     * its own user-facing success message from a [org.jetbrains.compose.resources.StringResource].
+     */
     suspend fun submitLoanApplication(
         loanState: LoanState,
         payload: LoansPayload,
         loanId: Long,
-    ): DataState<String>
+    )
 }

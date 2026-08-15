@@ -28,8 +28,8 @@ import mobile_wallet.feature.editpassword.generated.resources.feature_editpasswo
 import mobile_wallet.feature.editpassword.generated.resources.feature_editpassword_error_password_mismatch
 import mobile_wallet.feature.editpassword.generated.resources.feature_editpassword_error_password_weak
 import mobile_wallet.feature.editpassword.generated.resources.feature_editpassword_error_same_password
+import mobile_wallet.feature.editpassword.generated.resources.feature_editpassword_password_changed_successfully
 import org.jetbrains.compose.resources.StringResource
-import org.mifospay.core.common.DataState
 import org.mifospay.core.common.UiError
 import org.mifospay.core.common.getSerialized
 import org.mifospay.core.common.setSerialized
@@ -70,7 +70,7 @@ internal class EditPasswordViewModel(
     // instead of a hand-folded DataState result action. The handler owns the
     // Submitting/Submitted/Failed lifecycle; we observe it to drive this screen's
     // existing dialog + toast/logout events, so the Screen is unchanged.
-    private val submitPassword = viewModelScope.submitHandler<String>()
+    private val submitPassword = viewModelScope.submitHandler<Unit>()
 
     init {
         submitPassword.state
@@ -82,7 +82,11 @@ internal class EditPasswordViewModel(
 
                     is SubmitState.Submitted -> {
                         mutableStateFlow.update { it.copy(dialogState = null) }
-                        sendEvent(EditPasswordEvent.ShowToast(submitState.result))
+                        sendEvent(
+                            EditPasswordEvent.ShowToast(
+                                Res.string.feature_editpassword_password_changed_successfully,
+                            ),
+                        )
                         sendEvent(EditPasswordEvent.OnLogoutUser)
                         submitPassword.reset()
                     }
@@ -226,14 +230,10 @@ internal class EditPasswordViewModel(
     private fun updatePassword(newPassword: String) {
         val userId = requireNotNull(userInfo.value?.userId)
         // Submit through the handler — it drives Submitting/Submitted/Failed, observed
-        // in `init`. The block unwraps the repository's transitional DataState result:
-        // return the value on success, throw on error so the handler reports Failed.
+        // in `init`. The repository call completes normally on success and throws on
+        // failure, so the handler reports Failed with that exception's message.
         submitPassword.submit {
-            when (val result = userRepository.updateUserPassword(userId, newPassword)) {
-                is DataState.Success -> result.data
-                is DataState.Error -> throw result.exception
-                DataState.Loading -> error("updateUserPassword must not emit Loading")
-            }
+            userRepository.updateUserPassword(userId, newPassword)
         }
     }
 }
@@ -280,7 +280,7 @@ internal sealed interface EditPasswordDialog {
 internal sealed interface EditPasswordEvent {
     data object NavigateBack : EditPasswordEvent
     data object OnLogoutUser : EditPasswordEvent
-    data class ShowToast(val message: String) : EditPasswordEvent
+    data class ShowToast(val message: StringResource) : EditPasswordEvent
 }
 
 internal sealed interface EditPasswordAction {

@@ -9,7 +9,6 @@
  */
 package org.mifospay.core.data.repository
 
-import org.mifospay.core.common.DataState
 import org.mifospay.core.common.ScreenStateStream
 import org.mifospay.core.model.autopay.AutoPayHistory
 import org.mifospay.core.network.model.entity.Page
@@ -35,9 +34,10 @@ interface AutoPayHistoryRepository {
     ): ScreenStateStream<Page<AutoPayHistory>>
 
     /**
-     * Get AutoPay history by ID (point-lookup, stays on DataState).
+     * Get AutoPay history by ID (point-lookup). Returns the entry or throws
+     * on failure / when the lookup is unsupported.
      */
-    suspend fun getHistoryById(id: Long): DataState<AutoPayHistory>
+    suspend fun getHistoryById(id: Long): AutoPayHistory
 
     /**
      * Get AutoPay history by status

@@ -16,7 +16,6 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
@@ -25,7 +24,6 @@ import kpt.core.base.database.invalidation.notifyingWrite
 import kpt.core.database.wallet.recentpayee.RecentPayeeDao
 import kpt.core.database.wallet.recentpayee.toDomain
 import kpt.core.database.wallet.recentpayee.toEntity
-import org.mifospay.core.common.DataState
 import org.mifospay.core.common.ScreenState
 import org.mifospay.core.common.asScreenStateFlow
 import org.mifospay.core.data.repository.RecentPayeeRepository
@@ -59,38 +57,20 @@ private const val RECENT_PAYEES_TABLE = "wallet_recent_payees"
  * hits skip the N+1 walk entirely (the walk still fires in the background on
  * every screen entry so the cache stays fresh).
  *
- * The legacy DataState-returning [getRecentPayees] method is retained for BC
- * (see [RecentPayeeRepository] KDoc). Its implementation is UNCHANGED — it
- * still runs the full N+1 walk on every subscription and does NOT read from
- * the cache. New callers MUST use [getRecentPayeesScreen].
+ * The sole read surface is the store-backed [getRecentPayeesScreen] — callers
+ * consume an offline-first `Flow<ScreenState<...>>` sourced from the Room
+ * `wallet_recent_payees` cache.
  */
 @OptIn(ExperimentalTime::class)
 class RecentPayeeRepositoryImpl(
     private val selfServiceApiManager: SelfServiceApiManager,
     private val ioDispatcher: CoroutineDispatcher,
     // Phase-5 Batch-4 store wiring. Nullable-default so unit tests that build
-    // a RecentPayeeRepositoryImpl without the store harness (existing tests)
-    // don't have to construct it; the legacy `getRecentPayees(...)` path is
-    // unaffected. Production DI in `RepositoryModule` wires this
+    // a RecentPayeeRepositoryImpl without the store harness don't have to
+    // construct it. Production DI in `RepositoryModule` wires this
     // unconditionally.
     private val recentPayeeDao: RecentPayeeDao? = null,
 ) : RecentPayeeRepository {
-
-    override fun getRecentPayees(
-        accountId: Long,
-        limit: Int,
-    ): Flow<DataState<List<RecentPayee>>> = flow {
-        emit(DataState.Loading)
-
-        try {
-            val derived = deriveRecentPayees(accountId)
-            val trimmed = derived.take(limit)
-            emit(DataState.Success(trimmed))
-        } catch (e: Exception) {
-            Logger.e(e) { "RecentPayee: Failed to fetch recent payees" }
-            emit(DataState.Error(e, null))
-        }
-    }.flowOn(ioDispatcher)
 
     // Phase-5 Batch-4 store-backed read — GOAL D12/D13 (Room SoT + background
     // derive-and-persist via notifyingWrite).
@@ -136,9 +116,8 @@ class RecentPayeeRepositoryImpl(
     }
 
     // ------------------------------------------------------------------
-    // Internals — the shared derive walk + the persist step. Both are
-    // reused by the legacy `getRecentPayees(...)` path (derive only) and
-    // the new `getRecentPayeesScreen(...)` path (derive + persist).
+    // Internals — the shared derive walk + the persist step, both consumed
+    // by the `getRecentPayeesScreen(...)` path (derive + persist).
     // ------------------------------------------------------------------
 
     /**

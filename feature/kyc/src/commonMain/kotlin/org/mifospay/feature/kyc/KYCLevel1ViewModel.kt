@@ -18,7 +18,9 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 import kpt.core.base.store.submit.SubmitState
 import kpt.core.base.store.submit.submitHandler
-import org.mifospay.core.common.DataState
+import mobile_wallet.feature.kyc.generated.resources.Res
+import mobile_wallet.feature.kyc.generated.resources.feature_kyc_successkyc1
+import org.jetbrains.compose.resources.StringResource
 import org.mifospay.core.common.DateHelper
 import org.mifospay.core.common.ScreenState
 import org.mifospay.core.common.getSerialized
@@ -48,11 +50,11 @@ internal class KYCLevel1ViewModel(
     }
 
     // Template idiom (core-base/store): the one-shot KYCLevel1 write (add/update) goes
-    // through a SubmitHandler instead of a hand-folded DataState result action. The handler
+    // through a SubmitHandler instead of a hand-folded result action. The handler
     // owns the Submitting/Submitted/Failed lifecycle; we observe it below to drive this
     // screen's existing Loading dialog + toast + navigate-to-level-2 UX, so the Screen is
-    // unchanged. Result type is String (the success toast message the write returns).
-    private val submitKyc = viewModelScope.submitHandler<String>()
+    // unchanged. Writes return Unit; the success toast is a feature StringResource.
+    private val submitKyc = viewModelScope.submitHandler<Unit>()
 
     init {
         submitKyc.state
@@ -66,7 +68,7 @@ internal class KYCLevel1ViewModel(
 
                     is SubmitState.Submitted -> {
                         mutableStateFlow.update { it.copy(dialogState = null) }
-                        sendEvent(KycLevel1Event.ShowToast(submitState.result))
+                        sendEvent(KycLevel1Event.ShowToast(Res.string.feature_kyc_successkyc1))
                         sendEvent(KycLevel1Event.NavigateToKycLevel2)
                         submitKyc.reset()
                     }
@@ -247,19 +249,12 @@ internal class KYCLevel1ViewModel(
         }
 
         // Submit through the handler — it drives Submitting/Submitted/Failed, observed in
-        // `init`. The block unwraps the repository's transitional DataState result: return
-        // the value on success, throw on error so the handler reports Failed.
+        // `init`. The write returns Unit and throws on error, so the handler reports Failed.
         submitKyc.submit {
-            val result = if (state.doesExist) {
+            if (state.doesExist) {
                 kycLevelRepository.updateKYCLevel1Details(state.clientId, state.details)
             } else {
                 kycLevelRepository.addKYCLevel1Details(state.clientId, state.details)
-            }
-
-            when (result) {
-                is DataState.Success -> result.data
-                is DataState.Error -> throw result.exception
-                DataState.Loading -> error("KYCLevel1 write must not emit Loading")
             }
         }
     }
@@ -311,7 +306,7 @@ internal data class KycLevel1State(
 internal sealed interface KycLevel1Event {
     data object NavigateToKycLevel2 : KycLevel1Event
     data object OnNavigateBack : KycLevel1Event
-    data class ShowToast(val message: String) : KycLevel1Event
+    data class ShowToast(val message: StringResource) : KycLevel1Event
 }
 
 internal sealed interface KycLevel1Action {

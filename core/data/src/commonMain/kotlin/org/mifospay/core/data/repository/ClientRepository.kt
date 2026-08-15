@@ -12,7 +12,6 @@ package org.mifospay.core.data.repository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kpt.core.base.store.screen.ScreenDataStream
-import org.mifospay.core.common.DataState
 import org.mifospay.core.common.ScreenState
 import org.mifospay.core.model.account.Account
 import org.mifospay.core.model.client.Client
@@ -63,13 +62,12 @@ interface ClientRepository {
 
     suspend fun getClients(): Flow<ScreenState<Page<Client>>>
 
-    // Point-lookup (non-streaming suspend) — kept on DataState. The
-    // ScreenState surface is inherently stream-shaped (Loading → terminal);
-    // one-shot suspend fetches don't have a Loading phase to model, so the
-    // template's own point-lookups keep a sealed Result equivalent. Callers
-    // that want a Loading tick can wrap the suspend in `flow { … }` +
+    // Point-lookup (non-streaming suspend) — returns the value and throws on
+    // error. The ScreenState surface is inherently stream-shaped (Loading →
+    // terminal); one-shot suspend fetches don't have a Loading phase to model.
+    // Callers that want a Loading tick can wrap the suspend in `flow { … }` +
     // `asScreenStateFlow()` at the callsite.
-    suspend fun getClient(clientId: Long): DataState<Client>
+    suspend fun getClient(clientId: Long): Client
 
     // Writes throw on error; message-returning writes now return Unit.
     suspend fun updateClient(clientId: Long, client: UpdatedClient)

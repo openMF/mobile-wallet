@@ -9,18 +9,13 @@
  */
 package org.mifospay.core.data.repositoryImpl
 
-import io.ktor.client.plugins.ClientRequestException
-import io.ktor.client.plugins.ServerResponseException
-import io.ktor.client.statement.bodyAsText
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.withContext
-import org.mifospay.core.common.DataState
 import org.mifospay.core.common.ScreenStateStream
 import org.mifospay.core.common.asScreenStateFlow
 import org.mifospay.core.data.mapper.toEntity
 import org.mifospay.core.data.repository.UserRepository
-import org.mifospay.core.data.util.parseMifosError
 import org.mifospay.core.model.user.NewUser
 import org.mifospay.core.network.SelfServiceApiManager
 import org.mifospay.core.network.model.CommonResponse
@@ -44,15 +39,9 @@ class UserRepositoryImpl(
             .flowOn(ioDispatcher)
     }
 
-    override suspend fun createUser(newUser: NewUser): DataState<Int> {
-        return try {
-            val result = withContext(ioDispatcher) {
-                selfServiceApiManager.userApi.createUser(newUser.toEntity())
-            }
-
-            DataState.Success(result.resourceId)
-        } catch (e: Exception) {
-            DataState.Error(e)
+    override suspend fun createUser(newUser: NewUser): Int {
+        return withContext(ioDispatcher) {
+            selfServiceApiManager.userApi.createUser(newUser.toEntity()).resourceId
         }
     }
 
@@ -69,56 +58,26 @@ class UserRepositoryImpl(
     override suspend fun updateUserPassword(
         userId: Long,
         password: String,
-    ): DataState<String> {
-        return try {
+    ) {
+        withContext(ioDispatcher) {
             selfServiceApiManager.userApi.updateUserPassword(
                 updateUserEntity = UpdateUserEntityPassword(
                     password,
                     password,
                 ),
             )
-
-            DataState.Success("Password updated successfully")
-        } catch (e: ClientRequestException) {
-            val message = parseMifosError(
-                e.response.bodyAsText(),
-                e.response.status.value,
-            )
-
-            DataState.Error(Exception(message))
-        } catch (e: ServerResponseException) {
-            val message = parseMifosError(
-                e.response.bodyAsText(),
-                e.response.status.value,
-            )
-
-            DataState.Error(Exception(message))
-        } catch (e: Exception) {
-            DataState.Error(e)
         }
     }
 
-    override suspend fun deleteUser(userId: Int): DataState<CommonResponse> {
-        return try {
-            val result = withContext(ioDispatcher) {
-                selfServiceApiManager.userApi.deleteUser(userId)
-            }
-
-            DataState.Success(result)
-        } catch (e: Exception) {
-            DataState.Error(e)
+    override suspend fun deleteUser(userId: Int): CommonResponse {
+        return withContext(ioDispatcher) {
+            selfServiceApiManager.userApi.deleteUser(userId)
         }
     }
 
-    override suspend fun assignClientToUser(userId: Int, clientId: Int): DataState<Unit> {
-        return try {
-            val result = withContext(ioDispatcher) {
-                selfServiceApiManager.userApi.assignClientToUser(userId, mapOf("clients" to listOf(clientId)))
-            }
-
-            DataState.Success(Unit)
-        } catch (e: Exception) {
-            DataState.Error(e)
+    override suspend fun assignClientToUser(userId: Int, clientId: Int) {
+        withContext(ioDispatcher) {
+            selfServiceApiManager.userApi.assignClientToUser(userId, mapOf("clients" to listOf(clientId)))
         }
     }
 }

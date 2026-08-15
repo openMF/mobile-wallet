@@ -12,7 +12,6 @@ package org.mifospay.core.data.repositoryImpl
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
-import org.mifospay.core.common.DataState
 import org.mifospay.core.common.ScreenStateStream
 import org.mifospay.core.common.asScreenStateFlow
 import org.mifospay.core.data.repository.AutoPayHistoryRepository
@@ -46,8 +45,8 @@ class AutoPayHistoryRepositoryImpl(
             .flowOn(ioDispatcher)
     }
 
-    override suspend fun getHistoryById(id: Long): DataState<AutoPayHistory> {
-        return DataState.Error(Exception("Individual history lookup not supported in read-only mode"), null)
+    override suspend fun getHistoryById(id: Long): AutoPayHistory {
+        throw UnsupportedOperationException("Individual history lookup not supported in read-only mode")
     }
 
     override fun getHistoryByStatus(status: String): ScreenStateStream<List<AutoPayHistory>> {

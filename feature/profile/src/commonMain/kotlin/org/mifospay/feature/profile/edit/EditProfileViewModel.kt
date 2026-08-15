@@ -33,7 +33,6 @@ import mobile_wallet.feature.profile.generated.resources.feature_profile_error_i
 import mobile_wallet.feature.profile.generated.resources.feature_profile_profile_image_updated_successfully
 import mobile_wallet.feature.profile.generated.resources.feature_profile_profile_updated_successfully
 import org.jetbrains.compose.resources.StringResource
-import org.mifospay.core.common.DataState
 import org.mifospay.core.common.ScreenState
 import org.mifospay.core.common.StringResourceSerializer
 import org.mifospay.core.common.getSerialized
@@ -360,12 +359,10 @@ internal class EditProfileViewModel(
     }
 
     private fun submitClientProfileUpdate() {
+        // The local-prefs write returns Unit and throws on failure; the handler maps
+        // that to Submitted/Failed (observed in `init`).
         submitClientProfile.submit {
-            when (val result = preferencesRepository.updateClientProfile(state.updatedClient)) {
-                is DataState.Success -> result.data
-                is DataState.Error -> throw result.exception
-                DataState.Loading -> error("updateClientProfile must not emit Loading")
-            }
+            preferencesRepository.updateClientProfile(state.updatedClient)
         }
     }
 }
@@ -463,7 +460,7 @@ sealed interface EditProfileAction {
         data class LoadClientImage(val clientId: Long) : Internal
 
         /**
-         * Client-image load result. Uses [ScreenState] (not [DataState]) — the
+         * Client-image load result. Uses [ScreenState] (not the legacy DataState) — the
          * `getClientImage` read path was migrated to `Flow<ScreenState<String>>`
          * during the Phase-3 cutover. The one-shot profile writes no longer have
          * result actions here: `updateClient` / `updateClientImage` /

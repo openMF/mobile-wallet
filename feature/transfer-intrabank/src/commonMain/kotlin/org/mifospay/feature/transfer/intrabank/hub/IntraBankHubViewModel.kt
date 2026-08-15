@@ -145,12 +145,11 @@ class IntraBankHubViewModel(
 
         Logger.d { "RecentPayee: Loading recent payees for account $accountId" }
 
-        // Phase-5 Batch-4: cut over from the transitional
-        // `getRecentPayees(accountId, limit): Flow<DataState<...>>` to the
-        // store-native `getRecentPayeesScreen(accountId, limit, scope):
-        // Flow<ScreenState<...>>` — reads come from the Room-backed
-        // `wallet_recent_payees` cache (offline-first), a background derive
-        // kick refreshes the cache on every subscription.
+        // Phase-5 Batch-4: reads come through the store-native
+        // `getRecentPayeesScreen(accountId, limit, scope): Flow<ScreenState<...>>`
+        // — sourced from the Room-backed `wallet_recent_payees` cache
+        // (offline-first); a background derive kick refreshes the cache on every
+        // subscription.
         recentPayeeRepository
             .getRecentPayeesScreen(accountId, RECENT_PAYEES_LIMIT, viewModelScope)
             .onEach { screenState ->

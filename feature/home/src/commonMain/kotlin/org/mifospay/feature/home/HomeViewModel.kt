@@ -24,7 +24,6 @@ import mobile_wallet.feature.home.generated.resources.feature_home_account_succe
 import mobile_wallet.feature.home.generated.resources.feature_home_failed_to_load_accounts
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.getString
-import org.mifospay.core.common.DataState
 import org.mifospay.core.common.ScreenState
 import org.mifospay.core.data.repository.AccountRepository
 import org.mifospay.core.data.repository.SelfServiceRepository
@@ -331,23 +330,18 @@ class HomeViewModel(
 
             is HomeAction.MarkAsDefault -> {
                 // Submit through the handler — it drives Submitting/Submitted/Failed,
-                // observed in `init`. The block unwraps the repository's transitional
-                // DataState result: return the account id on success (so the observer
-                // can update `defaultAccountId`), throw on error so the handler reports
-                // Failed and the error toast fires.
+                // observed in `init`. The repository write returns Unit and throws on
+                // failure; the handler maps that to Submitted/Failed. On success the
+                // block returns the account id so the observer can update
+                // `defaultAccountId` and fire the success toast.
                 submitDefaultAccount.submit {
-                    when (
-                        val result = preferencesRepository.updateDefaultAccount(
-                            DefaultAccount(
-                                accountId = action.accountId,
-                                accountNo = action.accountNo,
-                            ),
-                        )
-                    ) {
-                        is DataState.Success -> action.accountId
-                        is DataState.Error -> throw result.exception
-                        DataState.Loading -> error("updateDefaultAccount must not emit Loading")
-                    }
+                    preferencesRepository.updateDefaultAccount(
+                        DefaultAccount(
+                            accountId = action.accountId,
+                            accountNo = action.accountNo,
+                        ),
+                    )
+                    action.accountId
                 }
             }
 

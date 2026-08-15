@@ -10,10 +10,10 @@
 package org.mifospay.core.network.config
 
 import kotlinx.coroutines.flow.Flow
-import org.mifospay.core.common.DataState
+import org.mifospay.core.common.ScreenState
 import org.mifospay.core.model.instance.InstancesConfig
 
 interface InstanceConfigLoader {
-    suspend fun fetchInstancesConfig(): DataState<InstancesConfig>
-    fun observeInstancesConfig(): Flow<DataState<InstancesConfig>>
+    suspend fun fetchInstancesConfig(): InstancesConfig
+    fun observeInstancesConfig(): Flow<ScreenState<InstancesConfig>>
 }

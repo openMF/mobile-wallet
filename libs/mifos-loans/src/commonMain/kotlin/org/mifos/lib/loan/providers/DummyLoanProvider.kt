@@ -24,7 +24,7 @@ import org.mifos.lib.loan.core.model.LoanTemplate
 import org.mifos.lib.loan.core.model.LoansPayload
 import org.mifos.lib.loan.core.model.Product
 import org.mifos.lib.loan.core.model.ProductOptions
-import org.mifospay.core.common.DataState
+import org.mifospay.core.common.ScreenState
 
 /**
  * Dummy, no-network implementation of [LoanProvider].
@@ -44,26 +44,25 @@ import org.mifospay.core.common.DataState
  */
 class DummyLoanProvider : LoanProvider {
 
-    override fun getLoanTemplate(clientId: Long): Flow<DataState<LoanTemplate>> = flow {
+    override fun getLoanTemplate(clientId: Long): Flow<ScreenState<LoanTemplate>> = flow {
         delay(DUMMY_DELAY_MS)
-        emit(DataState.Success(mockLoanTemplate))
+        emit(ScreenState.Content(mockLoanTemplate))
     }
 
     override fun getLoanTemplateByProduct(
         clientId: Long,
         productId: Long,
-    ): Flow<DataState<LoanTemplate>> = flow {
+    ): Flow<ScreenState<LoanTemplate>> = flow {
         delay(DUMMY_DELAY_MS)
-        emit(DataState.Success(mockLoanTemplate))
+        emit(ScreenState.Content(mockLoanTemplate))
     }
 
     override suspend fun submitLoanApplication(
         loanState: LoanState,
         payload: LoansPayload,
         loanId: Long,
-    ): DataState<String> {
+    ) {
         delay(DUMMY_SUBMIT_DELAY_MS)
-        return DataState.Success("Loan application submitted successfully (dummy)")
     }
 
     private companion object {

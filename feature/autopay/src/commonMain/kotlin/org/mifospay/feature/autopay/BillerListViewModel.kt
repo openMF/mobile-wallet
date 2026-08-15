@@ -18,7 +18,6 @@ import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 import kpt.core.base.store.submit.SubmitState
 import kpt.core.base.store.submit.submitHandler
-import org.mifospay.core.common.DataState
 import org.mifospay.core.common.getSerialized
 import org.mifospay.core.datastore.BillerRepository
 import org.mifospay.core.model.autopay.Biller
@@ -143,14 +142,9 @@ class BillerListViewModel(
 
     private fun deleteBiller(billerId: String) {
         // Submit through the handler — it drives Submitting/Submitted/Failed, observed
-        // in `init`. The block unwraps the repository's transitional DataState result:
-        // return Unit on success, throw on error so the handler reports Failed.
+        // in `init`. The repository throws on failure, which the handler surfaces as Failed.
         submitDelete.submit {
-            when (val result = billerRepository.deleteBiller(billerId)) {
-                is DataState.Success -> result.data
-                is DataState.Error -> throw result.exception
-                DataState.Loading -> error("deleteBiller must not emit Loading")
-            }
+            billerRepository.deleteBiller(billerId)
         }
     }
 

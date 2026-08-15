@@ -22,7 +22,6 @@ import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
-import org.mifospay.core.common.DataState
 import org.mifospay.core.data.repository.SearchRepository
 import org.mifospay.core.model.search.SearchResult
 import kotlin.test.AfterTest
@@ -81,7 +80,7 @@ class MobileVerificationViewModelTest {
                     any(),
                     any(),
                 )
-            } returns DataState.Success(data = emptyList())
+            } returns emptyList()
 
             viewModel.trySendAction(MobileVerificationAction.PhoneNoChanged(validPhoneNumber))
             viewModel.trySendAction(MobileVerificationAction.VerifyPhoneBtnClicked)
@@ -136,16 +135,14 @@ class MobileVerificationViewModelTest {
                     any(),
                     any(),
                 )
-            } returns DataState.Success(
-                data = listOf(
-                    SearchResult(
-                        entityId = 1,
-                        entityAccountNo = "123",
-                        entityName = "SameUserName",
-                        entityType = "savings",
-                        parentId = 1,
-                        parentName = "smith",
-                    ),
+            } returns listOf(
+                SearchResult(
+                    entityId = 1,
+                    entityAccountNo = "123",
+                    entityName = "SameUserName",
+                    entityType = "savings",
+                    parentId = 1,
+                    parentName = "smith",
                 ),
             )
 

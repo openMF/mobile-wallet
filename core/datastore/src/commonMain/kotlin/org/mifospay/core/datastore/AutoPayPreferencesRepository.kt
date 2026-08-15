@@ -11,7 +11,6 @@ package org.mifospay.core.datastore
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
-import org.mifospay.core.common.DataState
 import org.mifospay.core.model.autopay.AutoPay
 import org.mifospay.core.model.autopay.AutoPayHistory
 import org.mifospay.core.model.autopay.UpcomingPayment
@@ -45,32 +44,32 @@ interface AutoPayPreferencesRepository {
     /**
      * Update AutoPay enabled state
      */
-    suspend fun updateAutoPayEnabled(enabled: Boolean): DataState<Unit>
+    suspend fun updateAutoPayEnabled(enabled: Boolean)
 
     /**
      * Cache AutoPay schedules
      */
-    suspend fun cacheAutoPaySchedules(schedules: List<AutoPay>): DataState<Unit>
+    suspend fun cacheAutoPaySchedules(schedules: List<AutoPay>)
 
     /**
      * Cache upcoming payments
      */
-    suspend fun cacheUpcomingPayments(payments: List<UpcomingPayment>): DataState<Unit>
+    suspend fun cacheUpcomingPayments(payments: List<UpcomingPayment>)
 
     /**
      * Cache AutoPay history
      */
-    suspend fun cacheAutoPayHistory(history: List<AutoPayHistory>): DataState<Unit>
+    suspend fun cacheAutoPayHistory(history: List<AutoPayHistory>)
 
     /**
      * Update last sync timestamp
      */
-    suspend fun updateLastSyncTimestamp(timestamp: Long): DataState<Unit>
+    suspend fun updateLastSyncTimestamp(timestamp: Long)
 
     /**
      * Clear all cached data
      */
-    suspend fun clearCache(): DataState<Unit>
+    suspend fun clearCache()
 
     /**
      * Get cached AutoPay schedule by ID

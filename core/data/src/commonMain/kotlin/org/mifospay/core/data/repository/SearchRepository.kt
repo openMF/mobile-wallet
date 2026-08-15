@@ -9,7 +9,6 @@
  */
 package org.mifospay.core.data.repository
 
-import org.mifospay.core.common.DataState
 import org.mifospay.core.model.search.SearchResult
 
 interface SearchRepository {
@@ -17,5 +16,5 @@ interface SearchRepository {
         query: String,
         resources: String,
         exactMatch: Boolean,
-    ): DataState<List<SearchResult>>
+    ): List<SearchResult>
 }

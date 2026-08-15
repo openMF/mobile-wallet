@@ -17,7 +17,8 @@ import kotlinx.coroutines.launch
 import org.mifos.lib.loan.core.model.LoanTemplate
 import org.mifos.lib.loan.core.model.ProductOptions
 import org.mifos.lib.loan.repository.LoansRepository
-import org.mifospay.core.common.DataState
+import org.mifospay.core.common.ScreenState
+import org.mifospay.core.common.errorOrNull
 import org.mifospay.core.ui.utils.BaseViewModel
 
 /**
@@ -72,13 +73,13 @@ internal class SelectLoanTypeViewModel(
         }
     }
 
-    private fun handleTemplateLoaded(result: DataState<LoanTemplate>) {
+    private fun handleTemplateLoaded(result: ScreenState<LoanTemplate>) {
         when (result) {
-            is DataState.Loading -> {
+            is ScreenState.Loading -> {
                 mutableStateFlow.update { it.copy(viewState = SelectLoanTypeState.ViewState.Loading) }
             }
 
-            is DataState.Success -> {
+            is ScreenState.Content -> {
                 mutableStateFlow.update {
                     it.copy(
                         viewState = SelectLoanTypeState.ViewState.Content(
@@ -88,9 +89,15 @@ internal class SelectLoanTypeViewModel(
                 }
             }
 
-            is DataState.Error -> {
+            // Error / Empty / NoNetwork / Unauthenticated — surface the failure. Only Error
+            // carries a message; the others are unreachable for the wizard's dummy provider.
+            else -> {
                 mutableStateFlow.update {
-                    it.copy(viewState = SelectLoanTypeState.ViewState.Error(result.message))
+                    it.copy(
+                        viewState = SelectLoanTypeState.ViewState.Error(
+                            result.errorOrNull?.message.orEmpty(),
+                        ),
+                    )
                 }
             }
         }
@@ -140,6 +147,6 @@ internal sealed interface SelectLoanTypeAction {
     data class ProductClicked(val productId: Int) : SelectLoanTypeAction
 
     sealed interface Internal : SelectLoanTypeAction {
-        data class TemplateLoaded(val result: DataState<LoanTemplate>) : Internal
+        data class TemplateLoaded(val result: ScreenState<LoanTemplate>) : Internal
     }
 }

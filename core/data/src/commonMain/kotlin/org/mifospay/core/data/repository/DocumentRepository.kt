@@ -10,12 +10,11 @@
 package org.mifospay.core.data.repository
 
 import io.ktor.http.content.PartData
-import org.mifospay.core.common.DataState
 import org.mifospay.core.common.ScreenStateStream
 import org.mifospay.core.network.model.entity.noncore.Document
 
 interface DocumentRepository {
-    // Phase-3 cutover — Flow-shaped surfaces on ScreenState.
+    // Flow-shaped surfaces on ScreenState.
     suspend fun getDocuments(entityType: String, entityId: Int): ScreenStateStream<List<Document>>
 
     suspend fun createDocument(
@@ -26,14 +25,14 @@ interface DocumentRepository {
         fileName: PartData.FileItem,
     ): ScreenStateStream<Unit>
 
-    // Suspend-shape write stays on DataState (Phase-3 D1).
+    // Message-only write: returns Unit and throws on error.
     suspend fun createDocument(
         entityType: String,
         entityId: Long,
         name: String,
         description: String,
         file: ByteArray,
-    ): DataState<String>
+    )
 
     suspend fun downloadDocument(entityType: String, entityId: Int, documentId: Int): ScreenStateStream<Document>
 

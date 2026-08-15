@@ -21,8 +21,8 @@ import org.mifos.lib.loan.core.model.LoansPayload
 import org.mifos.lib.loan.mapper.toDto
 import org.mifos.lib.loan.mapper.toModel
 import org.mifos.lib.loan.network.LoansService
-import org.mifospay.core.common.DataState
-import org.mifospay.core.common.asDataStateFlow
+import org.mifospay.core.common.ScreenState
+import org.mifospay.core.common.asScreenStateFlow
 
 /**
  * The real, Fineract-backed [LoanProvider] adapter. Registered in [org.mifos.lib.loan.providers.LoanProviderRegistry]
@@ -34,20 +34,20 @@ class FineractLoanProvider(
     private val ioDispatcher: CoroutineDispatcher,
 ) : LoanProvider {
 
-    override fun getLoanTemplate(clientId: Long): Flow<DataState<LoanTemplate>> {
+    override fun getLoanTemplate(clientId: Long): Flow<ScreenState<LoanTemplate>> {
         return loansService.getLoanTemplate(clientId)
             .map { it.toModel() }
-            .asDataStateFlow()
+            .asScreenStateFlow()
             .flowOn(ioDispatcher)
     }
 
     override fun getLoanTemplateByProduct(
         clientId: Long,
         productId: Long,
-    ): Flow<DataState<LoanTemplate>> {
+    ): Flow<ScreenState<LoanTemplate>> {
         return loansService.getLoanTemplateByProduct(clientId, productId)
             .map { it.toModel() }
-            .asDataStateFlow()
+            .asScreenStateFlow()
             .flowOn(ioDispatcher)
     }
 
@@ -58,14 +58,9 @@ class FineractLoanProvider(
         loanState: LoanState,
         payload: LoansPayload,
         loanId: Long,
-    ): DataState<String> {
-        return try {
-            withContext(ioDispatcher) {
-                loansService.createLoansAccount(payload.toDto())
-            }
-            DataState.Success("Loan application submitted successfully")
-        } catch (e: Exception) {
-            DataState.Error(e)
+    ) {
+        withContext(ioDispatcher) {
+            loansService.createLoansAccount(payload.toDto())
         }
     }
 }

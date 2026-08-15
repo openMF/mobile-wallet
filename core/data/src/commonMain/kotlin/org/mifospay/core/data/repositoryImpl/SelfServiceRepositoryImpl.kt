@@ -14,7 +14,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asFlow
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.flatMapLatest
@@ -22,7 +21,6 @@ import kotlinx.coroutines.flow.flatMapMerge
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.scan
 import kotlinx.coroutines.flow.zip
 import kotlinx.coroutines.withContext
@@ -33,11 +31,9 @@ import kpt.core.base.store.screen.asScreenStream
 import kpt.core.store.AppStoreRegistry
 import kpt.core.store.wallet.beneficiary.BeneficiaryKey
 import kpt.core.store.wallet.history.TransactionKey
-import org.mifospay.core.common.DataState
 import org.mifospay.core.common.DateHelper
 import org.mifospay.core.common.ScreenState
 import org.mifospay.core.common.asScreenStateFlow
-import org.mifospay.core.common.combineResultsWith
 import org.mifospay.core.data.mapper.toAccount
 import org.mifospay.core.data.mapper.toModel
 import org.mifospay.core.data.mapper.toModelAccountType
@@ -80,13 +76,9 @@ class SelfServiceRepositoryImpl(
     // asScreenStateFlow path — is unaffected.
     private val beneficiaryStore: Store<BeneficiaryKey, List<Beneficiary>>? = null,
 ) : SelfServiceRepository {
-    override suspend fun loginSelf(payload: AuthenticationPayload): DataState<User> {
-        return try {
-            val result = apiManager.authenticationApi.authenticate(payload)
-
-            DataState.Success(result)
-        } catch (e: Exception) {
-            DataState.Error(e)
+    override suspend fun loginSelf(payload: AuthenticationPayload): User {
+        return withContext(dispatcher) {
+            apiManager.authenticationApi.authenticate(payload)
         }
     }
 
@@ -117,19 +109,15 @@ class SelfServiceRepositoryImpl(
     override suspend fun getSelfAccountTransactionFromId(
         accountId: Long,
         transactionId: Long,
-    ): DataState<Flow<Transaction>> {
-        return try {
-            val result = withContext(dispatcher) {
-                apiManager.savingAccountsListApi.getSavingAccountTransaction(
-                    accountId,
-                    transactionId,
-                )
-            }
-
-            DataState.Success(result.map { it.toModel() })
-        } catch (e: Exception) {
-            DataState.Error(e)
+    ): Flow<Transaction> {
+        val result = withContext(dispatcher) {
+            apiManager.savingAccountsListApi.getSavingAccountTransaction(
+                accountId,
+                transactionId,
+            )
         }
+
+        return result.map { it.toModel() }
     }
 
     override fun getSelfAccounts(clientId: Long): Flow<ScreenState<List<Account>>> {
@@ -140,30 +128,25 @@ class SelfServiceRepositoryImpl(
             .flowOn(dispatcher)
     }
 
-    // Transitional DataState surface — kept for BC while callers migrate to
-    // [getAccountAndBeneficiaryListScreen] (Phase-5 Batch-4). New code MUST
-    // NOT wire this method; the ScreenState-native combinator below is the
-    // sanctioned path.
-    override fun getAccountAndBeneficiaryList(clientId: Long): Flow<DataState<AccountContent>> {
+    // Network-only aggregation lifted into ScreenState via `asScreenStateFlow`
+    // — kept for BC while callers migrate to the store-native combinator
+    // [getAccountAndBeneficiaryListScreen] (Phase-5 Batch-4), the sanctioned
+    // offline-first path.
+    override fun getAccountAndBeneficiaryList(clientId: Long): Flow<ScreenState<AccountContent>> {
         val accountList = apiManager.clientsApi
             .getAccounts(clientId, Constants.SAVINGS)
-            .onStart { DataState.Loading }
-            .catch { DataState.Error(it, null) }
-            .map { DataState.Success(it.toAccount()) }
+            .map { it.toAccount() }
             .flowOn(dispatcher)
 
         val beneficiaryList = apiManager.beneficiaryApi
             .beneficiaryList()
-            .onStart { DataState.Loading }
-            .catch { DataState.Error(it, null) }
-            .map { DataState.Success(it) }
             .flowOn(dispatcher)
 
         return accountList.zip(beneficiaryList) { accounts, beneficiaries ->
-            accounts.combineResultsWith(beneficiaries) { accData, bccData ->
-                AccountContent(accData, bccData)
-            }
-        }.flowOn(dispatcher)
+            AccountContent(accounts = accounts, beneficiaries = beneficiaries)
+        }
+            .asScreenStateFlow()
+            .flowOn(dispatcher)
     }
 
     override fun getActiveAccountsWithTransactionsPerAccount(

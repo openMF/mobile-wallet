@@ -10,7 +10,6 @@
 package org.mifospay.core.data.repository
 
 import kotlinx.coroutines.flow.Flow
-import org.mifospay.core.common.DataState
 import org.mifospay.core.common.ScreenState
 import org.mifospay.core.model.beneficiary.Beneficiary
 import org.mifospay.core.model.beneficiary.BeneficiaryPayload
@@ -23,13 +22,14 @@ interface BeneficiaryRepository {
 
     suspend fun getBeneficiaryTemplate(): Flow<ScreenState<BeneficiaryTemplate>>
 
-    // Writes stay on DataState per Phase-3 D1 (no offline write stores yet).
-    suspend fun createBeneficiary(beneficiaryPayload: BeneficiaryPayload): DataState<String>
+    // Writes execute the network call and throw on failure (no offline write
+    // stores yet). Callers surface errors via their own try/catch.
+    suspend fun createBeneficiary(beneficiaryPayload: BeneficiaryPayload)
 
     suspend fun updateBeneficiary(
         beneficiaryId: Long,
         payload: BeneficiaryUpdatePayload,
-    ): DataState<String>
+    )
 
-    suspend fun deleteBeneficiary(beneficiaryId: Long): DataState<String>
+    suspend fun deleteBeneficiary(beneficiaryId: Long)
 }

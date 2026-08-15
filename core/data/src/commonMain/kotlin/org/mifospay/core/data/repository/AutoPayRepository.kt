@@ -9,7 +9,6 @@
  */
 package org.mifospay.core.data.repository
 
-import org.mifospay.core.common.DataState
 import org.mifospay.core.common.ScreenStateStream
 import org.mifospay.core.model.autopay.AutoPay
 import org.mifospay.core.model.autopay.AutoPayHistory
@@ -42,37 +41,37 @@ interface AutoPayRepository {
      */
     fun getAutoPaySchedule(autoPayId: Long): ScreenStateStream<AutoPay>
 
-    // Writes stay on DataState (Phase-3 D1).
+    // Writes throw on failure and return Unit on success.
 
     /**
-     * Create a new AutoPay schedule
+     * Create a new AutoPay schedule. Throws on failure.
      */
     suspend fun createAutoPaySchedule(
         payload: AutoPayPayload,
-    ): DataState<String>
+    )
 
     /**
-     * Update an existing AutoPay schedule
+     * Update an existing AutoPay schedule. Throws on failure.
      */
     suspend fun updateAutoPaySchedule(
         autoPayId: Long,
         payload: AutoPayUpdatePayload,
-    ): DataState<String>
+    )
 
     /**
-     * Delete an AutoPay schedule
+     * Delete an AutoPay schedule. Throws on failure.
      */
-    suspend fun deleteAutoPaySchedule(autoPayId: Long): DataState<String>
+    suspend fun deleteAutoPaySchedule(autoPayId: Long)
 
     /**
-     * Pause an AutoPay schedule
+     * Pause an AutoPay schedule. Throws on failure.
      */
-    suspend fun pauseAutoPaySchedule(autoPayId: Long): DataState<String>
+    suspend fun pauseAutoPaySchedule(autoPayId: Long)
 
     /**
-     * Resume a paused AutoPay schedule
+     * Resume a paused AutoPay schedule. Throws on failure.
      */
-    suspend fun resumeAutoPaySchedule(autoPayId: Long): DataState<String>
+    suspend fun resumeAutoPaySchedule(autoPayId: Long)
 
     /**
      * Get AutoPay payment history. Keeps the [Page] wrapper inside Content
@@ -101,9 +100,9 @@ interface AutoPayRepository {
 
     /**
      * Validate AutoPay payload before submission (pure-local validation,
-     * no I/O; stays on DataState).
+     * no I/O). Throws on invalid input.
      */
-    suspend fun validateAutoPayPayload(payload: AutoPayPayload): DataState<Boolean>
+    suspend fun validateAutoPayPayload(payload: AutoPayPayload)
 }
 
 data class AutoPayStatistics(

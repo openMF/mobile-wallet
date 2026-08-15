@@ -9,7 +9,7 @@
  */
 package org.mifospay.core.data.repository
 
-import org.mifospay.core.common.DataState
+import org.mifospay.core.common.ScreenStateStream
 import org.mifospay.core.model.interbank.InterBankParticipantResponse
 import org.mifospay.core.model.interbank.InterBankPartyInfoResponse
 import org.mifospay.core.model.interbank.InterBankTransferRequest
@@ -19,20 +19,20 @@ interface InterBankRepository {
     suspend fun fetchParticipant(
         partyId: String,
         currencyCode: String,
-    ): DataState<InterBankParticipantResponse>
+    ): InterBankParticipantResponse
 
     suspend fun fetchPartyInfo(
         partyId: String,
         currencyCode: String,
         ownerFspId: String,
-    ): DataState<InterBankPartyInfoResponse>
+    ): InterBankPartyInfoResponse
 
-    suspend fun findParticipant(
+    fun findParticipant(
         partyId: String,
         currencyCode: String,
-    ): DataState<InterBankPartyInfoResponse>
+    ): ScreenStateStream<InterBankPartyInfoResponse>
 
     suspend fun interBankMakeTransfer(
         request: InterBankTransferRequest,
-    ): DataState<InterBankTransferResponse>
+    ): InterBankTransferResponse
 }

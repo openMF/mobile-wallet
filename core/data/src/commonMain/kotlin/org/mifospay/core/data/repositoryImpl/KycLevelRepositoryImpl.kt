@@ -13,7 +13,6 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
-import org.mifospay.core.common.DataState
 import org.mifospay.core.common.ScreenStateStream
 import org.mifospay.core.common.asScreenStateFlow
 import org.mifospay.core.data.repository.KycLevelRepository
@@ -37,30 +36,18 @@ class KycLevelRepositoryImpl(
     override suspend fun addKYCLevel1Details(
         clientId: Long,
         kycLevel1Details: KYCLevel1Details,
-    ): DataState<String> {
-        return try {
-            withContext(ioDispatcher) {
-                apiManager.kycLevel1Api.addKYCLevel1Details(clientId, kycLevel1Details)
-            }
-
-            DataState.Success("KYC Level One details added successfully")
-        } catch (e: Exception) {
-            DataState.Error(e)
+    ) {
+        withContext(ioDispatcher) {
+            apiManager.kycLevel1Api.addKYCLevel1Details(clientId, kycLevel1Details)
         }
     }
 
     override suspend fun updateKYCLevel1Details(
         clientId: Long,
         kycLevel1Details: KYCLevel1Details,
-    ): DataState<String> {
-        return try {
-            withContext(ioDispatcher) {
-                apiManager.kycLevel1Api.updateKYCLevel1Details(clientId, kycLevel1Details)
-            }
-
-            DataState.Success("KYC Level One details added successfully")
-        } catch (e: Exception) {
-            DataState.Error(e)
+    ) {
+        withContext(ioDispatcher) {
+            apiManager.kycLevel1Api.updateKYCLevel1Details(clientId, kycLevel1Details)
         }
     }
 }

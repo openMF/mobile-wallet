@@ -10,7 +10,6 @@
 package org.mifospay.core.datastore
 
 import kotlinx.coroutines.flow.Flow
-import org.mifospay.core.common.DataState
 import org.mifospay.core.model.autopay.Biller
 import org.mifospay.core.model.autopay.BillerCategory
 
@@ -26,19 +25,19 @@ interface BillerRepository {
     suspend fun getBillerById(id: String): Biller?
 
     /**
-     * Save a new biller
+     * Save a new biller. Returns the saved biller or throws on failure.
      */
-    suspend fun saveBiller(biller: Biller): DataState<Biller>
+    suspend fun saveBiller(biller: Biller): Biller
 
     /**
-     * Update an existing biller
+     * Update an existing biller. Returns the updated biller or throws on failure.
      */
-    suspend fun updateBiller(biller: Biller): DataState<Biller>
+    suspend fun updateBiller(biller: Biller): Biller
 
     /**
-     * Delete a biller
+     * Delete a biller. Throws on failure.
      */
-    suspend fun deleteBiller(id: String): DataState<Unit>
+    suspend fun deleteBiller(id: String)
 
     /**
      * Get billers by category
@@ -56,7 +55,7 @@ interface BillerRepository {
     suspend fun isBillerExists(name: String, accountNumber: String): Boolean
 
     /**
-     * Clear all billers
+     * Clear all billers. Throws on failure.
      */
-    suspend fun clearAllBillers(): DataState<Unit>
+    suspend fun clearAllBillers()
 }

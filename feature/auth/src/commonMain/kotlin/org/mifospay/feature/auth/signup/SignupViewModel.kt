@@ -47,8 +47,8 @@ import mobile_wallet.feature.auth.generated.resources.feature_auth_error_state_r
 import mobile_wallet.feature.auth.generated.resources.feature_auth_error_username_required
 import mobile_wallet.feature.auth.generated.resources.feature_auth_registration_successful
 import org.jetbrains.compose.resources.StringResource
-import org.mifospay.core.common.DataState
 import org.mifospay.core.common.ImmutableListSerializer
+import org.mifospay.core.common.ScreenState
 import org.mifospay.core.common.StringProvider
 import org.mifospay.core.common.getSerialized
 import org.mifospay.core.common.setSerialized
@@ -465,11 +465,7 @@ class SignupViewModel(
             state.emailInput,
             state.passwordInput,
         )
-        val userId = when (val result = userRepository.createUser(newUser)) {
-            is DataState.Success -> result.data
-            is DataState.Error -> throw Exception(result.exception.message.toString())
-            is DataState.Loading -> error("createUser must not emit Loading")
-        }
+        val userId = userRepository.createUser(newUser)
 
         // 3. Create the client (rollback: delete the user on failure).
         val newClient = NewClient(
@@ -494,15 +490,12 @@ class SignupViewModel(
         }
 
         // 4. Assign the client to the user (rollback: delete both on failure).
-        when (val result = userRepository.assignClientToUser(userId, clientId)) {
-            is DataState.Success -> Unit
-            is DataState.Error -> {
-                userRepository.deleteUser(userId)
-                runCatching { clientRepository.deleteClient(clientId) }
-                throw Exception(result.exception.toString())
-            }
-
-            is DataState.Loading -> error("assignClientToUser must not emit Loading")
+        try {
+            userRepository.assignClientToUser(userId, clientId)
+        } catch (e: Exception) {
+            userRepository.deleteUser(userId)
+            runCatching { clientRepository.deleteClient(clientId) }
+            throw Exception(e.toString())
         }
 
         // 5. Success — the observer surfaces the toast + login navigation.
@@ -513,17 +506,18 @@ class SignupViewModel(
         val results = coroutineScope {
             fields.map { (label, value) ->
                 async {
-                    val result = searchRepository.searchResources(value, Constants.CLIENTS, false)
+                    val result = runCatching {
+                        searchRepository.searchResources(value, Constants.CLIENTS, false)
+                    }
                     label to result
                 }
             }.awaitAll()
         }
 
         return results.mapNotNull { (label, result) ->
-            when (result) {
-                is DataState.Loading -> null
-                is DataState.Success -> {
-                    if (result.data.isNotEmpty()) {
+            result.fold(
+                onSuccess = { matches ->
+                    if (matches.isNotEmpty()) {
                         stringProvider.get(
                             resource = Res.string.feature_auth_error_field_already_exists,
                             label,
@@ -531,27 +525,32 @@ class SignupViewModel(
                     } else {
                         null
                     }
-                }
-
-                is DataState.Error -> stringProvider.get(
-                    Res.string.feature_auth_error_check_uniqueness_failed,
-                    label,
-                )
-            }
+                },
+                onFailure = {
+                    stringProvider.get(
+                        Res.string.feature_auth_error_check_uniqueness_failed,
+                        label,
+                    )
+                },
+            )
         }
     }
 
     private fun loadCountriesFromJson() {
-        viewModelScope.launch {
-            when (val countriesWithStatesResult = assetRepository.getCountriesWithStates()) {
-                is DataState.Success -> mutableStateFlow.update {
-                    it.copy(countriesWithStates = countriesWithStatesResult.data)
-                }
+        assetRepository.getCountriesWithStates()
+            .onEach { screenState ->
+                when (screenState) {
+                    is ScreenState.Content -> mutableStateFlow.update {
+                        it.copy(countriesWithStates = screenState.data)
+                    }
 
-                is DataState.Error -> Logger.d("Failed to load countries.json: ${countriesWithStatesResult.exception.message}")
-                is DataState.Loading -> {}
+                    is ScreenState.Error ->
+                        Logger.d("Failed to load countries.json: ${screenState.error.message}")
+
+                    else -> Unit
+                }
             }
-        }
+            .launchIn(viewModelScope)
     }
 }
 

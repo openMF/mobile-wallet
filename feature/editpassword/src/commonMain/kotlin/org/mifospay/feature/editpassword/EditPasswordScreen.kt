@@ -37,6 +37,7 @@ import mobile_wallet.feature.editpassword.generated.resources.feature_editpasswo
 import mobile_wallet.feature.editpassword.generated.resources.feature_editpassword_new_password
 import mobile_wallet.feature.editpassword.generated.resources.feature_editpassword_old_password
 import mobile_wallet.feature.editpassword.generated.resources.feature_editpassword_save
+import org.jetbrains.compose.resources.getString
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.mifospay.core.designsystem.component.BasicDialogState
@@ -68,7 +69,7 @@ internal fun EditPasswordScreen(
             is EditPasswordEvent.OnLogoutUser -> onLogout.invoke()
             is EditPasswordEvent.ShowToast -> {
                 scope.launch {
-                    snackbarHostState.showSnackbar(event.message)
+                    snackbarHostState.showSnackbar(getString(event.message))
                 }
             }
         }

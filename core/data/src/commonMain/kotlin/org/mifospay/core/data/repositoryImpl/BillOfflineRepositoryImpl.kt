@@ -19,7 +19,6 @@ import kpt.core.base.database.invalidation.notifyingWrite
 import kpt.core.database.wallet.bill.BillDao
 import kpt.core.database.wallet.bill.toDomain
 import kpt.core.database.wallet.bill.toEntity
-import org.mifospay.core.common.DataState
 import org.mifospay.core.datastore.BillRepository
 import org.mifospay.core.model.autopay.Bill
 import kotlin.random.Random
@@ -98,57 +97,37 @@ class BillOfflineRepositoryImpl(
         }
     }
 
-    override suspend fun saveBill(bill: Bill): DataState<Bill> {
-        return try {
-            withContext(ioDispatcher) {
-                // Preserve the datastore impl's duplicate-detection semantics —
-                // reject when a bill with the same (name, billerId) already exists.
-                val duplicates = dao.countMatching(bill.name, bill.billerId)
-                if (duplicates > 0) {
-                    return@withContext DataState.Error(
-                        Exception("Bill with this name and biller already exists"),
-                    )
-                }
-                val toWrite = bill.toEntity(generatedIdFallback = generateBillId())
-                notifyingWrite(BILLS_TABLE) {
-                    dao.upsert(toWrite)
-                }
-                DataState.Success(toWrite.toDomain())
+    override suspend fun saveBill(bill: Bill): Bill {
+        return withContext(ioDispatcher) {
+            // Preserve the datastore impl's duplicate-detection semantics —
+            // reject when a bill with the same (name, billerId) already exists.
+            val duplicates = dao.countMatching(bill.name, bill.billerId)
+            require(duplicates == 0) { "Bill with this name and biller already exists" }
+            val toWrite = bill.toEntity(generatedIdFallback = generateBillId())
+            notifyingWrite(BILLS_TABLE) {
+                dao.upsert(toWrite)
             }
-        } catch (e: Exception) {
-            DataState.Error(Exception("Failed to save bill: ${e.message}"))
+            toWrite.toDomain()
         }
     }
 
-    override suspend fun updateBill(bill: Bill): DataState<Bill> {
-        return try {
-            withContext(ioDispatcher) {
-                val existingId = bill.id
-                    ?: return@withContext DataState.Error(Exception("Bill ID is required for update"))
-                if (dao.getById(existingId) == null) {
-                    return@withContext DataState.Error(Exception("Bill not found"))
-                }
-                val entity = bill.toEntity(generatedIdFallback = existingId)
-                notifyingWrite(BILLS_TABLE) {
-                    dao.upsert(entity)
-                }
-                DataState.Success(entity.toDomain())
+    override suspend fun updateBill(bill: Bill): Bill {
+        return withContext(ioDispatcher) {
+            val existingId = requireNotNull(bill.id) { "Bill ID is required for update" }
+            checkNotNull(dao.getById(existingId)) { "Bill not found" }
+            val entity = bill.toEntity(generatedIdFallback = existingId)
+            notifyingWrite(BILLS_TABLE) {
+                dao.upsert(entity)
             }
-        } catch (e: Exception) {
-            DataState.Error(Exception("Failed to update bill: ${e.message}"))
+            entity.toDomain()
         }
     }
 
-    override suspend fun deleteBill(id: String): DataState<Unit> {
-        return try {
-            withContext(ioDispatcher) {
-                notifyingWrite(BILLS_TABLE) {
-                    dao.deleteById(id)
-                }
+    override suspend fun deleteBill(id: String) {
+        withContext(ioDispatcher) {
+            notifyingWrite(BILLS_TABLE) {
+                dao.deleteById(id)
             }
-            DataState.Success(Unit)
-        } catch (e: Exception) {
-            DataState.Error(Exception("Failed to delete bill: ${e.message}"))
         }
     }
 
@@ -166,16 +145,11 @@ class BillOfflineRepositoryImpl(
         }
     }
 
-    override suspend fun clearAllBills(): DataState<Unit> {
-        return try {
-            withContext(ioDispatcher) {
-                notifyingWrite(BILLS_TABLE) {
-                    dao.deleteAll()
-                }
+    override suspend fun clearAllBills() {
+        withContext(ioDispatcher) {
+            notifyingWrite(BILLS_TABLE) {
+                dao.deleteAll()
             }
-            DataState.Success(Unit)
-        } catch (e: Exception) {
-            DataState.Error(Exception("Failed to clear bills: ${e.message}"))
         }
     }
 

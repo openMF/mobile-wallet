@@ -17,7 +17,6 @@ import kotlinx.coroutines.flow.flowOf
 import kpt.core.base.store.screen.ExperimentalScreenDataStreamTestingApi
 import kpt.core.base.store.screen.ScreenDataStream
 import kpt.core.base.store.screen.screenDataStreamForTesting
-import org.mifospay.core.common.DataState
 import org.mifospay.core.common.ScreenState
 import org.mifospay.core.data.repository.OfficeRepository
 import org.mifospay.core.data.repository.SelfServiceRepository
@@ -108,8 +107,8 @@ internal class FakeSelfServiceRepository : SelfServiceRepository {
         shouldReturnError = error
     }
 
-    override suspend fun loginSelf(payload: AuthenticationPayload): DataState<User> =
-        DataState.Error(UnsupportedOperationException("Not used in fast-mpay tests"))
+    override suspend fun loginSelf(payload: AuthenticationPayload): User =
+        throw UnsupportedOperationException("Not used in fast-mpay tests")
 
     override fun getSelfClientDetails(clientId: Long): Flow<ScreenState<Client>> =
         flowOf(ScreenState.Empty)
@@ -123,8 +122,8 @@ internal class FakeSelfServiceRepository : SelfServiceRepository {
     override suspend fun getSelfAccountTransactionFromId(
         accountId: Long,
         transactionId: Long,
-    ): DataState<Flow<Transaction>> =
-        DataState.Error(UnsupportedOperationException("Not used in fast-mpay tests"))
+    ): Flow<Transaction> =
+        throw UnsupportedOperationException("Not used in fast-mpay tests")
 
     override fun getSelfAccounts(clientId: Long): Flow<ScreenState<List<Account>>> =
         flowOf(ScreenState.Empty)
@@ -184,8 +183,8 @@ internal class FakeSelfServiceRepository : SelfServiceRepository {
 
     override fun getAccountAndBeneficiaryList(
         clientId: Long,
-    ): Flow<DataState<AccountContent>> =
-        flowOf(DataState.Error(UnsupportedOperationException("Not used in fast-mpay tests")))
+    ): Flow<ScreenState<AccountContent>> =
+        flowOf(ScreenState.Empty)
 
     override fun getAccountAndBeneficiaryListScreen(
         clientId: Long,
@@ -244,25 +243,21 @@ internal class FakeUserPreferencesRepository : UserPreferencesRepository {
     override val accountExternalIds: StateFlow<Map<Long, String>> = MutableStateFlow(emptyMap())
     override val language: StateFlow<Language> = MutableStateFlow(Language.DEFAULT)
 
-    override suspend fun updateToken(token: String): DataState<Unit> = DataState.Success(Unit)
-    override suspend fun updateUserInfo(user: UserInfo): DataState<Unit> = DataState.Success(Unit)
-    override suspend fun setLanguage(language: Language): DataState<Unit> = DataState.Success(Unit)
-    override suspend fun updateClientInfo(client: Client): DataState<Unit> = DataState.Success(Unit)
-    override suspend fun updateClientProfile(client: UpdatedClient): DataState<Unit> =
-        DataState.Success(Unit)
+    override suspend fun updateToken(token: String) {}
+    override suspend fun updateUserInfo(user: UserInfo) {}
+    override suspend fun setLanguage(language: Language) {}
+    override suspend fun updateClientInfo(client: Client) {}
+    override suspend fun updateClientProfile(client: UpdatedClient) {}
 
-    override suspend fun updateDefaultAccount(account: DefaultAccount): DataState<Unit> =
-        DataState.Success(Unit)
+    override suspend fun updateDefaultAccount(account: DefaultAccount) {}
 
-    override suspend fun updateSelectedInstance(instance: ServerInstance): DataState<Unit> =
-        DataState.Success(Unit)
+    override suspend fun updateSelectedInstance(instance: ServerInstance) {}
 
-    override suspend fun updateSelectedInterbankInstance(instance: InterbankServer): DataState<Unit> =
-        DataState.Success(Unit)
+    override suspend fun updateSelectedInterbankInstance(instance: InterbankServer) {}
 
     override suspend fun updateAccountExternalIds(
         accountExternalIds: Map<Long, String>,
-    ): DataState<Unit> = DataState.Success(Unit)
+    ) {}
 
     override fun getAccountExternalId(accountId: Long): String? = null
     override suspend fun logOut() {}

@@ -26,7 +26,6 @@ import kotlinx.coroutines.test.setMain
 import kpt.core.base.store.screen.ExperimentalScreenDataStreamTestingApi
 import kpt.core.base.store.screen.ScreenDataStream
 import kpt.core.base.store.screen.screenDataStreamForTesting
-import org.mifospay.core.common.DataState
 import org.mifospay.core.common.ScreenState
 import org.mifospay.core.data.repository.AccountRepository
 import org.mifospay.core.data.repository.LocalAssetRepository
@@ -432,25 +431,21 @@ private class FakeUserPreferencesRepository(
     override val selectedInterbankInstance: StateFlow<InterbankServer?> = MutableStateFlow(null)
     override val language: StateFlow<Language> = MutableStateFlow(Language.DEFAULT)
 
-    override suspend fun updateToken(token: String): DataState<Unit> = DataState.Success(Unit)
-    override suspend fun updateUserInfo(user: UserInfo): DataState<Unit> = DataState.Success(Unit)
-    override suspend fun setLanguage(language: Language): DataState<Unit> = DataState.Success(Unit)
-    override suspend fun updateClientInfo(client: Client): DataState<Unit> = DataState.Success(Unit)
-    override suspend fun updateClientProfile(client: UpdatedClient): DataState<Unit> =
-        DataState.Success(Unit)
+    override suspend fun updateToken(token: String) {}
+    override suspend fun updateUserInfo(user: UserInfo) {}
+    override suspend fun setLanguage(language: Language) {}
+    override suspend fun updateClientInfo(client: Client) {}
+    override suspend fun updateClientProfile(client: UpdatedClient) {}
 
-    override suspend fun updateDefaultAccount(account: DefaultAccount): DataState<Unit> =
-        DataState.Success(Unit)
+    override suspend fun updateDefaultAccount(account: DefaultAccount) {}
 
-    override suspend fun updateSelectedInstance(instance: ServerInstance): DataState<Unit> =
-        DataState.Success(Unit)
+    override suspend fun updateSelectedInstance(instance: ServerInstance) {}
 
-    override suspend fun updateSelectedInterbankInstance(instance: InterbankServer): DataState<Unit> =
-        DataState.Success(Unit)
+    override suspend fun updateSelectedInterbankInstance(instance: InterbankServer) {}
 
     override suspend fun updateAccountExternalIds(
         accountExternalIds: Map<Long, String>,
-    ): DataState<Unit> = DataState.Success(Unit)
+    ) {}
 
     override fun getAccountExternalId(accountId: Long): String? =
         _accountExternalIds.value[accountId]

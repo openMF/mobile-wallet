@@ -9,8 +9,8 @@
  */
 package org.mifospay.core.data.repository
 
-import org.mifospay.core.common.DataState
+import org.mifospay.core.common.ScreenStateStream
 
 interface AssetRepository {
-    suspend fun getCountriesWithStates(): DataState<Map<String, List<String>>>
+    fun getCountriesWithStates(): ScreenStateStream<Map<String, List<String>>>
 }

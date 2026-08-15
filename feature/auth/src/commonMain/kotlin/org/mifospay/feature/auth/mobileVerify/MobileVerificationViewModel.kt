@@ -19,7 +19,6 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 import kpt.core.base.store.submit.SubmitState
 import kpt.core.base.store.submit.submitHandler
-import org.mifospay.core.common.DataState
 import org.mifospay.core.common.getSerialized
 import org.mifospay.core.common.setSerialized
 import org.mifospay.core.data.repository.SearchRepository
@@ -188,24 +187,16 @@ class MobileVerificationViewModel(
         // `init`. The block runs the uniqueness search: return the phone no on success (unique),
         // throw on error / already-exists so the handler reports Failed with that message.
         submitRequestOtp.submit {
-            when (
-                val result = searchRepository.searchResources(
-                    query = phoneNo,
-                    resources = Constants.CLIENTS,
-                    exactMatch = true,
-                )
-            ) {
-                is DataState.Success -> {
-                    if (result.data.isEmpty()) {
-                        // TODO:: Call repository request an otp to this phone no.
-                        phoneNo
-                    } else {
-                        throw Exception("Mobile number already exists.")
-                    }
-                }
-
-                is DataState.Error -> throw result.exception
-                DataState.Loading -> error("searchResources must not emit Loading")
+            val result = searchRepository.searchResources(
+                query = phoneNo,
+                resources = Constants.CLIENTS,
+                exactMatch = true,
+            )
+            if (result.isEmpty()) {
+                // TODO:: Call repository request an otp to this phone no.
+                phoneNo
+            } else {
+                throw Exception("Mobile number already exists.")
             }
         }
     }

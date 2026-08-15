@@ -12,7 +12,6 @@ package org.mifospay.core.data.repository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kpt.core.base.store.screen.ScreenDataStream
-import org.mifospay.core.common.DataState
 import org.mifospay.core.common.ScreenState
 import org.mifospay.core.model.account.Account
 import org.mifospay.core.model.account.AccountContent
@@ -26,8 +25,8 @@ import org.mifospay.core.network.model.entity.authentication.AuthenticationPaylo
 import org.mifospay.core.network.model.entity.user.User
 
 interface SelfServiceRepository {
-    // Point-lookup / write — stays on DataState.
-    suspend fun loginSelf(payload: AuthenticationPayload): DataState<User>
+    // Point-lookup — one-shot suspend; returns the value and throws on error.
+    suspend fun loginSelf(payload: AuthenticationPayload): User
 
     // Phase-3 cutover — streaming reads on ScreenState.
     fun getSelfClientDetails(clientId: Long): Flow<ScreenState<Client>>
@@ -39,12 +38,11 @@ interface SelfServiceRepository {
         accountId: Long,
     ): Flow<List<Transaction>>
 
-    // Legacy suspend returning DataState<Flow<T>> — nested-flow shape not
-    // idiomatic under ScreenState; leaves as-is for later chunks to rework.
+    // One-shot suspend returning the raw transaction flow; throws on error.
     suspend fun getSelfAccountTransactionFromId(
         accountId: Long,
         transactionId: Long,
-    ): DataState<Flow<Transaction>>
+    ): Flow<Transaction>
 
     fun getSelfAccounts(clientId: Long): Flow<ScreenState<List<Account>>>
 
@@ -159,11 +157,11 @@ interface SelfServiceRepository {
         scope: CoroutineScope,
     ): ScreenDataStream<List<Beneficiary>>
 
-    // Dashboard-style aggregation of two upstream streams — the transitional
-    // DataState path is kept for one release for BC (a small number of
-    // out-of-tree consumers may still bind against it). New callers MUST use
-    // [getAccountAndBeneficiaryListScreen], the Phase-5 Batch-4 combinator.
-    fun getAccountAndBeneficiaryList(clientId: Long): Flow<DataState<AccountContent>>
+    // Dashboard-style aggregation of two upstream streams, lifted into
+    // ScreenState via `asScreenStateFlow`. New callers SHOULD prefer
+    // [getAccountAndBeneficiaryListScreen], the Phase-5 Batch-4 store-native
+    // combinator; this simpler network-only variant is kept for BC.
+    fun getAccountAndBeneficiaryList(clientId: Long): Flow<ScreenState<AccountContent>>
 
     /**
      * Phase-5 Batch-4 **combinator read** for the account+beneficiary

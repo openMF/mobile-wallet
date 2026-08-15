@@ -46,6 +46,7 @@ import mobile_wallet.feature.kyc.generated.resources.feature_kyc_first_name
 import mobile_wallet.feature.kyc.generated.resources.feature_kyc_last_name
 import mobile_wallet.feature.kyc.generated.resources.feature_kyc_phone_number
 import mobile_wallet.feature.kyc.generated.resources.feature_kyc_select_dob
+import org.jetbrains.compose.resources.getString
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.mifospay.core.designsystem.component.BasicDialogState
@@ -76,7 +77,7 @@ internal fun KYCLevel1Screen(
             is KycLevel1Event.NavigateToKycLevel2 -> navigateToKycLevel2.invoke()
             is KycLevel1Event.ShowToast -> {
                 scope.launch {
-                    snackbarHostState.showSnackbar(event.message)
+                    snackbarHostState.showSnackbar(getString(event.message))
                 }
             }
 

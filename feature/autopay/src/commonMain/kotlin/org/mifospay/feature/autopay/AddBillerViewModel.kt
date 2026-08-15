@@ -17,7 +17,6 @@ import kotlinx.coroutines.flow.update
 import kotlinx.serialization.Serializable
 import kpt.core.base.store.submit.SubmitState
 import kpt.core.base.store.submit.submitHandler
-import org.mifospay.core.common.DataState
 import org.mifospay.core.common.getSerialized
 import org.mifospay.core.common.setSerialized
 import org.mifospay.core.data.util.BillerValidator
@@ -213,14 +212,10 @@ class AddBillerViewModel(
         )
 
         // Submit through the handler — it drives Submitting/Submitted/Failed, observed
-        // in `init`. The block unwraps the repository's transitional DataState result:
-        // return the value on success, throw on error so the handler reports Failed.
+        // in `init`. The repository returns the saved biller or throws on failure,
+        // which the handler surfaces as Failed.
         submitBiller.submit {
-            when (val result = billerRepository.saveBiller(biller)) {
-                is DataState.Success -> result.data
-                is DataState.Error -> throw result.exception
-                DataState.Loading -> error("saveBiller must not emit Loading")
-            }
+            billerRepository.saveBiller(biller)
         }
     }
 

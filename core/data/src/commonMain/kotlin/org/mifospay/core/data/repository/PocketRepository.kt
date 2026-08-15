@@ -12,7 +12,7 @@ package org.mifospay.core.data.repository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kpt.core.base.store.screen.ScreenDataStream
-import org.mifospay.core.common.DataState
+import org.mifospay.core.common.ScreenState
 import org.mifospay.core.model.payload.PocketLinkPayload
 import org.mifospay.core.model.pocket.DetailedPocketAccount
 import org.mifospay.core.model.pocket.LinkableAccount
@@ -20,7 +20,7 @@ import org.mifospay.core.model.pocket.PocketAccount
 
 interface PocketRepository {
 
-    suspend fun getPocketAccounts(): DataState<List<PocketAccount>>
+    suspend fun getPocketAccounts(): List<PocketAccount>
 
     /**
      * Phase-5 Batch-2 **LEDGER read** for the `pocket` archetype (GOAL D13) —
@@ -70,7 +70,7 @@ interface PocketRepository {
 
     fun getAvailableAccountsToLink(
         clientId: Long,
-    ): Flow<DataState<List<LinkableAccount>>>
+    ): Flow<ScreenState<List<LinkableAccount>>>
 
     /**
      * manage-pocket linkable-accounts **LEDGER read** (GOAL D13) —

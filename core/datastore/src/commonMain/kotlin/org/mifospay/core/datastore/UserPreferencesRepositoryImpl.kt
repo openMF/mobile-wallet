@@ -17,7 +17,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
-import org.mifospay.core.common.DataState
 import org.mifospay.core.model.account.DefaultAccount
 import org.mifospay.core.model.client.Client
 import org.mifospay.core.model.client.UpdatedClient
@@ -115,92 +114,44 @@ class UserPreferencesRepositoryImpl(
             started = SharingStarted.Eagerly,
         )
 
-    override suspend fun updateDefaultAccount(account: DefaultAccount): DataState<Unit> {
-        return try {
-            val result = preferenceManager.updateDefaultAccount(account)
-
-            DataState.Success(result)
-        } catch (e: Exception) {
-            DataState.Error(e)
-        }
+    override suspend fun updateDefaultAccount(account: DefaultAccount) {
+        preferenceManager.updateDefaultAccount(account)
     }
 
-    override suspend fun updateSelectedInstance(instance: ServerInstance): DataState<Unit> {
-        return try {
-            preferenceManager.updateSelectedInstance(instance)
-            DataState.Success(Unit)
-        } catch (e: Exception) {
-            DataState.Error(e)
-        }
+    override suspend fun updateSelectedInstance(instance: ServerInstance) {
+        preferenceManager.updateSelectedInstance(instance)
     }
 
-    override suspend fun updateSelectedInterbankInstance(instance: InterbankServer): DataState<Unit> {
-        return try {
-            preferenceManager.updateSelectedInterbankInstance(instance)
-            DataState.Success(Unit)
-        } catch (e: Exception) {
-            DataState.Error(e)
-        }
+    override suspend fun updateSelectedInterbankInstance(instance: InterbankServer) {
+        preferenceManager.updateSelectedInterbankInstance(instance)
     }
 
-    override suspend fun updateAccountExternalIds(accountExternalIds: Map<Long, String>): DataState<Unit> {
-        return try {
-            preferenceManager.updateAccountExternalIds(accountExternalIds)
-            DataState.Success(Unit)
-        } catch (e: Exception) {
-            DataState.Error(e)
-        }
+    override suspend fun updateAccountExternalIds(accountExternalIds: Map<Long, String>) {
+        preferenceManager.updateAccountExternalIds(accountExternalIds)
     }
 
     override fun getAccountExternalId(accountId: Long): String? {
         return preferenceManager.getAccountExternalId(accountId)
     }
 
-    override suspend fun updateToken(token: String): DataState<Unit> {
-        return try {
-            val result = preferenceManager.updateAuthToken(token)
-
-            DataState.Success(result)
-        } catch (e: Exception) {
-            DataState.Error(e)
-        }
+    override suspend fun updateToken(token: String) {
+        preferenceManager.updateAuthToken(token)
     }
 
-    override suspend fun updateClientInfo(client: Client): DataState<Unit> {
-        return try {
-            val result = preferenceManager.updateClientInfo(client)
-
-            DataState.Success(result)
-        } catch (e: Exception) {
-            DataState.Error(e)
-        }
+    override suspend fun updateClientInfo(client: Client) {
+        preferenceManager.updateClientInfo(client)
     }
 
-    override suspend fun updateClientProfile(client: UpdatedClient): DataState<Unit> {
-        return try {
-            val result = preferenceManager.updateClientProfile(client)
-            DataState.Success(result)
-        } catch (e: Exception) {
-            DataState.Error(e)
-        }
+    override suspend fun updateClientProfile(client: UpdatedClient) {
+        preferenceManager.updateClientProfile(client)
     }
 
-    override suspend fun setLanguage(language: Language): DataState<Unit> {
-        return try {
-            preferenceManager.setLanguage(language)
-            DataState.Success(Unit)
-        } catch (e: Exception) {
-            DataState.Error(e)
-        }
+    override suspend fun setLanguage(language: Language) {
+        preferenceManager.setLanguage(language)
     }
-    override suspend fun updateUserInfo(user: UserInfo): DataState<Unit> {
-        return try {
-            val result = preferenceManager.updateUserInfo(user)
 
-            DataState.Success(result)
-        } catch (e: Exception) {
-            DataState.Error(e)
-        }
+    override suspend fun updateUserInfo(user: UserInfo) {
+        preferenceManager.updateUserInfo(user)
     }
 
     override suspend fun logOut() {

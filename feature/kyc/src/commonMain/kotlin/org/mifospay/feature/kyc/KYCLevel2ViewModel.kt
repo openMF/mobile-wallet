@@ -25,7 +25,9 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 import kpt.core.base.store.submit.SubmitState
 import kpt.core.base.store.submit.submitHandler
-import org.mifospay.core.common.DataState
+import mobile_wallet.feature.kyc.generated.resources.Res
+import mobile_wallet.feature.kyc.generated.resources.feature_kyc_successkyc2
+import org.jetbrains.compose.resources.StringResource
 import org.mifospay.core.common.getSerialized
 import org.mifospay.core.common.setSerialized
 import org.mifospay.core.data.repository.DocumentRepository
@@ -51,11 +53,11 @@ internal class KYCLevel2ViewModel(
     }
 
     // Template idiom (core-base/store): the one-shot document upload write goes through a
-    // SubmitHandler instead of a hand-folded DataState result action. The handler owns the
+    // SubmitHandler instead of a hand-folded result action. The handler owns the
     // Submitting/Submitted/Failed lifecycle; we observe it below to drive this screen's
     // existing Loading dialog + toast + navigate-to-level-3 UX, so the Screen is unchanged.
-    // Result type is String (the success toast message the write returns).
-    private val submitUpload = viewModelScope.submitHandler<String>()
+    // Writes return Unit; the success toast is a feature StringResource.
+    private val submitUpload = viewModelScope.submitHandler<Unit>()
 
     init {
         submitUpload.state
@@ -69,7 +71,7 @@ internal class KYCLevel2ViewModel(
 
                     is SubmitState.Submitted -> {
                         mutableStateFlow.update { it.copy(dialogState = null) }
-                        sendEvent(KycLevel2Event.ShowToast(submitState.result))
+                        sendEvent(KycLevel2Event.ShowToast(Res.string.feature_kyc_successkyc2))
                         sendEvent(KycLevel2Event.OnNavigateToLevel3)
                         submitUpload.reset()
                     }
@@ -171,22 +173,15 @@ internal class KYCLevel2ViewModel(
         val file = state.uploadedFile ?: return
 
         // Submit through the handler — it drives Submitting/Submitted/Failed, observed in
-        // `init`. The block unwraps the repository's transitional DataState result: return
-        // the value on success, throw on error so the handler reports Failed.
+        // `init`. The write returns Unit and throws on error, so the handler reports Failed.
         submitUpload.submit {
-            val result = repository.createDocument(
+            repository.createDocument(
                 entityType = state.entityType,
                 entityId = state.entityId,
                 name = state.fileName,
                 description = state.description,
                 file = file,
             )
-
-            when (result) {
-                is DataState.Success -> result.data
-                is DataState.Error -> throw result.exception
-                DataState.Loading -> error("Document upload must not emit Loading")
-            }
         }
     }
 }
@@ -244,7 +239,7 @@ internal data class KycLevel2State(
 internal sealed interface KycLevel2Event {
     data object OnNavigateBack : KycLevel2Event
     data object OnNavigateToLevel3 : KycLevel2Event
-    data class ShowToast(val message: String) : KycLevel2Event
+    data class ShowToast(val message: StringResource) : KycLevel2Event
 }
 
 internal sealed interface KycLevel2Action {

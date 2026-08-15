@@ -21,7 +21,6 @@ import kpt.core.base.store.screen.ScreenDataStream
 import kpt.core.base.store.screen.asScreenStream
 import kpt.core.store.AppStoreRegistry
 import kpt.core.store.wallet.client.ClientDetailKey
-import org.mifospay.core.common.DataState
 import org.mifospay.core.common.ScreenState
 import org.mifospay.core.common.asScreenStateFlow
 import org.mifospay.core.data.mapper.toAccount
@@ -98,12 +97,9 @@ class ClientRepositoryImpl(
         )
     }
 
-    override suspend fun getClient(clientId: Long): DataState<Client> {
-        return try {
-            val result = apiManager.clientsApi.getClientForId(clientId)
-            DataState.Success(result.toModel())
-        } catch (e: Exception) {
-            DataState.Error(e)
+    override suspend fun getClient(clientId: Long): Client {
+        return withContext(ioDispatcher) {
+            apiManager.clientsApi.getClientForId(clientId).toModel()
         }
     }
 

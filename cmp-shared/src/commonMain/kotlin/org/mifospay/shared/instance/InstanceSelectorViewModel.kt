@@ -10,6 +10,8 @@
 package org.mifospay.shared.instance
 
 import androidx.lifecycle.viewModelScope
+import cmp.shared.generated.resources.Res
+import cmp.shared.generated.resources.failed_to_load_instances
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
@@ -17,7 +19,8 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import org.mifospay.core.common.DataState
+import org.jetbrains.compose.resources.getString
+import org.mifospay.core.common.ScreenState
 import org.mifospay.core.datastore.UserPreferencesRepository
 import org.mifospay.core.model.instance.InstancesConfig
 import org.mifospay.core.model.instance.InterbankServer
@@ -45,7 +48,7 @@ class InstanceSelectorViewModel(
             tempSelectedInterbankInstance,
         ) { remoteConfig, selectedMainInstance, selectedInterbankInstance, tempMainInstance, tempInterbankInstance ->
             when (remoteConfig) {
-                is DataState.Success -> {
+                is ScreenState.Content -> {
                     val config = remoteConfig.data
                     val defaultInstance = config.getDefaultInstance()
 
@@ -73,18 +76,42 @@ class InstanceSelectorViewModel(
                     }
                 }
 
-                is DataState.Error -> {
+                is ScreenState.Error -> {
+                    val message = remoteConfig.error.message
+                        ?: getString(Res.string.failed_to_load_instances)
                     mutableStateFlow.update {
                         it.copy(
                             isLoading = false,
-                            error = remoteConfig.exception.message ?: "Failed to load instances",
+                            error = message,
                         )
                     }
                 }
 
-                DataState.Loading -> {
+                ScreenState.Loading -> {
                     mutableStateFlow.update {
                         it.copy(isLoading = true)
+                    }
+                }
+
+                ScreenState.Empty -> {
+                    mutableStateFlow.update {
+                        it.copy(
+                            instances = emptyList(),
+                            isLoading = false,
+                            error = null,
+                        )
+                    }
+                }
+
+                is ScreenState.NoNetwork,
+                ScreenState.Unauthenticated,
+                -> {
+                    val message = getString(Res.string.failed_to_load_instances)
+                    mutableStateFlow.update {
+                        it.copy(
+                            isLoading = false,
+                            error = message,
+                        )
                     }
                 }
             }
@@ -169,5 +196,5 @@ sealed interface InstanceSelectorAction {
     data class SelectMainInstance(val instance: ServerInstance) : InstanceSelectorAction
     data class SelectInterbankInstance(val instance: InterbankServer) : InstanceSelectorAction
     data object UpdateInstances : InstanceSelectorAction
-    data class ConfigLoaded(val config: DataState<InstancesConfig>) : InstanceSelectorAction
+    data class ConfigLoaded(val config: ScreenState<InstancesConfig>) : InstanceSelectorAction
 }

@@ -10,8 +10,11 @@
 package org.mifospay.core.data.repositoryImpl
 
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.withContext
-import org.mifospay.core.common.DataState
+import org.mifospay.core.common.ScreenStateStream
+import org.mifospay.core.common.asScreenStateFlow
 import org.mifospay.core.data.repository.InterBankRepository
 import org.mifospay.core.model.interbank.InterBankParticipantRequest
 import org.mifospay.core.model.interbank.InterBankParticipantResponse
@@ -29,82 +32,48 @@ class InterBankRepositoryImpl(
     override suspend fun fetchParticipant(
         partyId: String,
         currencyCode: String,
-    ): DataState<InterBankParticipantResponse> {
-        return try {
-            val request = InterBankParticipantRequest(
-                partyId = partyId.trim(),
-                currencyCode = currencyCode,
-                partyIdType = "MSISDN",
-            )
-            val result = withContext(ioDispatcher) {
-                apiManager.interBankApi.fetchParticipant(request)
-            }
-            DataState.Success(result)
-        } catch (e: Exception) {
-            DataState.Error(e)
-        }
+    ): InterBankParticipantResponse = withContext(ioDispatcher) {
+        val request = InterBankParticipantRequest(
+            partyId = partyId.trim(),
+            currencyCode = currencyCode,
+            partyIdType = "MSISDN",
+        )
+        apiManager.interBankApi.fetchParticipant(request)
     }
 
     override suspend fun fetchPartyInfo(
         partyId: String,
         currencyCode: String,
         ownerFspId: String,
-    ): DataState<InterBankPartyInfoResponse> {
-        return try {
-            val request = InterBankPartyInfoRequest(
-                partyId = partyId.trim(),
-                currencyCode = currencyCode,
-                ownerFspId = ownerFspId,
-                partyIdType = "MSISDN",
-            )
-            val result = withContext(ioDispatcher) {
-                apiManager.interBankApi.fetchPartyInfo(request)
-            }
-            DataState.Success(result)
-        } catch (e: Exception) {
-            DataState.Error(e)
-        }
+    ): InterBankPartyInfoResponse = withContext(ioDispatcher) {
+        val request = InterBankPartyInfoRequest(
+            partyId = partyId.trim(),
+            currencyCode = currencyCode,
+            ownerFspId = ownerFspId,
+            partyIdType = "MSISDN",
+        )
+        apiManager.interBankApi.fetchPartyInfo(request)
     }
 
-    override suspend fun findParticipant(
+    override fun findParticipant(
         partyId: String,
         currencyCode: String,
-    ): DataState<InterBankPartyInfoResponse> {
-        return try {
-            // First, fetch participant to get the FSP ID
-            val participantResult = fetchParticipant(partyId, currencyCode)
-
-            if (participantResult !is DataState.Success) {
-                return DataState.Error(
-                    Exception("Failed to fetch participant"),
-                )
-            }
-
-            val participant = participantResult.data
-
-            // Then, fetch party info using the FSP ID
-            val partyInfoResult = fetchPartyInfo(
+    ): ScreenStateStream<InterBankPartyInfoResponse> {
+        return flow {
+            // First, fetch participant to get the FSP ID, then fetch party info.
+            val participant = fetchParticipant(partyId, currencyCode)
+            val partyInfo = fetchPartyInfo(
                 partyId = partyId,
                 currencyCode = currencyCode,
                 ownerFspId = participant.fspId,
             )
-
-            partyInfoResult
-        } catch (e: Exception) {
-            DataState.Error(e)
-        }
+            emit(partyInfo)
+        }.asScreenStateFlow().flowOn(ioDispatcher)
     }
 
     override suspend fun interBankMakeTransfer(
         request: InterBankTransferRequest,
-    ): DataState<InterBankTransferResponse> {
-        return try {
-            val result = withContext(ioDispatcher) {
-                apiManager.interBankApi.interBankMakeTransfer(request)
-            }
-            DataState.Success(result)
-        } catch (e: Exception) {
-            DataState.Error(e)
-        }
+    ): InterBankTransferResponse = withContext(ioDispatcher) {
+        apiManager.interBankApi.interBankMakeTransfer(request)
     }
 }
