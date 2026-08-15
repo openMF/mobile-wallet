@@ -1,0 +1,10 @@
+{
+  "_comment": "App Toolkit collects NO data. All loan tracking, EMI calculation, bill reminders, and amortization scheduling run fully on-device. No account, no analytics, no telemetry, no third-party trackers. Interest Rates (FRED), Country Macro Data (World Bank), and Currency Exchange Rates make read-only public-data requests that carry no personal identifiers. Your data stays on your device and is never transmitted to Your Organization Name or any third party.",
+  "app_uses_signed_in_account": false,
+  "data_protections": [
+    {
+      "data_protection_id": "DATA_NOT_COLLECTED"
+    }
+  ],
+  "data_types": []
+}

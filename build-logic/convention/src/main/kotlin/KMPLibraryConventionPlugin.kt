@@ -1,5 +1,6 @@
 
 import com.android.build.api.variant.KotlinMultiplatformAndroidComponentsExtension
+import org.convention.BASE_MODULE_NAMESPACE
 import org.convention.configureKotlinMultiplatform
 import org.convention.libs
 import org.gradle.api.Plugin
@@ -43,12 +44,12 @@ class KMPLibraryConventionPlugin: Plugin<Project> {
 
             pluginManager.apply("org.convention.kmp.koin")
 
-            val baseNamespace = libs.findVersion("baseNamespace").get().requiredVersion
+            val baseNamespace = BASE_MODULE_NAMESPACE
             val compileSdkVersion = libs.findVersion("compileSdk").get().requiredVersion.toInt()
             val minSdkVersion = libs.findVersion("minSdk").get().requiredVersion.toInt()
-            // namespace is derived from baseNamespace + module path so all modules stay
-            // in sync when a fork changes baseNamespace.
-            // e.g. baseNamespace="kpt", path=":feature:loans" → "kpt.feature.loans"
+            // namespace is derived from BASE_MODULE_NAMESPACE + module path so all modules stay
+            // in sync. The base is a fixed template constant (not a fork-editable catalog value).
+            // e.g. base="kpt", path=":feature:loans" → "kpt.feature.loans"
             val moduleNamespace = baseNamespace + target.path.replace(":", ".").replace("-", "_").lowercase()
             // The resource prefix is derived from the module path so resources inside
             // ":core:module1" must be prefixed with "core_module1_"

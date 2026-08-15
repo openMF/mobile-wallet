@@ -1,0 +1,27 @@
+# app-profile/platforms/apple/macos/app-content/content-rights.yaml — feeds App Store Connect
+# "App Information" → "Content Rights" declaration for the Mac App Store listing (same
+# declaration as iOS — App Toolkit is one ASC app record spanning iOS + macOS platforms).
+# Fork-owned SoT — syncForkConfig / the release readiness gate reads this file; it does not
+# itself submit to ASC.
+#
+# App Toolkit posture: fully original app (Your Organization Name, MIT licensed, source on GitHub).
+# No third-party media, no licensed content, no user-generated content.
+
+contains_third_party_content: false
+declaration: >
+  This app does not contain, show, or access third-party content that
+  requires additional rights or licenses. All UI, copy, and iconography are
+  original or MIT-licensed open-source assets owned/authored by the Your Organization
+  Initiative. The Interest Rates, Country Macro Data, and Currency Exchange
+  Rates screens display factual, non-copyrightable numeric data retrieved
+  live from public government/international-institution data APIs (FRED,
+  World Bank, exchange-rate feeds) — this is data, not licensed third-party
+  media content. Mirrors the iOS declaration (see
+  ../../ios/app-content/content-rights.yaml) — one ASC app record spans
+  iOS + macOS.
+
+third_party_content_sources: []
+
+user_generated_content:
+  allows_ugc: false
+  moderation_policy_url: ""

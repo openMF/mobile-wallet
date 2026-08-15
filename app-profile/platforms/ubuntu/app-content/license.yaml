@@ -1,0 +1,9 @@
+# app-profile/platforms/ubuntu/app-content/license.yaml — feeds Snap Store `snapcraft.yaml`
+# `license:` field + Flathub `metainfo.xml` `<project_license>` + .deb `debian/copyright`.
+# Fork-owned SoT — syncForkConfig / the release readiness gate reads this file.
+
+spdx: MIT
+license_url: https://github.com/openMF/kmp-project-template/blob/main/LICENSE
+copyright_holder: Your Organization Name
+copyright_notice: "© 2026 Your Organization Name. All rights reserved."
+source_url: https://github.com/openMF/kmp-project-template

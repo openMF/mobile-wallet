@@ -1,0 +1,10 @@
+# app-profile/platforms/apple/macos/macos.yaml — macOS-ONLY (deep-merged under `apple.macos`).
+apple:
+  macos:
+    keywords: 'mifos,wallet,payment,p2p,transfer,finance'  # store.macos.keywords
+    category: 'FINANCE'                        # store.macos.category
+    secondary_category: 'PRODUCTIVITY'                   # store.macos.secondary.category (optional)
+    app_category: public.app-category.finance  # mac.app.category (LSApplicationCategoryType / packaging)
+    homebrew:
+      cask_name: mifos-pay                    # mac.homebrew.cask.name (kebab-case Homebrew Cask token)
+      tagline: 'YOUR_APP_SUBTITLE'            # PLACEHOLDER — mac.homebrew.tagline (mirrors store.subtitle)

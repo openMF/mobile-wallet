@@ -1,5 +1,6 @@
 
 import com.android.build.api.variant.KotlinMultiplatformAndroidComponentsExtension
+import org.convention.BASE_MODULE_NAMESPACE
 import org.convention.configureKotlinMultiplatform
 import org.convention.libs
 import org.gradle.api.Plugin
@@ -42,7 +43,7 @@ class KMPCoreBaseLibraryConventionPlugin: Plugin<Project> {
 
             pluginManager.apply("org.convention.kmp.koin")
 
-            val baseNamespace = libs.findVersion("baseNamespace").get().requiredVersion
+            val baseNamespace = BASE_MODULE_NAMESPACE
             val compileSdkVersion = libs.findVersion("compileSdk").get().requiredVersion.toInt()
             val minSdkVersion = libs.findVersion("minSdk").get().requiredVersion.toInt()
             // core-base uses dots (kpt.core.base.*), not underscores — replace "-" with "."

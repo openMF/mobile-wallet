@@ -2,13 +2,21 @@
 #
 # Runs Android + iOS + Desktop + Web checks in parallel on every PR + push to main/dev.
 #
-# iOS is invoked LOCALLY (not via actionhub) because the actionhub's reusable
-# workflow calls `:cmp-shared:compileKotlin` which doesn't exist in modern KMP —
-# the task is ambiguous (resolves to compileKotlinIosArm64, compileKotlinJs, etc.).
-# We route iOS through a thin local job that calls the correct platform task.
-# Track removal of this local override at: openMF/mifos-x-actionhub PR (TBD).
+# All platforms (incl. iOS) now go through the actionhub reusable pr-check-v2 @v1.0.63, which fixed the
+# KMP/SwiftPM iOS job (macos-26 + Xcode 26, delegates to `fastlane ios build_ios`, konan/SwiftPM caching,
+# cancel-in-progress) AND added Gradle dependency/build caching to the desktop (3-OS matrix) + web jobs
+# that previously had none (the intermittent Maven/plugin-portal 429 source). The prior LOCAL iOS
+# workaround — needed only while the actionhub iOS step was broken on KMP (it called the ambiguous
+# `:cmp-shared:compileKotlin` on macos-14/Xcode-15.2) — is removed as of this bump.
 name: PR Check
 run-name: "🔍 PR Check · #${{ github.event.pull_request.number || github.ref_name }} · ${{ github.event.pull_request.title || github.event.head_commit.message }}"
+
+# Cancel superseded runs: a newer commit on the same PR/branch cancels the older, still-running
+# PR-check instead of letting them pile up and hold scarce macOS runners ~50 min each (the
+# "runs in bunches → grabs many runners and holds them" problem the dev team flagged).
+concurrency:
+  group: pr-check-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
 
 on:
   pull_request:
@@ -18,47 +26,12 @@ on:
 
 jobs:
   validate:
-    uses: openMF/mifos-x-actionhub/.github/workflows/pr-check-v2.yaml@v1.0.21
+    uses: openMF/mifos-x-actionhub/.github/workflows/pr-check-v2.yaml@v1.0.63
     with:
-      # iOS handled locally below (actionhub iOS step is broken on KMP).
-      platforms:            'android,desktop,web'
+      platforms:            'android,ios,desktop,web'
       android_package_name: cmp-android
       ios_package_name:     cmp-ios
       shared_module:        cmp-shared
       desktop_package_name: cmp-desktop
       web_package_name:     cmp-web
     secrets: inherit
-
-  ios:
-    # macos-15 (arm64) is the image PR #185 (Jun 3, last green iOS) ran on. It
-    # ships Xcode 26.0.1 which has the iOS 26 SDK — the iOS 26 SDK exports
-    # _OBJC_CLASS_$_UIViewLayoutRegion that compose-multiplatform 1.11.x's
-    # CMPLayoutRegion references. The earlier macos-14 image ships Xcode 16.1
-    # max (iOS 18 SDK) which does NOT export the symbol → link fails. Per
-    # actions/runner-images macos-15-arm64-Readme.md, Xcode 26.0/26.1/26.2/26.3
-    # are all available on macos-15. (macos-14 deprecation begins 2026-07-06.)
-    name: PR Check · iOS
-    runs-on: macos-15
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-java@v4
-        with: { distribution: zulu, java-version: '17' }
-      - uses: gradle/actions/setup-gradle@v3
-      - uses: maxim-lobanov/setup-xcode@v1
-        # Xcode 26.0 = exact pin PR #185's actionhub action used (the action
-        # source comments "Builds on PR #47 (Xcode 26 fix, currently shipped
-        # as v1.0.13)"). Resolves to 26.0.1 on macos-15.
-        with: { xcode-version: '26.0' }
-      - uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: '3.3'
-          bundler-cache: true
-      - name: Generate podspec + placeholder framework
-        # podspec has a raise-if-missing check on
-        # build/cocoapods/framework/ComposeApp.framework. generateDummyFramework
-        # produces a placeholder so `pod install` passes; xcodebuild's
-        # script_phase later swaps in the real framework via syncFramework.
-        run: ./gradlew :cmp-shared:podspec :cmp-shared:generateDummyFramework
-      - name: fastlane ios build_ios (unsigned)
-        # Canonical PR-check lane in fastlane/Fastfile. Same path PR #185 used.
-        run: bundle exec fastlane ios build_ios

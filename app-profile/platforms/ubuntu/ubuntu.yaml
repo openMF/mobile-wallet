@@ -1,0 +1,35 @@
+# app-profile/platforms/ubuntu/ubuntu.yaml — Linux store packaging (Snap Store / Flathub / .deb).
+# Template default = a PLACEHOLDER; a FORK overrides the package names + maintainer with its own.
+# Deep-merged under `ubuntu.*` (top-level key), consumed via APP_PROFILE_MAP (ubuntu.* flat keys).
+ubuntu:
+  snap:
+    name: mifos-pay                        # ubuntu.snap.name (Snap Store package name, lowercase-hyphen)
+    grade: stable                          # ubuntu.snap.grade (stable | devel)
+    confinement: strict                    # ubuntu.snap.confinement (strict | classic | devmode)
+    channel: stable                        # ubuntu.snap.channel (default release channel)
+    summary: 'YOUR_APP_SUMMARY — short one-line summary (<=79 chars).'   # PLACEHOLDER — ubuntu.snap.summary (no Linux store listing authored yet)
+    description: 'YOUR_APP_DESCRIPTION — write your Snap Store long description here (<=4096 chars).'   # PLACEHOLDER — ubuntu.snap.description
+  flathub:
+    app_id: org.mifospay                   # ubuntu.flathub.app.id (reverse-DNS Flatpak application id — mirrors app_id)
+    developer: Mifos Initiative
+    name: Mifos Pay
+    summary: YOUR_APP_SUMMARY              # PLACEHOLDER — ubuntu.flathub.summary (<=35 chars)
+    description: 'YOUR_APP_DESCRIPTION — write your Flathub description here.'   # PLACEHOLDER — ubuntu.flathub.description
+    categories:                            # ubuntu.flathub.categories (list — unmapped, read direct)
+      - Finance
+      - Utility
+    keywords:                              # ubuntu.flathub.keywords (list — unmapped, read direct)
+      - mifos
+      - wallet
+      - payment
+      - p2p
+      - transfer
+      - finance
+  aur:
+    package_name: mifos-pay-bin            # ubuntu.aur.package.name (MUST end -bin)
+    source_type: binary                    # ubuntu.aur.source.type
+  deb:
+    package: mifos-pay                     # ubuntu.deb.package (.deb package name)
+    section: utils                         # ubuntu.deb.section (Debian archive section)
+    maintainer: Mifos Initiative <team@mifos.org>   # ubuntu.deb.maintainer (Name <email>)
+    homepage: https://mifos.org             # ubuntu.deb.homepage

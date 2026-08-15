@@ -1,0 +1,11 @@
+# app-profile/platforms/apple/ios/ios.yaml — iOS-ONLY overrides (deep-merged under `apple.ios`).
+# Empty stub: this fork has no iOS-specific overrides today. Keys documented for forks that need them.
+apple:
+  ios:
+    secondary_category: 'PRODUCTIVITY'                   # store.ios.secondary.category (optional)
+    apple_tv_privacy_url: ""                 # store.ios.apple.tv.privacy.url (only if targeting tvOS)
+    # keywords_override: ""                   # override apple.keywords for iOS specifically (rare)
+    primary_first_sub_category: ''           # store.ios.primary.first.subcategory (optional, ASC-controlled vocabulary)
+    primary_second_sub_category: ''          # store.ios.primary.second.subcategory (optional, ASC-controlled vocabulary)
+    secondary_first_sub_category: ''         # store.ios.secondary.first.subcategory (optional, ASC-controlled vocabulary)
+    secondary_second_sub_category: ''        # store.ios.secondary.second.subcategory (optional, ASC-controlled vocabulary)

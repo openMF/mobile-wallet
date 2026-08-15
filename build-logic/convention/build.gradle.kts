@@ -38,6 +38,9 @@ dependencies {
     // META-INF/gradle-plugins descriptor is on the build-logic runtime classpath,
     // letting WorkerComposeConventionPlugin apply it via pluginManager.apply(id).
     implementation(libs.worker.app.plugin)
+    // SnakeYAML — lets SyncForkConfigPlugin parse app-profile/app.yaml + platforms/**/*.yaml
+    // (the fork-owned white-label SoT). Not in the version catalog; literal coordinate.
+    implementation("org.yaml:snakeyaml:2.2")
 }
 
 tasks {

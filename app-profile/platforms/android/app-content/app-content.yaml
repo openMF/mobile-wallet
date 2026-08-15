@@ -1,0 +1,158 @@
+# deployment-layer/store-listing/variants/v1/app-content/android/en-US/app-content.yaml
+# feeds Google Play Console "App content" section (Play Store listing → App content). Folds 1:1
+# into app-profile/platforms/android/app-content/app-content.yaml on `--sync`.
+#
+# App Toolkit posture: 100% offline, no login, no account, no ads, no tracking, no analytics,
+# no data collection or transmission of any kind.
+
+privacy_policy_url: https://raw.githubusercontent.com/openMF/kmp-project-template/main/legal/output/privacy-policy.md
+
+ads:
+  contains_ads: false
+
+app_access:
+  all_functionality_available_without_special_access: true
+  login_required: false
+  restricted_functionality: false
+  notes: >
+    No login, no account, no gated features. The full app (loan tracker, EMI
+    calculator, affordability calculator, bill reminders, amortization
+    schedule, loan comparison, interest rates, country macro data, currency
+    exchange rates) is usable immediately after install with zero setup.
+
+content_rating:
+  ref: ./content-rating.yaml
+  category: Utility
+  expected_rating: Everyone
+
+target_audience:
+  age_groups: ["18 and over"]
+  appeals_to_children: false
+  is_child_directed: false
+  notes: >
+    Personal-finance / loan-tracking utility aimed at adults managing their
+    own finances. Not designed or marketed for children.
+
+data_safety:
+  ref: ./data-safety.csv
+  collects_or_shares_data: false
+  encrypted_in_transit: not_applicable
+  data_deletion: not_applicable
+  notes: >
+    App collects and transmits NO user data. All state (loans, reminders,
+    calculator inputs) is stored locally on-device only. Read-only public-data
+    calls (FRED interest rates, World Bank macro data, currency exchange
+    rates) carry no personal identifiers and are not "data collected" from
+    the user. See data-safety.csv for the full Play Console questionnaire.
+
+special_categories:
+  news_apps_declaration:
+    is_news_app: false
+  covid19_contact_tracing_status_apps:
+    is_covid_app: false
+  government_apps:
+    is_government_app: false
+
+financial_features_declaration:
+  is_financial_app_requiring_declaration: false
+  notes: >
+    App Toolkit is a personal offline utility (loan tracking, EMI
+    calculation) — it does not originate, process, or facilitate loans,
+    payments, or any regulated financial transaction, so it does not trigger
+    Play's financial-services app declaration requirements.
+
+health_apps:
+  is_health_app: false
+
+# ── questionnaire: the actual multi-question Play Console forms, in order ──
+# Keyed by console form; every question the console asks paired with the exact answer to select.
+# Answers derived from the data-posture above (100% offline, no login, no data collection).
+questionnaire:
+  content-rating:
+    form: Content rating
+    where: Play Console → App content → Content rating → Start questionnaire
+    steps:
+      - q: Select the category that best describes your app.
+        a: Utility, Productivity, or Communication
+      - q: Does your app contain violence?
+        a: "No"
+      - q: Does your app contain sexual content or nudity?
+        a: "No"
+      - q: Does your app contain profanity or crude humor?
+        a: "No"
+      - q: Does your app reference alcohol, tobacco, drugs, or simulated gambling?
+        a: "No"
+      - q: Does your app contain real-money gambling?
+        a: "No"
+      - q: Does your app share the user's location?
+        a: "No"
+      - q: Does your app allow user-generated content or user interaction?
+        a: "No"
+      - q: Does your app contain digital purchases?
+        a: "No"
+      - q: Does your app depict illegal activity or hate speech?
+        a: "No"
+    outcome: Everyone / PEGI 3 / USK 0 / ESRB Everyone
+  data-safety:
+    form: Data safety
+    where: Play Console → App content → Data safety → Manage
+    steps:
+      - q: Does your app collect or share any of the required user data types?
+        a: "No"
+      - q: Is all of the user data collected by your app encrypted in transit?
+        a: Not applicable — no data is collected
+      - q: Does your app provide a way for users to request that their data be deleted?
+        a: Not applicable — no data is collected or stored off-device
+      - q: Which of the following methods of account creation does your app support?
+        a: My app does not allow users to create an account
+    outcome: "No data shared/collected — badge: Data safety section shows \"No data collected\""
+  target-audience:
+    form: Target audience and content
+    where: Play Console → App content → Target audience and content
+    steps:
+      - q: Select all age groups your app is designed for.
+        a: "18 and over"
+      - q: Does your app appeal to children even if it is not primarily designed for them?
+        a: "No"
+      - q: Does your app fall under Google Play's Families Policy?
+        a: "No"
+    outcome: Not child-directed; standard adult utility audience
+  ads:
+    form: Ads
+    where: Play Console → App content → Ads
+    steps:
+      - q: Does your app contain ads?
+        a: "No"
+    outcome: No ads declared
+  app-access:
+    form: App access
+    where: Play Console → App content → App access
+    steps:
+      - q: Is all or part of your app restricted, requiring special access for review (e.g. login credentials)?
+        a: All functionality is available without special access
+    outcome: No restricted access — reviewer can use every feature immediately
+  special-cats:
+    form: News apps / COVID-19 contact tracing / Government apps
+    where: Play Console → App content → News apps, COVID-19 apps, Government apps declarations
+    steps:
+      - q: Is your app a news app?
+        a: "No"
+      - q: Is your app a COVID-19 contact tracing or status app?
+        a: "No"
+      - q: Is your app a government-operated app?
+        a: "No"
+    outcome: None of the special categories apply
+  news:
+    form: News apps declaration
+    where: Play Console → App content → News apps
+    steps:
+      - q: Does your app function as a news app (aggregates or publishes news content)?
+        a: "No"
+    outcome: Not a news app
+  privacy-policy:
+    form: Privacy policy
+    where: Play Console → App content → Privacy policy
+    steps:
+      - q: Provide a link to your privacy policy.
+        a: https://raw.githubusercontent.com/openMF/kmp-project-template/main/legal/output/privacy-policy.md
+    outcome: Privacy policy URL on file

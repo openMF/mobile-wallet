@@ -11,6 +11,16 @@ import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.plugin.KotlinHierarchyBuilder
 
 /**
+ * Base namespace prefix for every module's Android `namespace` (R-class package), derived as
+ * `BASE_MODULE_NAMESPACE + <module-path>` (e.g. `kpt.feature.loans`). It intentionally matches the
+ * hardcoded Kotlin package root (`kpt.*`) used across the source — there is NO reason for the Android
+ * namespace to differ per fork, so this is a fixed TEMPLATE constant (owner: template, full-copied on
+ * sync), NOT a catalog value a fork rewrites. Keeping it out of `libs.versions.toml` removes a
+ * pointless per-fork catalog-merge conflict during `/kmp-project-template-sync`.
+ */
+const val BASE_MODULE_NAMESPACE = "kpt"
+
+/**
  * Get the `libs` version catalog.
  */
 val Project.libs

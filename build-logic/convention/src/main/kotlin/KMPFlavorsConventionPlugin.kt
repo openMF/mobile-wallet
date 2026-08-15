@@ -56,6 +56,17 @@ class KMPFlavorsConventionPlugin : Plugin<Project> {
             //    + AGP bridge via AgpProductFlavorRegistrar.whenObjectAdded).
             pluginManager.apply(KmpFlavorPlugin::class.java)
 
+            // 1b. Fork-owned endpoints/creds/log-tag (B4/T10 white-label seam). This TEMPLATE-synced
+            //     plugin READS them from the fork-owned `gradle/fork.properties` (never synced), so a
+            //     fork changes its API base URLs, demo credentials, and log tag WITHOUT editing this
+            //     file — the hardcoded values below are the template defaults when a key is absent.
+            val forkProps = java.util.Properties().apply {
+                val f = rootProject.file("gradle/fork.properties")
+                if (f.exists()) f.inputStream().use { load(it) }
+            }
+            fun forkProp(key: String, default: String): String =
+                forkProps.getProperty(key)?.takeIf { it.isNotBlank() } ?: default
+
             // 2. Configure the KMP-side flavor contract.
             //    buildConfigPackage comes from gradle/libs.versions.toml ([versions].appId)
             //    so forks change the brand by editing ONE line.
@@ -93,14 +104,14 @@ class KMPFlavorsConventionPlugin : Plugin<Project> {
                         desktopWindowTitleSuffix.set(" (Demo)")
                         webTitleSuffix.set(" (Demo)")
                         buildConfigField("Boolean", "IS_DEMO_BUILD", "true")
-                        buildConfigField("String", "BASE_URL", "\"https://demo.openmf.org\"")
-                        buildConfigField("String", "DEMO_USERNAME", "\"demo\"")
-                        buildConfigField("String", "DEMO_PASSWORD", "\"demo\"")
+                        buildConfigField("String", "BASE_URL", "\"${forkProp("network.base.url.demo", "https://demo.example.com")}\"")
+                        buildConfigField("String", "DEMO_USERNAME", "\"${forkProp("demo.username", "demo")}\"")
+                        buildConfigField("String", "DEMO_PASSWORD", "\"${forkProp("demo.password", "demo")}\"")
                     }
                     register("prod") {
                         dimension.set("contentType")
                         buildConfigField("Boolean", "IS_DEMO_BUILD", "false")
-                        buildConfigField("String", "BASE_URL", "\"https://api.openmf.org\"")
+                        buildConfigField("String", "BASE_URL", "\"${forkProp("network.base.url.prod", "https://api.example.com")}\"")
                         buildConfigField("String", "DEMO_USERNAME", "\"\"")
                         buildConfigField("String", "DEMO_PASSWORD", "\"\"")
                     }
@@ -113,21 +124,21 @@ class KMPFlavorsConventionPlugin : Plugin<Project> {
                         applicationIdSuffix.set(".debug")
                         buildConfigField("Boolean", "ENABLE_LOGGING", "true")
                         buildConfigField("Boolean", "SHOW_DEBUG_OVERLAY", "true")
-                        buildConfigField("String", "LOG_TAG", "\"KMPTemplate-DEBUG\"")
+                        buildConfigField("String", "LOG_TAG", "\"${forkProp("log.tag", "KMPTemplate")}-DEBUG\"")
                     }
                     register("staging") {
                         isDebuggable.set(false)
                         applicationIdSuffix.set(".staging")
                         buildConfigField("Boolean", "ENABLE_LOGGING", "true")
                         buildConfigField("Boolean", "SHOW_DEBUG_OVERLAY", "false")
-                        buildConfigField("String", "LOG_TAG", "\"KMPTemplate-STAGING\"")
+                        buildConfigField("String", "LOG_TAG", "\"${forkProp("log.tag", "KMPTemplate")}-STAGING\"")
                     }
                     register("release") {
                         isDebuggable.set(false)
                         isMinifyEnabled.set(true)
                         buildConfigField("Boolean", "ENABLE_LOGGING", "false")
                         buildConfigField("Boolean", "SHOW_DEBUG_OVERLAY", "false")
-                        buildConfigField("String", "LOG_TAG", "\"KMPTemplate\"")
+                        buildConfigField("String", "LOG_TAG", "\"${forkProp("log.tag", "KMPTemplate")}\"")
                     }
                 }
 

@@ -1,0 +1,106 @@
+# app-profile/app.yaml — fork-owned white-label deployment SoT (COMMON, platform-agnostic).
+#
+# This is the SINGLE source of truth for all fork-owned deployment data (text + media).
+# Edit HERE — never gradle/fork.properties (now a generated/fallback build-bridge).
+# deployment/ reads this via deployment/_shared/config.rb (AppProfile.get).
+# `sync-dirs.sh` NEVER rewrites app-profile/** (owner: fork in customization-surface.yaml).
+#
+# Platform-DIFFERENT values live in app-profile/platforms/<platform>/*.yaml — no duplication.
+
+identity:
+  app_id: org.mifospay                    # SoT for appId; mirrored to gradle/libs.versions.toml
+  app_name: Mifos Pay                      # Android app_name, iOS CFBundleDisplayName, settings footer
+  namespace: org.mifospay                 # mirrors app_id
+
+# Per-flavor network endpoints + demo credentials + log tag. syncForkConfig emits these into
+# gradle/fork.properties (network.base.url.{demo,prod} / demo.username / demo.password / log.tag),
+# which KMPFlavorsConventionPlugin reads into per-flavor BuildConfig (BASE_URL / DEMO_USERNAME /
+# DEMO_PASSWORD / LOG_TAG). Blank falls back to the template default baked into the plugin. (B4)
+network:
+  demo_base_url: https://demo.openmf.org    # demo-flavor Mifos X platform endpoint
+  prod_base_url: https://api.openmf.org      # prod-flavor Mifos X platform endpoint
+  demo_username: demo
+  demo_password: demo
+  log_tag: MifosPay
+  # Declarative access-point topology — every REST + Supabase endpoint the app talks to, in ONE place.
+  # mobile-wallet talks to a single Mifos X (Fineract) platform API; the per-flavor BASE_URL above
+  # (demo/prod) is what KMPFlavorsConventionPlugin actually wires into BuildConfig today — this
+  # access_points list is the AppAccessPoints.kt SoT for forks that adopt core/network's
+  # AccessPointRegistry (not yet wired into this fork's core/network, so it's descriptive only).
+  access_points:
+    - id: main
+      type: rest
+      base_url: https://api.openmf.org/
+      loggable_host: api.openmf.org
+
+org:
+  name: Mifos Initiative
+  email: team@mifos.org
+  first_name: Mifos                          # App Store review contact first name
+  last_name: Initiative                      # App Store review contact last name
+  phone: ""                                  # no published org phone on record — leave blank, do not fabricate
+  copyright: "© 2026 Mifos Initiative. All rights reserved."   # desktop / Mac App Store packaging copyright (org.copyright)
+  marketing_url: https://mifos.org
+  privacy_url: https://mifos.org
+  support_url: https://mifos.org
+
+legal:
+  company_name: Mifos Initiative
+  jurisdiction: United States
+  effective_date: June 6, 2026
+  contact_email: team@mifos.org
+
+keystore_dn:
+  org_unit: Mobile
+  city: Arusha
+  state: Arusha
+  country: TZ
+
+store:
+  primary_locale: en-US
+  # NOTE: long-form marketing copy (subtitle/description/keywords/review notes) is NOT authored
+  # here yet — this fork's deployment/**/metadata/ still carries stale kmp-project-template demo
+  # copy ("Money Toolkit") that predates this app-profile/ adoption and does not describe Mifos Pay.
+  # Left as an explicit PLACEHOLDER (never fabricated) — run /idea-store-config-text-generate or
+  # hand-author real Mifos Pay store copy before shipping a store listing from this SoT.
+  title: 'Mifos Pay'                          # app display name (App Store name / Play title)
+  subtitle: 'YOUR_APP_SUBTITLE'               # PLACEHOLDER — short subtitle (App Store)
+  promotional_text: 'YOUR_APP_PROMO_TEXT'     # PLACEHOLDER — promotional text
+  description: 'YOUR_APP_DESCRIPTION — write your long store description here (App Store / Play full description).'   # PLACEHOLDER
+  release_notes: 'YOUR_APP_RELEASE_NOTES — describe what is new in this release.'   # PLACEHOLDER
+  copyright: '© 2026 Mifos Initiative. All rights reserved.'
+  age_rating: '4+'                            # iOS + macOS App Store age rating (store.ios.age.rating)
+  review:
+    notes: 'YOUR_APP_REVIEW_NOTES — notes for the App Store / Play review team (test steps, demo access).'   # PLACEHOLDER
+    first_name: 'Mifos'                         # App Store review contact (mirrors org.first_name)
+    last_name: 'Initiative'                     # App Store review contact (mirrors org.last_name)
+    demo_user: ""                            # store.review.demo.user (blank — no login)
+    demo_password: ""                        # store.review.demo.password
+  app_description: Mifos Pay                   # desktop packaging description (app.description)
+
+media:
+  root: media
+
+# ── Deploy targets — fork-facing PLATFORM on/off intent ───────────────────────
+# This block is the FORK-owned answer to "which PLATFORMS does my fork ship?".
+# It is COARSE (one row per platform) and pairs with the template-owned, FINE-grained
+# deployment/DEPLOYMENT_MANIFEST.yaml (one row per deploy TARGET, e.g. android-firebase,
+# ios-testflight, desktop-msi-signed).
+#
+#   • app.yaml#targets      → which PLATFORMS a fork ships   (this file, owner: fork)
+#   • DEPLOYMENT_MANIFEST    → which TARGETS exist per platform (owner: merge — new template
+#                              targets propagate on sync; the fork keeps its enabled/tier)
+#
+# A concrete deploy TARGET is active iff BOTH hold:
+#   (1) its platform is enabled here in app.yaml#targets, AND
+#   (2) the target's own `enabled:` is true in DEPLOYMENT_MANIFEST.yaml.
+# The two coexist at different granularity — neither replaces the other.
+# NOTE: macOS deploy targets live UNDER the manifest's `desktop` platform (mac-app-store,
+# mac-testflight, dmg-notarized) — there is no separate `macos` platform block in the manifest.
+targets:
+  android: { enabled: true, tier: internal }
+  ios:     { enabled: true, tier: internal }
+  macos:   { enabled: true, tier: internal }
+  web:     { enabled: true, tier: internal }
+  windows: { enabled: true, tier: internal }
+  ubuntu:  { enabled: true, tier: internal }
