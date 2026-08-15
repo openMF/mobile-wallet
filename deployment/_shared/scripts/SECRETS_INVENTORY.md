@@ -41,7 +41,7 @@ work unchanged once `/secrets pull` lands them.
    consumer-repo's GitHub Actions secrets under the legacy `gha_secret_var`
    name. This is the ONLY authorized path — `gh secret set` direct on the
    consumer repo is blocked by `core/scripts/gh-secret-set-guard.sh` (SV14).
-4. **`keystore-manager.sh --manual-mode`** is a whitelisted bridge for the
+4. **`scripts/white-label/keystore.sh --manual-mode`** is a whitelisted bridge for the
    legacy Android keystore push flow (AC86). Audit-logged in
    `.claude-runtime/ci-state/secrets-audit.jsonl`.
 

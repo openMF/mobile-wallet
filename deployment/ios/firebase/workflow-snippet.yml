@@ -29,9 +29,6 @@ jobs:
           chmod 600 secrets/live/apple/match/match_ci_key
           echo '${{ secrets.FIREBASE_SERVICE_ACCOUNT_JSON }}' > secrets/live/android/firebaseAppDistributionServiceCredentialsFile.json
 
-      - name: Install CocoaPods
-        run: gem install cocoapods
-
       - name: Deploy to Firebase (iOS)
         env:
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}

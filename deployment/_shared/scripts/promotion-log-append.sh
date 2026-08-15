@@ -1,9 +1,12 @@
 #!/usr/bin/env bash
 # deployment/_shared/scripts/promotion-log-append.sh
 #
-# Append a single row to deployment/PROMOTION_LOG.yaml#events[] per
-# RULE-DEPLOYMENT-MANIFEST-001 DM6 (append-only audit log, 12-field schema).
-# Called by every release-{platform}.yml workflow on successful lane dispatch.
+# Append a single row to the append-only promotion log (#events[]) per
+# RULE-DEPLOYMENT-MANIFEST-001 DM6 (12-field schema). The log is FRAMEWORK-level state (E1/D-4):
+# the internal `/idea-deploy` path exports PROMOTION_LOG_PATH → the project's
+# deployment-layer/deploy-state/PROMOTION_LOG.yaml and consumes the SAME deployment/ infra. A community
+# GitHub Actions deploy leaves PROMOTION_LOG_PATH UNSET → this is a clean no-op (its audit trail is the
+# Actions run history; nothing is committed into the public source repo).
 #
 # Usage:
 #   promotion-log-append.sh \
@@ -38,10 +41,15 @@ done
 [[ -n "$RUN_ID"   ]] || RUN_ID="local"
 
 REPO_ROOT="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
-LOG="$REPO_ROOT/deployment/PROMOTION_LOG.yaml"
 MANIFEST="$REPO_ROOT/deployment/DEPLOYMENT_MANIFEST.yaml"
 
-[[ -f "$LOG"      ]] || { echo "Missing PROMOTION_LOG.yaml" >&2; exit 1; }
+# Framework-level log path, exported by /idea-deploy. Unset (community GitHub Actions) → no-op.
+LOG="${PROMOTION_LOG_PATH:-}"
+if [ -z "$LOG" ]; then
+  echo "note: PROMOTION_LOG_PATH unset — deploy audit stays with the CI run (no committed log)" >&2; exit 0
+fi
+mkdir -p "$(dirname "$LOG")"
+[[ -f "$LOG" ]] || printf '# PROMOTION_LOG.yaml — append-only deploy audit (framework deployment-layer)\nevents:\n' > "$LOG"
 
 TS="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
 SHA="$(git -C "$REPO_ROOT" rev-parse HEAD 2>/dev/null || echo unknown)"

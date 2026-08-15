@@ -19,6 +19,219 @@ require_relative "variant_resolver"    # (flavor, buildType) → gradle_task / a
                                        # by convention (Phase 2 of deploy-gha-product-flavors epic;
                                        # delegates all secret paths to BuildSecrets.for(flavor:))
 
+require "yaml"
+
+# ── AppProfile — fork-owned white-label SoT (app-profile/) ────────────────────
+# Lazily loads app-profile/app.yaml + platforms/**/*.yaml, deep-merges them into
+# ONE nested hash, and resolves the SAME flat dotted gradle/fork.properties
+# namespace the lanes already use via AppProfile.get(dotted_key). `_fork_prop`
+# tries this FIRST (non-nil / non-empty), then falls back to gradle/fork.properties.
+# Fail-soft: if app-profile/ is absent (or a file is malformed), get() returns nil
+# for everything and `_fork_prop` behaves EXACTLY as before. Lanes are unchanged.
+module AppProfile
+  module_function
+
+  # Walk up from this file's dir to the first ancestor containing app-profile/.
+  def _root
+    return @_root if defined?(@_root)
+    @_root = nil
+    dir = __dir__
+    while dir && dir != "/"
+      cand = File.join(dir, "app-profile")
+      if File.directory?(cand)
+        @_root = cand
+        break
+      end
+      parent = File.dirname(dir)
+      break if parent == dir
+      dir = parent
+    end
+    @_root
+  end
+
+  def _deep_merge(a, b)
+    return b unless a.is_a?(Hash) && b.is_a?(Hash)
+    out = a.dup
+    b.each do |k, v|
+      out[k] = (out[k].is_a?(Hash) && v.is_a?(Hash)) ? _deep_merge(out[k], v) : v
+    end
+    out
+  end
+
+  # Merged hash of app.yaml + every platforms/**/*.yaml (string keys, deep-merged).
+  def _data
+    return @_data if defined?(@_data)
+    @_data = {}
+    root = _root
+    return @_data unless root
+    files = []
+    app = File.join(root, "app.yaml")
+    files << app if File.exist?(app)
+    # Merge ONLY the <platform>.yaml CONFIG files — never the app-content/ store DECLARATIONS
+    # (questionnaire answers read by their own consumers, not identity/store config keys).
+    files.concat(Dir.glob(File.join(root, "platforms", "**", "*.yaml")).reject { |f| f.include?("/app-content/") }.sort)
+    files.each do |f|
+      begin
+        y = YAML.respond_to?(:unsafe_load_file) ? YAML.unsafe_load_file(f) : YAML.load_file(f)
+        @_data = _deep_merge(@_data, y) if y.is_a?(Hash)
+      rescue StandardError
+        # fail-soft: a malformed profile file must never crash a deploy.
+      end
+    end
+    @_data
+  rescue StandardError
+    @_data = {}
+  end
+
+  # Flat gradle/fork.properties key → dotted path in the merged app-profile hash.
+  # Every non-legacy fork.properties key resolves deterministically; unmapped → nil
+  # (so `_fork_prop` falls through to gradle/fork.properties for legacy keys like
+  # `apple.tf.groups`).
+  MAP = {
+    # ── identity / app ──
+    "app.id"                             => "identity.app_id",
+    "app.description"                    => "store.app_description",
+    # ── org ──
+    "org.name"                           => "org.name",
+    "org.email"                          => "org.email",
+    "org.first.name"                     => "org.first_name",
+    "org.last.name"                      => "org.last_name",
+    "org.phone"                          => "org.phone",
+    "org.copyright"                      => "org.copyright",
+    "org.marketing.url"                  => "org.marketing_url",
+    "org.privacy.url"                    => "org.privacy_url",
+    "org.support.url"                    => "org.support_url",
+    # ── legal ──
+    "legal.company.name"                 => "legal.company_name",
+    "legal.jurisdiction"                 => "legal.jurisdiction",
+    "legal.effective.date"               => "legal.effective_date",
+    "legal.contact.email"                => "legal.contact_email",
+    # ── keystore DN ──
+    "keystore.dn.org_unit"               => "keystore_dn.org_unit",
+    "keystore.dn.city"                   => "keystore_dn.city",
+    "keystore.dn.state"                  => "keystore_dn.state",
+    "keystore.dn.country"                => "keystore_dn.country",
+    # ── store (common: iOS + macOS + Android) ──
+    "store.primary.locale"               => "store.primary_locale",
+    "store.title"                        => "store.title",
+    "store.subtitle"                     => "store.subtitle",
+    "store.promotional.text"             => "store.promotional_text",
+    "store.release.notes"                => "store.release_notes",
+    "store.description"                  => "store.description",
+    "store.copyright"                    => "store.copyright",
+    "store.ios.age.rating"               => "store.age_rating",
+    "store.review.notes"                 => "store.review.notes",
+    "store.review.demo.user"             => "store.review.demo_user",
+    "store.review.demo.password"         => "store.review.demo_password",
+    # ── android ──
+    "store.android.category"             => "android.category",
+    "store.android.short.description"    => "android.short_description",
+    "store.android.changelog"            => "android.changelog",
+    "store.android.video.url"            => "android.video_url",
+    "android.play.tracks.by_flavor"      => "android.play_tracks_by_flavor",
+    "firebase.android.prod.app.id"       => "android.firebase.app_id_prod",
+    "firebase.android.demo.app.id"       => "android.firebase.app_id_demo",
+    "firebase.groups"                    => "android.firebase.groups",
+    "play.testers.internal.googlegroup"  => "android.play_testers.internal_googlegroup",
+    "play.testers.closed.googlegroup"    => "android.play_testers.closed_googlegroup",
+    # ── apple (shared iOS + macOS) ──
+    "apple.team.id"                      => "apple.team_id",
+    "apple.match.git.url"                => "apple.match.git.url",
+    "apple.match.git.branch"             => "apple.match.git.branch",
+    "firebase.ios.prod.app.id"           => "apple.firebase.ios_app_id_prod",
+    "firebase.ios.demo.app.id"           => "apple.firebase.ios_app_id_demo",
+    "firebase.ios.app.id"                => "apple.firebase.ios_app_id",
+    "apple.testers.internal.group"       => "apple.testers.internal_group",
+    "apple.testers.external.group"       => "apple.testers.external_group",
+    "apple.testers.external.public.link" => "apple.testers.external_public_link",
+    "store.ios.keywords"                 => "apple.keywords",
+    "store.ios.category"                 => "apple.category",
+    # ── apple / iOS-only ──
+    "store.ios.secondary.category"       => "apple.ios.secondary_category",
+    "store.ios.apple.tv.privacy.url"     => "apple.ios.apple_tv_privacy_url",
+    # ── apple / macOS-only ──
+    "store.macos.keywords"               => "apple.macos.keywords",
+    "store.macos.category"               => "apple.macos.category",
+    "store.macos.secondary.category"     => "apple.macos.secondary_category",
+    "mac.app.category"                   => "apple.macos.app_category",
+    # ── web ──
+    "web.cloudflare.project"             => "web.cloudflare_project",
+    # ── Windows / Microsoft Store (platforms/windows/windows.yaml, top-level `windows:`) ──
+    "store.windows.ms.app.id"            => "windows.ms_app_id",
+    "store.windows.ms.publish.mode"      => "windows.ms_publish_mode",
+    "store.windows.ms.visibility"        => "windows.ms_visibility",
+    "windows.store.id"                   => "windows.store_id",
+    "windows.msix.identity.name"         => "windows.msix_identity_name",
+    "windows.msix.identity.publisher"    => "windows.msix_publisher",
+    "windows.msix.publisher.display.name" => "windows.msix_publisher_display_name",
+    "windows.partner.center.tenant.id"   => "windows.partner_center.tenant_id",
+    "windows.partner.center.client.id"   => "windows.partner_center.client_id",
+    # ── Ubuntu / Linux (platforms/ubuntu/ubuntu.yaml, top-level `ubuntu:`) ──
+    "ubuntu.snap.name"                   => "ubuntu.snap.name",
+    "ubuntu.snap.grade"                  => "ubuntu.snap.grade",
+    "ubuntu.snap.confinement"            => "ubuntu.snap.confinement",
+    "ubuntu.snap.channel"                => "ubuntu.snap.channel",
+    "ubuntu.flathub.app.id"              => "ubuntu.flathub.app_id",
+    "ubuntu.deb.package"                 => "ubuntu.deb.package",
+    "ubuntu.deb.section"                 => "ubuntu.deb.section",
+    "ubuntu.deb.maintainer"              => "ubuntu.deb.maintainer",
+    "ubuntu.deb.homepage"                => "ubuntu.deb.homepage",
+    # ── apple / trade representative contact information ──
+    "store.apple.trade.first.name"       => "apple.trade_representative.first_name",
+    "store.apple.trade.last.name"        => "apple.trade_representative.last_name",
+    "store.apple.trade.address.line1"    => "apple.trade_representative.address_line1",
+    "store.apple.trade.address.line2"    => "apple.trade_representative.address_line2",
+    "store.apple.trade.address.line3"    => "apple.trade_representative.address_line3",
+    "store.apple.trade.city"             => "apple.trade_representative.city_name",
+    "store.apple.trade.state"            => "apple.trade_representative.state",
+    "store.apple.trade.country"          => "apple.trade_representative.country",
+    "store.apple.trade.postal.code"      => "apple.trade_representative.postal_code",
+    "store.apple.trade.phone"            => "apple.trade_representative.phone_number",
+    "store.apple.trade.email"            => "apple.trade_representative.email_address",
+    "store.apple.trade.displayed"        => "apple.trade_representative.is_displayed_on_app_store",
+    # ── deploy-surface completeness (MS Store / winget / snap / flathub / aur / homebrew / ios-subcats / web) ──
+    "win.store.name"                     => "windows.store.name",
+    "win.store.short.description"        => "windows.store.short_description",
+    "win.store.description"              => "windows.store.description",
+    "win.store.category"                 => "windows.store.category",
+    "win.store.privacy.url"              => "windows.store.privacy_url",
+    "win.winget.package.id"              => "windows.winget.package_id",
+    "win.winget.publisher"               => "windows.winget.publisher",
+    "win.winget.name"                    => "windows.winget.name",
+    "win.winget.moniker"                 => "windows.winget.moniker",
+    "ubuntu.snap.summary"                => "ubuntu.snap.summary",
+    "ubuntu.snap.description"            => "ubuntu.snap.description",
+    "ubuntu.flathub.developer"           => "ubuntu.flathub.developer",
+    "ubuntu.flathub.name"                => "ubuntu.flathub.name",
+    "ubuntu.flathub.summary"             => "ubuntu.flathub.summary",
+    "ubuntu.flathub.description"         => "ubuntu.flathub.description",
+    "ubuntu.aur.package.name"            => "ubuntu.aur.package_name",
+    "ubuntu.aur.source.type"             => "ubuntu.aur.source_type",
+    "mac.homebrew.cask.name"             => "apple.macos.homebrew.cask_name",
+    "mac.homebrew.tagline"               => "apple.macos.homebrew.tagline",
+    "store.ios.primary.first.subcategory" => "apple.ios.primary_first_sub_category",
+    "store.ios.primary.second.subcategory" => "apple.ios.primary_second_sub_category",
+    "store.ios.secondary.first.subcategory" => "apple.ios.secondary_first_sub_category",
+    "store.ios.secondary.second.subcategory" => "apple.ios.secondary_second_sub_category",
+    "web.custom.domain"                  => "web.custom_domain",
+  }.freeze
+
+  # Resolve a flat fork.properties key against the merged app-profile hash.
+  # Returns nil for an unmapped key or a missing path; scalar leaves are stringified
+  # to mirror fork.properties' string return shape.
+  def get(key)
+    path = MAP[key]
+    return nil unless path
+    node = _data
+    path.split(".").each do |seg|
+      return nil unless node.is_a?(Hash) && node.key?(seg)
+      node = node[seg]
+    end
+    return nil if node.is_a?(Hash) || node.is_a?(Array)
+    node.nil? ? nil : node.to_s
+  end
+end
+
 # ── Helpers: read libs.versions.toml + secrets/ ──────────────────────────────
 
 DEPLOYMENT_REPO_ROOT = File.expand_path("../..", __dir__).freeze
@@ -45,9 +258,12 @@ def _secret(env_var, file_path = nil)
   ENV[env_var] || (file_path ? _secret_file(file_path) : nil)
 end
 
-# Read a key from gradle/fork.properties (local, gitignored).
-# Returns nil when the file is absent (CI uses ENV vars directly).
+# Read a key from the fork-owned white-label SoT (app-profile/) FIRST, then fall
+# back to gradle/fork.properties (local, gitignored). Returns nil when neither has
+# the key (CI uses ENV vars directly).
 def _fork_prop(key)
+  ap = AppProfile.get(key)
+  return ap if ap && !ap.to_s.strip.empty?
   props = File.join(DEPLOYMENT_REPO_ROOT, "gradle", "fork.properties")
   return nil unless File.exist?(props)
   File.readlines(props).each do |line|
@@ -108,6 +324,8 @@ module FastlaneConfig
   end
 
   def _fork_prop(key)
+    ap = AppProfile.get(key)
+    return ap if ap && !ap.to_s.strip.empty?
     props = File.join(DEPLOYMENT_REPO_ROOT, "gradle", "fork.properties")
     return nil unless File.exist?(props)
     File.readlines(props).each do |line|
@@ -124,7 +342,9 @@ module FastlaneConfig
   # ProjectConfig — identity + service-account paths consumed by Appfile
   # --------------------------------------------------------------------------
   module ProjectConfig
-    ORGANIZATION_NAME = "Mifos Initiative".freeze
+    # E0/T5 (white-label): no template identity literal — a fork overrides via ENV['ORGANIZATION_NAME']
+    # (or fork.properties org.name, read at call sites). Neutral default, never mifos.
+    ORGANIZATION_NAME = (ENV["ORGANIZATION_NAME"] || "Your Organization").freeze
 
     ANDROID = {
       package_name:        ForkIdentity::APP_ID,
@@ -147,14 +367,20 @@ module FastlaneConfig
   # IosConfig — build paths, ASC API, Match, TestFlight, App Store settings
   # --------------------------------------------------------------------------
   module IosConfig
-    _s = FastlaneConfig::SECRETS_DIR
-    _c = FastlaneConfig  # alias for brevity — calls FastlaneConfig._secret(...)
+    # Binding-robust self-reference (2026-08-08): fastlane's `import` intermittently re-parses this file
+    # in a NON-top-level binding (e.g. inside CredentialsManager::AppfileConfig), where the unqualified
+    # `FastlaneConfig` nesting lookup fails with `uninitialized constant …::FastlaneConfig` and aborts
+    # the whole config.rb load — breaking even an Android deploy that never touches IosConfig. Resolve the
+    # enclosing module by identity via Module.nesting (always correct regardless of the absolute namespace).
+    _c = Module.nesting.find { |m| m.name.to_s.split("::").last == "FastlaneConfig" } || FastlaneConfig
+    _s = _c::SECRETS_DIR
     _bs = BuildSecrets.for  # canonical resolver: LAYOUT.yaml + secrets/live/ path + ENV-first
     _nz = ->(v) { (v.nil? || v.to_s.strip.empty?) ? nil : v.to_s.strip }  # nil-if-blank
 
     BUILD_CONFIG = {
       scheme:                        "iosApp",
-      workspace:                     File.join(DEPLOYMENT_REPO_ROOT, "cmp-ios/iosApp.xcworkspace"),
+      # E6 — the app opens as a plain `.xcodeproj` (SwiftPM/XCFramework); the CocoaPods
+      # `iosApp.xcworkspace` was removed, so `build_app` archives from `project:` below.
       project_path:                  File.join(DEPLOYMENT_REPO_ROOT, "cmp-ios/iosApp.xcodeproj"),
       app_identifier:                ForkIdentity::APP_ID,
       team_id:                       ForkIdentity::IOS_TEAM_ID,
@@ -191,13 +417,13 @@ module FastlaneConfig
 
     TESTFLIGHT_CONFIG = {
       beta_app_review_info: {
-        contact_email:         _c._secret("TESTFLIGHT_CONTACT_EMAIL") || _c._fork_prop("org.email")      || "team@mifos.org",
-        contact_first_name:    _c._secret("TESTFLIGHT_FIRST_NAME")    || _c._fork_prop("org.first.name") || "Mifos",
+        contact_email:         _c._secret("TESTFLIGHT_CONTACT_EMAIL") || _c._fork_prop("org.email")      || "", # E0/T5: no mifos fallback — fork supplies org.email
+        contact_first_name:    _c._secret("TESTFLIGHT_FIRST_NAME")    || _c._fork_prop("org.first.name") || "App",
         contact_last_name:     _c._secret("TESTFLIGHT_LAST_NAME")     || _c._fork_prop("org.last.name")  || "Team",
-        contact_phone:         _c._secret("TESTFLIGHT_PHONE")         || _c._fork_prop("org.phone")      || "+1234567890",
+        contact_phone:         _c._secret("TESTFLIGHT_PHONE")         || _c._fork_prop("org.phone")      || "", # E0/T5: no mifos fallback — fork supplies org.phone
         demo_account_required: false,
       }.freeze,
-      beta_app_feedback_email:           _c._secret("BETA_FEEDBACK_EMAIL") || _c._fork_prop("org.email") || "team@mifos.org",
+      beta_app_feedback_email:           _c._secret("BETA_FEEDBACK_EMAIL") || _c._fork_prop("org.email") || "", # E0/T5: no mifos fallback — fork supplies org.email
       beta_app_description:              "#{ForkIdentity::APP_DISPLAY_NAME} beta build",
       demo_account_required:             false,
       distribute_external:               true,
@@ -242,12 +468,16 @@ module FastlaneConfig
       force:                              true,
       precheck_include_in_app_purchases:  false,
       run_precheck_before_submit:         true,
-      submission_information:             { add_id_info_uses_idfa: false }.freeze,
+      # export_compliance_uses_encryption:false ⇒ app declares NO non-exempt encryption (HTTPS/TLS only is
+      # exempt, Category 5 Part 2 — matches app-profile app-content/export-compliance.yaml
+      # itsappusesnonexemptencryption:false). Required to submit a never-submitted version, else deliver
+      # aborts "Export compliance is required to submit". add_id_info_uses_idfa:false ⇒ no IDFA.
+      submission_information:             { add_id_info_uses_idfa: false, export_compliance_uses_encryption: false }.freeze,
       app_review_information: {
-        first_name: _c._secret("APPSTORE_REVIEW_FIRST_NAME") || _c._fork_prop("org.first.name") || "Mifos",
+        first_name: _c._secret("APPSTORE_REVIEW_FIRST_NAME") || _c._fork_prop("org.first.name") || "App",
         last_name:  _c._secret("APPSTORE_REVIEW_LAST_NAME")  || _c._fork_prop("org.last.name")  || "Team",
-        phone:      _c._secret("APPSTORE_REVIEW_PHONE")      || _c._fork_prop("org.phone")      || "+1234567890",
-        email:      _c._secret("APPSTORE_REVIEW_EMAIL")      || _c._fork_prop("org.email")      || "review@mifos.org",
+        phone:      _c._secret("APPSTORE_REVIEW_PHONE")      || _c._fork_prop("org.phone")      || "", # E0/T5: no mifos fallback — fork supplies org.phone
+        email:      _c._secret("APPSTORE_REVIEW_EMAIL")      || _c._fork_prop("org.email")      || "", # E0/T5: no mifos fallback — fork supplies org.email
       }.freeze,
     }.freeze
   end
@@ -394,11 +624,18 @@ module FastlaneConfig
       keystore_password: options[:keystore_password] ||
                          ENV["KEYSTORE_PASSWORD"]    ||
                          props["storePassword"]      || "",
+      # Honor BOTH env conventions: KEY_ALIAS (CI pre_fastlane_script) AND KEYSTORE_ALIAS
+      # (build.gradle.kts + buildAndSignApp / vault materialization). props (upload_keystore.properties)
+      # is the file source. The literal "release" is a LAST-RESORT default — it is WRONG for keystores
+      # whose alias differs (e.g. mifos-kmp-release); honoring the env prevents a silent wrong-alias
+      # signing failure when the .properties file is absent (RULE-DEPLOY-VAULT-SIGNING-001).
       key_alias:         options[:key_alias]         ||
                          ENV["KEY_ALIAS"]            ||
+                         ENV["KEYSTORE_ALIAS"]       ||
                          props["keyAlias"]           || "release",
       key_password:      options[:key_password]      ||
                          ENV["KEY_PASSWORD"]         ||
+                         ENV["KEYSTORE_ALIAS_PASSWORD"] ||
                          props["keyPassword"]        || "",
     }
   end
@@ -424,6 +661,38 @@ def setup_ci_if_needed
   # no keychain password. Gating on ENV["CI"] left local runs on the (locked) login keychain → Match
   # found no identity and tried to mint a new cert → Apple cert cap. (fix 2026-07-31)
   setup_ci(force: true)
+end
+
+# Delete any lingering fastlane_tmp keychain and RESTORE the developer's login keychain as the macOS
+# default + search list. setup_ci creates fastlane_tmp, makes it DEFAULT, and unlocks it; if a LOCAL run
+# dies before delete_keychain (a build error, or a hard kill), fastlane_tmp stays DEFAULT forever →
+# unrelated apps (Bitwarden, Xcode) get endless "wants to use fastlane_tmp_keychain" password prompts.
+# We keep setup_ci (local iOS Match needs the throwaway keychain — CI-gating it broke Match, fix
+# 2026-07-31), and make cleanup GUARANTEED instead: called start-of-run (before_all, clears leftovers
+# from a prior killed run) AND end-of-run (Fastfile after_all + error). Idempotent, failure-safe.
+# GUARD on RUNNER_ENVIRONMENT, NOT ENV["CI"]: a SELF-HOSTED GitHub Actions runner (this repo runs one
+# on a dev's Mac — `actions.runner.…local-mac.plist`) sets CI=true but is a PERSISTENT machine, so
+# skipping cleanup there is exactly what leaves fastlane_tmp default → endless prompts. Skip ONLY a
+# truly-ephemeral github-hosted runner (torn down anyway). (2026-08-08)
+def cleanup_ci_keychain
+  return if ENV["RUNNER_ENVIRONMENT"] == "github-hosted"  # ephemeral GH-hosted runner — nothing to protect
+  home  = ENV["HOME"].to_s
+  login = "#{home}/Library/Keychains/login.keychain-db"
+  tmp   = "#{home}/Library/Keychains/fastlane_tmp_keychain-db"
+  # SURGICAL — touch ONLY the keychain we created (fastlane_tmp). NEVER rewrite the whole search list
+  # (`list-keychains -s login` would DROP the user's other keychains — system/custom) and NEVER force
+  # the default unless fastlane_tmp actually holds it.
+  # (1) Restore login as default ONLY IF fastlane_tmp is the CURRENT default (that's the prompt cause).
+  if File.exist?(login) && `security default-keychain -d user 2>/dev/null`.to_s.include?("fastlane_tmp_keychain")
+    system("security", "default-keychain", "-d", "user", "-s", login, out: File::NULL, err: File::NULL)
+  end
+  # (2) delete-keychain removes ONLY fastlane_tmp from the search list AND deletes its file (the rest of
+  # the search list is left intact) — same as fastlane's own delete_keychain. rm is a last-resort fallback.
+  if File.exist?(tmp)
+    system("security", "delete-keychain", tmp, out: File::NULL, err: File::NULL) || (File.delete(tmp) rescue nil)
+  end
+rescue
+  nil
 end
 
 # Load App Store Connect API key into lane context.
@@ -456,17 +725,23 @@ def with_ios_preamble(options = {})
     end
   end
 
-  # Install CocoaPods when the iOS project uses them — the Xcode archive needs the generated
-  # Pods/ + .xcconfig/.xcfilelist. This config.rb preamble overrides deploy_helpers' (which ran
-  # cocoapods), so without this the archive fails "Unable to open Pods-iosApp.release.xcconfig".
-  # KMP + CocoaPods: cmp_shared.podspec is generated by the Kotlin cocoapods plugin, so pod
-  # install fails "should run :generateDummyFramework first" unless these Gradle tasks run first
-  # (matches .github/workflows/pr-check.yml line 61). (2026-06-22)
-  podfile = File.join(DEPLOYMENT_REPO_ROOT, "cmp-ios", "Podfile")
-  if File.exist?(podfile)
-    sh("#{DEPLOYMENT_REPO_ROOT}/gradlew -p #{DEPLOYMENT_REPO_ROOT} :cmp-shared:podspec :cmp-shared:generateDummyFramework")
-    cocoapods(podfile: podfile, try_repo_update_on_error: true)
-  end
+  # E6 — SwiftPM/XCFramework, no CocoaPods. The iOS app links the Kotlin `ComposeApp`
+  # framework as an XCFramework (cmp-ios/Package.swift binary target) that the Xcode
+  # `[KMP] Embed and Sign ComposeApp XCFramework` Run-Script build phase assembles +
+  # signs + embeds on every archive (cmp-ios/scripts/embed-xcframework.sh). There is no
+  # `Podfile` / `pod install` / `cmp_shared.podspec` step anymore — the per-variant
+  # lanes assemble the XCFramework explicitly (see `assemble_ios_xcframework`) before
+  # `build_app`, so a cold CI runner produces the framework the archive consumes.
+end
+
+# Assemble the Kotlin `ComposeApp` XCFramework for the given Xcode build type — the
+# SwiftPM/XCFramework replacement for `pod install`. Staging maps to the Release
+# XCFramework slice (mirrors the old cocoapods xcodeConfigurationToNativeBuildType:
+# only *Debug is debuggable). Registered by the `XCFramework("ComposeApp")` DSL in
+# cmp-shared/build.gradle.kts (assembleComposeApp{Debug,Release}XCFramework).
+def assemble_ios_xcframework(build_type = "release")
+  xcf_type = build_type.to_s.downcase == "debug" ? "Debug" : "Release"
+  sh("cd #{DEPLOYMENT_REPO_ROOT} && ./gradlew :cmp-shared:assembleComposeApp#{xcf_type}XCFramework")
 end
 
 # Prepare the keychain for Match — delegates to fastlane's standard ephemeral `setup_ci` keychain.
@@ -476,6 +751,27 @@ end
 # (2026-07-31)
 def setup_ios_keychain(options = {})
   setup_ci(force: true)
+end
+
+# DSA-7 (RULE-DEPLOY-SIGNING-AUTO-001) — make Match signing fully NON-INTERACTIVE: no
+# "<app> wants to use the fastlane_tmp_keychain-db keychain / enter the keychain password"
+# dialog. After `match(readonly:true)` imports the shared Distribution cert + key into
+# `setup_ci`'s throwaway keychain, add codesign (and the apple tooling) to the key's ACL
+# partition list so `codesign`/`xcodebuild` use the key WITHOUT a per-signature prompt.
+# `setup_ci` exports MATCH_KEYCHAIN_NAME/PASSWORD; the tmp keychain's password is empty by
+# default. Fail-soft: a missing keychain (e.g. non-macOS/CI variance) just logs and continues —
+# the signing itself is already validated by the match import above.
+def suppress_codesign_keychain_prompt
+  kc_name = ENV["MATCH_KEYCHAIN_NAME"].to_s.empty? ? "fastlane_tmp_keychain" : ENV["MATCH_KEYCHAIN_NAME"]
+  kc_pass = ENV["MATCH_KEYCHAIN_PASSWORD"].to_s
+  kc_path = kc_name.include?("/") ? kc_name : File.expand_path("~/Library/Keychains/#{kc_name}-db")
+  kc_path = File.expand_path("~/Library/Keychains/#{kc_name}-db") unless File.exist?(kc_path)
+  unless File.exist?(kc_path)
+    UI.important("set-key-partition-list: keychain #{kc_name} not found — skipping (signing already imported).")
+    return
+  end
+  sh(%(security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "#{kc_pass}" "#{kc_path}" >/dev/null 2>&1)) rescue nil
+  UI.message("🔓 codesign key-partition-list set on #{kc_name} — signing is prompt-free.")
 end
 
 # Run Fastlane Match to fetch/refresh certificates and provisioning profiles.
@@ -517,6 +813,7 @@ def fetch_certificates_with_match(options = {})
   # override above (cert-renewal / bootstrap only), never as an automatic deploy-time fallback. (2026-07-31)
   begin
     match(**base, readonly: true, force: false)
+    suppress_codesign_keychain_prompt
     UI.success("✅ Signing pulled readonly from the fastlane-match provisioning repo (no Dev Portal, no mint).")
   rescue StandardError => e
     UI.user_error!(
@@ -932,7 +1229,10 @@ def build_ios_project(options = {})
   cfg = FastlaneConfig::IosConfig::BUILD_CONFIG
   build_app(
     scheme:           options[:scheme]        || cfg[:scheme],
-    workspace:        options[:workspace]     || cfg[:workspace],
+    # E6 — archive from the `.xcodeproj` (SwiftPM/XCFramework), NOT a CocoaPods
+    # `.xcworkspace` (removed). The `[KMP] Embed and Sign ComposeApp XCFramework`
+    # Run-Script phase builds + embeds the Kotlin framework during this archive.
+    project:          options[:project]       || cfg[:project_path],
     configuration:    options[:configuration] || "Release",
     output_name:      "iosApp.ipa",
     output_directory: File.join(DEPLOYMENT_REPO_ROOT, "cmp-ios/build"),
@@ -1015,18 +1315,27 @@ def buildAndSignApp(taskName:, buildType: "Release", **signing_config)
   # keystore_path from `build-secrets path upload_keystore`; the local-run fallback
   # must resolve through the SAME LAYOUT resolver (live-wins-else-sample), never hardcode.
   keystore = signing_config[:keystore_path] || BuildSecrets.for.path(:upload_keystore)
-  keystore_abs = File.expand_path(File.join(DEPLOYMENT_REPO_ROOT, keystore))
+  # Resolve to absolute WITHOUT doubling: File.join(repo_root, <absolute>) concatenates into a
+  # doubled, non-existent path — only prepend the repo root when `keystore` is relative.
+  keystore_abs = keystore.start_with?("/") ? keystore : File.expand_path(File.join(DEPLOYMENT_REPO_ROOT, keystore))
   gradlew    = File.join(DEPLOYMENT_REPO_ROOT, "gradlew")
   full_task  = ":cmp-android:#{taskName}#{buildType}"
 
+  # Signing goes through the ENVIRONMENT, never `-P` CLI args (RULE-DEPLOY-SIGNING-NO-CLI-LEAK-001).
+  # Gradle CLI args are echoed by fastlane's `sh` AND visible in `ps` — passing
+  # `-Pandroid.injected.signing.store.password=…` leaked the store password to a build log on
+  # 2026-08-08. cmp-android/build.gradle.kts's release signingConfig reads exactly these env vars via
+  # System.getenv; the gradle child inherits the env, but it is NOT printed in the command line.
+  # Only pre-existing env values are honored as a fallback (e.g. CI's pre_fastlane_script exports).
+  ENV["KEYSTORE_PATH"]           = keystore_abs
+  ENV["KEYSTORE_PASSWORD"]       = signing_config[:keystore_password] || ENV["KEYSTORE_PASSWORD"] || ""
+  ENV["KEYSTORE_ALIAS"]          = signing_config[:key_alias]         || ENV["KEYSTORE_ALIAS"] || "release"
+  ENV["KEYSTORE_ALIAS_PASSWORD"] = signing_config[:key_password]      || ENV["KEYSTORE_ALIAS_PASSWORD"] || ""
+
   # -p tells Gradle to use repo root as project dir, overriding whatever cwd
-  # Fastlane sets (deployment/fastlane/) when running the lane.
+  # Fastlane sets (deployment/fastlane/) when running the lane. NO signing on the command line.
   sh(
     gradlew, "-p", DEPLOYMENT_REPO_ROOT, full_task,
-    "-Pandroid.injected.signing.store.file=#{keystore_abs}",
-    "-Pandroid.injected.signing.store.password=#{signing_config[:keystore_password] || ''}",
-    "-Pandroid.injected.signing.key.alias=#{signing_config[:key_alias] || 'release'}",
-    "-Pandroid.injected.signing.key.password=#{signing_config[:key_password] || ''}",
     "-PVERSION_NAME=#{ENV['VERSION_NAME'] || '1.0.0'}",
     "-PVERSION_CODE=#{ENV['VERSION_CODE'] || '1'}",
   )

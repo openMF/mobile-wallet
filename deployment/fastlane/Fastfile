@@ -39,7 +39,17 @@ Dir.chdir(repo_root) rescue Dir.chdir(repo_root)  # suppress chdir-in-chdir warn
 # ── Shared config (absolute path) ────────────────────────────────────────────
 import File.join(repo_root, "deployment", "_shared", "config.rb")
 
+# ── Intrinsic drift-checked store-listing sync (absolute path; after config.rb) ──
+# So a listing change reaches the store on ANY deploy state — incl. Play promotions. See
+# deployment/_shared/listing_sync.rb.
+import File.join(repo_root, "deployment", "_shared", "listing_sync.rb")
+
 # ── Per-target lanes (absolute paths — immune to @path ||= resolution) ──────
 Dir[File.join(repo_root, "deployment", "*", "*", "lane.rb")].sort.each do |lane_file|
   import lane_file
 end
+
+# ── Materialize app-profile SoT → deployment/**/metadata before any lane ─────────
+# Shared with deployment/Fastfile (the CI entry point) — both import it so the regeneration runs
+# regardless of which Fastfile fastlane loads. See deployment/_shared/before_all.rb.
+import File.join(repo_root, "deployment", "_shared", "before_all.rb")

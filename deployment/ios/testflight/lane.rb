@@ -77,6 +77,12 @@ platform :ios do
     setup_ci_if_needed
     load_api_key(options)
 
+    # E6 — assemble the Kotlin `ComposeApp` XCFramework (SwiftPM/XCFramework; the
+    # CocoaPods-free replacement for the old pod-install step) so the `iosApp.xcodeproj`
+    # archive links the framework the app's Package.swift binary target + embed
+    # Run-Script phase consume. Staging → Release slice.
+    assemble_ios_xcframework(build_ty.to_s)
+
     # Auto-sync + verify App Store Connect store config BEFORE the ~15-min build:
     # fail fast if the app record is missing, and create/update the TestFlight "Test
     # Information" (BetaAppLocalization) from TESTFLIGHT_CONFIG so the external-beta
@@ -148,20 +154,39 @@ platform :ios do
     # this mirrors the macOS `desktop_testflight` lane, which uploads cleanly because
     # it sets zero app-level beta metadata. Only BUILD-level "What to Test"
     # (localized_build_info) is set — it's created together with the new build.
+    # Every TestFlight deploy now distributes to BOTH the internal (team) and external
+    # ({org}-mobile-apps) groups AND submits for Apple beta review, with export compliance
+    # answered so the build is immediately usable (never stuck "Missing Compliance"). Group
+    # NAMES are the org SoT — workspaces/{ws}/_org/company.yaml#org_identity.apple_testflight_
+    # {internal,testers}_group, folded into app-profile → resolved by TESTERS[:ios]. The
+    # sync_testflight_testers call above already ENSURED both groups exist (creating any missing
+    # one). Internal reaches every build automatically (has_access_to_all_builds); external needs
+    # this explicit distribution + review submission. External beta review REQUIRES a valid
+    # beta_app_review_info.contact_phone (org SoT deploy_contact.phone) — Apple rejects an empty one.
+    testers   = FastlaneConfig::IosConfig::TESTERS[:ios]
+    tf_groups = [testers[:internal_group], testers[:external_group]]
+                  .map { |g| g.to_s.strip }.reject(&:empty?).uniq
+    UI.important("👥 Distributing to TestFlight groups: #{tf_groups.join(', ')} — and submitting for beta review")
+
     pilot(
       api_key:                           Actions.lane_context[SharedValues::APP_STORE_CONNECT_API_KEY],
-      distribute_external:               false,   # external distribution is Stage 2
-      notify_external_testers:           false,
-      submit_beta_review:                false,   # no beta review on the internal rung
-      skip_submission:                   true,
-      skip_waiting_for_build_processing: testflight_config[:skip_waiting_for_build_processing],
+      distribute_external:               true,
+      notify_external_testers:           true,
+      groups:                            tf_groups,
+      submit_beta_review:                true,
+      skip_submission:                   false,
+      skip_waiting_for_build_processing: false,   # MUST wait for processing to submit for review
+      wait_processing_interval:          testflight_config[:wait_processing_interval],
+      wait_processing_timeout_duration:  testflight_config[:wait_processing_timeout_duration],
       expire_previous_builds:            testflight_config[:expire_previous_builds],
       uses_non_exempt_encryption:        testflight_config[:uses_non_exempt_encryption],
+      beta_app_review_info:              testflight_config[:beta_app_review_info]&.dup,
+      reject_build_waiting_for_review:   true,
       changelog:                         releaseNotes,
       localized_build_info:              localized_build_info,
     )
 
-    UI.success("✅ Successfully uploaded to TestFlight (internal)!")
+    UI.success("✅ Uploaded to TestFlight, distributed to internal + external (#{tf_groups.join(', ')}), and submitted for beta review!")
   end
 
   desc "Stage 1 → Stage 2 promotion: distribute an already-uploaded TF build to external testers (no rebuild, no re-upload). Triggers Apple's beta review (~24h)."

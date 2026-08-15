@@ -95,6 +95,22 @@ eq "by_flavor demo app_id landed"              "$(cat "$LIVE/fb/app_id_demo" 2>/
 # local_only has no ENV set → materialize skips it (body empty) → must NOT exist
 if [ -e "$LIVE/local/only.bin" ]; then bad "non-vaulted local_only should NOT materialize (no ENV)"; else ok "non-vaulted local_only correctly skipped"; fi
 
+echo "── 2b. export-paths parity + generated Gradle map ─────────────────"
+# The JVM/Gradle surface: `export-paths` projects the SAME `path()` algorithm to a flat map, and
+# `materialize-all` also writes it to gradle/secrets-paths.properties (write_paths_map!). Assert the
+# map is a faithful, drift-free projection and that env_var (env-line) keys are excluded.
+XP="$(ruby "$BS" export-paths | sort)"
+eq "export-paths row count = 5 (env_var api_token excluded)" \
+   "$(printf '%s\n' "$XP" | grep -c .)" "5"
+eq "export-paths[creds_json] == path creds_json (no drift)" \
+   "$(printf '%s\n' "$XP" | sed -n 's/^creds_json=//p')" "$(ruby "$BS" path creds_json)"
+eq "env_var api_token absent from export-paths (Gradle never needs it)" \
+   "$(printf '%s\n' "$XP" | grep -c '^api_token=')" "0"
+eq "materialize-all wrote gradle/secrets-paths.properties" \
+   "$([ -f "$ROOT/gradle/secrets-paths.properties" ] && echo yes || echo no)" "yes"
+eq "gradle map carries the same creds_json path" \
+   "$(sed -n 's/^creds_json=//p' "$ROOT/gradle/secrets-paths.properties" 2>/dev/null)" "$(ruby "$BS" path creds_json)"
+
 echo "── 3. idempotency ─────────────────────────────────────────────────"
 H1="$(find "$LIVE" -type f | sort | xargs shasum -a256 | shasum -a256 | cut -d' ' -f1)"
 ( cd "$ROOT"; ruby "$BS" materialize-all >/dev/null; ruby "$BS" materialize-all --flavor demo >/dev/null )

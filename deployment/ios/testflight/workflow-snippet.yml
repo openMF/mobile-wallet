@@ -27,9 +27,6 @@ jobs:
           echo "${{ secrets.MATCH_CI_KEY }}" > secrets/live/apple/match/match_ci_key
           chmod 600 secrets/live/apple/match/match_ci_key
 
-      - name: Install CocoaPods
-        run: gem install cocoapods
-
       - name: Deploy to TestFlight
         env:
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}

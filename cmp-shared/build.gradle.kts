@@ -10,14 +10,13 @@
 
 @file:OptIn(org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeCacheApi::class)
 
-import com.mobilebytelabs.kmpflavors.KmpFlavorExtension
 import org.jetbrains.kotlin.gradle.plugin.mpp.DisableCacheInKotlinVersion
 import org.jetbrains.kotlin.gradle.plugin.mpp.NativeBuildType
+import org.jetbrains.kotlin.gradle.plugin.mpp.apple.XCFramework
 
 plugins {
     alias(libs.plugins.kmp.library.convention)
     alias(libs.plugins.cmp.feature.convention)
-    alias(libs.plugins.kotlinCocoapods)
     // worker-kmp v4.0.0 — applies @WorkerKmpApp/@WorkerKmpWorkers codegen pipeline.
     // KSP processor scans this module's commonMain for @WorkerKmpWorkers (see
     // cmp/shared/WorkerDeclarations.kt) + emits per-platform installWorkerKmp{Platform}
@@ -29,6 +28,15 @@ plugins {
 }
 
 kotlin {
+    // E6 — SwiftPM/XCFramework export (replaces the Kotlin CocoaPods plugin).
+    // Assemble a single `ComposeApp.xcframework` from the iOS device + simulator
+    // slices; the iOS app consumes it via `cmp-ios/Package.swift` (SwiftPM binary
+    // target) + the flavor-aware `cmp-ios/scripts/embed-xcframework.sh` Xcode
+    // Run-Script build phase. `assembleComposeApp{Debug,Release}XCFramework` (and the
+    // umbrella `assembleComposeAppXCFramework`) Gradle tasks are registered
+    // automatically by this `XCFramework(...)` DSL — the deploy lanes call them
+    // instead of `pod install`.
+    val xcf = XCFramework("ComposeApp")
     listOf(
         iosArm64(),
         iosSimulatorArm64(),
@@ -39,6 +47,7 @@ kotlin {
             // KGP rejects debuggable=true + optimized=true on the same binary
             // (kotlin:kgp:misconfiguration:incompatible-binary-configuration).
             optimized = buildType == NativeBuildType.RELEASE
+            xcf.add(this)
         }
         // compose-signature:1.0.1 ships an iosArm64 klib that fails Kotlin/Native
         // static-cache generation on Kotlin 2.4.0 — the CI iOS build aborts with
@@ -143,44 +152,6 @@ kotlin {
         }
     }
 
-    cocoapods {
-        summary = "KMP Shared Module"
-        homepage = "https://github.com/openMF/kmp-project-template"
-        version =
-            project.version
-                .toString()
-                .substringBefore("-")
-                .substringBefore("+")
-        ios.deploymentTarget = "16.0"
-        podfile = project.file("../cmp-ios/Podfile")
-
-        // Map every {flavor}{BuildType} Xcode build configuration to a Kotlin/Native build
-        // type, derived DYNAMICALLY from the kmpFlavors DSL — no hardcoded config list, so
-        // adding / renaming / removing a flavor or build type auto-propagates here on the
-        // next build. Without this the Kotlin CocoaPods plugin cannot identify
-        // debug-vs-release for a non-standard CONFIGURATION name and fails the ComposeApp
-        // framework build ("Could not identify build type for Kotlin framework"). The
-        // config name mirrors GenerateIosFlavorXcconfigsTask ({flavor}{BuildType}); a
-        // debuggable build type → DEBUG, otherwise → RELEASE.
-        project.extensions.getByType<KmpFlavorExtension>().let { flavorsExt ->
-            for (flavor in flavorsExt.flavors) {
-                for (buildType in flavorsExt.buildTypes) {
-                    val configName = flavor.name + buildType.name.replaceFirstChar { it.uppercase() }
-                    xcodeConfigurationToNativeBuildType[configName] =
-                        if (buildType.isDebuggable.getOrElse(false)) {
-                            NativeBuildType.DEBUG
-                        } else {
-                            NativeBuildType.RELEASE
-                        }
-                }
-            }
-        }
-
-        framework {
-            baseName = "ComposeApp"
-            isStatic = true
-        }
-    }
 }
 
 compose.resources {

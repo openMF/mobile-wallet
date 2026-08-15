@@ -1,0 +1,47 @@
+# scripts/product-health/WHITE_LABEL_PLACEHOLDERS.yaml
+# TEMPLATE-VENDORED copy of the white-label placeholder vocabulary.
+#
+# Why this lives here (not only in the framework's core/registries): the product-health
+# identity checks (fork-identity / deployment-whitelabel / store-listing / secrets-alias-
+# namespace) run in the STANDALONE template checkout on CI (quality-gate.yml) and in every
+# FORK — neither has the framework monorepo on disk, so the vocabulary MUST ship inside the
+# template. lib.sh resolves this template-local copy first, then falls back to walking up to
+# the framework's core/registries/WHITE_LABEL_PLACEHOLDERS.yaml in the monorepo dev tree.
+#
+# Authoring SoT: core/registries/WHITE_LABEL_PLACEHOLDERS.yaml (framework repo). Keep the two
+# in sync — a new placeholder category/pattern is added there and re-vendored here.
+version: 1
+placeholders:
+  bundle_id:
+    - '^com\.example($|\.)'
+    - '^YOUR_APP_ID$'
+  app_display_name:
+    - '^App Toolkit$'
+    - '^YOUR_APP_NAME$'
+  firebase_project_number:
+    - '1:0{12}:'
+    - 'YOUR_FIREBASE_PROJECT'
+  apple_team_id:
+    - '^CHANGEME$'
+    - '^YOUR_TEAM_ID$'
+    - '^$'
+  apple_match_git_url:
+    - 'YOUR_ORG/ios-provisioning'
+    - '^CHANGEME$'
+    - '^$'
+  org_name:
+    - '^Your Organization Name$'
+    - '^App Toolkit$'
+    - '^CHANGEME$'
+    - '^$'
+  store_copy_marker:
+    - 'YOUR_[A-Z_]+'
+    - '\bTODO\b'
+    - '\bFIXME\b'
+    - '\bPLACEHOLDER\b'
+    - 'lorem ipsum'
+    # Prose placeholders the neutral template ships for store copy (matched case-insensitively):
+    # "Your App Name" / "Your App Tagline Here" / "Your app's one-line promotional pitch…" / "…Your Organization Name".
+    - 'Your App'
+    - "Your app's"
+    - 'Your Organization'

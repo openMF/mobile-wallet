@@ -1,0 +1,12 @@
+identity:
+  app_id: com.acme.moneyapp
+  app_name: Acme Money
+  namespace: com.acme.moneyapp
+org:
+  name: Acme Inc
+  email: dev@acme.example
+store:
+  primary_locale: en-US
+  title: Acme Money
+  subtitle: Budgets & Bills
+  description: 'Track budgets and bills, all offline.'

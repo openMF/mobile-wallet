@@ -1,0 +1,350 @@
+# customization-surface.yaml
+# ─────────────────────────────────────────────────────────────────────────────
+# Fork-ownership contract for kmp-project-template.
+#
+# A fork of this template runs `scripts/white-label/sync-dirs.sh` to pull template updates while
+# keeping its own branding + features. This file is the SINGLE declared source of
+# truth for "who owns this path?" — replacing the ownership knowledge previously
+# scattered across scripts/white-label/sync-dirs.sh (SYNC_DIRS + EXCLUSIONS), scripts/white-label/customize.sh, and the
+# syncForkConfig copy map.
+#
+# Every path resolves to exactly one owner:
+#
+#   template — the template is the SOLE author. `scripts/white-label/sync-dirs.sh` OVERWRITES the fork's
+#              copy. A fork edit here is drift and will be clobbered — a genuine fix
+#              belongs UPSTREAM as a PR to openMF/kmp-project-template.
+#
+#   fork     — the fork is the SOLE author. sync NEVER touches it (branding, demo,
+#              the core/store seam, generated Config.xcconfig, local flavors, icons,
+#              store listings, fork identity).
+#
+#   merge    — BOTH author. sync must do a 3-way MERGE, never a blind copy. This is
+#              where the "fork permissions silently dropped on sync" class lives:
+#              AndroidManifest.xml is template-shipped AND fork-extended.
+#
+# Precedence: FIRST matching rule wins. Rules are ordered most-specific → most-
+# general, so the narrow `merge`/`fork` carve-outs win over the broad `template`
+# module globs that follow them.
+#
+# Glob syntax: `*` matches within one path segment; `**` matches across segments;
+# `**/x` matches `x` at any depth (including the root).
+#
+# Coverage is enforced by `scripts/customization-surface.sh --verify` (CI): every
+# tracked path must match a NON-default rule, so a new template file can never land
+# unclassified and silently clobber a fork later.
+# ─────────────────────────────────────────────────────────────────────────────
+
+version: 1
+
+rules:
+  # ── merge-required (declared FIRST — must win over the template module globs) ──
+  # AndroidManifest: template ships the base manifest; forks add permissions
+  # (RECORD_AUDIO, FOREGROUND_SERVICE_*, etc). A blind copy DROPS the fork's — the
+  # exact loss class this contract exists to close.
+  - glob: "**/AndroidManifest.xml"
+    owner: merge
+    strategy: manifest-union
+  # String resources: template base keys + fork-added keys must union.
+  - glob: "**/composeResources/**/strings.xml"
+    owner: merge
+    strategy: strings-union
+  # Version catalog: fork pins versions + adds libs; template adds/bumps. Already a
+  # 3-way merge in scripts/white-label/sync-dirs.sh STEP 4.5 — declared here so the ownership is explicit.
+  - glob: "gradle/libs.versions.toml"
+    owner: merge
+    strategy: catalog-3way
+  # Settings: fork includes its own :feature:* modules; template adds core modules.
+  - glob: "settings.gradle.kts"
+    owner: merge
+    strategy: include-union
+  # Fork-owned settings-include seam (B1/T11). A fork adds its module includes HERE; the template
+  # settings.gradle.kts applies it via `apply(from = ...)` and stays full-copy / include-union.
+  - glob: "settings.local.gradle.kts"
+    owner: fork
+  # Template-sync version marker: records the template commit this fork last synced from. Written by
+  # scripts/white-label/sync-dirs.sh on every sync, so it is FORK-OWNED — a template dir-copy must
+  # never overwrite a fork's own last-synced pointer with the template's.
+  - glob: ".template-version"
+    owner: fork
+  # Root navigation host: template owns the scaffold; forks wire feature routes in.
+  - glob: "cmp-navigation/**/*Navigation*.kt"
+    owner: merge
+    strategy: kotlin-3way
+  - glob: "cmp-navigation/**/RootNav*.kt"
+    owner: merge
+    strategy: kotlin-3way
+  # Nav DI + tab registry: template ships the base graph; forks add their feature
+  # modules + bottom-nav tabs. Blind copy drops them (the awaazly 2026-07-19 loss class).
+  - glob: "cmp-navigation/**/di/*.kt"
+    owner: merge
+    strategy: kotlin-3way
+  - glob: "cmp-navigation/**/*TabItem*.kt"
+    owner: merge
+    strategy: kotlin-3way
+  # Room database registry: template ships the base @Database; forks add their own entities/DAOs/
+  # migrations ONLY inside the `// fork:begin`/`// fork:end` regions (entities, autoMigrations, DAO
+  # accessors), and bump the version via the fork-owned ForkDatabaseConfig.VERSION_OFFSET — never the
+  # template's TEMPLATE_BASE_VERSION line. Because fork edits live in disjoint regions/file from the
+  # template's demo:begin/end + base-version, the kotlin-3way (git merge-file) merges without conflict.
+  - glob: "**/AppDatabase.kt"
+    owner: merge
+    strategy: kotlin-3way
+  # Fork-owned DB schema offset — the single line a fork edits for its own schema version. PRESERVED.
+  - glob: "**/core/database/**/ForkDatabaseConfig.kt"
+    owner: fork
+  # Android FileProvider paths: template ships base <paths>; forks add feature paths
+  # (exports/recordings/imports). Blind copy drops them → runtime FileProvider crash.
+  - glob: "**/res/xml/provider_paths.xml"
+    owner: merge
+    strategy: xml-union
+  # App entry point: template ships the base Activity; forks wire app-init/SDK hooks.
+  - glob: "**/MainActivity.kt"
+    owner: merge
+    strategy: kotlin-3way
+  # Android app build script: template updates plugins/config; forks add deps + flavors.
+  # Merge (conflicts surface) beats a blind overwrite that silently drops every fork dep.
+  - glob: "cmp-android/build.gradle.kts"
+    owner: merge
+    strategy: kotlin-3way
+  # Android Application class: template ships the base Application; forks wire app-init/SDK
+  # hooks (Koin start, crash reporting, deep-link handlers). Merge so a template update never
+  # drops them. S4 classification gap — was owner GAP (AppInitializers seam lands in E1).
+  - glob: "**/AndroidApp.kt"
+    owner: merge
+    strategy: kotlin-3way
+  # Nav module build script: template updates plugins/config; forks add their feature-module
+  # dependencies. Merge (conflicts surface) beats a blind overwrite that drops fork feature deps.
+  # S7 classification gap — was owner GAP (feature-deps.gradle.kts seam lands in E1).
+  - glob: "cmp-navigation/build.gradle.kts"
+    owner: merge
+    strategy: kotlin-3way
+  # Fork-owned feature-dependency seam (S7/F4). A fork adds/removes feature-module deps HERE; the
+  # template-owned cmp-navigation/build.gradle.kts applies it via `apply(from = ...)` and stays full-copy.
+  # This closes the S7 gap where a fork had to edit the template build file to add a feature. (E1/T8, 2026-08-11)
+  - glob: "feature-deps.gradle.kts"
+    owner: fork
+  # Authenticated bottom-nav ViewModel: template ships the base tab graph; forks add tabs.
+  # Merge so a template update never drops fork-added tabs. S6 classification gap — was owner
+  # GAP (TabRegistry seam lands in E1). Matches AuthenticatedNavbarNavigationViewModel.kt.
+  - glob: "cmp-navigation/**/*NavbarNavigationViewModel.kt"
+    owner: merge
+    strategy: kotlin-3way
+
+  # ── fork-owned (carve-outs INSIDE otherwise-template dirs; declared before template) ──
+  # app-profile/ — the fork-owned white-label deployment SoT (identity, text, media, icons, per platform).
+  # This is the ONLY fork-owned deployment surface. deployment/ LOGIC stays template-owned and reads this
+  # via _shared/config.rb (AppProfile.get) + syncForkConfig; sync NEVER rewrites app-profile/**.
+  # (branding/icons was dissolved into app-profile/icons — there is no separate branding/ dir.)
+  - glob: "app-profile/**"
+    owner: fork
+  # feature backbone (E1 / F1) — home/profile/settings are the TEMPLATE-owned minimal shell every fork
+  # keeps and receives upstream fixes for. Declared ABOVE the blanket `feature/** → fork` (first-match
+  # wins). Their demo showcases stay fork-owned via the feature demo carve-out declared FIRST, so the
+  # backbone template rules never capture a `**/demo/**` package. An arbitrary `feature/<x>` a fork adds
+  # is consumer-owned and falls through to the blanket `feature/** → fork` default below.
+  - glob: "feature/**/demo/**"
+    owner: fork
+  - glob: "feature/home/**"
+    owner: template
+  - glob: "feature/profile/**"
+    owner: template
+  - glob: "feature/settings/**"
+    owner: template
+  - glob: "feature/**"
+    owner: fork
+  # core/store seam — the 4 seam files below are fork-authored (white-label-template-completion E0/T1, LD-2).
+  # The rest of core/store is template architecture (infra/, di aggregators) that MUST receive upstream fixes;
+  # the demo showcase stores under core/store/**/demo/** are fork-owned via the **/demo/** rule below.
+  - glob: "core/store/**/AppScreenStateDefaults.kt"
+    owner: fork
+  - glob: "core/store/**/AppErrorMapper.kt"
+    owner: fork
+  - glob: "core/store/**/AppStoreRegistry.kt"
+    owner: fork
+  - glob: "core/store/**/di/StoreModule.kt"
+    owner: fork
+  # White-label registry seams — the fork-owned extension package (cmp.navigation.registry). The
+  # template infra (KoinModules, AuthenticatedNavigation, the navbar screen, cmp-shared's initKoin,
+  # feature/home's HomeScreen shell) READS these seams; a fork adds/removes features, tabs, the home
+  # body, and startup hooks by editing ONLY files here, so the infra modules stay full-copy
+  # `owner: template`. Covers FeatureRegistry (routes+DI), BackboneRegistry (home body, S5),
+  # TabRegistry (bottom-nav tabs, S6), AppInitializers (startup hooks, S3/S4) + the package README.
+  # The whole package is the seam — same pattern as the core/store block above. (E1/T7, 2026-08-11)
+  - glob: "cmp-navigation/**/registry/**"
+    owner: fork
+  # Worker seam — the fork-owned @WorkerKmpWorkers site (cmp-shared). The template WorkerDeclarations.kt
+  # (base workers) stays owner:template; the KSP processor aggregates both. A fork declares its workers
+  # here, so a sync full-copies cmp-shared while the fork's workers survive.
+  - glob: "cmp-shared/**/ForkWorkerDeclarations.kt"
+    owner: fork
+  # demo showcase stores/data — fork-owned. Covers core/store/**/demo/{economic,banking,…}
+  # (the demo Store5 showcases) + every other **/demo/** package. The former dead globs
+  # `core/store/economic/**` + `core/store/banking/**` claimed `template` but matched ZERO
+  # real paths (the stores live under demo/), so they mis-declared ownership — removed (E0/T3).
+  - glob: "**/demo/**"
+    owner: fork
+  - glob: "build-logic/**/kotlin/local/**"   # LocalFlavors.kt fork flavor extensions
+    owner: fork
+  - glob: "cmp-android/src/main/res/**"
+    owner: fork
+  - glob: "cmp-android/src/main/ic_launcher-playstore.png"
+    owner: fork
+  - glob: "cmp-android/**/google-services.json"
+    owner: fork
+  - glob: "cmp-android/dependencies/**"       # dependency-guard baseline
+    owner: fork
+  - glob: "cmp-ios/iosApp/Assets.xcassets/**" # app icon + colors
+    owner: fork
+  - glob: "cmp-ios/Configuration/Config.xcconfig"  # syncForkConfig-generated identity
+    owner: fork
+  - glob: "cmp-web/src/jsMain/resources/**"
+    owner: fork
+  - glob: "cmp-web/src/wasmJsMain/resources/**"
+    owner: fork
+  - glob: "cmp-desktop/icons/**"
+    owner: fork
+  # Desktop build: template ships the packaging build logic; a fork overrides packaging identity
+  # (dock name, dmg). 3-way merge (symmetry with cmp-android's build.gradle) so template build
+  # improvements reach forks while fork packaging survives — not a blind fork-owned file. (B5/T11)
+  - glob: "cmp-desktop/build.gradle.kts"
+    owner: merge
+    strategy: kotlin-3way
+  - glob: "fastlane-config/project_config.rb"
+    owner: fork
+  # Store-listing text + media are DERIVED from app-profile/ by syncForkConfig — the SoT is
+  # app-profile/app.yaml + platforms/<p>/*.yaml (text) and app-profile/platforms/<p>/media (media).
+  # deployment/**/metadata is a generated materialization fastlane's metadata_path reads; NEVER
+  # hand-edit it. owner:generated → /kmp-project-template-sync ignores it (regenerated, not preserved).
+  - glob: "deployment/**/metadata/**"         # store listings — DERIVED from app-profile
+    owner: generated
+  - glob: "deployment/**/screenshots/**"      # DERIVED from app-profile/platforms/<p>/media
+    owner: generated
+  - glob: "deployment/**/og-images/**"        # DERIVED from app-profile/platforms/web/media
+    owner: generated
+  # deployment/ is a TEMPLATE-OWNED module, full-copied exactly like core-base/ with ZERO deployment
+  # carve-outs (E1/D-1..D-3 — RULE-TEMPLATE-MODULE-FIX-UPSTREAM-001 routes any deployment/ fix upstream).
+  # The ONLY non-template artifacts UNDER deployment/ are the DERIVED store listings above
+  # (owner:generated — regenerated from app-profile by syncForkConfig, never hand-edited). All fork DATA
+  # was relocated OUT of deployment/: per-target enabled/tier → app-profile/deploy-targets.yaml (owner:
+  # fork, below). The append-only deploy history is FRAMEWORK-level (project deployment-layer/deploy-state/,
+  # E1/D-4) — /idea-deploy owns it; community GitHub Actions deploys keep their audit in the Actions run
+  # history, so NOTHING lands in this public source repo. DEPLOYMENT_MANIFEST.yaml is a pure template CATALOG.
+  - glob: "secrets/live/**"                   # real secrets (gitignored)
+    owner: fork
+  - glob: "secrets/**/.sync-meta.json"        # per-fork vault sync state (SV33)
+    owner: fork
+  - glob: ".github/workflows/sync-dirs.yaml"  # fork's own sync workflow
+    owner: fork
+  - glob: "gradle/fork.properties"            # derived build-bridge from app-profile/app.yaml (do not hand-edit); gitignored
+    owner: fork
+  - glob: "local.properties"
+    owner: fork
+  - glob: "README.md"                         # rebranded per fork from the idea-plan
+    owner: fork
+  - glob: "CLAUDE.md"                          # fork project instructions
+    owner: fork
+
+  # ── template-owned (the broad sync surface — lowest precedence, declared LAST) ──
+  - glob: "build-logic/**"
+    owner: template
+  - glob: "cmp-android/**"
+    owner: template
+  - glob: "cmp-desktop/**"
+    owner: template
+  - glob: "cmp-ios/**"
+    owner: template
+  - glob: "cmp-web/**"
+    owner: template
+  - glob: "cmp-shared/**"
+    owner: template
+  - glob: "cmp-navigation/**"
+    owner: template
+  - glob: "sync/**"
+    owner: template
+  - glob: "core-base/**"
+    owner: template
+  - glob: "core/**"
+    owner: template
+  - glob: "deployment/**"
+    owner: template
+  - glob: "fastlane/**"
+    owner: template
+  - glob: "fastlane-config/**"
+    owner: template
+  - glob: "spotless/**"
+    owner: template
+  - glob: "gradle/wrapper/**"
+    owner: template
+  # Maestro E2E flow SoT (RULE-TEST-OUTPUT-LAYOUT-001). The template ships its framework screen-state
+  # retention flows here (synced via sync-dirs.sh idea-layer/testers/flows/screen-state); a fork adds its
+  # own feature flows alongside. Run captures (idea-layer/testers/captures/**) are gitignored evidence.
+  - glob: "idea-layer/testers/flows/**"
+    owner: template
+  # Idea-layer runtime state (agent-awareness / pipeline telemetry, e.g. AGENT_AWARENESS.jsonl) is
+  # per-fork append-only runtime evidence — never a template file to propagate, never clobbered by a
+  # sync. owner:fork = preserve the fork's state. Closes the classification gap so a new state file
+  # cannot silently fall to the blanket default (coverage-verify would flag it).
+  - glob: "idea-layer/state/**"
+    owner: fork
+  # In-template feature-authoring guide (E5 consumption contract) — template-authored, synced like
+  # the per-module CONSUMPTION.md docs. (closes a pre-existing E5 classification gap)
+  - glob: "FEATURE_AUTHORING.md"
+    owner: template
+  - glob: "scripts/**"
+    owner: template
+  - glob: "config/**"
+    owner: template
+  - glob: "secrets/sample/**"
+    owner: template
+  - glob: "secrets/**"                        # LAYOUT.yaml + scaffold (live/ is fork above)
+    owner: template
+  - glob: "docs/**"
+    owner: template
+  - glob: ".github/**"
+    owner: template
+  - glob: ".run/**"
+    owner: template
+  # root-level template files (mirror scripts/white-label/sync-dirs.sh SYNC_FILES)
+  - { glob: "Gemfile",                       owner: template }
+  - { glob: "Gemfile.lock",                  owner: template }
+  - { glob: "ci-prepush.sh",                 owner: template }
+  - { glob: "ci-prepush.bat",                owner: template }
+  - { glob: "gradlew",                       owner: template }
+  - { glob: "gradlew.bat",                   owner: template }
+  - { glob: "compose_compiler_config.conf",  owner: template }
+  - { glob: "scripts/white-label/sync-dirs.sh",                  owner: template }
+  - { glob: "scripts/white-label/customize.sh",                 owner: template }
+  - { glob: "setup-project.sh",              owner: template }
+  - { glob: "scripts/white-label/keystore.sh",           owner: template }
+  - { glob: "scripts/white-label/firebase.sh",             owner: template }
+  - { glob: "generateModuleGraphs.sh",       owner: template }
+  - { glob: "gradle/fork.properties.template", owner: template }
+  - { glob: "gradle/gradle-daemon-jvm.properties", owner: template }
+  - { glob: ".editorconfig",                 owner: template }
+  - { glob: ".gitattributes",                owner: template }
+  - { glob: ".gitignore",                    owner: template }
+  - { glob: ".actrc",                        owner: template }
+  - { glob: ".ruby-version",                 owner: template }
+  - { glob: ".kover-floor.yml",              owner: template }
+  - { glob: ".claudeignore",                 owner: template }
+  - { glob: "customization-surface.yaml",    owner: template }  # this contract self-syncs (reached via SYNC_FILES — WS4/T6)
+  - { glob: "version.txt",                   owner: template }
+  - { glob: "lib-integrate.properties",      owner: template }
+  - { glob: "secrets-manifest.yaml",         owner: fork }      # per-fork generated (project id + alias list) — E0/T1
+  - { glob: "gradle.properties",             owner: fork }      # holds fork.project.name (SyncForkConfigPlugin) — E0/T1
+  - { glob: "build.gradle.kts",              owner: template }
+  - { glob: "kotlin-js-store/**",            owner: template }
+  - { glob: "legal/**",                      owner: template }
+  - { glob: "tests/**",                      owner: template }   # test harness — E0/T1 (closes the classification gap)
+  - { glob: "META-INF/**",                   owner: template }
+  - { glob: "CODE_OF_CONDUCT.md",            owner: template }
+  - { glob: "CONTRIBUTING.md",               owner: template }
+  - { glob: "LICENSE",                       owner: template }
+
+  # ── default: any path not matched above ──
+  # Runtime treats an unmatched path as fork-owned (SAFE — never clobber an unknown
+  # fork file). `--verify` flags anything that reaches this rule so a human classifies
+  # it explicitly (a new template file must not rely on the default).
+  - glob: "**"
+    owner: fork
+    default: true

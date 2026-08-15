@@ -66,12 +66,18 @@ platform :ios do
       profile_name:          "match AdHoc #{ios_config[:app_identifier]}",
     )
 
+    # E6 — assemble the Kotlin `ComposeApp` XCFramework (SwiftPM/XCFramework; the
+    # CocoaPods-free replacement for the old pod-install step) before the
+    # `iosApp.xcodeproj` archive. Staging → Release slice.
+    assemble_ios_xcframework(build_ty.to_s)
+
     # Xcode `configuration` on the .xcscheme sets Debug/Release/Staging linkage;
     # we canonicalise the build_type into a capitalized configuration name so a
     # buildType named "staging" archives against the Staging xcconfig.
     build_app(
       scheme:           variant.ios_scheme,     # ← from resolver, never hardcoded
-      workspace:        ios_config[:workspace],
+      # E6 — archive from the `.xcodeproj` (SwiftPM/XCFramework), NOT a CocoaPods `.xcworkspace` (removed).
+      project:          ios_config[:project_path],
       configuration:    build_ty.to_s.capitalize,
       output_name:      "iosApp-#{flavor}.ipa",
       output_directory: File.join(DEPLOYMENT_REPO_ROOT, "cmp-ios/build"),

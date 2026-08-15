@@ -150,7 +150,7 @@ module FastlaneConfig
         groups: (ENV["FIREBASE_GROUPS"] || FORK["firebase.groups"])&.split(","),
       },
       project_path:    "cmp-ios/iosApp.xcodeproj",
-      workspace_path:  "cmp-ios/iosApp.xcworkspace",
+      # E6 — no CocoaPods `.xcworkspace`; the app is a plain `.xcodeproj` (SwiftPM/XCFramework).
       plist_path:      "cmp-ios/iosApp/Info.plist",
       scheme:          "iosApp",
       output_name:     "iosApp.ipa",
@@ -315,7 +315,6 @@ module FastlaneConfig
     BUILD_CONFIG = {
       app_identifier:   ProjectConfig::IOS[:app_identifier],
       project_path:     ProjectConfig::IOS[:project_path],
-      workspace_path:   ProjectConfig::IOS[:workspace_path],
       plist_path:       ProjectConfig::IOS[:plist_path],
       scheme:           ProjectConfig::IOS[:scheme],
       output_name:      ProjectConfig::IOS[:output_name],

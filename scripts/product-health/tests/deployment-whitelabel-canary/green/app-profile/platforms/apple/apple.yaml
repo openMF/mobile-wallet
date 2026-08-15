@@ -1,0 +1,9 @@
+apple:
+  keywords: budget,bills,money
+  category: Finance
+  trade_representative:
+    first_name: Acme
+    last_name: Inc
+    email_address: dev@acme.example
+    country: US
+    is_displayed_on_app_store: "false"
