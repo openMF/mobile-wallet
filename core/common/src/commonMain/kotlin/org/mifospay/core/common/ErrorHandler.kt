@@ -83,13 +83,6 @@ data class UiError(
                 )
             }
         }
-
-        /**
-         * Creates a [UiError] from a [DataState.Error] using the provided [ErrorMessageProvider].
-         */
-        fun from(error: DataState.Error<*>, provider: ErrorMessageProvider): UiError {
-            return from(error.exception, provider)
-        }
     }
 }
 
@@ -97,8 +90,3 @@ data class UiError(
  * Extension function to convert any [Throwable] to a [UiError].
  */
 fun Throwable.toUiError(provider: ErrorMessageProvider): UiError = UiError.from(this, provider)
-
-/**
- * Extension function to convert a [DataState.Error] to a [UiError].
- */
-fun <T> DataState.Error<T>.toUiError(provider: ErrorMessageProvider): UiError = UiError.from(this, provider)

@@ -17,17 +17,3 @@ import kotlinx.coroutines.flow.Flow
 interface NetworkMonitor {
     val isOnline: Flow<Boolean>
 }
-
-/**
- * Wraps an [upstream] [DataState] [Flow] with a reactive network guard.
- */
-fun <T> NetworkMonitor.withNetworkCheck(
-    upstream: Flow<org.mifospay.core.common.DataState<T>>,
-): Flow<org.mifospay.core.common.DataState<T>> = kotlinx.coroutines.flow.combine(isOnline, upstream) { isOnline, dataState ->
-    when {
-        dataState is org.mifospay.core.common.DataState.Success -> dataState
-        dataState is org.mifospay.core.common.DataState.Loading -> dataState
-        !isOnline -> org.mifospay.core.common.DataState.Error(Exception("Network unavailable"))
-        else -> dataState
-    }
-}

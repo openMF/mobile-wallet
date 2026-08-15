@@ -26,8 +26,8 @@ typealias ScreenStateStream<T> = Flow<ScreenState<T>>
 
 /**
  * Convert a `Flow<T>` (typically the raw Ktorfit API flow) into a
- * `Flow<ScreenState<T>>`. Phase-3 TRANSITIONAL shim — mirrors
- * [asDataStateFlow] semantics but emits [ScreenState] variants.
+ * `Flow<ScreenState<T>>`, emitting [ScreenState] variants and routing
+ * terminal errors through [AppErrorMapper].
  */
 fun <T> Flow<T>.asScreenStateFlow(
     isEmpty: (T) -> Boolean = { false },
@@ -52,19 +52,6 @@ fun <T> Flow<T>.asScreenStateFlow(
     }
         .onStart { emit(ScreenState.Loading) }
         .catch { e -> emit(AppErrorMapper.mapErrorBody<T>(e, errorBodyParser)) }
-
-/**
- * Bridge for repositories that still return `Flow<DataState<T>>` — lifts each
- * emission into a `Flow<ScreenState<T>>`. Useful when a caller has migrated
- * to `ScreenState` but the underlying repo has not yet.
- */
-fun <T> Flow<DataState<T>>.toScreenStateFlow(
-    isEmpty: (T) -> Boolean = { false },
-): Flow<ScreenState<T>> =
-    map<DataState<T>, ScreenState<T>> { ds ->
-        val screen = ds.toScreenState()
-        if (screen is ScreenState.Content && isEmpty(screen.data)) ScreenState.Empty else screen
-    }
 
 /**
  * Extension on `Flow<ScreenState<T>>` mirroring the template's

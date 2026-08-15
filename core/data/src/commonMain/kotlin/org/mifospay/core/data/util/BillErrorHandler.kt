@@ -13,7 +13,6 @@ import io.ktor.client.plugins.ClientRequestException
 import io.ktor.client.plugins.ServerResponseException
 import io.ktor.http.HttpStatusCode
 import kotlinx.coroutines.TimeoutCancellationException
-import org.mifospay.core.common.DataState
 
 /**
  * Utility class for handling bill-related errors
@@ -59,48 +58,6 @@ object BillErrorHandler {
             ?: validationResult.recurrencePatternError
             ?: validationResult.billerError
             ?: "Please check your input and try again."
-    }
-
-    /**
-     * Handles DataState errors and converts them to user-friendly messages
-     */
-    fun handleDataStateError(dataState: DataState.Error<*>): String {
-        val exception = dataState.exception
-        return when (exception) {
-            is IllegalArgumentException -> exception.message ?: "Invalid input provided."
-            is IllegalStateException -> exception.message ?: "Operation not allowed in current state."
-            is TimeoutCancellationException -> "Request timed out. Please try again."
-            is ClientRequestException -> handleClientRequestException(exception)
-            is ServerResponseException -> handleServerResponseException(exception)
-            else -> exception.message ?: "An unexpected error occurred. Please try again."
-        }
-    }
-
-    /**
-     * Handles client request exceptions
-     */
-    private fun handleClientRequestException(exception: ClientRequestException): String {
-        return when (exception.response.status) {
-            HttpStatusCode.BadRequest -> "Invalid request. Please check your input and try again."
-            HttpStatusCode.Unauthorized -> "Authentication failed. Please log in again."
-            HttpStatusCode.Forbidden -> "Access denied. You don't have permission to perform this action."
-            HttpStatusCode.NotFound -> "Bill not found. It may have been deleted or moved."
-            HttpStatusCode.Conflict -> "Bill already exists with the same name and biller."
-            HttpStatusCode.UnprocessableEntity -> "Invalid bill data. Please check your input and try again."
-            else -> "An error occurred. Please try again."
-        }
-    }
-
-    /**
-     * Handles server response exceptions
-     */
-    private fun handleServerResponseException(exception: ServerResponseException): String {
-        return when (exception.response.status) {
-            HttpStatusCode.InternalServerError -> "Server error. Please try again later."
-            HttpStatusCode.BadGateway -> "Bad gateway. Please try again later."
-            HttpStatusCode.ServiceUnavailable -> "Service temporarily unavailable. Please try again later."
-            else -> "Server error. Please try again later."
-        }
     }
 
     /**

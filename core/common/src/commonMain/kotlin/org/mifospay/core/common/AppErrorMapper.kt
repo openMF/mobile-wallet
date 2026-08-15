@@ -15,13 +15,11 @@ import io.ktor.client.statement.bodyAsText
 import kotlinx.io.IOException
 
 /**
- * Central mapper — Throwable / [DataState.Error] / feature error handlers →
+ * Central mapper — Throwable / feature error handlers →
  * [ScreenState.Error] / [ScreenState.NoNetwork] / [ScreenState.Unauthenticated].
  *
- * Consolidates the exception-typing logic that today lives duplicated across
- * `DataState.asDataStateFlow`, `SafeApiCall.safeApiCall`, and per-feature
- * catches (e.g. `SelfServiceRepositoryImpl.deleteBeneficiary`) so that the
- * Phase-3 repository-cutover has ONE seam to route every error through.
+ * Consolidates the exception-typing logic so that the repository read-side
+ * has ONE seam to route every error through.
  *
  * Mirrors the template's error-routing intent:
  *  - `ClientRequestException` (401/403) → [ScreenState.Unauthenticated]
@@ -153,25 +151,6 @@ object AppErrorMapper {
     } catch (_: Exception) {
         ""
     }
-}
-
-// -----------------------------------------------------------------------------
-// Bridge helpers — smooth the DataState → ScreenState transition.
-// -----------------------------------------------------------------------------
-
-/**
- * Fold a [DataState] into a [ScreenState]. Used by repositories still
- * returning [DataState] internally (e.g. via helper flows) that want to
- * expose a [ScreenState]-typed surface.
- *
- * NOTE: `DataState.Loading` maps to `ScreenState.Loading`, `Success` to
- * `Content` (never `Empty` — the emptiness predicate belongs to the caller,
- * mirror `emptyIfContent` in the template).
- */
-fun <T> DataState<T>.toScreenState(): ScreenState<T> = when (this) {
-    is DataState.Loading -> ScreenState.Loading
-    is DataState.Success -> ScreenState.Content(data = data)
-    is DataState.Error -> AppErrorMapper.mapError(exception)
 }
 
 /** Convert a raw [Throwable] to a [ScreenState] via [AppErrorMapper]. */
