@@ -533,7 +533,7 @@ runs-on: ${{ matrix.os }}
 
 ### File-to-Secret Mapping
 
-Use `keystore-manager.sh` to encode secrets:
+Use `scripts/white-label/keystore.sh` to encode secrets:
 
 | File in `secrets/` | GitHub Secret Name | Used By |
 |-------------------|--------------------|---------|

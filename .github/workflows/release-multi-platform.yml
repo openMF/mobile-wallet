@@ -1,6 +1,6 @@
 # .github/workflows/release-multi-platform.yml
 #
-# Thin wrapper → openMF/mifos-x-actionhub/.github/workflows/release-multi-platform-v2.yaml@v1.0.61
+# Thin wrapper → openMF/mifos-x-actionhub/.github/workflows/release-multi-platform-v2.yaml@v1.0.63
 #
 # All orchestration logic lives in the centralized reusable workflow.
 # This file just declares the dispatch inputs + passes secrets through.
@@ -225,7 +225,7 @@ jobs:
     # @v2.0.15, publish-desktop @v2.0.8, publish-web @v2.0.10 — all carry the flavor
     # dimension). The `with:` block below threads the single dispatched
     # `inputs.flavor` / `inputs.build_type` straight through.
-    uses: openMF/mifos-x-actionhub/.github/workflows/release-multi-platform-v2.yaml@v1.0.61
+    uses: openMF/mifos-x-actionhub/.github/workflows/release-multi-platform-v2.yaml@v1.0.63
     with:
       version_tag:          ${{ inputs.version_tag }}
       android_package_name: cmp-android
@@ -298,6 +298,11 @@ jobs:
         "$BS" materialize match_ssh_key            --from-env MATCH_GIT_PRIVATE_KEY
         "$BS" materialize match_git_url
         "$BS" materialize match_git_branch
+        # Emit the Gradle path map (build_secrets.rb#export-paths → gradle/secrets-paths.properties, SoT
+        # projection): the JVM build reads THIS at configuration time instead of shelling out to the
+        # resolver — cross-platform + configuration-cache-correct. Regenerated here from the live tree.
+        mkdir -p gradle && "$BS" export-paths > gradle/secrets-paths.properties \
+          && echo "✅ gradle/secrets-paths.properties ($(grep -c = gradle/secrets-paths.properties) keys)"
         # Sanity-validate the resolved files (no secret VALUE is ever echoed).
         if [ -n "${APPSTORE_AUTH_KEY_B64:-}" ]; then
           grep -q "PRIVATE KEY" "$("$BS" path appstore_auth_key)" \

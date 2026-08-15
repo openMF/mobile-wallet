@@ -93,8 +93,8 @@ secrets/*
 .env.local
 !.env.local.example
 
-# Fork identity — filled-in values. Committed schema: gradle/fork.properties.template
-gradle/fork.properties
+# Fork identity — committed for real (org.mifospay): non-secret app/org/store metadata,
+# no API keys or credentials. See gradle/fork.properties.template for the neutral schema.
 PROJECT_SETUP_INFO.txt
 
 # iOS Secrets - NEVER COMMIT THESE!

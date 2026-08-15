@@ -18,7 +18,7 @@ jobs:
         with:
           app-id: ${{ secrets.CLA_APP_ID }}
           private-key: ${{ secrets.CLA_APP_PRIVATE_KEY }}
-          owner: openMF
+          owner: ${{ github.repository_owner }}
 
       - name: Check contributor team membership
         uses: actions/github-script@v7
@@ -26,7 +26,7 @@ jobs:
           github-token: ${{ steps.app-token.outputs.token }}
           script: |
             const author = context.payload.pull_request.user.login;
-            const org = 'openMF';
+            const org = context.repo.owner;
             const teams = ['contributors', 'contracted-contributors'];
 
             if (context.payload.pull_request.user.type === 'Bot') {
@@ -35,7 +35,7 @@ jobs:
             }
 
             // App token has both members:read and pull-requests:write — one client for everything.
-            // All actions appear as mifos-cla-check[bot], no personal account involved.
+            // All actions appear as the CLA app bot, no personal account involved.
             let isMember = false;
             let matchedTeam = null;
             for (const team of teams) {

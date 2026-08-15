@@ -26,9 +26,18 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       # Pure bash + grep + find — no Java/Gradle. Fails on any demo⇄framework
-      # separation drift so `customizer.sh --clean` stays a safe, source-valid removal.
+      # separation drift so `scripts/white-label/customize.sh --clean` stays a safe, source-valid removal.
       - name: Verify demo⇄framework separation convention
         run: bash scripts/verify-demo-convention.sh
+      # Product health — reads gradle/fork.properties (the project-level single source of truth) and
+      # runs every scripts/product-health/checks/*.sh: fork-identity (FAILs a fork still on the template's
+      # openMF/Mifos signing+org identity — Apple 90288) + appid-consistency (FAILs if fork.properties
+      # app.id drifted from libs.versions.toml appId) + store-listing (WARNs on un-authored copy).
+      # The upstream template itself sets TEMPLATE_SELF_BUILD=1 so its fork-only checks skip.
+      - name: Product health (fork.properties sanity)
+        env:
+          TEMPLATE_SELF_BUILD: ${{ github.repository == 'openMF/kmp-project-template' && '1' || '' }}
+        run: bash scripts/product-health/product-health.sh
 
   spotless:
     name: Spotless
