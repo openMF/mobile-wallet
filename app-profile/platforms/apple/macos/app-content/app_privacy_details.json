@@ -1,10 +1,101 @@
-{
-  "_comment": "App Toolkit collects NO data. All loan tracking, EMI calculation, bill reminders, and amortization scheduling run fully on-device. No account, no analytics, no telemetry, no third-party trackers. Interest Rates (FRED), Country Macro Data (World Bank), and Currency Exchange Rates make read-only public-data requests that carry no personal identifiers. Your data stays on your device and is never transmitted to Your Organization Name or any third party. Mirrors the iOS nutrition label (../../ios/app_privacy_details.json) — one ASC app record spans iOS + macOS.",
-  "app_uses_signed_in_account": false,
-  "data_protections": [
-    {
-      "data_protection_id": "DATA_NOT_COLLECTED"
-    }
-  ],
-  "data_types": []
-}
+[
+  {
+    "category": "CONTACTS",
+    "purposes": [
+      "APP_FUNCTIONALITY"
+    ],
+    "data_protections": [
+      "DATA_LINKED_TO_YOU"
+    ]
+  },
+  {
+    "category": "CREDIT_AND_FRAUD",
+    "purposes": [
+      "APP_FUNCTIONALITY"
+    ],
+    "data_protections": [
+      "DATA_LINKED_TO_YOU"
+    ]
+  },
+  {
+    "category": "DEVICE_ID",
+    "purposes": [
+      "APP_FUNCTIONALITY"
+    ],
+    "data_protections": [
+      "DATA_LINKED_TO_YOU"
+    ]
+  },
+  {
+    "category": "EMAIL_ADDRESS",
+    "purposes": [
+      "APP_FUNCTIONALITY"
+    ],
+    "data_protections": [
+      "DATA_LINKED_TO_YOU"
+    ]
+  },
+  {
+    "category": "NAME",
+    "purposes": [
+      "APP_FUNCTIONALITY"
+    ],
+    "data_protections": [
+      "DATA_LINKED_TO_YOU"
+    ]
+  },
+  {
+    "category": "OTHER_FINANCIAL_INFO",
+    "purposes": [
+      "APP_FUNCTIONALITY"
+    ],
+    "data_protections": [
+      "DATA_LINKED_TO_YOU"
+    ]
+  },
+  {
+    "category": "PAYMENT_INFORMATION",
+    "purposes": [
+      "APP_FUNCTIONALITY"
+    ],
+    "data_protections": [
+      "DATA_LINKED_TO_YOU"
+    ]
+  },
+  {
+    "category": "PHONE_NUMBER",
+    "purposes": [
+      "APP_FUNCTIONALITY"
+    ],
+    "data_protections": [
+      "DATA_LINKED_TO_YOU"
+    ]
+  },
+  {
+    "category": "PHOTOS_OR_VIDEOS",
+    "purposes": [
+      "APP_FUNCTIONALITY"
+    ],
+    "data_protections": [
+      "DATA_LINKED_TO_YOU"
+    ]
+  },
+  {
+    "category": "PHYSICAL_ADDRESS",
+    "purposes": [
+      "APP_FUNCTIONALITY"
+    ],
+    "data_protections": [
+      "DATA_LINKED_TO_YOU"
+    ]
+  },
+  {
+    "category": "USER_ID",
+    "purposes": [
+      "APP_FUNCTIONALITY"
+    ],
+    "data_protections": [
+      "DATA_LINKED_TO_YOU"
+    ]
+  }
+]

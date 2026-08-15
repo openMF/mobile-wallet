@@ -16,8 +16,10 @@ apple:
     internal_group: Internal Testers         # apple.testers.internal.group
     external_group: mifos-mobile-apps        # apple.testers.external.group — deployment/ios/testflight distribution_groups
     external_public_link: "true"             # apple.testers.external.public.link
-  keywords: 'mifos,wallet,payment,p2p,transfer,finance'  # store.ios.keywords
-  category: 'FINANCE'                          # store.ios.category
+  keywords: 'wallet,payments,transfer,sendmoney,QRpay,invoice,card,linkbank,KYC,merchant'  # store.ios.keywords — real, from dev fastlane/metadata/ios/en-US/keywords.txt
+  category: 'FINANCE'                          # store.ios.category — real, from dev fastlane/metadata/ios/primary_category.txt
+  ios:
+    secondary_category: 'UTILITIES'            # store.ios.secondary.category — real, from dev fastlane/metadata/ios/secondary_category.txt
   # App Store trade-representative contact (App Review → App Information). iOS + macOS App Store.
   # NOT YET AUTHORED — left blank rather than filled with fabricated business-registration details
   # (name/address/phone). Someone with Mifos Initiative's real registered trade-representative

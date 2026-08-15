@@ -35,14 +35,14 @@ network:
 
 org:
   name: Mifos Initiative
-  email: team@mifos.org
-  first_name: Mifos                          # App Store review contact first name
-  last_name: Initiative                      # App Store review contact last name
-  phone: ""                                  # no published org phone on record — leave blank, do not fabricate
-  copyright: "© 2026 Mifos Initiative. All rights reserved."   # desktop / Mac App Store packaging copyright (org.copyright)
-  marketing_url: https://mifos.org
-  privacy_url: https://mifos.org
-  support_url: https://mifos.org
+  email: info@mifos.org                      # real App Store review contact email, from dev fastlane/metadata/ios/review_information
+  first_name: Hekmatullah                    # real App Store review contact first name, from dev fastlane/metadata/ios/review_information
+  last_name: Amin                            # real App Store review contact last name, from dev fastlane/metadata/ios/review_information
+  phone: "+44 7391462187"                    # real App Store review contact phone, from dev fastlane/metadata/ios/review_information
+  copyright: "© 2025 The Mifos Initiative"    # desktop / Mac App Store packaging copyright (org.copyright) — from dev fastlane/metadata/ios/copyright.txt
+  marketing_url: ""                        # matches dev's real (blank) marketing_url.txt
+  privacy_url: https://openmf.github.io/privacy_policy_mifos_mobile.html   # real, from dev fastlane/metadata/ios/en-US/privacy_url.txt
+  support_url: https://mifos.org/resources/support/   # real, from dev fastlane/metadata/ios/en-US/support_url.txt
 
 legal:
   company_name: Mifos Initiative
@@ -58,32 +58,51 @@ keystore_dn:
 
 store:
   primary_locale: en-US
-  # Store copy authored from the app's actual, verified feature set (accounts, P2P/QR payments,
-  # transfers, beneficiaries, invoices, bill autopay, savings pockets, KYC, standing instructions) —
-  # not invented claims. Revise wording/tone per your own product/marketing preference before release;
-  # the facts described here are accurate as of this authoring.
+  # Store copy pulled from the real, previously-authored listing already published on the `dev`
+  # branch (fastlane/metadata/**), not invented — see fastlane/metadata/ios/en-US/*.txt +
+  # fastlane/metadata/android/en-GB/*.txt on dev for the source of truth this was copied from.
   title: 'Mifos Pay'                          # app display name (App Store name / Play title)
-  subtitle: 'Mobile banking for Mifos X'
-  promotional_text: 'Offline-first mobile banking for Mifos X (Fineract) institutions.'
+  subtitle: 'Open-source digital wallet'
+  promotional_text: 'Send and receive money, pay merchants, and track transactions with an open-source wallet powered by Mifos X / Fineract.'
   description: >-
-    Mifos Pay is an offline-first mobile banking client for institutions running the Mifos X
-    (Fineract) digital banking platform. Connect to your institution's Mifos X instance to view
-    accounts and transaction history, make P2P transfers and QR payments, pay bills and set up
-    autopay, manage beneficiaries and savings pockets, submit KYC documents, and track standing
-    instructions and invoices — with account and transaction data cached locally so recently viewed
-    information stays available even without a network connection.
-  release_notes: 'Initial release of Mifos Pay — offline-first mobile banking for Mifos X (Fineract) institutions.'
-  copyright: '© 2026 Mifos Initiative. All rights reserved.'
+    Mifos Pay is a simple, secure way to send, request, and track money. Create a wallet account,
+    add a card, share a QR to get paid, set standing instructions for recurring transfers, and
+    manage invoices—all from one clean, modern app.
+
+
+    WHAT YOU CAN DO
+
+    • Sign up as a customer or merchant and complete a guided registration
+
+    • Create a wallet savings account (subject to approval) and see your balance at a glance
+
+    • Send money using a Virtual Payment Address (VPA), mobile number, or account number
+
+    • Request money with your personal QR code; optionally set the amount and currency before sharing
+
+    • Add and manage cards; view masked details and remove or edit when needed
+
+    • Track everything in Payments: filter History by debits or credits, view statements, and see real-time notifications
+
+    • Set SI (Standing Instructions) for automatic transfers on a fixed schedule (weeks, months, years)
+
+    • Create and review invoices; see invoice status, items, and transaction IDs
+
+    • Keep profile details up to date—name, address, phone, VPA—and link a bank account
+
+    • Upload documents for KYC or support directly in the app
+
+    • Get help fast with built-in FAQs
+  release_notes: ''                           # matches dev's real (blank) release notes — no fabricated "what's new"
+  copyright: '© 2025 The Mifos Initiative'
   age_rating: '4+'                            # iOS + macOS App Store age rating (store.ios.age.rating)
   review:
-    notes: >-
-      Mifos Pay connects to a Mifos X (Fineract) platform instance, selected or configured via the
-      in-app instance picker. The public Mifos X demo environment can be used for review; see
-      https://mifos.org for details on demo access.
-    first_name: 'Mifos'                         # App Store review contact (mirrors org.first_name)
-    last_name: 'Initiative'                     # App Store review contact (mirrors org.last_name)
-    demo_user: ""                            # store.review.demo.user (blank — no login)
-    demo_password: ""                        # store.review.demo.password
+    notes: ''                                 # matches dev's real (blank) review notes
+    # NOTE: the review contact NAME/EMAIL/PHONE is NOT authored here — it's org.first_name/
+    # org.last_name/org.email/org.phone above (the actual keys SyncForkConfigPlugin writes to
+    # review_information/{first,last}_name.txt + email_address.txt + phone_number.txt).
+    demo_user: "venus"                       # real reviewer demo account, from dev fastlane/metadata/ios/review_information
+    demo_password: "@Venus@2025@"
   app_description: Mifos Pay                   # desktop packaging description (app.description)
 
 media:
