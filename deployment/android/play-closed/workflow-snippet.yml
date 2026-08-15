@@ -14,6 +14,20 @@ jobs:
         uses: ruby/setup-ruby@v1
         with: { bundler-cache: true }
 
+      # deployment/**/metadata is DERIVED from app-profile/ (gitignored), so a promotion job — which
+      # does NOT build — must still materialize the listing before the drift-checked sync in the lane
+      # can push it. Explicit JDK+Gradle + syncForkConfig (SYNC_FORK_DONE=1 makes the Fastfile
+      # before_all skip its own run). Without this a promote could ship a stale/empty listing.
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with: { distribution: zulu, java-version: '17' }
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v3
+      - name: Materialize store listing from app-profile (syncForkConfig)
+        run: |
+          ./gradlew -q syncForkConfig
+          echo "SYNC_FORK_DONE=1" >> "$GITHUB_ENV"
+
       - name: Materialize secrets (vault-mode)
         if: ${{ secrets.SOPS_AGE_KEY != '' }}
         env:

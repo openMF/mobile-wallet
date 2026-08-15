@@ -28,6 +28,12 @@ platform :android do
     # touching this file (D6).
     variant = VariantResolver.resolve(flavor: flavor.to_s, build_type: build_ty.to_s)
 
+    # Intrinsic listing sync: a promotion is a pure track move (skips metadata below), so push the
+    # app-profile-derived listing FIRST when it changed since the last push — otherwise promoting an
+    # already-built binary after a listing edit would ship a stale store listing. Drift-checked, so
+    # unchanged repeats are a no-op. (RULE-DEPLOY-LISTING-SYNC-ALL-STATES-001)
+    sync_play_listing_if_changed(options)
+
     upload_to_play_store(
       track:                        "internal",
       track_promote_to:             "beta",

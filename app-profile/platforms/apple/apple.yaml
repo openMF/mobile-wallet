@@ -7,8 +7,10 @@ apple:
       url: git@github.com:openMF/ios-provisioning-profile.git   # apple.match.git.url — deployment/BOOTSTRAP.md
       branch: dev                            # apple.match.git.branch
   firebase:
-    ios_app_id_prod: 1:000000000000:ios:placeholder   # PLACEHOLDER — no separate prod/demo iOS firebase config found; single GoogleService-Info.plist below
-    ios_app_id_demo: 1:000000000000:ios:placeholder   # PLACEHOLDER — no separate prod/demo iOS firebase config found
+    # No separate prod/demo iOS Firebase apps exist (single GoogleService-Info.plist) — both
+    # resolve to the same real app id as ios_app_id below.
+    ios_app_id_prod: 1:728434912738:ios:86a7badfaed88b841a1dbb
+    ios_app_id_demo: 1:728434912738:ios:86a7badfaed88b841a1dbb
     ios_app_id: 1:728434912738:ios:86a7badfaed88b841a1dbb   # firebase.ios.app.id — cmp-ios/iosApp/GoogleService-Info.plist (org.mifospay)
   testers:
     internal_group: Internal Testers         # apple.testers.internal.group
@@ -17,19 +19,23 @@ apple:
   keywords: 'mifos,wallet,payment,p2p,transfer,finance'  # store.ios.keywords
   category: 'FINANCE'                          # store.ios.category
   # App Store trade-representative contact (App Review → App Information). iOS + macOS App Store.
-  # Template default = a PLACEHOLDER; a fork overrides with its own registered business contact.
-  # syncForkConfig DERIVES deployment/{ios/appstore,desktop/mac-app-store}/metadata/
-  # trade_representative_contact_information/*.txt from these keys — never hand-edit those .txt files.
+  # NOT YET AUTHORED — left blank rather than filled with fabricated business-registration details
+  # (name/address/phone). Someone with Mifos Initiative's real registered trade-representative
+  # information must fill these in before an actual App Store submission. email_address uses the
+  # organization's real published contact (team@mifos.org, matches org.email elsewhere in this file)
+  # since that one field is a real, defensible value. syncForkConfig DERIVES
+  # deployment/{ios/appstore,desktop/mac-app-store}/metadata/trade_representative_contact_information/*.txt
+  # from these keys — never hand-edit those .txt files directly.
   trade_representative:
-    first_name: 'Your'                         # PLACEHOLDER — store.apple.trade.first.name
-    last_name: 'Org'                           # PLACEHOLDER — store.apple.trade.last.name
-    address_line1: 'Your Organization Name'    # PLACEHOLDER — store.apple.trade.address.line1
+    first_name: ''                           # unauthored — store.apple.trade.first.name
+    last_name: ''                             # unauthored — store.apple.trade.last.name
+    address_line1: ''                        # unauthored — store.apple.trade.address.line1
     address_line2: ''                        # store.apple.trade.address.line2
     address_line3: ''                        # store.apple.trade.address.line3
-    city_name: 'Wilmington'                    # store.apple.trade.city
-    state: 'DE'                                # store.apple.trade.state
-    country: 'US'                              # store.apple.trade.country
-    postal_code: '19801'                     # store.apple.trade.postal.code
-    phone_number: '+15555550100'             # PLACEHOLDER — store.apple.trade.phone
-    email_address: 'you@example.com'           # PLACEHOLDER — store.apple.trade.email
+    city_name: ''                             # unauthored — store.apple.trade.city
+    state: ''                                 # unauthored — store.apple.trade.state
+    country: 'US'                              # store.apple.trade.country — real (Mifos Initiative is US-based)
+    postal_code: ''                          # unauthored — store.apple.trade.postal.code
+    phone_number: ''                         # unauthored — store.apple.trade.phone
+    email_address: 'team@mifos.org'            # real — Mifos Initiative's published contact email
     is_displayed_on_app_store: 'false'       # store.apple.trade.displayed

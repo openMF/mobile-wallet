@@ -6,12 +6,12 @@
     IgnorableNamespaces="uap rescap">
 
   <Identity
-      Name="MifosInitiative.MoneyToolkit"
+      Name="MifosInitiative.MifosPay"
       Publisher="CN=Mifos Initiative"
       Version="1.0.0.0" />
 
   <Properties>
-    <DisplayName>Money Toolkit</DisplayName>
+    <DisplayName>Mifos Pay</DisplayName>
     <PublisherDisplayName>Mifos Initiative</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
@@ -25,10 +25,10 @@
   </Resources>
 
   <Applications>
-    <Application Id="MoneyToolkit" Executable="MoneyToolkit.exe" EntryPoint="Windows.FullTrustApplication">
+    <Application Id="MifosPay" Executable="MifosPay.exe" EntryPoint="Windows.FullTrustApplication">
       <uap:VisualElements
-          DisplayName="Money Toolkit"
-          Description="Mifos Money Toolkit"
+          DisplayName="Mifos Pay"
+          Description="Mifos Pay"
           BackgroundColor="transparent"
           Square150x150Logo="Assets\Square150x150Logo.png"
           Square44x44Logo="Assets\Square44x44Logo.png" />

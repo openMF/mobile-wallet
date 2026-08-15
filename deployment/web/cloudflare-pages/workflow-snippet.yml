@@ -32,4 +32,4 @@ jobs:
         with:
           apiToken:  ${{ secrets.CLOUDFLARE_PAGES_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command:   pages deploy cmp-web/build/dist/js/productionExecutable --project-name=mifos-x-web
+          command:   pages deploy cmp-web/build/dist/js/productionExecutable --project-name=YOUR_CLOUDFLARE_PAGES_PROJECT

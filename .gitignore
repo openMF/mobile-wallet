@@ -143,3 +143,4 @@ deployment/fastlane/**/report.xml
 # *.keystore / *.key rules above would ignore them. (Real secrets live in gitignored secrets/live/.)
 !secrets/sample/android/keystores/upload_keystore.keystore
 !secrets/sample/desktop/linux/gpg_signing.key
+deployment/fastlane/.listing_sync_state.json

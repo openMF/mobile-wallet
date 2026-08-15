@@ -11,7 +11,7 @@ signing: none
 distribution_groups: ["public"]
 retention: "indefinite"
 runners:
-  local: { command: "wrangler pages deploy ./cmp-web/build/dist/js/productionExecutable --project-name=mifos-x-web" }
+  local: { command: "wrangler pages deploy ./cmp-web/build/dist/js/productionExecutable --project-name=YOUR_CLOUDFLARE_PAGES_PROJECT" }
   ci:    { workflow_snippet: workflow-snippet.yml }
 requires_confirm: false
 enabled_by_default: false

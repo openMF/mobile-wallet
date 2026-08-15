@@ -54,7 +54,11 @@ fi
 # ── B2 — no template org identity as a LITERAL in template-owned deployment logic ─
 # The value must be TOKENIZED (read from app-profile via config.rb), never hardcoded.
 # Comments and metadata .txt / README are excluded.
-PATTERNS='Mifos Initiative|org\.mifos\.kmp\.template|mifos-x-web|MifosInitiative\.MoneyToolkit'
+# NOTE: intentionally does NOT match a bare "Mifos Initiative" org name — the template's own
+# maintainer (Mifos Initiative) also publishes real downstream forks (e.g. mifos-pay), for which
+# that literal is the genuine, correct publisher identity, not leaked template branding. Match only
+# the template's OWN demo-app-specific identity strings instead.
+PATTERNS='org\.mifos\.kmp\.template|mifos-x-web|MifosInitiative\.MoneyToolkit|Money[ ]?Toolkit'
 b2_hits=()
 if [ -d "$HEALTH_ROOT/deployment" ]; then
   while IFS= read -r f; do
@@ -167,9 +171,13 @@ if [ -n "$marker_re" ] && grep -rIlE "$marker_re" $STORE_YAMLS >/dev/null 2>&1; 
 fi
 
 # ── B8 — a fork must not ship the template's default store copy (blocking; template self-skips at top) ──
+# NOTE: deliberately does NOT match a bare "Mifos Initiative" org name or the "org.mifos" bundle-id
+# fragment — both collide with genuinely correct, authored content for a real Mifos-family fork
+# (a real copyright line naming Mifos Initiative; the app's own real "org.mifospay" bundle id, which
+# contains "org.mifos" as a substring). Match only the template's OWN demo-app-specific identity string.
 # shellcheck disable=SC2086
-if grep -rIlE 'Money Toolkit|Mifos Initiative|org\.mifos' $STORE_YAMLS >/dev/null 2>&1; then
-  echo "❌ B8: template default store copy ('Money Toolkit' / 'Mifos Initiative' / 'org.mifos') in the app-profile store schema — author this fork's own listing."; fail=1
+if grep -rIlE 'Money[ ]?Toolkit|org\.mifos\.kmp\.template' $STORE_YAMLS >/dev/null 2>&1; then
+  echo "❌ B8: template default store copy ('Money Toolkit' / 'org.mifos.kmp.template') in the app-profile store schema — author this fork's own listing."; fail=1
 fi
 
 # ── B9 — deployment/ metadata drifted from the app-profile key SoT (WARN, non-blocking) ──

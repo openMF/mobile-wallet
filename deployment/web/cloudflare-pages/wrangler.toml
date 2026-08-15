@@ -1,4 +1,4 @@
 # deployment/web/cloudflare-pages/wrangler.toml
-name = "mifos-x-web"
+name = "YOUR_CLOUDFLARE_PAGES_PROJECT"
 compatibility_date = "2026-06-01"
 pages_build_output_dir = "../../../cmp-web/build/dist/js/productionExecutable"

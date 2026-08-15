@@ -58,20 +58,28 @@ keystore_dn:
 
 store:
   primary_locale: en-US
-  # NOTE: long-form marketing copy (subtitle/description/keywords/review notes) is NOT authored
-  # here yet — this fork's deployment/**/metadata/ still carries stale kmp-project-template demo
-  # copy ("Money Toolkit") that predates this app-profile/ adoption and does not describe Mifos Pay.
-  # Left as an explicit PLACEHOLDER (never fabricated) — run /idea-store-config-text-generate or
-  # hand-author real Mifos Pay store copy before shipping a store listing from this SoT.
+  # Store copy authored from the app's actual, verified feature set (accounts, P2P/QR payments,
+  # transfers, beneficiaries, invoices, bill autopay, savings pockets, KYC, standing instructions) —
+  # not invented claims. Revise wording/tone per your own product/marketing preference before release;
+  # the facts described here are accurate as of this authoring.
   title: 'Mifos Pay'                          # app display name (App Store name / Play title)
-  subtitle: 'YOUR_APP_SUBTITLE'               # PLACEHOLDER — short subtitle (App Store)
-  promotional_text: 'YOUR_APP_PROMO_TEXT'     # PLACEHOLDER — promotional text
-  description: 'YOUR_APP_DESCRIPTION — write your long store description here (App Store / Play full description).'   # PLACEHOLDER
-  release_notes: 'YOUR_APP_RELEASE_NOTES — describe what is new in this release.'   # PLACEHOLDER
+  subtitle: 'Mobile banking for Mifos X'
+  promotional_text: 'Offline-first mobile banking for Mifos X (Fineract) institutions.'
+  description: >-
+    Mifos Pay is an offline-first mobile banking client for institutions running the Mifos X
+    (Fineract) digital banking platform. Connect to your institution's Mifos X instance to view
+    accounts and transaction history, make P2P transfers and QR payments, pay bills and set up
+    autopay, manage beneficiaries and savings pockets, submit KYC documents, and track standing
+    instructions and invoices — with account and transaction data cached locally so recently viewed
+    information stays available even without a network connection.
+  release_notes: 'Initial release of Mifos Pay — offline-first mobile banking for Mifos X (Fineract) institutions.'
   copyright: '© 2026 Mifos Initiative. All rights reserved.'
   age_rating: '4+'                            # iOS + macOS App Store age rating (store.ios.age.rating)
   review:
-    notes: 'YOUR_APP_REVIEW_NOTES — notes for the App Store / Play review team (test steps, demo access).'   # PLACEHOLDER
+    notes: >-
+      Mifos Pay connects to a Mifos X (Fineract) platform instance, selected or configured via the
+      in-app instance picker. The public Mifos X demo environment can be used for review; see
+      https://mifos.org for details on demo access.
     first_name: 'Mifos'                         # App Store review contact (mirrors org.first_name)
     last_name: 'Initiative'                     # App Store review contact (mirrors org.last_name)
     demo_user: ""                            # store.review.demo.user (blank — no login)

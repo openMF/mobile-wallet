@@ -4,7 +4,14 @@
 
 platform :android do
   desc "Promote internal track to closed testing (alpha) on Google Play"
-  lane :promoteToClosed do
+  lane :promoteToClosed do |options|
+    options = sanitize_options(options)
+
+    # Intrinsic listing sync: promotion skips metadata (below), so push the app-profile-derived
+    # listing first when it changed since the last push. Drift-checked no-op when unchanged.
+    # (RULE-DEPLOY-LISTING-SYNC-ALL-STATES-001)
+    sync_play_listing_if_changed(options)
+
     upload_to_play_store(
       track:                        "internal",
       track_promote_to:             "alpha",

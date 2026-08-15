@@ -2,8 +2,8 @@
 # Only values that DIFFER from the common app.yaml live here.
 android:
   category: 'Finance'                          # store.android.category
-  short_description: 'YOUR_APP_SHORT_DESCRIPTION'  # PLACEHOLDER — store.android.short.description (this fork's deployment/ metadata carries stale template demo copy, not real Mifos Pay copy — author before shipping)
-  changelog: 'YOUR_APP_CHANGELOG — describe what is new in this release.'  # PLACEHOLDER — store.android.changelog
+  short_description: 'Offline-first mobile banking for Mifos X (Fineract) institutions.'
+  changelog: 'Initial release of Mifos Pay — offline-first mobile banking for Mifos X (Fineract) institutions.'
   video_url: ""                              # store.android.video.url (Play Store promo YouTube URL)
   # play_tracks_by_flavor: "prod=internal,demo=internal"   # android.play.tracks.by_flavor (optional override)
   firebase:

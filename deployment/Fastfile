@@ -17,5 +17,14 @@
 # before any lane.rb is imported.
 import "_shared/config.rb"
 
+# ── Materialize app-profile SoT → deployment/**/metadata before any lane (CI entry) ──
+# deployment/**/metadata is DERIVED (owner:generated, gitignored); regenerate from app-profile first.
+import "_shared/before_all.rb"
+
+# ── Intrinsic drift-checked store-listing sync (every store deploy lane calls it) ────
+# So a listing change reaches the store on ANY deploy state — incl. Play promotions — not just a
+# fresh build or a /idea-deploy-orchestrated run. See deployment/_shared/listing_sync.rb.
+import "_shared/listing_sync.rb"
+
 # ── Per-target lane imports ───────────────────────────────────────────────────
 Dir["./*/**/lane.rb"].each { |f| import f }

@@ -31,6 +31,12 @@ platform :android do
     rollout_pct = ENV.fetch("ROLLOUT", "1.0").to_s.strip
     rollout_pct = "1.0" if rollout_pct.empty?
 
+    # Intrinsic listing sync: production promotion (below) skips metadata, so push the app-profile-
+    # derived listing FIRST when it changed since the last push — a stale listing must never reach
+    # production just because the binary was promoted rather than freshly built. Drift-checked no-op
+    # when unchanged. (RULE-DEPLOY-LISTING-SYNC-ALL-STATES-001)
+    sync_play_listing_if_changed(options)
+
     # For first-time apps the beta release may be in draft with no country targeting,
     # making beta→production promotion fail with "Release in track targeting no countries".
     # Promote from internal directly to production in that case.

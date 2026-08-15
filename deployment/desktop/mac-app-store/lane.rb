@@ -40,6 +40,8 @@
 #   MAC_PROVISIONING_PROFILE_PATH  — .provisionprofile path embedded into app bundle
 #   MAC_APP_STORE_CONNECT_APP_ID   — Numeric ASC app ID for the macOS app
 
+require_relative "../../_shared/lib/appstore_helpers"
+
 MAC_APP_STORE_METADATA_PATH    = File.join(DEPLOYMENT_REPO_ROOT, "deployment/desktop/mac-app-store/metadata").freeze
 MAC_APP_STORE_SCREENSHOTS_PATH = File.join(DEPLOYMENT_REPO_ROOT, "deployment/desktop/mac-app-store/metadata/screenshots").freeze
 MAC_APP_STORE_PRIMARY_LOCALE   = "en-GB".freeze
@@ -137,6 +139,43 @@ platform :mac do
     UI.success("✅ Mac build #{build_number} submitted for beta review — external testers receive it on approval (~24h).")
   end
 
+  desc "Sync Mac App Store listing (metadata + screenshots) — no binary upload, no submission (parity with ios upload_ios_screenshots)."
+  lane :syncMacListing do |options|
+    options       = sanitize_options(options)
+    mac_bundle_id = ENV["MAC_APP_IDENTIFIER"] || ENV["MAC_BUNDLE_ID"] || ForkIdentity::APP_ID
+    load_api_key(options)
+
+    # deliver only runs under an officially-supported platform (:ios/:mac/:android) — this lane is under
+    # platform :mac (the desktop syncListing lane's :desktop context makes deliver abort "not supported").
+    # A LISTING sync must NOT push app-level identity (name/subtitle) — App Store names are globally
+    # unique + set once; re-pushing a taken name aborts "app name already used on a different account"
+    # (same class as the iOS promoteToAppStore heal). Hide name/subtitle so only version-level content
+    # (description / keywords / screenshots) syncs.
+    AppStoreHelpers.without_app_identity_metadata(MAC_APP_STORE_METADATA_PATH) do
+      deliver(
+        platform:                             "osx",
+        api_key:                              Actions.lane_context[SharedValues::APP_STORE_CONNECT_API_KEY],
+        app_identifier:                       mac_bundle_id,
+        metadata_path:                        MAC_APP_STORE_METADATA_PATH,
+        screenshots_path:                     MAC_APP_STORE_SCREENSHOTS_PATH,
+        skip_binary_upload:                   true,
+        # NOTE: deliver has no `skip_submission` (that is a pilot param). Not submitting == leaving
+        # submit_for_review at its false default. Passing skip_submission aborts "invalid parameters".
+        submit_for_review:                    false,
+        skip_metadata:                        false,
+        skip_screenshots:                     false,
+        overwrite_screenshots:                true,
+        skip_app_version_update:              true,
+        ignore_language_directory_validation: true,
+        run_precheck_before_submit:           false,
+        force:                                true,
+      )
+    end
+
+    record_store_listing_synced("mac", MAC_APP_STORE_METADATA_PATH)
+    UI.success("✅ Mac App Store listing synced (metadata + screenshots — no binary, no submission)")
+  end
+
   desc "Promote an existing Mac TestFlight build to Mac App Store review — no rebuild, no re-upload."
   lane :promoteMacToAppStore do |options|
     options       = sanitize_options(options)
@@ -161,25 +200,42 @@ platform :mac do
     UI.message("🚀 Submitting Mac build #{build_number} for App Store review...")
     UI.message("   automatic_release: true  (goes live on approval — no manual step)")
 
-    deliver(
-      platform:                             "osx",
-      api_key:                              Actions.lane_context[SharedValues::APP_STORE_CONNECT_API_KEY],
-      app_identifier:                       mac_bundle_id,
-      app_version:                          app_version,
-      build_number:                         build_number,
-      skip_binary_upload:                   true,
-      metadata_path:                        MAC_APP_STORE_METADATA_PATH,
-      screenshots_path:                     MAC_APP_STORE_SCREENSHOTS_PATH,
-      overwrite_screenshots:                true,
-      ignore_language_directory_validation: true,
-      skip_app_version_update:              true,
-      submit_for_review:                    true,
-      automatic_release:                    true,
-      phased_release:                       false,
-      reject_if_possible:                   true,
-      run_precheck_before_submit:           false,
-      force:                                true,
-    )
+    # Drift-checked listing sync (parity with Android/iOS): re-upload metadata + screenshots only when
+    # the app-profile-derived Mac listing changed since the last push. (RULE-DEPLOY-LISTING-SYNC-ALL-STATES-001)
+    mac_listing_changed = store_listing_needs_sync?("mac", MAC_APP_STORE_METADATA_PATH)
+    UI.message(mac_listing_changed ? "🔄 Mac App Store listing changed — will upload metadata + screenshots" : "✓ Mac App Store listing unchanged — skipping metadata re-upload")
+
+    # A PROMOTE must never push app-level identity (name/subtitle) — the globally-unique app name aborts
+    # deliver ("already used on a different account"). Hide it so only version-level listing syncs (parity
+    # with the iOS promoteToAppStore lane + syncMacListing). (2026-08-10)
+    AppStoreHelpers.without_app_identity_metadata(MAC_APP_STORE_METADATA_PATH) do
+      deliver(
+        platform:                             "osx",
+        api_key:                              Actions.lane_context[SharedValues::APP_STORE_CONNECT_API_KEY],
+        app_identifier:                       mac_bundle_id,
+        app_version:                          app_version,
+        build_number:                         build_number,
+        skip_binary_upload:                   true,
+        skip_metadata:                        !mac_listing_changed,
+        skip_screenshots:                     !mac_listing_changed,
+        metadata_path:                        MAC_APP_STORE_METADATA_PATH,
+        screenshots_path:                     MAC_APP_STORE_SCREENSHOTS_PATH,
+        overwrite_screenshots:                true,
+        ignore_language_directory_validation: true,
+        skip_app_version_update:              true,
+        submit_for_review:                    true,
+        # Export-compliance + IDFA answers — required to submit a never-submitted Mac version, else deliver
+        # aborts "Export compliance is required to submit". Shared with iOS (one ASC app record).
+        submission_information:               FastlaneConfig::IosConfig::APPSTORE_CONFIG[:submission_information],
+        automatic_release:                    true,
+        phased_release:                       false,
+        reject_if_possible:                   true,
+        run_precheck_before_submit:           false,
+        force:                                true,
+      )
+    end
+
+    record_store_listing_synced("mac", MAC_APP_STORE_METADATA_PATH) if mac_listing_changed
 
     UI.success("✅ Mac build #{build_number} submitted for App Store review — will auto-release on approval.")
   end
@@ -323,6 +379,23 @@ platform :mac do
     # ── Step 1a: Match appstore — installs Apple Distribution cert + provisioning profile ─
     match(**match_base.merge(type: "appstore", platform: "macos"))
 
+    # ── Step 1a.5: resolve the keychain that ACTUALLY holds the identity ─────────────
+    # `setup_ci` (via with_ios_preamble/setup_ios_keychain) can install Match's cert into
+    # `fastlane_tmp_keychain-db` instead of login.keychain-db — then a login-keychain-only lookup
+    # returns EMPTY even though the cert is in the search list (2026-08-06 M1 false-abort). Walk the
+    # keychain search list and use whichever one holds a VALID Apple Distribution identity for BOTH the
+    # SHA-1 lookup and codesign's --keychain. setup_ci already unlocked + set key-partition-list there.
+    search_kcs = [login_kc, *(`security list-keychains 2>/dev/null`.scan(/"([^"]+)"/).flatten)].uniq
+    signing_kc = search_kcs.find do |kc|
+      File.exist?(kc) &&
+        !`security find-identity -v -p codesigning #{kc.shellescape} 2>/dev/null`
+          .scan(/Apple Distribution|3rd Party Mac Developer Application/).empty?
+    end
+    if signing_kc && signing_kc != login_kc
+      UI.important("🔎 Apple Distribution identity is in #{File.basename(signing_kc)} (not login.keychain) — using it for signing")
+      login_kc = signing_kc
+    end
+
     # ── Step 2: Set MAC_KEYCHAIN_PATH immediately after appstore Match ────────────
     ENV["MAC_KEYCHAIN_PATH"] = login_kc
     UI.message("🔐 Keychain: #{login_kc}")
@@ -333,40 +406,65 @@ platform :mac do
 
     # ── Step 3: Capture app-signing SHA1 before installer Match muddies keychain ──
     # Use SHA1 over display name to avoid "ambiguous" codesign errors.
+    # SHA1 via `find-identity -v -p codesigning` (lists ONLY valid, non-expired signing identities as
+    # `N) <SHA1> "name"`). Robust against the cert+p12 double-import that leaves duplicate keychain entries:
+    # the old `find-certificate | grep 'SHA-1 hash:' | tail -1 | awk` returned EMPTY on that duplicate.
     app_sha1 = sh(
-      "security find-certificate -c 'Apple Distribution' -Z #{login_kc.shellescape} 2>/dev/null" \
-      " | grep 'SHA-1 hash:' | tail -1 | awk '{print $3}'",
+      "security find-identity -v -p codesigning #{login_kc.shellescape} 2>/dev/null" \
+      " | grep -E 'Apple Distribution|3rd Party Mac Developer Application' | head -1 | awk '{print $2}'",
       log: false,
     ).strip
-    UI.user_error!("No Apple Distribution cert SHA1 found in login.keychain-db") if app_sha1.empty?
+    if app_sha1.empty?
+      app_sha1 = sh(
+        "security find-certificate -c 'Apple Distribution' -a -Z #{login_kc.shellescape} 2>/dev/null" \
+        " | awk '/SHA-1 hash:/{print $3; exit}'",
+        log: false,
+      ).strip
+    end
+    UI.user_error!("No Apple Distribution signing identity found in the keychain search list (checked find-identity + find-certificate across #{search_kcs.map { |k| File.basename(k) }.join(', ')})") if app_sha1.empty?
     ENV["MAC_SIGNING_IDENTITY"] = app_sha1
     UI.message("🔏 App signing SHA1: #{app_sha1}")
+
+    # Capture the Apple Team ID from the app-signing identity name ("… (TEAMID)"). A machine that builds
+    # multiple orgs carries several teams' installer certs; the installer cert MUST match THIS app's team.
+    team_id = `security find-identity -v -p codesigning 2>/dev/null`.lines
+              .grep(/#{Regexp.escape(app_sha1)}/).first.to_s[/\(([A-Z0-9]{10})\)/, 1]
+    UI.message("🏷  App signing team: #{team_id || 'unknown'}")
 
     # ── Step 1b: Match mac_installer_distribution — installs installer cert ────────
     # Snapshot SHA1s before so we can diff to find the exact installer cert SHA1,
     # regardless of whether it is named "3rd Party Mac Developer Installer" or
     # "Apple Distribution" in the keychain.
     sha1s_before_installer = _list_identity_sha1s(login_kc)
-    match(**match_base.merge(type: "mac_installer_distribution", platform: "macos"))
+    # skip_provisioning_profiles: installer certs sign the .pkg via `productbuild` and need NO provisioning
+    # profile (ios-provisioning-profile CLAUDE.md gotcha #4). Without this, Match tries to fetch a
+    # non-existent `Unknown_<bundle>.provisionprofile` and (readonly) aborts "No matching provisioning
+    # profiles found … cannot create because readonly" (2026-08-06 M1 Step-1b).
+    match(**match_base.merge(type: "mac_installer_distribution", platform: "macos", skip_provisioning_profiles: true))
     sha1s_after_installer  = _list_identity_sha1s(login_kc)
     new_installer_sha1s    = sha1s_after_installer - sha1s_before_installer
 
-    # ── Step 4: Store installer identity ──────────────────────────────────────────
-    if new_installer_sha1s.any?
+    # ── Step 4: Store installer identity — TEAM-MATCHED across the full search list ────────────────
+    # A machine that builds multiple orgs carries several teams' installer certs; picking the wrong-team
+    # one → Apple rejects the PKG (90237). Match the app's team; search the whole list (the cert may be in
+    # fastlane_tmp_keychain or login.keychain). Installer certs are `-p basic`, NOT `-p codesigning`.
+    installer_lines = search_kcs.flat_map do |kc|
+      `security find-identity -v -p basic #{kc.shellescape} 2>/dev/null`.lines.grep(/Installer/i)
+    end
+    chosen_installer = installer_lines.find { |l| team_id && l.include?("(#{team_id})") }&.[](/"([^"]+)"/, 1)
+    if chosen_installer
+      ENV["MAC_INSTALLER_IDENTITY"] = chosen_installer
+      UI.message("📦 Installer (team #{team_id}): #{chosen_installer}")
+    elsif new_installer_sha1s.any?
       ENV["MAC_INSTALLER_IDENTITY"] = new_installer_sha1s.first
-      UI.message("📦 Installer SHA1: #{new_installer_sha1s.first}")
+      UI.message("📦 Installer SHA1 (newly installed): #{new_installer_sha1s.first}")
     else
-      # Fallback: name-based search for known installer cert patterns
-      installer = sh(
-        "security find-identity -v -p basic #{login_kc.shellescape} 2>/dev/null" \
-        " | grep -iE 'installer|3rd party mac' | head -1 | sed 's/.*\"\\(.*\\)\".*/\\1/'",
-        log: false,
-      ).strip
-      unless installer.empty?
-        ENV["MAC_INSTALLER_IDENTITY"] = installer
-        UI.message("📦 Installer (name): #{installer}")
+      first = installer_lines.first&.[](/"([^"]+)"/, 1)
+      if first
+        UI.important("⚠️  No team-#{team_id} installer cert found; falling back to #{first}")
+        ENV["MAC_INSTALLER_IDENTITY"] = first
       else
-        UI.important("⚠️  No installer cert found — PKG will be unsigned (local dev only).")
+        UI.user_error!("No '3rd Party Mac Developer Installer' cert for team #{team_id} in the keychain search list — the PKG cannot be signed. Fix the provisioning repo (cert-renewal.sh).")
       end
     end
   end
@@ -465,9 +563,27 @@ platform :mac do
     # variant (bundle org.mifos.kmp.template.demo) → upload_to_testflight can't find the
     # app on App Store Connect AND it misaligns with the prod Match provisioning profile.
     flavor = (options[:flavor] || ENV["FLAVOR"]).to_s.strip
+
+    # CFBundleVersion must STRICTLY increase per TestFlight/App Store upload. Compose Desktop leaves it
+    # unset → build.gradle.kts falls back to the static packageVersion ("1.0.0") UNLESS -PmacBuildVersion
+    # is passed. Only CI set it (via GITHUB_RUN_NUMBER); a LOCAL /idea-deploy set neither, so every mac
+    # upload 409'd ("bundle version must be higher than … '1.0.0'"). Derive a monotonic build number from
+    # the git commit count (same basis as Android's versionCode) so local uploads are unique + increasing.
+    # Override with MAC_BUILD_VERSION when a specific value is needed. (2026-08-10)
+    require "shellwords"
+    mac_build_version = ENV["MAC_BUILD_VERSION"].to_s.strip
+    if mac_build_version.empty?
+      count = `git -C #{repo_root.shellescape} rev-list --count HEAD 2>/dev/null`.strip
+      mac_build_version = "1.0.#{count}" unless count.empty?
+    end
+
     gradle_args = [gradlew, "-p", repo_root, ":cmp-desktop:createReleaseDistributable",
                    "--no-daemon", "--no-configuration-cache"]
     gradle_args << "-PkmpFlavor=#{flavor}" unless flavor.empty?
+    unless mac_build_version.to_s.empty?
+      gradle_args << "-PmacBuildVersion=#{mac_build_version}"
+      UI.message("🔢 macOS CFBundleVersion → #{mac_build_version} (monotonic, from git commit count) — avoids the '1.0.0' upload 409")
+    end
 
     begin
       UI.message("Building unsigned .app bundle (createReleaseDistributable, flavor=#{flavor.empty? ? '(default)' : flavor})...")
