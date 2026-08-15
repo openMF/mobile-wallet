@@ -10,17 +10,16 @@
 package org.mifospay.feature.merchants
 
 import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.mifospay.core.model.savingsaccount.SavingsWithAssociationsEntity
+import org.mifospay.core.ui.utils.BaseViewModel
 
 // STUB VERDICT (Phase-5 Batch-4, 2026-08-01):
 // -----------------------------------------------------------------------------
@@ -53,44 +52,95 @@ import org.mifospay.core.model.savingsaccount.SavingsWithAssociationsEntity
 // -----------------------------------------------------------------------------
 class MerchantViewModel(
     private val savedStateHandle: SavedStateHandle,
-) : ViewModel() {
+) : BaseViewModel<MerchantState, MerchantEvent, MerchantAction>(
+    initialState = MerchantState(),
+) {
 
-    private val _searchQuery = MutableStateFlow("")
-    private val searchQuery: StateFlow<String> = _searchQuery.asStateFlow()
+    /**
+     * The following three [StateFlow]s preserve the ViewModel's original public
+     * surface (`merchantUiState`, `merchantsListUiState`, `isRefreshing`) so the
+     * Screen compiles unchanged — each is a projection of the single MVI
+     * [MerchantState] exposed by [BaseViewModel.stateFlow].
+     */
+    val merchantUiState: StateFlow<MerchantUiState> = stateFlow
+        .map { it.merchantUiState }
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5_000),
+            initialValue = MerchantUiState.Empty,
+        )
 
-    private val _merchantUiState = MutableStateFlow<MerchantUiState>(MerchantUiState.Empty)
-    val merchantUiState: StateFlow<MerchantUiState> = _merchantUiState
-
-    private val _isRefreshing = MutableStateFlow(false)
-    val isRefreshing = _isRefreshing.asStateFlow()
-
-    val merchantsListUiState: StateFlow<MerchantUiState> = searchQuery
-        .map {
-            when (_merchantUiState.value) {
-                is MerchantUiState.ShowMerchants -> {
-                    MerchantUiState.ShowMerchants(emptyList())
-                }
-
-                else -> MerchantUiState.ShowMerchants(arrayListOf())
-            }
-        }
+    val merchantsListUiState: StateFlow<MerchantUiState> = stateFlow
+        .map { it.merchantListUiState }
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5_000),
             initialValue = MerchantUiState.ShowMerchants(arrayListOf()),
         )
 
-    fun updateSearchQuery(query: String) {
-        _searchQuery.value = query
-    }
+    val isRefreshing: StateFlow<Boolean> = stateFlow
+        .map { it.isRefreshing }
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5_000),
+            initialValue = false,
+        )
 
-    fun refresh() {
-        viewModelScope.launch {
-            _isRefreshing.value = true
-            delay(200)
-            _isRefreshing.value = false
+    /**
+     * Thin wrapper kept so `viewModel::updateSearchQuery` in the Screen stays
+     * valid — delegates to the MVI action stream.
+     */
+    fun updateSearchQuery(query: String) = trySendAction(MerchantAction.UpdateSearchQuery(query))
+
+    /**
+     * Thin wrapper kept so `viewModel::refresh` in the Screen stays valid —
+     * delegates to the MVI action stream.
+     */
+    fun refresh() = trySendAction(MerchantAction.Refresh)
+
+    override fun handleAction(action: MerchantAction) {
+        when (action) {
+            is MerchantAction.UpdateSearchQuery -> {
+                mutableStateFlow.update { current ->
+                    // Preserves the original derivation: the stub always yields
+                    // an empty merchant list (no backend), so both branches map
+                    // to a ShowMerchants with an empty list.
+                    val list = when (current.merchantUiState) {
+                        is MerchantUiState.ShowMerchants ->
+                            MerchantUiState.ShowMerchants(emptyList())
+
+                        else -> MerchantUiState.ShowMerchants(arrayListOf())
+                    }
+                    current.copy(
+                        searchQuery = action.query,
+                        merchantListUiState = list,
+                    )
+                }
+            }
+
+            is MerchantAction.Refresh -> {
+                viewModelScope.launch {
+                    mutableStateFlow.update { it.copy(isRefreshing = true) }
+                    delay(200)
+                    mutableStateFlow.update { it.copy(isRefreshing = false) }
+                }
+            }
         }
     }
+}
+
+data class MerchantState(
+    val merchantUiState: MerchantUiState = MerchantUiState.Empty,
+    val merchantListUiState: MerchantUiState = MerchantUiState.ShowMerchants(arrayListOf()),
+    val searchQuery: String = "",
+    val isRefreshing: Boolean = false,
+)
+
+sealed interface MerchantEvent
+
+sealed interface MerchantAction {
+    data class UpdateSearchQuery(val query: String) : MerchantAction
+    data object Refresh : MerchantAction
 }
 
 sealed class MerchantUiState {

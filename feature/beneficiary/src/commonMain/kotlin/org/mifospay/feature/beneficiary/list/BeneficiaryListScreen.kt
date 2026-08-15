@@ -80,7 +80,7 @@ fun BeneficiaryListScreen(
     val scope = rememberCoroutineScope()
 
     val listState by viewModel.listState.collectAsStateWithLifecycle()
-    val deleteState by deleteViewModel.state.collectAsStateWithLifecycle()
+    val deleteState by deleteViewModel.deleteState.collectAsStateWithLifecycle()
 
     // Observe delete success and trigger list refresh
     LaunchedEffect(deleteState.deleteSuccessful) {

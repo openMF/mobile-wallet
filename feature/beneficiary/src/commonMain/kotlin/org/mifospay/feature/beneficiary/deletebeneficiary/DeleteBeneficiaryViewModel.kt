@@ -9,17 +9,15 @@
  */
 package org.mifospay.feature.beneficiary.deletebeneficiary
 
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kpt.core.base.store.submit.SubmitState
 import kpt.core.base.store.submit.submitHandler
 import org.mifospay.core.data.repository.SelfServiceRepository
+import org.mifospay.core.ui.utils.BaseViewModel
 
 /**
  * ViewModel for handling beneficiary deletion.
@@ -30,10 +28,14 @@ import org.mifospay.core.data.repository.SelfServiceRepository
  */
 class DeleteBeneficiaryViewModel(
     private val repository: SelfServiceRepository,
-) : ViewModel() {
+) : BaseViewModel<DeleteBeneficiaryState, DeleteBeneficiaryEvent, DeleteBeneficiaryAction>(
+    initialState = DeleteBeneficiaryState(),
+) {
 
-    private val _state = MutableStateFlow(DeleteBeneficiaryState())
-    val state: StateFlow<DeleteBeneficiaryState> = _state.asStateFlow()
+    // Public view-state surface renamed from `state` → `deleteState`: BaseViewModel
+    // already declares a protected `state: S` (the current-value accessor), so the
+    // public StateFlow must use a distinct name. The Screen reads `deleteState`.
+    val deleteState: StateFlow<DeleteBeneficiaryState> get() = stateFlow
 
     // Template idiom (core-base/store): the delete write goes through a SubmitHandler
     // instead of a hand-folded DataState result. The handler owns the
@@ -47,13 +49,13 @@ class DeleteBeneficiaryViewModel(
             .onEach { submitState ->
                 when (submitState) {
                     is SubmitState.Submitting -> {
-                        _state.update {
+                        mutableStateFlow.update {
                             it.copy(dialogState = DeleteBeneficiaryState.DialogState.Deleting)
                         }
                     }
 
                     is SubmitState.Submitted -> {
-                        _state.update {
+                        mutableStateFlow.update {
                             it.copy(
                                 dialogState = null,
                                 deleteSuccessful = true,
@@ -65,7 +67,7 @@ class DeleteBeneficiaryViewModel(
                     is SubmitState.Failed -> {
                         val message = submitState.error.message
                             ?: submitState.error.toString()
-                        _state.update {
+                        mutableStateFlow.update {
                             it.copy(
                                 dialogState = DeleteBeneficiaryState.DialogState.Error(message),
                             )
@@ -79,52 +81,74 @@ class DeleteBeneficiaryViewModel(
             .launchIn(viewModelScope)
     }
 
+    override fun handleAction(action: DeleteBeneficiaryAction) {
+        when (action) {
+            is DeleteBeneficiaryAction.ShowDeleteConfirmation -> {
+                mutableStateFlow.update {
+                    it.copy(
+                        dialogState = DeleteBeneficiaryState.DialogState.Confirmation(
+                            beneficiaryId = action.beneficiaryId,
+                            beneficiaryName = action.beneficiaryName,
+                        ),
+                    )
+                }
+            }
+
+            is DeleteBeneficiaryAction.ConfirmDelete -> {
+                mutableStateFlow.update {
+                    it.copy(dialogState = DeleteBeneficiaryState.DialogState.Deleting)
+                }
+
+                // Submit through the handler — it drives Submitting/Submitted/Failed,
+                // observed in `init`. The repository write returns Unit and throws on
+                // failure; the handler maps that to Submitted/Failed.
+                submitDelete.submit {
+                    repository.deleteBeneficiary(action.beneficiaryId)
+                }
+            }
+
+            DeleteBeneficiaryAction.DismissDialog -> {
+                mutableStateFlow.update {
+                    it.copy(dialogState = null)
+                }
+            }
+
+            DeleteBeneficiaryAction.ConsumeDeleteSuccess -> {
+                mutableStateFlow.update {
+                    it.copy(deleteSuccessful = false)
+                }
+            }
+        }
+    }
+
     /**
      * Shows the delete confirmation bottom sheet.
      */
     fun showDeleteConfirmation(beneficiaryId: Long, beneficiaryName: String) {
-        _state.update {
-            it.copy(
-                dialogState = DeleteBeneficiaryState.DialogState.Confirmation(
-                    beneficiaryId = beneficiaryId,
-                    beneficiaryName = beneficiaryName,
-                ),
-            )
-        }
+        trySendAction(
+            DeleteBeneficiaryAction.ShowDeleteConfirmation(beneficiaryId, beneficiaryName),
+        )
     }
 
     /**
      * Confirms deletion and executes the delete operation.
      */
     fun confirmDelete(beneficiaryId: Long) {
-        _state.update {
-            it.copy(dialogState = DeleteBeneficiaryState.DialogState.Deleting)
-        }
-
-        // Submit through the handler — it drives Submitting/Submitted/Failed,
-        // observed in `init`. The repository write returns Unit and throws on
-        // failure; the handler maps that to Submitted/Failed.
-        submitDelete.submit {
-            repository.deleteBeneficiary(beneficiaryId)
-        }
+        trySendAction(DeleteBeneficiaryAction.ConfirmDelete(beneficiaryId))
     }
 
     /**
      * Dismisses the current dialog/bottom sheet.
      */
     fun dismissDialog() {
-        _state.update {
-            it.copy(dialogState = null)
-        }
+        trySendAction(DeleteBeneficiaryAction.DismissDialog)
     }
 
     /**
      * Resets the delete success flag after it has been consumed.
      */
     fun consumeDeleteSuccess() {
-        _state.update {
-            it.copy(deleteSuccessful = false)
-        }
+        trySendAction(DeleteBeneficiaryAction.ConsumeDeleteSuccess)
     }
 }
 
@@ -142,4 +166,19 @@ data class DeleteBeneficiaryState(
 
         data class Error(val message: String) : DialogState
     }
+}
+
+sealed interface DeleteBeneficiaryEvent
+
+sealed interface DeleteBeneficiaryAction {
+    data class ShowDeleteConfirmation(
+        val beneficiaryId: Long,
+        val beneficiaryName: String,
+    ) : DeleteBeneficiaryAction
+
+    data class ConfirmDelete(val beneficiaryId: Long) : DeleteBeneficiaryAction
+
+    data object DismissDialog : DeleteBeneficiaryAction
+
+    data object ConsumeDeleteSuccess : DeleteBeneficiaryAction
 }

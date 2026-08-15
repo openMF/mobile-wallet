@@ -9,18 +9,35 @@
  */
 package org.mifospay.feature.qr
 
-import androidx.lifecycle.ViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asSharedFlow
-import kotlinx.coroutines.flow.update
 import org.mifospay.core.data.util.StandardUpiQrCodeProcessor
 import org.mifospay.core.data.util.UpiQrCodeProcessor
+import org.mifospay.core.ui.utils.BaseViewModel
 
-class ScanQrViewModel : ViewModel() {
+class ScanQrViewModel : BaseViewModel<ScanQrState, ScanQrEvent, ScanQrAction>(
+    initialState = ScanQrState,
+) {
 
-    private val _eventFlow = MutableStateFlow<ScanQrEvent?>(null)
-    val eventFlow = _eventFlow.asSharedFlow()
+    override fun handleAction(action: ScanQrAction) {
+        when (action) {
+            is ScanQrAction.NavigateToSendScreen -> {
+                sendEvent(ScanQrEvent.OnNavigateToSendScreen(action.data))
+            }
 
+            is ScanQrAction.NavigateToPayeeDetails -> {
+                sendEvent(ScanQrEvent.OnNavigateToPayeeDetails(action.data))
+            }
+
+            is ScanQrAction.ShowInvalidQrToast -> {
+                sendEvent(ScanQrEvent.ShowToast("Scan a Valid Payment QR Code"))
+            }
+        }
+    }
+
+    /**
+     * Decodes the scanned [data] synchronously (the QR scanner needs the [Boolean]
+     * return to decide whether to stop scanning) and routes the resulting one-shot
+     * navigation/toast signal through the MVI action channel.
+     */
     fun onScanned(data: String): Boolean {
         return try {
             val isUpiQr = try {
@@ -35,26 +52,32 @@ class ScanQrViewModel : ViewModel() {
                 }
             }
 
-            _eventFlow.update {
+            trySendAction(
                 if (isUpiQr) {
-                    ScanQrEvent.OnNavigateToPayeeDetails(data)
+                    ScanQrAction.NavigateToPayeeDetails(data)
                 } else {
-                    ScanQrEvent.OnNavigateToSendScreen(data)
-                }
-            }
+                    ScanQrAction.NavigateToSendScreen(data)
+                },
+            )
 
             true
         } catch (e: Exception) {
-            _eventFlow.update {
-                ScanQrEvent.ShowToast("Scan a Valid Payment QR Code")
-            }
+            trySendAction(ScanQrAction.ShowInvalidQrToast)
             false
         }
     }
 }
 
+data object ScanQrState
+
 sealed interface ScanQrEvent {
     data class OnNavigateToSendScreen(val data: String) : ScanQrEvent
     data class OnNavigateToPayeeDetails(val data: String) : ScanQrEvent
     data class ShowToast(val message: String) : ScanQrEvent
+}
+
+sealed interface ScanQrAction {
+    data class NavigateToSendScreen(val data: String) : ScanQrAction
+    data class NavigateToPayeeDetails(val data: String) : ScanQrAction
+    data object ShowInvalidQrToast : ScanQrAction
 }

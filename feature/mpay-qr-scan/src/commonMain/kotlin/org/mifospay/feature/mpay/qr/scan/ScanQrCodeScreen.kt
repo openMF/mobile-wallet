@@ -19,7 +19,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -43,6 +42,7 @@ import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.mifospay.core.designsystem.icon.MifosIcons
 import org.mifospay.core.model.utils.QrCodeData
+import org.mifospay.core.ui.utils.EventsEffect
 import org.mifospay.feature.mpay.qr.scan.components.QrActionButton
 import org.mifospay.feature.mpay.qr.scan.components.QrHelpDialog
 import org.mifospay.feature.mpay.qr.scan.components.QrProcessingOverlay
@@ -59,10 +59,8 @@ internal fun ScanQrCodeScreen(
     modifier: Modifier = Modifier,
     viewModel: ScanQrViewModel = koinViewModel(),
 ) {
-    val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
 
-    val eventFlow by viewModel.eventFlow.collectAsStateWithLifecycle(null)
     val isTorchEnabled by viewModel.isTorchEnabled.collectAsStateWithLifecycle()
     val showHelpDialog by viewModel.showHelpDialog.collectAsStateWithLifecycle()
     val isProcessingImage by viewModel.isProcessingImage.collectAsStateWithLifecycle()
@@ -71,15 +69,13 @@ internal fun ScanQrCodeScreen(
     val scanSuccessMessage = stringResource(Res.string.feature_qr_scan_success)
     val noQrFoundMessage = stringResource(Res.string.feature_qr_no_qr_found)
 
-    LaunchedEffect(key1 = eventFlow) {
-        when (eventFlow) {
+    EventsEffect(viewModel) { event ->
+        when (event) {
             is ScanQrEvent.OnNavigateToIntraBankTransfer -> {
-                val event = eventFlow as ScanQrEvent.OnNavigateToIntraBankTransfer
                 navigateToIntraBankTransfer.invoke(event.qrData)
             }
 
             is ScanQrEvent.OnNavigateToInterbankTransfer -> {
-                val event = eventFlow as ScanQrEvent.OnNavigateToInterbankTransfer
                 navigateToInterbankTransfer.invoke(
                     event.accountExternalId,
                     event.recipientName,
@@ -88,28 +84,20 @@ internal fun ScanQrCodeScreen(
             }
 
             is ScanQrEvent.ShowToast -> {
-                scope.launch {
-                    snackbarHostState.showSnackbar((eventFlow as ScanQrEvent.ShowToast).message)
-                }
+                snackbarHostState.showSnackbar(event.message)
             }
 
-            is ScanQrEvent.OnNavigateToAddBeneficiary -> navigateToAddBeneficiaryScreen.invoke(
-                (eventFlow as ScanQrEvent.OnNavigateToAddBeneficiary).beneficiary,
-            )
+            is ScanQrEvent.OnNavigateToAddBeneficiary -> {
+                navigateToAddBeneficiaryScreen.invoke(event.beneficiary)
+            }
 
             is ScanQrEvent.OnScanSuccess -> {
-                scope.launch {
-                    snackbarHostState.showSnackbar(scanSuccessMessage)
-                }
+                snackbarHostState.showSnackbar(scanSuccessMessage)
             }
 
             is ScanQrEvent.OnNoQrFound -> {
-                scope.launch {
-                    snackbarHostState.showSnackbar(noQrFoundMessage)
-                }
+                snackbarHostState.showSnackbar(noQrFoundMessage)
             }
-
-            null -> Unit
         }
     }
 

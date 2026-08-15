@@ -45,7 +45,7 @@ internal fun SetupUpiPinScreenRoute(
         type = type,
         index = index,
         bankAccountDetails = bankAccountDetails,
-        otpText = setUpViewModel.requestOtp(bankAccountDetails),
+        otpText = setUpViewModel.requestOtp(),
         setupUpiPin = {
             setUpViewModel.setupUpiPin(bankAccountDetails, it)
         },

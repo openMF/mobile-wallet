@@ -15,16 +15,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import kotlinx.coroutines.launch
 import org.koin.compose.viewmodel.koinViewModel
 import org.mifospay.core.designsystem.component.MifosScaffold
+import org.mifospay.core.ui.utils.EventsEffect
 
 @Composable
 internal fun ScanQrCodeScreen(
@@ -34,28 +30,21 @@ internal fun ScanQrCodeScreen(
     modifier: Modifier = Modifier,
     viewModel: ScanQrViewModel = koinViewModel(),
 ) {
-    val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
 
-    val eventFlow by viewModel.eventFlow.collectAsStateWithLifecycle(null)
-
-    LaunchedEffect(key1 = eventFlow) {
-        when (eventFlow) {
+    EventsEffect(viewModel) { event ->
+        when (event) {
             is ScanQrEvent.OnNavigateToSendScreen -> {
-                navigateToSendScreen.invoke((eventFlow as ScanQrEvent.OnNavigateToSendScreen).data)
+                navigateToSendScreen.invoke(event.data)
             }
 
             is ScanQrEvent.OnNavigateToPayeeDetails -> {
-                navigateToPayeeDetailsScreen.invoke((eventFlow as ScanQrEvent.OnNavigateToPayeeDetails).data)
+                navigateToPayeeDetailsScreen.invoke(event.data)
             }
 
             is ScanQrEvent.ShowToast -> {
-                scope.launch {
-                    snackbarHostState.showSnackbar((eventFlow as ScanQrEvent.ShowToast).message)
-                }
+                snackbarHostState.showSnackbar(event.message)
             }
-
-            null -> Unit
         }
     }
 

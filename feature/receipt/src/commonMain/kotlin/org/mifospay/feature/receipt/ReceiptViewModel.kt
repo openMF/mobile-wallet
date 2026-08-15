@@ -10,16 +10,14 @@
 package org.mifospay.feature.receipt
 
 import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.ViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import org.mifospay.core.model.savingsaccount.Transaction
 import org.mifospay.core.model.savingsaccount.TransferDetail
+import org.mifospay.core.ui.utils.BaseViewModel
 
 class ReceiptViewModel(
     savedStateHandle: SavedStateHandle,
-) : ViewModel() {
+) : BaseViewModel<ReceiptUiState, ReceiptEvent, ReceiptAction>(
     // TODO(phase-5-batch-3): reads off the existing history / transaction store
     //   per GOAL D13 — the receipt screen renders a `Transaction` +
     //   `receiptLink` (see `ReceiptUiState.Success`), which is a projection of
@@ -29,14 +27,25 @@ class ReceiptViewModel(
     //   implementation should thread `transactionId` (from savedStateHandle)
     //   into `SelfServiceRepository.getTransactionsStream(...).state` or a
     //   future `getTransactionByIdStream(...)` variant on top of the same
-    //   store, then
-    //   project the row into `ReceiptUiState.Success`. Kept as an
+    //   store, then project the row into `ReceiptUiState.Success`. Kept as an
     //   Error("Not implemented yet") stub until that wiring lands (existing
     //   pre-batch-3 behavior — not a Batch-3 regression).
-    private val mReceiptState =
-        MutableStateFlow<ReceiptUiState>(ReceiptUiState.Error("Not implemented yet"))
-    val receiptUiState: StateFlow<ReceiptUiState> = mReceiptState.asStateFlow()
+    initialState = ReceiptUiState.Error("Not implemented yet"),
+) {
+
+    /**
+     * Preserves the original public surface (`viewModel.receiptUiState`) so the
+     * Screen compiles unchanged — aliased onto [BaseViewModel.stateFlow].
+     */
+    val receiptUiState: StateFlow<ReceiptUiState> get() = stateFlow
+
+    // Stub feature: not implemented yet, so there are no user-driven actions.
+    override fun handleAction(action: ReceiptAction) = Unit
 }
+
+sealed interface ReceiptEvent
+
+sealed interface ReceiptAction
 
 sealed interface ReceiptUiState {
     data class Success(

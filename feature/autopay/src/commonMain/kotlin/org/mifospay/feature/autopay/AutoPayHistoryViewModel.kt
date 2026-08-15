@@ -10,7 +10,6 @@
 package org.mifospay.feature.autopay
 
 import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import co.touchlab.kermit.Logger
 import kotlinx.coroutines.delay
@@ -20,6 +19,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.mifospay.core.common.ScreenState
 import org.mifospay.core.data.repository.AutoPayHistoryRepository
@@ -27,6 +27,7 @@ import org.mifospay.core.data.repository.AutoPayHistoryStatistics
 import org.mifospay.core.model.autopay.AutoPayHistory
 import org.mifospay.core.model.autopay.PaymentStatus
 import org.mifospay.core.network.model.entity.Page
+import org.mifospay.core.ui.utils.BaseViewModel
 
 /**
  * ViewModel for AutoPay history screen.
@@ -37,18 +38,19 @@ import org.mifospay.core.network.model.entity.Page
 class AutoPayHistoryViewModel(
     private val autoPayHistoryRepository: AutoPayHistoryRepository,
     private val savedStateHandle: SavedStateHandle,
-) : ViewModel() {
+) : BaseViewModel<AutoPayHistoryUiState, AutoPayHistoryEvent, AutoPayHistoryAction>(
+    initialState = AutoPayHistoryUiState(),
+) {
 
     private val autoPayId: Long = savedStateHandle.get<Long>("autoPayId") ?: 0L
 
-    private val _uiState = MutableStateFlow(AutoPayHistoryUiState())
-    val uiState: StateFlow<AutoPayHistoryUiState> = _uiState.asStateFlow()
+    // MVI view-state surface. `state` (BaseViewModel) is the current value and
+    // `stateFlow` is the hot StateFlow. The Screen consumes `uiState` unchanged,
+    // aliased here to `stateFlow` so the public API and the Screen stay intact.
+    val uiState: StateFlow<AutoPayHistoryUiState> get() = stateFlow
 
-    init {
-        loadAutoPayHistory()
-        loadHistoryStatistics()
-    }
-
+    // Search/filter selection surfaces are separate from the MVI view-state and
+    // preserved as-is to keep the ViewModel's existing public API + behavior.
     private val _searchQuery = MutableStateFlow("")
     val searchQuery: StateFlow<String> = _searchQuery.asStateFlow()
 
@@ -58,29 +60,33 @@ class AutoPayHistoryViewModel(
     private val _selectedDateRange = MutableStateFlow<Pair<String?, String?>>(null to null)
     val selectedDateRange: StateFlow<Pair<String?, String?>> = _selectedDateRange.asStateFlow()
 
-    private fun loadAutoPayHistory() {
-        Logger.d("AUTOPAY_HISTORY AutoPayHistoryViewModel Loading history for AutoPay ID: $autoPayId")
+    init {
+        loadAutoPayHistory()
+        loadHistoryStatistics()
+    }
 
-        _uiState.value = _uiState.value.copy(isLoading = true, error = null)
+    override fun handleAction(action: AutoPayHistoryAction) {
+        when (action) {
+            is AutoPayHistoryAction.LoadWithPagination -> loadAutoPayHistoryWithPaginationInternal(
+                autoPayId = action.autoPayId,
+                limit = action.limit,
+                offset = action.offset,
+            )
 
-        viewModelScope.launch {
-            try {
-                delay(2000)
+            is AutoPayHistoryAction.Search -> searchHistoryInternal(action.query)
 
-                val dummyHistory = createDummyHistoryData()
-                _uiState.value = _uiState.value.copy(
-                    isLoading = false,
-                    historyList = dummyHistory,
-                    error = null,
-                )
-                Logger.d("AUTOPAY_HISTORY AutoPayHistoryViewModel Successfully loaded ${dummyHistory.size} dummy history entries")
-            } catch (exception: Exception) {
-                _uiState.value = _uiState.value.copy(
-                    isLoading = false,
-                    error = exception.message ?: "Unknown error occurred",
-                )
-                Logger.e("AUTOPAY_HISTORY AutoPayHistoryViewModel Exception in history flow: ${exception.message}")
-            }
+            is AutoPayHistoryAction.FilterByStatus -> filterByStatusInternal(action.status)
+
+            is AutoPayHistoryAction.FilterByDateRange -> filterByDateRangeInternal(
+                fromDate = action.fromDate,
+                toDate = action.toDate,
+            )
+
+            AutoPayHistoryAction.ClearFilters -> clearFiltersInternal()
+
+            AutoPayHistoryAction.RefreshHistory -> refreshHistoryInternal()
+
+            AutoPayHistoryAction.ClearError -> clearErrorInternal()
         }
     }
 
@@ -89,63 +95,137 @@ class AutoPayHistoryViewModel(
         limit: Int = 20,
         offset: Int = 0,
     ) {
+        trySendAction(AutoPayHistoryAction.LoadWithPagination(autoPayId, limit, offset))
+    }
+
+    fun searchHistory(query: String) {
+        trySendAction(AutoPayHistoryAction.Search(query))
+    }
+
+    fun filterByStatus(status: String?) {
+        trySendAction(AutoPayHistoryAction.FilterByStatus(status))
+    }
+
+    fun filterByDateRange(fromDate: String?, toDate: String?) {
+        trySendAction(AutoPayHistoryAction.FilterByDateRange(fromDate, toDate))
+    }
+
+    fun clearFilters() {
+        trySendAction(AutoPayHistoryAction.ClearFilters)
+    }
+
+    fun refreshHistory() {
+        trySendAction(AutoPayHistoryAction.RefreshHistory)
+    }
+
+    fun clearError() {
+        trySendAction(AutoPayHistoryAction.ClearError)
+    }
+
+    private fun loadAutoPayHistory() {
+        Logger.d("AUTOPAY_HISTORY AutoPayHistoryViewModel Loading history for AutoPay ID: $autoPayId")
+
+        mutableStateFlow.update { it.copy(isLoading = true, error = null) }
+
+        viewModelScope.launch {
+            try {
+                delay(2000)
+
+                val dummyHistory = createDummyHistoryData()
+                mutableStateFlow.update {
+                    it.copy(
+                        isLoading = false,
+                        historyList = dummyHistory,
+                        error = null,
+                    )
+                }
+                Logger.d("AUTOPAY_HISTORY AutoPayHistoryViewModel Successfully loaded ${dummyHistory.size} dummy history entries")
+            } catch (exception: Exception) {
+                mutableStateFlow.update {
+                    it.copy(
+                        isLoading = false,
+                        error = exception.message ?: "Unknown error occurred",
+                    )
+                }
+                Logger.e("AUTOPAY_HISTORY AutoPayHistoryViewModel Exception in history flow: ${exception.message}")
+            }
+        }
+    }
+
+    private fun loadAutoPayHistoryWithPaginationInternal(
+        autoPayId: Long,
+        limit: Int,
+        offset: Int,
+    ) {
         Logger.d("AUTOPAY_HISTORY AutoPayHistoryViewModel Loading paginated history for AutoPay ID: $autoPayId, limit: $limit, offset: $offset")
 
-        _uiState.value = _uiState.value.copy(isLoading = true, error = null)
+        mutableStateFlow.update { it.copy(isLoading = true, error = null) }
 
         viewModelScope.launch {
             autoPayHistoryRepository.getAutoPayHistoryWithPagination(autoPayId, limit, offset)
                 .onEach { screenState ->
                     when (screenState) {
                         is ScreenState.Loading -> {
-                            _uiState.value = _uiState.value.copy(isLoading = true, error = null)
+                            mutableStateFlow.update { it.copy(isLoading = true, error = null) }
                         }
 
                         is ScreenState.Empty -> {
-                            _uiState.value = _uiState.value.copy(
-                                isLoading = false,
-                                historyPage = null,
-                                error = null,
-                            )
+                            mutableStateFlow.update {
+                                it.copy(
+                                    isLoading = false,
+                                    historyPage = null,
+                                    error = null,
+                                )
+                            }
                         }
 
                         is ScreenState.Content -> {
-                            _uiState.value = _uiState.value.copy(
-                                isLoading = false,
-                                historyPage = screenState.data,
-                                error = null,
-                            )
+                            mutableStateFlow.update {
+                                it.copy(
+                                    isLoading = false,
+                                    historyPage = screenState.data,
+                                    error = null,
+                                )
+                            }
                             Logger.d("AUTOPAY_HISTORY AutoPayHistoryViewModel Successfully loaded paginated history: ${screenState.data.pageItems.size} entries")
                         }
 
                         is ScreenState.Error -> {
-                            _uiState.value = _uiState.value.copy(
-                                isLoading = false,
-                                error = screenState.error.message ?: "Failed to load history",
-                            )
+                            mutableStateFlow.update {
+                                it.copy(
+                                    isLoading = false,
+                                    error = screenState.error.message ?: "Failed to load history",
+                                )
+                            }
                             Logger.e("AUTOPAY_HISTORY AutoPayHistoryViewModel Error loading paginated history: ${screenState.error.message}")
                         }
 
                         is ScreenState.NoNetwork -> {
-                            _uiState.value = _uiState.value.copy(
-                                isLoading = false,
-                                error = "No network. Please check your connection.",
-                            )
+                            mutableStateFlow.update {
+                                it.copy(
+                                    isLoading = false,
+                                    error = "No network. Please check your connection.",
+                                )
+                            }
                         }
 
                         is ScreenState.Unauthenticated -> {
-                            _uiState.value = _uiState.value.copy(
-                                isLoading = false,
-                                error = "Session expired. Please log in again.",
-                            )
+                            mutableStateFlow.update {
+                                it.copy(
+                                    isLoading = false,
+                                    error = "Session expired. Please log in again.",
+                                )
+                            }
                         }
                     }
                 }
                 .catch { exception ->
-                    _uiState.value = _uiState.value.copy(
-                        isLoading = false,
-                        error = exception.message ?: "Unknown error occurred",
-                    )
+                    mutableStateFlow.update {
+                        it.copy(
+                            isLoading = false,
+                            error = exception.message ?: "Unknown error occurred",
+                        )
+                    }
                     Logger.e("AUTOPAY_HISTORY AutoPayHistoryViewModel Exception in paginated history flow: ${exception.message}")
                 }
                 .launchIn(this)
@@ -160,7 +240,7 @@ class AutoPayHistoryViewModel(
                 delay(1500)
 
                 val dummyStatistics = createDummyStatistics()
-                _uiState.value = _uiState.value.copy(statistics = dummyStatistics)
+                mutableStateFlow.update { it.copy(statistics = dummyStatistics) }
                 Logger.d("AUTOPAY_HISTORY AutoPayHistoryViewModel Successfully loaded dummy statistics: ${dummyStatistics.totalTransactions} total transactions")
             } catch (exception: Exception) {
                 Logger.e("AUTOPAY_HISTORY AutoPayHistoryViewModel Exception in statistics flow: ${exception.message}")
@@ -168,13 +248,13 @@ class AutoPayHistoryViewModel(
         }
     }
 
-    fun searchHistory(query: String) {
+    private fun searchHistoryInternal(query: String) {
         Logger.d("AUTOPAY_HISTORY AutoPayHistoryViewModel Searching history with query: $query")
 
         _searchQuery.value = query
 
         if (query.isBlank()) {
-            _uiState.value = _uiState.value.copy(filteredHistoryList = _uiState.value.historyList)
+            mutableStateFlow.update { it.copy(filteredHistoryList = state.historyList) }
             return
         }
 
@@ -183,12 +263,12 @@ class AutoPayHistoryViewModel(
                 .onEach { screenState ->
                     when (screenState) {
                         is ScreenState.Content -> {
-                            _uiState.value = _uiState.value.copy(filteredHistoryList = screenState.data)
+                            mutableStateFlow.update { it.copy(filteredHistoryList = screenState.data) }
                             Logger.d("AUTOPAY_HISTORY AutoPayHistoryViewModel Search completed: ${screenState.data.size} results")
                         }
 
                         is ScreenState.Empty -> {
-                            _uiState.value = _uiState.value.copy(filteredHistoryList = emptyList())
+                            mutableStateFlow.update { it.copy(filteredHistoryList = emptyList()) }
                         }
 
                         is ScreenState.Error -> {
@@ -210,13 +290,13 @@ class AutoPayHistoryViewModel(
         }
     }
 
-    fun filterByStatus(status: String?) {
+    private fun filterByStatusInternal(status: String?) {
         Logger.d("AUTOPAY_HISTORY AutoPayHistoryViewModel Filtering by status: $status")
 
         _selectedStatus.value = status
 
         if (status == null) {
-            _uiState.value = _uiState.value.copy(filteredHistoryList = _uiState.value.historyList)
+            mutableStateFlow.update { it.copy(filteredHistoryList = state.historyList) }
             return
         }
 
@@ -225,12 +305,12 @@ class AutoPayHistoryViewModel(
                 .onEach { screenState ->
                     when (screenState) {
                         is ScreenState.Content -> {
-                            _uiState.value = _uiState.value.copy(filteredHistoryList = screenState.data)
+                            mutableStateFlow.update { it.copy(filteredHistoryList = screenState.data) }
                             Logger.d("AUTOPAY_HISTORY AutoPayHistoryViewModel Status filter applied: ${screenState.data.size} results")
                         }
 
                         is ScreenState.Empty -> {
-                            _uiState.value = _uiState.value.copy(filteredHistoryList = emptyList())
+                            mutableStateFlow.update { it.copy(filteredHistoryList = emptyList()) }
                         }
 
                         is ScreenState.Error -> {
@@ -252,13 +332,13 @@ class AutoPayHistoryViewModel(
         }
     }
 
-    fun filterByDateRange(fromDate: String?, toDate: String?) {
+    private fun filterByDateRangeInternal(fromDate: String?, toDate: String?) {
         Logger.d("AUTOPAY_HISTORY AutoPayHistoryViewModel Filtering by date range: $fromDate to $toDate")
 
         _selectedDateRange.value = fromDate to toDate
 
         if (fromDate == null || toDate == null) {
-            _uiState.value = _uiState.value.copy(filteredHistoryList = _uiState.value.historyList)
+            mutableStateFlow.update { it.copy(filteredHistoryList = state.historyList) }
             return
         }
 
@@ -267,12 +347,12 @@ class AutoPayHistoryViewModel(
                 .onEach { screenState ->
                     when (screenState) {
                         is ScreenState.Content -> {
-                            _uiState.value = _uiState.value.copy(filteredHistoryList = screenState.data)
+                            mutableStateFlow.update { it.copy(filteredHistoryList = screenState.data) }
                             Logger.d("AUTOPAY_HISTORY AutoPayHistoryViewModel Date range filter applied: ${screenState.data.size} results")
                         }
 
                         is ScreenState.Empty -> {
-                            _uiState.value = _uiState.value.copy(filteredHistoryList = emptyList())
+                            mutableStateFlow.update { it.copy(filteredHistoryList = emptyList()) }
                         }
 
                         is ScreenState.Error -> {
@@ -294,24 +374,24 @@ class AutoPayHistoryViewModel(
         }
     }
 
-    fun clearFilters() {
+    private fun clearFiltersInternal() {
         Logger.d("AUTOPAY_HISTORY AutoPayHistoryViewModel Clearing all filters")
 
         _searchQuery.value = ""
         _selectedStatus.value = null
         _selectedDateRange.value = null to null
-        _uiState.value = _uiState.value.copy(filteredHistoryList = _uiState.value.historyList)
+        mutableStateFlow.update { it.copy(filteredHistoryList = state.historyList) }
     }
 
-    fun refreshHistory() {
+    private fun refreshHistoryInternal() {
         Logger.d("AUTOPAY_HISTORY AutoPayHistoryViewModel Refreshing history for AutoPay ID: $autoPayId")
 
         loadAutoPayHistory()
         loadHistoryStatistics()
     }
 
-    fun clearError() {
-        _uiState.value = _uiState.value.copy(error = null)
+    private fun clearErrorInternal() {
+        mutableStateFlow.update { it.copy(error = null) }
     }
 
     private fun createDummyHistoryData(): List<AutoPayHistory> {
@@ -484,4 +564,29 @@ data class AutoPayHistoryUiState(
 ) {
     val displayHistoryList: List<AutoPayHistory>
         get() = filteredHistoryList.ifEmpty { historyList }
+}
+
+sealed interface AutoPayHistoryEvent
+
+sealed interface AutoPayHistoryAction {
+    data class LoadWithPagination(
+        val autoPayId: Long,
+        val limit: Int,
+        val offset: Int,
+    ) : AutoPayHistoryAction
+
+    data class Search(val query: String) : AutoPayHistoryAction
+
+    data class FilterByStatus(val status: String?) : AutoPayHistoryAction
+
+    data class FilterByDateRange(
+        val fromDate: String?,
+        val toDate: String?,
+    ) : AutoPayHistoryAction
+
+    data object ClearFilters : AutoPayHistoryAction
+
+    data object RefreshHistory : AutoPayHistoryAction
+
+    data object ClearError : AutoPayHistoryAction
 }

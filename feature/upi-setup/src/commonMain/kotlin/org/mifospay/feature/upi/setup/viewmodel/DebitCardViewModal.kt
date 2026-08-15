@@ -9,39 +9,57 @@
  */
 package org.mifospay.feature.upi.setup.viewmodel
 
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import org.mifospay.core.ui.utils.BaseViewModel
 
-class DebitCardViewModel : ViewModel() {
+class DebitCardViewModel :
+    BaseViewModel<DebitCardUiState, DebitCardEvent, DebitCardAction>(
+        initialState = DebitCardUiState.Initials,
+    ) {
 
-    private val _debitCardUiState = MutableStateFlow<DebitCardUiState>(DebitCardUiState.Initials)
-    val debitCardUiState: StateFlow<DebitCardUiState> = _debitCardUiState
+    val debitCardUiState: StateFlow<DebitCardUiState> get() = stateFlow
 
-    @Suppress("UnusedParameter")
-    fun verifyDebitCard(debitCardNumber: String, month: String, year: String) {
-        val otp = "0000"
-        viewModelScope.launch {
-            _debitCardUiState.value = DebitCardUiState.Verifying
-            delay(2000)
+    override fun handleAction(action: DebitCardAction) {
+        when (action) {
+            is DebitCardAction.VerifyDebitCard -> {
+                val otp = "0000"
+                viewModelScope.launch {
+                    mutableStateFlow.value = DebitCardUiState.Verifying
+                    delay(2000)
 
-            val isVerified = verifyDebitCardNumber(debitCardNumber)
-            if (isVerified) {
-                _debitCardUiState.value = DebitCardUiState.Verified(otp)
-            } else {
-                _debitCardUiState.value = DebitCardUiState.VerificationFailed(
-                    "Invalid Debit Card Number",
-                )
+                    val isVerified = verifyDebitCardNumber(action.debitCardNumber)
+                    if (isVerified) {
+                        mutableStateFlow.value = DebitCardUiState.Verified(otp)
+                    } else {
+                        mutableStateFlow.value = DebitCardUiState.VerificationFailed(
+                            "Invalid Debit Card Number",
+                        )
+                    }
+                }
             }
         }
+    }
+
+    fun verifyDebitCard(debitCardNumber: String, month: String, year: String) {
+        trySendAction(DebitCardAction.VerifyDebitCard(debitCardNumber, month, year))
     }
 
     private fun verifyDebitCardNumber(debitCardNumber: String): Boolean {
         return debitCardNumber.length in 12..19
     }
+}
+
+sealed interface DebitCardEvent
+
+sealed interface DebitCardAction {
+    data class VerifyDebitCard(
+        val debitCardNumber: String,
+        val month: String,
+        val year: String,
+    ) : DebitCardAction
 }
 
 sealed class DebitCardUiState {

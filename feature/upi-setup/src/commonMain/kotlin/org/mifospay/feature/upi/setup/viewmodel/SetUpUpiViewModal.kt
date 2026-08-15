@@ -9,18 +9,39 @@
  */
 package org.mifospay.feature.upi.setup.viewmodel
 
-import androidx.lifecycle.ViewModel
 import org.mifospay.core.model.bank.BankAccountDetails
+import org.mifospay.core.ui.utils.BaseViewModel
 
-@Suppress("UnusedParameter")
-class SetUpUpiViewModal : ViewModel() {
+class SetUpUpiViewModal :
+    BaseViewModel<SetUpUpiState, SetUpUpiEvent, SetUpUpiAction>(
+        initialState = SetUpUpiState,
+    ) {
 
-    fun requestOtp(bankAccountDetails: BankAccountDetails?): String {
+    override fun handleAction(action: SetUpUpiAction) {
+        when (action) {
+            is SetUpUpiAction.SetupUpiPin -> {
+                // to do setup upi pin api
+            }
+        }
+    }
+
+    fun requestOtp(): String {
         val otp = "0000"
         return otp
     }
 
     fun setupUpiPin(bankAccountDetails: BankAccountDetails?, mSetupUpiPin: String?) {
-        // to do setup upi pin api
+        trySendAction(SetUpUpiAction.SetupUpiPin(bankAccountDetails, mSetupUpiPin))
     }
+}
+
+data object SetUpUpiState
+
+sealed interface SetUpUpiEvent
+
+sealed interface SetUpUpiAction {
+    data class SetupUpiPin(
+        val bankAccountDetails: BankAccountDetails?,
+        val mSetupUpiPin: String?,
+    ) : SetUpUpiAction
 }
