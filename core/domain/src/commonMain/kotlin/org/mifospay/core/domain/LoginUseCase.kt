@@ -41,7 +41,7 @@ class LoginUseCase(
         }
 
         if (userInfo.clients.isEmpty()) {
-            throw IllegalStateException("No clients found")
+            error("No clients found")
         }
 
         return persistSession(userInfo)

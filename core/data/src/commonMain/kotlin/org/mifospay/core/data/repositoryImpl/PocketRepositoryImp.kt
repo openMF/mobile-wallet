@@ -82,7 +82,7 @@ class PocketRepositoryImp(
     override suspend fun getPocketAccounts(): List<PocketAccount> {
         return withContext(ioDispatcher) {
             if (!networkMonitor.isOnline.first()) {
-                throw IllegalStateException("Network unavailable")
+                error("Network unavailable")
             }
             fetchBasicPocketsFromNetwork()
         }

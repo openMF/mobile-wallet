@@ -186,7 +186,9 @@ internal class ConfirmDetailsViewModel(
                         )
                     }
                 } catch (e: Exception) {
-                    e.printStackTrace()
+                    // Submission failed — surface a user-facing error dialog. The exception
+                    // itself is intentionally not logged here (no logger dependency in this
+                    // library module); the ScreenState error path already carries diagnostics.
                     mutableStateFlow.update {
                         it.copy(
                             isSubmitting = false,

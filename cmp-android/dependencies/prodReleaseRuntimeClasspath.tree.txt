@@ -3,8 +3,8 @@
 |    +--- org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.0 -> 1.9.0 (c)
 |    +--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.0 -> 1.8.22 (c)
 |    \--- org.jetbrains.kotlin:kotlin-stdlib-common:2.4.0 (c)
-+--- androidx.databinding:databinding-common:9.2.1
-+--- androidx.databinding:databinding-runtime:9.2.1
++--- androidx.databinding:databinding-common:9.3.1
++--- androidx.databinding:databinding-runtime:9.3.1
 |    +--- androidx.collection:collection:1.0.0 -> 1.6.0
 |    |    \--- androidx.collection:collection-jvm:1.6.0
 |    |         +--- androidx.annotation:annotation:1.9.1 -> 1.10.0
@@ -15,8 +15,8 @@
 |    |         +--- org.jspecify:jspecify:1.0.0
 |    |         +--- androidx.collection:collection-ktx:1.6.0 (c)
 |    |         \--- org.jetbrains.compose.collection-internal:collection:1.8.0 -> 1.9.1 (c)
-|    +--- androidx.databinding:databinding-common:9.2.1
-|    +--- androidx.databinding:viewbinding:9.2.1
+|    +--- androidx.databinding:databinding-common:9.3.1
+|    +--- androidx.databinding:viewbinding:9.3.1
 |    |    +--- androidx.annotation:annotation:1.0.0 -> 1.10.0 (*)
 |    |    \--- org.jetbrains.kotlin:kotlin-stdlib:2.2.10 -> 2.4.0 (*)
 |    +--- androidx.lifecycle:lifecycle-runtime:2.6.1 -> 2.11.0-beta01
@@ -95,12 +95,12 @@
 |    |         +--- androidx.lifecycle:lifecycle-viewmodel-savedstate:2.11.0-beta01 (c)
 |    |         \--- org.jetbrains.androidx.lifecycle:lifecycle-runtime:2.9.5 -> 2.11.0-beta01 (c)
 |    \--- org.jetbrains.kotlin:kotlin-stdlib:2.2.10 -> 2.4.0 (*)
-+--- androidx.databinding:databinding-adapters:9.2.1
-|    +--- androidx.databinding:databinding-runtime:9.2.1 (*)
++--- androidx.databinding:databinding-adapters:9.3.1
+|    +--- androidx.databinding:databinding-runtime:9.3.1 (*)
 |    +--- org.jetbrains.kotlin:kotlin-stdlib:2.2.10 -> 2.4.0 (*)
-|    \--- androidx.databinding:databinding-common:9.2.1
-+--- androidx.databinding:databinding-ktx:9.2.1
-|    +--- androidx.databinding:databinding-runtime:9.2.1 (*)
+|    \--- androidx.databinding:databinding-common:9.3.1
++--- androidx.databinding:databinding-ktx:9.3.1
+|    +--- androidx.databinding:databinding-runtime:9.3.1 (*)
 |    +--- org.jetbrains.kotlin:kotlin-stdlib:2.2.10 -> 2.4.0 (*)
 |    +--- org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.1 -> 1.11.0 (*)
 |    +--- androidx.lifecycle:lifecycle-runtime-ktx:2.6.1 -> 2.11.0-beta01
@@ -232,13 +232,13 @@
 |              +--- androidx.lifecycle:lifecycle-viewmodel-savedstate:2.11.0-beta01 (c)
 |              +--- org.jetbrains.androidx.lifecycle:lifecycle-viewmodel:2.9.5 -> 2.11.0-beta01 (c)
 |              \--- androidx.lifecycle:lifecycle-common-java8:2.11.0-beta01 (c)
-+--- com.google.firebase:firebase-bom:34.15.0
++--- com.google.firebase:firebase-bom:34.15.0 -> 34.17.0
 |    +--- com.google.firebase:firebase-analytics:23.2.0 (c)
-|    +--- com.google.firebase:firebase-crashlytics:20.0.6 (c)
-|    +--- com.google.firebase:firebase-common:22.1.0 (c)
+|    +--- com.google.firebase:firebase-crashlytics:20.1.0 (c)
 |    +--- com.google.firebase:firebase-encoders:17.0.0 (c)
-|    +--- com.google.firebase:firebase-installations:19.1.1 (c)
-|    +--- com.google.firebase:firebase-perf:22.0.5 (c)
+|    +--- com.google.firebase:firebase-common:22.2.0 (c)
+|    +--- com.google.firebase:firebase-installations:19.1.2 (c)
+|    +--- com.google.firebase:firebase-perf:22.0.6 (c)
 |    \--- com.google.firebase:firebase-config:23.1.0 (c)
 +--- com.google.firebase:firebase-analytics -> 23.2.0
 |    +--- com.google.android.gms:play-services-measurement:23.2.0
@@ -437,7 +437,7 @@
 |    |    +--- com.google.android.gms:play-services-measurement-base:23.2.0 (*)
 |    |    +--- com.google.android.gms:play-services-measurement-sdk-api:23.2.0 (*)
 |    |    +--- com.google.android.gms:play-services-tasks:18.2.0 -> 18.4.0 (*)
-|    |    +--- com.google.firebase:firebase-common:21.0.0 -> 22.1.0
+|    |    +--- com.google.firebase:firebase-common:21.0.0 -> 22.2.0
 |    |    |    +--- org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.9.0 -> 1.11.0
 |    |    |    |    +--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.11.0 (*)
 |    |    |    |    +--- org.jetbrains.kotlinx:kotlinx-coroutines-bom:1.11.0 (*)
@@ -532,14 +532,15 @@
 |    |    |    +--- com.google.android.gms:play-services-basement:18.9.0 (*)
 |    |    |    \--- com.google.android.gms:play-services-tasks:18.4.0 (*)
 |    |    +--- com.google.firebase:firebase-components:18.0.0 -> 19.0.0 (*)
-|    |    +--- com.google.firebase:firebase-installations:17.0.1 -> 19.1.1
+|    |    +--- com.google.firebase:firebase-installations:17.0.1 -> 19.1.2
 |    |    |    +--- com.google.android.gms:play-services-tasks:18.4.0 (*)
 |    |    |    +--- com.google.firebase:firebase-annotations:17.0.0 (*)
-|    |    |    +--- com.google.firebase:firebase-common:22.0.1 -> 22.1.0 (*)
+|    |    |    +--- com.google.firebase:firebase-common:22.0.1 -> 22.2.0 (*)
 |    |    |    +--- com.google.firebase:firebase-components:19.0.0 (*)
 |    |    |    +--- com.google.firebase:firebase-installations-interop:17.3.0
 |    |    |    |    +--- com.google.firebase:firebase-annotations:17.0.0 (*)
 |    |    |    |    \--- com.google.android.gms:play-services-tasks:18.4.0 (*)
+|    |    |    +--- androidx.datastore:datastore-preferences:1.1.7 (*)
 |    |    |    \--- org.jetbrains.kotlin:kotlin-stdlib:2.0.21 -> 2.4.0 (*)
 |    |    +--- com.google.firebase:firebase-installations-interop:17.0.0 -> 17.3.0 (*)
 |    |    +--- com.google.firebase:firebase-measurement-connector:19.0.0 -> 20.0.1
@@ -552,9 +553,9 @@
 |         +--- com.google.android.gms:play-services-basement:18.9.0 (*)
 |         +--- com.google.android.gms:play-services-measurement-base:23.2.0 (*)
 |         \--- com.google.android.gms:play-services-measurement-impl:23.2.0 (*)
-+--- com.google.firebase:firebase-crashlytics -> 20.0.6
-|    +--- com.google.firebase:firebase-sessions:3.0.6
-|    |    +--- com.google.firebase:firebase-common:22.0.1 -> 22.1.0 (*)
++--- com.google.firebase:firebase-crashlytics -> 20.1.0
+|    +--- com.google.firebase:firebase-sessions:3.0.7
+|    |    +--- com.google.firebase:firebase-common:22.0.1 -> 22.2.0 (*)
 |    |    +--- com.google.firebase:firebase-components:19.0.0 (*)
 |    |    +--- com.google.firebase:firebase-installations-interop:17.2.0 -> 17.3.0 (*)
 |    |    +--- com.google.firebase:firebase-annotations:17.0.0 (*)
@@ -568,7 +569,7 @@
 |    |    |    +--- androidx.annotation:annotation:1.1.0 -> 1.10.0 (*)
 |    |    |    \--- com.google.firebase:firebase-encoders:17.0.0 (*)
 |    |    +--- org.jetbrains.kotlin:kotlin-stdlib:2.0.21 -> 2.4.0 (*)
-|    |    +--- com.google.firebase:firebase-installations:18.0.0 -> 19.1.1 (*)
+|    |    +--- com.google.firebase:firebase-installations:18.0.0 -> 19.1.2 (*)
 |    |    +--- com.google.firebase:firebase-datatransport:19.0.0
 |    |    |    +--- androidx.annotation:annotation:1.1.0 -> 1.10.0 (*)
 |    |    |    +--- com.google.android.datatransport:transport-api:3.1.0 -> 3.2.0
@@ -599,14 +600,14 @@
 |    |              \--- org.jetbrains.kotlinx:kotlinx-serialization-core:1.11.0 (*)
 |    +--- com.google.android.gms:play-services-tasks:18.4.0 (*)
 |    +--- com.google.firebase:firebase-annotations:17.0.0 (*)
-|    +--- com.google.firebase:firebase-common:22.0.1 -> 22.1.0 (*)
+|    +--- com.google.firebase:firebase-common:22.0.1 -> 22.2.0 (*)
 |    +--- com.google.firebase:firebase-components:19.0.0 (*)
 |    +--- com.google.firebase:firebase-config-interop:16.0.1
 |    |    +--- com.google.firebase:firebase-encoders-json:18.0.1 (*)
 |    |    \--- com.google.firebase:firebase-encoders:17.0.0 (*)
 |    +--- com.google.firebase:firebase-encoders:17.0.0 (*)
 |    +--- com.google.firebase:firebase-encoders-json:18.0.1 (*)
-|    +--- com.google.firebase:firebase-installations:18.0.0 -> 19.1.1 (*)
+|    +--- com.google.firebase:firebase-installations:18.0.0 -> 19.1.2 (*)
 |    +--- com.google.firebase:firebase-installations-interop:17.2.0 -> 17.3.0 (*)
 |    +--- com.google.firebase:firebase-measurement-connector:20.0.1 (*)
 |    +--- org.jetbrains.kotlin:kotlin-stdlib:2.0.21 -> 2.4.0 (*)
@@ -1428,7 +1429,7 @@
 |    |    +--- org.jetbrains.kotlinx:kotlinx-serialization-json:1.11.0 (*)
 |    |    +--- project :core:analytics
 |    |    |    +--- project :core-base:analytics
-|    |    |    |    +--- com.google.firebase:firebase-bom:34.15.0 (*)
+|    |    |    |    +--- com.google.firebase:firebase-bom:34.15.0 -> 34.17.0 (*)
 |    |    |    |    +--- org.jetbrains.kotlin:kotlin-stdlib:2.4.0 (*)
 |    |    |    |    +--- io.insert-koin:koin-bom:4.2.2 (*)
 |    |    |    |    +--- io.insert-koin:koin-core:4.2.2 (*)
@@ -1446,28 +1447,28 @@
 |    |    |    |    +--- org.jetbrains.kotlinx:kotlinx-datetime:0.8.0
 |    |    |    |    |    \--- org.jetbrains.kotlinx:kotlinx-datetime-jvm:0.8.0
 |    |    |    |    |         \--- org.jetbrains.kotlin:kotlin-stdlib:2.1.20 -> 2.4.0 (*)
-|    |    |    |    \--- dev.gitlive:firebase-analytics:2.4.0
-|    |    |    |         \--- dev.gitlive:firebase-analytics-android:2.4.0
+|    |    |    |    \--- dev.gitlive:firebase-analytics:2.4.0 -> 3.0.0-alpha01
+|    |    |    |         \--- dev.gitlive:firebase-analytics-android:3.0.0-alpha01
 |    |    |    |              +--- com.google.firebase:firebase-analytics -> 23.2.0 (*)
 |    |    |    |              +--- org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.10.2 -> 1.11.0 (*)
-|    |    |    |              +--- com.google.firebase:firebase-bom:33.15.0 -> 34.15.0 (*)
-|    |    |    |              +--- dev.gitlive:firebase-app:2.4.0
-|    |    |    |              |    \--- dev.gitlive:firebase-app-android:2.4.0
-|    |    |    |              |         +--- com.google.firebase:firebase-common -> 22.1.0 (*)
+|    |    |    |              +--- com.google.firebase:firebase-bom:34.17.0 (*)
+|    |    |    |              +--- dev.gitlive:firebase-app:3.0.0-alpha01
+|    |    |    |              |    \--- dev.gitlive:firebase-app-android:3.0.0-alpha01
+|    |    |    |              |         +--- com.google.firebase:firebase-common -> 22.2.0 (*)
 |    |    |    |              |         +--- org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.10.2 -> 1.11.0 (*)
-|    |    |    |              |         +--- com.google.firebase:firebase-bom:33.15.0 -> 34.15.0 (*)
-|    |    |    |              |         +--- org.jetbrains.kotlin:kotlin-stdlib:2.2.20 -> 2.4.0 (*)
-|    |    |    |              |         +--- dev.gitlive:firebase-common:2.4.0
-|    |    |    |              |         |    \--- dev.gitlive:firebase-common-android:2.4.0
-|    |    |    |              |         |         +--- com.google.firebase:firebase-common -> 22.1.0 (*)
+|    |    |    |              |         +--- com.google.firebase:firebase-bom:34.17.0 (*)
+|    |    |    |              |         +--- org.jetbrains.kotlin:kotlin-stdlib:2.4.0 (*)
+|    |    |    |              |         +--- dev.gitlive:firebase-common:3.0.0-alpha01
+|    |    |    |              |         |    \--- dev.gitlive:firebase-common-android:3.0.0-alpha01
+|    |    |    |              |         |         +--- com.google.firebase:firebase-common -> 22.2.0 (*)
 |    |    |    |              |         |         +--- org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.10.2 -> 1.11.0 (*)
-|    |    |    |              |         |         +--- com.google.firebase:firebase-bom:33.15.0 -> 34.15.0 (*)
+|    |    |    |              |         |         +--- com.google.firebase:firebase-bom:34.17.0 (*)
 |    |    |    |              |         |         +--- org.jetbrains.kotlinx:kotlinx-serialization-core:1.9.0 -> 1.11.0 (*)
-|    |    |    |              |         |         +--- org.jetbrains.kotlin:kotlin-stdlib:2.2.20 -> 2.4.0 (*)
+|    |    |    |              |         |         +--- org.jetbrains.kotlin:kotlin-stdlib:2.4.0 (*)
 |    |    |    |              |         |         \--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2 -> 1.11.0 (*)
 |    |    |    |              |         \--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2 -> 1.11.0 (*)
-|    |    |    |              +--- org.jetbrains.kotlin:kotlin-stdlib:2.2.20 -> 2.4.0 (*)
-|    |    |    |              +--- dev.gitlive:firebase-common:2.4.0 (*)
+|    |    |    |              +--- org.jetbrains.kotlin:kotlin-stdlib:2.4.0 (*)
+|    |    |    |              +--- dev.gitlive:firebase-common:3.0.0-alpha01 (*)
 |    |    |    |              \--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2 -> 1.11.0 (*)
 |    |    |    +--- org.jetbrains.kotlin:kotlin-stdlib:2.4.0 (*)
 |    |    |    +--- io.insert-koin:koin-bom:4.2.2 (*)
@@ -1515,31 +1516,31 @@
 |    |    |    |    +--- org.jetbrains.compose.ui:ui-util:1.9.1 -> 1.11.1 (*)
 |    |    |    |    \--- org.jetbrains.kotlin:kotlin-stdlib -> 2.4.0 (*)
 |    |    |    +--- org.jetbrains.compose.ui:ui:1.11.1 (*)
-|    |    |    \--- io.github.mobilebytelabs:cmp-network-monitor:3.5.9
-|    |    |         \--- io.github.mobilebytelabs:cmp-network-monitor-android:3.5.9
-|    |    |              +--- org.jetbrains.kotlin:kotlin-stdlib:2.3.10 -> 2.4.0 (*)
-|    |    |              +--- io.github.mobilebytelabs:cmp-observe:3.5.9
-|    |    |              |    \--- io.github.mobilebytelabs:cmp-observe-android:3.5.9
-|    |    |              |         +--- org.jetbrains.kotlin:kotlin-stdlib:2.3.10 -> 2.4.0 (*)
-|    |    |              |         +--- com.google.firebase:firebase-bom:33.7.0 -> 34.15.0 (*)
-|    |    |              |         +--- dev.gitlive:firebase-crashlytics:2.4.0
-|    |    |              |         |    \--- dev.gitlive:firebase-crashlytics-android:2.4.0
-|    |    |              |         |         +--- com.google.firebase:firebase-crashlytics -> 20.0.6 (*)
+|    |    |    \--- io.github.mobilebytelabs:cmp-network-monitor:3.5.11
+|    |    |         \--- io.github.mobilebytelabs:cmp-network-monitor-android:3.5.11
+|    |    |              +--- org.jetbrains.kotlin:kotlin-stdlib:2.4.0 (*)
+|    |    |              +--- io.github.mobilebytelabs:cmp-observe:3.5.11
+|    |    |              |    \--- io.github.mobilebytelabs:cmp-observe-android:3.5.11
+|    |    |              |         +--- org.jetbrains.kotlin:kotlin-stdlib:2.4.0 (*)
+|    |    |              |         +--- com.google.firebase:firebase-bom:34.17.0 (*)
+|    |    |              |         +--- dev.gitlive:firebase-crashlytics:3.0.0-alpha01
+|    |    |              |         |    \--- dev.gitlive:firebase-crashlytics-android:3.0.0-alpha01
+|    |    |              |         |         +--- com.google.firebase:firebase-crashlytics -> 20.1.0 (*)
 |    |    |              |         |         +--- org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.10.2 -> 1.11.0 (*)
-|    |    |              |         |         +--- com.google.firebase:firebase-bom:33.15.0 -> 34.15.0 (*)
-|    |    |              |         |         +--- dev.gitlive:firebase-app:2.4.0 (*)
-|    |    |              |         |         +--- org.jetbrains.kotlin:kotlin-stdlib:2.2.20 -> 2.4.0 (*)
-|    |    |              |         |         +--- dev.gitlive:firebase-common:2.4.0 (*)
+|    |    |              |         |         +--- com.google.firebase:firebase-bom:34.17.0 (*)
+|    |    |              |         |         +--- dev.gitlive:firebase-app:3.0.0-alpha01 (*)
+|    |    |              |         |         +--- org.jetbrains.kotlin:kotlin-stdlib:2.4.0 (*)
+|    |    |              |         |         +--- dev.gitlive:firebase-common:3.0.0-alpha01 (*)
 |    |    |              |         |         \--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2 -> 1.11.0 (*)
-|    |    |              |         +--- dev.gitlive:firebase-analytics:2.4.0 (*)
-|    |    |              |         \--- dev.gitlive:firebase-perf:2.4.0
-|    |    |              |              \--- dev.gitlive:firebase-perf-android:2.4.0
-|    |    |              |                   +--- com.google.firebase:firebase-perf -> 22.0.5
+|    |    |              |         +--- dev.gitlive:firebase-analytics:3.0.0-alpha01 (*)
+|    |    |              |         \--- dev.gitlive:firebase-perf:3.0.0-alpha01
+|    |    |              |              \--- dev.gitlive:firebase-perf-android:3.0.0-alpha01
+|    |    |              |                   +--- com.google.firebase:firebase-perf -> 22.0.6
 |    |    |              |                   |    +--- com.google.firebase:firebase-annotations:17.0.0 (*)
 |    |    |              |                   |    +--- com.google.firebase:firebase-installations-interop:17.1.0 -> 17.3.0 (*)
 |    |    |              |                   |    +--- com.google.firebase:protolite-well-known-types:18.0.1
 |    |    |              |                   |    |    \--- com.google.protobuf:protobuf-javalite:3.25.5
-|    |    |              |                   |    +--- com.google.firebase:firebase-common:22.0.1 -> 22.1.0 (*)
+|    |    |              |                   |    +--- com.google.firebase:firebase-common:22.0.1 -> 22.2.0 (*)
 |    |    |              |                   |    +--- com.google.firebase:firebase-components:19.0.0 (*)
 |    |    |              |                   |    +--- com.google.firebase:firebase-config:21.5.0 -> 23.1.0
 |    |    |              |                   |    |    +--- com.google.firebase:firebase-config-interop:16.0.1 (*)
@@ -1549,14 +1550,14 @@
 |    |    |              |                   |    |    |    +--- com.google.firebase:firebase-measurement-connector:18.0.0 -> 20.0.1 (*)
 |    |    |              |                   |    |    |    \--- com.google.android.gms:play-services-basement:18.1.0 -> 18.9.0 (*)
 |    |    |              |                   |    |    +--- com.google.firebase:firebase-measurement-connector:18.0.0 -> 20.0.1 (*)
-|    |    |              |                   |    |    +--- com.google.firebase:firebase-common:22.0.1 -> 22.1.0 (*)
+|    |    |              |                   |    |    +--- com.google.firebase:firebase-common:22.0.1 -> 22.2.0 (*)
 |    |    |              |                   |    |    +--- com.google.firebase:firebase-components:19.0.0 (*)
-|    |    |              |                   |    |    +--- com.google.firebase:firebase-installations:18.0.0 -> 19.1.1 (*)
+|    |    |              |                   |    |    +--- com.google.firebase:firebase-installations:18.0.0 -> 19.1.2 (*)
 |    |    |              |                   |    |    +--- com.google.android.gms:play-services-tasks:18.4.0 (*)
 |    |    |              |                   |    |    +--- org.jetbrains.kotlin:kotlin-stdlib:2.0.21 -> 2.4.0 (*)
 |    |    |              |                   |    |    \--- androidx.annotation:annotation:1.5.0 -> 1.10.0 (*)
-|    |    |              |                   |    +--- com.google.firebase:firebase-installations:18.0.0 -> 19.1.1 (*)
-|    |    |              |                   |    +--- com.google.firebase:firebase-sessions:2.0.7 -> 3.0.6 (*)
+|    |    |              |                   |    +--- com.google.firebase:firebase-installations:18.0.0 -> 19.1.2 (*)
+|    |    |              |                   |    +--- com.google.firebase:firebase-sessions:2.0.7 -> 3.0.7 (*)
 |    |    |              |                   |    +--- com.google.firebase:firebase-datatransport:18.1.8 -> 19.0.0 (*)
 |    |    |              |                   |    +--- androidx.annotation:annotation:1.5.0 -> 1.10.0 (*)
 |    |    |              |                   |    +--- androidx.lifecycle:lifecycle-process:2.3.1 -> 2.11.0-beta01 (*)
@@ -1576,10 +1577,10 @@
 |    |    |              |                   |              +--- com.squareup.okio:okio:3.16.4 -> 3.17.0 (*)
 |    |    |              |                   |              \--- org.jetbrains.kotlin:kotlin-stdlib:2.2.21 -> 2.4.0 (*)
 |    |    |              |                   +--- org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.10.2 -> 1.11.0 (*)
-|    |    |              |                   +--- com.google.firebase:firebase-bom:33.15.0 -> 34.15.0 (*)
-|    |    |              |                   +--- dev.gitlive:firebase-app:2.4.0 (*)
-|    |    |              |                   +--- org.jetbrains.kotlin:kotlin-stdlib:2.2.20 -> 2.4.0 (*)
-|    |    |              |                   +--- dev.gitlive:firebase-common:2.4.0 (*)
+|    |    |              |                   +--- com.google.firebase:firebase-bom:34.17.0 (*)
+|    |    |              |                   +--- dev.gitlive:firebase-app:3.0.0-alpha01 (*)
+|    |    |              |                   +--- org.jetbrains.kotlin:kotlin-stdlib:2.4.0 (*)
+|    |    |              |                   +--- dev.gitlive:firebase-common:3.0.0-alpha01 (*)
 |    |    |              |                   \--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2 -> 1.11.0 (*)
 |    |    |              \--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2 -> 1.11.0 (*)
 |    |    +--- project :core:designsystem
@@ -1741,7 +1742,7 @@
 |    |    |    |    |    |                   +--- org.jetbrains.kotlin:kotlin-stdlib:2.0.20 -> 2.4.0 (*)
 |    |    |    |    |    |                   \--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.1 -> 1.11.0 (*)
 |    |    |    |    |    +--- org.mobilenativefoundation.store:cache5:5.1.0-alpha08 (*)
-|    |    |    |    |    +--- io.github.mobilebytelabs:cmp-network-monitor:3.5.9 (*)
+|    |    |    |    |    +--- io.github.mobilebytelabs:cmp-network-monitor:3.5.11 (*)
 |    |    |    |    |    +--- io.insert-koin:koin-core:4.2.2 (*)
 |    |    |    |    |    +--- org.jetbrains.kotlin:kotlin-stdlib:2.4.0 (*)
 |    |    |    |    |    +--- io.insert-koin:koin-bom:4.2.2 (*)
@@ -1815,18 +1816,18 @@
 |    |    |    |    |    +--- org.jetbrains.kotlinx:kotlinx-serialization-json:1.11.0 (*)
 |    |    |    |    |    +--- project :core-base:store (*)
 |    |    |    |    |    +--- project :core-base:designsystem (*)
-|    |    |    |    |    +--- io.github.mobilebytelabs:cmp-network-monitor-compose:3.5.9
-|    |    |    |    |    |    \--- io.github.mobilebytelabs:cmp-network-monitor-compose-android:3.5.9
-|    |    |    |    |    |         +--- org.jetbrains.kotlin:kotlin-stdlib:2.3.10 -> 2.4.0 (*)
-|    |    |    |    |    |         +--- io.github.mobilebytelabs:cmp-network-monitor:3.5.9 (*)
-|    |    |    |    |    |         +--- org.jetbrains.compose.runtime:runtime:1.10.3 -> 1.11.1 (*)
-|    |    |    |    |    |         +--- org.jetbrains.compose.foundation:foundation:1.10.3 -> 1.11.1 (*)
+|    |    |    |    |    +--- io.github.mobilebytelabs:cmp-network-monitor-compose:3.5.11
+|    |    |    |    |    |    \--- io.github.mobilebytelabs:cmp-network-monitor-compose-android:3.5.11
+|    |    |    |    |    |         +--- org.jetbrains.kotlin:kotlin-stdlib:2.4.0 (*)
+|    |    |    |    |    |         +--- io.github.mobilebytelabs:cmp-network-monitor:3.5.11 (*)
+|    |    |    |    |    |         +--- org.jetbrains.compose.runtime:runtime:1.11.1 (*)
+|    |    |    |    |    |         +--- org.jetbrains.compose.foundation:foundation:1.11.1 (*)
 |    |    |    |    |    |         +--- org.jetbrains.compose.material3:material3:1.9.0 (*)
-|    |    |    |    |    |         +--- org.jetbrains.compose.animation:animation:1.10.3 -> 1.11.1 (*)
+|    |    |    |    |    |         +--- org.jetbrains.compose.animation:animation:1.11.1 (*)
 |    |    |    |    |    |         \--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2 -> 1.11.0 (*)
-|    |    |    |    |    +--- io.github.mobilebytelabs:cmp-intent-launcher:3.5.9
-|    |    |    |    |    |    \--- io.github.mobilebytelabs:cmp-intent-launcher-android:3.5.9
-|    |    |    |    |    |         +--- org.jetbrains.kotlin:kotlin-stdlib:2.3.10 -> 2.4.0 (*)
+|    |    |    |    |    +--- io.github.mobilebytelabs:cmp-intent-launcher:3.5.11
+|    |    |    |    |    |    \--- io.github.mobilebytelabs:cmp-intent-launcher-android:3.5.11
+|    |    |    |    |    |         +--- org.jetbrains.kotlin:kotlin-stdlib:2.4.0 (*)
 |    |    |    |    |    |         +--- androidx.core:core-ktx:1.13.1 -> 1.19.0 (*)
 |    |    |    |    |    |         +--- androidx.activity:activity:1.10.1 -> 1.13.0 (*)
 |    |    |    |    |    |         +--- org.jetbrains.kotlinx:kotlinx-coroutines-android:1.10.2 -> 1.11.0 (*)
@@ -2410,7 +2411,7 @@
 |    |    |    |    |    +--- com.squareup.okio:okio:3.17.0 (*)
 |    |    |    |    |    +--- org.jetbrains.compose.runtime:runtime:1.11.1 (*)
 |    |    |    |    |    \--- org.jetbrains.compose.components:components-resources:1.11.1 (*)
-|    |    |    |    +--- io.github.mobilebytelabs:cmp-network-monitor:3.5.9 (*)
+|    |    |    |    +--- io.github.mobilebytelabs:cmp-network-monitor:3.5.11 (*)
 |    |    |    |    +--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.11.0 (*)
 |    |    |    |    +--- org.jetbrains.kotlinx:kotlinx-datetime:0.8.0 (*)
 |    |    |    |    \--- co.touchlab:kermit:2.1.0 (*)
@@ -2472,7 +2473,7 @@
 |    |    +--- project :core:model (*)
 |    |    +--- project :core:network (*)
 |    |    +--- project :core:store (*)
-|    |    +--- io.github.mobilebytelabs:cmp-network-monitor:3.5.9 (*)
+|    |    +--- io.github.mobilebytelabs:cmp-network-monitor:3.5.11 (*)
 |    |    +--- io.github.openmf:mifos-authenticator-passcode:2.3.0-beta
 |    |    |    \--- io.github.openmf:mifos-authenticator-passcode-android:2.3.0-beta
 |    |    |         +--- androidx.activity:activity-compose:1.12.2 -> 1.13.0 (*)
@@ -2564,8 +2565,8 @@
 |    +--- org.jetbrains.androidx.core:core-bundle:1.0.1 (*)
 |    +--- org.jetbrains.androidx.navigation:navigation-compose:2.9.2 (*)
 |    +--- org.jetbrains.kotlinx:kotlinx-collections-immutable:0.5.1 (*)
-|    +--- io.github.mobilebytelabs:worker-app-annotations:4.0.4
-|    |    \--- io.github.mobilebytelabs:worker-app-annotations-android:4.0.4
+|    +--- io.github.mobilebytelabs:worker-app-annotations:4.0.6
+|    |    \--- io.github.mobilebytelabs:worker-app-annotations-android:4.0.6
 |    |         \--- org.jetbrains.kotlin:kotlin-stdlib:2.3.21 -> 2.4.0 (*)
 |    +--- project :cmp-navigation
 |    |    +--- io.insert-koin:koin-bom:4.2.2 (*)
@@ -2688,13 +2689,13 @@
 |    |    |    |         |         +--- com.mohamedrejeb.calf:calf-permissions-core:0.12.0 (*)
 |    |    |    |         |         \--- org.jetbrains.kotlin:kotlin-stdlib:2.3.20 -> 2.4.0 (*)
 |    |    |    |         \--- org.jetbrains.kotlin:kotlin-stdlib:2.3.20 -> 2.4.0 (*)
-|    |    |    +--- io.github.mobilebytelabs:cmp-share:3.5.9
-|    |    |    |    \--- io.github.mobilebytelabs:cmp-share-android:3.5.9
-|    |    |    |         +--- org.jetbrains.kotlin:kotlin-stdlib:2.3.10 -> 2.4.0 (*)
+|    |    |    +--- io.github.mobilebytelabs:cmp-share:3.5.11
+|    |    |    |    \--- io.github.mobilebytelabs:cmp-share-android:3.5.11
+|    |    |    |         +--- org.jetbrains.kotlin:kotlin-stdlib:2.4.0 (*)
 |    |    |    |         +--- androidx.core:core-ktx:1.13.1 -> 1.19.0 (*)
 |    |    |    |         +--- org.jetbrains.kotlinx:kotlinx-coroutines-android:1.10.2 -> 1.11.0 (*)
 |    |    |    |         \--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2 -> 1.11.0 (*)
-|    |    |    +--- io.github.mobilebytelabs:cmp-intent-launcher:3.5.9 (*)
+|    |    |    +--- io.github.mobilebytelabs:cmp-intent-launcher:3.5.11 (*)
 |    |    |    \--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.11.0 (*)
 |    |    +--- project :core-base:security (*)
 |    |    +--- io.github.openmf:mifos-authenticator-biometrics:2.3.0-beta (*)
@@ -2861,8 +2862,8 @@
 |    |    |    +--- io.insert-koin:koin-androidx-compose:4.2.2 (*)
 |    |    |    +--- io.insert-koin:koin-androidx-navigation:4.2.2 (*)
 |    |    |    +--- io.insert-koin:koin-core-viewmodel:4.2.2 (*)
-|    |    |    +--- io.github.mobilebytelabs:worker-kmp:4.0.4
-|    |    |    |    \--- io.github.mobilebytelabs:worker-kmp-jvm:4.0.4
+|    |    |    +--- io.github.mobilebytelabs:worker-kmp:4.0.6
+|    |    |    |    \--- io.github.mobilebytelabs:worker-kmp-jvm:4.0.6
 |    |    |    |         +--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2 -> 1.11.0 (*)
 |    |    |    |         +--- org.jetbrains.kotlinx:kotlinx-datetime:0.8.0 (*)
 |    |    |    |         +--- co.touchlab:kermit:2.0.6 -> 2.1.0 (*)
@@ -2888,12 +2889,12 @@
 |    |    |    +--- org.jetbrains.androidx.core:core-bundle:1.0.1 (*)
 |    |    |    +--- org.jetbrains.androidx.navigation:navigation-compose:2.9.2 (*)
 |    |    |    +--- org.jetbrains.kotlinx:kotlinx-collections-immutable:0.5.1 (*)
-|    |    |    +--- io.github.mobilebytelabs:worker-app-annotations:4.0.4 (*)
-|    |    |    +--- io.github.mobilebytelabs:worker-compose-all:4.0.4
-|    |    |    |    \--- io.github.mobilebytelabs:worker-compose-all-android:4.0.4
-|    |    |    |         +--- io.github.mobilebytelabs:worker-android:4.0.4
-|    |    |    |         |    \--- io.github.mobilebytelabs:worker-android-android:4.0.4
-|    |    |    |         |         +--- io.github.mobilebytelabs:worker-kmp:4.0.4 (*)
+|    |    |    +--- io.github.mobilebytelabs:worker-app-annotations:4.0.6 (*)
+|    |    |    +--- io.github.mobilebytelabs:worker-compose-all:4.0.6
+|    |    |    |    \--- io.github.mobilebytelabs:worker-compose-all-android:4.0.6
+|    |    |    |         +--- io.github.mobilebytelabs:worker-android:4.0.6
+|    |    |    |         |    \--- io.github.mobilebytelabs:worker-android-android:4.0.6
+|    |    |    |         |         +--- io.github.mobilebytelabs:worker-kmp:4.0.6 (*)
 |    |    |    |         |         +--- org.jetbrains.kotlin:kotlin-stdlib:2.3.21 -> 2.4.0 (*)
 |    |    |    |         |         +--- org.jetbrains.kotlinx:kotlinx-coroutines-android:1.10.2 -> 1.11.0 (*)
 |    |    |    |         |         +--- androidx.work:work-runtime-ktx:2.11.0
@@ -2938,10 +2939,10 @@
 |    |    |    |         |         +--- org.jetbrains.compose.runtime:runtime:1.11.0 -> 1.11.1 (*)
 |    |    |    |         |         +--- androidx.activity:activity-compose:1.13.0 (*)
 |    |    |    |         |         \--- io.insert-koin:koin-android:4.0.4 -> 4.2.2 (*)
-|    |    |    |         +--- io.github.mobilebytelabs:worker-kmp:4.0.4 (*)
-|    |    |    |         +--- io.github.mobilebytelabs:worker-compose:4.0.4
-|    |    |    |         |    \--- io.github.mobilebytelabs:worker-compose-android:4.0.4
-|    |    |    |         |         +--- io.github.mobilebytelabs:worker-kmp:4.0.4 (*)
+|    |    |    |         +--- io.github.mobilebytelabs:worker-kmp:4.0.6 (*)
+|    |    |    |         +--- io.github.mobilebytelabs:worker-compose:4.0.6
+|    |    |    |         |    \--- io.github.mobilebytelabs:worker-compose-android:4.0.6
+|    |    |    |         |         +--- io.github.mobilebytelabs:worker-kmp:4.0.6 (*)
 |    |    |    |         |         +--- org.jetbrains.compose.runtime:runtime:1.11.0 -> 1.11.1 (*)
 |    |    |    |         |         +--- org.jetbrains.compose.ui:ui:1.11.0 -> 1.11.1 (*)
 |    |    |    |         |         +--- org.jetbrains.compose.foundation:foundation:1.11.0 -> 1.11.1 (*)
@@ -2949,33 +2950,33 @@
 |    |    |    |         |         +--- org.jetbrains.kotlin:kotlin-stdlib:2.3.21 -> 2.4.0 (*)
 |    |    |    |         |         +--- org.jetbrains.kotlinx:kotlinx-coroutines-android:1.10.2 -> 1.11.0 (*)
 |    |    |    |         |         \--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2 -> 1.11.0 (*)
-|    |    |    |         +--- io.github.mobilebytelabs:worker-koin:4.0.4
-|    |    |    |         |    \--- io.github.mobilebytelabs:worker-koin-jvm:4.0.4
-|    |    |    |         |         +--- io.github.mobilebytelabs:worker-kmp:4.0.4 (*)
+|    |    |    |         +--- io.github.mobilebytelabs:worker-koin:4.0.6
+|    |    |    |         |    \--- io.github.mobilebytelabs:worker-koin-jvm:4.0.6
+|    |    |    |         |         +--- io.github.mobilebytelabs:worker-kmp:4.0.6 (*)
 |    |    |    |         |         +--- io.insert-koin:koin-core:4.0.4 -> 4.2.2 (*)
 |    |    |    |         |         \--- org.jetbrains.kotlin:kotlin-stdlib:2.3.21 -> 2.4.0 (*)
-|    |    |    |         +--- io.github.mobilebytelabs:worker-sync:4.0.4
-|    |    |    |         |    \--- io.github.mobilebytelabs:worker-sync-jvm:4.0.4
-|    |    |    |         |         +--- io.github.mobilebytelabs:worker-kmp:4.0.4 (*)
-|    |    |    |         |         +--- io.github.mobilebytelabs:worker-koin:4.0.4 (*)
+|    |    |    |         +--- io.github.mobilebytelabs:worker-sync:4.0.6
+|    |    |    |         |    \--- io.github.mobilebytelabs:worker-sync-jvm:4.0.6
+|    |    |    |         |         +--- io.github.mobilebytelabs:worker-kmp:4.0.6 (*)
+|    |    |    |         |         +--- io.github.mobilebytelabs:worker-koin:4.0.6 (*)
 |    |    |    |         |         +--- io.insert-koin:koin-core:4.0.4 -> 4.2.2 (*)
 |    |    |    |         |         +--- org.jetbrains.kotlin:kotlin-stdlib:2.3.21 -> 2.4.0 (*)
 |    |    |    |         |         \--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2 -> 1.11.0 (*)
-|    |    |    |         +--- io.github.mobilebytelabs:worker-scheduler:4.0.4
-|    |    |    |         |    \--- io.github.mobilebytelabs:worker-scheduler-android:4.0.4
-|    |    |    |         |         +--- io.github.mobilebytelabs:worker-android:4.0.4 (*)
-|    |    |    |         |         +--- io.github.mobilebytelabs:worker-kmp:4.0.4 (*)
+|    |    |    |         +--- io.github.mobilebytelabs:worker-scheduler:4.0.6
+|    |    |    |         |    \--- io.github.mobilebytelabs:worker-scheduler-android:4.0.6
+|    |    |    |         |         +--- io.github.mobilebytelabs:worker-android:4.0.6 (*)
+|    |    |    |         |         +--- io.github.mobilebytelabs:worker-kmp:4.0.6 (*)
 |    |    |    |         |         +--- org.jetbrains.kotlin:kotlin-stdlib:2.3.21 -> 2.4.0 (*)
 |    |    |    |         |         +--- androidx.work:work-runtime-ktx:2.11.0 (*)
-|    |    |    |         |         +--- io.github.mobilebytelabs:worker-koin:4.0.4 (*)
+|    |    |    |         |         +--- io.github.mobilebytelabs:worker-koin:4.0.6 (*)
 |    |    |    |         |         +--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2 -> 1.11.0 (*)
 |    |    |    |         |         +--- org.jetbrains.kotlinx:kotlinx-datetime:0.8.0 (*)
 |    |    |    |         |         +--- org.jetbrains.kotlinx:kotlinx-serialization-json:1.8.1 -> 1.11.0 (*)
 |    |    |    |         |         \--- io.insert-koin:koin-core:4.0.4 -> 4.2.2 (*)
-|    |    |    |         +--- io.github.mobilebytelabs:worker-store5:4.0.4
-|    |    |    |         |    \--- io.github.mobilebytelabs:worker-store5-jvm:4.0.4
-|    |    |    |         |         +--- io.github.mobilebytelabs:worker-kmp:4.0.4 (*)
-|    |    |    |         |         +--- io.github.mobilebytelabs:worker-scheduler:4.0.4 (*)
+|    |    |    |         +--- io.github.mobilebytelabs:worker-store5:4.0.6
+|    |    |    |         |    \--- io.github.mobilebytelabs:worker-store5-jvm:4.0.6
+|    |    |    |         |         +--- io.github.mobilebytelabs:worker-kmp:4.0.6 (*)
+|    |    |    |         |         +--- io.github.mobilebytelabs:worker-scheduler:4.0.6 (*)
 |    |    |    |         |         +--- org.mobilenativefoundation.store:store5:5.1.0-alpha06 -> 5.1.0-alpha08 (*)
 |    |    |    |         |         +--- io.insert-koin:koin-core:4.0.4 -> 4.2.2 (*)
 |    |    |    |         |         \--- org.jetbrains.kotlin:kotlin-stdlib:2.3.21 -> 2.4.0 (*)
@@ -2983,7 +2984,7 @@
 |    |    |    +--- project :core:common (*)
 |    |    |    +--- project :core:datastore (*)
 |    |    |    +--- project :core:model (*)
-|    |    |    +--- io.github.mobilebytelabs:worker-sync:4.0.4 (*)
+|    |    |    +--- io.github.mobilebytelabs:worker-sync:4.0.6 (*)
 |    |    |    +--- io.github.mirzemehdi:kmpnotifier-local:2.0.0
 |    |    |    |    \--- io.github.mirzemehdi:kmpnotifier-local-android:2.0.0
 |    |    |    |         +--- io.github.mirzemehdi:kmpnotifier-core:2.0.0
@@ -3013,8 +3014,8 @@
 |    +--- org.jetbrains.compose.components:components-resources:1.11.1 (*)
 |    +--- project :core-base:platform (*)
 |    +--- io.coil-kt.coil3:coil-compose-core:3.5.0 (*)
-|    +--- io.github.mobilebytelabs:worker-kmp:4.0.4 (*)
-|    +--- io.github.mobilebytelabs:worker-compose-all:4.0.4 (*)
+|    +--- io.github.mobilebytelabs:worker-kmp:4.0.6 (*)
+|    +--- io.github.mobilebytelabs:worker-compose-all:4.0.6 (*)
 |    +--- project :sync (*)
 |    +--- project :core:datastore (*)
 |    +--- project :core:common (*)

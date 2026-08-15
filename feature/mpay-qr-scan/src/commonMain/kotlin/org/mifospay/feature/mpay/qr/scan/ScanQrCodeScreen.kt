@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -42,7 +43,6 @@ import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.mifospay.core.designsystem.icon.MifosIcons
 import org.mifospay.core.model.utils.QrCodeData
-import org.mifospay.core.ui.utils.EventsEffect
 import org.mifospay.feature.mpay.qr.scan.components.QrActionButton
 import org.mifospay.feature.mpay.qr.scan.components.QrHelpDialog
 import org.mifospay.feature.mpay.qr.scan.components.QrProcessingOverlay
@@ -69,34 +69,36 @@ internal fun ScanQrCodeScreen(
     val scanSuccessMessage = stringResource(Res.string.feature_qr_scan_success)
     val noQrFoundMessage = stringResource(Res.string.feature_qr_no_qr_found)
 
-    EventsEffect(viewModel) { event ->
-        when (event) {
-            is ScanQrEvent.OnNavigateToIntraBankTransfer -> {
-                navigateToIntraBankTransfer.invoke(event.qrData)
-            }
+    LaunchedEffect(Unit) {
+        viewModel.eventFlow.collect { event ->
+            when (event) {
+                is ScanQrEvent.OnNavigateToIntraBankTransfer -> {
+                    navigateToIntraBankTransfer.invoke(event.qrData)
+                }
 
-            is ScanQrEvent.OnNavigateToInterbankTransfer -> {
-                navigateToInterbankTransfer.invoke(
-                    event.accountExternalId,
-                    event.recipientName,
-                    event.amount,
-                )
-            }
+                is ScanQrEvent.OnNavigateToInterbankTransfer -> {
+                    navigateToInterbankTransfer.invoke(
+                        event.accountExternalId,
+                        event.recipientName,
+                        event.amount,
+                    )
+                }
 
-            is ScanQrEvent.ShowToast -> {
-                snackbarHostState.showSnackbar(event.message)
-            }
+                is ScanQrEvent.ShowToast -> {
+                    snackbarHostState.showSnackbar(event.message)
+                }
 
-            is ScanQrEvent.OnNavigateToAddBeneficiary -> {
-                navigateToAddBeneficiaryScreen.invoke(event.beneficiary)
-            }
+                is ScanQrEvent.OnNavigateToAddBeneficiary -> {
+                    navigateToAddBeneficiaryScreen.invoke(event.beneficiary)
+                }
 
-            is ScanQrEvent.OnScanSuccess -> {
-                snackbarHostState.showSnackbar(scanSuccessMessage)
-            }
+                is ScanQrEvent.OnScanSuccess -> {
+                    snackbarHostState.showSnackbar(scanSuccessMessage)
+                }
 
-            is ScanQrEvent.OnNoQrFound -> {
-                snackbarHostState.showSnackbar(noQrFoundMessage)
+                is ScanQrEvent.OnNoQrFound -> {
+                    snackbarHostState.showSnackbar(noQrFoundMessage)
+                }
             }
         }
     }
