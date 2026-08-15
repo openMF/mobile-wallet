@@ -50,6 +50,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.launch
 import kpt.core.base.store.screen.ScreenState
 import kpt.core.base.ui.screen.ScreenContent
+import org.jetbrains.compose.resources.getString
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.mifospay.core.common.CurrencyFormatter
@@ -89,7 +90,7 @@ fun StandingInstructionsScreen(
             is SIEvent.OnNavigateToSIDetails -> onShowSIDetails.invoke(event.siId)
             is SIEvent.ShowToast -> {
                 scope.launch {
-                    snackbarHostState.showSnackbar(event.message)
+                    snackbarHostState.showSnackbar(getString(event.message))
                 }
             }
         }

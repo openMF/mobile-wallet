@@ -23,10 +23,10 @@ import kpt.core.base.store.screen.ScreenState
 import kpt.core.base.store.submit.SubmitState
 import kpt.core.base.store.submit.submitHandler
 import mobile_wallet.feature.savedcards.generated.resources.Res
+import mobile_wallet.feature.savedcards.generated.resources.feature_savedcards_card_deleted_successfully
 import mobile_wallet.feature.savedcards.generated.resources.feature_savedcards_confirm_delete_card
 import mobile_wallet.feature.savedcards.generated.resources.feature_savedcards_delete_card
 import org.jetbrains.compose.resources.StringResource
-import org.mifospay.core.common.DataState
 import org.mifospay.core.common.getSerialized
 import org.mifospay.core.common.setSerialized
 import org.mifospay.core.data.repository.SavedCardRepository
@@ -75,7 +75,7 @@ class CardsScreenViewModel(
     // handler owns the Submitting/Submitted/Failed lifecycle; we observe it in `init`
     // to drive the existing Loading/Error dialog + success toast, so the Screen and
     // the delete-confirm dialog (DeleteCardClicked) are unchanged.
-    private val submitDelete = viewModelScope.submitHandler<String>()
+    private val submitDelete = viewModelScope.submitHandler<Unit>()
 
     init {
         submitDelete.state
@@ -89,7 +89,7 @@ class CardsScreenViewModel(
 
                     is SubmitState.Submitted -> {
                         mutableStateFlow.update { it.copy(dialogState = null) }
-                        sendEvent(CardEvent.ShowToast(submitState.result))
+                        sendEvent(CardEvent.ShowToast(Res.string.feature_savedcards_card_deleted_successfully))
                         submitDelete.reset()
                     }
 
@@ -151,14 +151,10 @@ class CardsScreenViewModel(
 
     private fun deleteCard(action: CardAction.Internal.DeleteCard) {
         // Submit through the handler — it drives Submitting/Submitted/Failed, observed
-        // in `init`. The block unwraps the repository's transitional DataState result:
-        // return the value on success, throw on error so the handler reports Failed.
+        // in `init`. The repository write returns the success message and throws on
+        // failure; the handler maps that to Submitted/Failed.
         submitDelete.submit {
-            when (val result = repository.deleteCard(state.clientId, action.cardId)) {
-                is DataState.Success -> result.data
-                is DataState.Error -> throw result.exception
-                is DataState.Loading -> error("deleteCard must not emit Loading")
-            }
+            repository.deleteCard(state.clientId, action.cardId)
         }
     }
 }
@@ -186,7 +182,7 @@ data class CardState(
 sealed interface CardEvent {
     data class OnNavigateToCardDetails(val cardId: Long) : CardEvent
     data class OnNavigateToAddEdit(val type: CardAddEditType) : CardEvent
-    data class ShowToast(val message: String) : CardEvent
+    data class ShowToast(val message: StringResource) : CardEvent
 }
 
 sealed interface CardAction {

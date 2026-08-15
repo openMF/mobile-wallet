@@ -19,7 +19,6 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kpt.core.base.store.submit.SubmitState
 import kpt.core.base.store.submit.submitHandler
-import org.mifospay.core.common.DataState
 import org.mifospay.core.data.repository.SelfServiceRepository
 
 /**
@@ -41,7 +40,7 @@ class DeleteBeneficiaryViewModel(
     // Submitting/Submitted/Failed lifecycle; we observe it here to drive this VM's
     // existing Deleting overlay + success flag + error sheet, so the public state
     // shape and the consuming Screen are unchanged.
-    private val submitDelete = viewModelScope.submitHandler<String>()
+    private val submitDelete = viewModelScope.submitHandler<Unit>()
 
     init {
         submitDelete.state
@@ -103,15 +102,10 @@ class DeleteBeneficiaryViewModel(
         }
 
         // Submit through the handler — it drives Submitting/Submitted/Failed,
-        // observed in `init`. The block unwraps the repository's transitional
-        // DataState result: return the value on success, throw on error so the
-        // handler reports Failed.
+        // observed in `init`. The repository write returns Unit and throws on
+        // failure; the handler maps that to Submitted/Failed.
         submitDelete.submit {
-            when (val result = repository.deleteBeneficiary(beneficiaryId)) {
-                is DataState.Success -> result.data
-                is DataState.Error -> throw result.exception
-                DataState.Loading -> error("deleteBeneficiary must not emit Loading")
-            }
+            repository.deleteBeneficiary(beneficiaryId)
         }
     }
 

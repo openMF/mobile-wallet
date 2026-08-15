@@ -56,7 +56,6 @@ import mobile_wallet.feature.pocket.generated.resources.feature_pocket_error_lin
 import mobile_wallet.feature.pocket.generated.resources.feature_pocket_error_load_accounts
 import mobile_wallet.feature.pocket.generated.resources.feature_pocket_unknown_account
 import org.jetbrains.compose.resources.getString
-import org.mifospay.core.common.DataState
 import org.mifospay.core.common.ScreenState
 import org.mifospay.core.data.repository.PocketRepository
 import org.mifospay.core.data.util.toForkScreenStateFlow
@@ -295,38 +294,25 @@ internal class ManagePocketViewModel(
         val explicitAccounts = accountsToLink.map { it.toDetailedPocketAccount() }
 
         // Submit through the handler — it drives Submitting/Submitted/Failed, observed
-        // in `observeLinkSubmit()`. The block unwraps the repository's transitional
-        // DataState result: return the value on success, throw on error so the handler
-        // reports Failed.
+        // in `observeLinkSubmit()`. The repository write completes normally on success
+        // and throws on failure, so the handler reports Failed directly.
         submitLink.submit {
-            when (
-                val result = pocketRepository.linkAccounts(
-                    payload = payload,
-                    explicitlyAddedAccounts = explicitAccounts,
-                    clientId = state.clientId,
-                )
-            ) {
-                is DataState.Success -> result.data
-                is DataState.Error -> throw result.exception
-                DataState.Loading -> error("linkAccounts must not emit Loading")
-            }
+            pocketRepository.linkAccounts(
+                payload = payload,
+                explicitlyAddedAccounts = explicitAccounts,
+                clientId = state.clientId,
+            )
         }
     }
 
     private fun delinkAccount(account: ManagePocketAccount) {
         // Submit through the handler — Submitting/Submitted/Failed observed in
-        // `observeDelinkSubmit()`; block unwraps the transitional DataState result.
+        // `observeDelinkSubmit()`; the repository write throws on failure.
         submitDelink.submit {
-            when (
-                val result = pocketRepository.delinkAccounts(
-                    pocketAccountMappingIds = listOf(account.mappingId),
-                    clientId = state.clientId,
-                )
-            ) {
-                is DataState.Success -> result.data
-                is DataState.Error -> throw result.exception
-                DataState.Loading -> error("delinkAccounts must not emit Loading")
-            }
+            pocketRepository.delinkAccounts(
+                pocketAccountMappingIds = listOf(account.mappingId),
+                clientId = state.clientId,
+            )
         }
     }
 

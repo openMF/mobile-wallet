@@ -25,6 +25,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.withContext
 import kpt.core.base.store.infra.FetchedAtRepository
 import kpt.core.base.store.screen.FetchPolicy
 import kpt.core.base.store.screen.ScreenDataStream
@@ -127,21 +128,22 @@ class PocketRepositoryImp(
         payload: PocketLinkPayload,
         explicitlyAddedAccounts: List<DetailedPocketAccount>,
         clientId: Long,
-    ): DataState<Unit> {
-        // Pure online write — no local cache mutation. The pre-store impl
-        // eagerly mutated `detailedPocketCache` here to give the VM a
-        // momentary "already-updated" impression; the store5 rollout replaces
-        // that with an SWR / manual refresh through the read store. The
-        // `explicitlyAddedAccounts` parameter is preserved on the signature
-        // for source-level compatibility with any calling code that populated
-        // it, but is intentionally UNUSED — the next re-subscribe pulls fresh
-        // data from the server.
+    ) {
+        // Pure online write — no local cache mutation, no try/catch: completes
+        // normally on success and lets the exception propagate on failure so the
+        // caller's SubmitHandler reports Failed. The pre-store impl eagerly mutated
+        // `detailedPocketCache` here to give the VM a momentary "already-updated"
+        // impression; the store5 rollout replaces that with an SWR / manual refresh
+        // through the read store. The `explicitlyAddedAccounts` parameter is
+        // preserved on the signature for source-level compatibility with any calling
+        // code that populated it, but is intentionally UNUSED — the next re-subscribe
+        // pulls fresh data from the server.
         //
         // Suppress: retained for API compat; see rationale above.
         @Suppress("UnusedParameter")
         val ignoredExplicitAdds = explicitlyAddedAccounts
 
-        return runAsDataState(networkMonitor, ioDispatcher) {
+        withContext(ioDispatcher) {
             val request = PocketLinkRequest(
                 accountsDetail = payload.accountsDetail.map {
                     PocketLinkRequest.AccountDetail(
@@ -157,11 +159,11 @@ class PocketRepositoryImp(
     override suspend fun delinkAccounts(
         pocketAccountMappingIds: List<Long>,
         clientId: Long,
-    ): DataState<Unit> {
+    ) {
         // Same pure-online-write rationale as [linkAccounts] — no cache
-        // mutation, no forceRefresh side-effect. The store's next SWR /
-        // re-subscribe cycle pulls fresh data.
-        return runAsDataState(networkMonitor, ioDispatcher) {
+        // mutation, no forceRefresh side-effect, no try/catch (let it throw).
+        // The store's next SWR / re-subscribe cycle pulls fresh data.
+        withContext(ioDispatcher) {
             val serverIds = pocketAccountMappingIds.filter { it > 0 }
             if (serverIds.isNotEmpty()) {
                 val request = PocketDelinkRequest(serverIds)

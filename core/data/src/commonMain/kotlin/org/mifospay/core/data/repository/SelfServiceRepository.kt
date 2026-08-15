@@ -205,13 +205,14 @@ interface SelfServiceRepository {
         scope: CoroutineScope,
     ): Flow<ScreenState<AccountContent>>
 
-    // Writes stay on DataState (Phase-3 D1).
-    suspend fun createBeneficiary(beneficiaryPayload: BeneficiaryPayload): DataState<String>
+    // Beneficiary writes — plain suspend (throw on error). The success message is
+    // now owned by each consumer VM as a feature StringResource.
+    suspend fun createBeneficiary(beneficiaryPayload: BeneficiaryPayload)
 
     suspend fun updateBeneficiary(
         beneficiaryId: Long,
         payload: BeneficiaryUpdatePayload,
-    ): DataState<String>
+    )
 
-    suspend fun deleteBeneficiary(beneficiaryId: Long): DataState<String>
+    suspend fun deleteBeneficiary(beneficiaryId: Long)
 }

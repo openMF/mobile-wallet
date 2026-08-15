@@ -116,14 +116,17 @@ interface PocketRepository {
         scope: CoroutineScope,
     ): ScreenDataStream<List<LinkableAccount>>
 
+    // Writes complete normally on success and throw on failure; the caller's
+    // SubmitHandler maps success/exception to SubmitState. The user-facing dialog
+    // copy is a feature StringResource surfaced by the ViewModel, not repo copy.
     suspend fun linkAccounts(
         payload: PocketLinkPayload,
         explicitlyAddedAccounts: List<DetailedPocketAccount>,
         clientId: Long,
-    ): DataState<Unit>
+    )
 
     suspend fun delinkAccounts(
         pocketAccountMappingIds: List<Long>,
         clientId: Long,
-    ): DataState<Unit>
+    )
 }

@@ -27,7 +27,6 @@ import kpt.core.database.wallet.transaction.toDomain
 import kpt.core.store.AppStoreRegistry
 import kpt.core.store.wallet.selfaccounts.SelfAccountsKey
 import kpt.core.store.wallet.transferdetail.TransferDetailKey
-import org.mifospay.core.common.DataState
 import org.mifospay.core.common.ScreenState
 import org.mifospay.core.common.asScreenStateFlow
 import org.mifospay.core.data.mapper.toAccount
@@ -185,15 +184,9 @@ class AccountRepositoryImpl(
         )
     }
 
-    override suspend fun makeTransfer(payload: AccountTransferPayload): DataState<String> {
-        return try {
-            withContext(ioDispatcher) {
-                selfManager.accountTransfersApi.makeTransfer(payload)
-            }
-
-            DataState.Success("Transaction Successful")
-        } catch (e: Exception) {
-            DataState.Error(e, null)
+    override suspend fun makeTransfer(payload: AccountTransferPayload) {
+        withContext(ioDispatcher) {
+            selfManager.accountTransfersApi.makeTransfer(payload)
         }
     }
 }

@@ -192,16 +192,14 @@ internal class FakeSelfServiceRepository : SelfServiceRepository {
         scope: CoroutineScope,
     ): Flow<ScreenState<AccountContent>> = flowOf(ScreenState.Empty)
 
-    override suspend fun createBeneficiary(beneficiaryPayload: BeneficiaryPayload): DataState<String> =
-        DataState.Success("Success")
+    override suspend fun createBeneficiary(beneficiaryPayload: BeneficiaryPayload) {}
 
     override suspend fun updateBeneficiary(
         beneficiaryId: Long,
         payload: BeneficiaryUpdatePayload,
-    ): DataState<String> = DataState.Success("Success")
+    ) {}
 
-    override suspend fun deleteBeneficiary(beneficiaryId: Long): DataState<String> =
-        DataState.Success("Success")
+    override suspend fun deleteBeneficiary(beneficiaryId: Long) {}
 }
 
 /**

@@ -54,6 +54,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.launch
 import mobile_wallet.feature.standing_instruction.generated.resources.Res
 import mobile_wallet.feature.standing_instruction.generated.resources.feature_standing_instruction_error_oops
+import org.jetbrains.compose.resources.getString
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.mifospay.core.designsystem.component.BasicDialogState
@@ -95,7 +96,7 @@ internal fun AddEditSIScreen(
             is AddEditSIEvent.OnNavigateBack -> navigateBack.invoke()
             is AddEditSIEvent.ShowToast -> {
                 scope.launch {
-                    snackbarHostState.showSnackbar(message = event.message)
+                    snackbarHostState.showSnackbar(message = getString(event.message))
                 }
             }
         }

@@ -11,7 +11,6 @@ package org.mifospay.core.data.repository
 
 import kotlinx.coroutines.CoroutineScope
 import kpt.core.base.store.screen.ScreenDataStream
-import org.mifospay.core.common.DataState
 import org.mifospay.core.common.ScreenStateStream
 import org.mifospay.core.model.savingsaccount.CreateNewSavingEntity
 import org.mifospay.core.model.savingsaccount.SavingAccountDetail
@@ -77,19 +76,19 @@ interface SavingsAccountRepository {
 
     fun getSavingAccountTemplate(clientId: Long): ScreenStateStream<SavingAccountTemplate>
 
-    // Writes stay on DataState (Phase-3 D1).
-    suspend fun createSavingsAccount(savingAccount: CreateNewSavingEntity): DataState<String>
+    // Writes throw on failure (template idiom — consumed by a SubmitHandler).
+    suspend fun createSavingsAccount(savingAccount: CreateNewSavingEntity)
 
     suspend fun updateSavingsAccount(
         accountId: Long,
         savingAccount: UpdateSavingAccountEntity,
-    ): DataState<String>
+    )
 
     suspend fun unblockAccount(
         accountId: Long,
-    ): DataState<String>
+    )
 
     suspend fun blockAccount(
         accountId: Long,
-    ): DataState<String>
+    )
 }

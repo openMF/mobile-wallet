@@ -51,6 +51,7 @@ import mobile_wallet.feature.savedcards.generated.resources.feature_savedcards_c
 import mobile_wallet.feature.savedcards.generated.resources.feature_savedcards_expiry_date
 import mobile_wallet.feature.savedcards.generated.resources.feature_savedcards_first_name
 import mobile_wallet.feature.savedcards.generated.resources.feature_savedcards_last_name
+import org.jetbrains.compose.resources.getString
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.mifospay.core.designsystem.component.BasicDialogState
@@ -84,7 +85,7 @@ internal fun AddEditCardScreen(
             is AECardEvent.OnNavigateBack -> navigateBack.invoke()
             is AECardEvent.ShowToast -> {
                 scope.launch {
-                    snackbarHostState.showSnackbar(message = event.message)
+                    snackbarHostState.showSnackbar(message = getString(event.message))
                 }
             }
         }

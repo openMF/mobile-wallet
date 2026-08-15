@@ -21,7 +21,6 @@ import kpt.core.base.store.screen.asScreenStream
 import kpt.core.store.AppStoreRegistry
 import kpt.core.store.wallet.account.AccountDetailKey
 import org.mifospay.core.common.Constants
-import org.mifospay.core.common.DataState
 import org.mifospay.core.common.ScreenStateStream
 import org.mifospay.core.common.asScreenStateFlow
 import org.mifospay.core.data.mapper.toModel
@@ -111,56 +110,32 @@ class SavingsAccountRepositoryImpl(
 
     override suspend fun createSavingsAccount(
         savingAccount: CreateNewSavingEntity,
-    ): DataState<String> {
-        return try {
-            withContext(ioDispatcher) {
-                apiManager.savingAccountsListApi.createSavingsAccount(savingAccount)
-            }
-
-            DataState.Success("Savings Account Created Successfully")
-        } catch (e: Exception) {
-            DataState.Error(e)
+    ) {
+        withContext(ioDispatcher) {
+            apiManager.savingAccountsListApi.createSavingsAccount(savingAccount)
         }
     }
 
     override suspend fun updateSavingsAccount(
         accountId: Long,
         savingAccount: UpdateSavingAccountEntity,
-    ): DataState<String> {
-        return try {
-            withContext(ioDispatcher) {
-                apiManager.savingAccountsListApi.updateSavingsAccount(accountId, savingAccount)
-            }
-
-            DataState.Success("Savings Account Updated Successfully")
-        } catch (e: Exception) {
-            DataState.Error(e)
+    ) {
+        withContext(ioDispatcher) {
+            apiManager.savingAccountsListApi.updateSavingsAccount(accountId, savingAccount)
         }
     }
 
     override suspend fun unblockAccount(
         accountId: Long,
-    ): DataState<String> {
-        return try {
-            withContext(ioDispatcher) {
-                apiManager.savingAccountsListApi.blockUnblockAccount(accountId, "unblock")
-            }
-
-            DataState.Success("Account unblocked successfully")
-        } catch (e: Exception) {
-            DataState.Error(e)
+    ) {
+        withContext(ioDispatcher) {
+            apiManager.savingAccountsListApi.blockUnblockAccount(accountId, "unblock")
         }
     }
 
-    override suspend fun blockAccount(accountId: Long): DataState<String> {
-        return try {
-            withContext(ioDispatcher) {
-                apiManager.savingAccountsListApi.blockUnblockAccount(accountId, "block")
-            }
-
-            DataState.Success("Account blocked successfully")
-        } catch (e: Exception) {
-            DataState.Error(e)
+    override suspend fun blockAccount(accountId: Long) {
+        withContext(ioDispatcher) {
+            apiManager.savingAccountsListApi.blockUnblockAccount(accountId, "block")
         }
     }
 

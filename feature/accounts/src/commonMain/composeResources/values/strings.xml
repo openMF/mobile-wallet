@@ -78,6 +78,8 @@
     <string name="feature_accounts_beneficiary_deleted">Beneficiary deleted</string>
     <string name="feature_accounts_beneficiary_added">Beneficiary added</string>
     <string name="feature_accounts_beneficiary_updated">Beneficiary updated</string>
+    <string name="feature_accounts_saving_created_successfully">Savings Account Created Successfully</string>
+    <string name="feature_accounts_saving_updated_successfully">Savings Account Updated Successfully</string>
 
     <!-- SavingAccountDetailScreen -->
     <string name="feature_accounts_detail_account_details">Account Details</string>

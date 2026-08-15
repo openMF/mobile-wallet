@@ -25,8 +25,8 @@ import kpt.core.base.store.submit.submitHandler
 import mobile_wallet.feature.standing_instruction.generated.resources.Res
 import mobile_wallet.feature.standing_instruction.generated.resources.feature_standing_instruction_delete
 import mobile_wallet.feature.standing_instruction.generated.resources.feature_standing_instruction_delete_message
+import mobile_wallet.feature.standing_instruction.generated.resources.feature_standing_instruction_deleted_successfully
 import org.jetbrains.compose.resources.StringResource
-import org.mifospay.core.common.DataState
 import org.mifospay.core.common.getSerialized
 import org.mifospay.core.common.setSerialized
 import org.mifospay.core.data.repository.StandingInstructionRepository
@@ -78,7 +78,7 @@ class StandingInstructionViewModel(
     // screen's existing loading/error dialog + success toast. The list refresh is
     // implicit — the reactive `getAllStandingInstructionsStream` re-emits once the
     // record is gone, exactly as before.
-    private val submitDelete = viewModelScope.submitHandler<String>()
+    private val submitDelete = viewModelScope.submitHandler<Unit>()
 
     init {
         submitDelete.state
@@ -92,7 +92,11 @@ class StandingInstructionViewModel(
 
                     is SubmitState.Submitted -> {
                         mutableStateFlow.update { it.copy(dialogState = null) }
-                        sendEvent(SIEvent.ShowToast(submitState.result))
+                        sendEvent(
+                            SIEvent.ShowToast(
+                                Res.string.feature_standing_instruction_deleted_successfully,
+                            ),
+                        )
                         submitDelete.reset()
                     }
 
@@ -154,15 +158,10 @@ class StandingInstructionViewModel(
 
     private fun deleteSI(action: SIAction.Internal.DeleteSI) {
         // Submit through the handler — it drives Submitting/Submitted/Failed,
-        // observed in `init`. The block unwraps the repository's transitional
-        // DataState: return the value on success, throw on error so the handler
-        // reports Failed.
+        // observed in `init`. The repository write completes normally on success
+        // and throws on failure; the handler maps that to Submitted/Failed.
         submitDelete.submit {
-            when (val result = siRepository.deleteStandingInstruction(action.siId)) {
-                is DataState.Success -> result.data
-                is DataState.Error -> throw result.exception
-                DataState.Loading -> error("deleteStandingInstruction must not emit Loading")
-            }
+            siRepository.deleteStandingInstruction(action.siId)
         }
     }
 }
@@ -188,7 +187,7 @@ data class SIUiState(
 }
 
 sealed interface SIEvent {
-    data class ShowToast(val message: String) : SIEvent
+    data class ShowToast(val message: StringResource) : SIEvent
     data class OnNavigateToSIDetails(val siId: Long) : SIEvent
     data class OnAddEditSI(val type: SIAddEditType) : SIEvent
 }

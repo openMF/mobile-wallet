@@ -12,7 +12,6 @@ package org.mifospay.core.data.repository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kpt.core.base.store.screen.ScreenDataStream
-import org.mifospay.core.common.DataState
 import org.mifospay.core.common.ScreenState
 import org.mifospay.core.model.account.Account
 import org.mifospay.core.model.account.AccountTransferPayload
@@ -63,6 +62,6 @@ interface AccountRepository {
         scope: CoroutineScope,
     ): ScreenDataStream<List<Account>>
 
-    // Writes stay on DataState (Phase-3 D1).
-    suspend fun makeTransfer(payload: AccountTransferPayload): DataState<String>
+    // Write migrated off legacy DataState — suspends and throws on failure.
+    suspend fun makeTransfer(payload: AccountTransferPayload)
 }

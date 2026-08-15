@@ -107,15 +107,9 @@ class ClientRepositoryImpl(
         }
     }
 
-    override suspend fun updateClient(clientId: Long, client: UpdatedClient): DataState<String> {
-        return try {
-            withContext(ioDispatcher) {
-                fineractApiManager.clientsApi.updateClient(clientId, client.toEntity())
-            }
-
-            DataState.Success("Client updated successfully")
-        } catch (e: Exception) {
-            DataState.Error(e)
+    override suspend fun updateClient(clientId: Long, client: UpdatedClient) {
+        withContext(ioDispatcher) {
+            fineractApiManager.clientsApi.updateClient(clientId, client.toEntity())
         }
     }
 
@@ -126,18 +120,12 @@ class ClientRepositoryImpl(
             .flowOn(ioDispatcher)
     }
 
-    override suspend fun updateClientImage(clientId: Long, image: String): DataState<String> {
-        return try {
-            withContext(ioDispatcher) {
-                fineractApiManager.clientsApi.updateClientImage(
-                    clientId = clientId,
-                    typedFile = "data:image/png;base64,$image",
-                )
-            }
-
-            DataState.Success("Client image updated successfully")
-        } catch (e: Exception) {
-            DataState.Error(e)
+    override suspend fun updateClientImage(clientId: Long, image: String) {
+        withContext(ioDispatcher) {
+            fineractApiManager.clientsApi.updateClientImage(
+                clientId = clientId,
+                typedFile = "data:image/png;base64,$image",
+            )
         }
     }
 
@@ -157,27 +145,15 @@ class ClientRepositoryImpl(
             .flowOn(ioDispatcher)
     }
 
-    override suspend fun createClient(newClient: NewClient): DataState<Int> {
-        return try {
-            val result = withContext(ioDispatcher) {
-                fineractApiManager.clientsApi.createClient(newClient.toEntity())
-            }
-
-            DataState.Success(result.clientId)
-        } catch (e: Exception) {
-            DataState.Error(e)
+    override suspend fun createClient(newClient: NewClient): Int {
+        return withContext(ioDispatcher) {
+            fineractApiManager.clientsApi.createClient(newClient.toEntity()).clientId
         }
     }
 
-    override suspend fun deleteClient(clientId: Int): DataState<Int> {
-        return try {
-            val result = withContext(ioDispatcher) {
-                fineractApiManager.clientsApi.deleteClient(clientId)
-            }
-
-            DataState.Success(result.clientId)
-        } catch (e: Exception) {
-            DataState.Error(e)
+    override suspend fun deleteClient(clientId: Int): Int {
+        return withContext(ioDispatcher) {
+            fineractApiManager.clientsApi.deleteClient(clientId).clientId
         }
     }
 }

@@ -47,6 +47,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.launch
 import kpt.core.base.store.screen.ScreenState
 import kpt.core.base.ui.screen.ScreenContent
+import org.jetbrains.compose.resources.getString
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.resources.vectorResource
 import org.koin.compose.viewmodel.koinViewModel
@@ -90,7 +91,7 @@ fun CardsScreen(
 
             is CardEvent.ShowToast -> {
                 scope.launch {
-                    snackbarHostState.showSnackbar(event.message)
+                    snackbarHostState.showSnackbar(getString(event.message))
                 }
             }
         }

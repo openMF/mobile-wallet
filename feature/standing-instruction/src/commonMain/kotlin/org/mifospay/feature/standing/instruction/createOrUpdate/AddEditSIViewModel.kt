@@ -24,7 +24,10 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 import kpt.core.base.store.submit.SubmitState
 import kpt.core.base.store.submit.submitHandler
-import org.mifospay.core.common.DataState
+import mobile_wallet.feature.standing_instruction.generated.resources.Res
+import mobile_wallet.feature.standing_instruction.generated.resources.feature_standing_instruction_created_successfully
+import mobile_wallet.feature.standing_instruction.generated.resources.feature_standing_instruction_updated_successfully
+import org.jetbrains.compose.resources.StringResource
 import org.mifospay.core.common.DateHelper
 import org.mifospay.core.common.ScreenState
 import org.mifospay.core.common.getSerialized
@@ -82,7 +85,7 @@ internal class AddEditSIViewModel(
     // SubmitHandler instead of a hand-folded DataState result action. The handler
     // owns the Submitting/Submitted/Failed lifecycle; we observe it to drive this
     // screen's existing loading/error dialog + success toast + navigate-back.
-    private val submitSI = viewModelScope.submitHandler<String>()
+    private val submitSI = viewModelScope.submitHandler<Unit>()
 
     init {
         submitSI.state
@@ -96,7 +99,14 @@ internal class AddEditSIViewModel(
 
                     is SubmitState.Submitted -> {
                         mutableStateFlow.update { it.copy(dialogState = null) }
-                        sendEvent(AddEditSIEvent.ShowToast(submitState.result))
+                        val successMessage = when (state.type) {
+                            is SIAddEditType.AddItem ->
+                                Res.string.feature_standing_instruction_created_successfully
+
+                            is SIAddEditType.EditItem ->
+                                Res.string.feature_standing_instruction_updated_successfully
+                        }
+                        sendEvent(AddEditSIEvent.ShowToast(successMessage))
                         sendEvent(AddEditSIEvent.OnNavigateBack)
                         submitSI.reset()
                     }
@@ -310,11 +320,10 @@ internal class AddEditSIViewModel(
 
     private fun initiateSubmitSI() = onContent { content ->
         // Submit through the handler — it drives Submitting/Submitted/Failed,
-        // observed in `init`. The block unwraps the repository's transitional
-        // DataState: return the value on success, throw on error so the handler
-        // reports Failed.
+        // observed in `init`. The repository write completes normally on success
+        // and throws on failure; the handler maps that to Submitted/Failed.
         submitSI.submit {
-            val result = when (state.type) {
+            when (state.type) {
                 is SIAddEditType.AddItem -> {
                     repository.createStandingInstruction(content.payload)
                 }
@@ -325,12 +334,6 @@ internal class AddEditSIViewModel(
 
                     repository.updateStandingInstruction(insId, payload)
                 }
-            }
-
-            when (result) {
-                is DataState.Success -> result.data
-                is DataState.Error -> throw result.exception
-                DataState.Loading -> error("create/updateStandingInstruction must not emit Loading")
             }
         }
     }
@@ -684,7 +687,7 @@ internal data class AddEditSIState(
 }
 
 sealed interface AddEditSIEvent {
-    data class ShowToast(val message: String) : AddEditSIEvent
+    data class ShowToast(val message: StringResource) : AddEditSIEvent
     data object OnNavigateBack : AddEditSIEvent
 }
 

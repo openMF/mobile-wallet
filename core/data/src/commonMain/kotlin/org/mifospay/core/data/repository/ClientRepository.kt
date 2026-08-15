@@ -71,19 +71,19 @@ interface ClientRepository {
     // `asScreenStateFlow()` at the callsite.
     suspend fun getClient(clientId: Long): DataState<Client>
 
-    // Writes stay on DataState (Phase-3 D1).
-    suspend fun updateClient(clientId: Long, client: UpdatedClient): DataState<String>
+    // Writes throw on error; message-returning writes now return Unit.
+    suspend fun updateClient(clientId: Long, client: UpdatedClient)
 
     fun getClientImage(clientId: Long): Flow<ScreenState<String>>
 
-    suspend fun updateClientImage(clientId: Long, image: String): DataState<String>
+    suspend fun updateClientImage(clientId: Long, image: String)
 
     // Non-DataState/ScreenState surface — throwing suspend; leave as-is.
     suspend fun getClientAccounts(clientId: Long): ClientAccountsEntity
 
     suspend fun getAccounts(clientId: Long, accountType: String): Flow<ScreenState<List<Account>>>
 
-    suspend fun createClient(newClient: NewClient): DataState<Int>
+    suspend fun createClient(newClient: NewClient): Int
 
-    suspend fun deleteClient(clientId: Int): DataState<Int>
+    suspend fun deleteClient(clientId: Int): Int
 }

@@ -496,6 +496,5 @@ private class FakeAccountRepository : AccountRepository {
     ): ScreenDataStream<List<Account>> =
         screenDataStreamForTesting(state = flowOf(StoreScreenState.Empty))
 
-    override suspend fun makeTransfer(payload: AccountTransferPayload): DataState<String> =
-        DataState.Success("Success")
+    override suspend fun makeTransfer(payload: AccountTransferPayload) {}
 }

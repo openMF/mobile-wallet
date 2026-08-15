@@ -62,6 +62,7 @@ import mobile_wallet.feature.beneficiary.generated.resources.feature_beneficiary
 import mobile_wallet.feature.beneficiary.generated.resources.feature_beneficiary_transfer_limit
 import mobile_wallet.feature.beneficiary.generated.resources.scan_qr_code
 import mobile_wallet.feature.beneficiary.generated.resources.skip_the_form
+import org.jetbrains.compose.resources.getString
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.mifospay.core.designsystem.component.BasicDialogState
@@ -111,7 +112,7 @@ internal fun AddEditBeneficiaryScreen(
 
             is AEBEvent.ShowToast -> {
                 scope.launch {
-                    snackbarHostState.showSnackbar(event.message)
+                    snackbarHostState.showSnackbar(getString(event.message))
                 }
             }
 

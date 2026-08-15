@@ -33,10 +33,11 @@ import mobile_wallet.feature.accounts.generated.resources.feature_accounts_error
 import mobile_wallet.feature.accounts.generated.resources.feature_accounts_error_submitted_date_required
 import mobile_wallet.feature.accounts.generated.resources.feature_accounts_saving_button_save
 import mobile_wallet.feature.accounts.generated.resources.feature_accounts_saving_button_update
+import mobile_wallet.feature.accounts.generated.resources.feature_accounts_saving_created_successfully
 import mobile_wallet.feature.accounts.generated.resources.feature_accounts_saving_title_create
 import mobile_wallet.feature.accounts.generated.resources.feature_accounts_saving_title_update
+import mobile_wallet.feature.accounts.generated.resources.feature_accounts_saving_updated_successfully
 import org.jetbrains.compose.resources.StringResource
-import org.mifospay.core.common.DataState
 import org.mifospay.core.common.DateHelper
 import org.mifospay.core.common.ScreenState
 import org.mifospay.core.common.getSerialized
@@ -87,7 +88,7 @@ internal class AddEditSavingViewModel(
     // handler owns the Submitting/Submitted/Failed lifecycle; we observe it here to
     // drive this screen's existing loading/error dialog + toast + back-navigation,
     // so the Screen is unchanged.
-    private val submitSavingAccount = viewModelScope.submitHandler<String>()
+    private val submitSavingAccount = viewModelScope.submitHandler<Unit>()
 
     init {
         stateFlow
@@ -109,7 +110,14 @@ internal class AddEditSavingViewModel(
 
                     is SubmitState.Submitted -> {
                         mutableStateFlow.update { it.copy(dialogState = null) }
-                        sendEvent(AESEvent.ShowToast(submitState.result))
+                        val successMessage = when (state.type) {
+                            is SavingsAddEditType.AddItem ->
+                                Res.string.feature_accounts_saving_created_successfully
+
+                            is SavingsAddEditType.EditItem ->
+                                Res.string.feature_accounts_saving_updated_successfully
+                        }
+                        sendEvent(AESEvent.ShowToast(successMessage))
                         sendEvent(AESEvent.OnNavigateBack)
                         submitSavingAccount.reset()
                     }
@@ -293,14 +301,10 @@ internal class AddEditSavingViewModel(
     private fun initiateCreateSavingAccount() {
         onContent { content ->
             // Submit through the handler — it drives Submitting/Submitted/Failed,
-            // observed in `init`. The block unwraps the repository's transitional
-            // DataState: return the value on success, throw on error.
+            // observed in `init`. The repository write returns Unit and throws on
+            // failure; the handler maps that to Submitted/Failed.
             submitSavingAccount.submit {
-                when (val result = repository.createSavingsAccount(content.createSavingEntity)) {
-                    is DataState.Success -> result.data
-                    is DataState.Error -> throw result.exception
-                    DataState.Loading -> error("createSavingsAccount must not emit Loading")
-                }
+                repository.createSavingsAccount(content.createSavingEntity)
             }
         }
     }
@@ -312,14 +316,7 @@ internal class AddEditSavingViewModel(
             }
 
             submitSavingAccount.submit {
-                when (
-                    val result =
-                        repository.updateSavingsAccount(accountId, content.updateSavingEntity)
-                ) {
-                    is DataState.Success -> result.data
-                    is DataState.Error -> throw result.exception
-                    DataState.Loading -> error("updateSavingsAccount must not emit Loading")
-                }
+                repository.updateSavingsAccount(accountId, content.updateSavingEntity)
             }
         }
     }
@@ -476,7 +473,7 @@ internal data class AESState(
 
 internal sealed interface AESEvent {
     data object OnNavigateBack : AESEvent
-    data class ShowToast(val message: String) : AESEvent
+    data class ShowToast(val message: StringResource) : AESEvent
 }
 
 internal sealed interface AESAction {

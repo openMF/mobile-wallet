@@ -31,7 +31,6 @@ import org.mifos.authenticator.biometrics.platformAuthenticator.RegistrationResu
 import org.mifos.authenticator.passcode.PasscodeManager
 import org.mifos.feature.passcode.BiometricErrorMessages
 import org.mifos.feature.passcode.BiometricPromptStrings
-import org.mifospay.core.common.DataState
 import org.mifospay.core.data.repository.SavingsAccountRepository
 import org.mifospay.core.data.repository.UserVerificationRepository
 import org.mifospay.core.datastore.UserPreferencesRepository
@@ -98,7 +97,7 @@ class SettingsViewModel(
     // The handler owns the Submitting/Submitted/Failed lifecycle; we observe it
     // to drive this screen's existing Loading/Error dialog + logout navigation,
     // so the Screen is unchanged.
-    private val submitDisableAccount = viewModelScope.submitHandler<String>()
+    private val submitDisableAccount = viewModelScope.submitHandler<Unit>()
 
     init {
         submitDisableAccount.state
@@ -293,14 +292,10 @@ class SettingsViewModel(
     private fun handleDisableAccount() {
         // TODO:: this shouldn't work, we need account id to block account
         // Submit through the handler — it drives Submitting/Submitted/Failed, observed
-        // in `init`. The block unwraps the repository's transitional DataState result:
-        // return the value on success, throw on error so the handler reports Failed.
+        // in `init`. The repository write returns Unit and throws on failure; the
+        // handler maps that to Submitted/Failed.
         submitDisableAccount.submit {
-            when (val result = repository.blockAccount(state.client.id)) {
-                is DataState.Success -> result.data
-                is DataState.Error -> throw result.exception
-                DataState.Loading -> error("blockAccount must not emit Loading")
-            }
+            repository.blockAccount(state.client.id)
         }
     }
 

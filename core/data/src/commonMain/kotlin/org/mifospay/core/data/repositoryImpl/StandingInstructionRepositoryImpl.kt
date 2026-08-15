@@ -21,7 +21,6 @@ import kpt.core.base.store.screen.ScreenDataStream
 import kpt.core.base.store.screen.asScreenStream
 import kpt.core.store.AppStoreRegistry
 import kpt.core.store.wallet.standinginstruction.StandingInstructionKey
-import org.mifospay.core.common.DataState
 import org.mifospay.core.common.ScreenState
 import org.mifospay.core.common.asScreenStateFlow
 import org.mifospay.core.data.repository.StandingInstructionRepository
@@ -109,51 +108,33 @@ class StandingInstructionRepositoryImpl(
 
     override suspend fun createStandingInstruction(
         payload: StandingInstructionPayload,
-    ): DataState<String> {
-        return try {
-            withContext(ioDispatcher) {
-                apiManager.standingInstructionApi.createStandingInstruction(payload)
-            }
-
-            DataState.Success("Standing Instruction created successfully")
-        } catch (e: Exception) {
-            DataState.Error(e, null)
+    ) {
+        withContext(ioDispatcher) {
+            apiManager.standingInstructionApi.createStandingInstruction(payload)
         }
     }
 
     override suspend fun updateStandingInstruction(
         instructionId: Long,
         payload: SIUpdatePayload,
-    ): DataState<String> {
-        return try {
-            withContext(ioDispatcher) {
-                apiManager.standingInstructionApi.updateStandingInstruction(
-                    instructionId = instructionId,
-                    payload = payload,
-                    command = "update",
-                )
-            }
-
-            DataState.Success("Standing Instruction updated successfully")
-        } catch (e: Exception) {
-            DataState.Error(e, null)
+    ) {
+        withContext(ioDispatcher) {
+            apiManager.standingInstructionApi.updateStandingInstruction(
+                instructionId = instructionId,
+                payload = payload,
+                command = "update",
+            )
         }
     }
 
     override suspend fun deleteStandingInstruction(
         instructionId: Long,
-    ): DataState<String> {
-        return try {
-            withContext(ioDispatcher) {
-                apiManager.standingInstructionApi.deleteStandingInstruction(
-                    instructionId = instructionId,
-                    command = "delete",
-                )
-            }
-
-            DataState.Success("Standing Instruction deleted successfully")
-        } catch (e: Exception) {
-            DataState.Error(e, null)
+    ) {
+        withContext(ioDispatcher) {
+            apiManager.standingInstructionApi.deleteStandingInstruction(
+                instructionId = instructionId,
+                command = "delete",
+            )
         }
     }
 }

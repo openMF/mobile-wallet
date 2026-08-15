@@ -34,5 +34,8 @@
     <string name="feature_standing_instruction_status">Status:</string>
     <string name="feature_standing_instruction_delete">Delete Standing Instruction</string>
     <string name="feature_standing_instruction_delete_message">Are you sure you want to delete this Standing Instruction?</string>
+    <string name="feature_standing_instruction_created_successfully">Standing Instruction created successfully</string>
+    <string name="feature_standing_instruction_updated_successfully">Standing Instruction updated successfully</string>
+    <string name="feature_standing_instruction_deleted_successfully">Standing Instruction deleted successfully</string>
 
 </resources>

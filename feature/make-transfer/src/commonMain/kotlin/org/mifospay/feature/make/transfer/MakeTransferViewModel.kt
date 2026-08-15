@@ -31,7 +31,6 @@ import mobile_wallet.feature.make_transfer.generated.resources.feature_make_tran
 import mobile_wallet.feature.make_transfer.generated.resources.feature_make_transfer_error_same_account
 import mobile_wallet.feature.make_transfer.generated.resources.feature_make_transfer_error_select_account
 import org.jetbrains.compose.resources.StringResource
-import org.mifospay.core.common.DataState
 import org.mifospay.core.common.DateHelper
 import org.mifospay.core.common.ScreenState
 import org.mifospay.core.common.getSerialized
@@ -113,7 +112,7 @@ internal class MakeTransferViewModel(
     // Submitting/Submitted/Failed lifecycle (and is idempotent while Submitting — this is the
     // double-submit guard for the transfer); we observe it to drive this screen's EXISTING
     // Loading dialog / error dialog / OnTransferSuccess navigation, so the Screen is unchanged.
-    private val submitTransfer = viewModelScope.submitHandler<String>()
+    private val submitTransfer = viewModelScope.submitHandler<Unit>()
 
     init {
         submitTransfer.state
@@ -222,11 +221,7 @@ internal class MakeTransferViewModel(
         }
 
         submitTransfer.submit {
-            when (val result = accountRepository.makeTransfer(state.transferPayload)) {
-                is DataState.Success -> result.data
-                is DataState.Error -> throw result.exception
-                DataState.Loading -> error("makeTransfer must not emit Loading")
-            }
+            accountRepository.makeTransfer(state.transferPayload)
         }
     }
 

@@ -81,8 +81,8 @@ internal class EditProfileViewModel(
     // The original chain (updateClient success → image [if any] → local prefs →
     // toast + navigate-back) is reproduced by kicking the next write off the prior
     // handler's terminal state.
-    private val submitUpdateProfile = viewModelScope.submitHandler<String>()
-    private val submitUpdateImage = viewModelScope.submitHandler<String>()
+    private val submitUpdateProfile = viewModelScope.submitHandler<Unit>()
+    private val submitUpdateImage = viewModelScope.submitHandler<Unit>()
     private val submitClientProfile = viewModelScope.submitHandler<Unit>()
 
     init {
@@ -335,15 +335,11 @@ internal class EditProfileViewModel(
     }
 
     private fun initiateUpdateProfile() {
-        // updateClient write → SubmitHandler. Unwrap the transitional DataState: return
-        // the value on success, throw on error so the handler reports Failed. The chain
-        // to the image + local-prefs writes is driven from the handler's terminal state.
+        // updateClient write → SubmitHandler. The repository write returns Unit and throws
+        // on failure; the handler maps that to Submitted/Failed. The chain to the image +
+        // local-prefs writes is driven from the handler's terminal state.
         submitUpdateProfile.submit {
-            when (val result = clientRepository.updateClient(state.clientId, state.updatedClient)) {
-                is DataState.Success -> result.data
-                is DataState.Error -> throw result.exception
-                DataState.Loading -> error("updateClient must not emit Loading")
-            }
+            clientRepository.updateClient(state.clientId, state.updatedClient)
         }
     }
 
@@ -356,16 +352,7 @@ internal class EditProfileViewModel(
         val image = state.profileImage
         if (image != null) {
             submitUpdateImage.submit {
-                when (
-                    val result = clientRepository.updateClientImage(
-                        state.clientId,
-                        image.decodeToString(),
-                    )
-                ) {
-                    is DataState.Success -> result.data
-                    is DataState.Error -> throw result.exception
-                    DataState.Loading -> error("updateClientImage must not emit Loading")
-                }
+                clientRepository.updateClientImage(state.clientId, image.decodeToString())
             }
         } else {
             submitClientProfileUpdate()

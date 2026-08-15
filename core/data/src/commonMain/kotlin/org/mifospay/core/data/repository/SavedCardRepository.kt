@@ -12,7 +12,6 @@ package org.mifospay.core.data.repository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kpt.core.base.store.screen.ScreenDataStream
-import org.mifospay.core.common.DataState
 import org.mifospay.core.common.ScreenState
 import org.mifospay.core.model.savedcards.CardPayload
 import org.mifospay.core.model.savedcards.SavedCard
@@ -58,10 +57,12 @@ interface SavedCardRepository {
 
     fun getSavedCard(clientId: Long, cardId: Long): Flow<ScreenState<SavedCard>>
 
-    // Writes stay on DataState (Phase-3 D1).
-    suspend fun addSavedCard(clientId: Long, card: CardPayload): DataState<String>
+    // Writes complete normally on success and throw on failure; the caller's
+    // SubmitHandler maps success/exception to SubmitState. The user-facing success
+    // message is a feature StringResource surfaced by the ViewModel, not repo copy.
+    suspend fun addSavedCard(clientId: Long, card: CardPayload)
 
-    suspend fun deleteCard(clientId: Long, cardId: Long): DataState<String>
+    suspend fun deleteCard(clientId: Long, cardId: Long)
 
-    suspend fun updateCard(clientId: Long, cardId: Long, card: CardPayload): DataState<String>
+    suspend fun updateCard(clientId: Long, cardId: Long, card: CardPayload)
 }

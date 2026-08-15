@@ -29,7 +29,6 @@ import mobile_wallet.feature.accounts.generated.resources.delete_beneficiary_tit
 import mobile_wallet.feature.accounts.generated.resources.feature_accounts_beneficiary_deleted
 import mobile_wallet.feature.accounts.generated.resources.feature_accounts_default_account_updated
 import org.jetbrains.compose.resources.StringResource
-import org.mifospay.core.common.DataState
 import org.mifospay.core.common.ScreenState
 import org.mifospay.core.data.repository.SelfServiceRepository
 import org.mifospay.core.datastore.UserPreferencesRepository
@@ -123,7 +122,7 @@ class AccountViewModel(
     // SubmitHandler instead of a hand-folded DataState result action. The handler owns
     // the Submitting/Submitted/Failed lifecycle; we observe it here to drive this
     // screen's existing delete dialog + toast, so the Screen is unchanged.
-    private val submitDeleteBeneficiary = viewModelScope.submitHandler<String>()
+    private val submitDeleteBeneficiary = viewModelScope.submitHandler<Unit>()
 
     init {
         submitDeleteBeneficiary.state
@@ -234,14 +233,10 @@ class AccountViewModel(
 
     private fun handleDeleteBeneficiary(action: DeleteBeneficiary) {
         // Submit through the handler — it drives Submitting/Submitted/Failed, observed
-        // in `init`. The block unwraps the repository's transitional DataState result:
-        // return the value on success, throw on error so the handler reports Failed.
+        // in `init`. The repository write returns Unit and throws on failure; the
+        // handler maps that to Submitted/Failed.
         submitDeleteBeneficiary.submit {
-            when (val result = repository.deleteBeneficiary(action.beneficiaryId)) {
-                is DataState.Success -> result.data
-                is DataState.Error -> throw result.exception
-                DataState.Loading -> error("deleteBeneficiary must not emit Loading")
-            }
+            repository.deleteBeneficiary(action.beneficiaryId)
         }
     }
 }

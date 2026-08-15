@@ -9,9 +9,6 @@
  */
 package org.mifospay.core.data.repositoryImpl
 
-import io.ktor.client.plugins.ClientRequestException
-import io.ktor.client.plugins.ServerResponseException
-import io.ktor.client.statement.bodyAsText
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -29,7 +26,6 @@ import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.scan
 import kotlinx.coroutines.flow.zip
 import kotlinx.coroutines.withContext
-import kotlinx.io.IOException
 import kpt.core.base.store.infra.FetchedAtRepository
 import kpt.core.base.store.screen.FetchPolicy
 import kpt.core.base.store.screen.ScreenDataStream
@@ -39,8 +35,6 @@ import kpt.core.store.wallet.beneficiary.BeneficiaryKey
 import kpt.core.store.wallet.history.TransactionKey
 import org.mifospay.core.common.DataState
 import org.mifospay.core.common.DateHelper
-import org.mifospay.core.common.HttpStatusException
-import org.mifospay.core.common.NetworkException
 import org.mifospay.core.common.ScreenState
 import org.mifospay.core.common.asScreenStateFlow
 import org.mifospay.core.common.combineResultsWith
@@ -386,62 +380,24 @@ class SelfServiceRepositoryImpl(
 
     override suspend fun createBeneficiary(
         beneficiaryPayload: BeneficiaryPayload,
-    ): DataState<String> {
-        return try {
-            withContext(dispatcher) {
-                apiManager.beneficiaryApi.createBeneficiary(beneficiaryPayload)
-            }
-
-            DataState.Success("Beneficiary created successfully")
-        } catch (e: Exception) {
-            DataState.Error(e)
+    ) {
+        withContext(dispatcher) {
+            apiManager.beneficiaryApi.createBeneficiary(beneficiaryPayload)
         }
     }
 
     override suspend fun updateBeneficiary(
         beneficiaryId: Long,
         payload: BeneficiaryUpdatePayload,
-    ): DataState<String> {
-        return try {
-            withContext(dispatcher) {
-                apiManager.beneficiaryApi.updateBeneficiary(beneficiaryId, payload)
-            }
-
-            DataState.Success("Beneficiary updated successfully")
-        } catch (e: Exception) {
-            DataState.Error(e)
+    ) {
+        withContext(dispatcher) {
+            apiManager.beneficiaryApi.updateBeneficiary(beneficiaryId, payload)
         }
     }
 
-    override suspend fun deleteBeneficiary(beneficiaryId: Long): DataState<String> {
-        return try {
-            withContext(dispatcher) {
-                apiManager.beneficiaryApi.deleteBeneficiary(beneficiaryId)
-            }
-
-            DataState.Success("Beneficiary deleted successfully")
-        } catch (e: ClientRequestException) {
-            val status = e.response.status.value
-            val responseBody = try {
-                e.response.bodyAsText()
-            } catch (_: Exception) {
-                ""
-            }
-            val userMessage = parseMifosError(responseBody, status)
-            DataState.Error(HttpStatusException(status, userMessage, e.message))
-        } catch (e: ServerResponseException) {
-            val status = e.response.status.value
-            val responseBody = try {
-                e.response.bodyAsText()
-            } catch (_: Exception) {
-                ""
-            }
-            val userMessage = parseMifosError(responseBody, status)
-            DataState.Error(HttpStatusException(status, userMessage, e.message))
-        } catch (e: IOException) {
-            DataState.Error(NetworkException("Network unavailable. Please check your connection."))
-        } catch (e: Exception) {
-            DataState.Error(e)
+    override suspend fun deleteBeneficiary(beneficiaryId: Long) {
+        withContext(dispatcher) {
+            apiManager.beneficiaryApi.deleteBeneficiary(beneficiaryId)
         }
     }
 }

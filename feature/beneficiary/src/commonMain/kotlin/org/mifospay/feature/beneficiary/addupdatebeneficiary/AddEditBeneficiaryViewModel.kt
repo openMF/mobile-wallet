@@ -26,6 +26,7 @@ import kpt.core.base.store.submit.submitHandler
 import mobile_wallet.feature.beneficiary.generated.resources.Res
 import mobile_wallet.feature.beneficiary.generated.resources.feature_beneficiary_account_type_other
 import mobile_wallet.feature.beneficiary.generated.resources.feature_beneficiary_account_type_wallet
+import mobile_wallet.feature.beneficiary.generated.resources.feature_beneficiary_added
 import mobile_wallet.feature.beneficiary.generated.resources.feature_beneficiary_button_save
 import mobile_wallet.feature.beneficiary.generated.resources.feature_beneficiary_button_update
 import mobile_wallet.feature.beneficiary.generated.resources.feature_beneficiary_error_empty_account_number
@@ -36,8 +37,8 @@ import mobile_wallet.feature.beneficiary.generated.resources.feature_beneficiary
 import mobile_wallet.feature.beneficiary.generated.resources.feature_beneficiary_error_select_locale
 import mobile_wallet.feature.beneficiary.generated.resources.feature_beneficiary_title_add
 import mobile_wallet.feature.beneficiary.generated.resources.feature_beneficiary_title_update
+import mobile_wallet.feature.beneficiary.generated.resources.feature_beneficiary_updated
 import org.jetbrains.compose.resources.StringResource
-import org.mifospay.core.common.DataState
 import org.mifospay.core.common.ScreenState
 import org.mifospay.core.common.getSerialized
 import org.mifospay.core.common.setSerialized
@@ -153,7 +154,7 @@ internal class AddEditBeneficiaryViewModel(
     // owns the Submitting/Submitted/Failed lifecycle; we observe it in `init` to
     // drive this screen's existing loading/error dialog + toast + QR navigation,
     // so the Screen is unchanged.
-    private val submitBeneficiary = viewModelScope.submitHandler<String>()
+    private val submitBeneficiary = viewModelScope.submitHandler<Unit>()
 
     init {
         stateFlow
@@ -171,7 +172,14 @@ internal class AddEditBeneficiaryViewModel(
 
                     is SubmitState.Submitted -> {
                         mutableStateFlow.update { it.copy(dialogState = null) }
-                        sendEvent(AEBEvent.ShowToast(submitState.result))
+                        val successMessage = when (state.addEditType) {
+                            is BeneficiaryAddEditType.AddItem ->
+                                Res.string.feature_beneficiary_added
+
+                            is BeneficiaryAddEditType.EditItem ->
+                                Res.string.feature_beneficiary_updated
+                        }
+                        sendEvent(AEBEvent.ShowToast(successMessage))
                         navigateAfterSave()
                         submitBeneficiary.reset()
                     }
@@ -342,15 +350,10 @@ internal class AddEditBeneficiaryViewModel(
                 )
 
                 // Submit through the handler — it drives Submitting/Submitted/Failed,
-                // observed in `init`. The block unwraps the repository's transitional
-                // DataState result: return the value on success, throw on error so the
-                // handler reports Failed.
+                // observed in `init`. The repository write returns Unit and throws on
+                // failure; the handler maps that to Submitted/Failed.
                 submitBeneficiary.submit {
-                    when (val result = repository.createBeneficiary(payload)) {
-                        is DataState.Success -> result.data
-                        is DataState.Error -> throw result.exception
-                        DataState.Loading -> error("createBeneficiary must not emit Loading")
-                    }
+                    repository.createBeneficiary(payload)
                 }
             }
 
@@ -362,11 +365,7 @@ internal class AddEditBeneficiaryViewModel(
                 )
 
                 submitBeneficiary.submit {
-                    when (val result = repository.updateBeneficiary(beneficiaryId, payload)) {
-                        is DataState.Success -> result.data
-                        is DataState.Error -> throw result.exception
-                        DataState.Loading -> error("updateBeneficiary must not emit Loading")
-                    }
+                    repository.updateBeneficiary(beneficiaryId, payload)
                 }
             }
         }
@@ -490,7 +489,7 @@ internal data class AEBState(
 internal sealed interface AEBEvent {
     data object NavigateBack : AEBEvent
     data object NavigateToQr : AEBEvent
-    data class ShowToast(val message: String) : AEBEvent
+    data class ShowToast(val message: StringResource) : AEBEvent
 
     /**
      * Navigate to intra-bank transfer screen after successfully adding beneficiary from QR scan.

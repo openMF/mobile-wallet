@@ -12,8 +12,8 @@ iosTeamId        = "L432S2FZP5"                      # Apple Developer Team ID
 # ─────────────────────────────────────────────────────────────────────────────────────────────────
 # Android
 androidDesugarJdkLibs = "2.1.5"
-androidGradlePlugin = "9.2.1"
-androidTools = "32.2.1"
+androidGradlePlugin = "9.3.1"
+androidTools = "32.3.1"
 compileSdk = "37"
 minSdk = "26"
 targetSdk = "37"
@@ -96,7 +96,7 @@ kotlinxCoroutines = "1.11.0"
 kotlinxDatetime = "0.8.0"
 kotlinxImmutable = "0.5.1"
 kotlinxSerializationJson = "1.11.0"
-ksp = "2.3.9"
+ksp = "2.3.11"
 
 # Ktor & Ktorfit
 ktorVersion = "3.5.1"
@@ -118,7 +118,7 @@ mokkery = "3.4.2"
 # 3.5.9: cmp-network-monitor accuracy overhaul (seed fix incl. no-plan/captive-portal, HTTP-204
 # validation, injectable ConnectivityProvider) — MobileByteLabs/KmpToolkit#150. Replaces the
 # mifos-pay-local jordond experiment.
-kmptoolkit = "3.5.9"
+kmptoolkit = "3.5.11"
 
 # CMP Libraries
 compose-plugin = "1.11.1"
@@ -169,7 +169,7 @@ sqliteWeb = "2.7.0"
 # worker-kmp — single-API background + foreground worker scheduling across
 # Android / iOS / Desktop / Web. See https://github.com/MobileByteLabs/worker-kmp.
 # Pin tracks last published release on Maven Central.
-worker-version = "4.0.4"
+worker-version = "4.0.6"
 # KMPNotifier — Kotlin Multiplatform local + push notifications (Android/iOS/Desktop/Web).
 kmpnotifier = "2.0.0"
 

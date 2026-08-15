@@ -486,14 +486,11 @@ class SignupViewModel(
                 countryId = state.countryInput,
             ),
         )
-        val clientId = when (val result = clientRepository.createClient(newClient)) {
-            is DataState.Success -> result.data
-            is DataState.Error -> {
-                userRepository.deleteUser(userId)
-                throw Exception(result.exception.message.toString())
-            }
-
-            is DataState.Loading -> error("createClient must not emit Loading")
+        val clientId = try {
+            clientRepository.createClient(newClient)
+        } catch (e: Exception) {
+            userRepository.deleteUser(userId)
+            throw Exception(e.message.toString())
         }
 
         // 4. Assign the client to the user (rollback: delete both on failure).
@@ -501,7 +498,7 @@ class SignupViewModel(
             is DataState.Success -> Unit
             is DataState.Error -> {
                 userRepository.deleteUser(userId)
-                clientRepository.deleteClient(clientId)
+                runCatching { clientRepository.deleteClient(clientId) }
                 throw Exception(result.exception.toString())
             }
 

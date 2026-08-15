@@ -21,7 +21,6 @@ import kpt.core.base.store.screen.ScreenDataStream
 import kpt.core.base.store.screen.asScreenStream
 import kpt.core.store.AppStoreRegistry
 import kpt.core.store.wallet.invoice.InvoiceKey
-import org.mifospay.core.common.DataState
 import org.mifospay.core.common.ScreenState
 import org.mifospay.core.common.asScreenStateFlow
 import org.mifospay.core.data.repository.InvoiceRepository
@@ -90,15 +89,9 @@ class InvoiceRepositoryImpl(
         )
     }
 
-    override suspend fun createInvoice(clientId: Long, invoice: InvoiceEntity): DataState<String> {
-        return try {
-            withContext(ioDispatcher) {
-                apiManager.invoiceApi.addInvoice(clientId, invoice)
-            }
-
-            DataState.Success("Invoice created successfully")
-        } catch (e: Exception) {
-            DataState.Error(e, null)
+    override suspend fun createInvoice(clientId: Long, invoice: InvoiceEntity) {
+        withContext(ioDispatcher) {
+            apiManager.invoiceApi.addInvoice(clientId, invoice)
         }
     }
 
@@ -106,27 +99,15 @@ class InvoiceRepositoryImpl(
         clientId: Long,
         invoiceId: Long,
         invoice: InvoiceEntity,
-    ): DataState<String> {
-        return try {
-            withContext(ioDispatcher) {
-                apiManager.invoiceApi.updateInvoice(clientId, invoiceId, invoice)
-            }
-
-            DataState.Success("Invoice updated successfully")
-        } catch (e: Exception) {
-            DataState.Error(e, null)
+    ) {
+        withContext(ioDispatcher) {
+            apiManager.invoiceApi.updateInvoice(clientId, invoiceId, invoice)
         }
     }
 
-    override suspend fun deleteInvoice(clientId: Long, invoiceId: Long): DataState<String> {
-        return try {
-            withContext(ioDispatcher) {
-                apiManager.invoiceApi.deleteInvoice(clientId, invoiceId)
-            }
-
-            DataState.Success("Invoice deleted successfully")
-        } catch (e: Exception) {
-            DataState.Error(e, null)
+    override suspend fun deleteInvoice(clientId: Long, invoiceId: Long) {
+        withContext(ioDispatcher) {
+            apiManager.invoiceApi.deleteInvoice(clientId, invoiceId)
         }
     }
 }

@@ -70,6 +70,7 @@ import mobile_wallet.feature.accounts.generated.resources.feature_accounts_add_s
 import mobile_wallet.feature.accounts.generated.resources.feature_accounts_add_with_hold_tax
 import mobile_wallet.feature.accounts.generated.resources.feature_accounts_add_withdrawal_fee
 import mobile_wallet.feature.accounts.generated.resources.feature_accounts_error_oops
+import org.jetbrains.compose.resources.getString
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.mifospay.core.designsystem.component.BasicDialogState
@@ -104,7 +105,7 @@ internal fun AddEditSavingAccountScreen(
             is AESEvent.OnNavigateBack -> navigateBack.invoke()
             is AESEvent.ShowToast -> {
                 scope.launch {
-                    snackbarHostState.showSnackbar(event.message)
+                    snackbarHostState.showSnackbar(getString(event.message))
                 }
             }
         }

@@ -287,7 +287,7 @@ class SignUpViewModelTest {
         everySuspend { mockUserRepository.createUser(any()) } returns DataState.Success(123)
 
         // Mock client creation to return a client ID
-        everySuspend { mockClientRepository.createClient(any()) } returns DataState.Success(456)
+        everySuspend { mockClientRepository.createClient(any()) } returns 456
 
         // Mock assigning client to user to return success
         everySuspend {
@@ -344,7 +344,7 @@ class SignUpViewModelTest {
         everySuspend { mockUserRepository.createUser(any()) } returns DataState.Success(101)
 
         // Mock client creation
-        everySuspend { mockClientRepository.createClient(any()) } returns DataState.Success(202)
+        everySuspend { mockClientRepository.createClient(any()) } returns 202
 
         // Mock client-user assignment
         everySuspend { mockUserRepository.assignClientToUser(101, 202) } returns DataState.Success(Unit)

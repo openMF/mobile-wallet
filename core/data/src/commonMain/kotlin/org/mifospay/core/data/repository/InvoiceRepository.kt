@@ -12,7 +12,6 @@ package org.mifospay.core.data.repository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kpt.core.base.store.screen.ScreenDataStream
-import org.mifospay.core.common.DataState
 import org.mifospay.core.common.ScreenState
 import org.mifospay.core.model.datatables.invoice.Invoice
 import org.mifospay.core.model.datatables.invoice.InvoiceEntity
@@ -58,14 +57,16 @@ interface InvoiceRepository {
         scope: CoroutineScope,
     ): ScreenDataStream<List<Invoice>>
 
-    // Writes stay on DataState (Phase-3 D1).
-    suspend fun createInvoice(clientId: Long, invoice: InvoiceEntity): DataState<String>
+    // Writes complete normally on success and throw on failure; the caller's
+    // SubmitHandler maps success/exception to SubmitState. The user-facing success
+    // message is a feature StringResource surfaced by the ViewModel, not repo copy.
+    suspend fun createInvoice(clientId: Long, invoice: InvoiceEntity)
 
     suspend fun updateInvoice(
         clientId: Long,
         invoiceId: Long,
         invoice: InvoiceEntity,
-    ): DataState<String>
+    )
 
-    suspend fun deleteInvoice(clientId: Long, invoiceId: Long): DataState<String>
+    suspend fun deleteInvoice(clientId: Long, invoiceId: Long)
 }

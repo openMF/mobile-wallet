@@ -12,7 +12,6 @@ package org.mifospay.core.data.repository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kpt.core.base.store.screen.ScreenDataStream
-import org.mifospay.core.common.DataState
 import org.mifospay.core.common.ScreenState
 import org.mifospay.core.model.standinginstruction.SITemplate
 import org.mifospay.core.model.standinginstruction.SIUpdatePayload
@@ -50,15 +49,17 @@ interface StandingInstructionRepository {
 
     fun getStandingInstruction(instructionId: Long): Flow<ScreenState<StandingInstruction>>
 
-    // Writes stay on DataState (Phase-3 D1).
+    // Writes complete normally on success and throw on failure; the caller's
+    // SubmitHandler maps success/exception to SubmitState. The user-facing success
+    // message is a feature StringResource surfaced by the ViewModel, not repo copy.
     suspend fun createStandingInstruction(
         payload: StandingInstructionPayload,
-    ): DataState<String>
+    )
 
     suspend fun updateStandingInstruction(
         instructionId: Long,
         payload: SIUpdatePayload,
-    ): DataState<String>
+    )
 
-    suspend fun deleteStandingInstruction(instructionId: Long): DataState<String>
+    suspend fun deleteStandingInstruction(instructionId: Long)
 }

@@ -21,7 +21,6 @@ import kpt.core.base.store.screen.ScreenDataStream
 import kpt.core.base.store.screen.asScreenStream
 import kpt.core.store.AppStoreRegistry
 import kpt.core.store.wallet.savedcards.SavedCardKey
-import org.mifospay.core.common.DataState
 import org.mifospay.core.common.ScreenState
 import org.mifospay.core.common.asScreenStateFlow
 import org.mifospay.core.data.repository.SavedCardRepository
@@ -90,27 +89,15 @@ class SavedCardRepositoryImpl(
             .flowOn(ioDispatcher)
     }
 
-    override suspend fun addSavedCard(clientId: Long, card: CardPayload): DataState<String> {
-        return try {
-            withContext(ioDispatcher) {
-                apiManager.savedCardApi.addSavedCard(clientId, card)
-            }
-
-            DataState.Success("Card added successfully")
-        } catch (e: Exception) {
-            DataState.Error(e, null)
+    override suspend fun addSavedCard(clientId: Long, card: CardPayload) {
+        withContext(ioDispatcher) {
+            apiManager.savedCardApi.addSavedCard(clientId, card)
         }
     }
 
-    override suspend fun deleteCard(clientId: Long, cardId: Long): DataState<String> {
-        return try {
-            withContext(ioDispatcher) {
-                apiManager.savedCardApi.deleteCard(clientId, cardId)
-            }
-
-            DataState.Success("Card deleted successfully")
-        } catch (e: Exception) {
-            DataState.Error(e, null)
+    override suspend fun deleteCard(clientId: Long, cardId: Long) {
+        withContext(ioDispatcher) {
+            apiManager.savedCardApi.deleteCard(clientId, cardId)
         }
     }
 
@@ -118,15 +105,9 @@ class SavedCardRepositoryImpl(
         clientId: Long,
         cardId: Long,
         card: CardPayload,
-    ): DataState<String> {
-        return try {
-            withContext(ioDispatcher) {
-                apiManager.savedCardApi.updateCard(clientId, cardId, card)
-            }
-
-            DataState.Success("Card updated successfully")
-        } catch (e: Exception) {
-            DataState.Error(e, null)
+    ) {
+        withContext(ioDispatcher) {
+            apiManager.savedCardApi.updateCard(clientId, cardId, card)
         }
     }
 }
