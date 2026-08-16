@@ -18,12 +18,16 @@ app_access:
   all_functionality_available_without_special_access: false
   login_required: true
   restricted_functionality: true
+  account_creation_method: "Username and password (Fineract self-registration — verified against AuthenticationRepositoryImpl.kt + SignupViewModel.kt; no OAuth/SSO/biometric)"
   # NOTE: reviewer demo credentials are in app-profile/app.yaml#store.review.demo_user/demo_password
-  # (real account, from dev fastlane/metadata/ios/review_information) — reuse for Play Console
-  # "App access" → "All or some functionality is restricted" → provide login credentials.
+  # (real account, from dev fastlane/metadata/ios/review_information). Android shares the SAME
+  # backend account as iOS — confirmed no separate Android-specific credential exists anywhere in
+  # the repo or on dev. Reuse for Play Console "App access" → "All or some functionality is
+  # restricted" → provide login credentials.
   notes: >
-    Requires a Mifos X (Fineract) account — sign up as a customer or merchant, or sign in with an
-    existing account. Reviewer login credentials are provided separately (see app.yaml#store.review).
+    Requires a Mifos X (Fineract) account — sign up as a customer or merchant (creates a real new
+    backend account), or sign in with an existing account. Reviewer login credentials are provided
+    separately (see app.yaml#store.review) — the same account works for both iOS and Android.
 
 content_rating:
   ref: ./content-rating.yaml
@@ -42,7 +46,7 @@ data_safety:
   ref: ./data-safety.csv
   collects_or_shares_data: true
   encrypted_in_transit: true   # real: network access points are HTTPS (https://api.openmf.org/)
-  data_deletion: unknown        # NOT verified — confirm the real account/data-deletion mechanism before submitting
+  data_deletion: unknown        # no in-app data-deletion flow found in source — verify whether the Mifos X institution's backend offers an out-of-band account-deletion process before submitting
   notes: >
     Real data collected (linked to the user's identity), matching the already-submitted iOS
     Privacy Nutrition Label 1:1: name, email address, phone number, physical address, user ID,
@@ -111,16 +115,25 @@ questionnaire:
       - q: Is all of the user data collected by your app encrypted in transit?
         a: "Yes — HTTPS (https://api.openmf.org/)"
       - q: Does your app provide a way for users to request that their data be deleted?
-        a: "NOT VERIFIED — confirm the real account/data-deletion mechanism before answering"
+        a: "NOT VERIFIED — no in-app data-deletion flow found in the source; confirm whether the Mifos X institution's backend offers an out-of-band account-deletion process before answering"
       - q: Which of the following methods of account creation does your app support?
-        a: "Username and password (Mifos X / Fineract registration) — confirm exact method before answering"
+        a: >-
+          Username and password — VERIFIED against the real source:
+          core/data/.../AuthenticationRepositoryImpl.kt authenticates via
+          AuthenticationPayload(username, password) against the Fineract self-service API
+          (Basic-Auth token response); SignupViewModel.kt implements guided self-registration
+          (username, password, email, mobile, name, address, savings-account selection) that
+          creates a genuine new backend account, not an admin-provisioned one. No OAuth/SSO/
+          biometric option exists. The Fineract tenant identifier is resolved from the selected
+          Mifos X instance at the HTTP-client level, not user-entered — so from the user's
+          perspective it is purely username + password.
       - q: Which data types does your app collect or share?
         a: >-
           Name, Email address, Phone number, Address, User IDs, User payment info (bank/account),
           Device or other IDs, Photos (KYC document upload) — matches the real iOS Privacy Nutrition
           Label 1:1. All collected for App functionality; not shared with third parties beyond the
           user's own Mifos X institution.
-    outcome: "Real data collection declared — NOT the template's 'no data collected' posture. The per-field required/optional + deletion-mechanism answers still need human confirmation against the actual implementation before submitting."
+    outcome: "Real data collection declared — NOT the template's 'no data collected' posture. Account creation method is verified against source. The per-field required/optional + data-deletion-mechanism answers still need human confirmation before submitting."
   target-audience:
     form: Target audience and content
     where: Play Console → App content → Target audience and content

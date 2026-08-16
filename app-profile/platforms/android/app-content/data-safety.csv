@@ -1,7 +1,7 @@
 Question ID (machine readable),Response ID (machine readable),Response value,Answer requirement,Human-friendly question label
 PSL_DATA_COLLECTION_COLLECTS_PERSONAL_DATA,,true,REQUIRED,Does your app collect or share any of the required user data types?
 PSL_DATA_COLLECTION_ENCRYPTED_IN_TRANSIT,,true,MAYBE_REQUIRED,Is all of the user data collected by your app encrypted in transit?
-PSL_SUPPORTED_ACCOUNT_CREATION_METHODS,PSL_ACM_USER_ID_PASSWORD,,MULTIPLE_CHOICE,Which of the following methods of account creation does your app support? Select all that apply / Username and password
+PSL_SUPPORTED_ACCOUNT_CREATION_METHODS,PSL_ACM_USER_ID_PASSWORD,true,MULTIPLE_CHOICE,Which of the following methods of account creation does your app support? Select all that apply / Username and password
 PSL_SUPPORTED_ACCOUNT_CREATION_METHODS,PSL_ACM_USER_ID_OTHER_AUTH,,MULTIPLE_CHOICE,Which of the following methods of account creation does your app support? Select all that apply / Username and other authentication
 PSL_SUPPORTED_ACCOUNT_CREATION_METHODS,PSL_ACM_USER_ID_PASSWORD_OTHER_AUTH,,MULTIPLE_CHOICE,"Which of the following methods of account creation does your app support? Select all that apply / Username, password, and other authentication"
 PSL_SUPPORTED_ACCOUNT_CREATION_METHODS,PSL_ACM_OAUTH,,MULTIPLE_CHOICE,Which of the following methods of account creation does your app support? Select all that apply / OAuth
