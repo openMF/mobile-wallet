@@ -1,24 +1,29 @@
-# deployment-layer/store-listing/variants/v1/app-content/android/en-US/app-content.yaml
-# feeds Google Play Console "App content" section (Play Store listing → App content). Folds 1:1
-# into app-profile/platforms/android/app-content/app-content.yaml on `--sync`.
+# app-profile/platforms/android/app-content/app-content.yaml
+# feeds Google Play Console "App content" section (Play Store listing → App content).
 #
-# App Toolkit posture: 100% offline, no login, no account, no ads, no tracking, no analytics,
-# no data collection or transmission of any kind.
+# Mifos Pay posture: a REAL mobile banking client — user registration/login, real financial
+# account + transaction data, KYC document upload, all sent to the user's own Mifos X (Fineract)
+# institution instance over HTTPS. NOT the neutral kmp-project-template's "100% offline, no login,
+# no data collection" demo posture — that would be a materially false declaration for this app.
+# Cross-checked against the real, already-submitted iOS Privacy Nutrition Label
+# (app-profile/platforms/apple/ios/app-content/app_privacy_details.json) — same app, same backend,
+# same real data categories.
 
-privacy_policy_url: https://raw.githubusercontent.com/openMF/kmp-project-template/main/legal/output/privacy-policy.md
+privacy_policy_url: https://openmf.github.io/privacy_policy_mifos_mobile.html
 
 ads:
   contains_ads: false
 
 app_access:
-  all_functionality_available_without_special_access: true
-  login_required: false
-  restricted_functionality: false
+  all_functionality_available_without_special_access: false
+  login_required: true
+  restricted_functionality: true
+  # NOTE: reviewer demo credentials are in app-profile/app.yaml#store.review.demo_user/demo_password
+  # (real account, from dev fastlane/metadata/ios/review_information) — reuse for Play Console
+  # "App access" → "All or some functionality is restricted" → provide login credentials.
   notes: >
-    No login, no account, no gated features. The full app (loan tracker, EMI
-    calculator, affordability calculator, bill reminders, amortization
-    schedule, loan comparison, interest rates, country macro data, currency
-    exchange rates) is usable immediately after install with zero setup.
+    Requires a Mifos X (Fineract) account — sign up as a customer or merchant, or sign in with an
+    existing account. Reviewer login credentials are provided separately (see app.yaml#store.review).
 
 content_rating:
   ref: ./content-rating.yaml
@@ -30,20 +35,23 @@ target_audience:
   appeals_to_children: false
   is_child_directed: false
   notes: >
-    Personal-finance / loan-tracking utility aimed at adults managing their
-    own finances. Not designed or marketed for children.
+    Mobile banking / digital wallet utility aimed at adults managing their own financial accounts.
+    Not designed or marketed for children.
 
 data_safety:
   ref: ./data-safety.csv
-  collects_or_shares_data: false
-  encrypted_in_transit: not_applicable
-  data_deletion: not_applicable
+  collects_or_shares_data: true
+  encrypted_in_transit: true   # real: network access points are HTTPS (https://api.openmf.org/)
+  data_deletion: unknown        # NOT verified — confirm the real account/data-deletion mechanism before submitting
   notes: >
-    App collects and transmits NO user data. All state (loans, reminders,
-    calculator inputs) is stored locally on-device only. Read-only public-data
-    calls (FRED interest rates, World Bank macro data, currency exchange
-    rates) carry no personal identifiers and are not "data collected" from
-    the user. See data-safety.csv for the full Play Console questionnaire.
+    Real data collected (linked to the user's identity), matching the already-submitted iOS
+    Privacy Nutrition Label 1:1: name, email address, phone number, physical address, user ID,
+    payment/bank account info, device ID, and photos (KYC document upload). All sent to the user's
+    own Mifos X (Fineract) institution instance for app functionality (account management, KYC,
+    fraud prevention) — not for advertising, analytics, or third-party sharing beyond that
+    institution. See data-safety.csv for the full Play Console questionnaire; the deep per-field
+    "required vs optional" and data-deletion-mechanism answers there are NOT yet verified against
+    the actual app implementation — confirm before submitting to Play Console.
 
 special_categories:
   news_apps_declaration:
@@ -54,19 +62,20 @@ special_categories:
     is_government_app: false
 
 financial_features_declaration:
-  is_financial_app_requiring_declaration: false
+  is_financial_app_requiring_declaration: true
   notes: >
-    App Toolkit is a personal offline utility (loan tracking, EMI
-    calculation) — it does not originate, process, or facilitate loans,
-    payments, or any regulated financial transaction, so it does not trigger
-    Play's financial-services app declaration requirements.
+    Mifos Pay is a real mobile banking / digital wallet client — it originates and facilitates
+    transfers, bill payments, and account management against a Mifos X (Fineract) institution, so
+    it DOES trigger Play's financial-services app declaration requirements. The specific financial-
+    services sub-category answers (e.g. which regulated activities apply) are NOT yet completed
+    here — confirm the exact declaration with the institution's compliance team before submitting.
 
 health_apps:
   is_health_app: false
 
 # ── questionnaire: the actual multi-question Play Console forms, in order ──
 # Keyed by console form; every question the console asks paired with the exact answer to select.
-# Answers derived from the data-posture above (100% offline, no login, no data collection).
+# Answers derived from the real data-posture above (real login, real financial data collection).
 questionnaire:
   content-rating:
     form: Content rating
@@ -98,14 +107,20 @@ questionnaire:
     where: Play Console → App content → Data safety → Manage
     steps:
       - q: Does your app collect or share any of the required user data types?
-        a: "No"
+        a: "Yes"
       - q: Is all of the user data collected by your app encrypted in transit?
-        a: Not applicable — no data is collected
+        a: "Yes — HTTPS (https://api.openmf.org/)"
       - q: Does your app provide a way for users to request that their data be deleted?
-        a: Not applicable — no data is collected or stored off-device
+        a: "NOT VERIFIED — confirm the real account/data-deletion mechanism before answering"
       - q: Which of the following methods of account creation does your app support?
-        a: My app does not allow users to create an account
-    outcome: "No data shared/collected — badge: Data safety section shows \"No data collected\""
+        a: "Username and password (Mifos X / Fineract registration) — confirm exact method before answering"
+      - q: Which data types does your app collect or share?
+        a: >-
+          Name, Email address, Phone number, Address, User IDs, User payment info (bank/account),
+          Device or other IDs, Photos (KYC document upload) — matches the real iOS Privacy Nutrition
+          Label 1:1. All collected for App functionality; not shared with third parties beyond the
+          user's own Mifos X institution.
+    outcome: "Real data collection declared — NOT the template's 'no data collected' posture. The per-field required/optional + deletion-mechanism answers still need human confirmation against the actual implementation before submitting."
   target-audience:
     form: Target audience and content
     where: Play Console → App content → Target audience and content
@@ -129,8 +144,10 @@ questionnaire:
     where: Play Console → App content → App access
     steps:
       - q: Is all or part of your app restricted, requiring special access for review (e.g. login credentials)?
-        a: All functionality is available without special access
-    outcome: No restricted access — reviewer can use every feature immediately
+        a: "All or some functionality is restricted — provide login credentials"
+    outcome: >-
+      Real login required. Reviewer demo credentials: app-profile/app.yaml#store.review.demo_user /
+      demo_password (real account, from dev fastlane/metadata/ios/review_information).
   special-cats:
     form: News apps / COVID-19 contact tracing / Government apps
     where: Play Console → App content → News apps, COVID-19 apps, Government apps declarations
@@ -154,5 +171,5 @@ questionnaire:
     where: Play Console → App content → Privacy policy
     steps:
       - q: Provide a link to your privacy policy.
-        a: https://raw.githubusercontent.com/openMF/kmp-project-template/main/legal/output/privacy-policy.md
-    outcome: Privacy policy URL on file
+        a: https://openmf.github.io/privacy_policy_mifos_mobile.html
+    outcome: Real, already-published privacy policy URL on file

@@ -1,9 +1,10 @@
-# deployment-layer/store-listing/variants/v1/app-content/android/en-US/content-rating.yaml
-# feeds Google Play Console "App content" → "Content rating" (IARC) questionnaire. Folds 1:1
-# into app-profile/platforms/android/app-content/content-rating.yaml on `--sync`.
+# app-profile/platforms/android/app-content/content-rating.yaml
+# feeds Google Play Console "App content" → "Content rating" (IARC) questionnaire.
 #
-# App Toolkit posture: 100% offline, no login, no account, no ads, no tracking, no user-generated
-# content. Loan tracker / EMI calculator / bill reminders / interest-rate viewer only.
+# Mifos Pay is a real mobile banking client (real login, real financial data — see app-content.yaml
+# for the full posture), but the IARC content-rating questionnaire below is specifically about
+# objectionable CONTENT (violence/sexual/profanity/gambling/UGC), not data collection — a real
+# banking app genuinely has none of that content either, so these answers stay accurate.
 
 category: Utility  # IARC "reference category" — Utility, Productivity, or Other (non-game)
 
