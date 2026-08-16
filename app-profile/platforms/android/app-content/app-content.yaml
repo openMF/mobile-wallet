@@ -19,15 +19,15 @@ app_access:
   login_required: true
   restricted_functionality: true
   account_creation_method: "Username and password (Fineract self-registration — verified against AuthenticationRepositoryImpl.kt + SignupViewModel.kt; no OAuth/SSO/biometric)"
-  # NOTE: reviewer demo credentials are in app-profile/app.yaml#store.review.demo_user/demo_password
-  # (real account, from dev fastlane/metadata/ios/review_information). Android shares the SAME
-  # backend account as iOS — confirmed no separate Android-specific credential exists anywhere in
-  # the repo or on dev. Reuse for Play Console "App access" → "All or some functionality is
-  # restricted" → provide login credentials.
+  # NOTE: reviewer demo credentials are in app-profile/app.yaml#store.review.demo_user/demo_password —
+  # the real, community-documented mifos-bank-2 "Wallet User" demo account (Mifos Mobile Apps
+  # Community wiki, Instance 2). Same account/instance works for both iOS and Android. Reuse for
+  # Play Console "App access" → "All or some functionality is restricted" → provide login credentials.
   notes: >
     Requires a Mifos X (Fineract) account — sign up as a customer or merchant (creates a real new
-    backend account), or sign in with an existing account. Reviewer login credentials are provided
-    separately (see app.yaml#store.review) — the same account works for both iOS and Android.
+    backend account), or sign in with an existing account. Reviewer login credentials + the demo
+    instance URL are provided separately (see app.yaml#store.review) — the same account works for
+    both iOS and Android.
 
 content_rating:
   ref: ./content-rating.yaml
@@ -160,7 +160,7 @@ questionnaire:
         a: "All or some functionality is restricted — provide login credentials"
     outcome: >-
       Real login required. Reviewer demo credentials: app-profile/app.yaml#store.review.demo_user /
-      demo_password (real account, from dev fastlane/metadata/ios/review_information).
+      demo_password — real mifos-bank-2 "Wallet User" account from the Mifos Mobile Apps Community wiki.
   special-cats:
     form: News apps / COVID-19 contact tracing / Government apps
     where: Play Console → App content → News apps, COVID-19 apps, Government apps declarations

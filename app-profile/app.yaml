@@ -97,12 +97,14 @@ store:
   copyright: '© 2025 The Mifos Initiative'
   age_rating: '4+'                            # iOS + macOS App Store age rating (store.ios.age.rating)
   review:
-    notes: ''                                 # matches dev's real (blank) review notes
-    # NOTE: the review contact NAME/EMAIL/PHONE is NOT authored here — it's org.first_name/
-    # org.last_name/org.email/org.phone above (the actual keys SyncForkConfigPlugin writes to
-    # review_information/{first,last}_name.txt + email_address.txt + phone_number.txt).
-    demo_user: "venus"                       # real reviewer demo account, from dev fastlane/metadata/ios/review_information
-    demo_password: "@Venus@2025@"
+    # Real, community-documented demo instance + account for App Store/Play reviewers — from the
+    # Mifos Mobile Apps Community wiki (Instance 2: mifos-bank-2), specifically the "Wallet User"
+    # role row for Mifos Wallet (Mifos Pay): https://mifosforge.jira.com/wiki/spaces/MP/pages/4537024513
+    notes: >-
+      In the app's instance picker, select or add the demo instance at
+      https://mifos-bank-2.mifos.community/ and sign in with the credentials below.
+    demo_user: "andromeda"
+    demo_password: "password"
   app_description: Mifos Pay                   # desktop packaging description (app.description)
 
 media:
