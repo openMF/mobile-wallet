@@ -23,7 +23,7 @@
 # ═════════════════════════════════════════════════════════════════════════════
 
 schema_version: "1.0"
-project: mobile-wallet
+project: mifos-pay
 template_version: "2026.5.0"
 
 # Per-target fork state. `canonical_name` MUST match a target in the template

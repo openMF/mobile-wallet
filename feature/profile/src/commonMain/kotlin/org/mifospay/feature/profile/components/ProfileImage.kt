@@ -27,9 +27,9 @@ import coil3.ImageLoader
 import coil3.compose.AsyncImage
 import coil3.compose.LocalPlatformContext
 import coil3.request.ImageRequest
-import mobile_wallet.feature.profile.generated.resources.Res
-import mobile_wallet.feature.profile.generated.resources.feature_profile_profile_image_description
-import mobile_wallet.feature.profile.generated.resources.placeholder
+import mifos_pay.feature.profile.generated.resources.Res
+import mifos_pay.feature.profile.generated.resources.feature_profile_profile_image_description
+import mifos_pay.feature.profile.generated.resources.placeholder
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.mifospay.core.designsystem.icon.MifosIcons

@@ -20,8 +20,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.sp
-import mobile_wallet.feature.upi_setup.generated.resources.Res
-import mobile_wallet.feature.upi_setup.generated.resources.feature_upi_setup_enter_otp
+import mifos_pay.feature.upi_setup.generated.resources.Res
+import mifos_pay.feature.upi_setup.generated.resources.feature_upi_setup_enter_otp
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.mifospay.core.designsystem.theme.MifosTheme

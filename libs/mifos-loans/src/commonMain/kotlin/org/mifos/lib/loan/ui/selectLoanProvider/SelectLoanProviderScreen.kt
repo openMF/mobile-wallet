@@ -22,9 +22,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import mobile_wallet.libs.mifos_loans.generated.resources.Res
-import mobile_wallet.libs.mifos_loans.generated.resources.feature_select_loan_provider_choose_provider
-import mobile_wallet.libs.mifos_loans.generated.resources.feature_select_loan_provider_top_bar_title
+import mifos_pay.libs.mifos_loans.generated.resources.Res
+import mifos_pay.libs.mifos_loans.generated.resources.feature_select_loan_provider_choose_provider
+import mifos_pay.libs.mifos_loans.generated.resources.feature_select_loan_provider_top_bar_title
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.mifospay.core.designsystem.component.MifosCard

@@ -33,11 +33,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextAlign
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import mobile_wallet.feature.kyc.generated.resources.Res
-import mobile_wallet.feature.kyc.generated.resources.feature_kyc_check
-import mobile_wallet.feature.kyc.generated.resources.feature_kyc_complete_kyc
-import mobile_wallet.feature.kyc.generated.resources.feature_kyc_error_oops
-import mobile_wallet.feature.kyc.generated.resources.feature_kyc_unexpected_error_subtitle
+import mifos_pay.feature.kyc.generated.resources.Res
+import mifos_pay.feature.kyc.generated.resources.feature_kyc_check
+import mifos_pay.feature.kyc.generated.resources.feature_kyc_complete_kyc
+import mifos_pay.feature.kyc.generated.resources.feature_kyc_error_oops
+import mifos_pay.feature.kyc.generated.resources.feature_kyc_unexpected_error_subtitle
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.mifospay.core.designsystem.icon.MifosIcons

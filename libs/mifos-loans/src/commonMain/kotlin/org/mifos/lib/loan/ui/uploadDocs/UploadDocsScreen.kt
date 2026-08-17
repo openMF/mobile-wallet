@@ -32,9 +32,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import mobile_wallet.libs.mifos_loans.generated.resources.Res
-import mobile_wallet.libs.mifos_loans.generated.resources.feature_apply_loan_section_fill_details
-import mobile_wallet.libs.mifos_loans.generated.resources.feature_button_next
+import mifos_pay.libs.mifos_loans.generated.resources.Res
+import mifos_pay.libs.mifos_loans.generated.resources.feature_apply_loan_section_fill_details
+import mifos_pay.libs.mifos_loans.generated.resources.feature_button_next
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.mifos.lib.loan.component.UploadDocumentsSection

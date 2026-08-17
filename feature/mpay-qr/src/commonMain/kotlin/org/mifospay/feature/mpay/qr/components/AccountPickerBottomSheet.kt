@@ -28,10 +28,10 @@ import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import mobile_wallet.feature.mpay_qr.generated.resources.Res
-import mobile_wallet.feature.mpay_qr.generated.resources.feature_mpay_qr_has_external_id
-import mobile_wallet.feature.mpay_qr.generated.resources.feature_mpay_qr_no_external_id
-import mobile_wallet.feature.mpay_qr.generated.resources.feature_mpay_qr_select_account
+import mifos_pay.feature.mpay_qr.generated.resources.Res
+import mifos_pay.feature.mpay_qr.generated.resources.feature_mpay_qr_has_external_id
+import mifos_pay.feature.mpay_qr.generated.resources.feature_mpay_qr_no_external_id
+import mifos_pay.feature.mpay_qr.generated.resources.feature_mpay_qr_select_account
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.mifospay.core.designsystem.icon.MifosIcons

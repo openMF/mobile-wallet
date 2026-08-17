@@ -22,8 +22,8 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import mobile_wallet.feature.upi_setup.generated.resources.Res
-import mobile_wallet.feature.upi_setup.generated.resources.feature_upi_setup_back
+import mifos_pay.feature.upi_setup.generated.resources.Res
+import mifos_pay.feature.upi_setup.generated.resources.feature_upi_setup_back
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel

@@ -14,7 +14,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.serialization.json.Json
-import mobile_wallet.core.network.generated.resources.Res
+import mifos_pay.core.network.generated.resources.Res
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.mifospay.core.common.ScreenState
 import org.mifospay.core.common.asScreenStateFlow

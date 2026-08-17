@@ -32,11 +32,11 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import mobile_wallet.feature.transfer_intrabank.generated.resources.Res
-import mobile_wallet.feature.transfer_intrabank.generated.resources.feature_send_money_add_payee
-import mobile_wallet.feature.transfer_intrabank.generated.resources.feature_send_money_history
-import mobile_wallet.feature.transfer_intrabank.generated.resources.feature_send_money_request
-import mobile_wallet.feature.transfer_intrabank.generated.resources.feature_send_money_scan_qr
+import mifos_pay.feature.transfer_intrabank.generated.resources.Res
+import mifos_pay.feature.transfer_intrabank.generated.resources.feature_send_money_add_payee
+import mifos_pay.feature.transfer_intrabank.generated.resources.feature_send_money_history
+import mifos_pay.feature.transfer_intrabank.generated.resources.feature_send_money_request
+import mifos_pay.feature.transfer_intrabank.generated.resources.feature_send_money_scan_qr
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.mifospay.core.designsystem.icon.MifosIcons

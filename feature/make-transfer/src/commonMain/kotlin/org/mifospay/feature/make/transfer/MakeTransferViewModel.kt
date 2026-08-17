@@ -5,7 +5,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See https://github.com/openMF/mifos-pay/blob/master/LICENSE.md
  */
 package org.mifospay.feature.make.transfer
 
@@ -22,14 +22,14 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 import kpt.core.base.store.submit.SubmitState
 import kpt.core.base.store.submit.submitHandler
-import mobile_wallet.feature.make_transfer.generated.resources.Res
-import mobile_wallet.feature.make_transfer.generated.resources.feature_make_transfer_error_empty_amount
-import mobile_wallet.feature.make_transfer.generated.resources.feature_make_transfer_error_empty_description
-import mobile_wallet.feature.make_transfer.generated.resources.feature_make_transfer_error_inactive_account
-import mobile_wallet.feature.make_transfer.generated.resources.feature_make_transfer_error_insufficient_balance
-import mobile_wallet.feature.make_transfer.generated.resources.feature_make_transfer_error_invalid_amount
-import mobile_wallet.feature.make_transfer.generated.resources.feature_make_transfer_error_same_account
-import mobile_wallet.feature.make_transfer.generated.resources.feature_make_transfer_error_select_account
+import mifos_pay.feature.make_transfer.generated.resources.Res
+import mifos_pay.feature.make_transfer.generated.resources.feature_make_transfer_error_empty_amount
+import mifos_pay.feature.make_transfer.generated.resources.feature_make_transfer_error_empty_description
+import mifos_pay.feature.make_transfer.generated.resources.feature_make_transfer_error_inactive_account
+import mifos_pay.feature.make_transfer.generated.resources.feature_make_transfer_error_insufficient_balance
+import mifos_pay.feature.make_transfer.generated.resources.feature_make_transfer_error_invalid_amount
+import mifos_pay.feature.make_transfer.generated.resources.feature_make_transfer_error_same_account
+import mifos_pay.feature.make_transfer.generated.resources.feature_make_transfer_error_select_account
 import org.jetbrains.compose.resources.StringResource
 import org.mifospay.core.common.DateHelper
 import org.mifospay.core.common.ScreenState

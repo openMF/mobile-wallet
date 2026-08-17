@@ -12,8 +12,8 @@ package org.mifospay.feature.history.detail
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.update
-import mobile_wallet.feature.history.generated.resources.Res
-import mobile_wallet.feature.history.generated.resources.feature_history_error_fallback
+import mifos_pay.feature.history.generated.resources.Res
+import mifos_pay.feature.history.generated.resources.feature_history_error_fallback
 import org.jetbrains.compose.resources.StringResource
 import org.mifospay.core.common.ScreenState
 import org.mifospay.core.data.repository.AccountRepository

@@ -22,10 +22,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import mobile_wallet.feature.mpay_qr_scan.generated.resources.Res
-import mobile_wallet.feature.mpay_qr_scan.generated.resources.feature_qr_help_description
-import mobile_wallet.feature.mpay_qr_scan.generated.resources.feature_qr_help_title
-import mobile_wallet.feature.mpay_qr_scan.generated.resources.feature_qr_ok
+import mifos_pay.feature.mpay_qr_scan.generated.resources.Res
+import mifos_pay.feature.mpay_qr_scan.generated.resources.feature_qr_help_description
+import mifos_pay.feature.mpay_qr_scan.generated.resources.feature_qr_help_title
+import mifos_pay.feature.mpay_qr_scan.generated.resources.feature_qr_ok
 import org.jetbrains.compose.resources.stringResource
 import org.mifospay.core.designsystem.icon.MifosIcons
 import template.core.base.designsystem.theme.KptTheme

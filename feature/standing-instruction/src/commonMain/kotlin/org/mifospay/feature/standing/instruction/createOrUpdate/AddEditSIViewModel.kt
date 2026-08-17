@@ -24,9 +24,9 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 import kpt.core.base.store.submit.SubmitState
 import kpt.core.base.store.submit.submitHandler
-import mobile_wallet.feature.standing_instruction.generated.resources.Res
-import mobile_wallet.feature.standing_instruction.generated.resources.feature_standing_instruction_created_successfully
-import mobile_wallet.feature.standing_instruction.generated.resources.feature_standing_instruction_updated_successfully
+import mifos_pay.feature.standing_instruction.generated.resources.Res
+import mifos_pay.feature.standing_instruction.generated.resources.feature_standing_instruction_created_successfully
+import mifos_pay.feature.standing_instruction.generated.resources.feature_standing_instruction_updated_successfully
 import org.jetbrains.compose.resources.StringResource
 import org.mifospay.core.common.DateHelper
 import org.mifospay.core.common.ScreenState

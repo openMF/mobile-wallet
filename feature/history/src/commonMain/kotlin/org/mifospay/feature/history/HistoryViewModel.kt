@@ -18,9 +18,9 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import mobile_wallet.feature.history.generated.resources.Res
-import mobile_wallet.feature.history.generated.resources.feature_history_error
-import mobile_wallet.feature.history.generated.resources.feature_history_no_account
+import mifos_pay.feature.history.generated.resources.Res
+import mifos_pay.feature.history.generated.resources.feature_history_error
+import mifos_pay.feature.history.generated.resources.feature_history_no_account
 import org.jetbrains.compose.resources.StringResource
 import org.mifospay.core.common.ScreenState
 import org.mifospay.core.data.repository.AccountRepository

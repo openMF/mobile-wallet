@@ -18,8 +18,8 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 import kpt.core.base.store.submit.SubmitState
 import kpt.core.base.store.submit.submitHandler
-import mobile_wallet.feature.auth.generated.resources.Res
-import mobile_wallet.feature.auth.generated.resources.feature_auth_error_login_failed
+import mifos_pay.feature.auth.generated.resources.Res
+import mifos_pay.feature.auth.generated.resources.feature_auth_error_login_failed
 import org.jetbrains.compose.resources.getString
 import org.mifospay.core.common.getSerialized
 import org.mifospay.core.common.setSerialized

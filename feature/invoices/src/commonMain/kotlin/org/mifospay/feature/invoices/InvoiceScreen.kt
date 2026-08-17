@@ -24,9 +24,9 @@ import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kpt.core.base.store.screen.ScreenState
 import kpt.core.base.ui.screen.ScreenContent
-import mobile_wallet.feature.invoices.generated.resources.Res
-import mobile_wallet.feature.invoices.generated.resources.feature_invoices_error_no_invoices_found
-import mobile_wallet.feature.invoices.generated.resources.feature_invoices_error_oops
+import mifos_pay.feature.invoices.generated.resources.Res
+import mifos_pay.feature.invoices.generated.resources.feature_invoices_error_no_invoices_found
+import mifos_pay.feature.invoices.generated.resources.feature_invoices_error_oops
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.mifospay.core.designsystem.component.MifosScaffold

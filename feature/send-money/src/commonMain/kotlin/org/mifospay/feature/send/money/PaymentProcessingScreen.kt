@@ -25,9 +25,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import mobile_wallet.feature.send_money.generated.resources.Res
-import mobile_wallet.feature.send_money.generated.resources.feature_send_money_paid_to
-import mobile_wallet.feature.send_money.generated.resources.feature_send_money_paying_securely
+import mifos_pay.feature.send_money.generated.resources.Res
+import mifos_pay.feature.send_money.generated.resources.feature_send_money_paid_to
+import mifos_pay.feature.send_money.generated.resources.feature_send_money_paying_securely
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel

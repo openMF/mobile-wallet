@@ -33,9 +33,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
-import mobile_wallet.feature.mpay_qr.generated.resources.Res
-import mobile_wallet.feature.mpay_qr.generated.resources.feature_mpay_qr_primary
-import mobile_wallet.feature.mpay_qr.generated.resources.logo
+import mifos_pay.feature.mpay_qr.generated.resources.Res
+import mifos_pay.feature.mpay_qr.generated.resources.feature_mpay_qr_primary
+import mifos_pay.feature.mpay_qr.generated.resources.logo
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview

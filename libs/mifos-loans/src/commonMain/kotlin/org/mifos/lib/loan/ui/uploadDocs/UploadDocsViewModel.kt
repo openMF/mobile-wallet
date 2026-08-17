@@ -20,8 +20,8 @@ import io.github.vinceglb.filekit.readBytes
 import io.github.vinceglb.filekit.size
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import mobile_wallet.libs.mifos_loans.generated.resources.Res
-import mobile_wallet.libs.mifos_loans.generated.resources.feature_upload_file_error
+import mifos_pay.libs.mifos_loans.generated.resources.Res
+import mifos_pay.libs.mifos_loans.generated.resources.feature_upload_file_error
 import org.jetbrains.compose.resources.StringResource
 import org.mifos.lib.loan.component.DocumentType
 import org.mifos.lib.loan.component.SignatureUploadType

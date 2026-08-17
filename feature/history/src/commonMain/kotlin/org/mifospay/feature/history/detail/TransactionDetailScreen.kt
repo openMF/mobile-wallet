@@ -20,11 +20,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import mobile_wallet.feature.history.generated.resources.Res
-import mobile_wallet.feature.history.generated.resources.feature_history_error
-import mobile_wallet.feature.history.generated.resources.feature_history_error_oops
-import mobile_wallet.feature.history.generated.resources.feature_history_share
-import mobile_wallet.feature.history.generated.resources.feature_history_transaction_details
+import mifos_pay.feature.history.generated.resources.Res
+import mifos_pay.feature.history.generated.resources.feature_history_error
+import mifos_pay.feature.history.generated.resources.feature_history_error_oops
+import mifos_pay.feature.history.generated.resources.feature_history_share
+import mifos_pay.feature.history.generated.resources.feature_history_transaction_details
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.mifospay.core.designsystem.component.MifosScaffold

@@ -29,10 +29,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kpt.core.base.store.screen.ScreenState
 import kpt.core.base.ui.screen.ScreenContent
-import mobile_wallet.feature.notification.generated.resources.Res
-import mobile_wallet.feature.notification.generated.resources.feature_notification_nothing_to_notify
-import mobile_wallet.feature.notification.generated.resources.feature_notification_notifications
-import mobile_wallet.feature.notification.generated.resources.feature_notification_there_is_nothing_to_show
+import mifos_pay.feature.notification.generated.resources.Res
+import mifos_pay.feature.notification.generated.resources.feature_notification_nothing_to_notify
+import mifos_pay.feature.notification.generated.resources.feature_notification_notifications
+import mifos_pay.feature.notification.generated.resources.feature_notification_there_is_nothing_to_show
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel

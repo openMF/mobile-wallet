@@ -20,9 +20,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
-import mobile_wallet.feature.mpay_qr.generated.resources.Res
-import mobile_wallet.feature.mpay_qr.generated.resources.feature_mpay_qr_download_qr
-import mobile_wallet.feature.mpay_qr.generated.resources.feature_mpay_qr_share_qr
+import mifos_pay.feature.mpay_qr.generated.resources.Res
+import mifos_pay.feature.mpay_qr.generated.resources.feature_mpay_qr_download_qr
+import mifos_pay.feature.mpay_qr.generated.resources.feature_mpay_qr_share_qr
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.mifospay.core.designsystem.component.MifosOutlinedButton

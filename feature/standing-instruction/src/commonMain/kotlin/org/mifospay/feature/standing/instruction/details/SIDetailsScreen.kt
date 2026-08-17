@@ -32,8 +32,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import mobile_wallet.feature.standing_instruction.generated.resources.Res
-import mobile_wallet.feature.standing_instruction.generated.resources.feature_standing_instruction_error_oops
+import mifos_pay.feature.standing_instruction.generated.resources.Res
+import mifos_pay.feature.standing_instruction.generated.resources.feature_standing_instruction_error_oops
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.mifospay.core.common.CurrencyFormatter

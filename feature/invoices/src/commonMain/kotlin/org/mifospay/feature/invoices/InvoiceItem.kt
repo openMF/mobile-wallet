@@ -19,9 +19,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
-import mobile_wallet.feature.invoices.generated.resources.Res
-import mobile_wallet.feature.invoices.generated.resources.ic_check
-import mobile_wallet.feature.invoices.generated.resources.ic_remove
+import mifos_pay.feature.invoices.generated.resources.Res
+import mifos_pay.feature.invoices.generated.resources.ic_check
+import mifos_pay.feature.invoices.generated.resources.ic_remove
 import org.jetbrains.compose.resources.vectorResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.mifospay.core.model.datatables.invoice.Invoice

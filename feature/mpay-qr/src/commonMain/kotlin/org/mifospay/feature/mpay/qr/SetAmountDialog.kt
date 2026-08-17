@@ -30,11 +30,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import mobile_wallet.feature.mpay_qr.generated.resources.Res
-import mobile_wallet.feature.mpay_qr.generated.resources.feature_request_money_cancel
-import mobile_wallet.feature.mpay_qr.generated.resources.feature_request_money_confirm
-import mobile_wallet.feature.mpay_qr.generated.resources.feature_request_money_enter_valid_amount
-import mobile_wallet.feature.mpay_qr.generated.resources.feature_request_money_set_amount
+import mifos_pay.feature.mpay_qr.generated.resources.Res
+import mifos_pay.feature.mpay_qr.generated.resources.feature_request_money_cancel
+import mifos_pay.feature.mpay_qr.generated.resources.feature_request_money_confirm
+import mifos_pay.feature.mpay_qr.generated.resources.feature_request_money_enter_valid_amount
+import mifos_pay.feature.mpay_qr.generated.resources.feature_request_money_set_amount
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.mifospay.core.designsystem.component.MifosButton

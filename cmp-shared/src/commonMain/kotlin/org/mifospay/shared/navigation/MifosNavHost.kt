@@ -15,10 +15,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.navOptions
 import cmp.shared.generated.resources.feature_finance_accounts
 import cmp.shared.generated.resources.feature_finance_beneficiaries
-import mobile_wallet.feature.payments.generated.resources.Res
-import mobile_wallet.feature.payments.generated.resources.feature_payments_history
-import mobile_wallet.feature.payments.generated.resources.feature_payments_request
-import mobile_wallet.feature.payments.generated.resources.feature_payments_send
+import mifos_pay.feature.payments.generated.resources.Res
+import mifos_pay.feature.payments.generated.resources.feature_payments_history
+import mifos_pay.feature.payments.generated.resources.feature_payments_request
+import mifos_pay.feature.payments.generated.resources.feature_payments_send
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.koinInject
 import org.mifos.feature.passcode.internalMifosPasscodeScreen

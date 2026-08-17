@@ -40,9 +40,9 @@ import coil3.compose.SubcomposeAsyncImage
 import coil3.compose.SubcomposeAsyncImageContent
 import coil3.compose.rememberAsyncImagePainter
 import kotlinx.coroutines.launch
-import mobile_wallet.feature.kyc.generated.resources.Res
-import mobile_wallet.feature.kyc.generated.resources.feature_kyc_file_name
-import mobile_wallet.feature.kyc.generated.resources.feature_kyc_submit
+import mifos_pay.feature.kyc.generated.resources.Res
+import mifos_pay.feature.kyc.generated.resources.feature_kyc_file_name
+import mifos_pay.feature.kyc.generated.resources.feature_kyc_submit
 import org.jetbrains.compose.resources.getString
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel

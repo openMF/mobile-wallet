@@ -17,8 +17,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import mobile_wallet.feature.receipt.generated.resources.Res
-import mobile_wallet.feature.receipt.generated.resources.feature_receipt_receipt
+import mifos_pay.feature.receipt.generated.resources.Res
+import mifos_pay.feature.receipt.generated.resources.feature_receipt_receipt
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.mifospay.core.designsystem.component.MifosScaffold

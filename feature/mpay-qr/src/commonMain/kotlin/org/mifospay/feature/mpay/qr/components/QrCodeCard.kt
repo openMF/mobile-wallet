@@ -32,11 +32,11 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import io.github.alexzhirkevich.qrose.options.QrOptions
 import io.github.alexzhirkevich.qrose.rememberQrCodePainter
-import mobile_wallet.feature.mpay_qr.generated.resources.Res
-import mobile_wallet.feature.mpay_qr.generated.resources.feature_mpay_qr_inter_bank
-import mobile_wallet.feature.mpay_qr.generated.resources.feature_mpay_qr_intra_bank
-import mobile_wallet.feature.mpay_qr.generated.resources.feature_mpay_qr_scan_instruction
-import mobile_wallet.feature.mpay_qr.generated.resources.logo
+import mifos_pay.feature.mpay_qr.generated.resources.Res
+import mifos_pay.feature.mpay_qr.generated.resources.feature_mpay_qr_inter_bank
+import mifos_pay.feature.mpay_qr.generated.resources.feature_mpay_qr_intra_bank
+import mifos_pay.feature.mpay_qr.generated.resources.feature_mpay_qr_scan_instruction
+import mifos_pay.feature.mpay_qr.generated.resources.logo
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview

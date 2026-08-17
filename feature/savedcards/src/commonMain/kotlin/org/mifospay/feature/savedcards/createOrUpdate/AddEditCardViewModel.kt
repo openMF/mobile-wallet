@@ -19,9 +19,9 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 import kpt.core.base.store.submit.SubmitState
 import kpt.core.base.store.submit.submitHandler
-import mobile_wallet.feature.savedcards.generated.resources.Res
-import mobile_wallet.feature.savedcards.generated.resources.feature_savedcards_card_added_successfully
-import mobile_wallet.feature.savedcards.generated.resources.feature_savedcards_card_updated_successfully
+import mifos_pay.feature.savedcards.generated.resources.Res
+import mifos_pay.feature.savedcards.generated.resources.feature_savedcards_card_added_successfully
+import mifos_pay.feature.savedcards.generated.resources.feature_savedcards_card_updated_successfully
 import org.jetbrains.compose.resources.StringResource
 import org.mifospay.core.common.ScreenState
 import org.mifospay.core.common.getSerialized

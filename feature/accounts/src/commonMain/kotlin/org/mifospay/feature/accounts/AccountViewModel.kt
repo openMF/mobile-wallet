@@ -23,11 +23,11 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import kpt.core.base.store.submit.SubmitState
 import kpt.core.base.store.submit.submitHandler
-import mobile_wallet.feature.accounts.generated.resources.Res
-import mobile_wallet.feature.accounts.generated.resources.delete_beneficiary_subtitle
-import mobile_wallet.feature.accounts.generated.resources.delete_beneficiary_title
-import mobile_wallet.feature.accounts.generated.resources.feature_accounts_beneficiary_deleted
-import mobile_wallet.feature.accounts.generated.resources.feature_accounts_default_account_updated
+import mifos_pay.feature.accounts.generated.resources.Res
+import mifos_pay.feature.accounts.generated.resources.delete_beneficiary_subtitle
+import mifos_pay.feature.accounts.generated.resources.delete_beneficiary_title
+import mifos_pay.feature.accounts.generated.resources.feature_accounts_beneficiary_deleted
+import mifos_pay.feature.accounts.generated.resources.feature_accounts_default_account_updated
 import org.jetbrains.compose.resources.StringResource
 import org.mifospay.core.common.ScreenState
 import org.mifospay.core.data.repository.SelfServiceRepository

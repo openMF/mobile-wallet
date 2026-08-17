@@ -23,9 +23,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import mobile_wallet.libs.mifos_loans.generated.resources.Res
-import mobile_wallet.libs.mifos_loans.generated.resources.feature_apply_loan_title
-import mobile_wallet.libs.mifos_loans.generated.resources.feature_loan_product_details_terms
+import mifos_pay.libs.mifos_loans.generated.resources.Res
+import mifos_pay.libs.mifos_loans.generated.resources.feature_apply_loan_title
+import mifos_pay.libs.mifos_loans.generated.resources.feature_loan_product_details_terms
 import org.jetbrains.compose.resources.stringResource
 import org.mifospay.core.designsystem.component.MifosButton
 import org.mifospay.core.designsystem.utils.onClick

@@ -28,11 +28,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import mobile_wallet.feature.mpay_qr_scan.generated.resources.Res
-import mobile_wallet.feature.mpay_qr_scan.generated.resources.feature_qr_close
-import mobile_wallet.feature.mpay_qr_scan.generated.resources.feature_qr_help
-import mobile_wallet.feature.mpay_qr_scan.generated.resources.feature_qr_scan_any_qr
-import mobile_wallet.feature.mpay_qr_scan.generated.resources.feature_qr_supported_transfers
+import mifos_pay.feature.mpay_qr_scan.generated.resources.Res
+import mifos_pay.feature.mpay_qr_scan.generated.resources.feature_qr_close
+import mifos_pay.feature.mpay_qr_scan.generated.resources.feature_qr_help
+import mifos_pay.feature.mpay_qr_scan.generated.resources.feature_qr_scan_any_qr
+import mifos_pay.feature.mpay_qr_scan.generated.resources.feature_qr_supported_transfers
 import org.jetbrains.compose.resources.stringResource
 import org.mifospay.core.designsystem.icon.MifosIcons
 

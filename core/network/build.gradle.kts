@@ -115,9 +115,9 @@ dependencies {
 }
 
 // Package the generated Res class under the module-scoped namespace referenced by
-// SupabaseInstanceConfigLoader (`import mobile_wallet.core.network.generated.resources.Res`).
+// SupabaseInstanceConfigLoader (`import mifos_pay.core.network.generated.resources.Res`).
 compose.resources {
     publicResClass = true
     generateResClass = always
-    packageOfResClass = "mobile_wallet.core.network.generated.resources"
+    packageOfResClass = "mifos_pay.core.network.generated.resources"
 }

@@ -42,8 +42,8 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import mobile_wallet.feature.faq.generated.resources.Res
-import mobile_wallet.feature.faq.generated.resources.feature_faq
+import mifos_pay.feature.faq.generated.resources.Res
+import mifos_pay.feature.faq.generated.resources.feature_faq
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel

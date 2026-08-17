@@ -25,8 +25,8 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 import kpt.core.base.store.submit.SubmitState
 import kpt.core.base.store.submit.submitHandler
-import mobile_wallet.feature.kyc.generated.resources.Res
-import mobile_wallet.feature.kyc.generated.resources.feature_kyc_successkyc2
+import mifos_pay.feature.kyc.generated.resources.Res
+import mifos_pay.feature.kyc.generated.resources.feature_kyc_successkyc2
 import org.jetbrains.compose.resources.StringResource
 import org.mifospay.core.common.getSerialized
 import org.mifospay.core.common.setSerialized

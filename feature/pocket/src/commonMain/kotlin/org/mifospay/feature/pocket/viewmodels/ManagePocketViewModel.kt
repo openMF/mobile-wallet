@@ -50,11 +50,11 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kpt.core.base.store.submit.SubmitState
 import kpt.core.base.store.submit.submitHandler
-import mobile_wallet.feature.pocket.generated.resources.Res
-import mobile_wallet.feature.pocket.generated.resources.feature_pocket_error_delink_account
-import mobile_wallet.feature.pocket.generated.resources.feature_pocket_error_link_accounts
-import mobile_wallet.feature.pocket.generated.resources.feature_pocket_error_load_accounts
-import mobile_wallet.feature.pocket.generated.resources.feature_pocket_unknown_account
+import mifos_pay.feature.pocket.generated.resources.Res
+import mifos_pay.feature.pocket.generated.resources.feature_pocket_error_delink_account
+import mifos_pay.feature.pocket.generated.resources.feature_pocket_error_link_accounts
+import mifos_pay.feature.pocket.generated.resources.feature_pocket_error_load_accounts
+import mifos_pay.feature.pocket.generated.resources.feature_pocket_unknown_account
 import org.jetbrains.compose.resources.getString
 import org.mifospay.core.common.ScreenState
 import org.mifospay.core.data.repository.PocketRepository

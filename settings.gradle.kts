@@ -94,7 +94,7 @@ extensions.configure<org.ajoberstar.reckon.gradle.ReckonExtension> {
 
 // Project name is driven by fork.project.name in gradle.properties (written by syncForkConfig).
 // Fallback keeps the fork's canonical name so a clean checkout builds without running syncForkConfig first.
-rootProject.name = providers.gradleProperty("fork.project.name").getOrElse("mobile-wallet")
+rootProject.name = providers.gradleProperty("fork.project.name").getOrElse("mifos-pay")
 
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
@@ -135,7 +135,7 @@ include(":core-base:ui")
 // ── Sync module (background job orchestration) ──────────────────────────────
 include(":sync")
 
-// ── Fork feature modules (mobile-wallet product surfaces) ───────────────────
+// ── Fork feature modules (mifos-pay product surfaces) ───────────────────
 include(":feature:home")
 include(":feature:history")
 include(":feature:receipt")

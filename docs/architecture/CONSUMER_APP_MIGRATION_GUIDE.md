@@ -1,6 +1,6 @@
 # Consumer App Migration Guide — Room 3 + Store 5 + Security
 
-> **Target Audience:** Developers migrating existing Mifos KMP consumer apps (mifos-mobile, mobile-wallet, field-officer-app) to the latest `kmp-project-template` infrastructure.
+> **Target Audience:** Developers migrating existing Mifos KMP consumer apps (mifos-mobile, mifos-pay, field-officer-app) to the latest `kmp-project-template` infrastructure.
 >
 > **Template Version:** Room 3.0.0-alpha03 | Store 5.1.0-alpha08 | Security (AES-256 field encryption)
 >

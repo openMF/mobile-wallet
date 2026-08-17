@@ -21,8 +21,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import mobile_wallet.feature.mpay_qr_scan.generated.resources.Res
-import mobile_wallet.feature.mpay_qr_scan.generated.resources.feature_qr_powered_by
+import mifos_pay.feature.mpay_qr_scan.generated.resources.Res
+import mifos_pay.feature.mpay_qr_scan.generated.resources.feature_qr_powered_by
 import org.jetbrains.compose.resources.stringResource
 
 @Composable

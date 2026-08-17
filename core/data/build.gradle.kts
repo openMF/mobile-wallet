@@ -104,10 +104,10 @@ kotlin {
 }
 
 // Generated compose-resources class package. AssetRepositoryImpl imports
-// `mobile_wallet.core.data.generated.resources.Res` — mirror the module-scoped naming
-// convention established by core/network (`mobile_wallet.core.network.generated.resources`).
+// `mifos_pay.core.data.generated.resources.Res` — mirror the module-scoped naming
+// convention established by core/network (`mifos_pay.core.network.generated.resources`).
 compose.resources {
     publicResClass = true
     generateResClass = always
-    packageOfResClass = "mobile_wallet.core.data.generated.resources"
+    packageOfResClass = "mifos_pay.core.data.generated.resources"
 }

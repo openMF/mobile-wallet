@@ -52,8 +52,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.launch
-import mobile_wallet.feature.standing_instruction.generated.resources.Res
-import mobile_wallet.feature.standing_instruction.generated.resources.feature_standing_instruction_error_oops
+import mifos_pay.feature.standing_instruction.generated.resources.Res
+import mifos_pay.feature.standing_instruction.generated.resources.feature_standing_instruction_error_oops
 import org.jetbrains.compose.resources.getString
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel

@@ -22,10 +22,10 @@ import kotlinx.serialization.Transient
 import kpt.core.base.store.screen.ScreenState
 import kpt.core.base.store.submit.SubmitState
 import kpt.core.base.store.submit.submitHandler
-import mobile_wallet.feature.savedcards.generated.resources.Res
-import mobile_wallet.feature.savedcards.generated.resources.feature_savedcards_card_deleted_successfully
-import mobile_wallet.feature.savedcards.generated.resources.feature_savedcards_confirm_delete_card
-import mobile_wallet.feature.savedcards.generated.resources.feature_savedcards_delete_card
+import mifos_pay.feature.savedcards.generated.resources.Res
+import mifos_pay.feature.savedcards.generated.resources.feature_savedcards_card_deleted_successfully
+import mifos_pay.feature.savedcards.generated.resources.feature_savedcards_confirm_delete_card
+import mifos_pay.feature.savedcards.generated.resources.feature_savedcards_delete_card
 import org.jetbrains.compose.resources.StringResource
 import org.mifospay.core.common.getSerialized
 import org.mifospay.core.common.setSerialized

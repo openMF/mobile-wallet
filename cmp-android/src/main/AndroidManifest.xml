@@ -21,7 +21,7 @@
          additionally requires a runtime grant — see KMPNotifier.permissionUtil. -->
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
-    <!-- Fork-only wallet permissions (mobile-wallet requires CAMERA for QR/scanning and
+    <!-- Fork-only wallet permissions (mifos-pay requires CAMERA for QR/scanning and
          legacy external storage for saved-cards / receipts / KYC exports). PRESERVED across
          template syncs — do not drop. -->
     <uses-permission android:name="android.permission.CAMERA" />

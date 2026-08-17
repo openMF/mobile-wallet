@@ -34,11 +34,11 @@ import io.github.vinceglb.filekit.dialogs.FileKitType
 import io.github.vinceglb.filekit.dialogs.compose.rememberFilePickerLauncher
 import io.github.vinceglb.filekit.readBytes
 import kotlinx.coroutines.launch
-import mobile_wallet.feature.mpay_qr_scan.generated.resources.Res
-import mobile_wallet.feature.mpay_qr_scan.generated.resources.feature_qr_no_qr_found
-import mobile_wallet.feature.mpay_qr_scan.generated.resources.feature_qr_scan_success
-import mobile_wallet.feature.mpay_qr_scan.generated.resources.feature_qr_torch
-import mobile_wallet.feature.mpay_qr_scan.generated.resources.feature_qr_upload_qr
+import mifos_pay.feature.mpay_qr_scan.generated.resources.Res
+import mifos_pay.feature.mpay_qr_scan.generated.resources.feature_qr_no_qr_found
+import mifos_pay.feature.mpay_qr_scan.generated.resources.feature_qr_scan_success
+import mifos_pay.feature.mpay_qr_scan.generated.resources.feature_qr_torch
+import mifos_pay.feature.mpay_qr_scan.generated.resources.feature_qr_upload_qr
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.mifospay.core.designsystem.icon.MifosIcons

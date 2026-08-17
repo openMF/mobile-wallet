@@ -24,8 +24,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import mobile_wallet.feature.merchants.generated.resources.Res
-import mobile_wallet.feature.merchants.generated.resources.feature_merchants_ic_bank
+import mifos_pay.feature.merchants.generated.resources.Res
+import mifos_pay.feature.merchants.generated.resources.feature_merchants_ic_bank
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.mifospay.core.designsystem.component.MifosCard

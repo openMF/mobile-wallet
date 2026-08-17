@@ -8,7 +8,7 @@ kmpProductFlavors = "2.8.3"
 appId            = "org.mifospay"                    # Android applicationId + iOS bundle ID
 appDisplayName   = "Mifos Pay"                       # Android app_name, iOS CFBundleDisplayName
 desktopAppName   = "Mifos Pay"                       # JVM package name, dock name
-projectName      = "mobile-wallet"                   # rootProject.name, Fastlane PROJECT_NAME
+projectName      = "mifos-pay"                        # rootProject.name, Fastlane PROJECT_NAME
 iosTeamId        = "L432S2FZP5"                      # Apple Developer Team ID
 # ─────────────────────────────────────────────────────────────────────────────────────────────────
 # Android
@@ -176,7 +176,7 @@ kmpnotifier = "2.0.0"
 
 # ── Fork-only versions ──────────────────────────────────────────────────────────────────────────
 # Kept because feature/**, core/**, libs/** modules still reference these directly; not all are
-# in the template catalog (mobile-wallet added them for wallet-specific surfaces).
+# in the template catalog (mifos-pay added them for wallet-specific surfaces).
 accompanist = "0.36.0"
 cameraLifecycleVersion = "1.4.2"
 cameraViewVersion = "1.4.2"

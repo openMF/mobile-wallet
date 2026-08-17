@@ -23,7 +23,7 @@ network:
   demo_password: demo
   log_tag: MifosPay
   # Declarative access-point topology — every REST + Supabase endpoint the app talks to, in ONE place.
-  # mobile-wallet talks to a single Mifos X (Fineract) platform API; the per-flavor BASE_URL above
+  # mifos-pay talks to a single Mifos X (Fineract) platform API; the per-flavor BASE_URL above
   # (demo/prod) is what KMPFlavorsConventionPlugin actually wires into BuildConfig today — this
   # access_points list is the AppAccessPoints.kt SoT for forks that adopt core/network's
   # AccessPointRegistry (not yet wired into this fork's core/network, so it's descriptive only).

@@ -11,7 +11,7 @@ package org.mifospay.core.data.repositoryImpl
 
 import kotlinx.coroutines.flow.flow
 import kotlinx.serialization.json.Json
-import mobile_wallet.core.data.generated.resources.Res
+import mifos_pay.core.data.generated.resources.Res
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.mifospay.core.common.ScreenStateStream
 import org.mifospay.core.common.asScreenStateFlow
