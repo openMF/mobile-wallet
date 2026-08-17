@@ -171,6 +171,13 @@ include(":feature:pocket")
 include(":libs")
 include(":libs:mifos-loans")
 
+// Fork-owned module-include seam (B1/T11 white-label). A fork adds its own `include(":feature:x")`
+// lines in `settings.local.gradle.kts` — never in this template-synced file. Guarded so a `--clean`
+// fork that removed the file still configures.
+if (file("settings.local.gradle.kts").exists()) {
+    apply(from = "settings.local.gradle.kts")
+}
+
 check(JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_17)) {
     """
     This project requires JDK 17+ but it is currently using JDK ${JavaVersion.current()}.

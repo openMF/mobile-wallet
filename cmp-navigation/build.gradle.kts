@@ -102,3 +102,12 @@ compose.resources {
     generateResClass = always
     packageOfResClass = "cmp.navigation.generated.resources"
 }
+
+// Fork-owned feature-module dependencies (S7/F4 white-label seam). Applied AFTER the `kotlin { }` block
+// above so the `commonMainImplementation` configuration it contributes to already exists. A fork edits
+// `feature-deps.gradle.kts`, never this template-owned build file — a template sync full-copies this file.
+// Mifos Pay's existing ~28 feature-module deps stay inline in the `commonMain.dependencies { }` block
+// above (pre-dates this seam's adoption; not moved to avoid an unnecessary bulk-move of working config).
+// Any NEW feature dependency a future contributor adds should go in `feature-deps.gradle.kts` instead,
+// so it survives the next template sync.
+apply(from = rootProject.file("feature-deps.gradle.kts"))
