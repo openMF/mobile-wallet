@@ -31,7 +31,7 @@ import template.core.base.designsystem.theme.KptTheme
 
 @Composable
 internal fun DebitCardScreen(
-    onDebitCardVerified: (String) -> Unit,
+    onDebitCardVerified: () -> Unit,
     onDebitCardVerificationFailed: (String) -> Unit,
     modifier: Modifier = Modifier,
     verificationStatus: Boolean = false,
@@ -55,7 +55,7 @@ internal fun DebitCardScreen(
 @VisibleForTesting
 internal fun DebitCardScreenWithHeaderAndContent(
     debitCardUiState: DebitCardUiState,
-    onDebitCardVerified: (String) -> Unit,
+    onDebitCardVerified: () -> Unit,
     onDebitCardVerificationFailed: (String) -> Unit,
     onDone: (String, String, String) -> Unit,
     modifier: Modifier = Modifier,
@@ -100,7 +100,7 @@ internal fun DebitCardScreenWithHeaderAndContent(
                             is DebitCardUiState.Verifying -> MifosProgressIndicatorOverlay()
 
                             is DebitCardUiState.Verified -> {
-                                onDebitCardVerified((debitCardUiState).otp)
+                                onDebitCardVerified()
                             }
 
                             is DebitCardUiState.VerificationFailed -> {

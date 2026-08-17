@@ -49,6 +49,12 @@ import org.mifospay.core.ui.utils.BaseViewModel
 //      `Flow<ScreenState<List<Merchant>>>` (drop the `arrayListOf()` stub).
 //
 // TODO: merchants has no backend endpoint; add MerchantStore when the API materializes.
+//
+// @Deferred(reason = "no server endpoint", ticket = "sub-plans/MERCHANTS_ENDPOINT_VERDICT.md")
+// Re-verified 2026-08-17 (offline-first-template-migration Phase 17) — fresh grep across
+// core/data/repository, core/data/repositoryImpl, and core/network still returns zero merchant
+// hits, and FineractApiManager's 18 bound APIs still carry no merchant surface. Verdict unchanged;
+// see sub-plans/MERCHANTS_ENDPOINT_VERDICT.md for the full rationale.
 // -----------------------------------------------------------------------------
 class MerchantViewModel(
     private val savedStateHandle: SavedStateHandle,

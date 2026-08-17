@@ -25,14 +25,18 @@ class DebitCardViewModel :
     override fun handleAction(action: DebitCardAction) {
         when (action) {
             is DebitCardAction.VerifyDebitCard -> {
-                val otp = "0000"
                 viewModelScope.launch {
                     mutableStateFlow.value = DebitCardUiState.Verifying
                     delay(2000)
 
                     val isVerified = verifyDebitCardNumber(action.debitCardNumber)
                     if (isVerified) {
-                        mutableStateFlow.value = DebitCardUiState.Verified(otp)
+                        // Card FORMAT is valid — this does not, and cannot, know the real OTP
+                        // (a real OTP is delivered out-of-band and only ever verified
+                        // server-side). Verification happens downstream via
+                        // SetUpUpiViewModal.requestOtp()/verifyOtp(...) against
+                        // TwoFactorAuthRepository — see sub-plans/UPI_OTP_STUB_VERDICT.md.
+                        mutableStateFlow.value = DebitCardUiState.Verified
                     } else {
                         mutableStateFlow.value = DebitCardUiState.VerificationFailed(
                             "Invalid Debit Card Number",
@@ -65,6 +69,6 @@ sealed interface DebitCardAction {
 sealed class DebitCardUiState {
     data object Initials : DebitCardUiState()
     data object Verifying : DebitCardUiState()
-    data class Verified(val otp: String) : DebitCardUiState()
+    data object Verified : DebitCardUiState()
     data class VerificationFailed(val errorMessage: String) : DebitCardUiState()
 }

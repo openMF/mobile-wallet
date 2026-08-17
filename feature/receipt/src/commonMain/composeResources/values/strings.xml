@@ -17,6 +17,8 @@
     <string name="feature_receipt_download_complete">Download completed</string>
     <string name="feature_receipt_proceed">Proceed</string>
     <string name="feature_receipt_receipt">Receipt</string>
+    <string name="feature_receipt_not_found">Receipt not available — the transaction has not been cached yet</string>
+    <string name="feature_receipt_reference_id">Reference ID</string>
     <string name="feature_receipt_view_Receipt">View Receipt</string>
     <string name="feature_receipt_pan_id">PAN ID</string>
     <string name="feature_receipt_unique_receipt_link_copied_to_clipboard">Unique Receipt Link copied to clipboard</string>

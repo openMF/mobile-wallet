@@ -42,9 +42,11 @@ import mifos_pay.feature.history.generated.resources.feature_history_transaction
 import mifos_pay.feature.history.generated.resources.feature_history_transaction_type
 import mifos_pay.feature.history.generated.resources.feature_history_transferred_from
 import mifos_pay.feature.history.generated.resources.feature_history_transferred_to
+import mifos_pay.feature.history.generated.resources.feature_history_view_Receipt
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.mifospay.core.common.CurrencyFormatter
+import org.mifospay.core.designsystem.component.MifosButton
 import org.mifospay.core.designsystem.component.MifosScaffold
 import org.mifospay.core.model.savingsaccount.Transaction
 import org.mifospay.core.ui.ErrorScreenContent
@@ -129,6 +131,7 @@ private fun TransactionDetails(
         transaction.transfer != null -> {
             TransferTransactionDetails(
                 transaction = transaction,
+                onAction = onAction,
                 modifier = modifier,
             )
         }
@@ -145,6 +148,7 @@ private fun TransactionDetails(
 @Composable
 private fun TransferTransactionDetails(
     transaction: Transaction,
+    onAction: (STAction.ViewTransaction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -195,6 +199,22 @@ private fun TransferTransactionDetails(
             label = stringResource(Res.string.feature_history_note),
             value = transaction.transfer?.transferDescription ?: "-",
         )
+
+        // Was declared (feature_history_view_Receipt) but never wired to any action —
+        // this closes the loop to the real Receipt card, which reads off the same
+        // transferId-keyed TransferDetail Store5 vertical (see
+        // sub-plans/RECEIPT_DATA_SOURCE.md). Only shown when a transferId exists —
+        // regular (non-transfer) transactions have no receipt to view.
+        transaction.transferId?.let { transferId ->
+            MifosButton(
+                onClick = { onAction(STAction.ViewTransaction(transferId)) },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = KptTheme.spacing.md),
+            ) {
+                Text(text = stringResource(Res.string.feature_history_view_Receipt))
+            }
+        }
     }
 }
 

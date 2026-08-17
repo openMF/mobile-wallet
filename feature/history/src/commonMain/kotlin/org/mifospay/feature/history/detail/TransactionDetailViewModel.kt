@@ -34,8 +34,11 @@ internal class TransactionDetailViewModel(
         private const val TRANSFER_ID_KEY = "transferId"
     }
 
+    /** Reused by [TransactionDetailScreen]'s Share action to open Receipt on the same transfer. */
+    val transferId: Long? = savedStateHandle.get<Long>(TRANSFER_ID_KEY)
+
     init {
-        savedStateHandle.get<Long>(TRANSFER_ID_KEY)?.let { transferId ->
+        transferId?.let { transferId ->
             // transfer-detail Store5 vertical (GOAL D13) — switched from the
             // transitional `getAccountTransfer(transferId)` (`asScreenStateFlow`
             // shim over the raw Ktorfit flow) to the store-native

@@ -20,8 +20,10 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import mifos_pay.feature.upi_setup.generated.resources.Res
 import mifos_pay.feature.upi_setup.generated.resources.feature_upi_setup_back
 import org.jetbrains.compose.resources.stringResource
@@ -30,6 +32,8 @@ import org.koin.compose.viewmodel.koinViewModel
 import org.mifospay.core.common.Constants
 import org.mifospay.core.designsystem.icon.MifosIcons
 import org.mifospay.core.model.bank.BankAccountDetails
+import org.mifospay.feature.upi.setup.viewmodel.OtpRequestState
+import org.mifospay.feature.upi.setup.viewmodel.OtpVerifyState
 import org.mifospay.feature.upi.setup.viewmodel.SetUpUpiViewModal
 
 @Composable
@@ -41,11 +45,16 @@ internal fun SetupUpiPinScreenRoute(
     modifier: Modifier = Modifier,
     setUpViewModel: SetUpUpiViewModal = koinViewModel(),
 ) {
+    val state by setUpViewModel.stateFlow.collectAsStateWithLifecycle()
+
     SetupUpiPinScreen(
         type = type,
         index = index,
         bankAccountDetails = bankAccountDetails,
-        otpText = setUpViewModel.requestOtp(),
+        otpRequestState = state.otpRequestState,
+        otpVerifyState = state.otpVerifyState,
+        onRequestOtp = setUpViewModel::requestOtp,
+        onVerifyOtp = setUpViewModel::verifyOtp,
         setupUpiPin = {
             setUpViewModel.setupUpiPin(bankAccountDetails, it)
         },
@@ -61,7 +70,10 @@ internal fun SetupUpiPinScreen(
     type: String,
     index: Int,
     bankAccountDetails: BankAccountDetails,
-    otpText: String,
+    otpRequestState: OtpRequestState,
+    otpVerifyState: OtpVerifyState,
+    onRequestOtp: () -> Unit,
+    onVerifyOtp: (String) -> Unit,
     setupUpiPin: (String) -> Unit,
     onBackPress: () -> Unit,
     modifier: Modifier = Modifier,
@@ -101,7 +113,10 @@ internal fun SetupUpiPinScreen(
             ) {
                 SetUpUpiScreenContent(
                     type = type,
-                    otpText = otpText,
+                    otpRequestState = otpRequestState,
+                    otpVerifyState = otpVerifyState,
+                    onRequestOtp = onRequestOtp,
+                    onVerifyOtp = onVerifyOtp,
                     correctlySettingUpi = {
                         setupUpiPin(it)
                     },
@@ -117,7 +132,10 @@ fun PreviewSetupUpiPin() {
     SetupUpiPinScreen(
         type = Constants.SETUP_UPI_PIN,
         index = 0,
-        otpText = "907889",
+        otpRequestState = OtpRequestState.Sent("+1 •••• ••1234"),
+        otpVerifyState = OtpVerifyState.Idle,
+        onRequestOtp = {},
+        onVerifyOtp = {},
         bankAccountDetails = getBankAccountDetails(),
         onBackPress = {},
         setupUpiPin = {},
@@ -130,7 +148,10 @@ fun PreviewChangeUpi() {
     SetupUpiPinScreen(
         type = Constants.CHANGE,
         index = 0,
-        otpText = "907889",
+        otpRequestState = OtpRequestState.Sent("+1 •••• ••1234"),
+        otpVerifyState = OtpVerifyState.Idle,
+        onRequestOtp = {},
+        onVerifyOtp = {},
         bankAccountDetails = getBankAccountDetails(),
         onBackPress = {},
         setupUpiPin = {},
@@ -143,7 +164,10 @@ fun PreviewForgetUpi() {
     SetupUpiPinScreen(
         type = Constants.FORGOT,
         index = 0,
-        otpText = "907889",
+        otpRequestState = OtpRequestState.Sent("+1 •••• ••1234"),
+        otpVerifyState = OtpVerifyState.Idle,
+        onRequestOtp = {},
+        onVerifyOtp = {},
         bankAccountDetails = getBankAccountDetails(),
         onBackPress = {},
         setupUpiPin = {},

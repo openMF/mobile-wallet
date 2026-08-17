@@ -157,6 +157,7 @@ object Constants {
     const val SETTING_UP_UPI_PIN = "Setting up UPI PIN.."
     const val UPDATED_BANK_ACCOUNT = "Updated Bank Account"
     const val INDEX = "Index"
+    const val ACCOUNT_NO = "AccountNo"
     const val CHANGE_UPI_PIN = "Change UPI PIN"
     const val FORGOT_UPI_PIN = "Forgot UPI PIN"
 

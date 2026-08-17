@@ -10,28 +10,50 @@
 package org.mifospay.feature.receipt
 
 import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.StateFlow
-import org.mifospay.core.model.savingsaccount.Transaction
+import kotlinx.coroutines.flow.update
+import mifos_pay.feature.receipt.generated.resources.Res
+import mifos_pay.feature.receipt.generated.resources.feature_receipt_not_found
+import org.jetbrains.compose.resources.StringResource
+import org.mifospay.core.common.ScreenState
+import org.mifospay.core.data.repository.AccountRepository
+import org.mifospay.core.data.util.toForkScreenStateFlow
 import org.mifospay.core.model.savingsaccount.TransferDetail
 import org.mifospay.core.ui.utils.BaseViewModel
 
+/**
+ * Reads OFF the shared `TransferDetail` Store5 vertical — the SAME store
+ * `TransactionDetailViewModel` (`feature/history`) already consumes via
+ * [AccountRepository.getAccountTransferStream]. No dedicated `ReceiptStore` /
+ * `ReceiptEntity` is authored for this feature (D13 verdict — see
+ * `sub-plans/RECEIPT_DATA_SOURCE.md`): the row is cached the moment the user
+ * viewed the transaction detail, and `TransferDetail` already carries every
+ * field a receipt card needs (amount, date, currency, from/to, reference id).
+ */
 class ReceiptViewModel(
     savedStateHandle: SavedStateHandle,
+    accountRepository: AccountRepository,
 ) : BaseViewModel<ReceiptUiState, ReceiptEvent, ReceiptAction>(
-    // TODO(phase-5-batch-3): reads off the existing history / transaction store
-    //   per GOAL D13 — the receipt screen renders a `Transaction` +
-    //   `receiptLink` (see `ReceiptUiState.Success`), which is a projection of
-    //   the same transaction data the batch-4 `AppStoreRegistry.History`
-    //   LEDGER store already caches (`wallet_transactions`). No dedicated
-    //   `ReceiptEntity` / `ReceiptStore` is emitted for this feature — the
-    //   implementation should thread `transactionId` (from savedStateHandle)
-    //   into `SelfServiceRepository.getTransactionsStream(...).state` or a
-    //   future `getTransactionByIdStream(...)` variant on top of the same
-    //   store, then project the row into `ReceiptUiState.Success`. Kept as an
-    //   Error("Not implemented yet") stub until that wiring lands (existing
-    //   pre-batch-3 behavior — not a Batch-3 regression).
-    initialState = ReceiptUiState.Error("Not implemented yet"),
+    initialState = ReceiptUiState.Loading,
 ) {
+
+    companion object {
+        private const val TRANSFER_ID_KEY = "transferId"
+    }
+
+    init {
+        val transferId = savedStateHandle.get<Long>(TRANSFER_ID_KEY)
+        if (transferId != null) {
+            accountRepository.getAccountTransferStream(transferId, viewModelScope)
+                .state.toForkScreenStateFlow()
+                .observeScreen { screenState ->
+                    mutableStateFlow.update { screenState.toReceiptUiState() }
+                }
+        } else {
+            mutableStateFlow.update { ReceiptUiState.Error(Res.string.feature_receipt_not_found) }
+        }
+    }
 
     /**
      * Preserves the original public surface (`viewModel.receiptUiState`) so the
@@ -39,22 +61,50 @@ class ReceiptViewModel(
      */
     val receiptUiState: StateFlow<ReceiptUiState> get() = stateFlow
 
-    // Stub feature: not implemented yet, so there are no user-driven actions.
-    override fun handleAction(action: ReceiptAction) = Unit
+    override fun handleAction(action: ReceiptAction) {
+        when (action) {
+            ReceiptAction.NavigateBack -> sendEvent(ReceiptEvent.OnNavigateBack)
+            ReceiptAction.ShareReceipt -> sendEvent(ReceiptEvent.OnShareReceipt)
+        }
+    }
 }
 
-sealed interface ReceiptEvent
+private fun ScreenState<TransferDetail>.toReceiptUiState(): ReceiptUiState = when (this) {
+    is ScreenState.Loading -> ReceiptUiState.Loading
+    is ScreenState.Content -> ReceiptUiState.Success(data)
+    is ScreenState.Empty -> ReceiptUiState.Error(Res.string.feature_receipt_not_found)
+    is ScreenState.Error -> {
+        val message = error.message
+        if (message.isNullOrEmpty()) {
+            ReceiptUiState.Error(Res.string.feature_receipt_not_found)
+        } else {
+            ReceiptUiState.ErrorMessage(message)
+        }
+    }
+    is ScreenState.NoNetwork -> ReceiptUiState.Error(Res.string.feature_receipt_not_found)
+    is ScreenState.Unauthenticated -> ReceiptUiState.Error(Res.string.feature_receipt_not_found)
+}
 
-sealed interface ReceiptAction
+sealed interface ReceiptEvent {
+    data object OnNavigateBack : ReceiptEvent
+    data object OnShareReceipt : ReceiptEvent
+}
+
+sealed interface ReceiptAction {
+    data object NavigateBack : ReceiptAction
+    data object ShareReceipt : ReceiptAction
+}
 
 sealed interface ReceiptUiState {
     data class Success(
-        val transaction: Transaction,
         val transferDetail: TransferDetail,
-        val receiptLink: String,
     ) : ReceiptUiState
 
     data class Error(
+        val messageRes: StringResource,
+    ) : ReceiptUiState
+
+    data class ErrorMessage(
         val message: String,
     ) : ReceiptUiState
 

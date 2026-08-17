@@ -39,6 +39,7 @@ import template.core.base.designsystem.theme.KptTheme
 internal fun TransactionDetailScreen(
     onNavigateBack: () -> Unit,
     modifier: Modifier = Modifier,
+    onShareTransaction: (transferId: Long) -> Unit = {},
     viewModel: TransactionDetailViewModel = koinViewModel(),
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
@@ -47,7 +48,9 @@ internal fun TransactionDetailScreen(
         when (event) {
             TransactionDetailEvent.OnNavigateBack -> onNavigateBack.invoke()
             TransactionDetailEvent.OnShareTransaction -> {
-                // TODO:: Configure Share Image Functionality
+                // Opens the dedicated Receipt card (shareable summary) for this transfer —
+                // reads off the same TransferDetail Store5 vertical this screen already uses.
+                viewModel.transferId?.let(onShareTransaction)
             }
         }
     }

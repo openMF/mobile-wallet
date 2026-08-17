@@ -23,6 +23,7 @@ private const val BASE_ROUTE = "$TRANSACTION_DETAIL_ROUTE&$TRANSFER_ID={$TRANSFE
 
 fun NavGraphBuilder.transactionDetailNavigation(
     navigateBack: () -> Unit,
+    navigateToReceipt: (transferId: Long) -> Unit = {},
 ) {
     composableWithSlideTransitions(
         route = BASE_ROUTE,
@@ -32,6 +33,7 @@ fun NavGraphBuilder.transactionDetailNavigation(
     ) {
         TransactionDetailScreen(
             onNavigateBack = navigateBack,
+            onShareTransaction = navigateToReceipt,
         )
     }
 }

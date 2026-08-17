@@ -11,6 +11,7 @@ package org.mifospay.feature.upi.setup.screens
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -19,24 +20,36 @@ import androidx.compose.ui.Modifier
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.mifospay.core.common.Constants
 import org.mifospay.core.designsystem.theme.MifosTheme
+import org.mifospay.feature.upi.setup.viewmodel.OtpRequestState
+import org.mifospay.feature.upi.setup.viewmodel.OtpVerifyState
 
 @Composable
 internal fun SetUpUpiScreenContent(
     type: String,
-    otpText: String,
+    otpRequestState: OtpRequestState,
+    otpVerifyState: OtpVerifyState,
+    onRequestOtp: () -> Unit,
+    onVerifyOtp: (String) -> Unit,
     correctlySettingUpi: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column {
         if (type == Constants.CHANGE) {
             ChangeUpi(
-                otpText = otpText,
+                otpRequestState = otpRequestState,
+                otpVerifyState = otpVerifyState,
+                onRequestOtp = onRequestOtp,
+                onVerifyOtp = onVerifyOtp,
                 correctlySettingUpi = correctlySettingUpi,
                 modifier = modifier,
             )
         } else {
             SettingAndForgotUpi(
-                correctlySettingUpi,
+                otpRequestState = otpRequestState,
+                otpVerifyState = otpVerifyState,
+                onRequestOtp = onRequestOtp,
+                onVerifyOtp = onVerifyOtp,
+                correctlySettingUpi = correctlySettingUpi,
                 modifier = modifier,
             )
         }
@@ -45,16 +58,24 @@ internal fun SetUpUpiScreenContent(
 
 @Composable
 private fun SettingAndForgotUpi(
+    otpRequestState: OtpRequestState,
+    otpVerifyState: OtpVerifyState,
+    onRequestOtp: () -> Unit,
+    onVerifyOtp: (String) -> Unit,
     correctlySettingUpi: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     var debitCardVerified by rememberSaveable { mutableStateOf(false) }
-    var otpVerified by rememberSaveable { mutableStateOf(false) }
     var debitCardScreenVisible by rememberSaveable { mutableStateOf(true) }
     var otpScreenVisible by rememberSaveable { mutableStateOf(false) }
     var upiPinScreenVisible by rememberSaveable { mutableStateOf(false) }
-    var upiPinScreenVerified by rememberSaveable { mutableStateOf(false) }
-    var realOtp by rememberSaveable { mutableStateOf("") }
+
+    LaunchedEffect(otpVerifyState) {
+        if (otpVerifyState is OtpVerifyState.Verified) {
+            otpScreenVisible = false
+            upiPinScreenVisible = true
+        }
+    }
 
     Column(modifier) {
         DebitCardScreen(
@@ -62,28 +83,25 @@ private fun SettingAndForgotUpi(
             isContentVisible = debitCardScreenVisible,
             onDebitCardVerified = {
                 debitCardVerified = true
-                otpScreenVisible = true
-                realOtp = it
                 debitCardScreenVisible = false
+                otpScreenVisible = true
+                // The debit-card step only validates the card FORMAT locally — the actual
+                // OTP is requested here, from the real TwoFactorAuthRepository-backed
+                // ViewModel, once the user reaches the OTP step.
+                onRequestOtp()
             },
             onDebitCardVerificationFailed = {
             },
         )
         OtpScreen(
-            verificationStatus = otpVerified,
+            verificationStatus = otpVerifyState is OtpVerifyState.Verified,
             contentVisibility = otpScreenVisible,
-            realOtp = realOtp,
-            onOtpTextCorrectlyEntered = {
-                otpScreenVisible = false
-                otpVerified = true
-                upiPinScreenVisible = true
-            },
+            otpRequestState = otpRequestState,
+            otpVerifyState = otpVerifyState,
+            onOtpEntered = onVerifyOtp,
         )
         UpiPinScreen(
-            correctlySettingUpi = {
-                upiPinScreenVerified = true
-                correctlySettingUpi(it)
-            },
+            correctlySettingUpi = correctlySettingUpi,
             contentVisibility = upiPinScreenVisible,
         )
     }
@@ -91,34 +109,36 @@ private fun SettingAndForgotUpi(
 
 @Composable
 private fun ChangeUpi(
-    otpText: String,
+    otpRequestState: OtpRequestState,
+    otpVerifyState: OtpVerifyState,
+    onRequestOtp: () -> Unit,
+    onVerifyOtp: (String) -> Unit,
     correctlySettingUpi: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    var otpVerified by rememberSaveable { mutableStateOf(false) }
-    var otpScreenVisible by rememberSaveable { mutableStateOf(true) }
     var upiPinScreenVisible by rememberSaveable { mutableStateOf(false) }
-    var upiPinScreenVerified by rememberSaveable { mutableStateOf(false) }
-    val realOtp by rememberSaveable { mutableStateOf(otpText) }
+    var otpScreenVisible by rememberSaveable { mutableStateOf(true) }
+
+    LaunchedEffect(Unit) { onRequestOtp() }
+
+    LaunchedEffect(otpVerifyState) {
+        if (otpVerifyState is OtpVerifyState.Verified) {
+            otpScreenVisible = false
+            upiPinScreenVisible = true
+        }
+    }
 
     Column(modifier) {
         OtpScreen(
-            verificationStatus = otpVerified,
+            verificationStatus = otpVerifyState is OtpVerifyState.Verified,
             contentVisibility = otpScreenVisible,
-            realOtp = realOtp,
-            onOtpTextCorrectlyEntered = {
-                otpScreenVisible = false
-                otpVerified = true
-                upiPinScreenVisible = true
-                otpScreenVisible = false
-            },
+            otpRequestState = otpRequestState,
+            otpVerifyState = otpVerifyState,
+            onOtpEntered = onVerifyOtp,
         )
 
         UpiPinScreen(
-            correctlySettingUpi = {
-                upiPinScreenVerified = true
-                correctlySettingUpi(it)
-            },
+            correctlySettingUpi = correctlySettingUpi,
             contentVisibility = upiPinScreenVisible,
         )
     }
@@ -130,7 +150,10 @@ private fun PreviewSetUpUpiPin() {
     MifosTheme {
         SetUpUpiScreenContent(
             type = Constants.SETUP,
-            otpText = "907889",
+            otpRequestState = OtpRequestState.Idle,
+            otpVerifyState = OtpVerifyState.Idle,
+            onRequestOtp = {},
+            onVerifyOtp = {},
             correctlySettingUpi = {},
         )
     }
@@ -142,7 +165,10 @@ private fun PreviewForgetUpiPin() {
     MifosTheme {
         SetUpUpiScreenContent(
             type = Constants.FORGOT,
-            otpText = "907889",
+            otpRequestState = OtpRequestState.Idle,
+            otpVerifyState = OtpVerifyState.Idle,
+            onRequestOtp = {},
+            onVerifyOtp = {},
             correctlySettingUpi = {},
         )
     }
@@ -154,7 +180,10 @@ private fun PreviewChangeUpiPin() {
     MifosTheme {
         SetUpUpiScreenContent(
             type = Constants.CHANGE,
-            otpText = "907889",
+            otpRequestState = OtpRequestState.Idle,
+            otpVerifyState = OtpVerifyState.Idle,
+            onRequestOtp = {},
+            onVerifyOtp = {},
             correctlySettingUpi = {},
         )
     }

@@ -9,7 +9,6 @@
  */
 package org.mifospay.feature.upi.setup.navigation
 
-import androidx.core.bundle.Bundle
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavType
@@ -17,38 +16,56 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import org.mifospay.core.common.Constants
 import org.mifospay.core.model.bank.BankAccountDetails
+import org.mifospay.feature.upi.setup.screens.SetupUpiPinScreenRoute
 
 const val SETUP_UPI_PIN_ROUTE = "setup_upi_pin_route"
 
+/**
+ * Was a nav-registered-but-blank destination — the composable body called no screen
+ * (`SetupUpiPinScreenRoute(...)` was commented out) and [navigateToSetupUpiPin] had zero
+ * callers anywhere in the app. This fix makes the destination actually render; the
+ * reachability gap (no in-app entry point navigates here yet) is documented in
+ * `sub-plans/UPI_OTP_STUB_VERDICT.md` rather than papered over with an invented caller.
+ *
+ * `bankAccountDetails` is reconstructed from the nav args this route already carried
+ * (index/type) plus the account number, which IS threaded through the route args below —
+ * unlike the previous version, which built a hardcoded placeholder `BankAccountDetails`
+ * regardless of what was passed to [navigateToSetupUpiPin].
+ */
 fun NavGraphBuilder.setupUpiPinScreen(
     navigateBack: () -> Unit,
 ) {
     composable(
-        route = "$SETUP_UPI_PIN_ROUTE/{${Constants.INDEX}}/{${Constants.TYPE}}",
+        route = "$SETUP_UPI_PIN_ROUTE/{${Constants.INDEX}}/{${Constants.TYPE}}/{${Constants.ACCOUNT_NO}}",
         arguments = listOf(
             navArgument(Constants.INDEX) { type = NavType.IntType },
             navArgument(Constants.TYPE) { type = NavType.StringType },
+            navArgument(Constants.ACCOUNT_NO) { type = NavType.StringType },
         ),
     ) { backStackEntry ->
-        val bankAccountDetails = BankAccountDetails(
-            accountNo = "sanctus",
-            bankName = null,
-            accountHolderName = null,
-            branch = null,
-            ifsc = null,
-            type = null,
-            isUpiEnabled = false,
-            upiPin = null,
-        )
-//        val index = backStackEntry.arguments?.getInt(Constants.INDEX) ?: 0
-//        val type = backStackEntry.arguments?.getString(Constants.TYPE) ?: ""
+        // NavBackStackEntry.arguments is a KMP `androidx.core.bundle.Bundle` without typed
+        // getters in commonMain — every other nav-arg reader in this codebase goes through
+        // `SavedStateHandle` instead (see TransactionDetailViewModel, ReceiptViewModel), which
+        // IS multiplatform-safe and auto-populated from these same route args.
+        val index = backStackEntry.savedStateHandle.get<Int>(Constants.INDEX) ?: 0
+        val type = backStackEntry.savedStateHandle.get<String>(Constants.TYPE) ?: ""
+        val accountNo = backStackEntry.savedStateHandle.get<String>(Constants.ACCOUNT_NO) ?: ""
 
-//        SetupUpiPinScreenRoute(
-//            type = type,
-//            index = index,
-//            bankAccountDetails = bankAccountDetails,
-//            onBackPress = navigateBack,
-//        )
+        SetupUpiPinScreenRoute(
+            type = type,
+            index = index,
+            bankAccountDetails = BankAccountDetails(
+                accountNo = accountNo,
+                bankName = null,
+                accountHolderName = null,
+                branch = null,
+                ifsc = null,
+                type = null,
+                isUpiEnabled = false,
+                upiPin = null,
+            ),
+            onBackPress = navigateBack,
+        )
     }
 }
 
@@ -57,12 +74,8 @@ fun NavController.navigateToSetupUpiPin(
     index: Int,
     type: String,
 ) {
-    val bundle = Bundle().apply {
-        putString(Constants.BANK_ACCOUNT_DETAILS, bankAccountDetails.toString())
-    }
-    this.navigate("$SETUP_UPI_PIN_ROUTE/$index/$type") {
+    this.navigate("$SETUP_UPI_PIN_ROUTE/$index/$type/${bankAccountDetails.accountNo}") {
         this.launchSingleTop = true
         this.restoreState = true
     }
-//    currentBackStackEntry?.arguments?.putAll(bundle)
 }

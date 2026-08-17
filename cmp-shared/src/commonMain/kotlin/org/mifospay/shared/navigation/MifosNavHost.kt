@@ -92,6 +92,7 @@ import org.mifospay.feature.pocket.navigation.navigateToPocketDashboard
 import org.mifospay.feature.pocket.navigation.pocketDashboardScreen
 import org.mifospay.feature.profile.navigation.navigateToProfile
 import org.mifospay.feature.profile.navigation.profileNavGraph
+import org.mifospay.feature.receipt.navigation.navigateToReceipt
 import org.mifospay.feature.receipt.navigation.receiptScreen
 import org.mifospay.feature.savedcards.createOrUpdate.addEditCardScreen
 import org.mifospay.feature.savedcards.details.cardDetailRoute
@@ -435,6 +436,7 @@ internal fun MifosNavHost(
 
         transactionDetailNavigation(
             navigateBack = navController::navigateUp,
+            navigateToReceipt = navController::navigateToReceipt,
         )
 
         addEditBeneficiaryScreen(

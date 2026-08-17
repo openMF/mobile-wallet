@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -27,12 +28,21 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.mifospay.core.designsystem.theme.MifosTheme
 import org.mifospay.core.ui.OtpTextField
 import org.mifospay.core.ui.VerifyStepHeader
+import org.mifospay.feature.upi.setup.viewmodel.OtpRequestState
+import org.mifospay.feature.upi.setup.viewmodel.OtpVerifyState
 import template.core.base.designsystem.theme.KptTheme
 
+/**
+ * Real server-verified OTP step — [otpRequestState] reflects whether the code was actually
+ * sent (via `TwoFactorAuthRepository.requestOTP`); [onOtpEntered] hands the typed digits to
+ * the caller, which verifies them against the server (`validateToken`) and reports the
+ * outcome back via [otpVerifyState]. No OTP value is ever known or compared client-side.
+ */
 @Composable
 internal fun OtpScreen(
-    realOtp: String,
-    onOtpTextCorrectlyEntered: () -> Unit,
+    otpRequestState: OtpRequestState,
+    otpVerifyState: OtpVerifyState,
+    onOtpEntered: (String) -> Unit,
     modifier: Modifier = Modifier,
     contentVisibility: Boolean = false,
     verificationStatus: Boolean = false,
@@ -57,7 +67,7 @@ internal fun OtpScreen(
         ) {
             VerifyStepHeader("OtpSetUp", verificationStatus)
             if (contentVisibility) {
-                OtpScreenContent(realOtp, onOtpTextCorrectlyEntered)
+                OtpScreenContent(otpRequestState, otpVerifyState, onOtpEntered)
             }
         }
     }
@@ -65,24 +75,50 @@ internal fun OtpScreen(
 
 @Composable
 private fun OtpScreenContent(
-    realOtp: String,
-    onOtpTextCorrectlyEntered: () -> Unit,
+    otpRequestState: OtpRequestState,
+    otpVerifyState: OtpVerifyState,
+    onOtpEntered: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(modifier) {
         Text(
-            text = stringResource(Res.string.feature_upi_setup_enter_otp),
+            text = when (otpRequestState) {
+                is OtpRequestState.Sent ->
+                    stringResource(Res.string.feature_upi_setup_enter_otp) +
+                        " (" + otpRequestState.target + ")"
+
+                else -> stringResource(Res.string.feature_upi_setup_enter_otp)
+            },
             color = KptTheme.colorScheme.onSurface,
             fontSize = 18.sp,
             style = KptTheme.typography.headlineMedium,
         )
-        OtpTextField(
-            onOtpTextCorrectlyEntered = {
-                onOtpTextCorrectlyEntered()
-            },
-            modifier = Modifier.padding(top = KptTheme.spacing.lg),
-            realOtp = realOtp,
-        )
+        when (otpRequestState) {
+            is OtpRequestState.Requesting -> CircularProgressIndicator(
+                modifier = Modifier.padding(top = KptTheme.spacing.lg),
+            )
+
+            is OtpRequestState.Error -> Text(
+                text = otpRequestState.message,
+                color = KptTheme.colorScheme.error,
+                style = KptTheme.typography.bodyMedium,
+                modifier = Modifier.padding(top = KptTheme.spacing.sm),
+            )
+
+            is OtpRequestState.Sent, OtpRequestState.Idle -> {
+                OtpTextField(
+                    onOtpEntered = onOtpEntered,
+                    modifier = Modifier.padding(top = KptTheme.spacing.lg),
+                    isError = otpVerifyState is OtpVerifyState.Failed,
+                    errorMessage = "Invalid OTP — please try again",
+                )
+                if (otpVerifyState is OtpVerifyState.Verifying) {
+                    CircularProgressIndicator(
+                        modifier = Modifier.padding(top = KptTheme.spacing.sm),
+                    )
+                }
+            }
+        }
     }
 }
 
@@ -91,10 +127,11 @@ private fun OtpScreenContent(
 private fun OtpScreenPreview() {
     MifosTheme {
         OtpScreen(
-            realOtp = "1234",
+            otpRequestState = OtpRequestState.Sent("+1 •••• ••1234"),
+            otpVerifyState = OtpVerifyState.Idle,
             contentVisibility = true,
             verificationStatus = false,
-            onOtpTextCorrectlyEntered = {},
+            onOtpEntered = {},
         )
     }
 }
@@ -104,10 +141,11 @@ private fun OtpScreenPreview() {
 private fun OtpScreenVerifiedPreview() {
     MifosTheme {
         OtpScreen(
-            realOtp = "1234",
+            otpRequestState = OtpRequestState.Sent("+1 •••• ••1234"),
+            otpVerifyState = OtpVerifyState.Verified,
             contentVisibility = false,
             verificationStatus = true,
-            onOtpTextCorrectlyEntered = {},
+            onOtpEntered = {},
         )
     }
 }

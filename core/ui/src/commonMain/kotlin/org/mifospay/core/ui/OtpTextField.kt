@@ -37,15 +37,22 @@ import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import template.core.base.designsystem.theme.KptTheme
 
+/**
+ * Pure digit collector — it does NOT decide correctness itself. [onOtpEntered] fires once
+ * [otpCount] digits are typed (or on IME-done); the caller verifies the code against the
+ * real backend (e.g. `TwoFactorAuthRepository.validateToken`) and reports the outcome back
+ * via [isError]/[errorMessage]. A real OTP's correct value is never known client-side, so a
+ * local string comparison (the previous `realOtp` param) can never be correct.
+ */
 @Composable
 fun OtpTextField(
-    onOtpTextCorrectlyEntered: () -> Unit,
+    onOtpEntered: (String) -> Unit,
     modifier: Modifier = Modifier,
-    realOtp: String = "",
     otpCount: Int = 4,
+    isError: Boolean = false,
+    errorMessage: String = "Invalid OTP",
 ) {
     var otpText by remember { mutableStateOf("") }
-    var isError by remember { mutableStateOf(false) }
     Column(
         modifier = modifier
             .fillMaxWidth()
@@ -57,23 +64,15 @@ fun OtpTextField(
             value = TextFieldValue(otpText, selection = TextRange(otpText.length)),
             onValueChange = {
                 otpText = it.text
-                isError = false
                 if (otpText.length == otpCount) {
-                    if (otpText != realOtp) {
-                        isError = true
-                    } else {
-                        onOtpTextCorrectlyEntered.invoke()
-                    }
+                    onOtpEntered(otpText)
                 }
             },
             keyboardActions = KeyboardActions(
                 onDone = {
-                    if (otpText != realOtp) {
-                        isError = true
-                    } else {
-                        onOtpTextCorrectlyEntered.invoke()
+                    if (otpText.length == otpCount) {
+                        onOtpEntered(otpText)
                     }
-                    println("OTP: $otpText and $isError")
                 },
             ),
             keyboardOptions = KeyboardOptions.Default.copy(
@@ -93,9 +92,8 @@ fun OtpTextField(
             },
         )
         if (isError) {
-            // display error message in text
             Text(
-                text = "Invalid OTP",
+                text = errorMessage,
                 style = KptTheme.typography.bodyMedium,
                 color = KptTheme.colorScheme.error,
                 textAlign = TextAlign.Center,
@@ -136,8 +134,7 @@ fun CharView(
 @Composable
 fun PreviewOtpTextField() {
     OtpTextField(
-        onOtpTextCorrectlyEntered = {},
-        realOtp = "1234",
+        onOtpEntered = {},
         otpCount = 4,
     )
 }
