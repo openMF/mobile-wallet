@@ -1,5 +1,1 @@
-First release of Money Toolkit.
-
-Track loans, calculate EMIs, set bill reminders, compare loan offers, view live interest rates and currency exchange rates.
-
-100% offline — no login, no account, no ads.
+Initial Production Release

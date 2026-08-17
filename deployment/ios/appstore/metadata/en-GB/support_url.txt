@@ -1,1 +1,1 @@
-https://github.com/openMF/kmp-project-template
+https://mifos.org/resources/support/

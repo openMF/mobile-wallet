@@ -1,1 +1,1 @@
-Loan tracker, EMI calculator, bill reminders & interest rates. Offline.
+A reference implementation of Mifos platform wallet and payment capabilities.
