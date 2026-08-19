@@ -409,6 +409,22 @@ merge_settings_include_union() {
         fi
         print_step "include-union: preserved $(printf '%s\n' "$fork_only" | grep -c . ) fork-local module include(s) in ${BOLD}$(basename "$out")${NC}"
     fi
+    # Prune PHANTOM includes: the union starts from the TEMPLATE file, which declares the template's OWN
+    # demo/app feature modules (feature/showcase, feature/loans, feature/rates, …) that a downstream fork
+    # does NOT have and the sync does NOT copy in. Left in, they reference non-existent module dirs and
+    # Gradle configuration hard-fails ("Configuring project ':feature:showcase' without an existing
+    # directory"), blocking even syncForkConfig. Drop every include(":a:b") whose resolved dir a/b/ is
+    # absent on disk (relative to the settings.gradle.kts dir) — keep the fork's real + synced modules.
+    local _iu_root _iu_out _iu_dropped=0 _iu_coord
+    _iu_root="$(cd "$(dirname "$out")" 2>/dev/null && pwd)"; [ -n "$_iu_root" ] || _iu_root="$(pwd)"
+    _iu_out="$(mktemp)"
+    while IFS= read -r _iu_line || [ -n "$_iu_line" ]; do
+        _iu_coord="$(printf '%s' "$_iu_line" | sed -nE 's/^[[:space:]]*include\("?:([A-Za-z0-9:_.-]+)"?\).*/\1/p')"
+        if [ -n "$_iu_coord" ] && [ ! -d "$_iu_root/${_iu_coord//://}" ]; then _iu_dropped=$((_iu_dropped + 1)); continue; fi
+        printf '%s\n' "$_iu_line"
+    done < "$tmp" > "$_iu_out"
+    mv "$_iu_out" "$tmp"
+    [ "$_iu_dropped" -gt 0 ] && print_step "include-union: pruned ${BOLD}$_iu_dropped${NC} phantom include(s) (module dir absent in this fork) from ${BOLD}$(basename "$out")${NC}"
     mv "$tmp" "$out"
     return 0
 }
@@ -986,8 +1002,8 @@ fi
 # preserves fork edits (e.g. AndroidManifest permissions). The mechanical sync
 # below is UNCHANGED — the contract is the declared source of truth the merge
 # engine adopts next. Fully guarded so it can never abort a sync.
-CS_READER="$(dirname "$0")/scripts/customization-surface.sh"
-if [ -f "$CS_READER" ] && [ -f "$(dirname "$0")/customization-surface.yaml" ]; then
+CS_READER="$SCRIPT_DIR/../customization-surface.sh"
+if [ -f "$CS_READER" ] && [ -f "$SCRIPT_DIR/../../customization-surface.yaml" ]; then
     # shellcheck source=/dev/null
     source "$CS_READER" 2>/dev/null || true
     if declare -F cs_match_g >/dev/null 2>&1; then
