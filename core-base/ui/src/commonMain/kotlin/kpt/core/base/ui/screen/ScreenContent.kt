@@ -44,11 +44,13 @@ import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import io.github.alexzhirkevich.compottie.rememberLottieComposition
 import io.github.alexzhirkevich.compottie.rememberLottiePainter
 import kpt.core.base.designsystem.component.KptShimmerLoadingBox
 import kpt.core.base.designsystem.theme.KptTheme
 import kpt.core.base.store.freshness.FreshnessSignal
+import kpt.core.base.store.screen.ScreenDataStream
 import kpt.core.base.store.screen.ScreenState
 import kpt.core.base.ui.captiveportal.rememberOpenCaptivePortalSignIn
 
@@ -123,6 +125,55 @@ fun <T> ScreenContent(
             }
         }
     }
+}
+
+/**
+ * Direct [ScreenDataStream] overload — the ViewModel exposes the stream (built in the repository)
+ * and Compose consumes it here: `stream.state` is collected lifecycle-aware and retry is wired to
+ * `stream.retry()`. The ViewModel neither converts to a `StateFlow` nor sets any state — the stream
+ * owns the whole state machine. Mirrors [kpt.core.base.ui.paging.PagingScreenContent].
+ *
+ * Same slot/override precedence as the base overload: per-call slot lambda → [LocalScreenStateDefaults]
+ * (the app-wide defaults branded in `core/store` `AppScreenStateDefaults`) → library default. So the
+ * state UIs can be set per-screen here AND globally in `core/store`.
+ *
+ * Best for PASSTHROUGH reads (the stream already decides Empty via its `isEmpty`). Features that
+ * PROJECT/COMBINE the Content payload (totals, search filter, computed schedule, dashboards) keep the
+ * `state:` overload and do the `mapContent`/`combineContent` in the ViewModel — never in Compose.
+ *
+ * ```
+ * // ViewModel:  val alerts = repository.alertsStream(viewModelScope)   // just the stream
+ * ScreenContent(stream = viewModel.alerts) { alerts, _ -> LazyColumn { … } }
+ * ```
+ */
+@Composable
+fun <T> ScreenContent(
+    stream: ScreenDataStream<T>,
+    modifier: Modifier = Modifier,
+    onRetry: () -> Unit = stream::retry,
+    refreshingIndicator: (@Composable () -> Unit)? = { DefaultRefreshingBanner() },
+    onDismiss: (() -> Unit)? = null,
+    loading: @Composable () -> Unit = { DefaultLoadingContent() },
+    empty: @Composable () -> Unit = { DefaultEmptyContent() },
+    noNetwork: @Composable (isCaptivePortal: Boolean) -> Unit = { captive ->
+        DefaultNoNetworkContent(onRetry, isCaptivePortal = captive, onDismiss = onDismiss)
+    },
+    error: @Composable (Throwable) -> Unit = { DefaultErrorContent(it, onRetry, onDismiss = onDismiss) },
+    content: @Composable (data: T, freshnessSignal: FreshnessSignal) -> Unit,
+) {
+    val state by stream.state.collectAsStateWithLifecycle(ScreenState.Loading)
+    ScreenContent(
+        state = state,
+        onRetry = onRetry,
+        modifier = modifier,
+        refreshingIndicator = refreshingIndicator,
+        onDismiss = onDismiss,
+        loading = loading,
+        empty = empty,
+        noNetwork = noNetwork,
+        error = error,
+        content = content,
+    )
 }
 
 /**

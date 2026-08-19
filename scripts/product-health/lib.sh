@@ -56,11 +56,14 @@ fi
 export WL_PLACEHOLDERS_YAML
 
 # wl_placeholders_load <category> — emit one regex pattern per line under placeholders.<category>.
+# The reset guard (any top-level `^key:` other than placeholders: closes the section) keeps this
+# robust when a sibling top-level block (e.g. example_identity:) follows placeholders: in the file.
 wl_placeholders_load() {
   local cat="$1"
   [ -f "$WL_PLACEHOLDERS_YAML" ] || { echo "wl_placeholders_load: WHITE_LABEL_PLACEHOLDERS.yaml not found" >&2; return 2; }
   awk -v cat="$cat" '
     /^placeholders:/   { in_ph=1; next }
+    /^[a-zA-Z_]+:/ && !/^placeholders:/ { in_ph=0 }
     in_ph && /^  [a-z_]+:[[:space:]]*$/ { curr=$1; sub(/:$/,"",curr); next }
     in_ph && curr==cat && /^    - / {
       val=$0; sub(/^    - /,"",val)
@@ -77,6 +80,36 @@ wl_matches_any() {
     [ -n "$pat" ] || continue
     printf '%s' "$val" | grep -qE "$pat" && return 0
   done < <(wl_placeholders_load "$cat")
+  return 1
+}
+
+# wl_example_load <category> — emit one regex per line under example_identity.<category>.
+# example_identity is the template's COMMITTED reference/demo identity (Mifos "Money Toolkit"):
+# template-mode gates ACCEPT it; fork-mode gates FAIL it (a fork must diverge from the reference).
+# A category with NO example block (e.g. signing: apple_team_id / apple_match_git_url) emits nothing
+# → wl_matches_example is always false for it → it stays placeholder-only (signing is never committed).
+wl_example_load() {
+  local cat="$1"
+  [ -f "$WL_PLACEHOLDERS_YAML" ] || { echo "wl_example_load: WHITE_LABEL_PLACEHOLDERS.yaml not found" >&2; return 2; }
+  awk -v cat="$cat" '
+    /^example_identity:/ { in_ex=1; next }
+    /^[a-zA-Z_]+:/ && !/^example_identity:/ { in_ex=0 }
+    in_ex && /^  [a-z_]+:[[:space:]]*$/ { curr=$1; sub(/:$/,"",curr); next }
+    in_ex && curr==cat && /^    - / {
+      val=$0; sub(/^    - /,"",val)
+      gsub(/^["'\''"]/,"",val); gsub(/["'\''"]$/,"",val)
+      print val
+    }
+  ' "$WL_PLACEHOLDERS_YAML"
+}
+
+# wl_matches_example <value> <category> — return 0 if value IS the declared reference identity.
+wl_matches_example() {
+  local val="$1" cat="$2" pat
+  while IFS= read -r pat; do
+    [ -n "$pat" ] || continue
+    printf '%s' "$val" | grep -qE "$pat" && return 0
+  done < <(wl_example_load "$cat")
   return 1
 }
 

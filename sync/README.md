@@ -92,7 +92,7 @@ The explicit constructor surface is a deliberate trade-off — it adds friction 
 
 - Real iOS / Desktop / Web background scheduling — worker execution on those platforms uses worker-kmp's default per-platform backing; only the Android path is exercised end-to-end at v1.
 - Real Android notification rendering — `renderNotification` logs at INFO at v1 (follow-up: wire `NotificationManagerCompat` + a sync-related channel created at `App.onCreate`, optional `POST_NOTIFICATIONS` runtime permission on API 33+).
-- Delta-sync algorithm callers (`changeListSync`) — the algorithm ships in `core/data/Synchronizer.kt` ready for the upstream Mifos Fineract PR conversation, but is unused at v1 because both pinned adopters (Frankfurter, World Bank) are snapshot APIs.
+- Delta-sync algorithm callers (`changeListSync`) — the algorithm ships in `core/data/Synchronizer.kt` ready for a delta-capable backend, but is unused at v1 because both pinned demo adopters (Frankfurter, World Bank) are snapshot APIs.
 
 ## Related
 

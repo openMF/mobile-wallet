@@ -9,6 +9,8 @@
  */
 package kpt.core.data.di
 
+import org.koin.core.qualifier.named
+
 /**
  * Named qualifiers for the four `SubmitOutbox<*>` bindings.
  *
@@ -41,4 +43,18 @@ package kpt.core.data.di
  * `:core:data:desktopTest`, catching the regression class long before the
  * `ClassCastException-at-first-save` shows up at runtime.
  */
-object OutboxQualifiers
+object OutboxQualifiers {
+    // demo:begin — demo submit-outbox qualifiers (stripped with the demo features)
+    /** `SubmitOutbox<kpt.core.model.demo.banking.Loan>`. */
+    val Loan = named("outbox.loan")
+
+    /** `SubmitOutbox<kpt.core.model.demo.banking.BillReminder>`. */
+    val BillReminder = named("outbox.billReminder")
+
+    /** `SubmitOutbox<kpt.core.model.demo.banking.LoanCalcScenario>`. */
+    val LoanCalcScenario = named("outbox.loanCalcScenario")
+
+    /** `SubmitOutbox<kpt.core.model.demo.alerts.PriceAlert>`. */
+    val PriceAlert = named("outbox.priceAlert")
+    // demo:end
+}

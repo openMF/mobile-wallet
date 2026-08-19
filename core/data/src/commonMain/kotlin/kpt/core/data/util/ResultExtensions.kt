@@ -11,13 +11,7 @@
 
 package kpt.core.data.util
 
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onStart
-import kpt.core.base.common.DataState
 import kpt.core.base.network.NetworkError
-import kpt.core.base.network.NetworkResult
 
 /** Custom exception class that wraps a RemoteError */
 class RemoteException(
@@ -66,89 +60,3 @@ fun NetworkError.toThrowable(): Throwable = when (this) {
         message = "Something unexpected happened. Please try again.",
     )
 }
-
-/**
- * Simple conversion from Result to DataState. Success -> Loaded, Error ->
- * Error
- */
-fun <D> NetworkResult<D, *>.toDataState(): DataState<D> = when (this) {
-    is NetworkResult.Success -> DataState.Success(data)
-    is NetworkResult.Error -> DataState.Error(error.toThrowable(), null)
-}
-
-/**
- * Converts kpt.corebase.network.NetworkResult to DataState with
- * existing data preserved in error state. Useful when you want to keep
- * showing previous data even when an error occurs.
- */
-fun <D> NetworkResult<D, *>.toDataState(existingData: D?): DataState<D> = when (this) {
-    is NetworkResult.Success -> DataState.Success(data)
-    is NetworkResult.Error -> DataState.Error(error.toThrowable(), existingData)
-}
-
-/**
- * Smart conversion from kpt.corebase.network.NetworkResult to
- * DataState that maps certain RemoteErrors to more specific DataState
- * types.
- */
-fun <D> NetworkResult<D, *>.toDataStateWithMapping(): DataState<D> = when (this) {
-    is NetworkResult.Success -> DataState.Success(data)
-    is NetworkResult.Error -> when (error) {
-        NetworkError.REQUEST_TIMEOUT -> DataState.NoNetwork(null)
-        else -> DataState.Error(error.toThrowable(), null)
-    }
-}
-
-/** Smart conversion with existing data preserved. */
-fun <D> NetworkResult<D, *>.toDataStateWithMapping(existingData: D?): DataState<D> = when (this) {
-    is NetworkResult.Success -> DataState.Success(data)
-    is NetworkResult.Error -> when (error) {
-        NetworkError.REQUEST_TIMEOUT -> DataState.NoNetwork(existingData)
-        else -> DataState.Error(error.toThrowable(), existingData)
-    }
-}
-
-/**
- * Extension for Flow<kpt.corebase.network.NetworkResult> to convert
- * to Flow<DataState>
- */
-fun <D> Flow<NetworkResult<D, *>>.asDataStateFlow(): Flow<DataState<D>> = map { it.toDataState() }
-    .onStart { emit(DataState.Loading) }
-
-/**
- * Extension for Flow<kpt.corebase.network.NetworkResult> with
- * existing data preservation
- */
-fun <D> Flow<NetworkResult<D, *>>.asDataStateFlow(
-    preserveDataOnError: Boolean = false,
-    getCurrentData: () -> D? = { null },
-): Flow<DataState<D>> = flow {
-    emit(DataState.Loading)
-
-    collect { result ->
-        val dataState = if (preserveDataOnError) {
-            result.toDataState(getCurrentData())
-        } else {
-            result.toDataState()
-        }
-        emit(dataState)
-    }
-}
-
-/** Utility extension to check if DataState represents a successful state */
-val <T> DataState<T>.isSuccess: Boolean
-    get() = this is DataState.Success
-
-/** Utility extension to check if DataState represents an error state */
-val <T> DataState<T>.isError: Boolean
-    get() = this is DataState.Error
-
-/** Utility extension to get the error if DataState is in error state */
-val <T> DataState<T>.errorOrNull: Throwable?
-    get() = (this as? DataState.Error)?.error
-
-/** Utility extension to get RemoteError if the error is RemoteException */
-val <T> DataState<T>.networkErrorOrNull: NetworkError?
-    get() = (this as? DataState.Error)?.error?.let { error ->
-        (error as? RemoteException)?.networkError
-    }

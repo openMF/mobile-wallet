@@ -14,23 +14,15 @@ plugins {
 kotlin {
     sourceSets {
         commonMain.dependencies {
-            // The generic NotificationScheduler<T : NotificationRequest> contract lives in
-            // core-base/platform — BillReminderSchedule implements NotificationRequest from
-            // there, so consumers only see the typed domain payload.
+            // Encapsulation-compliant re-export boundary (G-CORE-BASE-ENCAP): app-shell modules
+            // (cmp-navigation / cmp-shared / cmp-android) reach the core-base/platform surface —
+            // platformModule, GarbageCollectionManager, tryCollect — through core/ (never core-base
+            // directly). `api` so those symbols are visible transitively.
+            //
+            // Fork-owned platform-specific code (expect/actual bridges a fork adds) also belongs here.
+            // The bill-reminder scheduler that previously lived in this module migrated to feature/bills
+            // + the cross-platform sync worker infra (worker-kmp + KMPNotifier).
             api(projects.coreBase.platform)
-
-            implementation(libs.kotlinx.coroutines.core)
-        }
-
-        androidMain.dependencies {
-            // Bill-reminder notification scheduling — WorkManager + NotificationCompat power
-            // the Android actual of kpt.core.platform.notification.bill.BillReminderScheduler.
-            implementation(libs.androidx.work.ktx)
-            implementation(libs.androidx.core.ktx)
-
-            // koin-android exposes androidContext() for Koin scope wiring in
-            // notification/bill/di/NotificationModule.android.kt.
-            implementation(libs.koin.android)
         }
     }
 }

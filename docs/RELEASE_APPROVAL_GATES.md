@@ -1,7 +1,7 @@
 # Release Approval Gates — Admin Setup Guide
 
 > **Audience:** a repo **admin** / org **owner** of the repo where releases are dispatched
-> (e.g. `openMF/kmp-project-template`).
+> (e.g. `<owner>/<repo>`).
 > **Script:** [`scripts/configure-release-environments.sh`](../scripts/configure-release-environments.sh)
 > **Time:** ~2 minutes.
 
@@ -12,7 +12,7 @@
 ```bash
 # Recommended: gate only the public/production-facing stages.
 bash scripts/configure-release-environments.sh \
-  --repo openMF/kmp-project-template \
+  --repo <owner>/<repo> \
   --reviewer <your-github-login> \
   --production-only \
   --wait-prod 30
@@ -73,7 +73,7 @@ required-reviewer rule to each store environment.
 
 ```bash
 bash scripts/configure-release-environments.sh \
-  --repo openMF/kmp-project-template \
+  --repo <owner>/<repo> \
   --reviewer <login-or-@me-or-numeric-id> \
   --production-only \
   --wait-prod 30        # optional: 30-min cool-off on the top rung before deploy
@@ -180,7 +180,7 @@ The script is **idempotent** — re-run it any time to change reviewers or scope
 ## Verify it took
 
 ```bash
-gh api repos/openMF/kmp-project-template/environments/android-play-production \
+gh api repos/<owner>/<repo>/environments/android-play-production \
   -q '[.protection_rules[] | select(.type=="required_reviewers") | .reviewers[]] | length'
 # → prints 1 (or however many reviewers you set)
 ```

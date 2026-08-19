@@ -4,7 +4,7 @@
 # (epic showcase-framework-separation). Fails (exit 1) on any convention drift so the
 # `customizer --clean` removal + `sync-dirs` sync guarantees stay sound.
 #
-# The template ships a demo showcase that a fork removes with `customizer.sh --clean`.
+# The template ships a demo showcase that a fork removes with `scripts/white-label/customize.sh --clean`.
 # That removal is line-based (strips `// demo:begin … // demo:end` blocks + deletes
 # `**/demo/**` packages + the demo feature modules), so the convention MUST hold or the
 # strip corrupts source. This gate enforces it. Pure bash + grep + find — no Gradle, no
@@ -16,7 +16,7 @@
 #   C3  no-prose-markers — the tokens `demo:begin`/`demo:end` appear ONLY as clean markers
 #                          (a stray token in prose makes the awk stripper delete real code)
 #   C4  settings↔dirs    — every `feature:X` inside the settings demo-block has a `feature/X/` dir
-#   C5  sync-exclusion   — `sync-dirs.sh` excludes `*/demo/*` (fork demo never synced/overwritten)
+#   C5  sync-exclusion   — `scripts/white-label/sync-dirs.sh` excludes `*/demo/*` (fork demo never synced/overwritten)
 #
 # Usage: bash scripts/verify-demo-convention.sh      # exit 0 clean, exit 1 on any violation
 set -euo pipefail
@@ -53,11 +53,11 @@ while IFS= read -r feat; do
 done < <(awk '/demo:begin/{s=1;next} /demo:end/{s=0} s' settings.gradle.kts 2>/dev/null \
            | grep -oE 'feature:[a-z-]+' | sed 's/feature://' || true)
 
-# ── C5: sync-dirs.sh excludes the demo convention ─────────────────────────────────────
-if [ -f sync-dirs.sh ]; then
-  grep -qE '\*/demo/\*' sync-dirs.sh || viol C5-sync-exclusion "sync-dirs.sh is_excluded() does not exclude */demo/* (fork demo would be synced/overwritten)"
+# ── C5: scripts/white-label/sync-dirs.sh excludes the demo convention ─────────────────────────────────────
+if [ -f scripts/white-label/sync-dirs.sh ]; then
+  grep -qE '\*/demo/\*' scripts/white-label/sync-dirs.sh || viol C5-sync-exclusion "scripts/white-label/sync-dirs.sh is_excluded() does not exclude */demo/* (fork demo would be synced/overwritten)"
 else
-  viol C5-sync-exclusion "sync-dirs.sh not found at repo root"
+  viol C5-sync-exclusion "scripts/white-label/sync-dirs.sh not found at repo root"
 fi
 
 # ── verdict ───────────────────────────────────────────────────────────────────────────

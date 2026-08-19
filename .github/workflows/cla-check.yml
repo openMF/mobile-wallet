@@ -56,7 +56,7 @@ jobs:
                   `👋 Hi @${author} — thank you for your pull request.\n\n` +
                   `**This PR is currently blocked** because we do not have a Contributor License Agreement (CLA) on file for your GitHub account.\n\n` +
                   `To get unblocked:\n` +
-                  `1. Complete the form at https://mifos.org/about-us/financial-legal/mifos-contributor-agreement\n` +
+                  `1. Complete your organization's Contributor License Agreement form\n` +
                   `2. Complete the CLA signing process\n` +
                   `3. Once verified you will be added to the approved contributors list and this PR check will be cleared`
               });

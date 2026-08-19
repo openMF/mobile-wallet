@@ -111,12 +111,20 @@ abstract class SyncForkConfigTask : DefaultTask() {
         val demoPassword   = get("demo.password")
         val logTag         = get("log.tag")
 
-        // ── 2b. Write app.id BACK into gradle/libs.versions.toml#appId ─────────
-        // The whole build reads the bundle id via libs.versions.appId; fork.properties#app.id is the
-        // authored SoT. Sync the catalog from it so a fork edits app.id in ONE place. No-op when they
-        // already agree (e.g. the upstream template). product-health's appid-consistency check guards drift.
+        // ── 2b. Write app.id + app display name BACK into gradle/libs.versions.toml ─────────
+        // The whole build reads the bundle id via libs.versions.appId AND the app name via
+        // libs.versions.appDisplayName (Android resValue app_name / iOS CFBundleDisplayName). Both are
+        // resolved app-profile-first (identity.app_id / identity.app_name — priority ENV > app-profile >
+        // fork.properties > TOML), so sync BOTH back into the catalog: a fork edits identity in ONE place
+        // (app-profile/app.yaml) and the catalog follows. No-op when they already agree (e.g. the upstream
+        // template). Without the appDisplayName write the catalog drifts — a fork renamed in app.yaml would
+        // still INSTALL under the old name while the store listing showed the new one. appid-consistency
+        // guards the appId drift.
         if (appId.isNotBlank()) {
             patchTomlVersion(File(root, "gradle/libs.versions.toml"), "appId", appId)
+        }
+        if (appDisplayName.isNotBlank()) {
+            patchTomlVersion(File(root, "gradle/libs.versions.toml"), "appDisplayName", appDisplayName)
         }
 
         // Apple

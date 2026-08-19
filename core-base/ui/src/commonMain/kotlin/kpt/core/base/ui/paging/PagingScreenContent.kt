@@ -171,3 +171,49 @@ fun <T : Any> PagingScreenContent(
         }
     }
 }
+
+// STORE5-COMPLETENESS: paging-value — non-stream (plain List<T>) overload.
+/**
+ * Non-stream (Store5-optional) [PagingScreenContent] overload — a caller with an
+ * already-materialized `List<T>` (static content, a test fixture, or a non-Store5 source)
+ * renders through the SAME paging chrome (owned [LazyColumn] + empty-state slot) without
+ * being forced to construct a [PagingScreenStream]. There are no further pages to fetch, so
+ * the [LoadMoreFooter] and load-more trigger are intentionally omitted — the whole list is
+ * present.
+ *
+ * The trailing [lazyContent] lambda is signature-identical to the recommended stream overload
+ * above, so a screen upgrades from a static list to a live Store5 paging stream by swapping
+ * `items = staticList` for `pagingStream = viewModel.pagingStream` with ZERO change to its
+ * per-item content (the D2 dual-input, Store5-optional contract).
+ *
+ * Usage:
+ * ```
+ * PagingScreenContent(items = uiState.coins) { coins ->
+ *     items(coins) { coin -> CoinItem(coin = coin) }
+ * }
+ * ```
+ *
+ * @param items The already-loaded list rendered inside the LazyColumn.
+ * @param listState The [LazyListState] driving the list. Defaults to `rememberLazyListState()`.
+ * @param empty Slot shown when [items] is empty. Defaults to [DefaultEmptyContent].
+ * @param lazyContent The per-item content rendered inside the LazyColumn.
+ */
+@Composable
+fun <T : Any> PagingScreenContent(
+    items: List<T>,
+    modifier: Modifier = Modifier,
+    listState: LazyListState = rememberLazyListState(),
+    empty: @Composable () -> Unit = { DefaultEmptyContent() },
+    lazyContent: LazyListScope.(items: List<T>) -> Unit,
+) {
+    if (items.isEmpty()) {
+        empty()
+    } else {
+        LazyColumn(
+            state = listState,
+            modifier = modifier.fillMaxSize(),
+        ) {
+            lazyContent(items)
+        }
+    }
+}

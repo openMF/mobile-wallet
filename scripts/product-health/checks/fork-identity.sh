@@ -9,8 +9,14 @@
 # an unfilled placeholder on a fork). pure-white-label-100 WS6 — RULE-TEMPLATE-MODULE-FIX-UPSTREAM-001
 # identity/brand-field generalization.
 #
-#   template (TEMPLATE_SELF_BUILD=1) → EVERY field MUST match a declared placeholder (leak → FAIL)
-#   fork     (TEMPLATE_SELF_BUILD unset) → NO field may match a placeholder (unfilled → FAIL)
+# The template ships as a WORKING Mifos "Money Toolkit" reference example (example_identity in
+# WHITE_LABEL_PLACEHOLDERS.yaml), so identity is a THREE-way decision, not neutral-vs-authored:
+#   template (TEMPLATE_SELF_BUILD=1) → each field MUST be a declared placeholder OR the Mifos
+#                                      reference identity; a foreign real-brand value → FAIL (leak)
+#   fork     (TEMPLATE_SELF_BUILD unset) → NO field may be a placeholder (unfilled → FAIL) AND
+#                                      NO field may still be the Mifos reference (must rebrand → FAIL)
+# Signing categories (apple_team_id, apple_match_git_url) have NO example → they stay
+# placeholder-only on the template (real signing identity is injected at deploy time, never committed).
 #
 # exit 0 PASS / 1 FAIL.
 set -uo pipefail
@@ -37,10 +43,16 @@ for key in "${!FIELD_CAT[@]}"; do
       echo "❌ '$key=$val' is a template placeholder — a fork must set its own value (see WHITE_LABEL_PLACEHOLDERS.yaml#$cat)"
       fail=1
     fi
+  elif wl_matches_example "$val" "$cat"; then
+    # value IS the template's committed Mifos reference identity
+    if [ "$is_template" != "1" ]; then
+      echo "❌ '$key=$val' is the template's Mifos REFERENCE identity — a fork must rebrand to its own (see WHITE_LABEL_PLACEHOLDERS.yaml#example_identity.$cat)"
+      fail=1
+    fi
   else
-    # value is authored
+    # value is some OTHER authored (real) value
     if [ "$is_template" = "1" ]; then
-      echo "❌ '$key=$val' is authored on the NEUTRAL TEMPLATE — a real-brand value leaked in (must be a placeholder from WHITE_LABEL_PLACEHOLDERS.yaml#$cat)"
+      echo "❌ '$key=$val' is a foreign real-brand value on the TEMPLATE — must be the Mifos reference identity or a placeholder (WHITE_LABEL_PLACEHOLDERS.yaml#$cat / #example_identity.$cat)"
       fail=1
     fi
   fi
@@ -52,8 +64,10 @@ if [ -f "$lvt" ]; then
   bid="$(grep -E '^[[:space:]]*appId[[:space:]]*=' "$lvt" | head -1 | sed -E 's/.*=[[:space:]]*"?([^"]+)"?.*/\1/')"
   if wl_matches_any "$bid" bundle_id; then
     [ "$is_template" != "1" ] && { echo "❌ libs.versions.toml appId '$bid' is a template placeholder — fork must author"; fail=1; }
+  elif wl_matches_example "$bid" bundle_id; then
+    [ "$is_template" != "1" ] && { echo "❌ libs.versions.toml appId '$bid' is the Mifos REFERENCE id — fork must rebrand to its own appId"; fail=1; }
   else
-    [ "$is_template" = "1" ] && { echo "❌ libs.versions.toml appId '$bid' is authored on the NEUTRAL TEMPLATE — must be a placeholder"; fail=1; }
+    [ "$is_template" = "1" ] && { echo "❌ libs.versions.toml appId '$bid' is a foreign brand on the TEMPLATE — must be the Mifos reference id or a placeholder"; fail=1; }
   fi
 
   # Apple Team ID in libs.versions.toml — same directional model (WHITE_LABEL_PLACEHOLDERS.yaml#apple_team_id).

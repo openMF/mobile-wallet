@@ -24,7 +24,7 @@ deployment/
 │   ├── lib/                     ← Ruby helpers (populated in SP-07/08)
 │   ├── scripts/
 │   │   ├── _README.md           ← script index — purpose/inputs/outputs/exit
-│   │   ├── keystore-manager.sh  ← Android keystore lifecycle (moved by SP-05)
+│   │   ├── scripts/white-label/keystore.sh  ← Android keystore lifecycle (moved by SP-05)
 │   │   └── SECRETS_INVENTORY.md ← secrets reference doc (from SP-02)
 │   └── secrets-needs-schema.yaml ← human-readable dual-mode schema cheat-sheet
 ├── android/                     ← Tier-1 + Tier-2 Android targets

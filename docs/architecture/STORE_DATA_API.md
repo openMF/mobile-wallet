@@ -1,6 +1,6 @@
 # StoreData API — Unified Offline-First Data Layer
 
-> **Module:** `core-base/store` (synced to all consumer apps via sync-dirs.sh)
+> **Module:** `core-base/store` (synced to all consumer apps via scripts/white-label/sync-dirs.sh)
 > **Package:** `template.core.base.store`
 > **Store 5 Version:** 5.1.0-alpha08
 
@@ -522,6 +522,27 @@ Box(Modifier.fillMaxSize()) {
     )
 }
 ```
+
+### BaseMutationViewModel + MutationMode (the unified write idiom)
+
+For most write screens, extend the single base view-model
+`BaseMutationViewModel<T, R>` (`core-base/ui/.../viewmodel/BaseMutationViewModel.kt`) rather than
+wiring `submitHandler` by hand. It is parameterized by **`MutationMode`**:
+
+- **`MutationMode.InSession`** — single-shot submit, no persistence.
+- **`MutationMode.Draft`** — offline-resilient draft with 3-case resume (fresh / resume-in-progress /
+  resume-after-crash); the payload survives restarts and is retried on reconnect.
+
+There is exactly one base mutation VM (an earlier design split it into two — the mode now expresses
+the difference). The **Sync & Drafts** surface lists in-flight drafts from both modes.
+
+### Store archetypes (generator routing key)
+
+The read/write shape is selected by **`feature_profile.store_archetype`** — the 8 archetypes are
+`NETWORK_WITH_CACHE | MUTABLE | OFFLINE_LOCAL_ONLY | NETWORK_ONLY | CACHE_ONLY | PERIODIC |
+MEMORY_ONLY | LOAD_ONCE`. `kmp-store-gen` reads `store_archetype` and emits the matching
+`StoreFactory.create*` factory + `FetchPolicy`. Full decision matrix + module chain:
+[`FEATURE_AUTHORING.md`](../../FEATURE_AUTHORING.md).
 
 ## Store 5 API Notes
 

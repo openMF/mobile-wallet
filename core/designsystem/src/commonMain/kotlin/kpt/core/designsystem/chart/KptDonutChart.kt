@@ -29,6 +29,7 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import kpt.core.base.designsystem.chart.DonutGeometry
 import kpt.core.base.designsystem.theme.motion
 
 /**

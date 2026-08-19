@@ -24,6 +24,9 @@ class CMPFeatureConventionPlugin : Plugin<Project> {
                 apply("org.jetbrains.compose")
                 apply("org.convention.detekt.plugin")
                 apply("org.convention.spotless.plugin")
+                // Device-free CMP render tier (SCREENSHOT_TEST.md CMP-PRIMARY): renders commonMain
+                // @Preview from desktopTest (JVM, no emulator/Robolectric) → verifyRoborazziDesktop.
+                apply("io.github.takahirom.roborazzi")
             }
 
             // Compose Multiplatform UI-test infra (RULE-KMP-COMPOSE-UITEST-001):
@@ -40,13 +43,20 @@ class CMPFeatureConventionPlugin : Plugin<Project> {
                     "org.jetbrains.compose.ui:ui-test-junit4:$composeVersion",
                 )
 
+                // Device-free render tier deps — desktopTest ONLY (JVM-capable). roborazzi-compose-desktop
+                // has no JS/Wasm variant, so it MUST NOT go in the js/wasm-shared commonTest. The plain
+                // `roborazzi` AAR is never added here (no JVM variant → breaks desktopTest classpath).
+                add("desktopTestImplementation", libs.findLibrary("roborazzi-composeDesktop").get())
+                add("desktopTestImplementation", libs.findLibrary("composablePreviewScanner-common").get())
+                add("desktopTestImplementation", libs.findLibrary("composablePreviewScanner-jvm").get())
+
                 add("commonMainImplementation", project(":core:ui"))
                 add("commonMainImplementation", project(":core-base:ui"))
                 add("commonMainImplementation", project(":core:designsystem"))
                 add("commonMainImplementation", project(":core-base:designsystem"))
                 add("commonMainImplementation", project(":core:data"))
                 add("commonMainImplementation", project(":core-base:designsystem"))
-                add("commonMainImplementation", project(":core:analytics"))
+                add("commonMainImplementation", project(":core:firebase"))
 
                 add("commonMainImplementation", libs.findLibrary("koin.compose").get())
                 add("commonMainImplementation", libs.findLibrary("koin.compose.viewmodel").get())

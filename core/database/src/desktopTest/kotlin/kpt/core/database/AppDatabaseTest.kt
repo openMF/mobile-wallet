@@ -37,31 +37,33 @@ class AppDatabaseTest {
     }
 
     @Test
-    fun databaseExposeTransactionDao() {
+    fun databaseExposeAlertDao() {
         database = Room.inMemoryDatabaseBuilder<AppDatabase>()
             .setDriver(BundledSQLiteDriver())
             .setQueryCoroutineContext(Dispatchers.IO)
             .build()
 
-        assertNotNull(database!!.transactionDao)
+        assertNotNull(database!!.alertDao)
     }
 
     @Test
-    fun databaseExposeTransferDetailDao() {
+    fun databaseExposeInterestRateSeriesDao() {
         database = Room.inMemoryDatabaseBuilder<AppDatabase>()
             .setDriver(BundledSQLiteDriver())
             .setQueryCoroutineContext(Dispatchers.IO)
             .build()
 
-        assertNotNull(database!!.transferDetailDao)
+        assertNotNull(database!!.interestRateSeriesDao)
     }
 
     @Test
     fun databaseVersionIsCurrent() {
-        // Fork wallet schema — bumped to 8 by the transfer-detail Store5 vertical
-        // (AutoMigration(7→8) adding the wallet_transfer_details table). Update this
-        // constant when bumping AppDatabase.VERSION so the guardrail stays meaningful.
-        assertEquals(8, AppDatabase.VERSION)
+        // Bumped to 11 in the v10→v11 change that added the `cloud_todos` table (#274).
+        // Update this constant when bumping AppDatabase.VERSION so the guardrail
+        // stays meaningful. NOTE: #274 added the entity + version but omitted the
+        // AutoMigration(10→11) + 11.json schema export — a fresh install is fine, but an
+        // in-place v10→v11 upgrade needs that migration completed in a follow-up.
+        assertEquals(11, AppDatabase.VERSION)
     }
 
     @Test

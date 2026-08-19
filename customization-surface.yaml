@@ -133,17 +133,56 @@ rules:
   # ── fork-owned (carve-outs INSIDE otherwise-template dirs; declared before template) ──
   # app-profile/ — the fork-owned white-label deployment SoT (identity, text, media, icons, per platform).
   # This is the ONLY fork-owned deployment surface. deployment/ LOGIC stays template-owned and reads this
-  # via _shared/config.rb (AppProfile.get) + syncForkConfig; sync NEVER rewrites app-profile/**.
+  # via _shared/config.rb (AppProfile.get) + syncForkConfig.
   # (branding/icons was dissolved into app-profile/icons — there is no separate branding/ dir.)
-  - glob: "app-profile/**"
+  #
+  # OWNERSHIP SPLIT (WS02, RULE-TEMPLATE-MODULE-FIX-UPSTREAM-001 / epic AC6): the STRUCTURED yaml config
+  # (app.yaml + platforms/<p>/*.yaml + deploy-targets.yaml) is now owner: merge / strategy:
+  # yaml-schema-merge — the template supplies the key STRUCTURE, defaults and demo access-points while a
+  # fork's NON-placeholder identity/org/store scalar wins (classified via AppProfile::MAP key paths +
+  # the PLACEHOLDER regex; see scripts/customization-surface.sh#cs_merge_yaml_schema). The blind
+  # `app-profile/** → owner: fork` glob is GONE — it blind-preserved the whole surface, so a fork never
+  # received a freshly-added template key / demo access-point (schema silently skewed, RESEARCH F3).
+  # Questionnaire CONTENT (**/app-content/** — read by their own consumers, EXCLUDED from AppProfile._data),
+  # binary MEDIA (**/media/**), icons, and store-content json/md have no schema to evolve → stay owner: fork.
+
+  # app-content questionnaire answers — fork-authored, NOT identity config (config.rb rejects /app-content/
+  # from the merged _data). Declared FIRST so it wins over the platforms/**/*.yaml merge rule below.
+  - glob: "app-profile/**/app-content/**"
     owner: fork
-  # feature backbone (E1 / F1) — home/profile/settings are the TEMPLATE-owned minimal shell every fork
+  # structured yaml config — deep-merge (template wins schema/keys/defaults/demo-access-points; fork wins identity)
+  - glob: "app-profile/app.yaml"
+    owner: merge
+    strategy: yaml-schema-merge
+  - glob: "app-profile/platforms/**/*.yaml"
+    owner: merge
+    strategy: yaml-schema-merge
+  - glob: "app-profile/deploy-targets.yaml"
+    owner: merge
+    strategy: yaml-schema-merge
+  # binary media / icons / store-content json + md — no schema to evolve, blind-preserved owner: fork
+  - glob: "app-profile/icons/**"
+    owner: fork
+  - glob: "app-profile/platforms/**/media/**"
+    owner: fork
+  - glob: "app-profile/platforms/**/*.json"
+    owner: fork
+  - glob: "app-profile/README.md"
+    owner: fork
+  # feature backbone (E1 / F1) — home/profile/settings are the TEMPLATE-owned minimal SHELL every fork
   # keeps and receives upstream fixes for. Declared ABOVE the blanket `feature/** → fork` (first-match
-  # wins). Their demo showcases stay fork-owned via the feature demo carve-out declared FIRST, so the
-  # backbone template rules never capture a `**/demo/**` package. An arbitrary `feature/<x>` a fork adds
-  # is consumer-owned and falls through to the blanket `feature/** → fork` default below.
+  # wins). Their INNER content is fork-owned via two distinct seams: (a) the `*Body` vals in the
+  # fork-owned BackboneRegistry (cmp-navigation/**/registry — home/settings/profile inner content), and
+  # (b) demo showcases under `feature/**/demo/**` which are the DISTINCT `demo-showcase` class below.
+  #
+  # DEMO-SHOWCASE vs FORK (WS01 / epic AC8, LD3a): a demo showcase is template-SHIPPED (demo-only,
+  # updatable on sync) — a DIFFERENT ownership class from an arbitrary fork-added feature (which sync
+  # must NEVER touch). Before this split both funneled into `feature/** → fork`, indistinguishable
+  # except by the fence glob, so sync could not tell a showcase from a fork's own feature. Declared
+  # FIRST so the backbone template rules never capture a `**/demo/**` package. An arbitrary
+  # `feature/<x>` a fork authors is consumer-owned and falls through to the blanket `feature/** → fork`.
   - glob: "feature/**/demo/**"
-    owner: fork
+    owner: demo-showcase
   - glob: "feature/home/**"
     owner: template
   - glob: "feature/profile/**"
@@ -170,6 +209,14 @@ rules:
   # `owner: template`. Covers FeatureRegistry (routes+DI), BackboneRegistry (home body, S5),
   # TabRegistry (bottom-nav tabs, S6), AppInitializers (startup hooks, S3/S4) + the package README.
   # The whole package is the seam — same pattern as the core/store block above. (E1/T7, 2026-08-11)
+  #
+  # Base-feature INNER-content seam (WS01 / epic AC7): BackboneRegistry carries the fork-owned
+  # `homeBody` / `settingsBody` / `profileBody` `val`s — the settings/profile inner content lives HERE,
+  # in this fork-owned backbone-seam file, NOT in the template-owned `feature/{settings,profile}/**`
+  # shells above. Declared explicitly (more-specific-first) so the base-feature seam is self-documenting;
+  # it resolves the same `fork` as the enclosing `registry/**` rule (mirrors the shipped homeBody carve-out).
+  - glob: "cmp-navigation/**/registry/BackboneRegistry.kt"
+    owner: fork
   - glob: "cmp-navigation/**/registry/**"
     owner: fork
   # Worker seam — the fork-owned @WorkerKmpWorkers site (cmp-shared). The template WorkerDeclarations.kt
@@ -177,12 +224,14 @@ rules:
   # here, so a sync full-copies cmp-shared while the fork's workers survive.
   - glob: "cmp-shared/**/ForkWorkerDeclarations.kt"
     owner: fork
-  # demo showcase stores/data — fork-owned. Covers core/store/**/demo/{economic,banking,…}
-  # (the demo Store5 showcases) + every other **/demo/** package. The former dead globs
-  # `core/store/economic/**` + `core/store/banking/**` claimed `template` but matched ZERO
-  # real paths (the stores live under demo/), so they mis-declared ownership — removed (E0/T3).
+  # demo showcase stores/data — the DISTINCT `demo-showcase` class (WS01 / epic AC8). Covers
+  # core/store/**/demo/{economic,banking,…} (the demo Store5 showcases) + every other **/demo/**
+  # package: template-SHIPPED, demo-only, updatable on sync — NOT the same class as a fork-added
+  # feature (`feature/** → fork`). The former dead globs `core/store/economic/**` +
+  # `core/store/banking/**` claimed `template` but matched ZERO real paths (the stores live under
+  # demo/), so they mis-declared ownership — removed (E0/T3).
   - glob: "**/demo/**"
-    owner: fork
+    owner: demo-showcase
   - glob: "build-logic/**/kotlin/local/**"   # LocalFlavors.kt fork flavor extensions
     owner: fork
   - glob: "cmp-android/src/main/res/**"

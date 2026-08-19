@@ -17,6 +17,7 @@ internal fun Project.configureDetekt(extension: DetektExtension) = extension.app
     tasks.named<Detekt>("detekt") {
         mustRunAfter(":cmp-android:dependencyGuard")
         jvmTarget = "17"
+        baseline.set(rootDir.resolve("config/detekt/baseline.xml"))
         source(files(rootDir))
         include("**/*.kt")
         exclude("**/*.kts")

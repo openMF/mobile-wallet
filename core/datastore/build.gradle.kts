@@ -33,14 +33,6 @@ kotlin {
             implementation(libs.multiplatform.settings)
             implementation(libs.multiplatform.settings.serialization)
             implementation(libs.multiplatform.settings.coroutines)
-
-            // Koin DI is used by fork Koin modules (org.koin.core.qualifier.*, org.koin.dsl.*).
-            implementation(libs.koin.core)
-        }
-
-        androidMain.dependencies {
-            // androidContext() extension for KoinApplication (org.koin.android.ext.koin.androidContext).
-            implementation(libs.koin.android)
         }
     }
 }

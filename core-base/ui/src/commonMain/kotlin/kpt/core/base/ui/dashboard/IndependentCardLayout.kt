@@ -13,8 +13,10 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kpt.core.base.designsystem.theme.KptTheme
 import kpt.core.base.store.freshness.FreshnessSignal
+import kpt.core.base.store.screen.ScreenDataStream
 import kpt.core.base.store.screen.ScreenState
 import kpt.core.base.ui.screen.DefaultEmptyContent
 import kpt.core.base.ui.screen.DefaultErrorContent
@@ -131,4 +133,61 @@ fun <T> IndependentCardLayout(
             if (cardChrome != null) cardChrome(index, cardBody) else cardBody()
         }
     }
+}
+
+// STORE5-COMPLETENESS: card-stream — stream overload
+/**
+ * Direct [ScreenDataStream] overload of [IndependentCardLayout] — one Store5 read stream per
+ * independent card. Each `stream.state` is collected lifecycle-aware here and folded into the
+ * `List<ScreenState<T>>` the value overload above renders, so a fast card shows content while a
+ * slow one still spins and a single failed fetch only ruins its own card. Retry defaults to the
+ * card's own `stream.retry()`.
+ *
+ * Mirrors [ScreenContent]'s stream overload so a dashboard binds a list of live Store5 streams OR
+ * a list of plain [ScreenState] values (the base `states:` overload) with zero call-site
+ * divergence (the D2 dual-input contract). The per-card `(index, data, freshness)` content lambda
+ * is unchanged across both shapes.
+ *
+ * ```kotlin
+ * IndependentCardLayout(
+ *     streams = listOf(viewModel.loansStream, viewModel.billsStream, viewModel.ratesStream),
+ * ) { index, data, _ -> DashboardCard(index, data) }
+ * ```
+ *
+ * @param streams One [ScreenDataStream] per card — order defines the visual order of cards.
+ * @param onRetry Invoked with the card's index; defaults to that card's `stream.retry()`.
+ */
+@Composable
+fun <T> IndependentCardLayout(
+    streams: List<ScreenDataStream<T>>,
+    modifier: Modifier = Modifier,
+    onRetry: (Int) -> Unit = { index -> streams[index].retry() },
+    refreshingIndicator: (@Composable () -> Unit)? = null,
+    onDismiss: ((Int) -> Unit)? = null,
+    cardChrome: (@Composable (index: Int, card: @Composable () -> Unit) -> Unit)? = null,
+    loading: (@Composable (index: Int) -> Unit)? = null,
+    empty: (@Composable (index: Int) -> Unit)? = null,
+    noNetwork: (@Composable (index: Int, isCaptivePortal: Boolean) -> Unit)? = null,
+    error: (@Composable (index: Int, error: Throwable) -> Unit)? = null,
+    content: @Composable (index: Int, data: T, freshnessSignal: FreshnessSignal) -> Unit,
+) {
+    // `map` is a Kotlin inline fun, so the @Composable collectAsStateWithLifecycle call inherits
+    // this composable's calling context (same inline-lambda idiom the value overload uses for
+    // `states.forEachIndexed`). One collector per card stream.
+    val states = streams.map { stream ->
+        stream.state.collectAsStateWithLifecycle(ScreenState.Loading).value
+    }
+    IndependentCardLayout(
+        states = states,
+        onRetry = onRetry,
+        modifier = modifier,
+        refreshingIndicator = refreshingIndicator,
+        onDismiss = onDismiss,
+        cardChrome = cardChrome,
+        loading = loading,
+        empty = empty,
+        noNetwork = noNetwork,
+        error = error,
+        content = content,
+    )
 }

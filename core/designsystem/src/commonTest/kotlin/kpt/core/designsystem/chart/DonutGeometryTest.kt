@@ -9,6 +9,7 @@
  */
 package kpt.core.designsystem.chart
 
+import kpt.core.base.designsystem.chart.DonutGeometry
 import kotlin.math.abs
 import kotlin.test.Test
 import kotlin.test.assertEquals

@@ -20,52 +20,32 @@ kotlin {
             // Core Modules
             implementation(projects.core.data)
             implementation(projects.core.database)
+            implementation(projects.core.network) // E1: FeatureRegistry wires the relocated DemoNetworkModule (core/network/demo/di)
             implementation(projects.core.model)
             implementation(projects.core.common)
             implementation(projects.core.datastore)
-
-            implementation(projects.core.datastore)
-            implementation(projects.coreBase.common)
-            implementation(projects.coreBase.platform)
+            // Firebase analytics (firebaseModule + AnalyticsHelper + Compose helpers) via core/firebase.
+            implementation(projects.core.firebase)
+            // core/platform re-exports core-base/platform (platformModule, GarbageCollectionManager) —
+            // the app-shell reaches those through core/ per G-CORE-BASE-ENCAP.
+            implementation(projects.core.platform)
+            // core-base/security is the ONE sanctioned app-shell exception: cmp-navigation is the DI
+            // aggregator (KoinModules wires SecurityModule) and reads isReleaseBuild; no core/ wrapper
+            // is warranted for a security module the shell itself assembles. Feature modules NEVER
+            // depend on core-base — enforced by the encapsulation gate (Phase A).
             implementation(projects.coreBase.security)
-
-            // Phase 2 T4 (02-topology-reconciliation) — shell-security re-home:
-            //   * :core:designsystem  → MifosDialogBox for UnauthorizedDialogGate (b)
-            //   * mifos-authenticator-biometrics → PlatformAuthenticatorCompositionProvider (d)
-            //
-            // NB: no `projects.cmpShared` here — `cmp-shared` already depends on
-            // `cmp-navigation` (SharedApp → ComposeApp), so the shell-VM /
-            // instance-selector wiring goes the OTHER direction: `SharedApp`
-            // (in cmp-shared) composes `MifosPayViewModel` + `InstanceSelectorScreen`
-            // and passes them into `ComposeApp` via callbacks (see
-            // `cmp/navigation/ComposeApp.kt` param docs).
-            // `mifos-authenticator-passcode` (the library, not the feature module)
-            // is pulled `api` by `:core:data`, so `PasscodeManager` /
-            // `PasscodeStep` resolve transitively.
+            // Fork shell-security seam: core/designsystem (MifosDialogBox for UnauthorizedDialogGate) +
+            // mifos-authenticator-biometrics (PlatformAuthenticatorCompositionProvider for
+            // PlatformAuthenticatorGate). PRESERVED across template syncs — do not drop.
             implementation(projects.core.designsystem)
             implementation(libs.mifos.authenticator.biometrics)
 
-            // Phase 2 T6/T7 — fork Koin surface required by the re-homed shell
-            // (see `cmp.navigation.di.KoinModules`):
-            //   * :core:network — org.mifospay.core.network.di.{NetworkModule,LocalModule}
-            //     (Ktor client + InstanceConfigLoader used by LoginScreen's Supabase
-            //     multi-instance path).
-            //   * :core:domain — org.mifospay.core.domain.di.DomainModule
-            //     (use-cases the fork's RepositoryModule depends on downstream).
-            //   * :feature:passcode — org.mifos.feature.passcode.MifosAuthenticatorModule
-            //     (MifosPasscodeViewModel + BiometricSetupScreenViewmodel). The
-            //     PasscodeManager singleton itself is registered locally by
-            //     `KoinModules.MifosPasscodeModule` (this cmp-navigation module)
-            //     to avoid re-creating the cmp-shared → cmp-navigation cycle.
-            implementation(projects.core.network)
-            implementation(projects.core.domain)
-            implementation(projects.feature.passcode)
-
-            // shell (framework) — kept
+            // Backbone shell features (template-owned) — always present in every fork.
             implementation(projects.feature.home)
             implementation(projects.feature.profile)
             implementation(projects.feature.settings)
-            // demo feature deps removed — fork has no template demo modules (customizer --clean equivalent, deferred to CI)
+            // Fork feature-module deps come from the fork-owned `feature-deps.gradle.kts` seam
+            // (applied at the bottom of this file, S7/F4). A fork adds a feature there, never here.
             implementation(projects.sync)
 
             // put your multiplatform dependencies here
@@ -106,8 +86,4 @@ compose.resources {
 // Fork-owned feature-module dependencies (S7/F4 white-label seam). Applied AFTER the `kotlin { }` block
 // above so the `commonMainImplementation` configuration it contributes to already exists. A fork edits
 // `feature-deps.gradle.kts`, never this template-owned build file — a template sync full-copies this file.
-// Mifos Pay's existing ~28 feature-module deps stay inline in the `commonMain.dependencies { }` block
-// above (pre-dates this seam's adoption; not moved to avoid an unnecessary bulk-move of working config).
-// Any NEW feature dependency a future contributor adds should go in `feature-deps.gradle.kts` instead,
-// so it survives the next template sync.
 apply(from = rootProject.file("feature-deps.gradle.kts"))

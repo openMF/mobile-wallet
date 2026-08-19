@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copyright 2022 Mifos Initiative
+
+    This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+    If a copy of the MPL was not distributed with this file,
+    You can obtain one at https://mozilla.org/MPL/2.0/.
+
+    See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
+-->
+<resources>
+    <string name="feature_settings_top_app_bar_action_icon_description">设置</string>
+    <string name="feature_settings_top_app_bar_navigation_icon_description">搜索</string>
+    <string name="feature_settings_title">设置</string>
+    <string name="feature_settings_loading">加载中…</string>
+    <string name="feature_settings_privacy_policy">隐私政策</string>
+    <string name="feature_settings_licenses">许可证</string>
+    <string name="feature_settings_brand_guidelines">品牌指南</string>
+    <string name="feature_settings_feedback">反馈</string>
+    <string name="feature_settings_theme">主题</string>
+    <string name="feature_settings_brand_default">默认</string>
+    <string name="feature_settings_brand_android">Android</string>
+    <string name="feature_settings_dark_mode_preference">深色模式偏好</string>
+    <string name="feature_settings_dark_mode_config_system_default">系统默认</string>
+    <string name="feature_settings_dark_mode_config_light">浅色</string>
+    <string name="feature_settings_dark_mode_config_dark">深色</string>
+    <string name="feature_settings_dynamic_color_preference">使用动态颜色</string>
+    <string name="feature_settings_dynamic_color_yes">是</string>
+    <string name="feature_settings_dynamic_color_no">否</string>
+    <string name="feature_settings_dismiss_dialog_button_text">确定</string>
+    <string name="feature_settings_change_theme_text">更改主题</string>
+    <string name="feature_settings_change_theme_placeholder_text">更改主题</string>
+    <string name="feature_settings_change_language_text">更改语言</string>
+    <string name="feature_settings_change_language_placeholder_text">更改语言</string>
+    <string name="feature_settings_language_preference">语言</string>
+</resources>

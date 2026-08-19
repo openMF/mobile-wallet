@@ -25,7 +25,7 @@ Two downstream support files:
 
 | File | Role |
 |---|---|
-| [`build-logic/convention/src/main/kotlin/LocalFlavorsLoader.kt`](../build-logic/convention/src/main/kotlin/LocalFlavorsLoader.kt) | Reflective hook letting downstream forks add flavors via a `build-logic/convention/src/main/kotlin/local/LocalFlavors.kt` file that `sync-dirs.sh` excludes from sync. |
+| [`build-logic/convention/src/main/kotlin/LocalFlavorsLoader.kt`](../build-logic/convention/src/main/kotlin/LocalFlavorsLoader.kt) | Reflective hook letting downstream forks add flavors via a `build-logic/convention/src/main/kotlin/local/LocalFlavors.kt` file that `scripts/white-label/sync-dirs.sh` excludes from sync. |
 | [`build-logic/convention/src/main/kotlin/local/.gitkeep`](../build-logic/convention/src/main/kotlin/local/) | Placeholder for the local override directory — fork apps drop their `LocalFlavors.kt` here. |
 
 For the abstract verify gates that this concrete adoption realizes, see the library's [`consumer.md`](https://github.com/MobileByteLabs/kmp-product-flavors/blob/development/README.md). Each section of this doc references the corresponding library section number.
@@ -304,7 +304,7 @@ This template stores the brand identifier ONCE in `gradle/libs.versions.toml#[ve
 
 ```toml
 [versions]
-appId = "org.mifos.kmp.template"
+appId = "com.example.app"
 ```
 
 And reads it in `KMPFlavorsConventionPlugin`:
@@ -317,7 +317,7 @@ Forking this template to a new brand = changing one TOML line.
 
 ```bash
 grep -E '^appId\s*=' gradle/libs.versions.toml
-# Expected: appId = "org.mifos.kmp.template"
+# Expected: appId = "com.example.app"
 
 grep -E 'libs\.findVersion\("appId"\)' \
   build-logic/convention/src/main/kotlin/KMPFlavorsConventionPlugin.kt
@@ -380,7 +380,7 @@ grep -c "configureFlavors" \
 
 #### [§11 — Downstream extension hook: LocalFlavorsLoader](https://github.com/MobileByteLabs/kmp-product-flavors/blob/development/README.md)
 
-This template IS the template. Downstream forks (`mifos-mobile`, `mifos-pay`, `mifos-x-field-officer-app`, …) sync `build-logic/convention/` from here via `sync-dirs.sh` and add their fork-specific flavors via `local/LocalFlavors.kt`.
+This template IS the template. Downstream forks (`mifos-mobile`, `mifos-pay`, `mifos-x-field-officer-app`, …) sync `build-logic/convention/` from here via `scripts/white-label/sync-dirs.sh` and add their fork-specific flavors via `local/LocalFlavors.kt`.
 
 ```bash
 grep -E 'LocalFlavorsLoader\.applyIfPresent' \
@@ -460,13 +460,13 @@ When the library publishes `v2.8.0` (or v3.0, or v2.7.x patches):
 
 7. **Commit + PR**: the PR title is `chore(deps): bump kmp-product-flavors v{prev} → v{X.Y}` and the description quotes the new version section.
 
-8. **Downstream forks of this template** will pick up the bump via `sync-dirs.sh` automatically. They should also append a new version section to THEIR own `docs/ADOPTION_KMP_PRODUCT_FLAVORS.md` (synced + local edits coexist — same pattern as `LocalFlavors.kt`).
+8. **Downstream forks of this template** will pick up the bump via `scripts/white-label/sync-dirs.sh` automatically. They should also append a new version section to THEIR own `docs/ADOPTION_KMP_PRODUCT_FLAVORS.md` (synced + local edits coexist — same pattern as `LocalFlavors.kt`).
 
 ---
 
 ## Downstream forks — `LocalFlavors.kt` is the ONLY file you own
 
-Downstream apps that consume this template (`mifos-mobile`, `mifos-pay`, `mifos-x-field-officer-app`, …) **do NOT ship their own adoption record**. They inherit this file via `sync-dirs.sh` and everything else in `build-logic/convention/`.
+Downstream apps that consume this template (`mifos-mobile`, `mifos-pay`, `mifos-x-field-officer-app`, …) **do NOT ship their own adoption record**. They inherit this file via `scripts/white-label/sync-dirs.sh` and everything else in `build-logic/convention/`.
 
 The only file a fork ever owns is:
 
@@ -474,7 +474,7 @@ The only file a fork ever owns is:
 build-logic/convention/src/main/kotlin/local/LocalFlavors.kt
 ```
 
-This file is **excluded from `sync-dirs.sh`** — forks' edits survive every template sync. Forks add fork-specific flavors here:
+This file is **excluded from `scripts/white-label/sync-dirs.sh`** — forks' edits survive every template sync. Forks add fork-specific flavors here:
 
 ```kotlin
 package local
@@ -502,7 +502,7 @@ When a new library version ships, forks don't think about adoption at all. The m
 2. Maintainer runs `/lib-sync` (or `./scripts/lib-sync.sh`) against `samples/kmp-project-template` in the library repo.
 3. PR opens against `kmp-project-template/dev` with the bump.
 4. PR merges into the template's `dev` branch.
-5. Forks run `./sync-dirs.sh` against the updated template — `gradle/libs.versions.toml`, `build-logic/convention/`, and this `ADOPTION_KMP_PRODUCT_FLAVORS.md` all arrive together.
+5. Forks run `scripts/white-label/sync-dirs.sh` against the updated template — `gradle/libs.versions.toml`, `build-logic/convention/`, and this `ADOPTION_KMP_PRODUCT_FLAVORS.md` all arrive together.
 6. Fork's `local/LocalFlavors.kt` is untouched.
 
 This is why the three-tier model is asymmetric:
@@ -511,7 +511,7 @@ This is why the three-tier model is asymmetric:
 |---|---|---|
 | Library | abstract spec + migration recipes | publishes per minor release |
 | Template (this repo) | concrete record + convention plugin + LocalFlavorsLoader | bumped per library release via `/lib-sync` |
-| Fork (mifos-mobile etc.) | `LocalFlavors.kt` only | inherits via `sync-dirs.sh` |
+| Fork (mifos-mobile etc.) | `LocalFlavors.kt` only | inherits via `scripts/white-label/sync-dirs.sh` |
 
 Forks DON'T maintain an adoption doc. The template's doc IS their adoption doc — they inherit it.
 

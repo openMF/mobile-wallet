@@ -16,8 +16,14 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             implementation(projects.core.common)
-            implementation(projects.core.data)
+            // api: DataSyncWorker's PUBLIC constructor exposes core/data repositories (+ Synchronizer via
+            // core.data's api(coreBase.data)) and coreBase/datastore's SyncStatePersister — the
+            // @WorkerKmpWorkers KSP codegen in the consuming module (cmp-shared) must resolve those param
+            // types, exactly like worker-kmp core itself (see below). An `implementation` dep would not
+            // leak transitively and KSP would fail param-type resolution.
+            api(projects.core.data)
             implementation(projects.core.datastore)
+            api(projects.coreBase.datastore)
             implementation(projects.core.model)
 
             // worker-kmp core — CoroutineWorker / WorkerContext / WorkResult / WorkData /

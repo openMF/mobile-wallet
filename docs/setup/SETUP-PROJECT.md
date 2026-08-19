@@ -424,7 +424,7 @@ For CI/CD automation, download Firebase service account keys:
 2. Click **Generate New Private Key**
 3. Save as `firebaseAppDistributionServiceCredentialsFile.json`
 4. Place in the `secrets/` directory
-5. Run: `bash keystore-manager.sh encode-secrets`
+5. Run: `bash scripts/white-label/keystore.sh encode-secrets`
 
 ### 4. Play Store Configuration (Optional)
 
@@ -435,7 +435,7 @@ For Google Play Store deployment:
 3. Download JSON key file
 4. Save as `playStorePublishServiceCredentialsFile.json`
 5. Place in `secrets/` directory
-6. Run: `bash keystore-manager.sh encode-secrets`
+6. Run: `bash scripts/white-label/keystore.sh encode-secrets`
 
 ### 5. iOS Code Signing Configuration
 
@@ -503,7 +503,7 @@ If using GitHub Actions or similar CI/CD:
 
 1. Upload secrets to repository:
    ```bash
-   bash keystore-manager.sh add --repo=username/repository
+   bash scripts/white-label/keystore.sh add --repo=username/repository
    ```
 
 2. Configure environment-specific settings
@@ -661,13 +661,13 @@ If you prefer more control or need to re-run specific steps:
 
 ```bash
 # Step 1: Customization only
-bash customizer.sh com.company.app MyApp "My Application"
+bash scripts/white-label/customize.sh com.company.app MyApp "My Application"
 
 # Step 2: Firebase only
-bash firebase-setup.sh my-firebase-project com.company.app
+bash scripts/white-label/firebase.sh my-firebase-project com.company.app
 
 # Step 3: Keystore generation only
-bash keystore-manager.sh generate
+bash scripts/white-label/keystore.sh generate
 ```
 
 ### Re-running the Setup
@@ -730,7 +730,7 @@ package name initially. If needed, you can:
 You can skip Firebase setup during the main script execution and run it later:
 
 ```bash
-bash firebase-setup.sh <firebase-project-id> <ios-bundle-id>
+bash scripts/white-label/firebase.sh <firebase-project-id> <ios-bundle-id>
 ```
 
 The Android and iOS apps will build successfully without Firebase, but Firebase features won't work

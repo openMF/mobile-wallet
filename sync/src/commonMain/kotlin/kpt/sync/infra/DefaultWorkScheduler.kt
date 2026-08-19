@@ -66,6 +66,8 @@ public class DefaultWorkScheduler(
         content: NotificationContent,
         delay: Duration,
         mode: WorkMode,
+        uniqueName: String?,
+        tags: List<String>,
     ): WorkHandle {
         val request = oneTimeWorkRequest<NotificationWorker> {
             setInputData(
@@ -77,12 +79,26 @@ public class DefaultWorkScheduler(
             )
             setInitialDelay(delay)
             addTag(NOTIFICATION_WORK_NAME_PREFIX)
+            tags.forEach { addTag(it) }
             if (mode == WorkMode.Foreground) {
                 setExpedited(OutOfQuotaPolicy.RUN_AS_NON_EXPEDITED_WORK_REQUEST)
             }
         }
-        val id = workManager.enqueue(request)
-        return WorkHandle(id = id, uniqueName = null)
+        // Unique-named → REPLACE the pending request under that name; else fire-and-forget.
+        val id = if (uniqueName != null) {
+            workManager.enqueueUniqueWork(
+                uniqueWorkName = uniqueName,
+                existingWorkPolicy = ExistingWorkPolicy.REPLACE,
+                request = request,
+            )
+        } else {
+            workManager.enqueue(request)
+        }
+        return WorkHandle(id = id, uniqueName = uniqueName)
+    }
+
+    override suspend fun cancelWorkByTag(tag: String) {
+        workManager.cancelAllWorkByTag(tag)
     }
 
     override fun observeWork(handle: WorkHandle): Flow<WorkStatus> = workManager.getWorkInfosByTag(

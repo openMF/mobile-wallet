@@ -122,6 +122,16 @@ without their own network call.
 > `observePendingByFormKey`) and shape of user input — the screen archetype itself is
 > called `input` (covers form / wizard / quick-action / confirm / gesture).
 
+> **Unified write view-model.** Screens extend the single `BaseMutationViewModel<T, R>`
+> parameterized by **`MutationMode`** — `MutationMode.InSession` (single-shot submit) or
+> `MutationMode.Draft` (offline draft, 3-case resume). An earlier design split this into two base
+> VMs; the mode now expresses the difference. The `SubmitHandler` / `DraftSubmitHandler` shown below
+> are the lower-level handlers the base VM composes.
+
+> **Read shape is picked by `store_archetype`.** The generator routes on
+> `feature_profile.store_archetype` (8 archetypes) to select the `core/store` factory — see
+> [STORE_DATA_API.md](../architecture/STORE_DATA_API.md) and `FEATURE_AUTHORING.md`.
+
 
 ### Basic mutation (no draft persistence)
 ```kotlin
@@ -314,7 +324,7 @@ Everything consumer-forks need lives in `core/store/`:
 | `AppStoreRegistry.kt` | Named Store qualifiers (Koin) |
 | `appStoreModule.kt` | Koin DI bindings for your Store factories |
 
-`MifosTheme` provides `LocalScreenStateDefaults` automatically — zero per-screen wiring.
+`KptTheme` provides `LocalScreenStateDefaults` automatically — zero per-screen wiring.
 
 ---
 

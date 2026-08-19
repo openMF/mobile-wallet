@@ -12,7 +12,7 @@ graph LR
     :core:data["data"]
     :core:ui["ui"]
   end
-  :mifospay-android --> :mifospay-shared
-  :mifospay-android --> :core:data
-  :mifospay-android --> :core:ui
+  :cmp-android --> :cmp-shared
+  :cmp-android --> :core:data
+  :cmp-android --> :core:ui
 ```

@@ -27,11 +27,15 @@ This directory contains 17 bash scripts for project setup, deployment, and verif
 
 **Script Categories:**
 ```
-setup/
-├── setup-project.sh              (565 lines) - Master orchestrator
-├── customizer.sh                 (566 lines) - Package name customization
-├── firebase-setup.sh             (469 lines) - Firebase project setup
-└── keystore-manager.sh         (1,356 lines) - Keystore & secrets management
+setup-project.sh                  (565 lines) - thin redirect → scripts/white-label/doctor.sh (--legacy for old flow)
+
+scripts/white-label/             - the white-label lifecycle (see scripts/white-label/README.md)
+├── doctor.sh                     - the ONE entry: setup + verify + sync (RULE-WHITE-LABEL-DOCTOR-001)
+├── derive.rb                     - app-profile → gradle/fork.properties (single SoT)
+├── customize.sh                  (566 lines) - Package name customization  (was customizer.sh)
+├── firebase.sh                   (469 lines) - Firebase project setup      (was firebase-setup.sh)
+├── keystore.sh                 (1,356 lines) - Keystore & secrets mgmt      (was keystore-manager.sh)
+└── sync-dirs.sh                  - template sync engine (owner: template, self-propagating)
 
 ios-deployment/
 ├── deploy_firebase.sh            - iOS Firebase deployment
@@ -80,9 +84,9 @@ utilities/
    - Keystore passwords
 
 3. **Orchestrates Setup:**
-   - Runs `customizer.sh` to update package names
-   - Runs `firebase-setup.sh` to create Firebase projects
-   - Runs `keystore-manager.sh` to generate keystores
+   - Runs `scripts/white-label/customize.sh` to update package names
+   - Runs `scripts/white-label/firebase.sh` to create Firebase projects
+   - Runs `scripts/white-label/keystore.sh` to generate keystores
    - Runs iOS setup (if user confirms)
 
 4. **Generates Documentation:**
@@ -107,13 +111,13 @@ utilities/
 
 ---
 
-### 2. `customizer.sh` (566 lines)
+### 2. `scripts/white-label/customize.sh` (566 lines)
 
 **Purpose:** Update package names and namespaces throughout the project
 
 **Usage:**
 ```bash
-./customizer.sh
+scripts/white-label/customize.sh
 ```
 
 **What it does:**
@@ -133,12 +137,12 @@ utilities/
 4. **Creates google-services.json:**
    - Generates template with 4 variants:
      - `release`, `debug`, `demo`, `demo.debug`
-   - Placeholder app IDs (will be updated by `firebase-setup.sh`)
+   - Placeholder app IDs (will be updated by `scripts/white-label/firebase.sh`)
 
 5. **Updates libs.versions.toml:**
    - `androidPackageNamespace` version
 
-**⚠️ IMPORTANT:** Run `firebase-setup.sh` after this to populate real Firebase app IDs
+**⚠️ IMPORTANT:** Run `scripts/white-label/firebase.sh` after this to populate real Firebase app IDs
 
 **Interactive:** Yes (prompts for package names)
 
@@ -146,13 +150,13 @@ utilities/
 
 ---
 
-### 3. `firebase-setup.sh` (469 lines)
+### 3. `scripts/white-label/firebase.sh` (469 lines)
 
 **Purpose:** Create Firebase projects and register Android/iOS apps
 
 **Usage:**
 ```bash
-./firebase-setup.sh
+scripts/white-label/firebase.sh
 ```
 
 **What it does:**
@@ -198,13 +202,13 @@ Firebase App               → Config Variant
 
 ---
 
-### 4. `keystore-manager.sh` (1,356 lines)
+### 4. `scripts/white-label/keystore.sh` (1,356 lines)
 
 **Purpose:** Complete keystore and secrets management tool
 
 **Usage:**
 ```bash
-./keystore-manager.sh <command>
+scripts/white-label/keystore.sh <command>
 ```
 
 **Commands:**
@@ -213,7 +217,7 @@ Firebase App               → Config Variant
 Generate ORIGINAL and UPLOAD keystores
 
 ```bash
-./keystore-manager.sh generate
+scripts/white-label/keystore.sh generate
 ```
 
 **What it does:**
@@ -236,7 +240,7 @@ Generate ORIGINAL and UPLOAD keystores
 Encode all secrets in `secrets/` directory to base64
 
 ```bash
-./keystore-manager.sh encode-secrets
+scripts/white-label/keystore.sh encode-secrets
 ```
 
 **What it does:**
@@ -259,7 +263,7 @@ FILE_TO_SECRET_MAP["match_ci_key"]="MATCH_SSH_PRIVATE_KEY"
 Synchronize all secrets to secrets.env
 
 ```bash
-./keystore-manager.sh sync
+scripts/white-label/keystore.sh sync
 ```
 
 **What it does:**
@@ -291,7 +295,7 @@ Synchronize all secrets to secrets.env
 View current secrets (files + environment variables)
 
 ```bash
-./keystore-manager.sh view
+scripts/white-label/keystore.sh view
 ```
 
 **What it does:**
@@ -305,7 +309,7 @@ View current secrets (files + environment variables)
 Add secrets to GitHub repository (requires `gh` CLI)
 
 ```bash
-./keystore-manager.sh add [--repo owner/repo] [--env environment]
+scripts/white-label/keystore.sh add [--repo owner/repo] [--env environment]
 ```
 
 **What it does:**
@@ -324,7 +328,7 @@ Add secrets to GitHub repository (requires `gh` CLI)
 List all secrets in GitHub repository
 
 ```bash
-./keystore-manager.sh list [--repo owner/repo]
+scripts/white-label/keystore.sh list [--repo owner/repo]
 ```
 
 **Uses:** `gh secret list`
@@ -335,7 +339,7 @@ List all secrets in GitHub repository
 Delete a specific secret from GitHub
 
 ```bash
-./keystore-manager.sh delete [--repo owner/repo] [--name SECRET_NAME]
+scripts/white-label/keystore.sh delete [--repo owner/repo] [--name SECRET_NAME]
 ```
 
 **Interactive:** Prompts for secret name if not provided
@@ -346,7 +350,7 @@ Delete a specific secret from GitHub
 Delete ALL secrets from GitHub repository
 
 ```bash
-./keystore-manager.sh delete-all [--repo owner/repo]
+scripts/white-label/keystore.sh delete-all [--repo owner/repo]
 ```
 
 **⚠️ WARNING:** Irreversible! Requires confirmation.
@@ -358,9 +362,9 @@ Delete ALL secrets from GitHub repository
 Example:
 ```bash
 # Company & Organization
-COMPANY_NAME="Mifos Initiative"
+COMPANY_NAME="Your Company"
 DEPARTMENT="Mobile Development"
-ORGANIZATION="Mifos"
+ORGANIZATION="Your Org"
 CITY="San Francisco"
 STATE="CA"
 COUNTRY="US"
@@ -825,19 +829,19 @@ See [Version Handling Guide](../docs/claude/version-handling.md)
 # OR step-by-step:
 
 # 1. Customize package names
-./customizer.sh
+scripts/white-label/customize.sh
 
 # 2. Setup Firebase
-./firebase-setup.sh
+scripts/white-label/firebase.sh
 
 # 3. Generate keystores
-./keystore-manager.sh generate
+scripts/white-label/keystore.sh generate
 
 # 4. Encode secrets for GitHub Actions
-./keystore-manager.sh encode-secrets
+scripts/white-label/keystore.sh encode-secrets
 
 # 5. Add secrets to GitHub (requires gh CLI)
-./keystore-manager.sh add
+scripts/white-label/keystore.sh add
 
 # 6. Setup iOS (if needed)
 ./scripts/ios/setup_ios_complete.sh
@@ -864,25 +868,25 @@ See [Version Handling Guide](../docs/claude/version-handling.md)
 
 ```bash
 # Synchronize all secrets to secrets.env (recommended)
-./keystore-manager.sh sync
+scripts/white-label/keystore.sh sync
 
 # View current secrets
-./keystore-manager.sh view
+scripts/white-label/keystore.sh view
 
 # Encode all secrets
-./keystore-manager.sh encode-secrets
+scripts/white-label/keystore.sh encode-secrets
 
 # Add secrets to GitHub
-./keystore-manager.sh add
+scripts/white-label/keystore.sh add
 
 # List GitHub secrets
-./keystore-manager.sh list
+scripts/white-label/keystore.sh list
 
 # Delete a secret
-./keystore-manager.sh delete --name SECRET_NAME
+scripts/white-label/keystore.sh delete --name SECRET_NAME
 
 # Delete all secrets (with confirmation)
-./keystore-manager.sh delete-all
+scripts/white-label/keystore.sh delete-all
 ```
 
 ---
@@ -924,7 +928,7 @@ brew install git gh firebase-cli
 
 ---
 
-#### 2. `customizer.sh` doesn't update package names
+#### 2. `scripts/white-label/customize.sh` doesn't update package names
 
 **Cause:** Script requires interactive input
 
@@ -934,7 +938,7 @@ brew install git gh firebase-cli
 
 ---
 
-#### 3. `firebase-setup.sh` fails with "Authentication error"
+#### 3. `scripts/white-label/firebase.sh` fails with "Authentication error"
 
 **Cause:** Not logged into Firebase CLI
 
@@ -947,7 +951,7 @@ firebase login
 
 ### Keystore Issues
 
-#### 4. `keystore-manager.sh generate` fails
+#### 4. `scripts/white-label/keystore.sh generate` fails
 
 **Cause:** Missing `keytool` or `openssl`
 
@@ -976,7 +980,7 @@ gh auth login
 gh auth status  # Verify
 
 # Then retry
-./keystore-manager.sh add
+scripts/white-label/keystore.sh add
 ```
 
 ---

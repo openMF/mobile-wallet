@@ -13,8 +13,11 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kpt.core.base.store.freshness.FreshnessSignal
+import kpt.core.base.store.screen.ScreenDataStream
 import kpt.core.base.store.screen.ScreenState
 import kpt.core.base.store.submit.DraftResumeState
 import kpt.core.base.store.submit.MutationUiState
@@ -86,6 +89,54 @@ fun <T, R> MutationScreenContent(
         }
         SubmitProgressOverlay(state = submitState)
     }
+}
+
+// STORE5-COMPLETENESS: mutation-stream — stream overload
+/**
+ * Direct [ScreenDataStream] (Store5 read) overload of [MutationScreenContent]. Mirrors
+ * [ScreenContent]'s stream overload: the ViewModel exposes the read stream (built in the
+ * repository) and Compose collects `stream.state` lifecycle-aware here, wiring retry to
+ * `stream.retry()`. The write side is still driven by the [submitState] the ViewModel owns.
+ *
+ * This collapses the read-side ViewModel boilerplate — no `StateFlow` conversion, no manual
+ * `ScreenState` bookkeeping — while keeping the SAME `(data, freshness)` content lambda, so a
+ * mutation screen can bind a live Store5 stream OR a plain [ScreenState] value (the base
+ * `screenState:` overload) with zero call-site divergence (the D2 dual-input contract).
+ *
+ * ```kotlin
+ * MutationScreenContent(
+ *     stream = viewModel.editStream,          // repository-built ScreenDataStream
+ *     submitState = uiState.submit,
+ *     onSubmitted = { navigateBack() },
+ * ) { data, _ ->
+ *     EditForm(data = data, onSave = viewModel::onSave)
+ * }
+ * ```
+ */
+@Composable
+fun <T, R> MutationScreenContent(
+    stream: ScreenDataStream<T>,
+    submitState: SubmitState<R>,
+    onSubmitted: (result: R) -> Unit,
+    modifier: Modifier = Modifier,
+    onRetry: () -> Unit = stream::retry,
+    refreshingIndicator: (@Composable () -> Unit)? = null,
+    onFailed: ((error: Throwable, category: kpt.core.base.store.error.ErrorCategory) -> Unit)? = null,
+    submitStatus: (@Composable (submitState: SubmitState<R>) -> Unit)? = null,
+    content: @Composable (data: T, freshnessSignal: FreshnessSignal) -> Unit,
+) {
+    val screenState by stream.state.collectAsStateWithLifecycle(ScreenState.Loading)
+    MutationScreenContent(
+        screenState = screenState,
+        submitState = submitState,
+        onRetry = onRetry,
+        onSubmitted = onSubmitted,
+        modifier = modifier,
+        refreshingIndicator = refreshingIndicator,
+        onFailed = onFailed,
+        submitStatus = submitStatus,
+        content = content,
+    )
 }
 
 /**

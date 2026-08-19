@@ -1,10 +1,31 @@
 # Consumer App Migration Guide — Room 3 + Store 5 + Security
 
-> **Target Audience:** Developers migrating existing Mifos KMP consumer apps (mifos-mobile, mifos-pay, field-officer-app) to the latest `kmp-project-template` infrastructure.
+> **Target Audience:** Developers migrating an existing KMP consumer app onto the latest brand-neutral `kmp-project-template` infrastructure.
 >
 > **Template Version:** Room 3.0.0-alpha03 | Store 5.1.0-alpha08 | Security (AES-256 field encryption)
 >
 > **Platforms:** Android | iOS | Desktop (Windows/macOS/Linux) | Web (JS/WasmJS)
+
+---
+
+## Canonical white-label loop
+
+This is the one authoritative loop for standing up (or migrating) a fork — every other doc links
+here rather than re-deriving it:
+
+> **TL;DR:** fork → **`syncForkConfig`** → declare **`store_archetype`** → codegen → build → **`/kmp-project-template-sync`**.
+
+1. **fork** the template into your repo.
+2. Fill `app-profile/app.yaml` (+ `platforms/**`) and run **`syncForkConfig`** — brand flows from
+   `app-profile/` (the SoT) to every tokenized surface: `gradle/fork.properties`, bundle id + display
+   name, Firebase config, `mac-app-store.entitlements`, `fastlane/Appfile`, icons.
+3. Author a feature and **declare** its `feature_profile.store_archetype` (one of the 8 archetypes).
+4. Run codegen (`/kmp-implement` → `kmp-store-gen`) — it reads `store_archetype` and emits the matching
+   `core/store` factory (`createStore` / `createMemoryStore` / `createOfflineStore` /
+   `createMutableStore`) + `FetchPolicy`, appended to `AppStoreRegistry`. The unified
+   `BaseMutationViewModel` + `MutationMode` (InSession / Draft) drives every write screen.
+5. **Build / run**, then periodically run **`/kmp-project-template-sync`** to pull future white-label
+   improvements (backbone + `customization-surface.yaml` are sync-reachable) without losing fork work.
 
 ---
 
@@ -74,7 +95,7 @@ Ensure your project includes the latest `core-base` modules from `kmp-project-te
 
 ```bash
 # Manual sync (if not using GitHub Action)
-./sync-dirs.sh --check
+scripts/white-label/sync-dirs.sh --check
 ```
 
 ---
@@ -685,7 +706,7 @@ class UserPreferencesRepositoryImpl(...) {
 | Platform | Backend | Hardware-Backed? |
 |----------|---------|:----------------:|
 | Android | `EncryptedSharedPreferences` (AES-256-GCM via AndroidKeyStore) | Yes |
-| iOS | `KeychainSettings` (Keychain Services, service: `"org.mifos.secure"`) | Yes |
+| iOS | `KeychainSettings` (Keychain Services, service: `"${app_id}.secure"` — from `app-profile`) | Yes |
 | Desktop | `PropertiesSettings` (file-based, upgrade to OS Keychain planned) | No |
 | JS/WasmJS | In-memory (upgrade to IndexedDB CryptoKey planned) | No |
 

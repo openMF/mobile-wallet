@@ -5,11 +5,11 @@ kmpProductFlavors = "2.8.3"
 # ── Fork Identity — edit ONLY these 5 lines, then run ./gradlew syncForkConfig ──────────────────
 # NOTE: module Android namespaces are no longer a fork property — they derive from the fixed
 # build-logic constant org.convention.BASE_MODULE_NAMESPACE ("kpt"), so `baseNamespace` was removed.
-appId            = "org.mifospay"                    # Android applicationId + iOS bundle ID
-appDisplayName   = "Mifos Pay"                       # Android app_name, iOS CFBundleDisplayName
-desktopAppName   = "Mifos Pay"                       # JVM package name, dock name
-projectName      = "mifos-pay"                        # rootProject.name, Fastlane PROJECT_NAME
-iosTeamId        = "L432S2FZP5"                      # Apple Developer Team ID
+appId            = "org.mifospay"   # Android applicationId + iOS bundle ID
+appDisplayName   = "Mifos Pay"    # Android app_name, iOS CFBundleDisplayName
+desktopAppName   = "Mifos Pay"     # JVM package name, dock name
+projectName      = "mifos-pay"      # rootProject.name, Fastlane PROJECT_NAME
+iosTeamId        = "YOUR_TEAM_ID"             # Apple Developer Team ID (PLACEHOLDER — set in app-profile/platforms/apple/apple.yaml#team_id)
 # ─────────────────────────────────────────────────────────────────────────────────────────────────
 # Android
 androidDesugarJdkLibs = "2.1.5"
@@ -191,6 +191,8 @@ playServicesAuthVersion = "21.3.0"
 playServicesCodeScanner = "16.1.0"
 zxingVersion = "3.5.3"
 
+composablePreviewScanner = "0.9.1"
+skie = "0.10.4"
 [libraries]
 kmp-product-flavors-plugin = { group = "io.github.mobilebytelabs.kmpflavors", name = "flavor-plugin", version.ref = "kmpProductFlavors" }
 android-desugarJdkLibs = { group = "com.android.tools", name = "desugar_jdk_libs", version.ref = "androidDesugarJdkLibs" }
@@ -486,6 +488,12 @@ window-size = { group = "dev.chrisbanes.material3", name = "material3-window-siz
 zxing = { group = "com.google.zxing", name = "core", version.ref = "zxingVersion" }
 zxing-javase = { group = "com.google.zxing", name = "javase", version.ref = "zxingVersion" }
 
+cmp-firebase = { module = "io.github.mobilebytelabs:cmp-firebase", version.ref = "kmptoolkit" }
+cmp-firebase-compose = { module = "io.github.mobilebytelabs:cmp-firebase-compose", version.ref = "kmptoolkit" }
+roborazzi-composeDesktop = { group = "io.github.takahirom.roborazzi", name = "roborazzi-compose-desktop", version.ref = "roborazzi" }
+composablePreviewScanner-common = { group = "io.github.sergio-sastre.ComposablePreviewScanner", name = "common", version.ref = "composablePreviewScanner" }
+composablePreviewScanner-jvm = { group = "io.github.sergio-sastre.ComposablePreviewScanner", name = "jvm", version.ref = "composablePreviewScanner" }
+roborazzi-gradlePlugin = { group = "io.github.takahirom.roborazzi", name = "roborazzi-gradle-plugin", version.ref = "roborazzi" }
 [bundles]
 androidx-compose-ui-test = [
     "androidx-compose-ui-test",
@@ -551,10 +559,6 @@ spotless-convention = { id = "org.convention.spotless.plugin" }
 keystore-management = { id = "org.convention.keystore.management" }
 
 dependencyGuard = { id = "com.dropbox.dependency-guard", version.ref = "dependencyGuard" }
-# Fork's root build.gradle.kts uses `libs.plugins.module.graph` (dash-separated); Gradle
-# collapses camelCase `moduleGraph` and kebab `module-graph` to the same accessor, so we
-# expose ONLY the kebab form here.
-module-graph = { id = "com.jraska.module.graph.assertion", version.ref = "moduleGraph" }
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
 ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint" }
 spotless = { id = "com.diffplug.spotless", version.ref = "spotlessVersion" }
@@ -582,3 +586,5 @@ mokkery-plugin = { id = "dev.mokkery", version.ref = "mokkeryVersion" }
 secrets = { id = "com.google.android.libraries.mapsplatform.secrets-gradle-plugin", version.ref = "secrets" }
 # Version-catalog linter — applied at root; validates libs.versions.toml formatting/ordering.
 version-catalog-linter = { id = "io.github.pemistahl.version-catalog-linter", version.ref = "versionCatalogLinterVersion" }
+skie = { id = "co.touchlab.skie", version.ref = "skie" }
+moduleGraph = { id = "com.jraska.module.graph.assertion", version.ref = "moduleGraph" }

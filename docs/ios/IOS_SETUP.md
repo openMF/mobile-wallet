@@ -153,9 +153,9 @@ Located in `fastlane-config/project_config.rb`:
 
 **Why separate?** Each app you create from the template has a unique bundle ID and Firebase configuration.
 
-### How customizer.sh Works
+### How scripts/white-label/customize.sh Works
 
-When you run `customizer.sh` with a new package name:
+When you run `scripts/white-label/customize.sh` with a new package name:
 - ✅ Updates `IOS[:app_identifier]` to your new bundle ID
 - ✅ Updates Firebase app ID
 - ✅ **Preserves `IOS_SHARED` completely** (shared infrastructure)

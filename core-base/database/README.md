@@ -4,7 +4,7 @@ A comprehensive Kotlin Multiplatform library providing cross-platform database a
 
 ## Overview
 
-This module serves as the foundational database layer for Mifos Initiative applications, enabling consistent database operations across Android, Desktop (JVM), and Native (iOS/macOS) platforms. By leveraging the Room persistence library and Kotlin Multiplatform's expect/actual pattern, the module delivers a unified database API that works seamlessly across all supported platforms while respecting platform-specific implementation details.
+This module serves as the foundational database layer for apps built on this template, enabling consistent database operations across Android, Desktop (JVM), and Native (iOS/macOS) platforms. By leveraging the Room persistence library and Kotlin Multiplatform's expect/actual pattern, the module delivers a unified database API that works seamlessly across all supported platforms while respecting platform-specific implementation details.
 
 ## Architecture
 
@@ -37,10 +37,11 @@ Provides actual implementations for Android, Desktop, and Native platforms throu
 #### Desktop Implementation (`desktopMain`)
 
 - **AppDatabaseFactory**: Desktop-specific factory with platform-aware directory selection
-- Creates databases in platform-appropriate directories:
-  - **Windows**: `%APPDATA%/MifosDatabase`
-  - **macOS**: `~/Library/Application Support/MifosDatabase`
-  - **Linux**: `~/.local/share/MifosDatabase`
+- Creates databases in platform-appropriate directories, using the fork's `{databaseDirName}`
+  (resolved from `app-profile` naming — e.g. `App Toolkit`), not a hardcoded name:
+  - **Windows**: `%APPDATA%/{databaseDirName}`
+  - **macOS**: `~/Library/Application Support/{databaseDirName}`
+  - **Linux**: `~/.local/share/{databaseDirName}`
 - Uses inline reified generics for type-safe database instantiation
 - Automatically creates storage directories when required
 

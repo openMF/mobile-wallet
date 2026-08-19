@@ -9,7 +9,8 @@
  */
 package kpt.core.data.di
 
-import kpt.core.data.infra.TimeZoneMonitor
+import kpt.core.base.data.infra.TimeZoneMonitor
+import kpt.core.base.data.infra.impl.TimeZoneMonitorImpl
 import org.koin.core.module.Module
 import org.koin.dsl.module
 

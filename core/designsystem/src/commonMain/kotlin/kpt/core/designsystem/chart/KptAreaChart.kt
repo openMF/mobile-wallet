@@ -18,6 +18,7 @@ import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import kpt.core.base.designsystem.chart.SparklineGeometry
 
 /**
  * Filled area chart for the detail-screen Hero. Same geometry contract as

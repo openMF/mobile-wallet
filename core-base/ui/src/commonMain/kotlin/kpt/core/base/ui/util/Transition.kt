@@ -318,17 +318,6 @@ object TransitionProviders {
             }
         }
     }
-
-    /**
-     * Deprecated alias for [TransitionProviders.Kpt]. Renamed as part of the Money Toolkit pivot
-     * (`Mifos` → `Kpt`, "Kotlin Project Template"). Will be removed in the next release.
-     */
-    @Deprecated(
-        "Renamed to TransitionProviders.Kpt",
-        ReplaceWith("TransitionProviders.Kpt"),
-        level = DeprecationLevel.WARNING,
-    )
-    val Mifos = Kpt
 }
 
 
@@ -579,15 +568,4 @@ object RootTransitionProviders {
             }
         }
     }
-
-    /**
-     * Deprecated alias for [RootTransitionProviders.Kpt]. Renamed as part of the Money Toolkit
-     * pivot (`Mifos` → `Kpt`, "Kotlin Project Template"). Will be removed in the next release.
-     */
-    @Deprecated(
-        "Renamed to RootTransitionProviders.Kpt",
-        ReplaceWith("RootTransitionProviders.Kpt"),
-        level = DeprecationLevel.WARNING,
-    )
-    val Mifos = Kpt
 }

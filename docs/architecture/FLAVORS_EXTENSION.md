@@ -1,6 +1,6 @@
 # Flavor extensions for consumer apps
 
-> Audience: maintainers of downstream apps that inherit build-logic from `kmp-project-template` via `sync-dirs.sh` — `mifos-mobile`, `mifos-pay`, `mifos-x-field-officer-app`, `mifos-x-group-banking`, `mifos-x-open-banking`, `reels-downloader-new`, …
+> Audience: maintainers of downstream apps that inherit build-logic from `kmp-project-template` via `scripts/white-label/sync-dirs.sh` — `mifos-mobile`, `mifos-pay`, `mifos-x-field-officer-app`, `mifos-x-group-banking`, `mifos-x-open-banking`, `reels-downloader-new`, …
 
 ## What you get for free (the synced base)
 
@@ -82,7 +82,7 @@ Create one file in your consumer-app repo:
 build-logic/convention/src/main/kotlin/local/LocalFlavors.kt
 ```
 
-That `local/` directory is **excluded** from `sync-dirs.sh`. Anything inside survives every sync of `build-logic/` from the template.
+That `local/` directory is **excluded** from `scripts/white-label/sync-dirs.sh`. Anything inside survives every sync of `build-logic/` from the template.
 
 ### Skeleton
 
@@ -217,7 +217,7 @@ When you don't have a local file:
 ## FAQ
 
 **Q: Why not just edit `KMPFlavorsConventionPlugin.kt`?**
-A: That file is synced from `kmp-project-template`. Your edits will be wiped on the next `./sync-dirs.sh`. The `local/` directory is the only file path inside `build-logic/` that survives sync.
+A: That file is synced from `kmp-project-template`. Your edits will be wiped on the next `scripts/white-label/sync-dirs.sh`. The `local/` directory is the only file path inside `build-logic/` that survives sync.
 
 **Q: Can I delete `demo` or `prod` from the synced base?**
 A: Don't. They're the shared contract every downstream consumer relies on. If you genuinely don't want them, exclude their variants via `variantFilter { exclude() }` in your local file.
@@ -236,4 +236,4 @@ A: Today, each consumer maintains their own `LocalFlavors.kt` — copy/adapt as 
 - `build-logic/convention/src/main/kotlin/KMPFlavorsConventionPlugin.kt` (synced)
 - `build-logic/convention/src/main/kotlin/LocalFlavorsLoader.kt` (synced)
 - `build-logic/convention/src/main/kotlin/local/LocalFlavors.kt` (your file — NOT synced)
-- `sync-dirs.sh` — `EXCLUSIONS["build-logic"]="convention/src/main/kotlin/local:dir"`
+- `scripts/white-label/sync-dirs.sh` — `EXCLUSIONS["build-logic"]="convention/src/main/kotlin/local:dir"`

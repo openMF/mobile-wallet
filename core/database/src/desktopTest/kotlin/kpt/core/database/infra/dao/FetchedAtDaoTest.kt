@@ -13,8 +13,9 @@ import androidx.room3.Room
 import androidx.sqlite.driver.bundled.BundledSQLiteDriver
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.test.runTest
+import kpt.core.base.database.infra.dao.FetchedAtDao
+import kpt.core.base.database.infra.entity.FetchedAtEntity
 import kpt.core.database.AppDatabase
-import kpt.core.database.infra.entity.FetchedAtEntity
 import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test

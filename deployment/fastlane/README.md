@@ -15,13 +15,21 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 
 ## Android
 
+### android deployApkOnFirebase
+
+```sh
+[bundle exec] fastlane android deployApkOnFirebase
+```
+
+Publish Android APK to Firebase App Distribution (parameterized on flavor + build_type)
+
 ### android deployReleaseApkOnFirebase
 
 ```sh
 [bundle exec] fastlane android deployReleaseApkOnFirebase
 ```
 
-Publish Release Artifacts to Firebase App Distribution
+Alias: prod release APK → Firebase (delegates to deployApkOnFirebase(flavor: :prod, build_type: :release))
 
 ### android deployDemoApkOnFirebase
 
@@ -29,7 +37,7 @@ Publish Release Artifacts to Firebase App Distribution
 [bundle exec] fastlane android deployDemoApkOnFirebase
 ```
 
-Publish Demo Artifacts to Firebase App Distribution
+Alias: demo release APK → Firebase (delegates to deployApkOnFirebase(flavor: :demo, build_type: :release))
 
 ### android promoteToBeta
 
@@ -37,7 +45,15 @@ Publish Demo Artifacts to Firebase App Distribution
 [bundle exec] fastlane android promoteToBeta
 ```
 
-Promote internal track to beta on Google Play
+Promote internal track → beta on Google Play (flavor-neutral by API; flavor passthrough for secrets)
+
+### android promoteToClosed
+
+```sh
+[bundle exec] fastlane android promoteToClosed
+```
+
+Promote internal track to closed testing (alpha) on Google Play
 
 ### android deployInternal
 
@@ -45,7 +61,7 @@ Promote internal track to beta on Google Play
 [bundle exec] fastlane android deployInternal
 ```
 
-Deploy AAB to Google Play Store internal track
+Deploy Android AAB to Google Play Store (parameterized on flavor + build_type; track from config)
 
 ### android promote_to_production
 
@@ -124,6 +140,14 @@ One-shot: create proper Mac Installer Distribution cert in Apple Developer Porta
 
 Stage 1 → Stage 2 promotion: distribute an already-uploaded Mac TF build to external testers (no rebuild). Triggers Apple's beta review (~24h).
 
+### mac syncMacListing
+
+```sh
+[bundle exec] fastlane mac syncMacListing
+```
+
+Sync Mac App Store listing (metadata + screenshots) — no binary upload, no submission (parity with ios upload_ios_screenshots).
+
 ### mac promoteMacToAppStore
 
 ```sh
@@ -188,7 +212,7 @@ Upload an already-built IPA to App Store (skips build; use after release build s
 [bundle exec] fastlane ios release
 ```
 
-Upload iOS application to App Store
+Upload iOS application to App Store (parameterized on flavor + build_type; scheme from resolver)
 
 ### ios renewCerts
 
@@ -225,30 +249,6 @@ This is the local equivalent of openMF/ios-provisioning-profile cron (cert-renew
 See openMF/ios-provisioning-profile/cert-renewal.sh for a standalone bash runner
 that also works outside of this Fastlane context (e.g. from ios-provisioning-profile).
 
-
-### ios deployProdIpaOnFirebase
-
-```sh
-[bundle exec] fastlane ios deployProdIpaOnFirebase
-```
-
-Upload iOS production IPA to Firebase App Distribution
-
-### ios deployDemoIpaOnFirebase
-
-```sh
-[bundle exec] fastlane ios deployDemoIpaOnFirebase
-```
-
-Upload iOS demo IPA to Firebase App Distribution
-
-### ios deploy_on_firebase
-
-```sh
-[bundle exec] fastlane ios deploy_on_firebase
-```
-
-Alias for deployProdIpaOnFirebase (backward compatibility)
 
 ### ios frame_ios_screenshots
 
@@ -296,7 +296,7 @@ Upload an already-built IPA to TestFlight (skips build; use after beta build suc
 [bundle exec] fastlane ios beta
 ```
 
-Upload beta build to TestFlight
+Upload beta build to TestFlight (parameterized on flavor + build_type; scheme from resolver)
 
 ### ios promoteToExternalBeta
 

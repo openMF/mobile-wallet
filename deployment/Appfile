@@ -1,15 +1,25 @@
 # deployment/Appfile
 #
-# Identity values read from FastlaneConfig, which parses gradle/libs.versions.toml.
-# config.rb is imported by Fastfile before this file is evaluated.
+# SELF-SUFFICIENT — reads identity DIRECTLY from the committed sources (libs.versions.toml + fork.properties),
+# with NO dependency on FastlaneConfig. fastlane's CredentialsManager can evaluate the Appfile before the
+# Fastfile imports config.rb, which intermittently raised
+# `uninitialized constant CredentialsManager::AppfileConfig::FastlaneConfig` (and, via config.rb's
+# `module IosConfig` at load, dragged secret resolution into the wrong scope). Reading the two flat
+# values here removes that load-order coupling entirely. (2026-08-08)
 #
-# Entry point: bundle exec fastlane --fastlane-dir deployment <platform> <lane>
+# Entry point: cd deployment && bundle exec fastlane <platform> <lane>
+
+_root  = File.expand_path("..", __dir__)
+_toml  = (File.read(File.join(_root, "gradle/libs.versions.toml")) rescue "")
+_props = (File.read(File.join(_root, "gradle/fork.properties")) rescue "")
+_app_id = _toml[/^\s*appId\s*=\s*"([^"]+)"/, 1] || ENV["APP_IDENTIFIER"]
+_team   = _props[/^\s*apple\.team\.id\s*=\s*(.+)$/, 1]&.strip || ENV["APPLE_TEAM_ID"]
 
 # Android
-json_key_file(FastlaneConfig::ProjectConfig::ANDROID[:play_store_json_key])
-package_name(FastlaneConfig::ProjectConfig.android_package_name)
+json_key_file(File.join(_root, "secrets/live/android/play/playStorePublishServiceCredentialsFile.json"))
+package_name(_app_id)
 
 # iOS
-app_identifier(FastlaneConfig::ProjectConfig::IOS[:app_identifier])
-team_id(FastlaneConfig::ProjectConfig::IOS[:team_id])
+app_identifier(_app_id)
+team_id(_team) if _team
 # apple_id is read from FASTLANE_APPLE_ID env var — do not hardcode here.

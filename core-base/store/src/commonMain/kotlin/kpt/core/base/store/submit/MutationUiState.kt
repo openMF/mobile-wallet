@@ -28,6 +28,7 @@ import kpt.core.base.store.screen.ScreenState
 data class MutationUiState<out T, out R>(
     val screen: ScreenState<T> = ScreenState.Loading,
     val submit: SubmitState<R> = SubmitState.Idle,
+    val resume: DraftResumeState<T> = DraftResumeState.None,
 ) {
     /** True when data is loaded and no submission is in-flight. Use to enable the submit button. */
     val canInteract: Boolean
@@ -40,4 +41,16 @@ data class MutationUiState<out T, out R>(
     /** Loaded data, or null when screen is not yet [ScreenState.Content]. */
     val dataOrNull: T?
         get() = (screen as? ScreenState.Content)?.data
+
+    /**
+     * True when a saved draft is available to resume — drives the three-case
+     * [kpt.core.base.ui.draft.DraftResolutionPrompt] on form entry. Only draft-backed forms
+     * (`MutationMode.Draft`) ever set this; in-session forms leave it [DraftResumeState.None].
+     */
+    val hasResumableDraft: Boolean
+        get() = resume is DraftResumeState.HasDraft
+
+    /** The saved draft payload to pre-fill the form with on Resume, or null when there is none. */
+    val resumableDraft: T?
+        get() = (resume as? DraftResumeState.HasDraft)?.entry?.payload
 }

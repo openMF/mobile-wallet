@@ -103,10 +103,10 @@ identity/metadata (team ID, contacts, URLs). Then populate `secrets/live/` from 
 
 ```bash
 # Android
-bundle exec fastlane --fastlane-dir deployment android deployReleaseApkOnFirebase
+(cd deployment && bundle exec fastlane android deployReleaseApkOnFirebase)
 
 # iOS
-bundle exec fastlane --fastlane-dir deployment ios beta
+(cd deployment && bundle exec fastlane ios beta)
 ```
 
 ### Mode 2 — GitHub Actions

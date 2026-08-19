@@ -36,17 +36,17 @@ object DecisionEngine {
      * @param storeData snapshot from the Store pipeline (data, error, freshness flags)
      * @param networkStatus current connectivity; [NetworkStatus.CaptivePortal] is treated
      *   as offline for content decisions but surfaces a distinct UI flag
-     * @param fetchPolicy informational only — surfaced so callers can pass-through the
-     *   policy that drove the upstream Store5 request shape for telemetry / debug logging.
-     *   The case mapping below is **purely** a function of `(storeData, networkStatus)`;
-     *   policy-specific behaviour materialises at the stream layer
-     *   (see `streamDataForPolicy` in `StoreDataExtensions.kt`), not inside this decider.
+     * @param fetchPolicy the policy that drove the upstream Store5 request shape. Consumed for
+     *   ONE terminal-emptiness decision: a [FetchPolicy.CACHE_ONLY] (offline-local, no fetcher)
+     *   store maps its "no data" state to [ScreenState.Empty] rather than [ScreenState.Loading],
+     *   because there is no network fetch that could ever fill it. Every other mapping is a pure
+     *   function of `(storeData, networkStatus)`; remaining policy-specific behaviour materialises
+     *   at the stream layer (see `streamDataForPolicy` in `StoreDataExtensions.kt`).
      * @return the [ScreenState] variant the screen should render
      */
     fun <T> decide(
         storeData: StoreData<T>,
         networkStatus: NetworkStatus,
-        @Suppress("UNUSED_PARAMETER")
         fetchPolicy: FetchPolicy = FetchPolicy.NETWORK_WITH_CACHE,
     ): ScreenState<T> {
         val noData = storeData.isEmpty
@@ -56,7 +56,19 @@ object DecisionEngine {
 
         // === No data branch ===
         if (noData) {
+            // Offline-local ([FetchPolicy.CACHE_ONLY]) stores have NO network fetcher, so an
+            // empty read is TERMINAL — never a mid-fetch gap — and connectivity is irrelevant.
+            // Map "no data" to [ScreenState.Empty] so the screen shows its empty state instead
+            // of a perpetual Loading spinner (a network store, by contrast, is still fetching,
+            // so it correctly falls through to Loading below). A genuine DB read error still
+            // surfaces via the `error != null` arm. This backs the offline-local
+            // "`isEmpty` yields Empty for zero rows" contract exercised by
+            // WatchlistReactiveInvalidationTest / AlertsReactiveInvalidationTest and documented
+            // on the watchlist/alerts ViewModels.
             return when {
+                // Offline-local ([CACHE_ONLY]) with no DB error → terminal Empty (folded here to
+                // keep decide() within the ReturnCount limit; behaviour identical to a guard clause).
+                fetchPolicy == FetchPolicy.CACHE_ONLY && error == null -> ScreenState.Empty
                 isCaptivePortal -> ScreenState.NoNetwork(isCaptivePortal = true)
                 !isOnline -> ScreenState.NoNetwork()
                 error != null -> when (categorize(error)) {

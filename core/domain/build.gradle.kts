@@ -16,7 +16,6 @@ kotlin {
         commonMain.dependencies {
             implementation(projects.core.common)
             api(projects.core.data)
-            api(projects.core.datastore)
             api(projects.core.model)
         }
     }

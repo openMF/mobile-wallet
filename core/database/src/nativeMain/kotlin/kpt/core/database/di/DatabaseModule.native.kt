@@ -9,23 +9,10 @@
  */
 package kpt.core.database.di
 
-import androidx.sqlite.driver.bundled.BundledSQLiteDriver
-import kotlinx.coroutines.Dispatchers
-import kpt.core.base.database.AppDatabaseFactory
+import kpt.core.base.database.platformDatabaseModule
 import kpt.core.database.AppDatabase
 import org.koin.core.module.Module
-import org.koin.dsl.module
 
-actual val platformModule: Module = module {
-    single {
-        AppDatabaseFactory()
-            .createDatabase<AppDatabase>(
-                databaseName = AppDatabase.DATABASE_NAME,
-            )
-            .fallbackToDestructiveMigration(dropAllTables = true)
-            .fallbackToDestructiveMigrationOnDowngrade(false)
-            .setDriver(BundledSQLiteDriver())
-            .setQueryCoroutineContext(Dispatchers.Default)
-            .build()
-    }
-}
+// Delegates to the template-owned platformDatabaseModule<T> (core-base/database), which owns
+// the native SQLite driver + Default dispatcher + destructive-migration fallback.
+actual val platformModule: Module = platformDatabaseModule<AppDatabase>(appDatabaseNaming)

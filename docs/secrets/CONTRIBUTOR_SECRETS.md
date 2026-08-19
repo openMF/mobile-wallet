@@ -7,7 +7,7 @@
 1. Install `rclone` + `age` (one-time, 2 min)
 2. Generate a personal age identity key (one-time, 10 sec)
 3. Send your PUBLIC key to a maintainer; wait for them to add you as a recipient (next bundle push)
-4. Configure rclone for Mifos Drive (one-time, 5 min)
+4. Configure rclone for the shared secrets Drive (one-time, 5 min)
 5. Run `bash scripts/fetch-secrets-from-drive.sh`
 6. Run `bash scripts/secrets/sync-secrets-to-github.sh` to push into YOUR fork's GitHub Actions
 
@@ -60,7 +60,7 @@ Email / Slack / GitHub DM the `age1...` line to one of the maintainers. They wil
 
 ⚠️ If you ever lose `~/.config/mifos-secrets.key`, you'll need to generate a new pair and ask to be re-added — the old bundles cannot be decrypted without that file.
 
-## Step 3 — Configure rclone for Mifos Drive
+## Step 3 — Configure rclone for the shared secrets Drive
 
 ```bash
 rclone config

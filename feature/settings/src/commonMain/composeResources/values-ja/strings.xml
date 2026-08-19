@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copyright 2022 Mifos Initiative
+
+    This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+    If a copy of the MPL was not distributed with this file,
+    You can obtain one at https://mozilla.org/MPL/2.0/.
+
+    See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
+-->
+<resources>
+    <string name="feature_settings_top_app_bar_action_icon_description">設定</string>
+    <string name="feature_settings_top_app_bar_navigation_icon_description">検索</string>
+    <string name="feature_settings_title">設定</string>
+    <string name="feature_settings_loading">読み込み中…</string>
+    <string name="feature_settings_privacy_policy">プライバシーポリシー</string>
+    <string name="feature_settings_licenses">ライセンス</string>
+    <string name="feature_settings_brand_guidelines">ブランドガイドライン</string>
+    <string name="feature_settings_feedback">フィードバック</string>
+    <string name="feature_settings_theme">テーマ</string>
+    <string name="feature_settings_brand_default">デフォルト</string>
+    <string name="feature_settings_brand_android">Android</string>
+    <string name="feature_settings_dark_mode_preference">ダークモード設定</string>
+    <string name="feature_settings_dark_mode_config_system_default">システムのデフォルト</string>
+    <string name="feature_settings_dark_mode_config_light">ライト</string>
+    <string name="feature_settings_dark_mode_config_dark">ダーク</string>
+    <string name="feature_settings_dynamic_color_preference">ダイナミックカラーを使用</string>
+    <string name="feature_settings_dynamic_color_yes">はい</string>
+    <string name="feature_settings_dynamic_color_no">いいえ</string>
+    <string name="feature_settings_dismiss_dialog_button_text">OK</string>
+    <string name="feature_settings_change_theme_text">テーマを変更</string>
+    <string name="feature_settings_change_theme_placeholder_text">テーマを変更</string>
+    <string name="feature_settings_change_language_text">言語を変更</string>
+    <string name="feature_settings_change_language_placeholder_text">言語を変更</string>
+    <string name="feature_settings_language_preference">言語</string>
+</resources>

@@ -9,6 +9,7 @@
  */
 import com.android.build.api.instrumentation.InstrumentationScope
 import org.convention.dynamicVersion
+import org.convention.resolveSecretPath
 
 plugins {
     alias(libs.plugins.android.application.convention)
@@ -23,7 +24,11 @@ val appId: String = libs.versions.appId.get()
 val appDisplayName: String = libs.versions.appDisplayName.get()
 
 android {
-    namespace = appId
+    // Namespace is the STABLE code-gen package (BuildConfig / R live here) — deliberately fixed to the
+    // module's own source package, NOT the white-label applicationId. Decoupling the two is what lets a
+    // fork rebrand `applicationId` (market identity) with zero source edits while `BuildConfig` stays at a
+    // stable import path (`cmp.android.app.BuildConfig`, same package as this module's Kotlin).
+    namespace = "cmp.android.app"
 
     defaultConfig {
         applicationId = appId
@@ -38,15 +43,11 @@ android {
     signingConfigs {
         create("release") {
             // v2 Play App Signing model — Gradle signs release AABs with the UPLOAD key.
-            // Single source of truth: secrets/live/android/keystores/upload_keystore.keystore
-            // - Local-dev: developer drops their real upload_keystore.keystore into secrets/live/android/keystores/
-            // - CI: materialize-android-secrets.sh decodes UPLOAD_KEYSTORE_FILE GHA secret to the same path
-            // - KEYSTORE_PATH env var overrides (advanced use)
-            storeFile = file(System.getenv("KEYSTORE_PATH") ?: run {
-                val live = "../secrets/live/android/keystores/upload_keystore.keystore"
-                val sample = "../secrets/sample/android/keystores/upload_keystore.keystore"
-                if (file(live).exists()) live else sample
-            })
+            // Path resolved by the ONE resolver (build-secrets → secrets/LAYOUT.yaml key `upload_keystore`
+            // → secrets/live/android/keystores/upload_keystore.keystore, sample fallback) — never hardcoded
+            // here. KEYSTORE_PATH env overrides (CI materializes it via /secrets before a deploy).
+            storeFile = System.getenv("KEYSTORE_PATH")?.let { file(it) }
+                ?: project.resolveSecretPath("upload_keystore")
             storePassword = System.getenv("KEYSTORE_PASSWORD") ?: "Wizard@123"
             keyAlias = System.getenv("KEYSTORE_ALIAS") ?: "kmp-project-template"
             keyPassword = System.getenv("KEYSTORE_ALIAS_PASSWORD") ?: "Wizard@123"
@@ -108,18 +109,12 @@ dependencies {
 
     implementation(projects.cmpShared)
     implementation(projects.core.ui)
-    implementation(projects.coreBase.platform)
-    implementation(projects.coreBase.ui)
-    implementation(projects.coreBase.analytics)
-
-    implementation(projects.core.ui)
+    implementation(projects.core.firebase)
     implementation(projects.core.model)
     implementation(projects.core.data)
     implementation(projects.core.datastore)
+    implementation(projects.core.platform)
     implementation(projects.sync)
-
-    implementation(projects.coreBase.ui)
-    implementation(projects.coreBase.platform)
 
     // Compose
     implementation(libs.androidx.core.ktx)

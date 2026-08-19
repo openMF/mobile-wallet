@@ -18,6 +18,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.unit.Dp
+import kpt.core.base.designsystem.chart.SparklineGeometry
 
 /**
  * Minimal Canvas-based sparkline — a one-pass connected polyline whose y-axis is

@@ -133,6 +133,9 @@ data class KptTopAppBarConfiguration(
  * @param contentDescription Accessibility description for screen readers
  * @param onClick Callback invoked when the action is clicked
  * @param enabled Whether the action button is enabled and clickable
+ * @param testTag Optional stable test tag applied to the action's IconButton so UI/E2E
+ *   tests (Maestro, runComposeUiTest) can select it deterministically; null keeps the
+ *   prior behaviour (the action carries only its contentDescription)
  *
  * @see KptTopAppBarConfiguration
  */
@@ -141,6 +144,7 @@ data class TopAppBarAction(
     val contentDescription: String,
     val onClick: () -> Unit,
     val enabled: Boolean = true,
+    val testTag: String? = null,
 )
 
 @DslMarker

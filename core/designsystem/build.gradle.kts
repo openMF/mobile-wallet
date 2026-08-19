@@ -25,7 +25,7 @@ kotlin {
         commonMain.dependencies {
             api(projects.coreBase.designsystem)
             // Theme wires LocalScreenStateDefaults from core/store so every screen
-            // wrapped by MifosTheme picks up the app's branded ScreenState defaults.
+            // wrapped by KptTheme picks up the app's branded ScreenState defaults.
             implementation(projects.core.store)
 
             implementation(compose.ui)
@@ -38,23 +38,6 @@ kotlin {
             implementation(compose.components.uiToolingPreview)
 
             implementation(libs.coil.kt.compose)
-
-            // Fork-specific: BottomSheet.kt uses com.arkivanov.essenty.backhandler.BackCallback
-            // for KMP-safe hardware back-button handling. Template's core/designsystem doesn't
-            // ship a BottomSheet — it consumes M3's ModalBottomSheet directly per-feature.
-            implementation(libs.back.handler)
-
-            // Fork-specific: MifosIcons.kt references FluentIcons (Coin/Person/Wallet variants)
-            // for brand-consistent iconography beyond Material's Icons.Default.* set.
-            implementation(libs.fluentui.system.icons)
-        }
-        // Fork-specific androidMain deps for PermissionBox.kt (androidx.activity
-        // rememberLauncherForActivityResult / ActivityResultContracts + androidx.core
-        // ContextCompat/ActivityCompat). Template doesn't ship PermissionBox so its
-        // core/designsystem module doesn't need these.
-        androidMain.dependencies {
-            implementation(libs.androidx.activity.compose)
-            implementation(libs.androidx.core.ktx)
         }
     }
 }

@@ -9,6 +9,7 @@
 #   SR-11 no hardcoded secrets/<platform>/ path in the production workflow
 #   SR-12 no hardcoded service-account path/name anywhere (deployment + workflows + scripts) —
 #         the class the firebase/play rename exposed; every consumer resolves via build-secrets
+#   SR-13 the JVM/Gradle build consumes the resolver-generated map, never a config-time subprocess
 set -uo pipefail
 cd "$(git rev-parse --show-toplevel 2>/dev/null || echo .)"
 fail=0
@@ -81,5 +82,19 @@ if [ -n "$SR12" ]; then
   fail=1
 fi
 
-[ "$fail" = 0 ] && echo "✅ secrets-resolver guards pass (SR-7/8/9/10/11/12)"
+# ── SR-13: the Gradle build reads the resolver-generated map, NEVER a config-time subprocess ──
+#   The old `providers.exec(... build-secrets path <key> ...)` in SecretsPath.kt was Windows-shebang-
+#   fragile + configuration-cache-hostile + ran on every build (broke Desktop/Web CI). build-logic now
+#   reads gradle/secrets-paths.properties (build_secrets.rb#export-paths — same algorithm, no drift).
+#   Lock it: SecretsPath.kt MUST read that map and MUST NOT spawn a subprocess.
+SP=build-logic/convention/src/main/kotlin/org/convention/SecretsPath.kt
+if [ -f "$SP" ]; then
+  grep -q 'secrets-paths.properties' "$SP" \
+    || { echo "❌ SR-13: $SP must read gradle/secrets-paths.properties (the resolver map)"; fail=1; }
+  if grep -qE 'providers\.exec|ProcessBuilder|commandLine' "$SP"; then
+    echo "❌ SR-13: $SP must NOT exec a subprocess at config time — read the resolver map"; fail=1
+  fi
+fi
+
+[ "$fail" = 0 ] && echo "✅ secrets-resolver guards pass (SR-7/8/9/10/11/12/13)"
 exit $fail

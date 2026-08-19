@@ -577,5 +577,17 @@ main() {
 # Handle script interruption
 trap 'echo -e "\n${RED}Setup interrupted. You can run the script again to continue.${NC}"; exit 1' INT TERM
 
-# Execute main function
-main
+# ── One-entry redirect (single source of truth) ──────────────────────────────────────────────────────
+# Setup is now DRIVEN BY app-profile/ (the one fork SoT), not interactive prompts. scripts/
+# white-label-doctor.sh derives + applies + verifies every white-label stage in one place. This wrapper
+# points a fork there; the legacy guided package-rename + keystore prompts stay behind `--legacy` for a
+# fresh clone that still needs them.
+if [ "${1:-}" = "--legacy" ]; then
+    main
+else
+    echo -e "${CYAN}➜ Setup is now app-profile-driven — the single source of truth.${NC}"
+    echo -e "  1. Fill your fork's identity in ${CYAN}app-profile/app.yaml${NC} (+ platforms/*/*.yaml)."
+    echo -e "  2. This runs the one white-label lifecycle command (derive → syncForkConfig → verify)."
+    echo -e "  (Need the old interactive package-rename + keystore prompts? run: ${CYAN}./setup-project.sh --legacy${NC})\n"
+    exec bash "$SCRIPT_DIR/scripts/white-label-doctor.sh" --fix
+fi

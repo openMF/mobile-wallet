@@ -107,6 +107,11 @@ platform :android do
       skip_upload_screenshots: false,  # phone / sevenInch / tenInch screenshots
     )
 
+    # A1 pushes the full listing inline (above) — record its hash so a later promotion (A2/A3/closed)
+    # correctly skips the drift-checked re-sync when the listing hasn't changed since this build.
+    # (RULE-DEPLOY-LISTING-SYNC-ALL-STATES-001)
+    record_store_listing_synced("android", File.join(DEPLOYMENT_REPO_ROOT, "deployment/android/metadata"))
+
     # Attach the configured Google Group (fork.properties play.testers.<track>.googlegroup) to this Play
     # track so every upload reaches the group — a persistent, idempotent binding. `internal` track uses
     # play.testers.internal.googlegroup; `beta`/`closed` uses play.testers.closed.googlegroup. No-op if blank.

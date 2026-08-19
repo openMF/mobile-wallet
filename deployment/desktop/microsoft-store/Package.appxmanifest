@@ -11,7 +11,7 @@
       Version="1.0.0.0" />
 
   <Properties>
-    <DisplayName>Mifos Pay</DisplayName>
+    <DisplayName>App Toolkit</DisplayName>
     <PublisherDisplayName>Mifos Initiative</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
@@ -25,9 +25,9 @@
   </Resources>
 
   <Applications>
-    <Application Id="MifosPay" Executable="MifosPay.exe" EntryPoint="Windows.FullTrustApplication">
+    <Application Id="MoneyToolkit" Executable="MoneyToolkit.exe" EntryPoint="Windows.FullTrustApplication">
       <uap:VisualElements
-          DisplayName="Mifos Pay"
+          DisplayName="App Toolkit"
           Description="Mifos Pay"
           BackgroundColor="transparent"
           Square150x150Logo="Assets\Square150x150Logo.png"
