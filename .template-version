@@ -3,6 +3,6 @@
 # Format: bash-parseable key=value (same convention as gradle/fork.properties).
 template_repo=openMF/kmp-project-template
 template_ref=dev
-template_sha=b97eb73d818dfac2dfa3f4a5c679b419c513b0c7
+template_sha=6fe88bade82f36c5b8ab0b66569087ea6e340ef2
 template_tag=
-synced_at=2026-08-19T14:08:16Z
+synced_at=2026-08-19T18:21:27Z

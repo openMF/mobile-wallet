@@ -86,4 +86,10 @@ compose.resources {
 // Fork-owned feature-module dependencies (S7/F4 white-label seam). Applied AFTER the `kotlin { }` block
 // above so the `commonMainImplementation` configuration it contributes to already exists. A fork edits
 // `feature-deps.gradle.kts`, never this template-owned build file — a template sync full-copies this file.
-apply(from = rootProject.file("feature-deps.gradle.kts"))
+//
+// Apply ONLY when the seam file is present. `feature-deps.gradle.kts` is `owner: fork` (never synced), so a
+// fork that adopted the template BEFORE this seam existed — or is mid-adoption — may not have it yet; an
+// unconditional `apply(from = …)` then fails the whole configuration ("Could not read script …feature-deps
+// .gradle.kts as it does not exist"), which blocks even `syncForkConfig`. Guarding the apply keeps
+// cmp-navigation configurable in that window; the fork wires its features by creating the seam file.
+rootProject.file("feature-deps.gradle.kts").takeIf { it.exists() }?.let { apply(from = it) }

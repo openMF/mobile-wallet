@@ -343,14 +343,40 @@ cs_merge_yaml_schema() {
   return 0
 }
 
+# Semantic settings.gradle.kts merge — the `include-union` strategy. A textual 3-way unions the
+# fork's + template's `include(":module")` lines, but the template also declares its OWN demo/app
+# feature modules (feature/showcase, feature/loans, feature/rates, …) that a downstream fork does
+# NOT have and that the sync does NOT copy in (they are not template-shared modules). The blind
+# union therefore references non-existent module dirs and breaks Gradle configuration
+# ("Configuring project ':feature:showcase' without an existing directory"). After the union, DROP
+# every `include(":a:b")` whose resolved dir `a/b/` is absent on disk — keeping the fork's real
+# modules + the shared modules the sync actually materialized, never a template-only phantom.
+#   cs_merge_include_union <ours> <base> <theirs> [<out>]
+cs_merge_include_union() {
+  local ours="$1" base="$2" theirs="$3" out="${4:-$1}" rc
+  cs_merge_3way "$ours" "$base" "$theirs" "$out"; rc=$?
+  local root; root="$(cd "$(dirname "$out")" 2>/dev/null && pwd)"; [ -n "$root" ] || root="$(pwd)"
+  local tmp coord; tmp="$(mktemp)"
+  while IFS= read -r line || [ -n "$line" ]; do
+    coord="$(printf '%s' "$line" | sed -nE 's/^[[:space:]]*include\("?:([A-Za-z0-9:_.-]+)"?\).*/\1/p')"
+    if [ -n "$coord" ] && [ ! -d "$root/${coord//://}" ]; then
+      continue   # drop a phantom include — module dir does not exist in this fork
+    fi
+    printf '%s\n' "$line"
+  done < "$out" > "$tmp"
+  mv "$tmp" "$out"
+  return "$rc"
+}
+
 # Strategy dispatcher used by scripts/white-label/sync-dirs.sh for a `merge`-owned file.
 #   cs_merge <strategy> <ours> <base> <theirs> [<out>]
 cs_merge() {
   local strat="$1" ours="$2" base="$3" theirs="$4" out="${5:-$2}"
   case "$strat" in
-    manifest-union)    cs_merge_manifest    "$ours" "$theirs" "$out" ;;
-    yaml-schema-merge) cs_merge_yaml_schema "$ours" "$base" "$theirs" "$out" ;;
-    *)                 cs_merge_3way        "$ours" "$base" "$theirs" "$out" ;;
+    manifest-union)    cs_merge_manifest      "$ours" "$theirs" "$out" ;;
+    include-union)     cs_merge_include_union "$ours" "$base" "$theirs" "$out" ;;
+    yaml-schema-merge) cs_merge_yaml_schema   "$ours" "$base" "$theirs" "$out" ;;
+    *)                 cs_merge_3way          "$ours" "$base" "$theirs" "$out" ;;
   esac
 }
 
