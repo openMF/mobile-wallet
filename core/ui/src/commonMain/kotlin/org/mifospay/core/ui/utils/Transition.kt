@@ -5,7 +5,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 package org.mifospay.core.ui.utils
 
@@ -36,19 +36,19 @@ typealias NonNullExitTransitionProvider =
  * The default transition time (in milliseconds) for all fade transitions in the
  * [TransitionProviders].
  */
-const val DEFAULT_FADE_TRANSITION_TIME_MS: Int = 300
+const val DEFAULT_FADE_TRANSITION_TIME_MS: Int = 200
 
 /**
  * The default transition time (in milliseconds) for all slide transitions in the
  * [TransitionProviders].
  */
-const val DEFAULT_SLIDE_TRANSITION_TIME_MS: Int = 450
+const val DEFAULT_SLIDE_TRANSITION_TIME_MS: Int = 300
 
 /**
  * The default transition time (in milliseconds) for all slide transitions in the
  * [TransitionProviders].
  */
-const val DEFAULT_PUSH_TRANSITION_TIME_MS: Int = 350
+const val DEFAULT_PUSH_TRANSITION_TIME_MS: Int = 250
 
 /**
  * The default transition time (in milliseconds) for all "stay"/no-op transitions in the

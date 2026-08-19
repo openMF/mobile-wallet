@@ -1,0 +1,15 @@
+# deployment/Appfile
+#
+# Identity values read from FastlaneConfig, which parses gradle/libs.versions.toml.
+# config.rb is imported by Fastfile before this file is evaluated.
+#
+# Entry point: bundle exec fastlane --fastlane-dir deployment <platform> <lane>
+
+# Android
+json_key_file(FastlaneConfig::ProjectConfig::ANDROID[:play_store_json_key])
+package_name(FastlaneConfig::ProjectConfig.android_package_name)
+
+# iOS
+app_identifier(FastlaneConfig::ProjectConfig::IOS[:app_identifier])
+team_id(FastlaneConfig::ProjectConfig::IOS[:team_id])
+# apple_id is read from FASTLANE_APPLE_ID env var — do not hardcode here.

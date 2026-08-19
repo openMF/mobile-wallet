@@ -5,22 +5,20 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 package org.mifospay.feature.accounts.savingsaccount.details
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.serialization.Serializable
-import org.mifospay.core.common.DataState
+import org.mifospay.core.common.ScreenState
 import org.mifospay.core.common.getSerialized
 import org.mifospay.core.data.repository.SavingsAccountRepository
+import org.mifospay.core.data.util.toForkScreenStateFlow
 import org.mifospay.core.model.savingsaccount.SavingAccountDetail
 import org.mifospay.core.ui.utils.BaseViewModel
-import org.mifospay.feature.accounts.savingsaccount.details.SADAction.Internal.SavingAccountDetailResultReceived
 import org.mifospay.feature.accounts.savingsaccount.details.SADState.ViewState.Error
 
 internal class SavingAccountDetailViewModel(
@@ -39,9 +37,18 @@ internal class SavingAccountDetailViewModel(
     }
 
     init {
-        repository.getAccountDetail(state.accountId).onEach {
-            sendAction(SavingAccountDetailResultReceived(it))
-        }.launchIn(viewModelScope)
+        // Phase-5 Batch-1 SINGLE-ROW-PER-KEY read (GOAL D13) — switched from the
+        // transitional `getAccountDetail(accountId)` (`asScreenStateFlow` shim
+        // over the raw Ktorfit flow) to the store-native `getAccountDetailScreen(...)`
+        // that consumes the `accountDetail` Store5 read (`createStore` + Room SoT
+        // + CACHE_FIRST_SWR + single-row upsert). Same `ScreenStateStream<SavingAccountDetail>`
+        // shape; consumer branches are unchanged. Requires `viewModelScope` for
+        // the stream's internal reconnect + periodic + SWR side-fetch coroutines.
+        repository.getAccountDetailStream(state.accountId, scope = viewModelScope)
+            .state.toForkScreenStateFlow()
+            .observeScreen { screenState ->
+                mutableStateFlow.update { it.copy(viewState = screenState.toViewState()) }
+            }
     }
 
     override fun handleAction(action: SADAction) {
@@ -53,32 +60,24 @@ internal class SavingAccountDetailViewModel(
             is SADAction.ViewTransaction -> {
                 sendEvent(SADEvent.OnViewTransaction(action.clientId, action.accountId))
             }
-
-            is SavingAccountDetailResultReceived -> handleSavingAccountDetailResult(action)
         }
     }
+}
 
-    private fun handleSavingAccountDetailResult(action: SavingAccountDetailResultReceived) {
-        when (action.result) {
-            is DataState.Loading -> {
-                mutableStateFlow.update {
-                    it.copy(viewState = SADState.ViewState.Loading)
-                }
-            }
-
-            is DataState.Error -> {
-                mutableStateFlow.update {
-                    it.copy(viewState = Error(action.result.exception.message.toString()))
-                }
-            }
-
-            is DataState.Success -> {
-                mutableStateFlow.update {
-                    it.copy(viewState = SADState.ViewState.Content(action.result.data))
-                }
-            }
-        }
-    }
+/**
+ * Fold the 6-branch [ScreenState] into the existing 3-branch
+ * [SADState.ViewState] (Loading/Error/Content). Detail flows shouldn't emit
+ * [ScreenState.Empty] (single-record endpoints return Content or Error) but
+ * we defensively route it to Error. NoNetwork / Unauthenticated fold into
+ * Error until Phase-4 wires per-branch messaging.
+ */
+private fun ScreenState<SavingAccountDetail>.toViewState(): SADState.ViewState = when (this) {
+    is ScreenState.Loading -> SADState.ViewState.Loading
+    is ScreenState.Empty -> Error("Account not found.")
+    is ScreenState.Content -> SADState.ViewState.Content(data)
+    is ScreenState.Error -> Error(error.message.toString())
+    is ScreenState.NoNetwork -> Error("No network. Please check your connection.")
+    is ScreenState.Unauthenticated -> Error("Session expired. Please log in again.")
 }
 
 @Serializable
@@ -108,10 +107,4 @@ internal sealed interface SADEvent {
 internal sealed interface SADAction {
     data object NavigateBack : SADAction
     data class ViewTransaction(val clientId: Long, val accountId: Long) : SADAction
-
-    sealed interface Internal : SADAction {
-        data class SavingAccountDetailResultReceived(
-            val result: DataState<SavingAccountDetail>,
-        ) : Internal
-    }
 }

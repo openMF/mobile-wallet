@@ -5,13 +5,12 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 package org.mifospay.core.datastore
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
-import org.mifospay.core.common.DataState
 import org.mifospay.core.model.autopay.Biller
 import org.mifospay.core.model.autopay.BillerCategory
 
@@ -38,50 +37,29 @@ class BillerRepositoryImpl(
         }
     }
 
-    override suspend fun saveBiller(biller: Biller): DataState<Biller> {
-        return try {
-            val existingBillers = billerDataSource.billers.first()
+    override suspend fun saveBiller(biller: Biller): Biller {
+        val existingBillers = billerDataSource.billers.first()
 
-            // Check if biller already exists
-            val existingBiller = existingBillers.find {
-                it.name == biller.name && it.accountNumber == biller.accountNumber
-            }
-
-            if (existingBiller != null) {
-                DataState.Error(Exception("Biller with this name and account number already exists"))
-            } else {
-                billerDataSource.addBiller(biller)
-                DataState.Success(biller)
-            }
-        } catch (e: Exception) {
-            DataState.Error(Exception("Failed to save biller: ${e.message}"))
+        // Check if biller already exists
+        val existingBiller = existingBillers.find {
+            it.name == biller.name && it.accountNumber == biller.accountNumber
         }
+        require(existingBiller == null) { "Biller with this name and account number already exists" }
+        billerDataSource.addBiller(biller)
+        return biller
     }
 
-    override suspend fun updateBiller(biller: Biller): DataState<Biller> {
-        return try {
-            val existingBillers = billerDataSource.billers.first().toMutableList()
-            val index = existingBillers.indexOfFirst { it.id == biller.id }
-
-            if (index != -1) {
-                existingBillers[index] = biller
-                billerDataSource.updateBillers(existingBillers)
-                DataState.Success(biller)
-            } else {
-                DataState.Error(Exception("Biller not found"))
-            }
-        } catch (e: Exception) {
-            DataState.Error(Exception("Failed to update biller: ${e.message}"))
-        }
+    override suspend fun updateBiller(biller: Biller): Biller {
+        val existingBillers = billerDataSource.billers.first().toMutableList()
+        val index = existingBillers.indexOfFirst { it.id == biller.id }
+        require(index != -1) { "Biller not found" }
+        existingBillers[index] = biller
+        billerDataSource.updateBillers(existingBillers)
+        return biller
     }
 
-    override suspend fun deleteBiller(id: String): DataState<Unit> {
-        return try {
-            billerDataSource.removeBiller(id)
-            DataState.Success(Unit)
-        } catch (e: Exception) {
-            DataState.Error(Exception("Failed to delete biller: ${e.message}"))
-        }
+    override suspend fun deleteBiller(id: String) {
+        billerDataSource.removeBiller(id)
     }
 
     override suspend fun getBillersByCategory(category: BillerCategory): List<Biller> {
@@ -111,12 +89,7 @@ class BillerRepositoryImpl(
         }
     }
 
-    override suspend fun clearAllBillers(): DataState<Unit> {
-        return try {
-            billerDataSource.clearBillers()
-            DataState.Success(Unit)
-        } catch (e: Exception) {
-            DataState.Error(Exception("Failed to clear billers: ${e.message}"))
-        }
+    override suspend fun clearAllBillers() {
+        billerDataSource.clearBillers()
     }
 }

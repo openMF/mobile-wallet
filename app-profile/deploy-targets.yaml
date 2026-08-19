@@ -1,0 +1,131 @@
+# ═════════════════════════════════════════════════════════════════════════════
+# app-profile/deploy-targets.yaml — FORK-OWNED per-target deploy state
+#
+# Relocated OUT of deployment/DEPLOYMENT_MANIFEST.yaml (E1 / D-1, epic
+# pure-white-label-store5-network). This is the SINGLE fork-owned source of
+# per-target enable/tier/confirm state, so deployment/** can full-copy from the
+# template with ZERO exclusions.
+#
+#   • deployment/DEPLOYMENT_MANIFEST.yaml  → pure TEMPLATE CATALOG of which
+#                                            targets EXIST per platform (owner: template).
+#   • THIS file (app-profile/deploy-targets.yaml) → which of those catalog targets a
+#                                            FORK actually ships, and at what tier /
+#                                            confirmation gate (owner: fork).
+#
+# A target is ACTIVE iff (a) it exists in the template catalog, (b) its platform is
+# enabled in app-profile/app.yaml#targets, AND (c) its `enabled:` is true here.
+#
+# Validator:  scripts/deployment-manifest-validate.sh (reads THIS file for
+#             enabled/tier and the template catalog for the target list).
+# Ownership:  owner: fork (app-profile/** in customization-surface.yaml) — sync
+#             NEVER overwrites it, so a template sync full-copies deployment/**
+#             while your enabled/tier choices survive.
+# ═════════════════════════════════════════════════════════════════════════════
+
+schema_version: "1.0"
+project: mifos-pay
+template_version: "2026.5.0"
+
+# Per-target fork state. `canonical_name` MUST match a target in the template
+# catalog (deployment/DEPLOYMENT_MANIFEST.yaml). Only enabled/tier/requires_confirm
+# are fork-owned; everything else (path, runners, required_capabilities) is catalog.
+targets:
+  # ── Android ──────────────────────────────────────────────────────────────
+  - canonical_name: android-firebase
+    enabled: true
+    tier: 1
+    requires_confirm: false
+  - canonical_name: android-play-internal
+    enabled: true
+    tier: 1
+    requires_confirm: false
+  - canonical_name: android-play-closed
+    enabled: true
+    tier: 1
+    requires_confirm: false
+  - canonical_name: android-play-beta
+    enabled: true
+    tier: 1
+    requires_confirm: false
+  - canonical_name: android-play-production
+    enabled: false
+    tier: 1
+    requires_confirm: true
+  - canonical_name: android-sync-listing
+    enabled: true
+    tier: 1
+    requires_confirm: false
+
+  # ── iOS ──────────────────────────────────────────────────────────────────
+  - canonical_name: ios-firebase
+    enabled: true
+    tier: 1
+    requires_confirm: false
+  - canonical_name: ios-testflight
+    enabled: true
+    tier: 1
+    requires_confirm: false
+  - canonical_name: ios-appstore
+    enabled: false
+    tier: 1
+    requires_confirm: true
+  - canonical_name: ios-sync-listing
+    enabled: true
+    tier: 1
+    requires_confirm: false
+
+  # ── Desktop (incl. macOS App Store / TestFlight) ───────────────────────────
+  - canonical_name: desktop-linux-deb
+    enabled: true
+    tier: 1
+    requires_confirm: false
+  - canonical_name: desktop-windows-exe
+    enabled: true
+    tier: 1
+    requires_confirm: false
+  - canonical_name: desktop-macos-dmg-unsigned
+    enabled: true
+    tier: 1
+    requires_confirm: false
+  - canonical_name: desktop-mac-testflight
+    enabled: true
+    tier: 1
+    requires_confirm: false
+  - canonical_name: desktop-dmg-notarized
+    enabled: false
+    tier: 2
+    requires_confirm: true
+  - canonical_name: desktop-msi-signed
+    enabled: false
+    tier: 2
+    requires_confirm: true
+  - canonical_name: desktop-mac-app-store
+    enabled: true
+    tier: 2
+    requires_confirm: true
+  - canonical_name: desktop-microsoft-store
+    enabled: false
+    tier: 2
+    requires_confirm: true
+  - canonical_name: desktop-sync-listing
+    enabled: true
+    tier: 1
+    requires_confirm: false
+
+  # ── Web ────────────────────────────────────────────────────────────────────
+  - canonical_name: web-gh-pages
+    enabled: true
+    tier: 1
+    requires_confirm: false
+  - canonical_name: web-cloudflare-pages
+    enabled: false
+    tier: 2
+    requires_confirm: false
+  - canonical_name: web-netlify
+    enabled: false
+    tier: 2
+    requires_confirm: false
+  - canonical_name: web-vercel
+    enabled: false
+    tier: 2
+    requires_confirm: false

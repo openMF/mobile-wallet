@@ -5,14 +5,10 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 plugins {
     alias(libs.plugins.cmp.feature.convention)
-}
-
-android {
-    namespace = "org.mifospay.feature.settings"
 }
 
 kotlin {
@@ -26,6 +22,9 @@ kotlin {
 
             implementation(libs.koin.compose.viewmodel)
             implementation(libs.koin.compose)
+
+            // Template idiom: SubmitHandler (core-base/store) for one-shot writes.
+            implementation(projects.coreBase.store)
 
             // For BiometricErrorMessages / BiometricPromptStrings used by
             // SettingsViewModel's enable-biometrics path (v2.3.0-beta requires

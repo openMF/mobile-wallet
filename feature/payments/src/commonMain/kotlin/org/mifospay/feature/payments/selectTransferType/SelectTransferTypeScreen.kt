@@ -5,7 +5,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 package org.mifospay.feature.payments.selectTransferType
 
@@ -34,13 +34,13 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import mobile_wallet.feature.payments.generated.resources.Res
-import mobile_wallet.feature.payments.generated.resources.feature_payments_inter_bank_transfer_description
-import mobile_wallet.feature.payments.generated.resources.feature_payments_inter_bank_transfer_title
-import mobile_wallet.feature.payments.generated.resources.feature_payments_intra_bank_transfer_description
-import mobile_wallet.feature.payments.generated.resources.feature_payments_intra_bank_transfer_title
-import mobile_wallet.feature.payments.generated.resources.feature_payments_select_transfer_type_header
-import mobile_wallet.feature.payments.generated.resources.feature_payments_select_transfer_type_subtitle
+import mifos_pay.feature.payments.generated.resources.Res
+import mifos_pay.feature.payments.generated.resources.feature_payments_inter_bank_transfer_description
+import mifos_pay.feature.payments.generated.resources.feature_payments_inter_bank_transfer_title
+import mifos_pay.feature.payments.generated.resources.feature_payments_intra_bank_transfer_description
+import mifos_pay.feature.payments.generated.resources.feature_payments_intra_bank_transfer_title
+import mifos_pay.feature.payments.generated.resources.feature_payments_select_transfer_type_header
+import mifos_pay.feature.payments.generated.resources.feature_payments_select_transfer_type_subtitle
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.mifospay.core.designsystem.component.MifosCard

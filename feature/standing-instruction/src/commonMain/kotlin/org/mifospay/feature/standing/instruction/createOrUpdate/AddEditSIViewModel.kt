@@ -5,7 +5,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 package org.mifospay.feature.standing.instruction.createOrUpdate
 
@@ -22,8 +22,14 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
-import org.mifospay.core.common.DataState
+import kpt.core.base.store.submit.SubmitState
+import kpt.core.base.store.submit.submitHandler
+import mifos_pay.feature.standing_instruction.generated.resources.Res
+import mifos_pay.feature.standing_instruction.generated.resources.feature_standing_instruction_created_successfully
+import mifos_pay.feature.standing_instruction.generated.resources.feature_standing_instruction_updated_successfully
+import org.jetbrains.compose.resources.StringResource
 import org.mifospay.core.common.DateHelper
+import org.mifospay.core.common.ScreenState
 import org.mifospay.core.common.getSerialized
 import org.mifospay.core.common.setSerialized
 import org.mifospay.core.data.repository.ClientRepository
@@ -37,7 +43,6 @@ import org.mifospay.core.model.standinginstruction.StandingInstruction
 import org.mifospay.core.model.standinginstruction.StandingInstructionPayload
 import org.mifospay.core.model.standinginstruction.toSIUploadPayload
 import org.mifospay.core.ui.utils.BaseViewModel
-import org.mifospay.feature.standing.instruction.createOrUpdate.AddEditSIAction.Internal.HandleSubmitResult
 import org.mifospay.feature.standing.instruction.createOrUpdate.AddEditSIAction.Internal.HandleTemplateResult
 import org.mifospay.feature.standing.instruction.createOrUpdate.AddEditSIAction.Internal.LoadClientAccount
 import org.mifospay.feature.standing.instruction.createOrUpdate.AddEditSIState.DialogState.Error
@@ -76,7 +81,49 @@ internal class AddEditSIViewModel(
     private val _toClientAccounts = MutableStateFlow<List<Account>>(emptyList())
     val toClientAccounts = _toClientAccounts.asStateFlow()
 
+    // Template idiom (core-base/store): the create/update WRITE goes through a
+    // SubmitHandler instead of a hand-folded DataState result action. The handler
+    // owns the Submitting/Submitted/Failed lifecycle; we observe it to drive this
+    // screen's existing loading/error dialog + success toast + navigate-back.
+    private val submitSI = viewModelScope.submitHandler<Unit>()
+
     init {
+        submitSI.state
+            .onEach { submitState ->
+                when (submitState) {
+                    is SubmitState.Submitting -> {
+                        mutableStateFlow.update {
+                            it.copy(dialogState = AddEditSIState.DialogState.Loading)
+                        }
+                    }
+
+                    is SubmitState.Submitted -> {
+                        mutableStateFlow.update { it.copy(dialogState = null) }
+                        val successMessage = when (state.type) {
+                            is SIAddEditType.AddItem ->
+                                Res.string.feature_standing_instruction_created_successfully
+
+                            is SIAddEditType.EditItem ->
+                                Res.string.feature_standing_instruction_updated_successfully
+                        }
+                        sendEvent(AddEditSIEvent.ShowToast(successMessage))
+                        sendEvent(AddEditSIEvent.OnNavigateBack)
+                        submitSI.reset()
+                    }
+
+                    is SubmitState.Failed -> {
+                        val message = submitState.error.message.toString()
+                        mutableStateFlow.update {
+                            it.copy(dialogState = Error(message))
+                        }
+                        submitSI.reset()
+                    }
+
+                    SubmitState.Idle -> Unit
+                }
+            }
+            .launchIn(viewModelScope)
+
         stateFlow
             .onEach { savedStateHandle.setSerialized(key = KEY_STATE, value = it) }
             .launchIn(viewModelScope)
@@ -203,8 +250,6 @@ internal class AddEditSIViewModel(
 
             AddEditSIAction.SubmitClicked -> initiateAddEditSI()
 
-            is HandleSubmitResult -> handleSubmitResult(action)
-
             is HandleTemplateResult -> handleTemplateResult(action)
 
             is LoadClientAccount -> handleClientAccountResult(action)
@@ -273,96 +318,98 @@ internal class AddEditSIViewModel(
         }
     }
 
-    private fun initiateSubmitSI() {
-        mutableStateFlow.update {
-            it.copy(dialogState = AddEditSIState.DialogState.Loading)
-        }
-
-        onContent {
-            viewModelScope.launch {
-                val result = when (state.type) {
-                    is SIAddEditType.AddItem -> {
-                        repository.createStandingInstruction(it.payload)
-                    }
-
-                    is SIAddEditType.EditItem -> {
-                        val insId = requireNotNull(state.type.standingInsId)
-                        val payload = it.payload.toSIUploadPayload()
-
-                        repository.updateStandingInstruction(insId, payload)
-                    }
+    private fun initiateSubmitSI() = onContent { content ->
+        // Submit through the handler — it drives Submitting/Submitted/Failed,
+        // observed in `init`. The repository write completes normally on success
+        // and throws on failure; the handler maps that to Submitted/Failed.
+        submitSI.submit {
+            when (state.type) {
+                is SIAddEditType.AddItem -> {
+                    repository.createStandingInstruction(content.payload)
                 }
 
-                sendAction(HandleSubmitResult(result))
-            }
-        }
-    }
+                is SIAddEditType.EditItem -> {
+                    val insId = requireNotNull(state.type.standingInsId)
+                    val payload = content.payload.toSIUploadPayload()
 
-    private fun handleSubmitResult(action: HandleSubmitResult) {
-        when (action.result) {
-            is DataState.Loading -> {
-                mutableStateFlow.update {
-                    it.copy(dialogState = AddEditSIState.DialogState.Loading)
+                    repository.updateStandingInstruction(insId, payload)
                 }
-            }
-
-            is DataState.Error -> {
-                mutableStateFlow.update {
-                    it.copy(dialogState = Error(action.result.message))
-                }
-            }
-
-            is DataState.Success -> {
-                mutableStateFlow.update {
-                    it.copy(dialogState = null)
-                }
-
-                sendEvent(AddEditSIEvent.ShowToast(action.result.data))
-                sendEvent(AddEditSIEvent.OnNavigateBack)
             }
         }
     }
 
     private fun handleTemplateResult(action: HandleTemplateResult) {
-        when (action.result) {
-            is DataState.Loading -> {
+        // `getStandingInstructionTemplate` was migrated to
+        // `Flow<ScreenState<SITemplate>>` in Phase-3. Content builds the
+        // initial payload; Empty is defensively surfaced as an error (a
+        // template endpoint shouldn't emit Empty). NoNetwork / Unauthenticated
+        // fold into the existing Error surface until Phase-4 differentiates.
+        when (val result = action.result) {
+            is ScreenState.Loading -> {
                 mutableStateFlow.update {
                     it.copy(viewState = AddEditSIState.ViewState.Loading)
                 }
             }
 
-            is DataState.Error -> {
-                val message = action.result.exception.message.toString()
+            is ScreenState.Empty -> {
+                mutableStateFlow.update {
+                    it.copy(viewState = AddEditSIState.ViewState.Error("Template not available."))
+                }
+            }
+
+            is ScreenState.Error -> {
+                val message = result.error.message.toString()
                 mutableStateFlow.update {
                     it.copy(viewState = AddEditSIState.ViewState.Error(message))
                 }
             }
 
-            is DataState.Success -> {
+            is ScreenState.NoNetwork -> {
+                mutableStateFlow.update {
+                    it.copy(
+                        viewState = AddEditSIState.ViewState.Error(
+                            "No network. Please check your connection.",
+                        ),
+                    )
+                }
+            }
+
+            is ScreenState.Unauthenticated -> {
+                mutableStateFlow.update {
+                    it.copy(
+                        viewState = AddEditSIState.ViewState.Error(
+                            "Session expired. Please log in again.",
+                        ),
+                    )
+                }
+            }
+
+            is ScreenState.Content -> {
+                val template = result.data
                 mutableStateFlow.update {
                     it.copy(
                         viewState = AddEditSIState.ViewState.Content(
-                            template = action.result.data,
+                            template = template,
                             payload = if (state.isAddMode) {
                                 StandingInstructionPayload(
-                                    fromClientId = action.result.data.fromClient?.id ?: 0L,
-                                    fromOfficeId = action.result.data.fromOffice?.id ?: 0L,
-                                    fromAccountType = action.result.data.fromAccountType ?: "",
-                                    fromAccountId = action.result.data.fromAccountOptions?.firstOrNull()?.id ?: -1,
+                                    fromClientId = template.fromClient?.id ?: 0L,
+                                    fromOfficeId = template.fromOffice?.id ?: 0L,
+                                    fromAccountType = template.fromAccountType ?: "",
+                                    fromAccountId = template.fromAccountOptions?.firstOrNull()?.id ?: -1,
 
-                                    toOfficeId = action.result.data.toOfficeOptions?.firstOrNull()?.id ?: -1,
-                                    toAccountType = action.result.data.fromAccountType ?: "",
+                                    toOfficeId = template.toOfficeOptions?.firstOrNull()?.id ?: -1,
+                                    toAccountType = template.fromAccountType ?: "",
                                     toClientId = 0,
                                     toAccountId = 0,
 
                                     name = "",
                                     amount = "",
-                                    transferType = action.result.data.transferTypeOptions?.firstOrNull()?.id ?: -1,
-                                    instructionType = action.result.data.instructionTypeOptions?.firstOrNull()?.id ?: -1,
-                                    priority = action.result.data.priorityOptions?.firstOrNull()?.id,
-                                    status = action.result.data.statusOptions?.firstOrNull()?.id,
-                                    recurrenceType = action.result.data.recurrenceTypeOptions?.firstOrNull()?.id ?: -1,
-                                    recurrenceFrequency = action.result.data.recurrenceFrequencyOptions?.firstOrNull()?.id ?: -1,
+                                    transferType = template.transferTypeOptions?.firstOrNull()?.id ?: -1,
+                                    instructionType = template.instructionTypeOptions?.firstOrNull()?.id ?: -1,
+                                    priority = template.priorityOptions?.firstOrNull()?.id,
+                                    status = template.statusOptions?.firstOrNull()?.id,
+                                    recurrenceType = template.recurrenceTypeOptions?.firstOrNull()?.id ?: -1,
+                                    recurrenceFrequency = template.recurrenceFrequencyOptions?.firstOrNull()?.id ?: -1,
                                     recurrenceInterval = "",
 
                                     locale = "en_IN",
@@ -382,8 +429,8 @@ internal class AddEditSIViewModel(
                 if (!state.isAddMode) {
                     val insId = requireNotNull(state.type.standingInsId)
 
-                    repository.getStandingInstruction(insId).onEach { result ->
-                        sendAction(AddEditSIAction.Internal.HandleSIResult(result))
+                    repository.getStandingInstruction(insId).onEach { screenState ->
+                        sendAction(AddEditSIAction.Internal.HandleSIResult(screenState))
                     }.launchIn(viewModelScope)
                 }
             }
@@ -395,21 +442,37 @@ internal class AddEditSIViewModel(
             it.copy(dialogState = AddEditSIState.DialogState.Loading)
         }
 
+        // `clientRepository.getAccounts` was migrated to
+        // `Flow<ScreenState<List<Account>>>` in Phase-3. Content updates the
+        // to-client account picker; Empty explicitly emits an empty list AND
+        // clears the loading dialog (semantically "no savings accounts").
+        // NoNetwork / Unauthenticated fold into the existing error dialog.
         viewModelScope.launch {
             clientRepository.getAccounts(
                 clientId = action.clientId,
                 accountType = "savingsAccounts",
             ).collectLatest { result ->
                 when (result) {
-                    is DataState.Loading -> {
+                    is ScreenState.Loading -> {
                         mutableStateFlow.update {
                             it.copy(dialogState = AddEditSIState.DialogState.Loading)
                         }
                     }
 
-                    is DataState.Error -> showError(result.message)
+                    is ScreenState.Empty -> {
+                        sendAction(AddEditSIAction.DismissDialog)
+                        _toClientAccounts.update { emptyList() }
+                    }
 
-                    is DataState.Success -> {
+                    is ScreenState.Error -> showError(result.error.message.toString())
+
+                    is ScreenState.NoNetwork ->
+                        showError("No network. Please check your connection.")
+
+                    is ScreenState.Unauthenticated ->
+                        showError("Session expired. Please log in again.")
+
+                    is ScreenState.Content -> {
                         sendAction(AddEditSIAction.DismissDialog)
                         _toClientAccounts.update { result.data }
                     }
@@ -419,26 +482,49 @@ internal class AddEditSIViewModel(
     }
 
     private fun handleSIResult(action: AddEditSIAction.Internal.HandleSIResult) {
-        when (action.result) {
-            is DataState.Loading -> {
+        // `getStandingInstruction` was migrated to
+        // `Flow<ScreenState<StandingInstruction>>` in Phase-3. Content
+        // hydrates the edit-mode form; Empty is defensively surfaced as an
+        // error (single-record endpoint shouldn't emit Empty). NoNetwork /
+        // Unauthenticated fold into the existing error dialog.
+        when (val result = action.result) {
+            is ScreenState.Loading -> {
                 mutableStateFlow.update {
                     it.copy(dialogState = AddEditSIState.DialogState.Loading)
                 }
             }
 
-            is DataState.Error -> {
-                val message = action.result.exception.message.toString()
+            is ScreenState.Empty -> {
+                mutableStateFlow.update {
+                    it.copy(dialogState = Error("Standing instruction not found."))
+                }
+            }
+
+            is ScreenState.Error -> {
+                val message = result.error.message.toString()
                 mutableStateFlow.update {
                     it.copy(dialogState = Error(message))
                 }
             }
 
-            is DataState.Success -> {
+            is ScreenState.NoNetwork -> {
+                mutableStateFlow.update {
+                    it.copy(dialogState = Error("No network. Please check your connection."))
+                }
+            }
+
+            is ScreenState.Unauthenticated -> {
+                mutableStateFlow.update {
+                    it.copy(dialogState = Error("Session expired. Please log in again."))
+                }
+            }
+
+            is ScreenState.Content -> {
                 mutableStateFlow.update {
                     it.copy(dialogState = null)
                 }
 
-                updateSIResult(action.result.data)
+                updateSIResult(result.data)
             }
         }
     }
@@ -601,7 +687,7 @@ internal data class AddEditSIState(
 }
 
 sealed interface AddEditSIEvent {
-    data class ShowToast(val message: String) : AddEditSIEvent
+    data class ShowToast(val message: StringResource) : AddEditSIEvent
     data object OnNavigateBack : AddEditSIEvent
 }
 
@@ -639,9 +725,17 @@ sealed interface AddEditSIAction {
     data object SubmitClicked : AddEditSIAction
 
     sealed interface Internal : AddEditSIAction {
-        data class HandleTemplateResult(val result: DataState<SITemplate>) : Internal
+        /**
+         * Template load result. Uses [ScreenState] — Phase-3 migrated
+         * `getStandingInstructionTemplate` to a ScreenState stream.
+         */
+        data class HandleTemplateResult(val result: ScreenState<SITemplate>) : Internal
         data class LoadClientAccount(val clientId: Long) : Internal
-        data class HandleSubmitResult(val result: DataState<String>) : Internal
-        data class HandleSIResult(val result: DataState<StandingInstruction>) : Internal
+
+        /**
+         * Existing-SI load result (edit mode). Uses [ScreenState] — Phase-3
+         * migrated `getStandingInstruction` to a ScreenState stream.
+         */
+        data class HandleSIResult(val result: ScreenState<StandingInstruction>) : Internal
     }
 }

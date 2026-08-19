@@ -5,24 +5,28 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 package org.mifospay.core.data.repository
 
-import kotlinx.coroutines.flow.Flow
-import org.mifospay.core.common.DataState
+import org.mifospay.core.common.ScreenStateStream
 import org.mifospay.core.model.kyc.KYCLevel1Details
 
 interface KycLevelRepository {
-    fun fetchKYCLevel1Details(clientId: Long): Flow<DataState<KYCLevel1Details?>>
+    // Reads on ScreenState.
+    // `null` payload is legal here (client has not yet submitted KYC); screens
+    // treat Content(null) as "empty form" — not Empty (which would render a
+    // blocking empty-state message).
+    fun fetchKYCLevel1Details(clientId: Long): ScreenStateStream<KYCLevel1Details?>
 
+    // Message-only writes: return Unit and throw on error.
     suspend fun addKYCLevel1Details(
         clientId: Long,
         kycLevel1Details: KYCLevel1Details,
-    ): DataState<String>
+    )
 
     suspend fun updateKYCLevel1Details(
         clientId: Long,
         kycLevel1Details: KYCLevel1Details,
-    ): DataState<String>
+    )
 }

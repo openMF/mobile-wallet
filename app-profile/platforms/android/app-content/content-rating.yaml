@@ -1,0 +1,56 @@
+# app-profile/platforms/android/app-content/content-rating.yaml
+# feeds Google Play Console "App content" → "Content rating" (IARC) questionnaire.
+#
+# Mifos Pay is a real mobile banking client (real login, real financial data — see app-content.yaml
+# for the full posture), but the IARC content-rating questionnaire below is specifically about
+# objectionable CONTENT (violence/sexual/profanity/gambling/UGC), not data collection — a real
+# banking app genuinely has none of that content either, so these answers stay accurate.
+
+category: Utility  # IARC "reference category" — Utility, Productivity, or Other (non-game)
+
+questionnaire:
+  violence:
+    realistic_violence: false
+    fantasy_violence: false
+    graphic_violence: false
+    violence_against_children: false
+  sexual_content:
+    nudity: false
+    sexual_content_or_themes: false
+  profanity:
+    crude_humor_or_language: false
+  controlled_substances:
+    references_to_alcohol: false
+    references_to_tobacco: false
+    references_to_drugs: false
+    simulated_gambling: false
+  gambling:
+    real_money_gambling: false
+    simulated_gambling: false
+  user_generated_content:
+    allows_ugc: false
+    allows_user_interaction: false
+    shares_location: false
+    unrestricted_internet_access: false
+    digital_purchases: false
+  fear:
+    horror_or_fear_themes: false
+  discrimination:
+    hate_speech_or_discriminatory_content: false
+  miscellaneous:
+    depicts_illegal_activity: false
+
+expected_ratings:
+  esrb: Everyone
+  pegi: 3
+  usk: 0
+  classind: L
+  acb: G
+  giac_iarc_generic: 3+
+  playstore_summary: Everyone
+
+notes: >
+  No content triggers any IARC descriptor. Expected outcome across all
+  territory-specific systems is the lowest ("Everyone" / "3+" / "G") rating.
+  Re-run the Play Console questionnaire whenever a new feature adds
+  ads, UGC, location sharing, or purchases — none are planned.

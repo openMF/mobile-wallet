@@ -1,0 +1,1 @@
+In the app's instance picker, select or add the demo instance at https://mifos-bank-2.mifos.community/ and sign in with the credentials below.

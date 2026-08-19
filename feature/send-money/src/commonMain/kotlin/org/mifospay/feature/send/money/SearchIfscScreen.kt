@@ -5,7 +5,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 package org.mifospay.feature.send.money
 
@@ -40,13 +40,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import mobile_wallet.feature.send_money.generated.resources.Res
-import mobile_wallet.feature.send_money.generated.resources.feature_send_money_bank_branch
-import mobile_wallet.feature.send_money.generated.resources.feature_send_money_bank_name
-import mobile_wallet.feature.send_money.generated.resources.feature_send_money_cancel
-import mobile_wallet.feature.send_money.generated.resources.feature_send_money_continue
-import mobile_wallet.feature.send_money.generated.resources.feature_send_money_ifsc_code
-import mobile_wallet.feature.send_money.generated.resources.feature_send_money_search_ifsc
+import mifos_pay.feature.send_money.generated.resources.Res
+import mifos_pay.feature.send_money.generated.resources.feature_send_money_bank_branch
+import mifos_pay.feature.send_money.generated.resources.feature_send_money_bank_name
+import mifos_pay.feature.send_money.generated.resources.feature_send_money_cancel
+import mifos_pay.feature.send_money.generated.resources.feature_send_money_continue
+import mifos_pay.feature.send_money.generated.resources.feature_send_money_ifsc_code
+import mifos_pay.feature.send_money.generated.resources.feature_send_money_search_ifsc
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.mifospay.core.designsystem.component.MifosButton

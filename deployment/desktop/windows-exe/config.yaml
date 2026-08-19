@@ -1,0 +1,17 @@
+# deployment/desktop/windows-exe/config.yaml
+target: desktop-windows-exe
+platform: desktop
+os: windows
+tier: 1
+owning_capability: github-releases-publish
+output_format: exe
+output_path: "cmp-desktop/build/compose/binaries/main-release/exe/"
+version_format: "git"
+signing: none
+distribution_groups: ["public"]
+retention: "indefinite"
+runners:
+  local: { command: "bash deployment/desktop/windows-exe/script.sh" }
+  ci:    { workflow_snippet: workflow-snippet.yml }
+requires_confirm: false
+enabled_by_default: true

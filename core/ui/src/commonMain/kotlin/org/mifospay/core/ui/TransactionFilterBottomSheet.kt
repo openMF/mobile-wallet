@@ -5,7 +5,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 package org.mifospay.core.ui
 
@@ -48,18 +48,18 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
-import mobile_wallet.core.ui.generated.resources.Res
-import mobile_wallet.core.ui.generated.resources.core_ui_account_balance
-import mobile_wallet.core.ui.generated.resources.core_ui_account_number
-import mobile_wallet.core.ui.generated.resources.core_ui_all
-import mobile_wallet.core.ui.generated.resources.core_ui_credits
-import mobile_wallet.core.ui.generated.resources.core_ui_debits
-import mobile_wallet.core.ui.generated.resources.core_ui_filter_apply
-import mobile_wallet.core.ui.generated.resources.core_ui_filter_by_account
-import mobile_wallet.core.ui.generated.resources.core_ui_filter_clear_all
-import mobile_wallet.core.ui.generated.resources.core_ui_filter_title
-import mobile_wallet.core.ui.generated.resources.core_ui_filter_transaction_type
-import mobile_wallet.core.ui.generated.resources.core_ui_select_account
+import kpt.core.ui.generated.resources.Res
+import kpt.core.ui.generated.resources.core_ui_account_balance
+import kpt.core.ui.generated.resources.core_ui_account_number
+import kpt.core.ui.generated.resources.core_ui_all
+import kpt.core.ui.generated.resources.core_ui_credits
+import kpt.core.ui.generated.resources.core_ui_debits
+import kpt.core.ui.generated.resources.core_ui_filter_apply
+import kpt.core.ui.generated.resources.core_ui_filter_by_account
+import kpt.core.ui.generated.resources.core_ui_filter_clear_all
+import kpt.core.ui.generated.resources.core_ui_filter_title
+import kpt.core.ui.generated.resources.core_ui_filter_transaction_type
+import kpt.core.ui.generated.resources.core_ui_select_account
 import org.jetbrains.compose.resources.stringResource
 import org.mifospay.core.designsystem.component.MifosBottomSheet
 import org.mifospay.core.designsystem.component.MifosButton

@@ -1,0 +1,9 @@
+{
+  "name": "sql-js-worker",
+  "version": "0.0.1",
+  "private": true,
+  "license": "MPL-2.0",
+  "dependencies": {
+    "sql.js": "1.14.0"
+  }
+}

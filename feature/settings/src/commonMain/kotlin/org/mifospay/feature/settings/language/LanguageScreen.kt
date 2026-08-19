@@ -5,7 +5,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 package org.mifospay.feature.settings.language
 
@@ -33,9 +33,9 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import mobile_wallet.feature.settings.generated.resources.Res
-import mobile_wallet.feature.settings.generated.resources.feature_settings_change_language_placeholder_text
-import mobile_wallet.feature.settings.generated.resources.feature_settings_change_language_text
+import mifos_pay.feature.settings.generated.resources.Res
+import mifos_pay.feature.settings.generated.resources.feature_settings_change_language_placeholder_text
+import mifos_pay.feature.settings.generated.resources.feature_settings_change_language_text
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.mifospay.core.model.user.Language

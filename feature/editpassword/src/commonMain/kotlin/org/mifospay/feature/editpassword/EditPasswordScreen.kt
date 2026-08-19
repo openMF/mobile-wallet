@@ -5,7 +5,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 package org.mifospay.feature.editpassword
 
@@ -31,12 +31,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.launch
-import mobile_wallet.feature.editpassword.generated.resources.Res
-import mobile_wallet.feature.editpassword.generated.resources.feature_editpassword_change_password
-import mobile_wallet.feature.editpassword.generated.resources.feature_editpassword_confirm_new_password
-import mobile_wallet.feature.editpassword.generated.resources.feature_editpassword_new_password
-import mobile_wallet.feature.editpassword.generated.resources.feature_editpassword_old_password
-import mobile_wallet.feature.editpassword.generated.resources.feature_editpassword_save
+import mifos_pay.feature.editpassword.generated.resources.Res
+import mifos_pay.feature.editpassword.generated.resources.feature_editpassword_change_password
+import mifos_pay.feature.editpassword.generated.resources.feature_editpassword_confirm_new_password
+import mifos_pay.feature.editpassword.generated.resources.feature_editpassword_new_password
+import mifos_pay.feature.editpassword.generated.resources.feature_editpassword_old_password
+import mifos_pay.feature.editpassword.generated.resources.feature_editpassword_save
+import org.jetbrains.compose.resources.getString
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.mifospay.core.designsystem.component.BasicDialogState
@@ -68,7 +69,7 @@ internal fun EditPasswordScreen(
             is EditPasswordEvent.OnLogoutUser -> onLogout.invoke()
             is EditPasswordEvent.ShowToast -> {
                 scope.launch {
-                    snackbarHostState.showSnackbar(event.message)
+                    snackbarHostState.showSnackbar(getString(event.message))
                 }
             }
         }

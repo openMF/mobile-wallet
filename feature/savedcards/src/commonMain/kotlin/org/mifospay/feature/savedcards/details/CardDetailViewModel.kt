@@ -5,7 +5,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 package org.mifospay.feature.savedcards.details
 
@@ -19,7 +19,7 @@ import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.serialization.Serializable
-import org.mifospay.core.common.DataState
+import org.mifospay.core.common.ScreenState
 import org.mifospay.core.common.getSerialized
 import org.mifospay.core.common.setSerialized
 import org.mifospay.core.data.repository.SavedCardRepository
@@ -50,10 +50,24 @@ internal class CardDetailViewModel(
     @OptIn(ExperimentalCoroutinesApi::class)
     val cartDetailState = repository.getSavedCard(state.clientId, state.cardId)
         .mapLatest { result ->
+            // Fold ScreenState → the existing 3-branch ViewState. Single-item
+            // detail flows shouldn't emit Empty (the endpoint returns Content or
+            // Error), but we defensively project it to Error so the UI still
+            // renders a message rather than sitting on Loading forever.
             when (result) {
-                is DataState.Loading -> ViewState.Loading
-                is DataState.Error -> ViewState.Error(result.exception.message.toString())
-                is DataState.Success -> ViewState.Content(result.data)
+                is ScreenState.Loading -> ViewState.Loading
+
+                is ScreenState.Empty -> ViewState.Error("Card not found.")
+
+                is ScreenState.Content -> ViewState.Content(result.data)
+
+                is ScreenState.Error -> ViewState.Error(result.error.message.toString())
+
+                is ScreenState.NoNetwork ->
+                    ViewState.Error("No network. Please check your connection.")
+
+                is ScreenState.Unauthenticated ->
+                    ViewState.Error("Session expired. Please log in again.")
             }
         }.stateIn(
             scope = viewModelScope,

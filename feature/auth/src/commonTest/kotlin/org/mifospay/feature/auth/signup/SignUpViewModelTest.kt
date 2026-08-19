@@ -5,29 +5,30 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 package org.mifospay.feature.auth.signup
 
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import dev.mokkery.answering.returns
+import dev.mokkery.every
 import dev.mokkery.everySuspend
 import dev.mokkery.matcher.any
-import dev.mokkery.matcher.eq
 import dev.mokkery.matcher.logical.or
-import dev.mokkery.matcher.varargs.anyVarargs
 import dev.mokkery.mock
+import dev.mokkery.verify
 import dev.mokkery.verifySuspend
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
-import org.mifospay.core.common.DataState
+import org.mifospay.core.common.ScreenState
 import org.mifospay.core.common.StringProvider
 import org.mifospay.core.data.repository.AssetRepository
 import org.mifospay.core.data.repository.ClientRepository
@@ -50,8 +51,13 @@ class SignUpViewModelTest {
     private val mockSearchRepository: SearchRepository = mock()
     private val mockClientRepository: ClientRepository = mock()
     private val mockAssetRepository: AssetRepository = mock()
+
+    // Stub StringProvider.get(...) for the two arities SignupViewModel actually calls — resource
+    // only (0 format args) and resource + one label (1 format arg) — using plain `any()` element
+    // matchers, avoiding Mokkery 3.4.2's deprecated generic vararg matchers (varargsAll/anyVarargs).
     private val mockStringProvider: StringProvider = mock<StringProvider> {
-        everySuspend { get(any(), anyVarargs<Any>()) } returns "Mock String"
+        everySuspend { get(any()) } returns "Mock String"
+        everySuspend { get(any(), any()) } returns "Mock String"
     }
 
     private lateinit var viewModel: SignupViewModel
@@ -70,13 +76,15 @@ class SignUpViewModelTest {
     fun setup() {
         Dispatchers.setMain(testDispatcher)
 
-        everySuspend { mockAssetRepository.getCountriesWithStates() } returns DataState.Success(
-            mapOf(
-                "Afghanistan" to listOf(
-                    "Badakhshān", "Baghlān", "Balkh", "Bādghīs", "Bāmyān",
-                ),
-                "Albania" to listOf(
-                    "Berat", "Dibër", "Durrës", "Elbasan", "Fier",
+        every { mockAssetRepository.getCountriesWithStates() } returns flowOf(
+            ScreenState.Content(
+                mapOf(
+                    "Afghanistan" to listOf(
+                        "Badakhshān", "Baghlān", "Balkh", "Bādghīs", "Bāmyān",
+                    ),
+                    "Albania" to listOf(
+                        "Berat", "Dibër", "Durrës", "Elbasan", "Fier",
+                    ),
                 ),
             ),
         )
@@ -242,7 +250,7 @@ class SignUpViewModelTest {
         advanceUntilIdle()
 
         // Verifies that getCountriesWithStates() was called exactly once during the process
-        verifySuspend { mockAssetRepository.getCountriesWithStates() }
+        verify { mockAssetRepository.getCountriesWithStates() }
 
         assertEquals(
             listOf("Badakhshān", "Baghlān", "Balkh", "Bādghīs", "Bāmyān"),
@@ -271,20 +279,20 @@ class SignUpViewModelTest {
                 any(),
                 any(),
             )
-        } returns DataState.Success(emptyList())
+        } returns emptyList()
         everySuspend {
             mockSearchRepository.searchResources(
                 "9876543210",
                 any(),
                 any(),
             )
-        } returns DataState.Success(emptyList())
+        } returns emptyList()
 
         // Mock user creation to return a user ID
-        everySuspend { mockUserRepository.createUser(any()) } returns DataState.Success(123)
+        everySuspend { mockUserRepository.createUser(any()) } returns 123
 
         // Mock client creation to return a client ID
-        everySuspend { mockClientRepository.createClient(any()) } returns DataState.Success(456)
+        everySuspend { mockClientRepository.createClient(any()) } returns 456
 
         // Mock assigning client to user to return success
         everySuspend {
@@ -292,7 +300,7 @@ class SignUpViewModelTest {
                 any(),
                 any(),
             )
-        } returns DataState.Success(Unit)
+        } returns Unit
 
         enterAllFields()
 
@@ -331,20 +339,20 @@ class SignUpViewModelTest {
          */
         everySuspend {
             mockSearchRepository.searchResources(
-                or(eq("john_doe"), eq("9876543210")),
+                or("john_doe", "9876543210"),
                 any(),
                 any(),
             )
-        } returns DataState.Success(emptyList())
+        } returns emptyList()
 
         // Mock user creation
-        everySuspend { mockUserRepository.createUser(any()) } returns DataState.Success(101)
+        everySuspend { mockUserRepository.createUser(any()) } returns 101
 
         // Mock client creation
-        everySuspend { mockClientRepository.createClient(any()) } returns DataState.Success(202)
+        everySuspend { mockClientRepository.createClient(any()) } returns 202
 
         // Mock client-user assignment
-        everySuspend { mockUserRepository.assignClientToUser(101, 202) } returns DataState.Success(Unit)
+        everySuspend { mockUserRepository.assignClientToUser(101, 202) } returns Unit
 
         enterAllFields()
 
@@ -402,12 +410,10 @@ class SignUpViewModelTest {
          */
         everySuspend {
             mockSearchRepository.searchResources(
-                or(eq("SameUserName"), eq("9876543210")), any(), any(),
+                or("SameUserName", "9876543210"), any(), any(),
             )
-        } returns DataState.Success(
-            listOf(
-                fakeSearchResult,
-            ),
+        } returns listOf(
+            fakeSearchResult,
         )
 
         enterAllFields()
@@ -447,14 +453,12 @@ class SignUpViewModelTest {
          */
         everySuspend {
             mockSearchRepository.searchResources(
-                query = or(eq("john_doe"), eq("1234567890")),
+                query = or("john_doe", "1234567890"),
                 resources = any(),
                 exactMatch = any(),
             )
-        } returns DataState.Success(
-            listOf(
-                fakeSearchResult,
-            ),
+        } returns listOf(
+            fakeSearchResult,
         )
 
         enterAllFields()
@@ -498,14 +502,12 @@ class SignUpViewModelTest {
              */
             everySuspend {
                 mockSearchRepository.searchResources(
-                    query = or(eq("SameUserName"), eq("1234567890")),
+                    query = or("SameUserName", "1234567890"),
                     any(),
                     any(),
                 )
-            } returns DataState.Success(
-                listOf(
-                    fakeSearchResult,
-                ),
+            } returns listOf(
+                fakeSearchResult,
             )
 
             enterAllFields()

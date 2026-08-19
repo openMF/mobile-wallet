@@ -1,0 +1,29 @@
+# app-profile/platforms/windows/app-content/age-rating.yaml — feeds Microsoft Partner Center
+# "Age ratings" step (IARC-powered questionnaire, same engine backing Google Play's rating).
+# Fork-owned SoT — syncForkConfig / the release readiness gate reads this file; it does not
+# itself submit to Partner Center.
+#
+# App Toolkit posture: 100% offline, no login, no account, no ads, no tracking, no UGC.
+
+questionnaire:
+  violence: NONE
+  sexual_content: NONE
+  profanity_or_crude_humor: NONE
+  controlled_substances: NONE
+  gambling: NONE
+  user_generated_content: false
+  location_sharing: false
+  digital_purchases: false
+  unrestricted_internet_access: false
+
+expected_ratings:
+  esrb: Everyone
+  pegi: 3
+  usk: 0
+  classind: L
+  acb: G
+  generic_iarc: 3+
+
+notes: >
+  No content triggers any IARC descriptor; expected outcome across every
+  regional rating board is the lowest tier ("Everyone" / "PEGI 3" / "3+").

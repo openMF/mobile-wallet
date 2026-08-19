@@ -5,23 +5,35 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 package org.mifospay.feature.merchants
 
 import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.ViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import org.mifospay.core.model.savingsaccount.Transaction
+import org.mifospay.core.ui.utils.BaseViewModel
 
 class MerchantTransferViewModel(
     private val savedStateHandle: SavedStateHandle,
-) : ViewModel() {
-    private val state = MutableStateFlow<MerchantTransferUiState>(MerchantTransferUiState.Empty)
-    val uiState: StateFlow<MerchantTransferUiState> = state.asStateFlow()
+) : BaseViewModel<MerchantTransferUiState, MerchantTransferEvent, MerchantTransferAction>(
+    initialState = MerchantTransferUiState.Empty,
+) {
+
+    /**
+     * Preserves the original public surface (`viewModel.uiState`) so the Screen
+     * compiles unchanged — aliased onto [BaseViewModel.stateFlow].
+     */
+    val uiState: StateFlow<MerchantTransferUiState> get() = stateFlow
+
+    // Stub feature: no backend, no user-driven actions today. The action stream
+    // stays empty until a merchant-transfer endpoint materializes.
+    override fun handleAction(action: MerchantTransferAction) = Unit
 }
+
+sealed interface MerchantTransferEvent
+
+sealed interface MerchantTransferAction
 
 sealed class MerchantTransferUiState {
     data object Loading : MerchantTransferUiState()

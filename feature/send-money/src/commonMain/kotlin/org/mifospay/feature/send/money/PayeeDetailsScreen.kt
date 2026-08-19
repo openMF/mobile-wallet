@@ -5,7 +5,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 package org.mifospay.feature.send.money
 
@@ -65,23 +65,23 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.times
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import mobile_wallet.feature.send_money.generated.resources.Res
-import mobile_wallet.feature.send_money.generated.resources.feature_send_money_add_bank_account
-import mobile_wallet.feature.send_money.generated.resources.feature_send_money_add_bank_account_desc
-import mobile_wallet.feature.send_money.generated.resources.feature_send_money_amount_below_minimum
-import mobile_wallet.feature.send_money.generated.resources.feature_send_money_amount_exceeds_limit
-import mobile_wallet.feature.send_money.generated.resources.feature_send_money_balance
-import mobile_wallet.feature.send_money.generated.resources.feature_send_money_bank_icon
-import mobile_wallet.feature.send_money.generated.resources.feature_send_money_change_account
-import mobile_wallet.feature.send_money.generated.resources.feature_send_money_check_now
-import mobile_wallet.feature.send_money.generated.resources.feature_send_money_choose_account
-import mobile_wallet.feature.send_money.generated.resources.feature_send_money_pay_amount
-import mobile_wallet.feature.send_money.generated.resources.feature_send_money_payee_details_title
-import mobile_wallet.feature.send_money.generated.resources.feature_send_money_payee_profile
-import mobile_wallet.feature.send_money.generated.resources.feature_send_money_paying
-import mobile_wallet.feature.send_money.generated.resources.feature_send_money_rupee_icon
-import mobile_wallet.feature.send_money.generated.resources.feature_send_money_selected
-import mobile_wallet.feature.send_money.generated.resources.feature_send_money_upi_id
+import mifos_pay.feature.send_money.generated.resources.Res
+import mifos_pay.feature.send_money.generated.resources.feature_send_money_add_bank_account
+import mifos_pay.feature.send_money.generated.resources.feature_send_money_add_bank_account_desc
+import mifos_pay.feature.send_money.generated.resources.feature_send_money_amount_below_minimum
+import mifos_pay.feature.send_money.generated.resources.feature_send_money_amount_exceeds_limit
+import mifos_pay.feature.send_money.generated.resources.feature_send_money_balance
+import mifos_pay.feature.send_money.generated.resources.feature_send_money_bank_icon
+import mifos_pay.feature.send_money.generated.resources.feature_send_money_change_account
+import mifos_pay.feature.send_money.generated.resources.feature_send_money_check_now
+import mifos_pay.feature.send_money.generated.resources.feature_send_money_choose_account
+import mifos_pay.feature.send_money.generated.resources.feature_send_money_pay_amount
+import mifos_pay.feature.send_money.generated.resources.feature_send_money_payee_details_title
+import mifos_pay.feature.send_money.generated.resources.feature_send_money_payee_profile
+import mifos_pay.feature.send_money.generated.resources.feature_send_money_paying
+import mifos_pay.feature.send_money.generated.resources.feature_send_money_rupee_icon
+import mifos_pay.feature.send_money.generated.resources.feature_send_money_selected
+import mifos_pay.feature.send_money.generated.resources.feature_send_money_upi_id
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel

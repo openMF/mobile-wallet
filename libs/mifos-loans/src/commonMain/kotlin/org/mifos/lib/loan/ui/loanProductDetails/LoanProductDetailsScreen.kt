@@ -5,7 +5,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 package org.mifos.lib.loan.ui.loanProductDetails
 
@@ -23,33 +23,33 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import mobile_wallet.libs.mifos_loans.generated.resources.Res
-import mobile_wallet.libs.mifos_loans.generated.resources.feature_apply_loan_title
-import mobile_wallet.libs.mifos_loans.generated.resources.feature_loan_amendments_and_termination
-import mobile_wallet.libs.mifos_loans.generated.resources.feature_loan_apply_loan
-import mobile_wallet.libs.mifos_loans.generated.resources.feature_loan_continue_legal_compliance
-import mobile_wallet.libs.mifos_loans.generated.resources.feature_loan_default
-import mobile_wallet.libs.mifos_loans.generated.resources.feature_loan_documentation
-import mobile_wallet.libs.mifos_loans.generated.resources.feature_loan_get_loan
-import mobile_wallet.libs.mifos_loans.generated.resources.feature_loan_insurance
-import mobile_wallet.libs.mifos_loans.generated.resources.feature_loan_interest_rate
-import mobile_wallet.libs.mifos_loans.generated.resources.feature_loan_interest_rate_in_numbers
-import mobile_wallet.libs.mifos_loans.generated.resources.feature_loan_jurisdiction
-import mobile_wallet.libs.mifos_loans.generated.resources.feature_loan_repayment
-import mobile_wallet.libs.mifos_loans.generated.resources.feature_loan_sanction_and_disbursement
-import mobile_wallet.libs.mifos_loans.generated.resources.feature_loan_security_and_collateral
-import mobile_wallet.libs.mifos_loans.generated.resources.feature_loan_terms_and_conditions
-import mobile_wallet.libs.mifos_loans.generated.resources.feature_loan_up_to
-import mobile_wallet.libs.mifos_loans.generated.resources.feature_personal_loan_amendments_and_termination_details
-import mobile_wallet.libs.mifos_loans.generated.resources.feature_personal_loan_continue_legal_compliance_details
-import mobile_wallet.libs.mifos_loans.generated.resources.feature_personal_loan_default_details
-import mobile_wallet.libs.mifos_loans.generated.resources.feature_personal_loan_documentation_details
-import mobile_wallet.libs.mifos_loans.generated.resources.feature_personal_loan_insurance_details
-import mobile_wallet.libs.mifos_loans.generated.resources.feature_personal_loan_interest_rate_description
-import mobile_wallet.libs.mifos_loans.generated.resources.feature_personal_loan_jurisdiction_details
-import mobile_wallet.libs.mifos_loans.generated.resources.feature_personal_loan_repayment_details
-import mobile_wallet.libs.mifos_loans.generated.resources.feature_personal_loan_sanction_and_disbursement_details
-import mobile_wallet.libs.mifos_loans.generated.resources.feature_personal_loan_security_and_collateral_details
+import mifos_pay.libs.mifos_loans.generated.resources.Res
+import mifos_pay.libs.mifos_loans.generated.resources.feature_apply_loan_title
+import mifos_pay.libs.mifos_loans.generated.resources.feature_loan_amendments_and_termination
+import mifos_pay.libs.mifos_loans.generated.resources.feature_loan_apply_loan
+import mifos_pay.libs.mifos_loans.generated.resources.feature_loan_continue_legal_compliance
+import mifos_pay.libs.mifos_loans.generated.resources.feature_loan_default
+import mifos_pay.libs.mifos_loans.generated.resources.feature_loan_documentation
+import mifos_pay.libs.mifos_loans.generated.resources.feature_loan_get_loan
+import mifos_pay.libs.mifos_loans.generated.resources.feature_loan_insurance
+import mifos_pay.libs.mifos_loans.generated.resources.feature_loan_interest_rate
+import mifos_pay.libs.mifos_loans.generated.resources.feature_loan_interest_rate_in_numbers
+import mifos_pay.libs.mifos_loans.generated.resources.feature_loan_jurisdiction
+import mifos_pay.libs.mifos_loans.generated.resources.feature_loan_repayment
+import mifos_pay.libs.mifos_loans.generated.resources.feature_loan_sanction_and_disbursement
+import mifos_pay.libs.mifos_loans.generated.resources.feature_loan_security_and_collateral
+import mifos_pay.libs.mifos_loans.generated.resources.feature_loan_terms_and_conditions
+import mifos_pay.libs.mifos_loans.generated.resources.feature_loan_up_to
+import mifos_pay.libs.mifos_loans.generated.resources.feature_personal_loan_amendments_and_termination_details
+import mifos_pay.libs.mifos_loans.generated.resources.feature_personal_loan_continue_legal_compliance_details
+import mifos_pay.libs.mifos_loans.generated.resources.feature_personal_loan_default_details
+import mifos_pay.libs.mifos_loans.generated.resources.feature_personal_loan_documentation_details
+import mifos_pay.libs.mifos_loans.generated.resources.feature_personal_loan_insurance_details
+import mifos_pay.libs.mifos_loans.generated.resources.feature_personal_loan_interest_rate_description
+import mifos_pay.libs.mifos_loans.generated.resources.feature_personal_loan_jurisdiction_details
+import mifos_pay.libs.mifos_loans.generated.resources.feature_personal_loan_repayment_details
+import mifos_pay.libs.mifos_loans.generated.resources.feature_personal_loan_sanction_and_disbursement_details
+import mifos_pay.libs.mifos_loans.generated.resources.feature_personal_loan_security_and_collateral_details
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.mifos.lib.loan.component.ApplyLoanBottomBar

@@ -1,0 +1,30 @@
+# ═════════════════════════════════════════════════════════════════════════════
+# deployment/Fastfile — CANONICAL IMPORT DELEGATOR
+#
+# Contract (RULE-DEPLOYMENT-MANIFEST-001): this file contains ONLY Fastlane
+# `import` directives. NO lane definitions, NO helpers, NO platform blocks.
+# Per-target lane bodies live at deployment/<platform>/<target>/lane.rb.
+#
+# Entry point (local): (cd deployment && bundle exec fastlane <platform> <lane>)
+#   Uses deployment/fastlane/Fastfile which re-anchors cwd to repo root.
+#   NOTE: --fastlane-dir flag does NOT exist in Fastlane 2.235.0 (doc bug).
+# Entry point (CI): invoked via workflow-snippet.yml with env vars injected.
+# ═════════════════════════════════════════════════════════════════════════════
+
+# ── Shared config: FastlaneConfig module + global helpers ────────────────────
+# Must be imported FIRST so FastlaneConfig constants and helper methods
+# (sanitize_options, generateReleaseNote, buildAndSignApp, …) are in scope
+# before any lane.rb is imported.
+import "_shared/config.rb"
+
+# ── Materialize app-profile SoT → deployment/**/metadata before any lane (CI entry) ──
+# deployment/**/metadata is DERIVED (owner:generated, gitignored); regenerate from app-profile first.
+import "_shared/before_all.rb"
+
+# ── Intrinsic drift-checked store-listing sync (every store deploy lane calls it) ────
+# So a listing change reaches the store on ANY deploy state — incl. Play promotions — not just a
+# fresh build or a /idea-deploy-orchestrated run. See deployment/_shared/listing_sync.rb.
+import "_shared/listing_sync.rb"
+
+# ── Per-target lane imports ───────────────────────────────────────────────────
+Dir["./*/**/lane.rb"].each { |f| import f }

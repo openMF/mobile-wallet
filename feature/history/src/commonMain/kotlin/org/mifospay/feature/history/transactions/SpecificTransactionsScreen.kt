@@ -5,7 +5,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 package org.mifospay.feature.history.transactions
 
@@ -28,23 +28,25 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import mobile_wallet.feature.history.generated.resources.Res
-import mobile_wallet.feature.history.generated.resources.feature_history_account_number_alter
-import mobile_wallet.feature.history.generated.resources.feature_history_amount
-import mobile_wallet.feature.history.generated.resources.feature_history_currency
-import mobile_wallet.feature.history.generated.resources.feature_history_error
-import mobile_wallet.feature.history.generated.resources.feature_history_error_oops
-import mobile_wallet.feature.history.generated.resources.feature_history_note
-import mobile_wallet.feature.history.generated.resources.feature_history_specific_transactions_history
-import mobile_wallet.feature.history.generated.resources.feature_history_transaction_date
-import mobile_wallet.feature.history.generated.resources.feature_history_transaction_details
-import mobile_wallet.feature.history.generated.resources.feature_history_transaction_id
-import mobile_wallet.feature.history.generated.resources.feature_history_transaction_type
-import mobile_wallet.feature.history.generated.resources.feature_history_transferred_from
-import mobile_wallet.feature.history.generated.resources.feature_history_transferred_to
+import mifos_pay.feature.history.generated.resources.Res
+import mifos_pay.feature.history.generated.resources.feature_history_account_number_alter
+import mifos_pay.feature.history.generated.resources.feature_history_amount
+import mifos_pay.feature.history.generated.resources.feature_history_currency
+import mifos_pay.feature.history.generated.resources.feature_history_error
+import mifos_pay.feature.history.generated.resources.feature_history_error_oops
+import mifos_pay.feature.history.generated.resources.feature_history_note
+import mifos_pay.feature.history.generated.resources.feature_history_specific_transactions_history
+import mifos_pay.feature.history.generated.resources.feature_history_transaction_date
+import mifos_pay.feature.history.generated.resources.feature_history_transaction_details
+import mifos_pay.feature.history.generated.resources.feature_history_transaction_id
+import mifos_pay.feature.history.generated.resources.feature_history_transaction_type
+import mifos_pay.feature.history.generated.resources.feature_history_transferred_from
+import mifos_pay.feature.history.generated.resources.feature_history_transferred_to
+import mifos_pay.feature.history.generated.resources.feature_history_view_Receipt
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.mifospay.core.common.CurrencyFormatter
+import org.mifospay.core.designsystem.component.MifosButton
 import org.mifospay.core.designsystem.component.MifosScaffold
 import org.mifospay.core.model.savingsaccount.Transaction
 import org.mifospay.core.ui.ErrorScreenContent
@@ -129,6 +131,7 @@ private fun TransactionDetails(
         transaction.transfer != null -> {
             TransferTransactionDetails(
                 transaction = transaction,
+                onAction = onAction,
                 modifier = modifier,
             )
         }
@@ -145,6 +148,7 @@ private fun TransactionDetails(
 @Composable
 private fun TransferTransactionDetails(
     transaction: Transaction,
+    onAction: (STAction.ViewTransaction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -195,6 +199,22 @@ private fun TransferTransactionDetails(
             label = stringResource(Res.string.feature_history_note),
             value = transaction.transfer?.transferDescription ?: "-",
         )
+
+        // Was declared (feature_history_view_Receipt) but never wired to any action —
+        // this closes the loop to the real Receipt card, which reads off the same
+        // transferId-keyed TransferDetail Store5 vertical (see
+        // sub-plans/RECEIPT_DATA_SOURCE.md). Only shown when a transferId exists —
+        // regular (non-transfer) transactions have no receipt to view.
+        transaction.transferId?.let { transferId ->
+            MifosButton(
+                onClick = { onAction(STAction.ViewTransaction(transferId)) },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = KptTheme.spacing.md),
+            ) {
+                Text(text = stringResource(Res.string.feature_history_view_Receipt))
+            }
+        }
     }
 }
 

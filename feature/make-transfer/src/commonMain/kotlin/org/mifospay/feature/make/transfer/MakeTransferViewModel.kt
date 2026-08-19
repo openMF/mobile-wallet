@@ -5,7 +5,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See https://github.com/openMF/mifos-pay/blob/master/LICENSE.md
  */
 package org.mifospay.feature.make.transfer
 
@@ -18,20 +18,21 @@ import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
-import mobile_wallet.feature.make_transfer.generated.resources.Res
-import mobile_wallet.feature.make_transfer.generated.resources.feature_make_transfer_error_empty_amount
-import mobile_wallet.feature.make_transfer.generated.resources.feature_make_transfer_error_empty_description
-import mobile_wallet.feature.make_transfer.generated.resources.feature_make_transfer_error_inactive_account
-import mobile_wallet.feature.make_transfer.generated.resources.feature_make_transfer_error_insufficient_balance
-import mobile_wallet.feature.make_transfer.generated.resources.feature_make_transfer_error_invalid_amount
-import mobile_wallet.feature.make_transfer.generated.resources.feature_make_transfer_error_same_account
-import mobile_wallet.feature.make_transfer.generated.resources.feature_make_transfer_error_select_account
+import kpt.core.base.store.submit.SubmitState
+import kpt.core.base.store.submit.submitHandler
+import mifos_pay.feature.make_transfer.generated.resources.Res
+import mifos_pay.feature.make_transfer.generated.resources.feature_make_transfer_error_empty_amount
+import mifos_pay.feature.make_transfer.generated.resources.feature_make_transfer_error_empty_description
+import mifos_pay.feature.make_transfer.generated.resources.feature_make_transfer_error_inactive_account
+import mifos_pay.feature.make_transfer.generated.resources.feature_make_transfer_error_insufficient_balance
+import mifos_pay.feature.make_transfer.generated.resources.feature_make_transfer_error_invalid_amount
+import mifos_pay.feature.make_transfer.generated.resources.feature_make_transfer_error_same_account
+import mifos_pay.feature.make_transfer.generated.resources.feature_make_transfer_error_select_account
 import org.jetbrains.compose.resources.StringResource
-import org.mifospay.core.common.DataState
 import org.mifospay.core.common.DateHelper
+import org.mifospay.core.common.ScreenState
 import org.mifospay.core.common.getSerialized
 import org.mifospay.core.common.setSerialized
 import org.mifospay.core.common.utils.capitalizeWords
@@ -42,7 +43,6 @@ import org.mifospay.core.model.account.Account
 import org.mifospay.core.model.account.AccountTransferPayload
 import org.mifospay.core.model.utils.PaymentQrData
 import org.mifospay.core.ui.utils.BaseViewModel
-import org.mifospay.feature.make.transfer.MakeTransferAction.Internal.HandleTransferResult
 import org.mifospay.feature.make.transfer.MakeTransferState.DialogState.Error
 import org.mifospay.feature.make.transfer.navigation.TRANSFER_ARG
 
@@ -69,21 +69,37 @@ internal class MakeTransferViewModel(
         private const val KEY_STATE = "make_transfer_state"
     }
 
+    // Phase-3 fold: `getSelfAccounts` was migrated to `Flow<ScreenState<List<Account>>>`;
+    // fold the 6-branch ScreenState into the existing 4-branch ViewState.
+    // Content(emptyList) is defensively mapped to Empty (repo already emits
+    // ScreenState.Empty for empty responses, but the guard preserves prior
+    // behavior). NoNetwork / Unauthenticated fold into Error until Phase-4
+    // differentiates.
     @OptIn(ExperimentalCoroutinesApi::class)
     val accountsState = accountRepository.getSelfAccounts(state.fromClientId)
         .mapLatest { result ->
             when (result) {
-                is DataState.Loading -> ViewState.Loading
-                is DataState.Error -> ViewState.Error(result.message)
-                is DataState.Success -> {
+                is ScreenState.Loading -> ViewState.Loading
+                is ScreenState.Empty -> ViewState.Empty
+                is ScreenState.Content -> {
                     if (result.data.isEmpty()) {
                         ViewState.Empty
                     } else {
-                        val account = result.data.first { it.id == state.defaultAccountId }
+                        val account = result.data.firstOrNull { it.id == state.defaultAccountId }
+                            ?: result.data.first()
                         sendAction(MakeTransferAction.SelectAccount(account))
                         ViewState.Content(result.data)
                     }
                 }
+                is ScreenState.Error -> ViewState.Error(
+                    result.error.message ?: "Failed to load accounts",
+                )
+                is ScreenState.NoNetwork -> ViewState.Error(
+                    "No network. Please check your connection.",
+                )
+                is ScreenState.Unauthenticated -> ViewState.Error(
+                    "Session expired. Please log in again.",
+                )
             }
         }.stateIn(
             scope = viewModelScope,
@@ -91,7 +107,48 @@ internal class MakeTransferViewModel(
             initialValue = ViewState.Loading,
         )
 
+    // Template idiom (core-base/store): the money-movement transfer write goes through a
+    // SubmitHandler instead of a hand-folded DataState result action. The handler owns the
+    // Submitting/Submitted/Failed lifecycle (and is idempotent while Submitting — this is the
+    // double-submit guard for the transfer); we observe it to drive this screen's EXISTING
+    // Loading dialog / error dialog / OnTransferSuccess navigation, so the Screen is unchanged.
+    private val submitTransfer = viewModelScope.submitHandler<Unit>()
+
     init {
+        submitTransfer.state
+            .onEach { submitState ->
+                when (submitState) {
+                    is SubmitState.Submitting -> {
+                        mutableStateFlow.update {
+                            it.copy(dialogState = MakeTransferState.DialogState.Loading)
+                        }
+                    }
+
+                    is SubmitState.Submitted -> {
+                        mutableStateFlow.update { it.copy(dialogState = null) }
+                        sendEvent(MakeTransferEvent.OnTransferSuccess)
+                        submitTransfer.reset()
+                    }
+
+                    is SubmitState.Failed -> {
+                        // Preserve the exact prior error UX: DataState.Error.message was
+                        // `exception.message.toString()`; the submit block throws that same
+                        // exception, so this reproduces the identical dialog string.
+                        mutableStateFlow.update {
+                            it.copy(
+                                dialogState = Error.StringMessage(
+                                    submitState.error.message.toString(),
+                                ),
+                            )
+                        }
+                        submitTransfer.reset()
+                    }
+
+                    SubmitState.Idle -> Unit
+                }
+            }
+            .launchIn(viewModelScope)
+
         stateFlow
             .onEach { savedStateHandle.setSerialized(key = KEY_STATE, value = it) }
             .launchIn(viewModelScope)
@@ -128,8 +185,6 @@ internal class MakeTransferViewModel(
             }
 
             is MakeTransferAction.InitiateTransfer -> validateTransfer()
-
-            is HandleTransferResult -> handleTransferResult(action)
         }
     }
 
@@ -158,38 +213,15 @@ internal class MakeTransferViewModel(
     }
 
     private fun initiateTransfer() {
+        // Show the loading dialog immediately (mirrors prior UX); the handler's Submitting
+        // state re-affirms it. Submit is idempotent while Submitting, so a rapid second tap
+        // cannot launch a second transfer.
         mutableStateFlow.update {
             it.copy(dialogState = MakeTransferState.DialogState.Loading)
         }
 
-        viewModelScope.launch {
-            val result = accountRepository.makeTransfer(state.transferPayload)
-
-            sendAction(HandleTransferResult(result))
-        }
-    }
-
-    private fun handleTransferResult(action: HandleTransferResult) {
-        when (action.result) {
-            is DataState.Loading -> {
-                mutableStateFlow.update {
-                    it.copy(dialogState = MakeTransferState.DialogState.Loading)
-                }
-            }
-
-            is DataState.Error -> {
-                mutableStateFlow.update {
-                    it.copy(dialogState = Error.StringMessage(action.result.message))
-                }
-            }
-
-            is DataState.Success -> {
-                mutableStateFlow.update {
-                    it.copy(dialogState = null)
-                }
-
-                sendEvent(MakeTransferEvent.OnTransferSuccess)
-            }
+        submitTransfer.submit {
+            accountRepository.makeTransfer(state.transferPayload)
         }
     }
 
@@ -267,8 +299,4 @@ internal sealed interface MakeTransferAction {
     data class DescriptionChanged(val desc: String) : MakeTransferAction
 
     data class SelectAccount(val account: Account) : MakeTransferAction
-
-    sealed interface Internal : MakeTransferAction {
-        data class HandleTransferResult(val result: DataState<String>) : Internal
-    }
 }

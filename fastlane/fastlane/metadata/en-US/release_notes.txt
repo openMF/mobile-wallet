@@ -1,2 +1,0 @@
-fix(fastlane): sync ios_config.rb with kmp-project-template (#1961)
-Co-authored-by: Claude Opus 4.5 <noreply@anthropic.com>

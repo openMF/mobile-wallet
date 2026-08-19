@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <!-- Required for Mac App Store -->
+    <key>com.apple.security.app-sandbox</key>
+    <true/>
+    <!-- Network access for FRED, World Bank, currency rate APIs -->
+    <key>com.apple.security.network.client</key>
+    <true/>
+    <!-- Read-only access to user's files (for export features) -->
+    <key>com.apple.security.files.user-selected.read-only</key>
+    <true/>
+    <!-- Application identifier required by TestFlight / Mac App Store provisioning profile -->
+    <key>com.apple.application-identifier</key>
+    <string>L432S2FZP5.org.mifos.kmp.template</string>
+    <!-- Team identifier required alongside application-identifier -->
+    <key>com.apple.developer.team-identifier</key>
+    <string>L432S2FZP5</string>
+</dict>
+</plist>

@@ -5,7 +5,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 package org.mifospay.feature.history
 
@@ -37,15 +37,15 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.launch
-import mobile_wallet.feature.history.generated.resources.Res
-import mobile_wallet.feature.history.generated.resources.feature_history_empty
-import mobile_wallet.feature.history.generated.resources.feature_history_empty_filter
-import mobile_wallet.feature.history.generated.resources.feature_history_error_oops
-import mobile_wallet.feature.history.generated.resources.feature_history_filter_content_desc
-import mobile_wallet.feature.history.generated.resources.feature_history_header_account
-import mobile_wallet.feature.history.generated.resources.feature_history_header_all
-import mobile_wallet.feature.history.generated.resources.feature_history_header_credit
-import mobile_wallet.feature.history.generated.resources.feature_history_header_debit
+import mifos_pay.feature.history.generated.resources.Res
+import mifos_pay.feature.history.generated.resources.feature_history_empty
+import mifos_pay.feature.history.generated.resources.feature_history_empty_filter
+import mifos_pay.feature.history.generated.resources.feature_history_error_oops
+import mifos_pay.feature.history.generated.resources.feature_history_filter_content_desc
+import mifos_pay.feature.history.generated.resources.feature_history_header_account
+import mifos_pay.feature.history.generated.resources.feature_history_header_all
+import mifos_pay.feature.history.generated.resources.feature_history_header_credit
+import mifos_pay.feature.history.generated.resources.feature_history_header_debit
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.mifospay.core.designsystem.component.MifosScaffold

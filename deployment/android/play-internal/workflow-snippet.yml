@@ -1,0 +1,31 @@
+# deployment/android/play-internal/workflow-snippet.yml
+# Reusable GHA snippet for Android → Play Store internal track upload.
+name: android-play-internal-deploy
+on:
+  workflow_call:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with: { bundler-cache: true }
+
+      - name: Materialize secrets (vault-mode)
+        if: ${{ secrets.SOPS_AGE_KEY != '' }}
+        env:
+          SOPS_AGE_KEY: ${{ secrets.SOPS_AGE_KEY }}
+        run: bash deployment/_shared/scripts/secrets-pull.sh --required-for android-signing,android-play-internal-publish
+
+      - name: Materialize secrets (manual-mode)
+        if: ${{ secrets.SOPS_AGE_KEY == '' }}
+        run: |
+          mkdir -p secrets keystores
+          echo "${{ secrets.ANDROID_RELEASE_KEYSTORE_B64 }}" | base64 -d > keystores/upload_keystore.keystore
+          echo '${{ secrets.PLAYSTORE_PUBLISHER_JSON }}' > secrets/live/android/playStorePublishServiceCredentialsFile.json
+
+      - name: Deploy to Play internal
+        run: bundle exec fastlane android deployInternal

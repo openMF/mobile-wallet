@@ -5,7 +5,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 package org.mifospay.feature.transfer.intrabank.hub
 
@@ -17,10 +17,11 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
-import org.mifospay.core.common.DataState
+import org.mifospay.core.common.ScreenState
 import org.mifospay.core.data.repository.RecentPayeeRepository
 import org.mifospay.core.data.repository.SelfServiceRepository
 import org.mifospay.core.data.repository.ThirdPartyTransferRepository
+import org.mifospay.core.data.util.toForkScreenStateFlow
 import org.mifospay.core.datastore.UserPreferencesRepository
 import org.mifospay.core.model.account.RecentPayee
 import org.mifospay.core.model.beneficiary.Beneficiary
@@ -144,20 +145,36 @@ class IntraBankHubViewModel(
 
         Logger.d { "RecentPayee: Loading recent payees for account $accountId" }
 
-        recentPayeeRepository.getRecentPayees(accountId, RECENT_PAYEES_LIMIT)
-            .onEach { result ->
-                when (result) {
-                    is DataState.Loading -> {
+        // Phase-5 Batch-4: reads come through the store-native
+        // `getRecentPayeesScreen(accountId, limit, scope): Flow<ScreenState<...>>`
+        // — sourced from the Room-backed `wallet_recent_payees` cache
+        // (offline-first); a background derive kick refreshes the cache on every
+        // subscription.
+        recentPayeeRepository
+            .getRecentPayeesScreen(accountId, RECENT_PAYEES_LIMIT, viewModelScope)
+            .onEach { screenState ->
+                when (screenState) {
+                    is ScreenState.Loading -> {
                         mutableStateFlow.update {
                             it.copy(recentPayeesState = RecentPayeesState.Loading)
                         }
                     }
-                    is DataState.Success -> {
-                        Logger.d { "RecentPayee: Loaded ${result.data.size} recent payees" }
+
+                    is ScreenState.Empty -> {
                         mutableStateFlow.update {
                             it.copy(
-                                recentPayees = result.data,
-                                recentPayeesState = if (result.data.isEmpty()) {
+                                recentPayees = emptyList(),
+                                recentPayeesState = RecentPayeesState.Empty,
+                            )
+                        }
+                    }
+
+                    is ScreenState.Content -> {
+                        Logger.d { "RecentPayee: Loaded ${screenState.data.size} recent payees" }
+                        mutableStateFlow.update {
+                            it.copy(
+                                recentPayees = screenState.data,
+                                recentPayeesState = if (screenState.data.isEmpty()) {
                                     RecentPayeesState.Empty
                                 } else {
                                     RecentPayeesState.Success
@@ -165,8 +182,17 @@ class IntraBankHubViewModel(
                             )
                         }
                     }
-                    is DataState.Error -> {
-                        Logger.e(result.exception) { "RecentPayee: Failed to load" }
+
+                    is ScreenState.Error -> {
+                        Logger.e(screenState.error) { "RecentPayee: Failed to load" }
+                        mutableStateFlow.update {
+                            it.copy(recentPayeesState = RecentPayeesState.Error)
+                        }
+                    }
+
+                    is ScreenState.NoNetwork,
+                    is ScreenState.Unauthenticated,
+                    -> {
                         mutableStateFlow.update {
                             it.copy(recentPayeesState = RecentPayeesState.Error)
                         }
@@ -177,21 +203,35 @@ class IntraBankHubViewModel(
     }
 
     private fun loadBeneficiaries() {
+        val clientId = userPreferencesRepository.client.value?.id ?: return
         viewModelScope.launch {
-            selfServiceRepository.getBeneficiaryList()
-                .onEach { result ->
-                    when (result) {
-                        is DataState.Loading -> {
+            // Offline-first: read beneficiaries through the Store5 beneficiary store
+            // (Room SoT + CACHE_FIRST_SWR) so the cached list renders offline.
+            selfServiceRepository.getBeneficiaryListStream(clientId, viewModelScope)
+                .state.toForkScreenStateFlow()
+                .onEach { screenState ->
+                    when (screenState) {
+                        is ScreenState.Loading -> {
                             mutableStateFlow.update {
                                 it.copy(beneficiariesState = BeneficiariesState.Loading)
                             }
                         }
-                        is DataState.Success -> {
-                            Logger.d { "Beneficiaries: Loaded ${result.data.size} beneficiaries" }
+
+                        is ScreenState.Empty -> {
                             mutableStateFlow.update {
                                 it.copy(
-                                    beneficiaries = result.data,
-                                    beneficiariesState = if (result.data.isEmpty()) {
+                                    beneficiaries = emptyList(),
+                                    beneficiariesState = BeneficiariesState.Empty,
+                                )
+                            }
+                        }
+
+                        is ScreenState.Content -> {
+                            Logger.d { "Beneficiaries: Loaded ${screenState.data.size} beneficiaries" }
+                            mutableStateFlow.update {
+                                it.copy(
+                                    beneficiaries = screenState.data,
+                                    beneficiariesState = if (screenState.data.isEmpty()) {
                                         BeneficiariesState.Empty
                                     } else {
                                         BeneficiariesState.Success
@@ -199,8 +239,17 @@ class IntraBankHubViewModel(
                                 )
                             }
                         }
-                        is DataState.Error -> {
-                            Logger.e(result.exception) { "Beneficiaries: Failed to load" }
+
+                        is ScreenState.Error -> {
+                            Logger.e(screenState.error) { "Beneficiaries: Failed to load" }
+                            mutableStateFlow.update {
+                                it.copy(beneficiariesState = BeneficiariesState.Error)
+                            }
+                        }
+
+                        is ScreenState.NoNetwork,
+                        is ScreenState.Unauthenticated,
+                        -> {
                             mutableStateFlow.update {
                                 it.copy(beneficiariesState = BeneficiariesState.Error)
                             }

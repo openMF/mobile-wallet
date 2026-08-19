@@ -5,7 +5,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 package org.mifospay.shared
 
@@ -42,6 +42,23 @@ import kotlin.time.Duration.Companion.seconds
 import kotlin.time.ExperimentalTime
 import kotlin.time.TimeSource
 
+// TODO(phase-2-nav): DELETE this file's `MifosPayApp` (and consider deleting
+// `MifosPaySharedApp` + `MifosPayViewModel`'s app-shell responsibilities) once
+// the legacy entry points that still call `MifosPaySharedApp` migrate to the
+// template-shape `cmp.shared.SharedApp` (Phase 2 T2 nav-extensions migration).
+// The four shell-security behaviors this file owns (background re-auth lock,
+// 401 forced-logout dialog, start-destination, biometric provider) are
+// RE-HOMED as of Phase 2 T4 onto:
+//   * cmp/navigation/AppViewModel.kt           (state + timer + emit events)
+//   * cmp/navigation/ComposeApp.kt             (composes the three gates)
+//   * cmp/navigation/security/AppLockGate.kt   (thin lifecycle observer)
+//   * cmp/navigation/security/UnauthorizedDialogGate.kt
+//   * cmp/navigation/security/PlatformAuthenticatorGate.kt
+//   * cmp/navigation/rootnav/RootNavViewModel.kt (start-destination — already wired)
+// This file continues to exist because `org.mifospay.MainActivity` (legacy
+// Android entry) + `cmp-desktop/desktopMain/main.kt` + the native/iOS
+// ViewControllers still setContent { MifosPaySharedApp(...) }. Retiring THOSE
+// entry points belongs to the next chunk.
 /**
  * Top-level entry point composable for the Mifos Pay app, called from each
  * platform's `setContent` (Android `MainActivity`, desktop `main.kt`, iOS

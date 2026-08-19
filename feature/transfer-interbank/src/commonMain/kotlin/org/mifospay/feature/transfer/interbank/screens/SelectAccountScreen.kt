@@ -5,7 +5,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 package org.mifospay.feature.transfer.interbank.screens
 
@@ -30,17 +30,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import mobile_wallet.feature.transfer_interbank.generated.resources.Res
-import mobile_wallet.feature.transfer_interbank.generated.resources.feature_send_interbank_account
-import mobile_wallet.feature.transfer_interbank.generated.resources.feature_send_interbank_account_type
-import mobile_wallet.feature.transfer_interbank.generated.resources.feature_send_interbank_balance
-import mobile_wallet.feature.transfer_interbank.generated.resources.feature_send_interbank_choose_account_to_send
-import mobile_wallet.feature.transfer_interbank.generated.resources.feature_send_interbank_no_accounts
-import mobile_wallet.feature.transfer_interbank.generated.resources.feature_send_interbank_no_accounts_available
-import mobile_wallet.feature.transfer_interbank.generated.resources.feature_send_interbank_office
-import mobile_wallet.feature.transfer_interbank.generated.resources.feature_send_interbank_oops
-import mobile_wallet.feature.transfer_interbank.generated.resources.feature_send_interbank_select_account
-import mobile_wallet.feature.transfer_interbank.generated.resources.feature_send_interbank_select_your_account
+import mifos_pay.feature.transfer_interbank.generated.resources.Res
+import mifos_pay.feature.transfer_interbank.generated.resources.feature_send_interbank_account
+import mifos_pay.feature.transfer_interbank.generated.resources.feature_send_interbank_account_type
+import mifos_pay.feature.transfer_interbank.generated.resources.feature_send_interbank_balance
+import mifos_pay.feature.transfer_interbank.generated.resources.feature_send_interbank_choose_account_to_send
+import mifos_pay.feature.transfer_interbank.generated.resources.feature_send_interbank_no_accounts
+import mifos_pay.feature.transfer_interbank.generated.resources.feature_send_interbank_no_accounts_available
+import mifos_pay.feature.transfer_interbank.generated.resources.feature_send_interbank_office
+import mifos_pay.feature.transfer_interbank.generated.resources.feature_send_interbank_oops
+import mifos_pay.feature.transfer_interbank.generated.resources.feature_send_interbank_select_account
+import mifos_pay.feature.transfer_interbank.generated.resources.feature_send_interbank_select_your_account
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.mifospay.core.common.CurrencyFormatter

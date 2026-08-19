@@ -5,7 +5,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 package org.mifospay.feature.mpay.qr
 
@@ -47,15 +47,15 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import io.github.alexzhirkevich.qrose.ImageFormat
 import io.github.alexzhirkevich.qrose.rememberQrCodePainter
 import io.github.alexzhirkevich.qrose.toByteArray
-import mobile_wallet.feature.mpay_qr.generated.resources.Res
-import mobile_wallet.feature.mpay_qr.generated.resources.feature_mpay_qr_copied
-import mobile_wallet.feature.mpay_qr.generated.resources.feature_mpay_qr_downloaded
-import mobile_wallet.feature.mpay_qr.generated.resources.feature_mpay_qr_external_id_required
-import mobile_wallet.feature.mpay_qr.generated.resources.feature_mpay_qr_go_back
-import mobile_wallet.feature.mpay_qr.generated.resources.feature_mpay_qr_receive_money
-import mobile_wallet.feature.mpay_qr.generated.resources.feature_mpay_qr_scan_to_pay
-import mobile_wallet.feature.mpay_qr.generated.resources.feature_mpay_qr_unable_to_generate
-import mobile_wallet.feature.mpay_qr.generated.resources.feature_request_money_set_amount
+import mifos_pay.feature.mpay_qr.generated.resources.Res
+import mifos_pay.feature.mpay_qr.generated.resources.feature_mpay_qr_copied
+import mifos_pay.feature.mpay_qr.generated.resources.feature_mpay_qr_downloaded
+import mifos_pay.feature.mpay_qr.generated.resources.feature_mpay_qr_external_id_required
+import mifos_pay.feature.mpay_qr.generated.resources.feature_mpay_qr_go_back
+import mifos_pay.feature.mpay_qr.generated.resources.feature_mpay_qr_receive_money
+import mifos_pay.feature.mpay_qr.generated.resources.feature_mpay_qr_scan_to_pay
+import mifos_pay.feature.mpay_qr.generated.resources.feature_mpay_qr_unable_to_generate
+import mifos_pay.feature.mpay_qr.generated.resources.feature_request_money_set_amount
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel

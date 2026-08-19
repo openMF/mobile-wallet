@@ -1,0 +1,53 @@
+# app-profile/platforms/ubuntu/app-content/privacy.yaml — feeds Snap Store listing metadata +
+# Flathub `metainfo.xml` (`<content_rating>` / OARS + privacy-policy reference). Fork-owned SoT
+# — syncForkConfig / the release readiness gate reads this file; it does not itself submit to
+# the Snap Store or Flathub.
+#
+# App Toolkit posture: 100% offline, no login, no account, no ads, no tracking, no data
+# collection or transmission of any kind.
+
+privacy_policy_url: https://raw.githubusercontent.com/openMF/kmp-project-template/main/legal/output/privacy-policy.md
+
+collects_data: false
+data_collection_notes: >
+  App collects and transmits NO user data. All state (loans, reminders,
+  calculator inputs) is stored locally on-device only. Read-only public-data
+  calls (FRED interest rates, World Bank macro data, currency exchange
+  rates) carry no personal identifiers.
+
+contains_ads: false
+requires_account: false
+network_access:
+  required: true
+  purpose: Read-only public-data fetches (FRED interest rates, World Bank macro data, currency exchange rates)
+  transmits_user_data: false
+
+oars_content_rating:        # Flathub AppStream <content_rating type="oars-1.1"> — no descriptors triggered
+  violence-cartoon: none
+  violence-fantasy: none
+  violence-realistic: none
+  violence-bloodshed: none
+  violence-sexual: none
+  violence-desecration: none
+  violence-slavery: none
+  violence-worship: none
+  drugs-alcohol: none
+  drugs-narcotics: none
+  drugs-tobacco: none
+  sex-nudity: none
+  sex-themes: none
+  sex-homosexuality: none
+  sex-prostitution: none
+  sex-adultery: none
+  sex-appearance: none
+  language-profanity: none
+  language-humor: none
+  language-discrimination: none
+  language-drugs: none
+  social-chat: none
+  social-info: none
+  social-audio: none
+  social-location: none
+  social-contacts: none
+  money-purchasing: none
+  money-gambling: none

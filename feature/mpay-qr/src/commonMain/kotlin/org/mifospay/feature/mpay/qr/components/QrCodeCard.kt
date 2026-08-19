@@ -5,7 +5,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 package org.mifospay.feature.mpay.qr.components
 
@@ -32,11 +32,11 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import io.github.alexzhirkevich.qrose.options.QrOptions
 import io.github.alexzhirkevich.qrose.rememberQrCodePainter
-import mobile_wallet.feature.mpay_qr.generated.resources.Res
-import mobile_wallet.feature.mpay_qr.generated.resources.feature_mpay_qr_inter_bank
-import mobile_wallet.feature.mpay_qr.generated.resources.feature_mpay_qr_intra_bank
-import mobile_wallet.feature.mpay_qr.generated.resources.feature_mpay_qr_scan_instruction
-import mobile_wallet.feature.mpay_qr.generated.resources.logo
+import mifos_pay.feature.mpay_qr.generated.resources.Res
+import mifos_pay.feature.mpay_qr.generated.resources.feature_mpay_qr_inter_bank
+import mifos_pay.feature.mpay_qr.generated.resources.feature_mpay_qr_intra_bank
+import mifos_pay.feature.mpay_qr.generated.resources.feature_mpay_qr_scan_instruction
+import mifos_pay.feature.mpay_qr.generated.resources.logo
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
@@ -99,7 +99,7 @@ internal fun QrCodeCard(
             Box(
                 modifier = Modifier
                     .clip(RoundedCornerShape(KptTheme.spacing.md))
-                    .background(KptTheme.colorScheme.qrBackground)
+                    .background(androidx.compose.ui.graphics.Color.White)
                     .padding(KptTheme.spacing.md),
                 contentAlignment = Alignment.Center,
             ) {
@@ -166,7 +166,7 @@ private fun MifosLogoOverlay(
         modifier = modifier
             .size(LogoOverlaySize)
             .clip(CircleShape)
-            .background(KptTheme.colorScheme.qrBackground)
+            .background(androidx.compose.ui.graphics.Color.White)
             .border(
                 width = KptTheme.spacing.xs / 2,
                 color = KptTheme.colorScheme.primary,

@@ -5,7 +5,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 package org.mifospay.core.common
 
@@ -157,6 +157,7 @@ object Constants {
     const val SETTING_UP_UPI_PIN = "Setting up UPI PIN.."
     const val UPDATED_BANK_ACCOUNT = "Updated Bank Account"
     const val INDEX = "Index"
+    const val ACCOUNT_NO = "AccountNo"
     const val CHANGE_UPI_PIN = "Change UPI PIN"
     const val FORGOT_UPI_PIN = "Forgot UPI PIN"
 

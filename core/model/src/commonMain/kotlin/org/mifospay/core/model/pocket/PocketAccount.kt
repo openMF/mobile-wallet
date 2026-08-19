@@ -5,7 +5,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 package org.mifospay.core.model.pocket
 
@@ -24,9 +24,16 @@ data class DetailedPocketAccount(
     val productName: String?,
     val balance: Double?,
     val currencyCode: String?,
-    val currencyDisplaySymbol: String?,
     val decimalPlaces: Int?,
     val status: AccountStatus?,
+    // Upstream PR #2057 (manage-pocket) added the per-currency display symbol
+    // (e.g. "$"/"₹") separately from the ISO `currencyCode`. Defaulted to null so
+    // pre-manage-pocket call sites (PocketStore, PocketEntityMapper, Store5 fetcher
+    // decoders that were written before this field existed) continue to compile
+    // without change; those paths surface `null` here and the UI falls back to the
+    // pre-manage-pocket rendering (code-only). Fresh network fetches that pass the
+    // symbol through populate it end-to-end.
+    val currencyDisplaySymbol: String? = null,
 )
 
 data class LinkableAccount(
@@ -36,9 +43,10 @@ data class LinkableAccount(
     val accountType: AccountType,
     val balance: Double?,
     val currencyCode: String?,
-    val currencyDisplaySymbol: String?,
     val decimalPlaces: Int?,
     val status: AccountStatus?,
+    // See rationale on [DetailedPocketAccount.currencyDisplaySymbol].
+    val currencyDisplaySymbol: String? = null,
 )
 
 enum class AccountStatus {

@@ -5,19 +5,19 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 package org.mifospay.core.data.repository
 
-import kotlinx.coroutines.flow.Flow
-import org.mifospay.core.common.DataState
+import org.mifospay.core.common.ScreenStateStream
 import org.mifospay.core.network.model.twofactor.AccessToken
 import org.mifospay.core.network.model.twofactor.DeliveryMethod
 
 interface TwoFactorAuthRepository {
-    suspend fun deliveryMethods(): Flow<DataState<List<DeliveryMethod>>>
+    // Phase-3 cutover — Flow-shaped 2FA reads/submissions on ScreenState.
+    suspend fun deliveryMethods(): ScreenStateStream<List<DeliveryMethod>>
 
-    suspend fun requestOTP(deliveryMethod: String): Flow<DataState<String>>
+    suspend fun requestOTP(deliveryMethod: String): ScreenStateStream<String>
 
-    suspend fun validateToken(token: String): Flow<DataState<AccessToken>>
+    suspend fun validateToken(token: String): ScreenStateStream<AccessToken>
 }

@@ -5,7 +5,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 package org.mifospay.feature.accounts.savingsaccount
 
@@ -16,27 +16,30 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
-import mobile_wallet.feature.accounts.generated.resources.Res
-import mobile_wallet.feature.accounts.generated.resources.feature_accounts_error_account_id_required
-import mobile_wallet.feature.accounts.generated.resources.feature_accounts_error_client_id_required
-import mobile_wallet.feature.accounts.generated.resources.feature_accounts_error_date_format_required
-import mobile_wallet.feature.accounts.generated.resources.feature_accounts_error_external_id_length
-import mobile_wallet.feature.accounts.generated.resources.feature_accounts_error_external_id_required
-import mobile_wallet.feature.accounts.generated.resources.feature_accounts_error_locale_required
-import mobile_wallet.feature.accounts.generated.resources.feature_accounts_error_min_opening_balance_required
-import mobile_wallet.feature.accounts.generated.resources.feature_accounts_error_overdraft_limit_required
-import mobile_wallet.feature.accounts.generated.resources.feature_accounts_error_select_saving_product
-import mobile_wallet.feature.accounts.generated.resources.feature_accounts_error_submitted_date_required
-import mobile_wallet.feature.accounts.generated.resources.feature_accounts_saving_button_save
-import mobile_wallet.feature.accounts.generated.resources.feature_accounts_saving_button_update
-import mobile_wallet.feature.accounts.generated.resources.feature_accounts_saving_title_create
-import mobile_wallet.feature.accounts.generated.resources.feature_accounts_saving_title_update
+import kpt.core.base.store.submit.SubmitState
+import kpt.core.base.store.submit.submitHandler
+import mifos_pay.feature.accounts.generated.resources.Res
+import mifos_pay.feature.accounts.generated.resources.feature_accounts_error_account_id_required
+import mifos_pay.feature.accounts.generated.resources.feature_accounts_error_client_id_required
+import mifos_pay.feature.accounts.generated.resources.feature_accounts_error_date_format_required
+import mifos_pay.feature.accounts.generated.resources.feature_accounts_error_external_id_length
+import mifos_pay.feature.accounts.generated.resources.feature_accounts_error_external_id_required
+import mifos_pay.feature.accounts.generated.resources.feature_accounts_error_locale_required
+import mifos_pay.feature.accounts.generated.resources.feature_accounts_error_min_opening_balance_required
+import mifos_pay.feature.accounts.generated.resources.feature_accounts_error_overdraft_limit_required
+import mifos_pay.feature.accounts.generated.resources.feature_accounts_error_select_saving_product
+import mifos_pay.feature.accounts.generated.resources.feature_accounts_error_submitted_date_required
+import mifos_pay.feature.accounts.generated.resources.feature_accounts_saving_button_save
+import mifos_pay.feature.accounts.generated.resources.feature_accounts_saving_button_update
+import mifos_pay.feature.accounts.generated.resources.feature_accounts_saving_created_successfully
+import mifos_pay.feature.accounts.generated.resources.feature_accounts_saving_title_create
+import mifos_pay.feature.accounts.generated.resources.feature_accounts_saving_title_update
+import mifos_pay.feature.accounts.generated.resources.feature_accounts_saving_updated_successfully
 import org.jetbrains.compose.resources.StringResource
-import org.mifospay.core.common.DataState
 import org.mifospay.core.common.DateHelper
+import org.mifospay.core.common.ScreenState
 import org.mifospay.core.common.getSerialized
 import org.mifospay.core.common.setSerialized
 import org.mifospay.core.data.repository.LocalAssetRepository
@@ -47,7 +50,6 @@ import org.mifospay.core.model.savingsaccount.SavingAccountTemplate
 import org.mifospay.core.model.savingsaccount.UpdateSavingAccountEntity
 import org.mifospay.core.ui.utils.BaseViewModel
 import org.mifospay.feature.accounts.savingsaccount.AESAction.CreateOrUpdateSavingAccount
-import org.mifospay.feature.accounts.savingsaccount.AESAction.Internal.HandleSavingAddEditResult
 import org.mifospay.feature.accounts.savingsaccount.AESAction.Internal.HandleSavingTemplateResult
 import org.mifospay.feature.accounts.savingsaccount.AESState.ViewState.Error
 import org.mifospay.feature.accounts.savingsaccount.AESState.DialogState.Error as DialogStateError
@@ -81,6 +83,13 @@ internal class AddEditSavingViewModel(
         initialValue = emptyList(),
     )
 
+    // Template idiom (core-base/store): the create/update savings-account write goes
+    // through a SubmitHandler instead of a hand-folded DataState result action. The
+    // handler owns the Submitting/Submitted/Failed lifecycle; we observe it here to
+    // drive this screen's existing loading/error dialog + toast + back-navigation,
+    // so the Screen is unchanged.
+    private val submitSavingAccount = viewModelScope.submitHandler<Unit>()
+
     init {
         stateFlow
             .onEach { savedStateHandle.setSerialized(key = ADD_EDIT_SAVING_STATE_KEY, value = it) }
@@ -89,6 +98,42 @@ internal class AddEditSavingViewModel(
         repository.getSavingAccountTemplate(state.clientId).onEach {
             sendAction(HandleSavingTemplateResult(it))
         }.launchIn(viewModelScope)
+
+        submitSavingAccount.state
+            .onEach { submitState ->
+                when (submitState) {
+                    is SubmitState.Submitting -> {
+                        mutableStateFlow.update {
+                            it.copy(dialogState = AESState.DialogState.Loading)
+                        }
+                    }
+
+                    is SubmitState.Submitted -> {
+                        mutableStateFlow.update { it.copy(dialogState = null) }
+                        val successMessage = when (state.type) {
+                            is SavingsAddEditType.AddItem ->
+                                Res.string.feature_accounts_saving_created_successfully
+
+                            is SavingsAddEditType.EditItem ->
+                                Res.string.feature_accounts_saving_updated_successfully
+                        }
+                        sendEvent(AESEvent.ShowToast(successMessage))
+                        sendEvent(AESEvent.OnNavigateBack)
+                        submitSavingAccount.reset()
+                    }
+
+                    is SubmitState.Failed -> {
+                        val message = submitState.error.message.toString()
+                        mutableStateFlow.update {
+                            it.copy(dialogState = DialogStateError.StringMessage(message))
+                        }
+                        submitSavingAccount.reset()
+                    }
+
+                    SubmitState.Idle -> Unit
+                }
+            }
+            .launchIn(viewModelScope)
     }
 
     override fun handleAction(action: AESAction) {
@@ -168,8 +213,6 @@ internal class AddEditSavingViewModel(
             }
 
             is CreateOrUpdateSavingAccount -> initiateCreateOrUpdateSavingAccount()
-
-            is HandleSavingAddEditResult -> handleSavingAddEditResult(action)
 
             is HandleSavingTemplateResult -> handleSavingTemplateResult(action)
         }
@@ -257,9 +300,11 @@ internal class AddEditSavingViewModel(
 
     private fun initiateCreateSavingAccount() {
         onContent { content ->
-            viewModelScope.launch {
-                val result = repository.createSavingsAccount(content.createSavingEntity)
-                sendAction(HandleSavingAddEditResult(result))
+            // Submit through the handler — it drives Submitting/Submitted/Failed,
+            // observed in `init`. The repository write returns Unit and throws on
+            // failure; the handler maps that to Submitted/Failed.
+            submitSavingAccount.submit {
+                repository.createSavingsAccount(content.createSavingEntity)
             }
         }
     }
@@ -270,57 +315,53 @@ internal class AddEditSavingViewModel(
                 Res.string.feature_accounts_error_account_id_required
             }
 
-            viewModelScope.launch {
-                val result = repository.updateSavingsAccount(accountId, content.updateSavingEntity)
-                sendAction(HandleSavingAddEditResult(result))
+            submitSavingAccount.submit {
+                repository.updateSavingsAccount(accountId, content.updateSavingEntity)
             }
         }
     }
 
     private fun handleSavingTemplateResult(action: HandleSavingTemplateResult) {
-        when (action.result) {
-            is DataState.Loading -> {
+        // `getSavingAccountTemplate` was migrated to `ScreenStateStream`.
+        // Content builds the form; Empty is defensively surfaced as an error
+        // (a template endpoint shouldn't emit Empty). NoNetwork /
+        // Unauthenticated fold into the existing Error surface until Phase-4
+        // wires per-branch messaging.
+        when (val result = action.result) {
+            is ScreenState.Loading -> {
                 mutableStateFlow.update {
                     it.copy(viewState = AESState.ViewState.Loading)
                 }
             }
 
-            is DataState.Error -> {
+            is ScreenState.Empty -> {
                 mutableStateFlow.update {
-                    it.copy(viewState = Error(action.result.exception.message.toString()))
+                    it.copy(viewState = Error("Template not available."))
                 }
             }
 
-            is DataState.Success -> {
+            is ScreenState.Error -> {
                 mutableStateFlow.update {
-                    it.copy(viewState = AESState.ViewState.Content(action.result.data))
-                }
-            }
-        }
-    }
-
-    private fun handleSavingAddEditResult(action: HandleSavingAddEditResult) {
-        when (action.result) {
-            is DataState.Loading -> {
-                mutableStateFlow.update {
-                    it.copy(dialogState = AESState.DialogState.Loading)
+                    it.copy(viewState = Error(result.error.message.toString()))
                 }
             }
 
-            is DataState.Error -> {
-                val message = action.result.exception.message
-                    .toString()
+            is ScreenState.NoNetwork -> {
                 mutableStateFlow.update {
-                    it.copy(dialogState = DialogStateError.StringMessage(message))
+                    it.copy(viewState = Error("No network. Please check your connection."))
                 }
             }
 
-            is DataState.Success -> {
+            is ScreenState.Unauthenticated -> {
                 mutableStateFlow.update {
-                    it.copy(dialogState = null)
+                    it.copy(viewState = Error("Session expired. Please log in again."))
                 }
-                sendEvent(AESEvent.ShowToast(action.result.data))
-                sendEvent(AESEvent.OnNavigateBack)
+            }
+
+            is ScreenState.Content -> {
+                mutableStateFlow.update {
+                    it.copy(viewState = AESState.ViewState.Content(result.data))
+                }
             }
         }
     }
@@ -432,7 +473,7 @@ internal data class AESState(
 
 internal sealed interface AESEvent {
     data object OnNavigateBack : AESEvent
-    data class ShowToast(val message: String) : AESEvent
+    data class ShowToast(val message: StringResource) : AESEvent
 }
 
 internal sealed interface AESAction {
@@ -457,8 +498,11 @@ internal sealed interface AESAction {
     data object CreateOrUpdateSavingAccount : AESAction
 
     sealed interface Internal : AESAction {
-        data class HandleSavingAddEditResult(val result: DataState<String>) : Internal
-        data class HandleSavingTemplateResult(val result: DataState<SavingAccountTemplate>) :
+        /**
+         * Template load result. Uses [ScreenState] — Phase-3 migrated
+         * `getSavingAccountTemplate` to a `ScreenStateStream`.
+         */
+        data class HandleSavingTemplateResult(val result: ScreenState<SavingAccountTemplate>) :
             Internal
     }
 }

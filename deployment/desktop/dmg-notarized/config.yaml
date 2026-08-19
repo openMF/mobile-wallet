@@ -1,0 +1,21 @@
+# deployment/desktop/dmg-notarized/config.yaml
+target: desktop-dmg-notarized
+platform: desktop
+os: macos
+tier: 2
+owning_capability: macos-signing
+output_format: dmg
+output_path: "cmp-desktop/build/compose/binaries/main-release/dmg/"
+version_format: "git"
+signing: developer-id-application-via-match
+distribution_groups: ["public"]
+retention: "indefinite"
+runners:
+  local: { command: "(cd deployment && bundle exec fastlane mac buildNotarizedMacDmg)" }
+  ci:    { workflow_snippet: workflow-snippet.yml }
+requires_confirm: true
+enabled_by_default: false
+dev_fallback:
+  signing_mode: "ad-hoc"
+  command: "(cd deployment && AD_HOC_SIGNING=1 bundle exec fastlane mac buildNotarizedMacDmg)"
+  rationale: "Local dev builds skip Match + notarytool (5-15min wait) — use ad-hoc codesign for trusted-device runs. The lane honors AD_HOC_SIGNING=1 and branches early to skip cert install, notarize, and GH upload."

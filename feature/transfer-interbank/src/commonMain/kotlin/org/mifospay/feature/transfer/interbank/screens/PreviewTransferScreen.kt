@@ -5,7 +5,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 package org.mifospay.feature.transfer.interbank.screens
 
@@ -36,22 +36,22 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import mobile_wallet.feature.transfer_interbank.generated.resources.Res
-import mobile_wallet.feature.transfer_interbank.generated.resources.feature_send_interbank_acknowledgement_section
-import mobile_wallet.feature.transfer_interbank.generated.resources.feature_send_interbank_amount
-import mobile_wallet.feature.transfer_interbank.generated.resources.feature_send_interbank_available_balance
-import mobile_wallet.feature.transfer_interbank.generated.resources.feature_send_interbank_confirm_pay
-import mobile_wallet.feature.transfer_interbank.generated.resources.feature_send_interbank_date
-import mobile_wallet.feature.transfer_interbank.generated.resources.feature_send_interbank_description
-import mobile_wallet.feature.transfer_interbank.generated.resources.feature_send_interbank_edit
-import mobile_wallet.feature.transfer_interbank.generated.resources.feature_send_interbank_from_account
-import mobile_wallet.feature.transfer_interbank.generated.resources.feature_send_interbank_i_acknowledged
-import mobile_wallet.feature.transfer_interbank.generated.resources.feature_send_interbank_preview_transfer
-import mobile_wallet.feature.transfer_interbank.generated.resources.feature_send_interbank_terms_acknowledged
-import mobile_wallet.feature.transfer_interbank.generated.resources.feature_send_interbank_terms_acknowledged_description
-import mobile_wallet.feature.transfer_interbank.generated.resources.feature_send_interbank_to_account
-import mobile_wallet.feature.transfer_interbank.generated.resources.feature_send_interbank_transfer_amount
-import mobile_wallet.feature.transfer_interbank.generated.resources.feature_send_interbank_verified_recipient
+import mifos_pay.feature.transfer_interbank.generated.resources.Res
+import mifos_pay.feature.transfer_interbank.generated.resources.feature_send_interbank_acknowledgement_section
+import mifos_pay.feature.transfer_interbank.generated.resources.feature_send_interbank_amount
+import mifos_pay.feature.transfer_interbank.generated.resources.feature_send_interbank_available_balance
+import mifos_pay.feature.transfer_interbank.generated.resources.feature_send_interbank_confirm_pay
+import mifos_pay.feature.transfer_interbank.generated.resources.feature_send_interbank_date
+import mifos_pay.feature.transfer_interbank.generated.resources.feature_send_interbank_description
+import mifos_pay.feature.transfer_interbank.generated.resources.feature_send_interbank_edit
+import mifos_pay.feature.transfer_interbank.generated.resources.feature_send_interbank_from_account
+import mifos_pay.feature.transfer_interbank.generated.resources.feature_send_interbank_i_acknowledged
+import mifos_pay.feature.transfer_interbank.generated.resources.feature_send_interbank_preview_transfer
+import mifos_pay.feature.transfer_interbank.generated.resources.feature_send_interbank_terms_acknowledged
+import mifos_pay.feature.transfer_interbank.generated.resources.feature_send_interbank_terms_acknowledged_description
+import mifos_pay.feature.transfer_interbank.generated.resources.feature_send_interbank_to_account
+import mifos_pay.feature.transfer_interbank.generated.resources.feature_send_interbank_transfer_amount
+import mifos_pay.feature.transfer_interbank.generated.resources.feature_send_interbank_verified_recipient
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.mifospay.core.common.CurrencyFormatter

@@ -5,27 +5,25 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 package org.mifospay.feature.invoices
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.serialization.Serializable
-import org.mifospay.core.common.DataState
+import kpt.core.base.store.screen.ScreenState
 import org.mifospay.core.common.setSerialized
 import org.mifospay.core.data.repository.InvoiceRepository
 import org.mifospay.core.datastore.UserPreferencesRepository
 import org.mifospay.core.model.datatables.invoice.Invoice
 import org.mifospay.core.ui.utils.BaseViewModel
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class InvoicesViewModel(
     invoiceRepository: InvoiceRepository,
     repository: UserPreferencesRepository,
@@ -48,23 +46,24 @@ class InvoicesViewModel(
             .launchIn(viewModelScope)
     }
 
-    val invoiceUiState = invoiceRepository.getInvoices(state.clientId).mapLatest { result ->
-        when (result) {
-            is DataState.Loading -> InvoicesUiState.Loading
-            is DataState.Error -> InvoicesUiState.Error(result.exception.message.toString())
-            is DataState.Success -> {
-                if (result.data.isEmpty()) {
-                    InvoicesUiState.Empty
-                } else {
-                    InvoicesUiState.InvoiceList(result.data)
-                }
-            }
-        }
-    }.stateIn(
+    // Template idiom (core-base/store): hold the native ScreenDataStream and
+    // expose its pre-decided `state` straight to the Screen's `ScreenContent`.
+    // No fork-ScreenState fold, no 6→4 `when` — DecisionEngine inside the stream
+    // owns every Loading / Empty / NoNetwork / Unauthenticated / Error / Content
+    // transition, and `refresh()` drives retry. Named `invoiceUiState` (not
+    // `state`) because BaseViewModel already owns a `protected val state: S`.
+    private val stream = invoiceRepository.getInvoicesStream(
+        clientId = state.clientId,
+        scope = viewModelScope,
+    )
+
+    val invoiceUiState: StateFlow<ScreenState<List<Invoice>>> = stream.state.stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5_000),
-        initialValue = InvoicesUiState.Loading,
+        initialValue = ScreenState.Loading,
     )
+
+    fun retry() = stream.refresh()
 
     override fun handleAction(action: InvoiceAction) {
         when (action) {
@@ -73,13 +72,6 @@ class InvoicesViewModel(
             }
         }
     }
-}
-
-sealed interface InvoicesUiState {
-    data object Loading : InvoicesUiState
-    data object Empty : InvoicesUiState
-    data class Error(val message: String) : InvoicesUiState
-    data class InvoiceList(val list: List<Invoice>) : InvoicesUiState
 }
 
 @Serializable

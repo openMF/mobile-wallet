@@ -5,7 +5,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 package org.mifospay.feature.auth.mobileVerify
 
@@ -17,13 +17,13 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
-import org.mifospay.core.common.DataState
+import kpt.core.base.store.submit.SubmitState
+import kpt.core.base.store.submit.submitHandler
 import org.mifospay.core.common.getSerialized
 import org.mifospay.core.common.setSerialized
 import org.mifospay.core.data.repository.SearchRepository
 import org.mifospay.core.data.util.Constants
 import org.mifospay.core.ui.utils.BaseViewModel
-import org.mifospay.feature.auth.mobileVerify.MobileVerificationAction.Internal.ReceiveOtpVerifyResult
 
 class MobileVerificationViewModel(
     private val searchRepository: SearchRepository,
@@ -37,7 +37,94 @@ class MobileVerificationViewModel(
         private const val KEY_STATE = "mobile_verification"
     }
 
+    // Template idiom (core-base/store): the two one-shot writes on this screen — request-OTP
+    // (verify the mobile number is free, then request an OTP) and verify-OTP — each go through
+    // their own SubmitHandler instead of a hand-folded DataState result action. The handlers own
+    // the Submitting/Submitted/Failed lifecycle; we observe them below to drive this screen's
+    // existing loading/error dialogs, phone→OTP state transition, toast and navigation, so the
+    // Screen is unchanged. Both carry the phone number as the success result.
+    private val submitRequestOtp = viewModelScope.submitHandler<String>()
+    private val submitVerifyOtp = viewModelScope.submitHandler<String>()
+
     init {
+        submitRequestOtp.state
+            .onEach { submitState ->
+                when (submitState) {
+                    is SubmitState.Submitting -> {
+                        mutableStateFlow.update {
+                            if (it is MobileVerificationState.VerifyPhoneState) {
+                                it.copy(dialogState = MobileVerificationState.DialogState.Loading)
+                            } else {
+                                it
+                            }
+                        }
+                    }
+
+                    is SubmitState.Submitted -> {
+                        // Uniqueness passed + OTP requested — advance to the OTP entry state.
+                        mutableStateFlow.update {
+                            MobileVerificationState.VerifyOtpState(phoneNo = submitState.result)
+                        }
+                        submitRequestOtp.reset()
+                    }
+
+                    is SubmitState.Failed -> {
+                        val message = submitState.error.message ?: "Something Went Wrong!"
+                        mutableStateFlow.update {
+                            if (it is MobileVerificationState.VerifyPhoneState) {
+                                it.copy(
+                                    dialogState = MobileVerificationState.DialogState.Error(message),
+                                )
+                            } else {
+                                it
+                            }
+                        }
+                        submitRequestOtp.reset()
+                    }
+
+                    SubmitState.Idle -> Unit
+                }
+            }
+            .launchIn(viewModelScope)
+
+        submitVerifyOtp.state
+            .onEach { submitState ->
+                when (submitState) {
+                    is SubmitState.Submitting -> {
+                        mutableStateFlow.update {
+                            (it as? MobileVerificationState.VerifyOtpState)?.copy(
+                                dialogState = MobileVerificationState.DialogState.Loading,
+                            ) ?: it
+                        }
+                    }
+
+                    is SubmitState.Submitted -> {
+                        mutableStateFlow.update {
+                            (it as? MobileVerificationState.VerifyOtpState)?.copy(
+                                dialogState = null,
+                            ) ?: it
+                        }
+                        sendEvent(MobileVerificationEvent.ShowToast("Otp Verified Successfully"))
+                        sendEvent(MobileVerificationEvent.NavigateToSignup(submitState.result))
+                        submitVerifyOtp.reset()
+                    }
+
+                    is SubmitState.Failed -> {
+                        mutableStateFlow.update {
+                            (it as? MobileVerificationState.VerifyOtpState)?.copy(
+                                dialogState = MobileVerificationState.DialogState.Error(
+                                    "Otp Verification Failed",
+                                ),
+                            ) ?: it
+                        }
+                        submitVerifyOtp.reset()
+                    }
+
+                    SubmitState.Idle -> Unit
+                }
+            }
+            .launchIn(viewModelScope)
+
         stateFlow
             .onEach { savedStateHandle.setSerialized(key = KEY_STATE, value = it) }
             .launchIn(viewModelScope)
@@ -75,8 +162,6 @@ class MobileVerificationViewModel(
                 verifyEnteredOTP(currentState)
             }
 
-            is ReceiveOtpVerifyResult -> handleOtpVerifyResult(action)
-
             is MobileVerificationAction.ChangePhoneNumber -> handleChangePhoneNoClick()
 
             is MobileVerificationAction.DismissDialog -> handleDismissDialog()
@@ -87,7 +172,7 @@ class MobileVerificationViewModel(
 
     private fun verifyPhoneNo(currentState: MobileVerificationState.VerifyPhoneState) {
         if (currentState.isPhoneNoValid) {
-            verifyMobileAndRequestOtp(currentState.phoneNo, currentState)
+            verifyMobileAndRequestOtp(currentState.phoneNo)
         } else {
             mutableStateFlow.update {
                 currentState.copy(
@@ -97,106 +182,37 @@ class MobileVerificationViewModel(
         }
     }
 
-    private fun verifyMobileAndRequestOtp(
-        phoneNo: String,
-        currentState: MobileVerificationState.VerifyPhoneState,
-    ) {
-        viewModelScope.launch {
+    private fun verifyMobileAndRequestOtp(phoneNo: String) {
+        // Submit through the handler — it drives Submitting/Submitted/Failed, observed in
+        // `init`. The block runs the uniqueness search: return the phone no on success (unique),
+        // throw on error / already-exists so the handler reports Failed with that message.
+        submitRequestOtp.submit {
             val result = searchRepository.searchResources(
                 query = phoneNo,
                 resources = Constants.CLIENTS,
                 exactMatch = true,
             )
-
-            when (result) {
-                is DataState.Error -> {
-                    val message = result.exception.message ?: "Something Went Wrong!"
-                    mutableStateFlow.update {
-                        currentState.copy(
-                            dialogState = MobileVerificationState.DialogState.Error(message),
-                        )
-                    }
-                }
-
-                is DataState.Loading -> {
-                    mutableStateFlow.update {
-                        currentState.copy(dialogState = MobileVerificationState.DialogState.Loading)
-                    }
-                }
-
-                is DataState.Success -> {
-                    if (result.data.isEmpty()) {
-                        requestAnOtpToPhoneNo(phoneNo)
-                    } else {
-                        val message = "Mobile number already exists."
-                        mutableStateFlow.update {
-                            currentState.copy(
-                                dialogState = MobileVerificationState.DialogState.Error(message),
-                            )
-                        }
-                    }
-                }
+            if (result.isEmpty()) {
+                // TODO:: Call repository request an otp to this phone no.
+                phoneNo
+            } else {
+                throw Exception("Mobile number already exists.")
             }
-        }
-    }
-
-    private fun requestAnOtpToPhoneNo(phoneNo: String) {
-        viewModelScope.launch {
-            // TODO:: Call repository request an otp to this phone no.
-            mutableStateFlow.update {
-                MobileVerificationState.VerifyOtpState(phoneNo = phoneNo)
-            }
-            trySendAction(MobileVerificationAction.DismissDialog)
         }
     }
 
     private fun verifyEnteredOTP(state: MobileVerificationState.VerifyOtpState) {
-        viewModelScope.launch {
-            if (state.isOtpValid) {
-                // TODO:: Match send otp to entered otp
-                mutableStateFlow.update {
-                    state.copy(
-                        dialogState = MobileVerificationState.DialogState.Loading,
-                    )
-                }
-
-                sendAction(ReceiveOtpVerifyResult(DataState.Success(state.phoneNo)))
-            } else {
-                mutableStateFlow.update {
-                    state.copy(
-                        dialogState = MobileVerificationState.DialogState.Error("OTP isn't valid"),
-                    )
-                }
+        if (state.isOtpValid) {
+            // Submit through the handler — Submitting/Submitted/Failed observed in `init`.
+            submitVerifyOtp.submit {
+                // TODO:: Match send otp to entered otp — stub succeeds with the verified phone no.
+                state.phoneNo
             }
-        }
-    }
-
-    private fun handleOtpVerifyResult(action: ReceiveOtpVerifyResult) {
-        when (action.loginResult) {
-            is DataState.Error -> {
-                mutableStateFlow.update {
-                    (state as? MobileVerificationState.VerifyOtpState)?.copy(
-                        dialogState = MobileVerificationState.DialogState.Error("Otp Verification Failed"),
-                    ) ?: state
-                }
-            }
-
-            is DataState.Loading -> {
-                mutableStateFlow.update {
-                    (state as? MobileVerificationState.VerifyOtpState)?.copy(
-                        dialogState = MobileVerificationState.DialogState.Loading,
-                    ) ?: state
-                }
-            }
-
-            is DataState.Success -> {
-                mutableStateFlow.update {
-                    (state as? MobileVerificationState.VerifyOtpState)?.copy(
-                        dialogState = null,
-                    ) ?: state
-                }
-                sendEvent(MobileVerificationEvent.ShowToast("Otp Verified Successfully"))
-                sendEvent(MobileVerificationEvent.NavigateToSignup(action.loginResult.data))
+        } else {
+            mutableStateFlow.update {
+                state.copy(
+                    dialogState = MobileVerificationState.DialogState.Error("OTP isn't valid"),
+                )
             }
         }
     }
@@ -285,10 +301,4 @@ sealed interface MobileVerificationAction {
 
     data object DismissDialog : MobileVerificationAction
     data object CloseButtonClick : MobileVerificationAction
-
-    sealed class Internal : MobileVerificationAction {
-        data class ReceiveOtpVerifyResult(
-            val loginResult: DataState<String>,
-        ) : Internal()
-    }
 }

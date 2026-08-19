@@ -1,0 +1,41 @@
+# deployment/ios/appstore/workflow-snippet.yml
+# Production-gated — requires manual workflow_dispatch + CONFIRM input.
+name: ios-appstore-deploy
+on:
+  workflow_dispatch:
+    inputs:
+      confirm:
+        description: "Type CONFIRM to proceed"
+        required: true
+        type: string
+
+jobs:
+  deploy:
+    if: ${{ inputs.confirm == 'CONFIRM' }}
+    runs-on: macos-14
+    environment: production
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with: { bundler-cache: true }
+
+      - name: Materialize secrets (vault-mode)
+        if: ${{ secrets.SOPS_AGE_KEY != '' }}
+        env:
+          SOPS_AGE_KEY: ${{ secrets.SOPS_AGE_KEY }}
+        run: bash deployment/_shared/scripts/secrets-pull.sh --required-for ios-signing,ios-app-store
+
+      - name: Materialize secrets (manual-mode)
+        if: ${{ secrets.SOPS_AGE_KEY == '' }}
+        run: |
+          mkdir -p secrets
+          echo "${{ secrets.APPSTORE_AUTH_KEY_B64 }}" | base64 -d > secrets/live/apple/appstore/AuthKey.p8
+          echo "${{ secrets.MATCH_CI_KEY }}" > secrets/live/apple/match/match_ci_key
+          chmod 600 secrets/live/apple/match/match_ci_key
+
+      - name: Deploy to App Store
+        env:
+          MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+        run: bundle exec fastlane ios release

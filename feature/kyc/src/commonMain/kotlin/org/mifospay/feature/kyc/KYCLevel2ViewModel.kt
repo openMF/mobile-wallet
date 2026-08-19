@@ -5,7 +5,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 package org.mifospay.feature.kyc
 
@@ -23,14 +23,17 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
-import org.mifospay.core.common.DataState
+import kpt.core.base.store.submit.SubmitState
+import kpt.core.base.store.submit.submitHandler
+import mifos_pay.feature.kyc.generated.resources.Res
+import mifos_pay.feature.kyc.generated.resources.feature_kyc_successkyc2
+import org.jetbrains.compose.resources.StringResource
 import org.mifospay.core.common.getSerialized
 import org.mifospay.core.common.setSerialized
 import org.mifospay.core.data.repository.DocumentRepository
 import org.mifospay.core.data.util.Constants
 import org.mifospay.core.datastore.UserPreferencesRepository
 import org.mifospay.core.ui.utils.BaseViewModel
-import org.mifospay.feature.kyc.KycLevel2Action.Internal.HandleDocumentUploadResult
 import org.mifospay.feature.kyc.KycLevel2State.DialogState.Error
 
 internal class KYCLevel2ViewModel(
@@ -49,7 +52,43 @@ internal class KYCLevel2ViewModel(
         private const val KEY_STATE = "kyc_level_2_state"
     }
 
+    // Template idiom (core-base/store): the one-shot document upload write goes through a
+    // SubmitHandler instead of a hand-folded result action. The handler owns the
+    // Submitting/Submitted/Failed lifecycle; we observe it below to drive this screen's
+    // existing Loading dialog + toast + navigate-to-level-3 UX, so the Screen is unchanged.
+    // Writes return Unit; the success toast is a feature StringResource.
+    private val submitUpload = viewModelScope.submitHandler<Unit>()
+
     init {
+        submitUpload.state
+            .onEach { submitState ->
+                when (submitState) {
+                    is SubmitState.Submitting -> {
+                        mutableStateFlow.update {
+                            it.copy(dialogState = KycLevel2State.DialogState.Loading)
+                        }
+                    }
+
+                    is SubmitState.Submitted -> {
+                        mutableStateFlow.update { it.copy(dialogState = null) }
+                        sendEvent(KycLevel2Event.ShowToast(Res.string.feature_kyc_successkyc2))
+                        sendEvent(KycLevel2Event.OnNavigateToLevel3)
+                        submitUpload.reset()
+                    }
+
+                    is SubmitState.Failed -> {
+                        val message = submitState.error.message.toString()
+                        mutableStateFlow.update {
+                            it.copy(dialogState = Error(message))
+                        }
+                        submitUpload.reset()
+                    }
+
+                    SubmitState.Idle -> Unit
+                }
+            }
+            .launchIn(viewModelScope)
+
         stateFlow
             .onEach { savedStateHandle.setSerialized(key = KEY_STATE, value = it) }
             .launchIn(viewModelScope)
@@ -95,8 +134,6 @@ internal class KYCLevel2ViewModel(
             }
 
             KycLevel2Action.SubmitClicked -> initiateUploadDocument()
-
-            is HandleDocumentUploadResult -> handleDocumentUploadResult(action)
         }
     }
 
@@ -122,55 +159,29 @@ internal class KYCLevel2ViewModel(
         else -> uploadDocument()
     }
 
-    private fun uploadDocument() {
-        mutableStateFlow.update {
-            it.copy(dialogState = KycLevel2State.DialogState.Loading)
-        }
-
-        viewModelScope.launch {
-            state.uploadedFile?.let {
-                val result = repository.createDocument(
-                    entityType = state.entityType,
-                    entityId = state.entityId,
-                    name = state.fileName,
-                    description = state.description,
-                    file = it,
-                )
-
-                sendAction(HandleDocumentUploadResult(result))
-            }
-        }
-    }
-
     /**
      * API call to upload document fails with the following error:
      * Unable to create parent directories
      * of /.fineract/VENUS/documents/clients/2/iwqyn/abc.png
      * This is a server side error, the client side code is correct.
      */
-    private fun handleDocumentUploadResult(action: HandleDocumentUploadResult) {
-        when (action.result) {
-            is DataState.Loading -> {
-                mutableStateFlow.update {
-                    it.copy(dialogState = KycLevel2State.DialogState.Loading)
-                }
-            }
+    private fun uploadDocument() {
+        mutableStateFlow.update {
+            it.copy(dialogState = KycLevel2State.DialogState.Loading)
+        }
 
-            is DataState.Error -> {
-                val message = action.result.exception.message.toString()
-                mutableStateFlow.update {
-                    it.copy(dialogState = Error(message))
-                }
-            }
+        val file = state.uploadedFile ?: return
 
-            is DataState.Success -> {
-                mutableStateFlow.update {
-                    it.copy(dialogState = null)
-                }
-
-                sendEvent(KycLevel2Event.ShowToast(action.result.data))
-                sendEvent(KycLevel2Event.OnNavigateToLevel3)
-            }
+        // Submit through the handler — it drives Submitting/Submitted/Failed, observed in
+        // `init`. The write returns Unit and throws on error, so the handler reports Failed.
+        submitUpload.submit {
+            repository.createDocument(
+                entityType = state.entityType,
+                entityId = state.entityId,
+                name = state.fileName,
+                description = state.description,
+                file = file,
+            )
         }
     }
 }
@@ -228,7 +239,7 @@ internal data class KycLevel2State(
 internal sealed interface KycLevel2Event {
     data object OnNavigateBack : KycLevel2Event
     data object OnNavigateToLevel3 : KycLevel2Event
-    data class ShowToast(val message: String) : KycLevel2Event
+    data class ShowToast(val message: StringResource) : KycLevel2Event
 }
 
 internal sealed interface KycLevel2Action {
@@ -240,8 +251,4 @@ internal sealed interface KycLevel2Action {
     data object NavigateBack : KycLevel2Action
     data object DismissDialog : KycLevel2Action
     data object PickFile : KycLevel2Action
-
-    sealed interface Internal : KycLevel2Action {
-        data class HandleDocumentUploadResult(val result: DataState<String>) : Internal
-    }
 }

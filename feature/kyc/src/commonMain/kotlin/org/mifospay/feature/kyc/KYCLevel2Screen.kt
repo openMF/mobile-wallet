@@ -5,7 +5,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 package org.mifospay.feature.kyc
 
@@ -40,9 +40,10 @@ import coil3.compose.SubcomposeAsyncImage
 import coil3.compose.SubcomposeAsyncImageContent
 import coil3.compose.rememberAsyncImagePainter
 import kotlinx.coroutines.launch
-import mobile_wallet.feature.kyc.generated.resources.Res
-import mobile_wallet.feature.kyc.generated.resources.feature_kyc_file_name
-import mobile_wallet.feature.kyc.generated.resources.feature_kyc_submit
+import mifos_pay.feature.kyc.generated.resources.Res
+import mifos_pay.feature.kyc.generated.resources.feature_kyc_file_name
+import mifos_pay.feature.kyc.generated.resources.feature_kyc_submit
+import org.jetbrains.compose.resources.getString
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.mifospay.core.designsystem.component.BasicDialogState
@@ -76,7 +77,7 @@ internal fun KYCLevel2Screen(
             KycLevel2Event.OnNavigateToLevel3 -> navigateToLevel3.invoke()
             is KycLevel2Event.ShowToast -> {
                 scope.launch {
-                    snackbarHostState.showSnackbar(event.message)
+                    snackbarHostState.showSnackbar(getString(event.message))
                 }
             }
         }

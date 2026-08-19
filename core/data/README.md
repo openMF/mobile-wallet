@@ -22,6 +22,3 @@ graph LR
   :core:data --> :core:network
   :core:data --> :core:analytics
 ```
-# :core:data module
-## Dependency graph
-![Dependency graph](../../docs/images/graphs-kmp/dep_graph_core_data.svg)

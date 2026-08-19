@@ -5,20 +5,14 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 plugins {
     alias(libs.plugins.cmp.feature.convention)
 }
 
-android {
-    namespace = "org.mifospay.feature.mpay.qr.scan"
-
-    defaultConfig {
-        consumerProguardFiles("consumer-rules.pro")
-    }
-}
-
+// namespace auto-derives from baseNamespace + module path via kmp.library.convention;
+// consumer-rules.pro is auto-registered by the convention plugin when the file exists.
 kotlin {
     sourceSets {
         commonMain.dependencies {

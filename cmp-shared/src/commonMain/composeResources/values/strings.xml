@@ -6,7 +6,7 @@
     If a copy of the MPL was not distributed with this file,
     You can obtain one at https://mozilla.org/MPL/2.0/.
 
-    See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+    See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
 -->
 <resources>
     <string name="app_name">Mifos Pay</string>
@@ -27,6 +27,7 @@
     <string name="default">Default</string>
     <string name="tenant_value">Tenant: %1$d</string>
     <string name="error_message">Error: %1$d</string>
+    <string name="failed_to_load_instances">Failed to load instances</string>
 
     <!-- Finance Tab Labels -->
     <string name="feature_finance_accounts">Accounts</string>

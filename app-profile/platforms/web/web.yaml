@@ -1,0 +1,10 @@
+# app-profile/platforms/web/web.yaml — Web deploy (Cloudflare Pages / hosting) values.
+web:
+  # YOUR_CLOUDFLARE_PAGES_PROJECT — real name not yet known (this was the kmp-project-template's OWN
+  # Cloudflare Pages project, "mifos-x-web", not Mifos Pay's); set the real one before deploying via
+  # cloudflare-pages. This file (not gradle/fork.properties) is the actual resolved SoT syncForkConfig
+  # reads — app-profile outranks fork.properties, so the placeholder MUST live here, not just there.
+  cloudflare_project: YOUR_CLOUDFLARE_PAGES_PROJECT   # web.cloudflare.project — deployment/web/cloudflare-pages/wrangler.toml
+  base_url: https://mifos.org                 # public site base (org.marketing_url)
+  custom_domain: ""                          # web.custom.domain (optional — Cloudflare Pages custom domain)
+  env: {}                                    # web.env (map of build-time env vars — unmapped, read direct)

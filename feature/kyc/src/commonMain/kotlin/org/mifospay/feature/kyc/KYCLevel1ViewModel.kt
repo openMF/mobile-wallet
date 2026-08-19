@@ -5,7 +5,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 package org.mifospay.feature.kyc
 
@@ -14,20 +14,21 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
-import org.mifospay.core.common.DataState
+import kpt.core.base.store.submit.SubmitState
+import kpt.core.base.store.submit.submitHandler
+import mifos_pay.feature.kyc.generated.resources.Res
+import mifos_pay.feature.kyc.generated.resources.feature_kyc_successkyc1
+import org.jetbrains.compose.resources.StringResource
 import org.mifospay.core.common.DateHelper
+import org.mifospay.core.common.ScreenState
 import org.mifospay.core.common.getSerialized
 import org.mifospay.core.common.setSerialized
-import org.mifospay.core.common.takeUntilResultSuccess
 import org.mifospay.core.data.repository.KycLevelRepository
 import org.mifospay.core.datastore.UserPreferencesRepository
 import org.mifospay.core.model.kyc.KYCLevel1Details
 import org.mifospay.core.ui.utils.BaseViewModel
-import org.mifospay.feature.kyc.KycLevel1Action.Internal.HandleLevel1Result
-import org.mifospay.feature.kyc.KycLevel1Action.Internal.KycLevel1DetailsResult
 import org.mifospay.feature.kyc.KycLevel1State.DialogState.Error
 import kotlin.time.Clock
 import kotlin.time.ExperimentalTime
@@ -48,16 +49,94 @@ internal class KYCLevel1ViewModel(
         private const val KEY_STATE = "kyc_level_1_state"
     }
 
+    // Template idiom (core-base/store): the one-shot KYCLevel1 write (add/update) goes
+    // through a SubmitHandler instead of a hand-folded result action. The handler
+    // owns the Submitting/Submitted/Failed lifecycle; we observe it below to drive this
+    // screen's existing Loading dialog + toast + navigate-to-level-2 UX, so the Screen is
+    // unchanged. Writes return Unit; the success toast is a feature StringResource.
+    private val submitKyc = viewModelScope.submitHandler<Unit>()
+
     init {
+        submitKyc.state
+            .onEach { submitState ->
+                when (submitState) {
+                    is SubmitState.Submitting -> {
+                        mutableStateFlow.update {
+                            it.copy(dialogState = KycLevel1State.DialogState.Loading)
+                        }
+                    }
+
+                    is SubmitState.Submitted -> {
+                        mutableStateFlow.update { it.copy(dialogState = null) }
+                        sendEvent(KycLevel1Event.ShowToast(Res.string.feature_kyc_successkyc1))
+                        sendEvent(KycLevel1Event.NavigateToKycLevel2)
+                        submitKyc.reset()
+                    }
+
+                    is SubmitState.Failed -> {
+                        val message = submitState.error.message.toString()
+                        mutableStateFlow.update {
+                            it.copy(dialogState = Error(message))
+                        }
+                        submitKyc.reset()
+                    }
+
+                    SubmitState.Idle -> Unit
+                }
+            }
+            .launchIn(viewModelScope)
+
         stateFlow
             .onEach { savedStateHandle.setSerialized(key = KEY_STATE, value = it) }
             .launchIn(viewModelScope)
 
+        // Prefill the form from the existing KYCLevel1 record (if any). The
+        // stream naturally terminates after one Content emission from the
+        // ktorfit call, so no takeUntilResultSuccess-equivalent is needed.
+        // Empty / NoNetwork / Unauthenticated / Error simply leave the form
+        // blank and clear any residual Loading dialog.
         kycLevelRepository.fetchKYCLevel1Details(state.clientId)
-            .takeUntilResultSuccess()
-            .onEach {
-                sendAction(HandleLevel1Result(it))
-            }.launchIn(viewModelScope)
+            .observeScreen { screenState ->
+                when (screenState) {
+                    is ScreenState.Loading -> {
+                        mutableStateFlow.update {
+                            it.copy(dialogState = KycLevel1State.DialogState.Loading)
+                        }
+                    }
+
+                    is ScreenState.Content -> {
+                        screenState.data?.let { data ->
+                            mutableStateFlow.update {
+                                it.copy(
+                                    firstNameInput = data.firstName,
+                                    lastNameInput = data.lastName,
+                                    addressLine1Input = data.addressLine1,
+                                    addressLine2Input = data.addressLine2,
+                                    mobileNoInput = data.mobileNo,
+                                    dobInput = data.dob,
+                                    currentLevelInput = data.currentLevel,
+                                    doesExist = true,
+                                    dialogState = null,
+                                )
+                            }
+                        } ?: run {
+                            mutableStateFlow.update {
+                                it.copy(dialogState = null)
+                            }
+                        }
+                    }
+
+                    is ScreenState.Empty,
+                    is ScreenState.Error,
+                    is ScreenState.NoNetwork,
+                    is ScreenState.Unauthenticated,
+                    -> {
+                        mutableStateFlow.update {
+                            it.copy(dialogState = null)
+                        }
+                    }
+                }
+            }
     }
 
     override fun handleAction(action: KycLevel1Action) {
@@ -115,10 +194,6 @@ internal class KYCLevel1ViewModel(
             }
 
             KycLevel1Action.SubmitClicked -> initiateKycLevel1Submission()
-
-            is KycLevel1DetailsResult -> handleKycLevel1DetailsResult(action)
-
-            is HandleLevel1Result -> handleLevel1Result(action)
         }
     }
 
@@ -173,76 +248,13 @@ internal class KYCLevel1ViewModel(
             it.copy(dialogState = KycLevel1State.DialogState.Loading)
         }
 
-        viewModelScope.launch {
-            val result = if (state.doesExist) {
+        // Submit through the handler — it drives Submitting/Submitted/Failed, observed in
+        // `init`. The write returns Unit and throws on error, so the handler reports Failed.
+        submitKyc.submit {
+            if (state.doesExist) {
                 kycLevelRepository.updateKYCLevel1Details(state.clientId, state.details)
             } else {
                 kycLevelRepository.addKYCLevel1Details(state.clientId, state.details)
-            }
-
-            sendAction(KycLevel1DetailsResult(result))
-        }
-    }
-
-    private fun handleKycLevel1DetailsResult(action: KycLevel1DetailsResult) {
-        when (action.result) {
-            is DataState.Success -> {
-                mutableStateFlow.update {
-                    it.copy(dialogState = null)
-                }
-                sendEvent(KycLevel1Event.ShowToast(action.result.data))
-                sendEvent(KycLevel1Event.NavigateToKycLevel2)
-            }
-
-            is DataState.Error -> {
-                val message = action.result.exception.message.toString()
-                mutableStateFlow.update {
-                    it.copy(dialogState = Error(message))
-                }
-            }
-
-            is DataState.Loading -> {
-                mutableStateFlow.update {
-                    it.copy(dialogState = KycLevel1State.DialogState.Loading)
-                }
-            }
-        }
-    }
-
-    private fun handleLevel1Result(action: HandleLevel1Result) {
-        when (action.result) {
-            is DataState.Success -> {
-                action.result.data?.let { data ->
-                    mutableStateFlow.update {
-                        it.copy(
-                            firstNameInput = data.firstName,
-                            lastNameInput = data.lastName,
-                            addressLine1Input = data.addressLine1,
-                            addressLine2Input = data.addressLine2,
-                            mobileNoInput = data.mobileNo,
-                            dobInput = data.dob,
-                            currentLevelInput = data.currentLevel,
-                            doesExist = true,
-                            dialogState = null,
-                        )
-                    }
-                } ?: run {
-                    mutableStateFlow.update {
-                        it.copy(dialogState = null)
-                    }
-                }
-            }
-
-            is DataState.Loading -> {
-                mutableStateFlow.update {
-                    it.copy(dialogState = KycLevel1State.DialogState.Loading)
-                }
-            }
-
-            else -> {
-                mutableStateFlow.update {
-                    it.copy(dialogState = null)
-                }
             }
         }
     }
@@ -294,7 +306,7 @@ internal data class KycLevel1State(
 internal sealed interface KycLevel1Event {
     data object NavigateToKycLevel2 : KycLevel1Event
     data object OnNavigateBack : KycLevel1Event
-    data class ShowToast(val message: String) : KycLevel1Event
+    data class ShowToast(val message: StringResource) : KycLevel1Event
 }
 
 internal sealed interface KycLevel1Action {
@@ -309,9 +321,4 @@ internal sealed interface KycLevel1Action {
     data object DismissDialog : KycLevel1Action
     data object NavigateBack : KycLevel1Action
     data object NavigateToKycLevel2 : KycLevel1Action
-
-    sealed interface Internal : KycLevel1Action {
-        data class HandleLevel1Result(val result: DataState<KYCLevel1Details?>) : Internal
-        data class KycLevel1DetailsResult(val result: DataState<String>) : Internal
-    }
 }

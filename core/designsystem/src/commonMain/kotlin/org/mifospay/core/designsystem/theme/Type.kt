@@ -5,7 +5,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 package org.mifospay.core.designsystem.theme
 
@@ -16,16 +16,16 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.unit.sp
-import mobile_wallet.core.designsystem.generated.resources.Res
-import mobile_wallet.core.designsystem.generated.resources.outfit_black
-import mobile_wallet.core.designsystem.generated.resources.outfit_bold
-import mobile_wallet.core.designsystem.generated.resources.outfit_extra_bold
-import mobile_wallet.core.designsystem.generated.resources.outfit_extra_light
-import mobile_wallet.core.designsystem.generated.resources.outfit_light
-import mobile_wallet.core.designsystem.generated.resources.outfit_medium
-import mobile_wallet.core.designsystem.generated.resources.outfit_regular
-import mobile_wallet.core.designsystem.generated.resources.outfit_semi_bold
-import mobile_wallet.core.designsystem.generated.resources.outfit_thin
+import kpt.core.designsystem.generated.resources.Res
+import kpt.core.designsystem.generated.resources.outfit_black
+import kpt.core.designsystem.generated.resources.outfit_bold
+import kpt.core.designsystem.generated.resources.outfit_extra_bold
+import kpt.core.designsystem.generated.resources.outfit_extra_light
+import kpt.core.designsystem.generated.resources.outfit_light
+import kpt.core.designsystem.generated.resources.outfit_medium
+import kpt.core.designsystem.generated.resources.outfit_regular
+import kpt.core.designsystem.generated.resources.outfit_semi_bold
+import kpt.core.designsystem.generated.resources.outfit_thin
 import org.jetbrains.compose.resources.Font
 
 @Composable

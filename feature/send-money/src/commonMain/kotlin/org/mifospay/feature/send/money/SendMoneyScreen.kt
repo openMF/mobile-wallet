@@ -5,7 +5,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 package org.mifospay.feature.send.money
 
@@ -49,20 +49,20 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import mobile_wallet.feature.send_money.generated.resources.Res
-import mobile_wallet.feature.send_money.generated.resources.feature_send_money_amount
-import mobile_wallet.feature.send_money.generated.resources.feature_send_money_bottom_bar
-import mobile_wallet.feature.send_money.generated.resources.feature_send_money_close
-import mobile_wallet.feature.send_money.generated.resources.feature_send_money_loading
-import mobile_wallet.feature.send_money.generated.resources.feature_send_money_no_accounts_found
-import mobile_wallet.feature.send_money.generated.resources.feature_send_money_oops
-import mobile_wallet.feature.send_money.generated.resources.feature_send_money_proceed
-import mobile_wallet.feature.send_money.generated.resources.feature_send_money_scan_qr
-import mobile_wallet.feature.send_money.generated.resources.feature_send_money_selected
-import mobile_wallet.feature.send_money.generated.resources.feature_send_money_send
-import mobile_wallet.feature.send_money.generated.resources.feature_send_money_something_went_wrong
-import mobile_wallet.feature.send_money.generated.resources.feature_send_money_to_account
-import mobile_wallet.feature.send_money.generated.resources.feature_send_money_vpa_mobile_account_number
+import mifos_pay.feature.send_money.generated.resources.Res
+import mifos_pay.feature.send_money.generated.resources.feature_send_money_amount
+import mifos_pay.feature.send_money.generated.resources.feature_send_money_bottom_bar
+import mifos_pay.feature.send_money.generated.resources.feature_send_money_close
+import mifos_pay.feature.send_money.generated.resources.feature_send_money_loading
+import mifos_pay.feature.send_money.generated.resources.feature_send_money_no_accounts_found
+import mifos_pay.feature.send_money.generated.resources.feature_send_money_oops
+import mifos_pay.feature.send_money.generated.resources.feature_send_money_proceed
+import mifos_pay.feature.send_money.generated.resources.feature_send_money_scan_qr
+import mifos_pay.feature.send_money.generated.resources.feature_send_money_selected
+import mifos_pay.feature.send_money.generated.resources.feature_send_money_send
+import mifos_pay.feature.send_money.generated.resources.feature_send_money_something_went_wrong
+import mifos_pay.feature.send_money.generated.resources.feature_send_money_to_account
+import mifos_pay.feature.send_money.generated.resources.feature_send_money_vpa_mobile_account_number
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.mifospay.core.common.utils.maskString

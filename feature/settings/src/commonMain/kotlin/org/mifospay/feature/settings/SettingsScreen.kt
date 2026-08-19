@@ -5,7 +5,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 package org.mifospay.feature.settings
 
@@ -30,20 +30,20 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import mobile_wallet.feature.settings.generated.resources.Res
-import mobile_wallet.feature.settings.generated.resources.feature_settings_change_language_text
-import mobile_wallet.feature.settings.generated.resources.feature_settings_change_passcode
-import mobile_wallet.feature.settings.generated.resources.feature_settings_change_password
-import mobile_wallet.feature.settings.generated.resources.feature_settings_disable_account
-import mobile_wallet.feature.settings.generated.resources.feature_settings_disable_biometrics
-import mobile_wallet.feature.settings.generated.resources.feature_settings_enable_biometrics
-import mobile_wallet.feature.settings.generated.resources.feature_settings_faq
-import mobile_wallet.feature.settings.generated.resources.feature_settings_log_out
-import mobile_wallet.feature.settings.generated.resources.feature_settings_profile
-import mobile_wallet.feature.settings.generated.resources.feature_settings_settings
-import mobile_wallet.feature.settings.generated.resources.outline_logout
-import mobile_wallet.feature.settings.generated.resources.outline_password
-import mobile_wallet.feature.settings.generated.resources.outline_pin
+import mifos_pay.feature.settings.generated.resources.Res
+import mifos_pay.feature.settings.generated.resources.feature_settings_change_language_text
+import mifos_pay.feature.settings.generated.resources.feature_settings_change_passcode
+import mifos_pay.feature.settings.generated.resources.feature_settings_change_password
+import mifos_pay.feature.settings.generated.resources.feature_settings_disable_account
+import mifos_pay.feature.settings.generated.resources.feature_settings_disable_biometrics
+import mifos_pay.feature.settings.generated.resources.feature_settings_enable_biometrics
+import mifos_pay.feature.settings.generated.resources.feature_settings_faq
+import mifos_pay.feature.settings.generated.resources.feature_settings_log_out
+import mifos_pay.feature.settings.generated.resources.feature_settings_profile
+import mifos_pay.feature.settings.generated.resources.feature_settings_settings
+import mifos_pay.feature.settings.generated.resources.outline_logout
+import mifos_pay.feature.settings.generated.resources.outline_password
+import mifos_pay.feature.settings.generated.resources.outline_pin
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.resources.vectorResource
 import org.jetbrains.compose.ui.tooling.preview.Preview

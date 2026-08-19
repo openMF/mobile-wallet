@@ -1,0 +1,72 @@
+# deployment-layer/store-listing/variants/v1/app-content/ios/en-US/age-rating.yaml
+# feeds App Store Connect "App Information" → "Age Rating" (2023 IARC-style questionnaire,
+# ASC's `AgeRatingDeclaration`). Folds 1:1 into app-profile/platforms/apple/ios/app-content/
+# age-rating.yaml on `--sync`.
+#
+# App Toolkit posture: 100% offline, no login, no account, no ads, no tracking, no UGC.
+
+content_descriptors:
+  cartoon_or_fantasy_violence: NONE
+  realistic_violence: NONE
+  prolonged_graphic_or_sadistic_realistic_violence: NONE
+  sexual_content_or_nudity: NONE
+  graphic_sexual_content_or_nudity: NONE
+  profanity_or_crude_humor: NONE
+  alcohol_tobacco_or_drug_use_or_references: NONE
+  mature_or_suggestive_themes: NONE
+  simulated_gambling: NONE
+  horror_or_fear_themes: NONE
+  medical_or_treatment_information: NONE
+  contests: NONE
+
+declarations:
+  unrestricted_web_access: false
+  gambling_or_contests: false
+  made_for_kids: false
+  loot_box_or_paid_random_items: false
+
+expected_rating:
+  age_rating: "4+"
+  notes: >
+    No content descriptor is triggered and unrestricted web access is
+    disabled (Interest Rates / Country Macro Data / Currency Exchange Rates
+    are read-only in-app data fetches, not an embedded browser). Expected
+    ASC age rating is 4+.
+
+# ── questionnaire: the actual App Store Connect Age Rating form, in order ──
+questionnaire:
+  age-rating:
+    form: Age Rating
+    where: App Store Connect → App → App Information → Age Rating → Edit
+    steps:
+      - q: Cartoon or Fantasy Violence
+        a: None
+      - q: Realistic Violence
+        a: None
+      - q: Prolonged Graphic or Sadistic Realistic Violence
+        a: None
+      - q: Sexual Content or Nudity
+        a: None
+      - q: Graphic Sexual Content and Nudity
+        a: None
+      - q: Profanity or Crude Humor
+        a: None
+      - q: Alcohol, Tobacco, or Drug Use or References
+        a: None
+      - q: Mature/Suggestive Themes
+        a: None
+      - q: Simulated Gambling
+        a: None
+      - q: Horror/Fear Themes
+        a: None
+      - q: Medical/Treatment Information
+        a: None
+      - q: Contests
+        a: None
+      - q: Unrestricted Web Access
+        a: "No"
+      - q: Gambling and Contests
+        a: "No"
+      - q: Made for Kids
+        a: "No"
+    outcome: "4+"

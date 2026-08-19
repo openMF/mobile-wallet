@@ -5,7 +5,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 package org.mifos.feature.passcode
 
@@ -23,9 +23,9 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigationevent.NavigationEventInfo
 import androidx.navigationevent.compose.NavigationBackHandler
 import androidx.navigationevent.compose.rememberNavigationEventState
-import mobile_wallet.feature.passcode.generated.resources.Res
-import mobile_wallet.feature.passcode.generated.resources.feature_passcode_error
-import mobile_wallet.feature.passcode.generated.resources.feature_passcode_ok
+import mifos_pay.feature.passcode.generated.resources.Res
+import mifos_pay.feature.passcode.generated.resources.feature_passcode_error
+import mifos_pay.feature.passcode.generated.resources.feature_passcode_ok
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel

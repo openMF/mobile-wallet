@@ -5,66 +5,99 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 package org.mifospay.core.data.repositoryImpl
 
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.withContext
-import org.mifospay.core.common.DataState
-import org.mifospay.core.common.asDataStateFlow
+import kpt.core.base.store.infra.FetchedAtRepository
+import kpt.core.base.store.screen.FetchPolicy
+import kpt.core.base.store.screen.ScreenDataStream
+import kpt.core.base.store.screen.asScreenStream
+import kpt.core.store.AppStoreRegistry
+import kpt.core.store.wallet.savedcards.SavedCardKey
+import org.mifospay.core.common.ScreenState
+import org.mifospay.core.common.asScreenStateFlow
 import org.mifospay.core.data.repository.SavedCardRepository
 import org.mifospay.core.model.savedcards.CardPayload
 import org.mifospay.core.model.savedcards.SavedCard
 import org.mifospay.core.network.FineractApiManager
+import org.mobilenativefoundation.store.store5.Store
+import kpt.core.data.infra.NetworkMonitor as StoreNetworkMonitor
 
 class SavedCardRepositoryImpl(
     private val apiManager: FineractApiManager,
     private val ioDispatcher: CoroutineDispatcher,
+    // Phase-5 Batch-1 LEDGER wiring — injected by RepositoryModule so the
+    // store-backed getSavedCardsScreen(...) can consume Store5 via
+    // asScreenStream(...). Nullable-default so existing unit tests without
+    // the store harness continue to compile; getSavedCards(...) — the legacy
+    // asScreenStateFlow path — is unaffected.
+    private val savedCardStore: Store<SavedCardKey, List<SavedCard>>? = null,
+    private val storeNetworkMonitor: StoreNetworkMonitor? = null,
+    private val fetchedAtRepository: FetchedAtRepository? = null,
 ) : SavedCardRepository {
-    override fun getSavedCards(clientId: Long): Flow<DataState<List<SavedCard>>> {
+    override fun getSavedCards(clientId: Long): Flow<ScreenState<List<SavedCard>>> {
         return apiManager.savedCardApi
             .getSavedCards(clientId)
-            .catch { DataState.Error(it, null) }
-            .onStart { DataState.Loading }
-            .asDataStateFlow().flowOn(ioDispatcher)
+            .asScreenStateFlow(isEmpty = { it.isEmpty() })
+            .flowOn(ioDispatcher)
     }
 
-    override fun getSavedCard(clientId: Long, cardId: Long): Flow<DataState<SavedCard>> {
+    // Phase-5 Batch-1 LEDGER read — GOAL D13 (`createStore` + CACHE_FIRST_SWR).
+    //
+    // See the interface KDoc for the shape contract. Requires the three store-adapter
+    // dependencies (savedCardStore + NetworkMonitor + FetchedAtRepository).
+    // If any is null (test wiring), we IllegalState — production DI in
+    // RepositoryModule wires all three unconditionally.
+    override fun getSavedCardsStream(
+        clientId: Long,
+        scope: CoroutineScope,
+    ): ScreenDataStream<List<SavedCard>> {
+        val store = checkNotNull(savedCardStore) {
+            "getSavedCardsStream requires the `savedCards` Store5 wiring. Verify " +
+                "RepositoryModule bound AppStoreRegistry.SavedCards and injected it here."
+        }
+        val netMon = checkNotNull(storeNetworkMonitor) {
+            "getSavedCardsStream requires kmptoolkit NetworkMonitor. Verify DataModule bound it."
+        }
+        val fetchedAtRepo = checkNotNull(fetchedAtRepository) {
+            "getSavedCardsStream requires FetchedAtRepository. Verify DataModule bound it."
+        }
+        return store.asScreenStream(
+            key = SavedCardKey(clientId),
+            networkMonitor = netMon,
+            fetchedAtRepository = fetchedAtRepo,
+            cacheKey = "wallet_saved_cards-$clientId",
+            scope = scope,
+            isEmpty = { it.isEmpty() },
+            fetchPolicy = FetchPolicy.CACHE_FIRST_SWR,
+            ttl = AppStoreRegistry.Ttl.SAVED_CARDS,
+        )
+    }
+
+    override fun getSavedCard(clientId: Long, cardId: Long): Flow<ScreenState<SavedCard>> {
         return apiManager.savedCardApi
             .getSavedCard(clientId, cardId)
-            .catch { DataState.Error(it, null) }
-            .onStart { DataState.Loading }
             .map { it.first() }
-            .asDataStateFlow().flowOn(ioDispatcher)
+            .asScreenStateFlow()
+            .flowOn(ioDispatcher)
     }
 
-    override suspend fun addSavedCard(clientId: Long, card: CardPayload): DataState<String> {
-        return try {
-            withContext(ioDispatcher) {
-                apiManager.savedCardApi.addSavedCard(clientId, card)
-            }
-
-            DataState.Success("Card added successfully")
-        } catch (e: Exception) {
-            DataState.Error(e, null)
+    override suspend fun addSavedCard(clientId: Long, card: CardPayload) {
+        withContext(ioDispatcher) {
+            apiManager.savedCardApi.addSavedCard(clientId, card)
         }
     }
 
-    override suspend fun deleteCard(clientId: Long, cardId: Long): DataState<String> {
-        return try {
-            withContext(ioDispatcher) {
-                apiManager.savedCardApi.deleteCard(clientId, cardId)
-            }
-
-            DataState.Success("Card deleted successfully")
-        } catch (e: Exception) {
-            DataState.Error(e, null)
+    override suspend fun deleteCard(clientId: Long, cardId: Long) {
+        withContext(ioDispatcher) {
+            apiManager.savedCardApi.deleteCard(clientId, cardId)
         }
     }
 
@@ -72,15 +105,9 @@ class SavedCardRepositoryImpl(
         clientId: Long,
         cardId: Long,
         card: CardPayload,
-    ): DataState<String> {
-        return try {
-            withContext(ioDispatcher) {
-                apiManager.savedCardApi.updateCard(clientId, cardId, card)
-            }
-
-            DataState.Success("Card updated successfully")
-        } catch (e: Exception) {
-            DataState.Error(e, null)
+    ) {
+        withContext(ioDispatcher) {
+            apiManager.savedCardApi.updateCard(clientId, cardId, card)
         }
     }
 }

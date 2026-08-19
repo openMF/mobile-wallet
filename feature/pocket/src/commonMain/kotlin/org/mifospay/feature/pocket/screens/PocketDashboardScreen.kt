@@ -5,7 +5,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 package org.mifospay.feature.pocket.screens
 
@@ -42,33 +42,37 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import mobile_wallet.feature.pocket.generated.resources.Res
-import mobile_wallet.feature.pocket.generated.resources.feature_pocket_dashboard_loan_accounts
-import mobile_wallet.feature.pocket.generated.resources.feature_pocket_dashboard_manage
-import mobile_wallet.feature.pocket.generated.resources.feature_pocket_dashboard_savings_accounts
-import mobile_wallet.feature.pocket.generated.resources.feature_pocket_dashboard_share_accounts
-import mobile_wallet.feature.pocket.generated.resources.feature_pocket_dashboard_title
-import mobile_wallet.feature.pocket.generated.resources.feature_pocket_dashboard_total_balance
-import mobile_wallet.feature.pocket.generated.resources.feature_pocket_empty_action
-import mobile_wallet.feature.pocket.generated.resources.feature_pocket_empty_description
-import mobile_wallet.feature.pocket.generated.resources.feature_pocket_empty_title
+import kpt.core.base.store.screen.ScreenState
+import kpt.core.base.ui.screen.ScreenContent
+import mifos_pay.feature.pocket.generated.resources.Res
+import mifos_pay.feature.pocket.generated.resources.feature_pocket_dashboard_loan_accounts
+import mifos_pay.feature.pocket.generated.resources.feature_pocket_dashboard_manage
+import mifos_pay.feature.pocket.generated.resources.feature_pocket_dashboard_savings_accounts
+import mifos_pay.feature.pocket.generated.resources.feature_pocket_dashboard_share_accounts
+import mifos_pay.feature.pocket.generated.resources.feature_pocket_dashboard_title
+import mifos_pay.feature.pocket.generated.resources.feature_pocket_dashboard_total_balance
+import mifos_pay.feature.pocket.generated.resources.feature_pocket_empty_action
+import mifos_pay.feature.pocket.generated.resources.feature_pocket_empty_description
+import mifos_pay.feature.pocket.generated.resources.feature_pocket_empty_title
+import mifos_pay.feature.pocket.generated.resources.feature_pocket_unknown_account
+import mifos_pay.feature.pocket.generated.resources.feature_pocket_unknown_status
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
+import org.mifospay.core.common.CurrencyFormatter
 import org.mifospay.core.designsystem.component.MifosAccountCard
 import org.mifospay.core.designsystem.component.MifosButton
 import org.mifospay.core.designsystem.component.MifosScaffold
 import org.mifospay.core.designsystem.icon.MifosIcons
+import org.mifospay.core.model.enums.AccountType
 import org.mifospay.core.model.pocket.AccountStatus
-import org.mifospay.core.ui.ErrorScreenContent
-import org.mifospay.core.ui.MifosProgressIndicator
+import org.mifospay.core.model.pocket.DetailedPocketAccount
+import org.mifospay.core.model.pocket.PocketAccount
 import org.mifospay.core.ui.utils.EventsEffect
 import org.mifospay.feature.pocket.viewmodels.DetailedPocket
 import org.mifospay.feature.pocket.viewmodels.PocketDashboardAction
 import org.mifospay.feature.pocket.viewmodels.PocketDashboardEvent
-import org.mifospay.feature.pocket.viewmodels.PocketDashboardState
-import org.mifospay.feature.pocket.viewmodels.PocketDashboardUiState
 import org.mifospay.feature.pocket.viewmodels.PocketDashboardViewModel
 import template.core.base.designsystem.theme.KptTheme
 
@@ -81,7 +85,7 @@ internal fun PocketDashboardScreen(
     navigateToSavingsAccountDetail: (Long) -> Unit,
     viewModel: PocketDashboardViewModel = koinViewModel(),
 ) {
-    val state by viewModel.stateFlow.collectAsStateWithLifecycle()
+    val state by viewModel.uiState.collectAsStateWithLifecycle()
 
     EventsEffect(viewModel) { event ->
         when (event) {
@@ -98,16 +102,22 @@ internal fun PocketDashboardScreen(
         onAction = remember(viewModel) {
             { viewModel.trySendAction(it) }
         },
+        onRetry = viewModel::retry,
     )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun PocketDashboardContent(
-    state: PocketDashboardState,
+    state: ScreenState<List<DetailedPocketAccount>>,
     onAction: (PocketDashboardAction) -> Unit,
+    onRetry: () -> Unit,
 ) {
     val pullRefreshState = rememberPullToRefreshState()
+    // Pull-to-refresh spinner is driven by the stream's own freshness signal —
+    // true while a background/manual revalidation is in flight over existing
+    // content. Loading / Empty / Error are handled inside ScreenContent.
+    val isRefreshing = (state as? ScreenState.Content)?.freshnessSignal?.isRefreshing == true
 
     MifosScaffold(
         backPress = { onAction(PocketDashboardAction.NavigateBack) },
@@ -115,7 +125,7 @@ internal fun PocketDashboardContent(
         containerColor = KptTheme.colorScheme.background,
     ) { paddingValues ->
         PullToRefreshBox(
-            isRefreshing = state.isRefreshing,
+            isRefreshing = isRefreshing,
             onRefresh = { onAction(PocketDashboardAction.Refresh) },
             state = pullRefreshState,
             modifier = Modifier
@@ -123,102 +133,212 @@ internal fun PocketDashboardContent(
                 .padding(paddingValues),
             contentAlignment = Alignment.TopCenter,
         ) {
-            when (state.uiState) {
-                PocketDashboardUiState.Loading -> {
-                    MifosProgressIndicator()
-                }
-                is PocketDashboardUiState.Error -> {
-                    ErrorScreenContent(
-                        subTitle = stringResource(state.uiState.message),
-                        onClickRetry = { onAction(PocketDashboardAction.Retry) },
-                    )
-                }
-                PocketDashboardUiState.Empty -> {
+            // Template idiom: `ScreenContent` (core-base/ui) owns every render
+            // branch — loading / empty / no-network / unauthenticated /
+            // error+retry — driven by the stream's pre-decided `ScreenState`.
+            // Only the Content body is authored here; the empty state keeps the
+            // feature's existing "link your first account" call-to-action. The
+            // in-flight banner is suppressed (`refreshingIndicator = null`)
+            // because the PullToRefreshBox spinner already signals refresh.
+            ScreenContent(
+                state = state,
+                onRetry = onRetry,
+                modifier = Modifier.fillMaxSize(),
+                refreshingIndicator = null,
+                empty = {
                     EmptyPocketContent(
                         onLinkFirstAccount = { onAction(PocketDashboardAction.LinkFirstAccount) },
                     )
+                },
+            ) { pockets, _ ->
+                // Fallbacks resolved here (Composable scope) so the pure bucket
+                // fold below stays free of `stringResource` / suspend `getString`.
+                val unknownStatus = stringResource(Res.string.feature_pocket_unknown_status)
+                val unknownAccount = stringResource(Res.string.feature_pocket_unknown_account)
+                val buckets = remember(pockets, unknownStatus, unknownAccount) {
+                    pockets.toPocketBuckets(
+                        unknownStatus = unknownStatus,
+                        unknownAccount = unknownAccount,
+                    )
                 }
-                PocketDashboardUiState.Success -> {
-                    Column(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .verticalScroll(rememberScrollState())
-                            .padding(KptTheme.spacing.lg),
-                    ) {
-                        PocketDashboardCard(
-                            totalBalance = state.totalBalance,
-                            onManageClick = { onAction(PocketDashboardAction.ManagePocket) },
-                        )
-
-                        Spacer(modifier = Modifier.height(KptTheme.spacing.xl))
-
-                        if (state.savingsAccounts.isNotEmpty()) {
-                            PocketSectionHeader(title = Res.string.feature_pocket_dashboard_savings_accounts)
-                            Spacer(modifier = Modifier.height(KptTheme.spacing.md))
-                            Column(verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.md)) {
-                                state.savingsAccounts.forEach { account ->
-                                    MifosAccountCard(
-                                        accountId = account.accountId,
-                                        accountType = account.name,
-                                        accountNumber = account.accountNumber,
-                                        accountStatus = account.balanceOrStatus,
-                                        accountStatusColor = account.status.toColor(),
-                                        onAccountClick = {
-                                            onAction(PocketDashboardAction.NavigateToSavingsDetail(account.accountId))
-                                        },
-                                        icon = MifosIcons.PersonAccounts,
-                                    )
-                                }
-                            }
-                            Spacer(modifier = Modifier.height(KptTheme.spacing.xl))
-                        }
-
-                        if (state.loanAccounts.isNotEmpty()) {
-                            PocketSectionHeader(title = Res.string.feature_pocket_dashboard_loan_accounts)
-                            Spacer(modifier = Modifier.height(KptTheme.spacing.md))
-                            Column(verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.md)) {
-                                state.loanAccounts.forEach { account ->
-                                    MifosAccountCard(
-                                        accountId = account.accountId,
-                                        accountType = account.name,
-                                        accountNumber = account.accountNumber,
-                                        accountStatus = account.balanceOrStatus,
-                                        accountStatusColor = account.status.toColor(),
-                                        onAccountClick = {
-                                            onAction(PocketDashboardAction.NavigateToLoanDetail(account.accountId))
-                                        },
-                                        icon = MifosIcons.CoinMultiple,
-                                    )
-                                }
-                            }
-                            Spacer(modifier = Modifier.height(KptTheme.spacing.xl))
-                        }
-
-                        if (state.shareAccounts.isNotEmpty()) {
-                            PocketSectionHeader(title = Res.string.feature_pocket_dashboard_share_accounts)
-                            Spacer(modifier = Modifier.height(KptTheme.spacing.md))
-                            Column(verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.md)) {
-                                state.shareAccounts.forEach { account ->
-                                    MifosAccountCard(
-                                        accountId = account.accountId,
-                                        accountType = account.name,
-                                        accountNumber = account.accountNumber,
-                                        accountStatus = account.balanceOrStatus,
-                                        accountStatusColor = account.status.toColor(),
-                                        onAccountClick = {
-                                            onAction(PocketDashboardAction.NavigateToShareDetail(account.accountId))
-                                        },
-                                        icon = MifosIcons.CoinMultiple,
-                                    )
-                                }
-                            }
-                            Spacer(modifier = Modifier.height(KptTheme.spacing.xl))
-                        }
-                    }
-                }
+                PocketDashboardSuccessContent(buckets = buckets, onAction = onAction)
             }
         }
     }
+}
+
+@Composable
+private fun PocketDashboardSuccessContent(
+    buckets: PocketBuckets,
+    onAction: (PocketDashboardAction) -> Unit,
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
+            .padding(KptTheme.spacing.lg),
+    ) {
+        PocketDashboardCard(
+            totalBalance = buckets.totalBalance,
+            onManageClick = { onAction(PocketDashboardAction.ManagePocket) },
+        )
+
+        Spacer(modifier = Modifier.height(KptTheme.spacing.xl))
+
+        if (buckets.savingsAccounts.isNotEmpty()) {
+            PocketSectionHeader(title = Res.string.feature_pocket_dashboard_savings_accounts)
+            Spacer(modifier = Modifier.height(KptTheme.spacing.md))
+            Column(verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.md)) {
+                buckets.savingsAccounts.forEach { account ->
+                    MifosAccountCard(
+                        accountId = account.accountId,
+                        accountType = account.name,
+                        accountNumber = account.accountNumber,
+                        accountStatus = account.balanceOrStatus,
+                        accountStatusColor = account.status.toColor(),
+                        onAccountClick = {
+                            onAction(PocketDashboardAction.NavigateToSavingsDetail(account.accountId))
+                        },
+                        icon = MifosIcons.PersonAccounts,
+                    )
+                }
+            }
+            Spacer(modifier = Modifier.height(KptTheme.spacing.xl))
+        }
+
+        if (buckets.loanAccounts.isNotEmpty()) {
+            PocketSectionHeader(title = Res.string.feature_pocket_dashboard_loan_accounts)
+            Spacer(modifier = Modifier.height(KptTheme.spacing.md))
+            Column(verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.md)) {
+                buckets.loanAccounts.forEach { account ->
+                    MifosAccountCard(
+                        accountId = account.accountId,
+                        accountType = account.name,
+                        accountNumber = account.accountNumber,
+                        accountStatus = account.balanceOrStatus,
+                        accountStatusColor = account.status.toColor(),
+                        onAccountClick = {
+                            onAction(PocketDashboardAction.NavigateToLoanDetail(account.accountId))
+                        },
+                        icon = MifosIcons.CoinMultiple,
+                    )
+                }
+            }
+            Spacer(modifier = Modifier.height(KptTheme.spacing.xl))
+        }
+
+        if (buckets.shareAccounts.isNotEmpty()) {
+            PocketSectionHeader(title = Res.string.feature_pocket_dashboard_share_accounts)
+            Spacer(modifier = Modifier.height(KptTheme.spacing.md))
+            Column(verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.md)) {
+                buckets.shareAccounts.forEach { account ->
+                    MifosAccountCard(
+                        accountId = account.accountId,
+                        accountType = account.name,
+                        accountNumber = account.accountNumber,
+                        accountStatus = account.balanceOrStatus,
+                        accountStatusColor = account.status.toColor(),
+                        onAccountClick = {
+                            onAction(PocketDashboardAction.NavigateToShareDetail(account.accountId))
+                        },
+                        icon = MifosIcons.CoinMultiple,
+                    )
+                }
+            }
+            Spacer(modifier = Modifier.height(KptTheme.spacing.xl))
+        }
+    }
+}
+
+/**
+ * Screen-side presentation fold of the raw [DetailedPocketAccount] page into
+ * per-account-type sections + a formatted multi-currency total. This is the
+ * pure (non-suspend, non-Composable) extraction of the pre-migration
+ * `PocketDashboardViewModel.populateFromContent` — moved here because it now
+ * runs on the stream's `ScreenState.Content` payload directly, and the two
+ * missing-value fallbacks resolve from `stringResource` at the call site.
+ */
+internal data class PocketBuckets(
+    val totalBalance: String,
+    val savingsAccounts: List<DetailedPocket>,
+    val loanAccounts: List<DetailedPocket>,
+    val shareAccounts: List<DetailedPocket>,
+)
+
+private fun List<DetailedPocketAccount>.toPocketBuckets(
+    unknownStatus: String,
+    unknownAccount: String,
+): PocketBuckets {
+    // Upstream PR #2057 (manage-pocket) rewired per-account balance rendering to
+    // prefix the currency `displaySymbol` in front of the numeric string
+    // (`"$code $displaySymbol$formattedNum"`); kept identical here.
+    fun mapToUiModel(detailed: DetailedPocketAccount): DetailedPocket {
+        val balanceStr = if (detailed.status == AccountStatus.ACTIVE) {
+            if (detailed.balance != null) {
+                val code = detailed.currencyCode.orEmpty()
+                val displaySymbol = detailed.currencyDisplaySymbol.orEmpty()
+                val formattedNum = CurrencyFormatter.format(detailed.balance, detailed.decimalPlaces)
+                if (code.isNotEmpty()) "$code $displaySymbol$formattedNum" else "$displaySymbol$formattedNum"
+            } else {
+                ""
+            }
+        } else {
+            detailed.status?.name ?: unknownStatus
+        }
+
+        return DetailedPocket(
+            accountId = detailed.pocket.accountId,
+            name = detailed.productName ?: unknownAccount,
+            accountNumber = detailed.pocket.accountNumber,
+            balanceOrStatus = balanceStr,
+            status = detailed.status ?: AccountStatus.UNKNOWN,
+        )
+    }
+
+    val loanList = mutableListOf<DetailedPocket>()
+    val savingsList = mutableListOf<DetailedPocket>()
+    val shareList = mutableListOf<DetailedPocket>()
+    for (account in this) {
+        when (account.pocket.accountType) {
+            AccountType.LOAN -> loanList.add(mapToUiModel(account))
+            AccountType.SAVINGS -> savingsList.add(mapToUiModel(account))
+            AccountType.SHARE -> shareList.add(mapToUiModel(account))
+        }
+    }
+
+    // Multi-currency per-code sum, each rendered `"$code $displaySymbol$sum"` and
+    // joined by newline (the total-balance widget renders multi-line text).
+    val balancesByCurrency = this
+        .filter { it.status == AccountStatus.ACTIVE && it.balance != null && it.currencyCode != null }
+        .groupBy { it.currencyCode!! }
+        .map { (currencyCode, accounts) ->
+            val sum = accounts.sumOf { it.balance ?: 0.0 }
+            val decimalPlaces = accounts.first().decimalPlaces
+            val displaySymbol = accounts.first().currencyDisplaySymbol.orEmpty()
+            val formattedNum = CurrencyFormatter.format(sum, decimalPlaces)
+            if (currencyCode.isNotEmpty()) "$currencyCode $displaySymbol$formattedNum" else "$displaySymbol$formattedNum"
+        }
+
+    val formattedTotal = if (balancesByCurrency.isNotEmpty()) {
+        balancesByCurrency.joinToString("\n")
+    } else {
+        val sampleAccount = this.firstOrNull { it.currencyCode != null }
+        if (sampleAccount != null) {
+            val code = sampleAccount.currencyCode.orEmpty()
+            val displaySymbol = sampleAccount.currencyDisplaySymbol.orEmpty()
+            val formattedNum = CurrencyFormatter.format(0.0, sampleAccount.decimalPlaces)
+            if (code.isNotEmpty()) "$code $displaySymbol$formattedNum" else "$displaySymbol$formattedNum"
+        } else {
+            "0.00"
+        }
+    }
+
+    return PocketBuckets(
+        totalBalance = formattedTotal,
+        savingsAccounts = savingsList,
+        loanAccounts = loanList,
+        shareAccounts = shareList,
+    )
 }
 
 @Composable
@@ -386,52 +506,9 @@ internal fun EmptyPocketContent(
 @Composable
 internal fun PocketDashboardContentPreview() {
     PocketDashboardContent(
-        state = PocketDashboardState(
-            totalBalance = "MX$ 10,000.00\n$ 8,750.00",
-            savingsAccounts = listOf(
-                DetailedPocket(
-                    accountId = 1L,
-                    name = "Emergency Fund",
-                    accountNumber = "1004859238",
-                    balanceOrStatus = "$ 5,000.00",
-                    status = AccountStatus.ACTIVE,
-                ),
-                DetailedPocket(
-                    accountId = 2L,
-                    name = "Vacation Savings",
-                    accountNumber = "1004859299",
-                    balanceOrStatus = "$ 1,250.00",
-                    status = AccountStatus.ACTIVE,
-                ),
-            ),
-            loanAccounts = listOf(
-                DetailedPocket(
-                    accountId = 3L,
-                    name = "Personal Loan",
-                    accountNumber = "3009284756",
-                    balanceOrStatus = "MX$ 10,000.00",
-                    status = AccountStatus.ACTIVE,
-                ),
-                DetailedPocket(
-                    accountId = 4L,
-                    name = "Auto Loan",
-                    accountNumber = "3009284812",
-                    balanceOrStatus = "PENDING",
-                    status = AccountStatus.PENDING,
-                ),
-            ),
-            shareAccounts = listOf(
-                DetailedPocket(
-                    accountId = 5L,
-                    name = "Company Shares",
-                    accountNumber = "5001129384",
-                    balanceOrStatus = "$ 2,500.00",
-                    status = AccountStatus.ACTIVE,
-                ),
-            ),
-            uiState = PocketDashboardUiState.Success,
-        ),
+        state = ScreenState.Content(samplePocketAccounts),
         onAction = {},
+        onRetry = {},
     )
 }
 
@@ -442,3 +519,51 @@ private fun EmptyPocketContentPreview() {
         onLinkFirstAccount = {},
     )
 }
+
+private val samplePocketAccounts: List<DetailedPocketAccount> = listOf(
+    DetailedPocketAccount(
+        pocket = PocketAccount(
+            pocketId = 1L,
+            id = 1L,
+            accountId = 1L,
+            accountType = AccountType.SAVINGS,
+            accountNumber = "1004859238",
+        ),
+        productName = "Emergency Fund",
+        balance = 5_000.0,
+        currencyCode = "USD",
+        decimalPlaces = 2,
+        status = AccountStatus.ACTIVE,
+        currencyDisplaySymbol = "$",
+    ),
+    DetailedPocketAccount(
+        pocket = PocketAccount(
+            pocketId = 2L,
+            id = 2L,
+            accountId = 3L,
+            accountType = AccountType.LOAN,
+            accountNumber = "3009284756",
+        ),
+        productName = "Personal Loan",
+        balance = 10_000.0,
+        currencyCode = "MXN",
+        decimalPlaces = 2,
+        status = AccountStatus.ACTIVE,
+        currencyDisplaySymbol = "MX$",
+    ),
+    DetailedPocketAccount(
+        pocket = PocketAccount(
+            pocketId = 3L,
+            id = 3L,
+            accountId = 5L,
+            accountType = AccountType.SHARE,
+            accountNumber = "5001129384",
+        ),
+        productName = "Company Shares",
+        balance = 2_500.0,
+        currencyCode = "USD",
+        decimalPlaces = 2,
+        status = AccountStatus.ACTIVE,
+        currencyDisplaySymbol = "$",
+    ),
+)

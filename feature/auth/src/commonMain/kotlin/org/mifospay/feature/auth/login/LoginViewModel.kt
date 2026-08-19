@@ -5,7 +5,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 package org.mifospay.feature.auth.login
 
@@ -14,10 +14,13 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
-import org.mifospay.core.common.DataState
+import kpt.core.base.store.submit.SubmitState
+import kpt.core.base.store.submit.submitHandler
+import mifos_pay.feature.auth.generated.resources.Res
+import mifos_pay.feature.auth.generated.resources.feature_auth_error_login_failed
+import org.jetbrains.compose.resources.getString
 import org.mifospay.core.common.getSerialized
 import org.mifospay.core.common.setSerialized
 import org.mifospay.core.domain.LoginUseCase
@@ -38,7 +41,43 @@ class LoginViewModel(
         private const val KEY_STATE = "state"
     }
 
+    // Template idiom (core-base/store): the login (authenticate) write goes through a
+    // SubmitHandler instead of a hand-folded DataState result action. The handler owns the
+    // Submitting/Submitted/Failed lifecycle; we observe it below to drive this screen's
+    // existing loading/error dialog + passcode navigation, so the Screen is unchanged.
+    private val submitLogin = viewModelScope.submitHandler<UserInfo>()
+
     init {
+        submitLogin.state
+            .onEach { submitState ->
+                when (submitState) {
+                    is SubmitState.Submitting -> {
+                        mutableStateFlow.update {
+                            it.copy(dialogState = LoginState.DialogState.Loading)
+                        }
+                    }
+
+                    is SubmitState.Submitted -> {
+                        mutableStateFlow.update { it.copy(dialogState = null) }
+                        sendEvent(LoginEvent.NavigateToMifosPasscodeScreen)
+                        submitLogin.reset()
+                    }
+
+                    is SubmitState.Failed -> {
+                        val message = getString(Res.string.feature_auth_error_login_failed)
+                        mutableStateFlow.update {
+                            it.copy(
+                                dialogState = LoginState.DialogState.Error(message),
+                            )
+                        }
+                        submitLogin.reset()
+                    }
+
+                    SubmitState.Idle -> Unit
+                }
+            }
+            .launchIn(viewModelScope)
+
         stateFlow
             .onEach { savedStateHandle.setSerialized(key = KEY_STATE, value = it) }
             .launchIn(viewModelScope)
@@ -85,10 +124,6 @@ class LoginViewModel(
                 loginUser(state.username, state.password)
             }
 
-            is LoginAction.Internal.ReceiveLoginResult -> {
-                handleLoginResult(action)
-            }
-
             is LoginAction.SignupClicked -> {
                 sendEvent(LoginEvent.NavigateToSignup)
             }
@@ -99,40 +134,15 @@ class LoginViewModel(
         }
     }
 
-    private fun handleLoginResult(action: LoginAction.Internal.ReceiveLoginResult) {
-        when (action.loginResult) {
-            is DataState.Error -> {
-                mutableStateFlow.update {
-                    it.copy(dialogState = LoginState.DialogState.Error(action.loginResult.message))
-                }
-            }
-
-            is DataState.Loading -> {
-                mutableStateFlow.update {
-                    it.copy(dialogState = LoginState.DialogState.Loading)
-                }
-            }
-
-            is DataState.Success -> {
-                mutableStateFlow.update {
-                    it.copy(dialogState = null)
-                }
-                sendEvent(LoginEvent.NavigateToMifosPasscodeScreen)
-            }
-        }
-    }
-
     private fun loginUser(
         username: String,
         password: String,
     ) {
-        mutableStateFlow.update {
-            it.copy(dialogState = LoginState.DialogState.Loading)
-        }
-
-        viewModelScope.launch {
-            val result = loginUseCase(username, password)
-            sendAction(LoginAction.Internal.ReceiveLoginResult(result))
+        // Submit through the handler — it drives Submitting/Submitted/Failed, observed in
+        // `init`. The use-case returns the UserInfo on success and throws on failure, so
+        // the handler reports Submitted/Failed directly.
+        submitLogin.submit {
+            loginUseCase(username, password)
         }
     }
 }
@@ -170,10 +180,4 @@ sealed class LoginAction {
     data object ErrorDialogDismiss : LoginAction()
     data object LoginClicked : LoginAction()
     data object SignupClicked : LoginAction()
-
-    sealed class Internal : LoginAction() {
-        data class ReceiveLoginResult(
-            val loginResult: DataState<UserInfo>,
-        ) : Internal()
-    }
 }

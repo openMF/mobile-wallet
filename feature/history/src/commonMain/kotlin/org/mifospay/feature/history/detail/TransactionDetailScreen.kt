@@ -5,7 +5,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 package org.mifospay.feature.history.detail
 
@@ -20,11 +20,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import mobile_wallet.feature.history.generated.resources.Res
-import mobile_wallet.feature.history.generated.resources.feature_history_error
-import mobile_wallet.feature.history.generated.resources.feature_history_error_oops
-import mobile_wallet.feature.history.generated.resources.feature_history_share
-import mobile_wallet.feature.history.generated.resources.feature_history_transaction_details
+import mifos_pay.feature.history.generated.resources.Res
+import mifos_pay.feature.history.generated.resources.feature_history_error
+import mifos_pay.feature.history.generated.resources.feature_history_error_oops
+import mifos_pay.feature.history.generated.resources.feature_history_share
+import mifos_pay.feature.history.generated.resources.feature_history_transaction_details
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.mifospay.core.designsystem.component.MifosScaffold
@@ -39,6 +39,7 @@ import template.core.base.designsystem.theme.KptTheme
 internal fun TransactionDetailScreen(
     onNavigateBack: () -> Unit,
     modifier: Modifier = Modifier,
+    onShareTransaction: (transferId: Long) -> Unit = {},
     viewModel: TransactionDetailViewModel = koinViewModel(),
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
@@ -47,7 +48,9 @@ internal fun TransactionDetailScreen(
         when (event) {
             TransactionDetailEvent.OnNavigateBack -> onNavigateBack.invoke()
             TransactionDetailEvent.OnShareTransaction -> {
-                // TODO:: Configure Share Image Functionality
+                // Opens the dedicated Receipt card (shareable summary) for this transfer —
+                // reads off the same TransferDetail Store5 vertical this screen already uses.
+                viewModel.transferId?.let(onShareTransaction)
             }
         }
     }

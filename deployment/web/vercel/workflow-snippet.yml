@@ -1,0 +1,35 @@
+# deployment/web/vercel/workflow-snippet.yml
+name: web-vercel-deploy
+on:
+  workflow_call:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup JDK
+        uses: actions/setup-java@v4
+        with: { distribution: temurin, java-version: '17' }
+
+      - name: Materialize secrets (vault-mode)
+        if: ${{ secrets.SOPS_AGE_KEY != '' }}
+        env:
+          SOPS_AGE_KEY: ${{ secrets.SOPS_AGE_KEY }}
+        run: bash deployment/_shared/scripts/secrets-pull.sh --required-for web-vercel-publish
+
+      - name: Build web dist
+        run: ./gradlew :cmp-web:jsBrowserDistribution
+
+      - name: Deploy to Vercel
+        env:
+          VERCEL_TOKEN:       ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID:      ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID:  ${{ secrets.VERCEL_PROJECT_ID }}
+        run: |
+          npx --yes vercel@latest pull --yes --environment=production --token="$VERCEL_TOKEN"
+          npx --yes vercel@latest deploy --prod \
+            --token="$VERCEL_TOKEN" \
+            --cwd=. \
+            cmp-web/build/dist/js/productionExecutable

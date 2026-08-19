@@ -1,0 +1,59 @@
+# deployment/desktop/msi-signed/workflow-snippet.yml
+# Azure OIDC federation + Trusted Signing — no long-lived signing secrets.
+name: desktop-msi-signed-deploy
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        type: string
+        required: true
+      confirm:
+        description: "Type CONFIRM"
+        required: true
+        type: string
+
+jobs:
+  build:
+    if: ${{ inputs.confirm == 'CONFIRM' }}
+    runs-on: windows-latest
+    permissions:
+      id-token: write   # OIDC federation → Azure
+      contents: write   # gh release upload
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup JDK
+        uses: actions/setup-java@v4
+        with: { distribution: temurin, java-version: '17' }
+
+      - name: Azure login (OIDC)
+        uses: azure/login@v2
+        with:
+          tenant-id:        ${{ secrets.AZURE_TS_TENANT_ID }}
+          client-id:        ${{ secrets.AZURE_TS_CLIENT_ID }}
+          subscription-id:  ${{ secrets.AZURE_TS_SUBSCRIPTION_ID }}
+
+      - name: Build MSI
+        shell: bash
+        run: ./gradlew :cmp-desktop:packageReleaseMsi -PflavorDimension=prod
+
+      - name: Sign MSI via Azure Trusted Signing
+        uses: azure/trusted-signing-action@v0.5.1
+        with:
+          azure-tenant-id:               ${{ secrets.AZURE_TS_TENANT_ID }}
+          azure-client-id:               ${{ secrets.AZURE_TS_CLIENT_ID }}
+          endpoint:                      https://eus.codesigning.azure.net/
+          trusted-signing-account-name:  ${{ secrets.AZURE_TS_ACCOUNT_NAME }}
+          certificate-profile-name:      ${{ secrets.AZURE_TS_CERT_PROFILE_NAME }}
+          files-folder:                  cmp-desktop/build/compose/binaries/main-release/msi
+          files-folder-filter:           msi
+
+      - name: Upload to GH Release
+        shell: bash
+        env:
+          TAG: ${{ inputs.tag }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          MSI=$(find cmp-desktop/build/compose/binaries/main-release/msi -name '*.msi' -type f | head -1)
+          gh release upload "$TAG" "$MSI" --clobber

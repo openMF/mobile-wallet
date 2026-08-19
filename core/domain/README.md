@@ -18,6 +18,3 @@ graph LR
   :core:domain --> :core:data
   :core:domain --> :core:model
 ```
-# :core:domain module
-## Dependency graph
-![Dependency graph](../../docs/images/graphs-kmp/dep_graph_core_domain.svg)

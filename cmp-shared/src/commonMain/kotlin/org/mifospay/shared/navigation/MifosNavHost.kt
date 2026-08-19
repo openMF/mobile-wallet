@@ -5,7 +5,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 package org.mifospay.shared.navigation
 
@@ -13,12 +13,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.navOptions
-import mobile_wallet.cmp_shared.generated.resources.feature_finance_accounts
-import mobile_wallet.cmp_shared.generated.resources.feature_finance_beneficiaries
-import mobile_wallet.feature.payments.generated.resources.Res
-import mobile_wallet.feature.payments.generated.resources.feature_payments_history
-import mobile_wallet.feature.payments.generated.resources.feature_payments_request
-import mobile_wallet.feature.payments.generated.resources.feature_payments_send
+import cmp.shared.generated.resources.feature_finance_accounts
+import cmp.shared.generated.resources.feature_finance_beneficiaries
+import mifos_pay.feature.payments.generated.resources.Res
+import mifos_pay.feature.payments.generated.resources.feature_payments_history
+import mifos_pay.feature.payments.generated.resources.feature_payments_request
+import mifos_pay.feature.payments.generated.resources.feature_payments_send
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.koinInject
 import org.mifos.feature.passcode.internalMifosPasscodeScreen
@@ -27,6 +27,7 @@ import org.mifos.lib.loan.navigation.loanApplicationGraph
 import org.mifos.lib.loan.navigation.navigateToLoanApplicationGraph
 import org.mifospay.core.data.repository.UserVerificationRepository
 import org.mifospay.core.ui.utility.TabContent
+import org.mifospay.core.ui.utils.RootTransitionProviders
 import org.mifospay.feature.accounts.AccountsScreen
 import org.mifospay.feature.accounts.savingsaccount.SavingsAddEditType
 import org.mifospay.feature.accounts.savingsaccount.addEditSavingAccountScreen
@@ -91,6 +92,7 @@ import org.mifospay.feature.pocket.navigation.navigateToPocketDashboard
 import org.mifospay.feature.pocket.navigation.pocketDashboardScreen
 import org.mifospay.feature.profile.navigation.navigateToProfile
 import org.mifospay.feature.profile.navigation.profileNavGraph
+import org.mifospay.feature.receipt.navigation.navigateToReceipt
 import org.mifospay.feature.receipt.navigation.receiptScreen
 import org.mifospay.feature.savedcards.createOrUpdate.addEditCardScreen
 import org.mifospay.feature.savedcards.details.cardDetailRoute
@@ -140,7 +142,7 @@ import org.mifospay.feature.transfer.intrabank.success.navigateTransferSuccess
 import org.mifospay.feature.transfer.intrabank.success.transferSuccessScreen
 import org.mifospay.feature.upi.setup.navigation.setupUpiPinScreen
 import org.mifospay.shared.ui.MifosAppState
-import mobile_wallet.cmp_shared.generated.resources.Res as SharedRes
+import cmp.shared.generated.resources.Res as SharedRes
 
 /**
  * `SavedStateHandle` key used by callers of [internalMifosPasscodeScreen] for
@@ -176,6 +178,17 @@ const val AUTHENTICATION_VERIFICATION_KEY = "org.mifospay.mifos.authentication_v
  *        `navigateForPasscodeVerification` callback — does not override
  *        `allowBiometricAuth`, so biometric is allowed there.
  */
+// TODO(phase-2-nav): migrate ~60 feature nav-extensions to cmp-navigation type-safe
+// routes (Phase 2 T2 of 02-topology-reconciliation.md). Until then this ~1000-line
+// string-route nav host stays in place — retiring it in this chunk would strand
+// every feature composable that still resolves via its string route. The template
+// shell (`cmp.navigation.ComposeApp` → `RootNavScreen` → `authenticatedGraph`) is
+// wired for the four HOME/PAYMENTS/FINANCE/HISTORY top-level tabs (see
+// `cmp/navigation/authenticated/AuthenticatedNavigation.kt`) but does not yet
+// register the fork's ~60 feature destinations; the T2 rewrite converts each
+// `composable(route = "…/{arg}")` here into `composable<AppRoute.X> { … }` under
+// `:cmp-navigation`, then this file becomes deletable. Shell-security behaviors
+// and the Supabase instance selector already live in `:cmp-navigation` per T4/T5.
 @Composable
 internal fun MifosNavHost(
     appState: MifosAppState,
@@ -309,6 +322,16 @@ internal fun MifosNavHost(
         startDestination = HOME_ROUTE,
         navController = navController,
         modifier = modifier,
+        // Explicit lightweight fade for every destination that does NOT declare its own
+        // transition (the four bottom-nav tabs + ~10 other plain composables). Without this the
+        // JetBrains nav lib falls back to a 700ms fadeIn/fadeOut crossfade that keeps two heavy
+        // screens alpha-composited for 0.7s — the primary source of the transition lag. Fade (not
+        // slide) is the correct motion for sibling bottom-nav tabs; per-destination slide/push
+        // transitions (composableWithSlideTransitions/…PushTransitions) still override this default.
+        enterTransition = { RootTransitionProviders.Enter.fadeIn(this) },
+        exitTransition = { RootTransitionProviders.Exit.fadeOut(this) },
+        popEnterTransition = { RootTransitionProviders.Enter.fadeIn(this) },
+        popExitTransition = { RootTransitionProviders.Exit.fadeOut(this) },
     ) {
         internalMifosPasscodeScreen(
             navigateToLogin = onClickLogout,
@@ -413,6 +436,7 @@ internal fun MifosNavHost(
 
         transactionDetailNavigation(
             navigateBack = navController::navigateUp,
+            navigateToReceipt = navController::navigateToReceipt,
         )
 
         addEditBeneficiaryScreen(

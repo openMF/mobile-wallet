@@ -5,7 +5,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 
@@ -19,24 +19,24 @@ import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
  * See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 plugins {
-    alias(libs.plugins.kmp.library.convention)
+    alias(libs.plugins.kmp.core.base.library.convention)
     alias(libs.plugins.jetbrainsCompose)
     alias(libs.plugins.compose.compiler)
-}
-
-android {
-    namespace = "template.core.base.ui"
 }
 
 kotlin {
     sourceSets {
         androidMain.dependencies {
             api(libs.androidx.metrics)
-            implementation(libs.androidx.browser)
             implementation(libs.androidx.compose.runtime)
         }
 
         commonMain.dependencies {
+            implementation(projects.coreBase.store)
+            implementation(projects.coreBase.designsystem)
+            implementation(libs.cmp.network.monitor.compose)
+            implementation(libs.cmp.intent.launcher)
+
             implementation(compose.ui)
             implementation(compose.material3)
             implementation(compose.foundation)
@@ -44,6 +44,12 @@ kotlin {
             implementation(compose.components.resources)
             implementation(compose.materialIconsExtended)
             implementation(compose.components.uiToolingPreview)
+
+            // Compottie — first-class Lottie support for ScreenStateVisual.Lottie.
+            // `api` so apps that pass ScreenStateVisual.Lottie(spec = { ... }) can build
+            // a LottieCompositionSpec without re-declaring the dep.
+            api(libs.compottie)
+            api(libs.compottie.resources)
 
             implementation(libs.jb.composeViewmodel)
             implementation(libs.jb.lifecycle.compose)
@@ -78,5 +84,5 @@ kotlin {
 compose.resources {
     publicResClass = true
     generateResClass = always
-    packageOfResClass = "template.core.base.ui.generated.resources"
+    packageOfResClass = "kpt.core.base.ui.generated.resources"
 }

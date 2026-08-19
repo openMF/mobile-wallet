@@ -5,7 +5,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 package org.mifospay.feature.accounts
 
@@ -46,28 +46,28 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.launch
-import mobile_wallet.feature.accounts.generated.resources.Res
-import mobile_wallet.feature.accounts.generated.resources.baseline_check
-import mobile_wallet.feature.accounts.generated.resources.baseline_unchecked
-import mobile_wallet.feature.accounts.generated.resources.feature_accounts_add
-import mobile_wallet.feature.accounts.generated.resources.feature_accounts_apply_for_loan
-import mobile_wallet.feature.accounts.generated.resources.feature_accounts_check
-import mobile_wallet.feature.accounts.generated.resources.feature_accounts_default
-import mobile_wallet.feature.accounts.generated.resources.feature_accounts_edit
-import mobile_wallet.feature.accounts.generated.resources.feature_accounts_error_oops
-import mobile_wallet.feature.accounts.generated.resources.feature_accounts_info
-import mobile_wallet.feature.accounts.generated.resources.feature_accounts_savings_account
-import mobile_wallet.feature.accounts.generated.resources.feature_accounts_status_active
-import mobile_wallet.feature.accounts.generated.resources.feature_accounts_status_approved
-import mobile_wallet.feature.accounts.generated.resources.feature_accounts_status_closed
-import mobile_wallet.feature.accounts.generated.resources.feature_accounts_status_matured
-import mobile_wallet.feature.accounts.generated.resources.feature_accounts_status_pending_approval
-import mobile_wallet.feature.accounts.generated.resources.feature_accounts_status_prematurely_closed
-import mobile_wallet.feature.accounts.generated.resources.feature_accounts_status_rejected
-import mobile_wallet.feature.accounts.generated.resources.feature_accounts_status_transfer_in_progress
-import mobile_wallet.feature.accounts.generated.resources.feature_accounts_status_transfer_on_hold
-import mobile_wallet.feature.accounts.generated.resources.feature_accounts_status_withdrawn
-import mobile_wallet.feature.accounts.generated.resources.feature_accounts_unexpected_error_subtitle
+import mifos_pay.feature.accounts.generated.resources.Res
+import mifos_pay.feature.accounts.generated.resources.baseline_check
+import mifos_pay.feature.accounts.generated.resources.baseline_unchecked
+import mifos_pay.feature.accounts.generated.resources.feature_accounts_add
+import mifos_pay.feature.accounts.generated.resources.feature_accounts_apply_for_loan
+import mifos_pay.feature.accounts.generated.resources.feature_accounts_check
+import mifos_pay.feature.accounts.generated.resources.feature_accounts_default
+import mifos_pay.feature.accounts.generated.resources.feature_accounts_edit
+import mifos_pay.feature.accounts.generated.resources.feature_accounts_error_oops
+import mifos_pay.feature.accounts.generated.resources.feature_accounts_info
+import mifos_pay.feature.accounts.generated.resources.feature_accounts_savings_account
+import mifos_pay.feature.accounts.generated.resources.feature_accounts_status_active
+import mifos_pay.feature.accounts.generated.resources.feature_accounts_status_approved
+import mifos_pay.feature.accounts.generated.resources.feature_accounts_status_closed
+import mifos_pay.feature.accounts.generated.resources.feature_accounts_status_matured
+import mifos_pay.feature.accounts.generated.resources.feature_accounts_status_pending_approval
+import mifos_pay.feature.accounts.generated.resources.feature_accounts_status_prematurely_closed
+import mifos_pay.feature.accounts.generated.resources.feature_accounts_status_rejected
+import mifos_pay.feature.accounts.generated.resources.feature_accounts_status_transfer_in_progress
+import mifos_pay.feature.accounts.generated.resources.feature_accounts_status_transfer_on_hold
+import mifos_pay.feature.accounts.generated.resources.feature_accounts_status_withdrawn
+import mifos_pay.feature.accounts.generated.resources.feature_accounts_unexpected_error_subtitle
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.getString
 import org.jetbrains.compose.resources.stringResource

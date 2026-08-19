@@ -5,17 +5,17 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 package org.mifospay.core.data.repository
 
 import io.ktor.http.content.PartData
-import kotlinx.coroutines.flow.Flow
-import org.mifospay.core.common.DataState
+import org.mifospay.core.common.ScreenStateStream
 import org.mifospay.core.network.model.entity.noncore.Document
 
 interface DocumentRepository {
-    suspend fun getDocuments(entityType: String, entityId: Int): Flow<DataState<List<Document>>>
+    // Flow-shaped surfaces on ScreenState.
+    suspend fun getDocuments(entityType: String, entityId: Int): ScreenStateStream<List<Document>>
 
     suspend fun createDocument(
         entityType: String,
@@ -23,19 +23,20 @@ interface DocumentRepository {
         name: String,
         description: String,
         fileName: PartData.FileItem,
-    ): Flow<DataState<Unit>>
+    ): ScreenStateStream<Unit>
 
+    // Message-only write: returns Unit and throws on error.
     suspend fun createDocument(
         entityType: String,
         entityId: Long,
         name: String,
         description: String,
         file: ByteArray,
-    ): DataState<String>
+    )
 
-    suspend fun downloadDocument(entityType: String, entityId: Int, documentId: Int): Flow<DataState<Document>>
+    suspend fun downloadDocument(entityType: String, entityId: Int, documentId: Int): ScreenStateStream<Document>
 
-    suspend fun deleteDocument(entityType: String, entityId: Int, documentId: Int): Flow<DataState<Unit>>
+    suspend fun deleteDocument(entityType: String, entityId: Int, documentId: Int): ScreenStateStream<Unit>
 
     suspend fun updateDocument(
         entityType: String,
@@ -44,5 +45,5 @@ interface DocumentRepository {
         name: String,
         description: String,
         fileName: PartData.FileItem,
-    ): Flow<DataState<Unit>>
+    ): ScreenStateStream<Unit>
 }

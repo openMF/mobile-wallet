@@ -5,7 +5,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 package org.mifospay.feature.transfer.intrabank.hub
 
@@ -30,12 +30,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import mobile_wallet.feature.transfer_intrabank.generated.resources.Res
-import mobile_wallet.feature.transfer_intrabank.generated.resources.feature_select_account_placeholder
-import mobile_wallet.feature.transfer_intrabank.generated.resources.feature_send_money_see_all
-import mobile_wallet.feature.transfer_intrabank.generated.resources.feature_send_money_send
-import mobile_wallet.feature.transfer_intrabank.generated.resources.feature_send_money_tab_beneficiaries
-import mobile_wallet.feature.transfer_intrabank.generated.resources.feature_send_money_tab_recents
+import mifos_pay.feature.transfer_intrabank.generated.resources.Res
+import mifos_pay.feature.transfer_intrabank.generated.resources.feature_select_account_placeholder
+import mifos_pay.feature.transfer_intrabank.generated.resources.feature_send_money_see_all
+import mifos_pay.feature.transfer_intrabank.generated.resources.feature_send_money_send
+import mifos_pay.feature.transfer_intrabank.generated.resources.feature_send_money_tab_beneficiaries
+import mifos_pay.feature.transfer_intrabank.generated.resources.feature_send_money_tab_recents
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel

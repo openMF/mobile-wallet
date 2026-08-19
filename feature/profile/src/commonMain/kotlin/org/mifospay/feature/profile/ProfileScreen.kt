@@ -5,12 +5,11 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 package org.mifospay.feature.profile
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -28,9 +27,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import mobile_wallet.feature.profile.generated.resources.Res
-import mobile_wallet.feature.profile.generated.resources.feature_profile
-import mobile_wallet.feature.profile.generated.resources.feature_profile_personal_qr_code
+import kpt.core.base.store.screen.ScreenState
+import kpt.core.base.ui.screen.ScreenContent
+import mifos_pay.feature.profile.generated.resources.Res
+import mifos_pay.feature.profile.generated.resources.feature_profile
+import mifos_pay.feature.profile.generated.resources.feature_profile_personal_qr_code
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.mifospay.core.designsystem.component.BasicDialogState
@@ -40,8 +41,7 @@ import org.mifospay.core.designsystem.component.MifosButton
 import org.mifospay.core.designsystem.component.MifosLoadingDialog
 import org.mifospay.core.designsystem.component.MifosScaffold
 import org.mifospay.core.designsystem.icon.MifosIcons
-import org.mifospay.core.ui.ErrorScreenContent
-import org.mifospay.core.ui.MifosProgressIndicatorOverlay
+import org.mifospay.core.model.client.Client
 import org.mifospay.core.ui.utils.EventsEffect
 import org.mifospay.feature.profile.components.ProfileDetailsCard
 import org.mifospay.feature.profile.components.ProfileImage
@@ -81,6 +81,9 @@ internal fun ProfileScreen(
         onAction = remember(viewModel) {
             { action -> viewModel.trySendAction(action) }
         },
+        onRetry = remember(viewModel) {
+            { viewModel.retry() }
+        },
         modifier = modifier.fillMaxSize(),
     )
 }
@@ -88,8 +91,9 @@ internal fun ProfileScreen(
 @Composable
 internal fun ProfileScreenContent(
     state: ProfileState,
-    clientState: ProfileState.ViewState,
+    clientState: ScreenState<Client>,
     onAction: (ProfileAction) -> Unit,
+    onRetry: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     MifosScaffold(
@@ -100,36 +104,28 @@ internal fun ProfileScreenContent(
         },
         containerColor = KptTheme.colorScheme.background,
     ) { paddingValues ->
-        Box(
+        // Template idiom: `ScreenContent` (core-base/ui) owns every render
+        // branch — loading / empty / no-network / unauthenticated / error+retry —
+        // driven by the stream's pre-decided `ScreenState`. Only the Content
+        // body (the profile detail region) is authored here.
+        ScreenContent(
+            state = clientState,
+            onRetry = onRetry,
             modifier = Modifier.fillMaxSize().padding(paddingValues),
-            contentAlignment = Alignment.Center,
-        ) {
-            when (clientState) {
-                is ProfileState.ViewState.Loading -> MifosProgressIndicatorOverlay()
-
-                is ProfileState.ViewState.Error -> {
-                    ErrorScreenContent(
-                        onClickRetry = { },
-                        modifier = Modifier.align(Alignment.Center),
-                    )
-                }
-
-                is ProfileState.ViewState.Success -> {
-                    ProfileScreenContent(
-                        state = clientState,
-                        clientImage = state.clientImage,
-                        onAction = onAction,
-                        modifier = Modifier,
-                    )
-                }
-            }
+        ) { client, _ ->
+            ProfileScreenContent(
+                client = client,
+                clientImage = state.clientImage,
+                onAction = onAction,
+                modifier = Modifier,
+            )
         }
     }
 }
 
 @Composable
 private fun ProfileScreenContent(
-    state: ProfileState.ViewState.Success,
+    client: Client,
     clientImage: String?,
     modifier: Modifier = Modifier,
     onAction: (ProfileAction) -> Unit,
@@ -145,7 +141,7 @@ private fun ProfileScreenContent(
         ProfileImage(bitmap = clientImage)
 
         ProfileDetailsCard(
-            client = state.client,
+            client = client,
             modifier = Modifier.fillMaxWidth(),
         )
 

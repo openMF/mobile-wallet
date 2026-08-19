@@ -5,7 +5,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 package org.mifospay.feature.payments
 
@@ -29,12 +29,12 @@ import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import mobile_wallet.feature.payments.generated.resources.Res
-import mobile_wallet.feature.payments.generated.resources.baseline_content_copy
-import mobile_wallet.feature.payments.generated.resources.feature_payments_mobile_number
-import mobile_wallet.feature.payments.generated.resources.feature_payments_receive
-import mobile_wallet.feature.payments.generated.resources.feature_payments_show_code
-import mobile_wallet.feature.payments.generated.resources.feature_payments_vpa
+import mifos_pay.feature.payments.generated.resources.Res
+import mifos_pay.feature.payments.generated.resources.baseline_content_copy
+import mifos_pay.feature.payments.generated.resources.feature_payments_mobile_number
+import mifos_pay.feature.payments.generated.resources.feature_payments_receive
+import mifos_pay.feature.payments.generated.resources.feature_payments_show_code
+import mifos_pay.feature.payments.generated.resources.feature_payments_vpa
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.resources.vectorResource
 import org.jetbrains.compose.ui.tooling.preview.Preview

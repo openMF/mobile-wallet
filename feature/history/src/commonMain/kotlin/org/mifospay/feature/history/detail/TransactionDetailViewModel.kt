@@ -5,23 +5,21 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 package org.mifospay.feature.history.detail
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
-import mobile_wallet.feature.history.generated.resources.Res
-import mobile_wallet.feature.history.generated.resources.feature_history_error_fallback
+import mifos_pay.feature.history.generated.resources.Res
+import mifos_pay.feature.history.generated.resources.feature_history_error_fallback
 import org.jetbrains.compose.resources.StringResource
-import org.mifospay.core.common.DataState
+import org.mifospay.core.common.ScreenState
 import org.mifospay.core.data.repository.AccountRepository
+import org.mifospay.core.data.util.toForkScreenStateFlow
 import org.mifospay.core.model.savingsaccount.TransferDetail
 import org.mifospay.core.ui.utils.BaseViewModel
-import org.mifospay.feature.history.detail.TransactionDetailAction.TransferDetailReceive
 import org.mifospay.feature.history.detail.TransactionDetailState.ViewState.Content
 import org.mifospay.feature.history.detail.TransactionDetailState.ViewState.Error
 
@@ -36,11 +34,26 @@ internal class TransactionDetailViewModel(
         private const val TRANSFER_ID_KEY = "transferId"
     }
 
+    /** Reused by [TransactionDetailScreen]'s Share action to open Receipt on the same transfer. */
+    val transferId: Long? = savedStateHandle.get<Long>(TRANSFER_ID_KEY)
+
     init {
-        savedStateHandle.get<Long>(TRANSFER_ID_KEY)?.let { transferId ->
-            accountRepository.getAccountTransfer(transferId).onEach {
-                sendAction(TransferDetailReceive(it))
-            }.launchIn(viewModelScope)
+        transferId?.let { transferId ->
+            // transfer-detail Store5 vertical (GOAL D13) — switched from the
+            // transitional `getAccountTransfer(transferId)` (`asScreenStateFlow`
+            // shim over the raw Ktorfit flow) to the store-native
+            // `getAccountTransferStream(...)` that consumes the `transferDetail`
+            // Store5 read (`createStore` + Room SoT + CACHE_FIRST_SWR + single-row
+            // upsert), making the transaction-detail drill-down offline-first. The
+            // `.state` Flow is bridged to the fork ScreenState and folded through
+            // the same `observeScreen` reducer; consumer branches are unchanged.
+            // Requires `viewModelScope` for the stream's internal reconnect +
+            // periodic + SWR side-fetch coroutines.
+            accountRepository.getAccountTransferStream(transferId, viewModelScope)
+                .state.toForkScreenStateFlow()
+                .observeScreen { screenState ->
+                    mutableStateFlow.update { it.copy(viewState = screenState.toViewState()) }
+                }
         }
     }
 
@@ -53,38 +66,42 @@ internal class TransactionDetailViewModel(
             TransactionDetailAction.ShareTransaction -> {
                 sendEvent(TransactionDetailEvent.OnShareTransaction)
             }
-
-            is TransferDetailReceive -> handleTransferDetailReceive(action)
-        }
-    }
-
-    private fun handleTransferDetailReceive(action: TransferDetailReceive) {
-        when (action.result) {
-            is DataState.Error -> {
-                val message = action.result.exception.message
-                mutableStateFlow.update {
-                    if (message.isNullOrEmpty()) {
-                        it.copy(viewState = Error.ResourceMessage(Res.string.feature_history_error_fallback))
-                    } else {
-                        it.copy(Error.StringMessage(message))
-                    }
-                }
-            }
-
-            is DataState.Loading -> {
-                mutableStateFlow.update {
-                    it.copy(viewState = TransactionDetailState.ViewState.Loading)
-                }
-            }
-
-            is DataState.Success -> {
-                mutableStateFlow.update {
-                    it.copy(viewState = Content(action.result.data))
-                }
-            }
         }
     }
 }
+
+/**
+ * Fold the 6-branch [ScreenState] into the existing 3-branch
+ * [TransactionDetailState.ViewState] (Loading / Error{String,Resource} /
+ * Content). The Error sub-hierarchy is preserved:
+ *  - unwrapped exception with a non-empty message → [Error.StringMessage]
+ *  - anything else (blank message, Empty, NoNetwork, Unauthenticated) →
+ *    [Error.ResourceMessage] with the localised fallback string.
+ */
+private fun ScreenState<TransferDetail>.toViewState(): TransactionDetailState.ViewState =
+    when (this) {
+        is ScreenState.Loading -> TransactionDetailState.ViewState.Loading
+
+        is ScreenState.Empty ->
+            Error.ResourceMessage(Res.string.feature_history_error_fallback)
+
+        is ScreenState.Content -> Content(data)
+
+        is ScreenState.Error -> {
+            val message = error.message
+            if (message.isNullOrEmpty()) {
+                Error.ResourceMessage(Res.string.feature_history_error_fallback)
+            } else {
+                Error.StringMessage(message)
+            }
+        }
+
+        is ScreenState.NoNetwork ->
+            Error.ResourceMessage(Res.string.feature_history_error_fallback)
+
+        is ScreenState.Unauthenticated ->
+            Error.ResourceMessage(Res.string.feature_history_error_fallback)
+    }
 
 internal data class TransactionDetailState(
     val viewState: ViewState,
@@ -108,6 +125,4 @@ internal sealed interface TransactionDetailEvent {
 internal sealed interface TransactionDetailAction {
     data object NavigateBack : TransactionDetailAction
     data object ShareTransaction : TransactionDetailAction
-    data class TransferDetailReceive(val result: DataState<TransferDetail>) :
-        TransactionDetailAction
 }

@@ -1,0 +1,44 @@
+# deployment/android/play-closed/workflow-snippet.yml
+# Reusable GHA snippet for Android → promote internal → closed/alpha (no build).
+name: android-play-closed-promote
+on:
+  workflow_call:
+
+jobs:
+  promote:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with: { bundler-cache: true }
+
+      # deployment/**/metadata is DERIVED from app-profile/ (gitignored), so a promotion job — which
+      # does NOT build — must still materialize the listing before the drift-checked sync in the lane
+      # can push it. Explicit JDK+Gradle + syncForkConfig (SYNC_FORK_DONE=1 makes the Fastfile
+      # before_all skip its own run). Without this a promote could ship a stale/empty listing.
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with: { distribution: zulu, java-version: '17' }
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v3
+      - name: Materialize store listing from app-profile (syncForkConfig)
+        run: |
+          ./gradlew -q syncForkConfig
+          echo "SYNC_FORK_DONE=1" >> "$GITHUB_ENV"
+
+      - name: Materialize secrets (vault-mode)
+        if: ${{ secrets.SOPS_AGE_KEY != '' }}
+        env:
+          SOPS_AGE_KEY: ${{ secrets.SOPS_AGE_KEY }}
+        run: bash deployment/_shared/scripts/secrets-pull.sh --required-for android-play-internal-publish
+
+      - name: Materialize secrets (manual-mode)
+        if: ${{ secrets.SOPS_AGE_KEY == '' }}
+        run: |
+          mkdir -p secrets
+          echo '${{ secrets.PLAYSTORE_PUBLISHER_JSON }}' > secrets/live/android/playStorePublishServiceCredentialsFile.json
+
+      - name: Promote to closed/alpha
+        run: bundle exec fastlane android promoteToClosed

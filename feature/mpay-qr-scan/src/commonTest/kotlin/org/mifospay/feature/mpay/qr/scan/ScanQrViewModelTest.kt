@@ -5,7 +5,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 package org.mifospay.feature.mpay.qr.scan
 
@@ -22,7 +22,6 @@ import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
-import org.mifospay.core.common.DataState
 import org.mifospay.core.data.util.QrTransferRouter
 import org.mifospay.core.datastore.UserPreferencesRepository
 import org.mifospay.core.model.account.DefaultAccount
@@ -30,6 +29,7 @@ import org.mifospay.core.model.client.Client
 import org.mifospay.core.model.client.UpdatedClient
 import org.mifospay.core.model.instance.InterbankServer
 import org.mifospay.core.model.instance.ServerInstance
+import org.mifospay.core.model.user.Language
 import org.mifospay.core.model.user.UserInfo
 import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
@@ -348,15 +348,17 @@ private class FakeUserPreferencesRepository : UserPreferencesRepository {
     override val defaultAccountId: StateFlow<Long?> = MutableStateFlow(null)
     override val selectedInterbankInstance: StateFlow<InterbankServer?> = MutableStateFlow(null)
     override val accountExternalIds: StateFlow<Map<Long, String>> = MutableStateFlow(emptyMap())
+    override val language: StateFlow<Language> = MutableStateFlow(Language.DEFAULT)
 
-    override suspend fun updateToken(token: String): DataState<Unit> = DataState.Success(Unit)
-    override suspend fun updateUserInfo(user: UserInfo): DataState<Unit> = DataState.Success(Unit)
-    override suspend fun updateClientInfo(client: Client): DataState<Unit> = DataState.Success(Unit)
-    override suspend fun updateClientProfile(client: UpdatedClient): DataState<Unit> = DataState.Success(Unit)
-    override suspend fun updateDefaultAccount(account: DefaultAccount): DataState<Unit> = DataState.Success(Unit)
-    override suspend fun updateSelectedInstance(instance: ServerInstance): DataState<Unit> = DataState.Success(Unit)
-    override suspend fun updateSelectedInterbankInstance(instance: InterbankServer): DataState<Unit> = DataState.Success(Unit)
-    override suspend fun updateAccountExternalIds(accountExternalIds: Map<Long, String>): DataState<Unit> = DataState.Success(Unit)
+    override suspend fun updateToken(token: String) {}
+    override suspend fun updateUserInfo(user: UserInfo) {}
+    override suspend fun setLanguage(language: Language) {}
+    override suspend fun updateClientInfo(client: Client) {}
+    override suspend fun updateClientProfile(client: UpdatedClient) {}
+    override suspend fun updateDefaultAccount(account: DefaultAccount) {}
+    override suspend fun updateSelectedInstance(instance: ServerInstance) {}
+    override suspend fun updateSelectedInterbankInstance(instance: InterbankServer) {}
+    override suspend fun updateAccountExternalIds(accountExternalIds: Map<Long, String>) {}
     override fun getAccountExternalId(accountId: Long): String? = null
     override suspend fun logOut() {}
 }

@@ -6,7 +6,7 @@
     If a copy of the MPL was not distributed with this file,
     You can obtain one at https://mozilla.org/MPL/2.0/.
 
-    See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+    See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
 -->
 <resources>
     <!-- Select Account Screen -->
@@ -95,6 +95,8 @@
     <string name="feature_send_interbank_error_enter_description">Please enter a description</string>
     <string name="feature_send_interbank_error_phone_number_digits">Phone number must be at least 10 digits</string>
     <string name="feature_send_interbank_error_failed_to_search_recipient">Failed to search recipient</string>
+    <string name="feature_send_interbank_error_no_network">No network. Please check your connection.</string>
+    <string name="feature_send_interbank_error_session_expired">Session expired. Please log in again.</string>
     <string name="feature_send_interbank_terms_acknowledged">Terms Acknowledged</string>
     <string name="feature_send_interbank_i_acknowledged">I Acknowledge</string>
     <string name="feature_send_interbank_terms_acknowledged_description">By completing this final payment, you acknowledge that the transaction is irreversible. Please ensure all details are correct before submission.</string>

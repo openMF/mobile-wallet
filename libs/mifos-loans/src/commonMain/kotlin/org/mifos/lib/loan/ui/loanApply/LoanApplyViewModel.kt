@@ -5,7 +5,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 package org.mifos.lib.loan.ui.loanApply
 
@@ -19,18 +19,18 @@ import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.atStartOfDayIn
-import mobile_wallet.libs.mifos_loans.generated.resources.Res
-import mobile_wallet.libs.mifos_loans.generated.resources.feature_apply_loan_error_amount_empty
-import mobile_wallet.libs.mifos_loans.generated.resources.feature_apply_loan_error_amount_invalid_decimal
-import mobile_wallet.libs.mifos_loans.generated.resources.feature_apply_loan_error_amount_invalid_format
-import mobile_wallet.libs.mifos_loans.generated.resources.feature_apply_loan_error_amount_multiple
-import mobile_wallet.libs.mifos_loans.generated.resources.feature_apply_loan_error_amount_too_large
-import mobile_wallet.libs.mifos_loans.generated.resources.feature_apply_loan_error_amount_too_small
+import mifos_pay.libs.mifos_loans.generated.resources.Res
+import mifos_pay.libs.mifos_loans.generated.resources.feature_apply_loan_error_amount_empty
+import mifos_pay.libs.mifos_loans.generated.resources.feature_apply_loan_error_amount_invalid_decimal
+import mifos_pay.libs.mifos_loans.generated.resources.feature_apply_loan_error_amount_invalid_format
+import mifos_pay.libs.mifos_loans.generated.resources.feature_apply_loan_error_amount_multiple
+import mifos_pay.libs.mifos_loans.generated.resources.feature_apply_loan_error_amount_too_large
+import mifos_pay.libs.mifos_loans.generated.resources.feature_apply_loan_error_amount_too_small
 import org.jetbrains.compose.resources.StringResource
 import org.mifos.lib.loan.core.model.LoanTemplate
 import org.mifos.lib.loan.repository.LoansRepository
-import org.mifospay.core.common.DataState
 import org.mifospay.core.common.DateHelper
+import org.mifospay.core.common.ScreenState
 import org.mifospay.core.data.repository.SelfServiceRepository
 import org.mifospay.core.data.util.NetworkMonitor
 import org.mifospay.core.datastore.UserPreferencesRepository
@@ -142,26 +142,33 @@ internal class LoanApplyViewModel(
     }
 
     private fun handleDataLoaded(
-        client: DataState<Client>,
-        template: DataState<LoanTemplate>,
-        productTemplate: DataState<LoanTemplate>,
+        client: ScreenState<Client>,
+        template: ScreenState<LoanTemplate>,
+        productTemplate: ScreenState<LoanTemplate>,
     ) {
+        val loanStates = listOf(template, productTemplate)
         when {
-            listOf(client, template, productTemplate).any { it is DataState.Loading } -> {
+            client is ScreenState.Loading || loanStates.any { it is ScreenState.Loading } -> {
                 mutableStateFlow.update { it.copy(viewState = LoanApplyState.ViewState.Loading) }
             }
 
-            client is DataState.Success &&
-                template is DataState.Success &&
-                productTemplate is DataState.Success -> {
+            client is ScreenState.Content &&
+                template is ScreenState.Content &&
+                productTemplate is ScreenState.Content -> {
                 populateForm(client.data, template.data, productTemplate.data)
             }
 
             else -> {
-                val message = listOf(client, template, productTemplate)
-                    .filterIsInstance<DataState.Error<*>>()
+                val loanMessage = loanStates
+                    .filterIsInstance<ScreenState.Error>()
                     .firstOrNull()
+                    ?.error
                     ?.message
+                val clientMessage = (client as? ScreenState.Error)
+                    ?.error
+                    ?.message
+                val message = loanMessage
+                    ?: clientMessage
                     ?: "Something went wrong. Please try again."
                 mutableStateFlow.update {
                     it.copy(viewState = LoanApplyState.ViewState.Error(message))
@@ -400,9 +407,9 @@ internal sealed interface LoanApplyAction {
 
     sealed interface Internal : LoanApplyAction {
         data class DataLoaded(
-            val client: DataState<Client>,
-            val template: DataState<LoanTemplate>,
-            val productTemplate: DataState<LoanTemplate>,
+            val client: ScreenState<Client>,
+            val template: ScreenState<LoanTemplate>,
+            val productTemplate: ScreenState<LoanTemplate>,
         ) : Internal
     }
 }

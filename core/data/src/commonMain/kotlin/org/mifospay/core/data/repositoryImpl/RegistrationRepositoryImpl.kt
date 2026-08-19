@@ -5,13 +5,12 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 package org.mifospay.core.data.repositoryImpl
 
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
-import org.mifospay.core.common.DataState
 import org.mifospay.core.data.repository.RegistrationRepository
 import org.mifospay.core.network.FineractApiManager
 import org.mifospay.core.network.model.entity.register.RegisterPayload
@@ -21,25 +20,15 @@ class RegistrationRepositoryImpl(
     private val apiManager: FineractApiManager,
     private val ioDispatcher: CoroutineDispatcher,
 ) : RegistrationRepository {
-    override suspend fun registerUser(registerPayload: RegisterPayload): DataState<Unit> {
-        return try {
-            val result = withContext(ioDispatcher) {
-                apiManager.registrationAPi.registerUser(registerPayload)
-            }
-            DataState.Success(result)
-        } catch (e: Exception) {
-            DataState.Error(e)
+    override suspend fun registerUser(registerPayload: RegisterPayload) {
+        withContext(ioDispatcher) {
+            apiManager.registrationAPi.registerUser(registerPayload)
         }
     }
 
-    override suspend fun verifyUser(userVerify: UserVerify): DataState<Unit> {
-        return try {
-            val result = withContext(ioDispatcher) {
-                apiManager.registrationAPi.verifyUser(userVerify)
-            }
-            DataState.Success(result)
-        } catch (e: Exception) {
-            DataState.Error(e)
+    override suspend fun verifyUser(userVerify: UserVerify) {
+        withContext(ioDispatcher) {
+            apiManager.registrationAPi.verifyUser(userVerify)
         }
     }
 }

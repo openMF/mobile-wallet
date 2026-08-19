@@ -5,7 +5,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 package org.mifospay.feature.standing.instruction.details
 
@@ -15,7 +15,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.serialization.Serializable
-import org.mifospay.core.common.DataState
+import org.mifospay.core.common.ScreenState
 import org.mifospay.core.common.getSerialized
 import org.mifospay.core.common.setSerialized
 import org.mifospay.core.data.repository.StandingInstructionRepository
@@ -40,40 +40,36 @@ internal class SIDetailViewModel(
 
         val instructionId = requireNotNull(savedStateHandle.get<Long>("instructionId"))
 
-        repository.getStandingInstruction(instructionId).onEach {
-            sendAction(SIDAction.Internal.HandleSIDResult(it))
-        }.launchIn(viewModelScope)
+        // Use BaseViewModel's `observeScreen` bridge to fold the ScreenState
+        // stream directly into MVI state. The internal `HandleSIDResult`
+        // action (which used to shuttle DataState) is removed — the reducer
+        // folds inline.
+        repository.getStandingInstruction(instructionId).observeScreen { screenState ->
+            mutableStateFlow.update { it.copy(viewState = screenState.toViewState()) }
+        }
     }
 
     override fun handleAction(action: SIDAction) {
         when (action) {
             is SIDAction.NavigateBack -> sendEvent(SIDEvent.OnNavigateBack)
-
-            is SIDAction.Internal.HandleSIDResult -> handleSIDResult(action)
         }
     }
+}
 
-    private fun handleSIDResult(action: SIDAction.Internal.HandleSIDResult) {
-        when (action.result) {
-            is DataState.Loading -> {
-                mutableStateFlow.update {
-                    it.copy(viewState = ViewState.Loading)
-                }
-            }
-
-            is DataState.Error -> {
-                mutableStateFlow.update {
-                    it.copy(viewState = ViewState.Error(action.result.message))
-                }
-            }
-
-            is DataState.Success -> {
-                mutableStateFlow.update {
-                    it.copy(viewState = ViewState.Content(action.result.data))
-                }
-            }
-        }
-    }
+/**
+ * Fold the 6-branch [ScreenState] into the feature's existing 3-branch
+ * [ViewState] (Loading/Error/Content). Detail flows shouldn't emit
+ * [ScreenState.Empty] (single-item endpoints return Content or Error) but we
+ * defensively route it to Error. NoNetwork / Unauthenticated fold into Error
+ * until Phase-4 wires per-branch surfaces.
+ */
+private fun ScreenState<StandingInstruction>.toViewState(): ViewState = when (this) {
+    is ScreenState.Loading -> ViewState.Loading
+    is ScreenState.Empty -> ViewState.Error("Standing instruction not found.")
+    is ScreenState.Content -> ViewState.Content(data)
+    is ScreenState.Error -> ViewState.Error(error.message.toString())
+    is ScreenState.NoNetwork -> ViewState.Error("No network. Please check your connection.")
+    is ScreenState.Unauthenticated -> ViewState.Error("Session expired. Please log in again.")
 }
 
 @Serializable
@@ -98,10 +94,5 @@ internal sealed interface SIDEvent {
 }
 
 internal sealed interface SIDAction {
-
     data object NavigateBack : SIDAction
-
-    sealed interface Internal : SIDAction {
-        data class HandleSIDResult(val result: DataState<StandingInstruction>) : SIDAction
-    }
 }

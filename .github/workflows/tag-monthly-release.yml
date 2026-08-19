@@ -1,0 +1,35 @@
+# .github/workflows/tag-monthly-release.yml — v2 monthly Production release
+#
+# 1st of month 03:30 UTC. Default strategy: calver-month (vYYYY.MM.0). Lands at Stage 3 (Production).
+name: Tag Monthly Release
+run-name: "🏷️ Tag Monthly · $(date +%Y.%m)"
+
+on:
+  schedule:
+    - cron: '30 3 1 * *'
+  workflow_dispatch:
+
+concurrency:
+  group: monthly-release
+  cancel-in-progress: false
+
+jobs:
+  tag-and-release:
+    uses: openMF/mifos-x-actionhub/.github/workflows/tag-monthly-release-v2.yaml@v1.0.63
+    with:
+      version_strategy:      calver-month
+      starting_rung:         production
+      target_branch:         dev
+      production_rollout:    '0.10'
+      android_package_name:  cmp-android
+      ios_package_name:      cmp-ios
+      mac_package_name:      cmp-desktop
+      shared_module:         cmp-shared
+      web_package_name:      cmp-web
+      include_android:       true
+      include_ios:           true
+      include_web:           true
+      include_mac:           false
+      include_desktop_win:   false
+      include_desktop_linux: false
+    secrets: inherit

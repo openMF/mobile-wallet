@@ -5,7 +5,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 package org.mifospay.feature.invoices
 
@@ -19,9 +19,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
-import mobile_wallet.feature.invoices.generated.resources.Res
-import mobile_wallet.feature.invoices.generated.resources.ic_check
-import mobile_wallet.feature.invoices.generated.resources.ic_remove
+import mifos_pay.feature.invoices.generated.resources.Res
+import mifos_pay.feature.invoices.generated.resources.ic_check
+import mifos_pay.feature.invoices.generated.resources.ic_remove
 import org.jetbrains.compose.resources.vectorResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.mifospay.core.model.datatables.invoice.Invoice

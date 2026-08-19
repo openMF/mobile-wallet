@@ -5,7 +5,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 package org.mifos.lib.loan.ui.loanProductDetails
 
@@ -16,7 +16,8 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.mifos.lib.loan.core.model.LoanTemplate
 import org.mifos.lib.loan.repository.LoansRepository
-import org.mifospay.core.common.DataState
+import org.mifospay.core.common.ScreenState
+import org.mifospay.core.common.errorOrNull
 import org.mifospay.core.ui.utils.BaseViewModel
 
 /**
@@ -84,13 +85,13 @@ internal class LoanProductDetailsViewModel(
         }
     }
 
-    private fun handleTemplateLoaded(result: DataState<LoanTemplate>) {
+    private fun handleTemplateLoaded(result: ScreenState<LoanTemplate>) {
         when (result) {
-            is DataState.Loading -> {
+            is ScreenState.Loading -> {
                 mutableStateFlow.update { it.copy(viewState = LoanProductDetailsState.ViewState.Loading) }
             }
 
-            is DataState.Success -> {
+            is ScreenState.Content -> {
                 val template = result.data
                 val product = template.product
 
@@ -113,9 +114,15 @@ internal class LoanProductDetailsViewModel(
                 }
             }
 
-            is DataState.Error -> {
+            // Error / Empty / NoNetwork / Unauthenticated — surface the failure. Only Error
+            // carries a message; the others are unreachable for the wizard's dummy provider.
+            else -> {
                 mutableStateFlow.update {
-                    it.copy(viewState = LoanProductDetailsState.ViewState.Error(result.message))
+                    it.copy(
+                        viewState = LoanProductDetailsState.ViewState.Error(
+                            result.errorOrNull?.message.orEmpty(),
+                        ),
+                    )
                 }
             }
         }
@@ -183,6 +190,6 @@ internal sealed interface LoanProductDetailsAction {
     data object ApplyClicked : LoanProductDetailsAction
 
     sealed interface Internal : LoanProductDetailsAction {
-        data class TemplateLoaded(val result: DataState<LoanTemplate>) : Internal
+        data class TemplateLoaded(val result: ScreenState<LoanTemplate>) : Internal
     }
 }

@@ -1,0 +1,20 @@
+# deployment/desktop/microsoft-store/config.yaml
+target: desktop-microsoft-store
+platform: desktop
+os: windows
+tier: 2
+owning_capability: desktop-microsoft-store
+output_format: msix
+output_path: "cmp-desktop/build/compose/binaries/main-release/msix/"
+version_format: "git"
+signing: ms-partner-center
+distribution_groups: ["microsoft-store"]
+retention: "indefinite"
+runners:
+  local: { command: "bash deployment/desktop/microsoft-store/script.sh" }
+  ci:    { workflow_snippet: workflow-snippet.yml }
+requires_confirm: true
+enabled_by_default: false
+dev_fallback:
+  signing_mode: "self-signed-cert"
+  rationale: "MSIX self-signed packages install on dev machines via Add-AppxPackage -AllowUnsigned."

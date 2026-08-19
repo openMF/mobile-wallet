@@ -5,14 +5,10 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 plugins {
     alias(libs.plugins.cmp.feature.convention)
-}
-
-android {
-    namespace = "org.mifospay.feature.passcode"
 }
 
 
@@ -28,6 +24,9 @@ kotlin {
             implementation(compose.ui)
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
+            // BiometricsSetupScreen + MifosPasscode use NavigationBackHandler +
+            // rememberNavigationEventState from AndroidX's KMP back-handling API.
+            implementation(libs.androidx.navigationevent.compose)
         }
     }
 }

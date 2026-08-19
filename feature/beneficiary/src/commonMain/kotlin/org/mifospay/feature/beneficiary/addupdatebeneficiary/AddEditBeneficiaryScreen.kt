@@ -5,7 +5,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 package org.mifospay.feature.beneficiary.addupdatebeneficiary
 
@@ -53,15 +53,16 @@ import androidx.compose.ui.unit.toSize
 import androidx.compose.ui.window.PopupProperties
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.launch
-import mobile_wallet.feature.beneficiary.generated.resources.Res
-import mobile_wallet.feature.beneficiary.generated.resources.feature_beneficiary_account_no
-import mobile_wallet.feature.beneficiary.generated.resources.feature_beneficiary_account_type
-import mobile_wallet.feature.beneficiary.generated.resources.feature_beneficiary_locale
-import mobile_wallet.feature.beneficiary.generated.resources.feature_beneficiary_nickname
-import mobile_wallet.feature.beneficiary.generated.resources.feature_beneficiary_office_name
-import mobile_wallet.feature.beneficiary.generated.resources.feature_beneficiary_transfer_limit
-import mobile_wallet.feature.beneficiary.generated.resources.scan_qr_code
-import mobile_wallet.feature.beneficiary.generated.resources.skip_the_form
+import mifos_pay.feature.beneficiary.generated.resources.Res
+import mifos_pay.feature.beneficiary.generated.resources.feature_beneficiary_account_no
+import mifos_pay.feature.beneficiary.generated.resources.feature_beneficiary_account_type
+import mifos_pay.feature.beneficiary.generated.resources.feature_beneficiary_locale
+import mifos_pay.feature.beneficiary.generated.resources.feature_beneficiary_nickname
+import mifos_pay.feature.beneficiary.generated.resources.feature_beneficiary_office_name
+import mifos_pay.feature.beneficiary.generated.resources.feature_beneficiary_transfer_limit
+import mifos_pay.feature.beneficiary.generated.resources.scan_qr_code
+import mifos_pay.feature.beneficiary.generated.resources.skip_the_form
+import org.jetbrains.compose.resources.getString
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.mifospay.core.designsystem.component.BasicDialogState
@@ -111,7 +112,7 @@ internal fun AddEditBeneficiaryScreen(
 
             is AEBEvent.ShowToast -> {
                 scope.launch {
-                    snackbarHostState.showSnackbar(event.message)
+                    snackbarHostState.showSnackbar(getString(event.message))
                 }
             }
 

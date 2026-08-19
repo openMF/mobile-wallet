@@ -5,7 +5,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 package org.mifospay.feature.mpay.qr.scan.components
 
@@ -22,10 +22,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import mobile_wallet.feature.mpay_qr_scan.generated.resources.Res
-import mobile_wallet.feature.mpay_qr_scan.generated.resources.feature_qr_help_description
-import mobile_wallet.feature.mpay_qr_scan.generated.resources.feature_qr_help_title
-import mobile_wallet.feature.mpay_qr_scan.generated.resources.feature_qr_ok
+import mifos_pay.feature.mpay_qr_scan.generated.resources.Res
+import mifos_pay.feature.mpay_qr_scan.generated.resources.feature_qr_help_description
+import mifos_pay.feature.mpay_qr_scan.generated.resources.feature_qr_help_title
+import mifos_pay.feature.mpay_qr_scan.generated.resources.feature_qr_ok
 import org.jetbrains.compose.resources.stringResource
 import org.mifospay.core.designsystem.icon.MifosIcons
 import template.core.base.designsystem.theme.KptTheme

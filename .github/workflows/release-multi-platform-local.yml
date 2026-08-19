@@ -1,0 +1,253 @@
+# release-multi-platform-local.yml — self-hosted local-dev companion to
+# release-multi-platform.yml. Pinned to `@dev` everywhere so editing any
+# chain repo's dev branch in `workspaces/mifos-x/` ships to the next dispatch
+# instantly, no tag-cut required.
+#
+# Dispatched by `/ci local-actions` against the fork (where the self-hosted
+# runner is registered). NOT used by cloud production runs.
+#
+# Toggle inputs are the same shape as release-multi-platform.yml so behavior
+# diffs only in:
+#   1. workflow_call uses: → @dev (literal — GHA forbids expressions there)
+#   2. runner_pool defaults → ["self-hosted","macOS"] (everything on local Mac)
+#   3. publish_*_ref defaults → dev
+name: Release · Multi-Platform (Local Dev · self-hosted)
+run-name: "🛠️ Local release ${{ inputs.android_rung }} · iOS=${{ inputs.ios_rung }} · web=${{ inputs.web_rung }}"
+
+on:
+  workflow_dispatch:
+    inputs:
+      version_tag:
+        description: 'Version tag (leave EMPTY to auto-compute YYYY.M.D)'
+        required: false
+        type: string
+        default: ''
+      android_rung:
+        description: 'Android — top rung to reach'
+        required: false
+        type: choice
+        options: [skip, firebase, firebase+internal, internal, beta, production]
+        default: firebase
+      ios_rung:
+        description: 'iOS — top rung to reach'
+        required: false
+        type: choice
+        options: [skip, firebase, firebase+testflight, internal, beta, production]
+        default: skip
+      mac_rung:
+        description: 'macOS MAS — top rung to reach'
+        required: false
+        type: choice
+        options: [skip, internal, beta, production]
+        default: skip
+      desktop_win_rung:
+        description: 'Windows — skipped in local mode (jpackage is platform-tied)'
+        required: false
+        type: choice
+        options: [skip]
+        default: skip
+      desktop_linux_rung:
+        description: 'Linux DEB — skipped in local mode (jpackage is platform-tied)'
+        required: false
+        type: choice
+        options: [skip]
+        default: skip
+      web_rung:
+        description: 'Web — top rung'
+        required: false
+        type: choice
+        options: [skip, preview, staging, production]
+        default: skip
+      web_host:
+        description: 'Web host provider'
+        required: false
+        type: choice
+        options: [gh-pages, cloudflare-pages, netlify, vercel]
+        default: gh-pages
+      production_rollout:
+        description: 'Android staged rollout (0.0-1.0)'
+        required: false
+        type: string
+        default: '0.10'
+
+      # ── kmp-product-flavors dimension (deploy-gha-product-flavors Phase 5) ──
+      # Free-text (NOT `type: choice`) per GOAL D10 — zero drift surface. The
+      # authoritative flavor list lives in the `kmpFlavors {}` DSL; the
+      # `resolve-variants` job below re-emits variants.json from the DSL and
+      # validates this input at dispatch time. This @dev workflow is the
+      # iteration surface — Phase 6 flips the prod pin to @v1.0.47.
+      flavor:
+        description: 'flavor: demo | prod | all — validated at runtime against the DSL manifest (all → fan out to every declared flavor)'
+        required: false
+        type: string
+        default: 'all'
+
+      build_type:
+        description: 'build_type: release | staging | debug — validated at runtime against the DSL manifest'
+        required: false
+        type: string
+        default: 'release'
+
+jobs:
+  # Resolve `(flavor, build_type)` against the DSL manifest — mirrors the prod
+  # workflow's `resolve-variants` job on the self-hosted runner. Emits a JSON
+  # matrix consumed by the `release` job's `strategy.matrix` below.
+  resolve-variants:
+    name: Resolve product flavors
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    outputs:
+      matrix: ${{ steps.resolve.outputs.matrix }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+      - name: Emit variants.json from kmpFlavors {} DSL
+        run: ./gradlew :cmp-shared:exportKmpFlavorsManifest -q
+      - id: resolve
+        shell: bash
+        env:
+          FLAVOR: ${{ inputs.flavor }}
+          BUILD_TYPE: ${{ inputs.build_type }}
+        run: |
+          set -euo pipefail
+          MANIFEST="cmp-shared/build/kmp-flavors/variants.json"
+          test -f "$MANIFEST" || { echo "❌ manifest missing at $MANIFEST"; exit 1; }
+          VALID_FLAVORS=$(jq -r '.flavors[].name' "$MANIFEST" | paste -sd, -)
+          VALID_TYPES=$(jq   -r '.buildTypes[].name' "$MANIFEST" | paste -sd, -)
+          if [[ "$FLAVOR" != "all" ]] && ! jq -e --arg f "$FLAVOR" '.flavors[]|select(.name==$f)' "$MANIFEST" >/dev/null; then
+            echo "❌ unknown flavor '$FLAVOR' — valid: [$VALID_FLAVORS,all]"; exit 1
+          fi
+          if ! jq -e --arg b "$BUILD_TYPE" '.buildTypes[]|select(.name==$b)' "$MANIFEST" >/dev/null; then
+            echo "❌ unknown build_type '$BUILD_TYPE' — valid: [$VALID_TYPES]"; exit 1
+          fi
+          if [[ "$FLAVOR" == "all" ]]; then
+            MATRIX=$(jq -c --arg b "$BUILD_TYPE" '{include:[.flavors[]|{flavor:.name,build_type:$b}]}' "$MANIFEST")
+          else
+            MATRIX=$(jq -c --arg f "$FLAVOR" --arg b "$BUILD_TYPE" '{include:[{flavor:$f,build_type:$b}]}' <<<'{}')
+          fi
+          echo "matrix=$MATRIX" >> "$GITHUB_OUTPUT"
+          echo "✅ resolved matrix: $MATRIX"
+
+  release:
+    name: Release (local)
+    needs: [resolve-variants]
+    strategy:
+      # One deploy per (flavor, build_type) — populated by `resolve-variants`.
+      matrix: ${{ fromJson(needs.resolve-variants.outputs.matrix) }}
+      fail-fast: false
+    permissions:
+      contents: write
+      pages:    write
+      id-token: write
+    # DEV pin — points at the chain's rolling dev branch. Edit any chain
+    # repo's dev branch in workspaces/mifos-x/ and the next dispatch picks
+    # it up. No tag-cut needed for iteration. This is the validation base for
+    # the additive `flavor` / `build_type` inputs before Phase 6 cuts @v1.0.47.
+    uses: openMF/mifos-x-actionhub/.github/workflows/release-multi-platform-v2.yaml@v1.0.63
+    with:
+      version_tag:          ${{ inputs.version_tag }}
+      android_package_name: cmp-android
+      ios_package_name:     cmp-ios
+      mac_package_name:     cmp-desktop
+      shared_module:        cmp-shared
+      desktop_package_name: cmp-desktop
+      web_package_name:     cmp-web
+      android_target:       ${{ inputs.android_rung }}
+      ios_target:           ${{ inputs.ios_rung }}
+      mac_target:           ${{ inputs.mac_rung }}
+      desktop_win_target:   ${{ inputs.desktop_win_rung }}
+      desktop_linux_target: ${{ inputs.desktop_linux_rung }}
+      web_target:           ${{ inputs.web_rung }}
+      web_host:             ${{ inputs.web_host }}
+      production_rollout:   ${{ inputs.production_rollout }}
+      # kmp-product-flavors additive inputs (Phase 5). Consumed by actionhub
+      # @dev; Phase 4's cross-repo work teaches the reusable workflow + custom
+      # actions to accept these additively. `matrix.flavor` / `matrix.build_type`
+      # carry the concrete pair for this deploy leg (resolved by resolve-variants).
+      flavor:               ${{ matrix.flavor }}
+      build_type:           ${{ matrix.build_type }}
+      # All jobs on the self-hosted Mac runner — single executor, all platforms.
+      runner_pool_linux:    '["self-hosted","macOS"]'
+      runner_pool_mac:      '["self-hosted","macOS"]'
+      # Chain refs all pinned to @dev INSIDE the orchestrator's release-multi-platform-v2.yaml
+      # on the `dev` branch (publish-android-kmp@dev + publish-apple-kmp@dev). No
+      # input needed here — the dev branch's workflow file hardcodes them.
+      # RULE-DEPLOYMENT-MANIFEST-001 layout — same as prod workflow.
+      fastlane_mode:        pre-materialized
+      fastlane_cwd:         deployment
+      pre_fastlane_script: |
+        set -euo pipefail
+        if [ -n "${UPLOAD_KEYSTORE_B64:-}" ]; then
+          mkdir -p secrets/live/android/keystores
+          echo "$UPLOAD_KEYSTORE_B64" | base64 -d > secrets/live/android/keystores/upload_keystore.keystore
+          echo "✅ Materialized Android keystore"
+        fi
+        if [ -n "${GOOGLE_SERVICES_B64:-}" ]; then
+          echo "$GOOGLE_SERVICES_B64" | base64 -d > cmp-android/google-services.json
+          echo "✅ Materialized google-services.json"
+        fi
+        if [ -n "${FIREBASE_CREDS_B64:-}" ]; then
+          deployment/scripts/build-secrets materialize firebase_service_account --from-env FIREBASE_CREDS_B64
+          echo "✅ Materialized Firebase SA"
+        fi
+        if [ -n "${PLAYSTORE_CREDS_B64:-}" ]; then
+          deployment/scripts/build-secrets materialize play_service_account --from-env PLAYSTORE_CREDS_B64
+          echo "✅ Materialized Play SA"
+        fi
+        if [ -n "${APPSTORE_AUTH_KEY_B64:-}" ]; then
+          mkdir -p secrets/live/apple/appstore
+          # Write to both paths — Fastfile expects secrets/live/apple/appstore/AuthKey.p8
+          # (deployment/_shared/config.rb appstore_helpers); legacy callers may
+          # still reference secrets/live/apple/appstore/AuthKey.p8 (kept as backwards-compat).
+          echo "$APPSTORE_AUTH_KEY_B64" | base64 -d > secrets/live/apple/appstore/AuthKey.p8
+          chmod 600 secrets/live/apple/appstore/AuthKey.p8
+          cp secrets/live/apple/appstore/AuthKey.p8 secrets/live/apple/appstore/AuthKey.p8
+          echo "✅ Materialized App Store Connect .p8"
+        fi
+        if [ -n "${MATCH_GIT_PRIVATE_KEY:-}" ]; then
+          mkdir -p secrets/live/apple/match ~/.ssh
+          # match_ssh_private_key vault entry is the FULL match bundle (tar.gz):
+          #   match/git_url, match/git_branch, match/match_ci_key (SSH key),
+          #   match/.match_password, match/certificates_password, match/keychain_password
+          # Decode + extract; copy SSH key into secrets/live/apple/match/ (Fastfile expects this path
+          # per deployment/_shared/config.rb match_ssh_key_path); export MATCH_GIT_URL/BRANCH.
+          BUNDLE_DIR=$(mktemp -d)
+          echo "$MATCH_GIT_PRIVATE_KEY" | base64 -d > "$BUNDLE_DIR/bundle.tgz"
+          if tar -xzf "$BUNDLE_DIR/bundle.tgz" -C "$BUNDLE_DIR" 2>/dev/null; then
+            # It's a tar.gz bundle — extract SSH key + env vars
+            cp "$BUNDLE_DIR/match/match_ci_key" secrets/live/apple/match/match_ci_key
+            chmod 600 secrets/live/apple/match/match_ci_key
+            # Also write to legacy path for any callers still using it
+            cp "$BUNDLE_DIR/match/match_ci_key" secrets/live/apple/match/match_ci_key
+            chmod 600 secrets/live/apple/match/match_ci_key
+            if [ -f "$BUNDLE_DIR/match/git_url" ]; then
+              echo "MATCH_GIT_URL=$(cat $BUNDLE_DIR/match/git_url | tr -d '\n\r ')" >> "$GITHUB_ENV"
+            fi
+            if [ -f "$BUNDLE_DIR/match/git_branch" ]; then
+              echo "MATCH_GIT_BRANCH=$(cat $BUNDLE_DIR/match/git_branch | tr -d '\n\r ')" >> "$GITHUB_ENV"
+            fi
+            echo "✅ Materialized Match bundle (SSH key + git_url + git_branch)"
+          else
+            # Plain SSH key (legacy single-file format)
+            mv "$BUNDLE_DIR/bundle.tgz" secrets/live/apple/match/match_ci_key
+            chmod 600 secrets/live/apple/match/match_ci_key
+            cp secrets/live/apple/match/match_ci_key secrets/live/apple/match/match_ci_key
+            chmod 600 secrets/live/apple/match/match_ci_key
+            echo "✅ Materialized Match SSH key (legacy single-file)"
+          fi
+          rm -rf "$BUNDLE_DIR"
+        fi
+        if [ -n "${KEYSTORE_ALIAS:-}" ]; then echo "KEY_ALIAS=$KEYSTORE_ALIAS" >> "$GITHUB_ENV"; fi
+        if [ -n "${KEYSTORE_ALIAS_PASSWORD:-}" ]; then echo "KEY_PASSWORD=$KEYSTORE_ALIAS_PASSWORD" >> "$GITHUB_ENV"; fi
+        if [ -n "${KEYSTORE_PASSWORD:-}" ]; then
+          echo "KEYSTORE_PATH=secrets/live/android/keystores/upload_keystore.keystore" >> "$GITHUB_ENV"
+        fi
+        # Firebase App IDs are provided as direct env vars by the chain repo
+        # (publish-{android,apple}-kmp release.yaml env block) — no propagation
+        # needed here. For act, pass via --env-file.
+        echo "✅ pre_fastlane_script complete"
+    secrets: inherit

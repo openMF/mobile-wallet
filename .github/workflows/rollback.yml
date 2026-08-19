@@ -1,0 +1,37 @@
+# .github/workflows/rollback.yml — v2 per-platform release rollback
+#
+# Revert a release. `reason` is required (audit log).
+# Each platform job uses its own environment (rollback-{platform}) with required reviewers.
+name: Rollback
+run-name: "⏪ Rollback · ${{ inputs.version_tag || github.ref_name }}"
+
+on:
+  workflow_dispatch:
+    inputs:
+      platform:
+        description: 'Platform to roll back'
+        required: true
+        type: choice
+        options: [android, ios, mac, web, all]
+      rollback_to_version:
+        description: 'Tag to revert to (e.g. v2026.06.15)'
+        required: true
+        type: string
+      reason:
+        description: 'Required: reason for audit log'
+        required: true
+        type: string
+
+jobs:
+  rollback:
+    uses: openMF/mifos-x-actionhub/.github/workflows/rollback-v2.yaml@v1.0.63
+    with:
+      platform:             ${{ inputs.platform }}
+      rollback_to_version:  ${{ inputs.rollback_to_version }}
+      reason:               ${{ inputs.reason }}
+      operator:             ${{ github.actor }}
+      android_package_name: cmp-android
+      ios_package_name:     cmp-ios
+      mac_package_name:     cmp-desktop
+      web_package_name:     cmp-web
+    secrets: inherit

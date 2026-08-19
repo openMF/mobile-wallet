@@ -1,0 +1,17 @@
+# Per-module Kover line-coverage floor overrides.
+#
+# Read by the reusable workflow at
+# MobileByteLabs/mifos-x-actionhub-kover-coverage. ONLY list modules with an
+# explicit non-default floor; every other module discovered by
+# `koverXmlReport` uses the workflow's `default-floor` input (currently 0).
+#
+# Floors should only ratchet UPWARD over time as Phase 9 PRs raise coverage
+# on canonical-template modules.
+
+floors:
+  # `core-base:store` is empirically ~90% line-coverage (outcome of
+  # PRs #145 / #147 / #148), but its report.xml is not currently produced
+  # because koverXmlReport halts on the core/database desktop compile break
+  # (Gap #1 in docs/reports/source-coverage-260519.md). Bump to 90 once
+  # Gap #1 is fixed and the report.xml lands.
+  # ":core-base:store": 90

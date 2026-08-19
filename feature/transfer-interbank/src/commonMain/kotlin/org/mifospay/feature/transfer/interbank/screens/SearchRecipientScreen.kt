@@ -5,7 +5,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 package org.mifospay.feature.transfer.interbank.screens
 
@@ -31,15 +31,15 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import mobile_wallet.feature.transfer_interbank.generated.resources.Res
-import mobile_wallet.feature.transfer_interbank.generated.resources.feature_send_interbank_bank
-import mobile_wallet.feature.transfer_interbank.generated.resources.feature_send_interbank_enter_phone_number
-import mobile_wallet.feature.transfer_interbank.generated.resources.feature_send_interbank_enter_phone_to_search
-import mobile_wallet.feature.transfer_interbank.generated.resources.feature_send_interbank_found_recipients
-import mobile_wallet.feature.transfer_interbank.generated.resources.feature_send_interbank_no_recipients_found
-import mobile_wallet.feature.transfer_interbank.generated.resources.feature_send_interbank_no_results
-import mobile_wallet.feature.transfer_interbank.generated.resources.feature_send_interbank_search_recipient
-import mobile_wallet.feature.transfer_interbank.generated.resources.feature_send_interbank_to_account_interbank
+import mifos_pay.feature.transfer_interbank.generated.resources.Res
+import mifos_pay.feature.transfer_interbank.generated.resources.feature_send_interbank_bank
+import mifos_pay.feature.transfer_interbank.generated.resources.feature_send_interbank_enter_phone_number
+import mifos_pay.feature.transfer_interbank.generated.resources.feature_send_interbank_enter_phone_to_search
+import mifos_pay.feature.transfer_interbank.generated.resources.feature_send_interbank_found_recipients
+import mifos_pay.feature.transfer_interbank.generated.resources.feature_send_interbank_no_recipients_found
+import mifos_pay.feature.transfer_interbank.generated.resources.feature_send_interbank_no_results
+import mifos_pay.feature.transfer_interbank.generated.resources.feature_send_interbank_search_recipient
+import mifos_pay.feature.transfer_interbank.generated.resources.feature_send_interbank_to_account_interbank
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.mifospay.core.designsystem.component.MifosButton

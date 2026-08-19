@@ -5,7 +5,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 package org.mifospay.feature.fastmpay
 
@@ -21,17 +21,17 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import mobile_wallet.core.ui.generated.resources.Res
-import mobile_wallet.core.ui.generated.resources.core_ui_cancel
-import mobile_wallet.core.ui.generated.resources.core_ui_confirm_qr_amount_message
-import mobile_wallet.core.ui.generated.resources.core_ui_confirm_qr_amount_title
-import mobile_wallet.core.ui.generated.resources.core_ui_different_bank_message
-import mobile_wallet.core.ui.generated.resources.core_ui_different_bank_title
-import mobile_wallet.core.ui.generated.resources.core_ui_interbank_unavailable_message
-import mobile_wallet.core.ui.generated.resources.core_ui_interbank_unavailable_title
-import mobile_wallet.core.ui.generated.resources.core_ui_proceed_payment
-import mobile_wallet.core.ui.generated.resources.core_ui_try_interbank
-import mobile_wallet.core.ui.generated.resources.core_ui_understood
+import kpt.core.ui.generated.resources.Res
+import kpt.core.ui.generated.resources.core_ui_cancel
+import kpt.core.ui.generated.resources.core_ui_confirm_qr_amount_message
+import kpt.core.ui.generated.resources.core_ui_confirm_qr_amount_title
+import kpt.core.ui.generated.resources.core_ui_different_bank_message
+import kpt.core.ui.generated.resources.core_ui_different_bank_title
+import kpt.core.ui.generated.resources.core_ui_interbank_unavailable_message
+import kpt.core.ui.generated.resources.core_ui_interbank_unavailable_title
+import kpt.core.ui.generated.resources.core_ui_proceed_payment
+import kpt.core.ui.generated.resources.core_ui_try_interbank
+import kpt.core.ui.generated.resources.core_ui_understood
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.mifospay.core.model.utils.QrCodeData

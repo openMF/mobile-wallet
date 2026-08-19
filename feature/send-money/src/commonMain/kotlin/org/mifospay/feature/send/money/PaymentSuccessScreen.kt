@@ -5,7 +5,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 package org.mifospay.feature.send.money
 
@@ -35,14 +35,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import mobile_wallet.feature.send_money.generated.resources.Res
-import mobile_wallet.feature.send_money.generated.resources.feature_send_money_banking_name
-import mobile_wallet.feature.send_money.generated.resources.feature_send_money_done
-import mobile_wallet.feature.send_money.generated.resources.feature_send_money_paid_to
-import mobile_wallet.feature.send_money.generated.resources.feature_send_money_payment_success
-import mobile_wallet.feature.send_money.generated.resources.feature_send_money_payment_success_description
-import mobile_wallet.feature.send_money.generated.resources.feature_send_money_powered_by_upi
-import mobile_wallet.feature.send_money.generated.resources.feature_send_money_share_screenshot
+import mifos_pay.feature.send_money.generated.resources.Res
+import mifos_pay.feature.send_money.generated.resources.feature_send_money_banking_name
+import mifos_pay.feature.send_money.generated.resources.feature_send_money_done
+import mifos_pay.feature.send_money.generated.resources.feature_send_money_paid_to
+import mifos_pay.feature.send_money.generated.resources.feature_send_money_payment_success
+import mifos_pay.feature.send_money.generated.resources.feature_send_money_payment_success_description
+import mifos_pay.feature.send_money.generated.resources.feature_send_money_powered_by_upi
+import mifos_pay.feature.send_money.generated.resources.feature_send_money_share_screenshot
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel

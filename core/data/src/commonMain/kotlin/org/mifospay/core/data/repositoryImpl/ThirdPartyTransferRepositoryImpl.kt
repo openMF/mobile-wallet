@@ -5,16 +5,15 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 package org.mifospay.core.data.repositoryImpl
 
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
-import org.mifospay.core.common.DataState
-import org.mifospay.core.common.asDataStateFlow
+import org.mifospay.core.common.ScreenStateStream
+import org.mifospay.core.common.asScreenStateFlow
 import org.mifospay.core.data.repository.ThirdPartyTransferRepository
 import org.mifospay.core.data.util.parseMifosError
 import org.mifospay.core.network.SelfServiceApiManager
@@ -31,9 +30,9 @@ class ThirdPartyTransferRepositoryImpl(
             .accountTransferTemplate()
     }
 
-    override fun makeTransfer(payload: TransferPayload): Flow<DataState<TPTResponse>> {
+    override fun makeTransfer(payload: TransferPayload): ScreenStateStream<TPTResponse> {
         return flow { emit(apiManager.thirdPartyTransferApi.makeTransfer(payload)) }
-            .asDataStateFlow(parseMifosError)
+            .asScreenStateFlow(errorBodyParser = parseMifosError)
             .flowOn(ioDispatcher)
     }
 }

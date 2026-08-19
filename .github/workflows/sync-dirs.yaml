@@ -59,7 +59,9 @@ jobs:
 
           # Declare directories and files to sync
           DIRS=(
+            "cmp-android"
             "cmp-desktop"
+            "cmp-ios"
             "cmp-web"
             "cmp-shared"
             "core-base"
@@ -68,6 +70,7 @@ jobs:
             "fastlane-config"
             "scripts"
             "config"
+            "secrets"
             ".github"
             ".run"
           )
@@ -80,12 +83,21 @@ jobs:
           )
 
           # Define exclusions
+          # Consumer-branded assets and project-specific configs are preserved across syncs.
           declare -A EXCLUSIONS=(
+            ["cmp-android"]="src/main/res dependencies src/main/ic_launcher-playstore.png google-services.json"
+            ["cmp-ios"]="iosApp/Assets.xcassets Configuration/Config.xcconfig"
             ["cmp-web"]="src/jsMain/resources src/wasmJsMain/resources"
             ["cmp-desktop"]="icons build.gradle.kts"
             ["fastlane-config"]="project_config.rb extract_config.rb"
             [".github"]="workflows/sync-dirs.yaml"
-            ["root"]="secrets.env"
+            ["build-logic"]="convention/src/main/kotlin/local"
+            # Secrets: sync the SCAFFOLD only (secrets/sample/** + LAYOUT.yaml) so
+            # forks inherit the canonical layout, but NEVER real values —
+            # secrets/live/ is gitignored + fork-local (real secrets), and
+            # .sync-meta.json is per-fork sync state. Matches scripts/white-label/sync-dirs.sh.
+            # (secrets.env removed — that file was retired 2026-06-23.)
+            ["secrets"]="live .sync-meta.json"
           )
 
           # Function to check if path should be excluded
@@ -243,6 +255,127 @@ jobs:
 
           echo "Sync completed successfully!"
 
+      - name: Heal libs.versions.toml — pull missing build-logic aliases from upstream
+        shell: bash
+        run: |
+          set -uo pipefail
+          # Self-healing step: `build-logic/` is sync'd from upstream, but
+          # `gradle/libs.versions.toml` is intentionally consumer-local (it carries
+          # project-specific package names + version overrides). When upstream adds
+          # new `libs.<X>` accessors in build-logic with their matching catalog
+          # entries, only the build-logic gets sync'd — the consumer's catalog falls
+          # behind and the synced build-logic references aliases that don't exist
+          # locally. This step detects that gap and pulls the missing alias entries
+          # (and their referenced version keys) directly from the upstream catalog.
+
+          LIBS_TOML="gradle/libs.versions.toml"
+          TEMP_BRANCH="${{ env.TEMP_BRANCH }}"
+
+          if [[ ! -f "$LIBS_TOML" ]]; then
+            echo "ℹ️  Consumer has no $LIBS_TOML — nothing to heal."
+            exit 0
+          fi
+          if [[ ! -d "build-logic" ]]; then
+            echo "ℹ️  Consumer has no build-logic/ — nothing to heal."
+            exit 0
+          fi
+
+          # Extract every libs.<ref> usage in build-logic Kotlin + KTS source.
+          raw_refs=$(grep -rhoE '\blibs\.[a-zA-Z][a-zA-Z0-9._]*' \
+                  --include='*.kt' --include='*.kts' \
+                  build-logic 2>/dev/null \
+              | sed -E 's/^libs\.//' \
+              | sort -u)
+
+          # Method-call accessors are not alias references — they take string args.
+          method_re='^(findLibrary|findVersion|findBundle|findPlugin)([(.]|$)'
+
+          # Cache upstream's catalog content once (avoid re-shelling git show per ref).
+          upstream_toml=$(git show "${TEMP_BRANCH}:${LIBS_TOML}" 2>/dev/null || true)
+          if [[ -z "$upstream_toml" ]]; then
+            echo "⚠️  Upstream has no ${LIBS_TOML} — skipping heal."
+            exit 0
+          fi
+
+          # Helper: insert a line at the start of [section] in the consumer's catalog.
+          insert_into_section() {
+            local section_name="$1"
+            local line="$2"
+            local line_no
+            line_no=$(grep -n "^\[${section_name}\]" "$LIBS_TOML" | head -1 | cut -d: -f1)
+            if [[ -z "$line_no" ]]; then
+              echo "  ⚠️  No [$section_name] section header in $LIBS_TOML — skipping '$line'"
+              return 1
+            fi
+            { head -n "$line_no" "$LIBS_TOML"; echo "$line"; tail -n +$((line_no + 1)) "$LIBS_TOML"; } > "${LIBS_TOML}.tmp"
+            mv "${LIBS_TOML}.tmp" "$LIBS_TOML"
+          }
+
+          healed=0
+          warnings=0
+          while IFS= read -r ref; do
+            [[ -z "$ref" ]] && continue
+            [[ "$ref" =~ $method_re ]] && continue
+
+            # Resolve target section + alias key per Gradle accessor convention.
+            section="libraries"
+            lookup="$ref"
+            case "$ref" in
+              plugins.*)
+                section="plugins"
+                lookup="${ref#plugins.}"
+                ;;
+              versions.*)
+                section="versions"
+                lookup="${ref#versions.}"
+                # Whitelist the catalog filename — `libs.versions.toml` is a string in source.
+                [[ "$lookup" == "toml" ]] && continue
+                ;;
+            esac
+            key=$(echo "$lookup" | sed 's/\./-/g')
+
+            # Already declared in the consumer's catalog? Skip.
+            if grep -qE "^${key}[[:space:]]*=" "$LIBS_TOML"; then
+              continue
+            fi
+
+            # Pull the matching entry from upstream.
+            upstream_line=$(echo "$upstream_toml" | grep -E "^${key}[[:space:]]*=" | head -1)
+            if [[ -z "$upstream_line" ]]; then
+              echo "  ⚠️  Missing alias '$key' (for libs.$ref) not present in upstream catalog either — manual fix needed."
+              warnings=$((warnings + 1))
+              continue
+            fi
+
+            # If the alias references a version.ref, ensure that version key is also present.
+            ref_version=$(echo "$upstream_line" | grep -oE 'version\.ref = "[^"]+"' | sed -E 's/version\.ref = "([^"]+)"/\1/' | head -1)
+            if [[ -n "$ref_version" ]] && ! grep -qE "^${ref_version}[[:space:]]*=" "$LIBS_TOML"; then
+              ver_line=$(echo "$upstream_toml" | grep -E "^${ref_version}[[:space:]]*=" | head -1)
+              if [[ -n "$ver_line" ]]; then
+                if insert_into_section "versions" "$ver_line"; then
+                  echo "  ✅ Added version '$ref_version' (referenced by '$key') to [versions]"
+                  healed=$((healed + 1))
+                fi
+              fi
+            fi
+
+            # Insert the alias entry itself.
+            if insert_into_section "$section" "$upstream_line"; then
+              echo "  ✅ Added '$key' to [$section] from upstream"
+              healed=$((healed + 1))
+            fi
+          done <<< "$raw_refs"
+
+          echo
+          if [[ $healed -gt 0 ]]; then
+            echo "🩹 Healed $healed entries in $LIBS_TOML — they will be included in the sync PR."
+          elif [[ $warnings -gt 0 ]]; then
+            echo "⚠️  $warnings missing aliases could not be auto-healed (not in upstream either). Manual fix needed."
+            exit 1
+          else
+            echo "✅ libs.versions.toml already in sync with build-logic — no heal needed."
+          fi
+
       - name: Clean up temporary branch
         if: always()
         run: git branch -D "${{ env.TEMP_BRANCH }}" 2>/dev/null || true
@@ -272,16 +405,19 @@ jobs:
             Changes included in this sync:
 
             **Directories:**
+            - cmp-android (excluding src/main/res, dependencies, src/main/ic_launcher-playstore.png, google-services.json)
             - cmp-desktop (excluding icons, build.gradle.kts)
+            - cmp-ios (excluding iosApp/Assets.xcassets, Configuration/Config.xcconfig)
             - cmp-web (excluding src/jsMain/resources, src/wasmJsMain/resources)
             - cmp-shared
             - core-base
-            - build-logic
+            - build-logic (excluding convention/src/main/kotlin/local — consumer flavor extension point)
             - fastlane
             - fastlane-config (excluding project_config.rb, extract_config.rb)
             - scripts
             - config
-            - .github (excluding workflows/sync-dirs.yaml)
+            - secrets (scaffold only — excludes secrets/live/ real values + .sync-meta.json)
+            - .github (excluding workflows/sync-dirs.yaml — self-overwrite guard)
             - .run
 
             **Files:**
@@ -290,8 +426,8 @@ jobs:
             - ci-prepush.bat
             - ci-prepush.sh
 
-            **Root-level exclusions:**
-            - secrets.env
+            **Secrets:** scaffold only — secrets/sample/ + secrets/LAYOUT.yaml sync;
+            secrets/live/ (real values) and .sync-meta.json are never synced.
 
             ---
             Workflow run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}

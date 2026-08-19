@@ -5,29 +5,30 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 package org.mifospay.core.data.repository
 
-import kotlinx.coroutines.flow.Flow
-import org.mifospay.core.common.DataState
+import org.mifospay.core.common.ScreenStateStream
 import org.mifospay.core.model.user.NewUser
 import org.mifospay.core.network.model.CommonResponse
 import org.mifospay.core.network.model.GenericResponse
 import org.mifospay.core.network.model.entity.UserWithRole
 
 interface UserRepository {
-    suspend fun getUsers(): Flow<DataState<List<UserWithRole>>>
+    // Phase-3 cutover — Flow-shaped surfaces on ScreenState.
+    suspend fun getUsers(): ScreenStateStream<List<UserWithRole>>
 
-    suspend fun getUser(): Flow<DataState<UserWithRole>>
+    suspend fun getUser(): ScreenStateStream<UserWithRole>
 
-    suspend fun createUser(newUser: NewUser): DataState<Int>
+    suspend fun updateUser(userId: Int, updatedUser: NewUser): ScreenStateStream<GenericResponse>
 
-    suspend fun updateUser(userId: Int, updatedUser: NewUser): Flow<DataState<GenericResponse>>
+    // Writes throw on failure (DataState-free).
+    suspend fun createUser(newUser: NewUser): Int
 
-    suspend fun updateUserPassword(userId: Long, password: String): DataState<String>
+    suspend fun updateUserPassword(userId: Long, password: String)
 
-    suspend fun deleteUser(userId: Int): DataState<CommonResponse>
+    suspend fun deleteUser(userId: Int): CommonResponse
 
-    suspend fun assignClientToUser(userId: Int, clientId: Int): DataState<Unit>
+    suspend fun assignClientToUser(userId: Int, clientId: Int)
 }

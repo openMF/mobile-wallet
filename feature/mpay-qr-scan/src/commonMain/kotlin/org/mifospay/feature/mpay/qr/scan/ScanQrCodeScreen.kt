@@ -5,7 +5,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 package org.mifospay.feature.mpay.qr.scan
 
@@ -34,11 +34,11 @@ import io.github.vinceglb.filekit.dialogs.FileKitType
 import io.github.vinceglb.filekit.dialogs.compose.rememberFilePickerLauncher
 import io.github.vinceglb.filekit.readBytes
 import kotlinx.coroutines.launch
-import mobile_wallet.feature.mpay_qr_scan.generated.resources.Res
-import mobile_wallet.feature.mpay_qr_scan.generated.resources.feature_qr_no_qr_found
-import mobile_wallet.feature.mpay_qr_scan.generated.resources.feature_qr_scan_success
-import mobile_wallet.feature.mpay_qr_scan.generated.resources.feature_qr_torch
-import mobile_wallet.feature.mpay_qr_scan.generated.resources.feature_qr_upload_qr
+import mifos_pay.feature.mpay_qr_scan.generated.resources.Res
+import mifos_pay.feature.mpay_qr_scan.generated.resources.feature_qr_no_qr_found
+import mifos_pay.feature.mpay_qr_scan.generated.resources.feature_qr_scan_success
+import mifos_pay.feature.mpay_qr_scan.generated.resources.feature_qr_torch
+import mifos_pay.feature.mpay_qr_scan.generated.resources.feature_qr_upload_qr
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.mifospay.core.designsystem.icon.MifosIcons
@@ -59,10 +59,8 @@ internal fun ScanQrCodeScreen(
     modifier: Modifier = Modifier,
     viewModel: ScanQrViewModel = koinViewModel(),
 ) {
-    val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
 
-    val eventFlow by viewModel.eventFlow.collectAsStateWithLifecycle(null)
     val isTorchEnabled by viewModel.isTorchEnabled.collectAsStateWithLifecycle()
     val showHelpDialog by viewModel.showHelpDialog.collectAsStateWithLifecycle()
     val isProcessingImage by viewModel.isProcessingImage.collectAsStateWithLifecycle()
@@ -71,45 +69,37 @@ internal fun ScanQrCodeScreen(
     val scanSuccessMessage = stringResource(Res.string.feature_qr_scan_success)
     val noQrFoundMessage = stringResource(Res.string.feature_qr_no_qr_found)
 
-    LaunchedEffect(key1 = eventFlow) {
-        when (eventFlow) {
-            is ScanQrEvent.OnNavigateToIntraBankTransfer -> {
-                val event = eventFlow as ScanQrEvent.OnNavigateToIntraBankTransfer
-                navigateToIntraBankTransfer.invoke(event.qrData)
-            }
-
-            is ScanQrEvent.OnNavigateToInterbankTransfer -> {
-                val event = eventFlow as ScanQrEvent.OnNavigateToInterbankTransfer
-                navigateToInterbankTransfer.invoke(
-                    event.accountExternalId,
-                    event.recipientName,
-                    event.amount,
-                )
-            }
-
-            is ScanQrEvent.ShowToast -> {
-                scope.launch {
-                    snackbarHostState.showSnackbar((eventFlow as ScanQrEvent.ShowToast).message)
+    LaunchedEffect(Unit) {
+        viewModel.eventFlow.collect { event ->
+            when (event) {
+                is ScanQrEvent.OnNavigateToIntraBankTransfer -> {
+                    navigateToIntraBankTransfer.invoke(event.qrData)
                 }
-            }
 
-            is ScanQrEvent.OnNavigateToAddBeneficiary -> navigateToAddBeneficiaryScreen.invoke(
-                (eventFlow as ScanQrEvent.OnNavigateToAddBeneficiary).beneficiary,
-            )
+                is ScanQrEvent.OnNavigateToInterbankTransfer -> {
+                    navigateToInterbankTransfer.invoke(
+                        event.accountExternalId,
+                        event.recipientName,
+                        event.amount,
+                    )
+                }
 
-            is ScanQrEvent.OnScanSuccess -> {
-                scope.launch {
+                is ScanQrEvent.ShowToast -> {
+                    snackbarHostState.showSnackbar(event.message)
+                }
+
+                is ScanQrEvent.OnNavigateToAddBeneficiary -> {
+                    navigateToAddBeneficiaryScreen.invoke(event.beneficiary)
+                }
+
+                is ScanQrEvent.OnScanSuccess -> {
                     snackbarHostState.showSnackbar(scanSuccessMessage)
                 }
-            }
 
-            is ScanQrEvent.OnNoQrFound -> {
-                scope.launch {
+                is ScanQrEvent.OnNoQrFound -> {
                     snackbarHostState.showSnackbar(noQrFoundMessage)
                 }
             }
-
-            null -> Unit
         }
     }
 

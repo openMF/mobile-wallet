@@ -5,25 +5,25 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 package org.mifos.feature.passcode
 
 import androidx.compose.runtime.Composable
-import mobile_wallet.feature.passcode.generated.resources.Res
-import mobile_wallet.feature.passcode.generated.resources.feature_passcode_biometric_error_hardware_unavailable
-import mobile_wallet.feature.passcode.generated.resources.feature_passcode_biometric_error_invalid_arguments_auth
-import mobile_wallet.feature.passcode.generated.resources.feature_passcode_biometric_error_invalid_arguments_registration
-import mobile_wallet.feature.passcode.generated.resources.feature_passcode_biometric_error_invalid_registration_data
-import mobile_wallet.feature.passcode.generated.resources.feature_passcode_biometric_error_lockout
-import mobile_wallet.feature.passcode.generated.resources.feature_passcode_biometric_error_no_space
-import mobile_wallet.feature.passcode.generated.resources.feature_passcode_biometric_error_not_enrolled
-import mobile_wallet.feature.passcode.generated.resources.feature_passcode_biometric_error_timeout
-import mobile_wallet.feature.passcode.generated.resources.feature_passcode_biometric_error_unknown
-import mobile_wallet.feature.passcode.generated.resources.feature_passcode_biometric_prompt_description
-import mobile_wallet.feature.passcode.generated.resources.feature_passcode_biometric_prompt_negative_button
-import mobile_wallet.feature.passcode.generated.resources.feature_passcode_biometric_prompt_subtitle
-import mobile_wallet.feature.passcode.generated.resources.feature_passcode_biometric_prompt_title
+import mifos_pay.feature.passcode.generated.resources.Res
+import mifos_pay.feature.passcode.generated.resources.feature_passcode_biometric_error_hardware_unavailable
+import mifos_pay.feature.passcode.generated.resources.feature_passcode_biometric_error_invalid_arguments_auth
+import mifos_pay.feature.passcode.generated.resources.feature_passcode_biometric_error_invalid_arguments_registration
+import mifos_pay.feature.passcode.generated.resources.feature_passcode_biometric_error_invalid_registration_data
+import mifos_pay.feature.passcode.generated.resources.feature_passcode_biometric_error_lockout
+import mifos_pay.feature.passcode.generated.resources.feature_passcode_biometric_error_no_space
+import mifos_pay.feature.passcode.generated.resources.feature_passcode_biometric_error_not_enrolled
+import mifos_pay.feature.passcode.generated.resources.feature_passcode_biometric_error_timeout
+import mifos_pay.feature.passcode.generated.resources.feature_passcode_biometric_error_unknown
+import mifos_pay.feature.passcode.generated.resources.feature_passcode_biometric_prompt_description
+import mifos_pay.feature.passcode.generated.resources.feature_passcode_biometric_prompt_negative_button
+import mifos_pay.feature.passcode.generated.resources.feature_passcode_biometric_prompt_subtitle
+import mifos_pay.feature.passcode.generated.resources.feature_passcode_biometric_prompt_title
 import org.jetbrains.compose.resources.stringResource
 import org.mifos.authenticator.biometrics.platformAuthenticator.AuthStage
 import org.mifos.authenticator.biometrics.platformAuthenticator.BiometricError

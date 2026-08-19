@@ -5,7 +5,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 package org.mifospay.feature.auth.mobileVerify
 
@@ -22,7 +22,6 @@ import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
-import org.mifospay.core.common.DataState
 import org.mifospay.core.data.repository.SearchRepository
 import org.mifospay.core.model.search.SearchResult
 import kotlin.test.AfterTest
@@ -81,7 +80,7 @@ class MobileVerificationViewModelTest {
                     any(),
                     any(),
                 )
-            } returns DataState.Success(data = emptyList())
+            } returns emptyList()
 
             viewModel.trySendAction(MobileVerificationAction.PhoneNoChanged(validPhoneNumber))
             viewModel.trySendAction(MobileVerificationAction.VerifyPhoneBtnClicked)
@@ -136,16 +135,14 @@ class MobileVerificationViewModelTest {
                     any(),
                     any(),
                 )
-            } returns DataState.Success(
-                data = listOf(
-                    SearchResult(
-                        entityId = 1,
-                        entityAccountNo = "123",
-                        entityName = "SameUserName",
-                        entityType = "savings",
-                        parentId = 1,
-                        parentName = "smith",
-                    ),
+            } returns listOf(
+                SearchResult(
+                    entityId = 1,
+                    entityAccountNo = "123",
+                    entityName = "SameUserName",
+                    entityType = "savings",
+                    parentId = 1,
+                    parentName = "smith",
                 ),
             )
 

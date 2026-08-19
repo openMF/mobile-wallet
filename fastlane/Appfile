@@ -1,0 +1,15 @@
+# fastlane/Appfile — identity for all lanes (CI + deployment).
+# SELF-SUFFICIENT — reads identity DIRECTLY from the committed sources (gradle/libs.versions.toml +
+# gradle/fork.properties), with NO dependency on any Fastfile/config.rb import. fastlane's
+# CredentialsManager evaluates the Appfile BEFORE the Fastfile imports config.rb, so any indirect
+# load intermittently raises `uninitialized constant FastlaneConfig`. Reading the flat values here
+# removes that load-order coupling entirely (mirrors deployment/Appfile).
+_root  = File.expand_path("..", __dir__)
+_toml  = (File.read(File.join(_root, "gradle/libs.versions.toml")) rescue "")
+_props = (File.read(File.join(_root, "gradle/fork.properties")) rescue "")
+_app_id = _toml[/^\s*appId\s*=\s*"([^"]+)"/, 1] || ENV["APP_IDENTIFIER"]
+
+app_identifier(_app_id)                       # DERIVED — never hardcoded
+# Play service-account key — canonical secrets/live path (matches deployment/Appfile + secrets/LAYOUT.yaml).
+json_key_file(File.join(_root, "secrets/live/android/play/playStorePublishServiceCredentialsFile.json"))
+# apple_id is read from FASTLANE_APPLE_ID env var — do not hardcode here.

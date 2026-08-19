@@ -1,0 +1,18 @@
+# deployment/android/firebase/config.yaml
+target: android-firebase
+platform: android
+tier: 1
+owning_capability: android-firebase-distribute
+output_path: "cmp-android/build/outputs/apk/<flavor>/release/"
+version_format: "git"
+signing: android-keystore
+distribution_groups: ["mifos-mobile-apps"]
+retention: "30 days"
+flavors: [prod, demo]
+gradle_tasks:
+  prod: assembleProdRelease
+  demo: assembleDemoRelease
+runners:
+  local: { command: "bundle exec fastlane android deployReleaseApkOnFirebase" }
+  ci:    { workflow_snippet: workflow-snippet.yml }
+requires_confirm: false

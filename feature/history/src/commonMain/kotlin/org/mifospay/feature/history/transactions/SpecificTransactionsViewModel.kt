@@ -5,16 +5,13 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 package org.mifospay.feature.history.transactions
 
 import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
-import org.mifospay.core.common.DataState
+import org.mifospay.core.common.ScreenState
 import org.mifospay.core.data.repository.AccountRepository
 import org.mifospay.core.model.savingsaccount.Transaction
 import org.mifospay.core.model.savingsaccount.TransferDetail
@@ -37,9 +34,47 @@ internal class SpecificTransactionsViewModel(
     init {
         savedStateHandle.get<Long>(ACCOUNT_ID_KEY)?.let { accountId ->
             savedStateHandle.get<Long>(TRANSACTION_ID_KEY)?.let { transactionId ->
-                accountRepository.getTransaction(accountId, transactionId).onEach {
-                    sendAction(STAction.Internal.TransactionReceive(it))
-                }.launchIn(viewModelScope)
+                // Use the BaseViewModel `observeScreen` bridge to fold the
+                // ScreenState stream directly. The internal
+                // `TransactionReceive` action (which used to shuttle
+                // DataState) is removed; the reducer folds inline.
+                accountRepository.getTransaction(accountId, transactionId).observeScreen { screenState ->
+                    when (screenState) {
+                        is ScreenState.Loading -> {
+                            mutableStateFlow.update {
+                                it.copy(viewState = STState.ViewState.Loading)
+                            }
+                        }
+
+                        is ScreenState.Empty -> {
+                            mutableStateFlow.update {
+                                it.copy(viewState = Error("Transaction not found."))
+                            }
+                        }
+
+                        is ScreenState.Content -> {
+                            handleTransferDetailReceive(screenState.data)
+                        }
+
+                        is ScreenState.Error -> {
+                            mutableStateFlow.update {
+                                it.copy(viewState = Error(screenState.error.message.toString()))
+                            }
+                        }
+
+                        is ScreenState.NoNetwork -> {
+                            mutableStateFlow.update {
+                                it.copy(viewState = Error("No network. Please check your connection."))
+                            }
+                        }
+
+                        is ScreenState.Unauthenticated -> {
+                            mutableStateFlow.update {
+                                it.copy(viewState = Error("Session expired. Please log in again."))
+                            }
+                        }
+                    }
+                }
             }
         }
     }
@@ -52,28 +87,6 @@ internal class SpecificTransactionsViewModel(
 
             is STAction.ViewTransaction -> {
                 sendEvent(STEvent.OnViewTransaction(action.transferId))
-            }
-
-            is STAction.Internal.TransactionReceive -> handleTransactionReceive(action)
-        }
-    }
-
-    private fun handleTransactionReceive(action: STAction.Internal.TransactionReceive) {
-        when (action.result) {
-            is DataState.Loading -> {
-                mutableStateFlow.update {
-                    it.copy(viewState = STState.ViewState.Loading)
-                }
-            }
-
-            is DataState.Error -> {
-                mutableStateFlow.update {
-                    it.copy(viewState = Error(action.result.exception.message.toString()))
-                }
-            }
-
-            is DataState.Success -> {
-                handleTransferDetailReceive(action.result.data)
             }
         }
     }
@@ -135,8 +148,4 @@ internal sealed interface STEvent {
 internal sealed interface STAction {
     data object NavigateBack : STAction
     data class ViewTransaction(val transferId: Long) : STAction
-
-    sealed interface Internal : STAction {
-        data class TransactionReceive(val result: DataState<Transaction>) : Internal
-    }
 }

@@ -6,15 +6,11 @@
     If a copy of the MPL was not distributed with this file,
     You can obtain one at https://mozilla.org/MPL/2.0/.
 
-    See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+    See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
 -->
 <resources>
-    <string name="app_name">Mifos Pay</string>
+    <!-- app_name injected at build time from appDisplayName in libs.versions.toml -->
     <string name="home">Home</string>
-    <string name="payments">Payments</string>
-    <string name="finance">Finance</string>
     <string name="profile">Profile</string>
     <string name="not_connected">⚠️ You aren’t connected to the internet</string>
-    <string name="faq">FAQ</string>
-
 </resources>

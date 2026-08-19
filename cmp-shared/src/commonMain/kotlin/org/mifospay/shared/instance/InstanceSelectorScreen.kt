@@ -5,7 +5,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 package org.mifospay.shared.instance
 
@@ -42,14 +42,14 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import mobile_wallet.cmp_shared.generated.resources.Res
-import mobile_wallet.cmp_shared.generated.resources.default
-import mobile_wallet.cmp_shared.generated.resources.error_message
-import mobile_wallet.cmp_shared.generated.resources.interbank_server
-import mobile_wallet.cmp_shared.generated.resources.no_interbank_servers
-import mobile_wallet.cmp_shared.generated.resources.select_instance
-import mobile_wallet.cmp_shared.generated.resources.tenant_value
-import mobile_wallet.cmp_shared.generated.resources.update
+import cmp.shared.generated.resources.Res
+import cmp.shared.generated.resources.default
+import cmp.shared.generated.resources.error_message
+import cmp.shared.generated.resources.interbank_server
+import cmp.shared.generated.resources.no_interbank_servers
+import cmp.shared.generated.resources.select_instance
+import cmp.shared.generated.resources.tenant_value
+import cmp.shared.generated.resources.update
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel

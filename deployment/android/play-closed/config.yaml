@@ -1,0 +1,17 @@
+# deployment/android/play-closed/config.yaml
+target: android-play-closed
+platform: android
+tier: 2
+owning_capability: android-play-internal-publish
+output_format: none   # promotion-only, no build
+version_format: "playstore"
+signing: none
+distribution_groups: ["alpha"]
+retention: "180 days"
+runners:
+  local: { command: "bundle exec fastlane android promoteToClosed" }
+  ci:    { workflow_snippet: workflow-snippet.yml }
+requires_confirm: false
+promotion_only: true
+source_track: internal
+target_track: alpha

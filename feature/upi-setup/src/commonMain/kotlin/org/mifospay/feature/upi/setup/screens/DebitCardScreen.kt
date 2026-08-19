@@ -5,7 +5,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 package org.mifospay.feature.upi.setup.screens
 
@@ -31,7 +31,7 @@ import template.core.base.designsystem.theme.KptTheme
 
 @Composable
 internal fun DebitCardScreen(
-    onDebitCardVerified: (String) -> Unit,
+    onDebitCardVerified: () -> Unit,
     onDebitCardVerificationFailed: (String) -> Unit,
     modifier: Modifier = Modifier,
     verificationStatus: Boolean = false,
@@ -55,7 +55,7 @@ internal fun DebitCardScreen(
 @VisibleForTesting
 internal fun DebitCardScreenWithHeaderAndContent(
     debitCardUiState: DebitCardUiState,
-    onDebitCardVerified: (String) -> Unit,
+    onDebitCardVerified: () -> Unit,
     onDebitCardVerificationFailed: (String) -> Unit,
     onDone: (String, String, String) -> Unit,
     modifier: Modifier = Modifier,
@@ -100,7 +100,7 @@ internal fun DebitCardScreenWithHeaderAndContent(
                             is DebitCardUiState.Verifying -> MifosProgressIndicatorOverlay()
 
                             is DebitCardUiState.Verified -> {
-                                onDebitCardVerified((debitCardUiState).otp)
+                                onDebitCardVerified()
                             }
 
                             is DebitCardUiState.VerificationFailed -> {

@@ -5,16 +5,19 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 package org.mifospay.feature.autopay
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
-import org.mifospay.core.common.DataState
+import kpt.core.base.store.submit.SubmitState
+import kpt.core.base.store.submit.submitHandler
 import org.mifospay.core.common.DateHelper
 import org.mifospay.core.common.getSerialized
 import org.mifospay.core.data.util.BillValidator
@@ -39,7 +42,43 @@ class EditBillViewModel(
 
     private val billId: String = savedStateHandle["billId"] ?: ""
 
+    // Template idiom (core-base/store): the one-shot update goes through a SubmitHandler
+    // instead of a hand-folded DataState result. The handler owns the
+    // Submitting/Submitted/Failed lifecycle; we observe it to drive this screen's
+    // existing loading/success/error UX, so the Screen is unchanged.
+    private val submitBill = viewModelScope.submitHandler<Bill>()
+
     init {
+        submitBill.state
+            .onEach { submitState ->
+                when (submitState) {
+                    is SubmitState.Submitting -> {
+                        mutableStateFlow.update { it.copy(isLoading = true) }
+                    }
+
+                    is SubmitState.Submitted -> {
+                        mutableStateFlow.update {
+                            it.copy(isLoading = false, isSuccess = true)
+                        }
+                        sendEvent(EditBillEvent.BillUpdated(submitState.result))
+                        submitBill.reset()
+                    }
+
+                    is SubmitState.Failed -> {
+                        mutableStateFlow.update {
+                            it.copy(
+                                isLoading = false,
+                                error = "Failed to update bill: ${submitState.error.message}",
+                            )
+                        }
+                        submitBill.reset()
+                    }
+
+                    SubmitState.Idle -> Unit
+                }
+            }
+            .launchIn(viewModelScope)
+
         loadBill()
         loadAvailableBillers()
     }
@@ -248,61 +287,30 @@ class EditBillViewModel(
             return
         }
 
-        viewModelScope.launch {
-            mutableStateFlow.update { it.copy(isLoading = true) }
+        val formData = mutableStateFlow.value.formData
 
-            try {
-                val formData = mutableStateFlow.value.formData
+        val bill = Bill(
+            id = billId,
+            name = formData.name.trim(),
+            amount = formData.amount.toDoubleOrNull() ?: 0.0,
+            currency = formData.currency,
+            dueDate = formData.dueDate,
+            recurrencePattern = formData.recurrencePattern,
+            billerId = formData.billerId,
+            billerName = formData.billerName,
+            description = formData.description.takeIf { it.isNotBlank() },
+            // AutoPay configuration
+            autoPayEnabled = formData.enableAutoPay,
+            autoPayPaymentMethod = formData.autoPayPaymentMethod.takeIf { it.isNotBlank() },
+            autoPaySourceAccount = formData.autoPaySourceAccount.takeIf { it.isNotBlank() },
+            autoPayMaxAmount = formData.autoPayMaxAmount.toDoubleOrNull(),
+        )
 
-                val bill = Bill(
-                    id = billId,
-                    name = formData.name.trim(),
-                    amount = formData.amount.toDoubleOrNull() ?: 0.0,
-                    currency = formData.currency,
-                    dueDate = formData.dueDate,
-                    recurrencePattern = formData.recurrencePattern,
-                    billerId = formData.billerId,
-                    billerName = formData.billerName,
-                    description = formData.description.takeIf { it.isNotBlank() },
-                    // AutoPay configuration
-                    autoPayEnabled = formData.enableAutoPay,
-                    autoPayPaymentMethod = formData.autoPayPaymentMethod.takeIf { it.isNotBlank() },
-                    autoPaySourceAccount = formData.autoPaySourceAccount.takeIf { it.isNotBlank() },
-                    autoPayMaxAmount = formData.autoPayMaxAmount.toDoubleOrNull(),
-                )
-
-                val result = billRepository.updateBill(bill)
-
-                when (result) {
-                    is DataState.Loading -> {
-                        // Loading state is already handled by setting isLoading = true above
-                    }
-                    is DataState.Success -> {
-                        mutableStateFlow.update {
-                            it.copy(
-                                isLoading = false,
-                                isSuccess = true,
-                            )
-                        }
-                        sendEvent(EditBillEvent.BillUpdated(result.data))
-                    }
-                    is DataState.Error -> {
-                        mutableStateFlow.update {
-                            it.copy(
-                                isLoading = false,
-                                error = "Failed to update bill: ${result.exception.message}",
-                            )
-                        }
-                    }
-                }
-            } catch (exception: Exception) {
-                mutableStateFlow.update {
-                    it.copy(
-                        isLoading = false,
-                        error = "Failed to update bill: ${exception.message}",
-                    )
-                }
-            }
+        // Submit through the handler — it drives Submitting/Submitted/Failed, observed
+        // in `init`. The repository returns the updated bill or throws on failure,
+        // which the handler surfaces as Failed.
+        submitBill.submit {
+            billRepository.updateBill(bill)
         }
     }
 

@@ -5,7 +5,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 package org.mifospay.feature.merchants.ui
 
@@ -44,19 +44,19 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import mobile_wallet.feature.merchants.generated.resources.Res
-import mobile_wallet.feature.merchants.generated.resources.feature_merchants_amount
-import mobile_wallet.feature.merchants.generated.resources.feature_merchants_credits
-import mobile_wallet.feature.merchants.generated.resources.feature_merchants_debits
-import mobile_wallet.feature.merchants.generated.resources.feature_merchants_error_oops
-import mobile_wallet.feature.merchants.generated.resources.feature_merchants_merchant_transaction
-import mobile_wallet.feature.merchants.generated.resources.feature_merchants_no_transactions_found
-import mobile_wallet.feature.merchants.generated.resources.feature_merchants_other
-import mobile_wallet.feature.merchants.generated.resources.feature_merchants_submit
-import mobile_wallet.feature.merchants.generated.resources.feature_merchants_transaction_date
-import mobile_wallet.feature.merchants.generated.resources.feature_merchants_transaction_id
-import mobile_wallet.feature.merchants.generated.resources.feature_merchants_transfer_money_to_this_merchant
-import mobile_wallet.feature.merchants.generated.resources.feature_merchants_unexpected_error_subtitle
+import mifos_pay.feature.merchants.generated.resources.Res
+import mifos_pay.feature.merchants.generated.resources.feature_merchants_amount
+import mifos_pay.feature.merchants.generated.resources.feature_merchants_credits
+import mifos_pay.feature.merchants.generated.resources.feature_merchants_debits
+import mifos_pay.feature.merchants.generated.resources.feature_merchants_error_oops
+import mifos_pay.feature.merchants.generated.resources.feature_merchants_merchant_transaction
+import mifos_pay.feature.merchants.generated.resources.feature_merchants_no_transactions_found
+import mifos_pay.feature.merchants.generated.resources.feature_merchants_other
+import mifos_pay.feature.merchants.generated.resources.feature_merchants_submit
+import mifos_pay.feature.merchants.generated.resources.feature_merchants_transaction_date
+import mifos_pay.feature.merchants.generated.resources.feature_merchants_transaction_id
+import mifos_pay.feature.merchants.generated.resources.feature_merchants_transfer_money_to_this_merchant
+import mifos_pay.feature.merchants.generated.resources.feature_merchants_unexpected_error_subtitle
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.jetbrains.compose.ui.tooling.preview.PreviewParameter

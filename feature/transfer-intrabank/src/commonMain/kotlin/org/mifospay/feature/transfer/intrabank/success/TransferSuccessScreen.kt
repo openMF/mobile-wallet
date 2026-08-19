@@ -5,7 +5,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 package org.mifospay.feature.transfer.intrabank.success
 
@@ -39,18 +39,18 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import mobile_wallet.feature.transfer_intrabank.generated.resources.Res
-import mobile_wallet.feature.transfer_intrabank.generated.resources.feature_make_transfer_payment_success
-import mobile_wallet.feature.transfer_intrabank.generated.resources.feature_make_transfer_success
-import mobile_wallet.feature.transfer_intrabank.generated.resources.feature_transfer_amount
-import mobile_wallet.feature.transfer_intrabank.generated.resources.feature_transfer_back_to_home
-import mobile_wallet.feature.transfer_intrabank.generated.resources.feature_transfer_copy
-import mobile_wallet.feature.transfer_intrabank.generated.resources.feature_transfer_date
-import mobile_wallet.feature.transfer_intrabank.generated.resources.feature_transfer_description
-import mobile_wallet.feature.transfer_intrabank.generated.resources.feature_transfer_from_account
-import mobile_wallet.feature.transfer_intrabank.generated.resources.feature_transfer_to_account
-import mobile_wallet.feature.transfer_intrabank.generated.resources.feature_transfer_transaction_id
-import mobile_wallet.feature.transfer_intrabank.generated.resources.feature_transfer_transfer_completed
+import mifos_pay.feature.transfer_intrabank.generated.resources.Res
+import mifos_pay.feature.transfer_intrabank.generated.resources.feature_make_transfer_payment_success
+import mifos_pay.feature.transfer_intrabank.generated.resources.feature_make_transfer_success
+import mifos_pay.feature.transfer_intrabank.generated.resources.feature_transfer_amount
+import mifos_pay.feature.transfer_intrabank.generated.resources.feature_transfer_back_to_home
+import mifos_pay.feature.transfer_intrabank.generated.resources.feature_transfer_copy
+import mifos_pay.feature.transfer_intrabank.generated.resources.feature_transfer_date
+import mifos_pay.feature.transfer_intrabank.generated.resources.feature_transfer_description
+import mifos_pay.feature.transfer_intrabank.generated.resources.feature_transfer_from_account
+import mifos_pay.feature.transfer_intrabank.generated.resources.feature_transfer_to_account
+import mifos_pay.feature.transfer_intrabank.generated.resources.feature_transfer_transaction_id
+import mifos_pay.feature.transfer_intrabank.generated.resources.feature_transfer_transfer_completed
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.mifospay.core.designsystem.component.MifosButton

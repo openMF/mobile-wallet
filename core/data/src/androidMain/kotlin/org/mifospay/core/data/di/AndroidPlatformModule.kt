@@ -5,7 +5,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 package org.mifospay.core.data.di
 
@@ -20,6 +20,10 @@ import org.mifospay.core.data.util.TimeZoneBroadcastMonitor
 import org.mifospay.core.data.util.TimeZoneMonitor
 
 val AndroidDataModule = module {
+    // Legacy fork NetworkMonitor (org.mifospay.core.data.util) for DataState `withNetworkCheck`.
+    // The Store5 `kpt.core.data.infra.NetworkMonitor` is bound in DataModule via kmptoolkit's
+    // `NetworkMonitorProvider.install()` (cmp-network-monitor 3.6.0+, which carries the
+    // AndroidNetworkMonitor cold-start seed fix) — no per-platform override needed here.
     single<NetworkMonitor> {
         ConnectivityManagerNetworkMonitor(androidContext(), get(named(MifosDispatchers.IO.name)))
     }

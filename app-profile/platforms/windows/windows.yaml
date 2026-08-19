@@ -1,0 +1,38 @@
+# app-profile/platforms/windows/windows.yaml — Microsoft Store packaging (Windows / MSIX).
+# Template default = a PLACEHOLDER MS Store identity. A FORK overrides msix_identity_name /
+# msix_publisher / msix_publisher_display_name (+ store_id / partner_center) with its own values.
+# Partner Center ids stay unset (YOUR_*) until the fork wires MS Store CI — the deployment-whitelabel
+# health check WARNs (not FAILs) on unset distribution placeholders.
+# Deep-merged under `windows.*` (top-level key), consumed via APP_PROFILE_MAP (windows.* flat keys).
+windows:
+  store_id: ""                             # windows.store.id (Partner Center App identity Store ID, 9XXXXXXXX)
+  ms_app_id: ""                            # store.windows.ms.app.id (StoreBroker App ID)
+  ms_publish_mode: Manual                  # store.windows.ms.publish.mode (Manual | Immediate | SpecificDate)
+  ms_visibility: Public                    # store.windows.ms.visibility (Public | Hidden | Private)
+  msix_identity_name: MifosInitiative.MifosPay             # windows.msix.identity.name
+  msix_publisher: CN=Mifos Initiative                      # windows.msix.identity.publisher (CN=…) — matches deployment/desktop/microsoft-store/Package.appxmanifest publisher
+  msix_publisher_display_name: Mifos Initiative            # windows.msix.publisher.display.name
+  partner_center:
+    tenant_id: YOUR_PARTNER_CENTER_TENANT_ID   # windows.partner.center.tenant.id — PLACEHOLDER, no MS Partner Center account on record
+    client_id: YOUR_PARTNER_CENTER_CLIENT_ID   # windows.partner.center.client.id — PLACEHOLDER
+  store:                                     # Microsoft Store listing TEXT (win.store.*) — PLACEHOLDER, no MS Store listing authored yet
+    name: Mifos Pay                          # win.store.name
+    short_description: 'YOUR_APP_SHORT_DESCRIPTION'   # PLACEHOLDER — win.store.short.description (<=100 chars)
+    description: 'YOUR_APP_DESCRIPTION — write your Microsoft Store long description here (<=10000 chars).'   # PLACEHOLDER — win.store.description
+    features:                                # win.store.features (list — unmapped, read direct) — PLACEHOLDER
+      - YOUR_APP_FEATURE_1
+      - YOUR_APP_FEATURE_2
+    search_terms:                            # win.store.search.terms (list, <=7 — unmapped, read direct)
+      - mifos
+      - wallet
+      - payment
+      - p2p
+      - transfer
+      - finance
+    category: Finance                        # win.store.category
+    privacy_url: https://mifos.org             # win.store.privacy.url
+  winget:
+    package_id: MifosInitiative.MifosPay       # win.winget.package.id (Publisher.AppName)
+    publisher: Mifos Initiative                # win.winget.publisher
+    name: Mifos Pay                            # win.winget.name
+    moniker: mifos-pay                         # win.winget.moniker

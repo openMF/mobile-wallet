@@ -5,12 +5,11 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 package org.mifospay.core.data.repository
 
-import kotlinx.coroutines.flow.Flow
-import org.mifospay.core.common.DataState
+import org.mifospay.core.common.ScreenStateStream
 import org.mifospay.core.model.autopay.AutoPay
 import org.mifospay.core.model.autopay.AutoPayHistory
 import org.mifospay.core.model.autopay.AutoPayPayload
@@ -20,63 +19,69 @@ import org.mifospay.core.model.autopay.UpcomingPayment
 import org.mifospay.core.network.model.entity.Page
 
 interface AutoPayRepository {
+    // Phase-3 cutover — Flow-shaped reads on ScreenState.
+
     /**
      * Get AutoPay template for creating new AutoPay schedules
      */
     fun getAutoPayTemplate(
         clientId: Long,
         sourceAccountId: Long,
-    ): Flow<DataState<AutoPayTemplate>>
+    ): ScreenStateStream<AutoPayTemplate>
 
     /**
      * Get all AutoPay schedules for a client
      */
     fun getAllAutoPaySchedules(
         clientId: Long,
-    ): Flow<DataState<List<AutoPay>>>
+    ): ScreenStateStream<List<AutoPay>>
 
     /**
      * Get AutoPay schedule by ID
      */
-    fun getAutoPaySchedule(autoPayId: Long): Flow<DataState<AutoPay>>
+    fun getAutoPaySchedule(autoPayId: Long): ScreenStateStream<AutoPay>
+
+    // Writes throw on failure and return Unit on success.
 
     /**
-     * Create a new AutoPay schedule
+     * Create a new AutoPay schedule. Throws on failure.
      */
     suspend fun createAutoPaySchedule(
         payload: AutoPayPayload,
-    ): DataState<String>
+    )
 
     /**
-     * Update an existing AutoPay schedule
+     * Update an existing AutoPay schedule. Throws on failure.
      */
     suspend fun updateAutoPaySchedule(
         autoPayId: Long,
         payload: AutoPayUpdatePayload,
-    ): DataState<String>
+    )
 
     /**
-     * Delete an AutoPay schedule
+     * Delete an AutoPay schedule. Throws on failure.
      */
-    suspend fun deleteAutoPaySchedule(autoPayId: Long): DataState<String>
+    suspend fun deleteAutoPaySchedule(autoPayId: Long)
 
     /**
-     * Pause an AutoPay schedule
+     * Pause an AutoPay schedule. Throws on failure.
      */
-    suspend fun pauseAutoPaySchedule(autoPayId: Long): DataState<String>
+    suspend fun pauseAutoPaySchedule(autoPayId: Long)
 
     /**
-     * Resume a paused AutoPay schedule
+     * Resume a paused AutoPay schedule. Throws on failure.
      */
-    suspend fun resumeAutoPaySchedule(autoPayId: Long): DataState<String>
+    suspend fun resumeAutoPaySchedule(autoPayId: Long)
 
     /**
-     * Get AutoPay payment history
+     * Get AutoPay payment history. Keeps the [Page] wrapper inside Content
+     * (mirrors `AutoPayHistoryRepository.getAutoPayHistoryWithPagination`
+     * treatment).
      */
     fun getAutoPayHistory(
         autoPayId: Long,
         limit: Int = 20,
-    ): Flow<DataState<Page<AutoPayHistory>>>
+    ): ScreenStateStream<Page<AutoPayHistory>>
 
     /**
      * Get upcoming payments for all AutoPay schedules
@@ -84,19 +89,20 @@ interface AutoPayRepository {
     fun getUpcomingPayments(
         clientId: Long,
         limit: Int = 10,
-    ): Flow<DataState<List<UpcomingPayment>>>
+    ): ScreenStateStream<List<UpcomingPayment>>
 
     /**
      * Get AutoPay statistics for dashboard
      */
     fun getAutoPayStatistics(
         clientId: Long,
-    ): Flow<DataState<AutoPayStatistics>>
+    ): ScreenStateStream<AutoPayStatistics>
 
     /**
-     * Validate AutoPay payload before submission
+     * Validate AutoPay payload before submission (pure-local validation,
+     * no I/O). Throws on invalid input.
      */
-    suspend fun validateAutoPayPayload(payload: AutoPayPayload): DataState<Boolean>
+    suspend fun validateAutoPayPayload(payload: AutoPayPayload)
 }
 
 data class AutoPayStatistics(

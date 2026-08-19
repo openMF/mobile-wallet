@@ -5,7 +5,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 package org.mifospay.core.network.config
 
@@ -14,9 +14,10 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.serialization.json.Json
-import mobile_wallet.core.network.generated.resources.Res
+import mifos_pay.core.network.generated.resources.Res
 import org.jetbrains.compose.resources.ExperimentalResourceApi
-import org.mifospay.core.common.DataState
+import org.mifospay.core.common.ScreenState
+import org.mifospay.core.common.asScreenStateFlow
 import org.mifospay.core.model.instance.InstancesConfig
 import org.mifospay.core.network.SupabaseApiManager
 
@@ -30,31 +31,29 @@ class SupabaseInstanceConfigLoader(
     private val json: Json,
 ) : InstanceConfigLoader {
 
-    override suspend fun fetchInstancesConfig(): DataState<InstancesConfig> {
+    override suspend fun fetchInstancesConfig(): InstancesConfig {
         if (!supabaseApiManager.isConfigured) {
             return loadFallbackConfig()
         }
         return try {
-            val config = supabaseApiManager.appConfigService.fetchInstancesConfig()
-            DataState.Success(config)
+            supabaseApiManager.appConfigService.fetchInstancesConfig()
         } catch (e: Exception) {
             loadFallbackConfig()
         }
     }
 
-    override fun observeInstancesConfig(): Flow<DataState<InstancesConfig>> = flow {
+    override fun observeInstancesConfig(): Flow<ScreenState<InstancesConfig>> = flow {
         emit(fetchInstancesConfig())
-    }.flowOn(ioDispatcher)
+    }.asScreenStateFlow().flowOn(ioDispatcher)
 
     @OptIn(ExperimentalResourceApi::class)
-    private suspend fun loadFallbackConfig(): DataState<InstancesConfig> {
+    private suspend fun loadFallbackConfig(): InstancesConfig {
         return try {
             val bytes = Res.readBytes("files/instances_config_default.json")
             val jsonString = bytes.decodeToString()
-            val config = json.decodeFromString<InstancesConfig>(jsonString)
-            DataState.Success(config)
+            json.decodeFromString<InstancesConfig>(jsonString)
         } catch (e: Exception) {
-            DataState.Success(DEFAULT_CONFIG)
+            DEFAULT_CONFIG
         }
     }
 

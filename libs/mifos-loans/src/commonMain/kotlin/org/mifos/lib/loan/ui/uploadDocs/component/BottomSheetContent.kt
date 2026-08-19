@@ -5,7 +5,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 package org.mifos.lib.loan.ui.uploadDocs.component
 
@@ -49,13 +49,13 @@ import com.niyajali.compose.sign.exportSignature
 import com.niyajali.compose.sign.rememberSignatureState
 import io.github.vinceglb.filekit.dialogs.compose.util.encodeToByteArray
 import kotlinx.coroutines.launch
-import mobile_wallet.libs.mifos_loans.generated.resources.Res
-import mobile_wallet.libs.mifos_loans.generated.resources.attach
-import mobile_wallet.libs.mifos_loans.generated.resources.capture
-import mobile_wallet.libs.mifos_loans.generated.resources.reset
-import mobile_wallet.libs.mifos_loans.generated.resources.save_and_submit
-import mobile_wallet.libs.mifos_loans.generated.resources.sign
-import mobile_wallet.libs.mifos_loans.generated.resources.sign_here
+import mifos_pay.libs.mifos_loans.generated.resources.Res
+import mifos_pay.libs.mifos_loans.generated.resources.attach
+import mifos_pay.libs.mifos_loans.generated.resources.capture
+import mifos_pay.libs.mifos_loans.generated.resources.reset
+import mifos_pay.libs.mifos_loans.generated.resources.save_and_submit
+import mifos_pay.libs.mifos_loans.generated.resources.sign
+import mifos_pay.libs.mifos_loans.generated.resources.sign_here
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.stringResource
 import org.mifos.lib.loan.component.SignatureUploadType

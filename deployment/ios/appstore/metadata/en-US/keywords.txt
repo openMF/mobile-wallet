@@ -1,0 +1,1 @@
+wallet,payments,transfer,sendmoney,QRpay,invoice,card,linkbank,KYC,merchant

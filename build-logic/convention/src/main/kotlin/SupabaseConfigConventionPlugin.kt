@@ -1,11 +1,11 @@
 /*
- * Copyright 2024 Mifos Initiative
+ * Copyright 2025 Mifos Initiative
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 
 import org.gradle.api.Plugin
@@ -13,32 +13,88 @@ import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.dependencies
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
-import org.mifospay.libs
-import java.io.File
+import org.convention.libs
+import org.convention.resolveSecretPath
 
+/**
+ * Convention plugin that generates Supabase credentials from a JSON secrets file.
+ *
+ * This plugin:
+ * 1. Reads credentials from `secrets/live/supabase/supabaseCredentialsFile.json`
+ * 2. Generates a `SupabaseCredentials` object implementing `kpt.core.base.network.SupabaseCredentials`
+ * 3. Adds the generated source to the commonMain source set
+ * 4. Adds the supabase-postgrest dependency
+ *
+ * ## Usage
+ *
+ * Apply the plugin to your module's build.gradle.kts:
+ * ```kotlin
+ * plugins {
+ *     alias(libs.plugins.kmp.supabase.config)
+ * }
+ *
+ * // Optional: Configure the package name (defaults to module namespace + ".config")
+ * supabaseConfig {
+ *     packageName = "com.example.myapp.network.config"
+ * }
+ * ```
+ *
+ * ## Secrets File Format
+ *
+ * Create `secrets/live/supabase/supabaseCredentialsFile.json` in your project root:
+ * ```json
+ * {
+ *   "url": "https://your-project.supabase.co",
+ *   "anonKey": "your-anon-key"
+ * }
+ * ```
+ *
+ * ## Generated Code
+ *
+ * The plugin generates:
+ * ```kotlin
+ * object SupabaseCredentials : kpt.core.base.network.SupabaseCredentials {
+ *     override val url = "https://your-project.supabase.co"
+ *     override val anonKey = "your-anon-key"
+ * }
+ * ```
+ */
 class SupabaseConfigConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
+            // Create extension for configuration
+            val extension = extensions.create("supabaseConfig", SupabaseConfigExtension::class.java)
+
             val generatedDir = layout.buildDirectory.dir("generated/supabase")
-            val secretsFile = rootProject.file("secrets/supabaseCredentialsFile.json")
+            // Path resolved by the ONE resolver (deployment/scripts/build-secrets → secrets/LAYOUT.yaml →
+            // secrets/live/supabase/…, sample fallback) — never hardcoded here, so the secrets tree stays
+            // re-manageable in secrets/LAYOUT.yaml alone.
+            val secretsFile = resolveSecretPath("supabase_credentials")
 
             // Register the code generation task
             val generateTask = tasks.register("generateSupabaseConfig") {
+                // Determine package name from extension or derive from namespace
+                val packageName = extension.packageName
+                    ?: project.findProperty("android.namespace")?.toString()?.let { "$it.config" }
+                    ?: "${project.group}.config"
+
+                val packagePath = packageName.replace(".", "/")
                 val outputFile = generatedDir.get().asFile
-                    .resolve("org/mifospay/core/network/config/SupabaseCredentials.kt")
+                    .resolve("$packagePath/SupabaseCredentials.kt")
 
                 // Track file content as input property for proper up-to-date checking
-                // This handles both file changes and file existence changes
                 val fileContent = if (secretsFile.exists() && secretsFile.length() > 0) {
                     secretsFile.readText()
                 } else {
                     ""
                 }
                 inputs.property("credentialsContent", fileContent)
+                inputs.property("packageName", packageName)
                 outputs.file(outputFile)
 
                 doLast {
                     val currentContent = inputs.properties["credentialsContent"] as String
+                    val currentPackage = inputs.properties["packageName"] as String
                     val (url, anonKey) = if (currentContent.isNotEmpty()) {
                         try {
                             parseCredentials(currentContent)
@@ -48,34 +104,34 @@ class SupabaseConfigConventionPlugin : Plugin<Project> {
                         }
                     } else {
                         logger.warn("Supabase credentials file not found at: ${secretsFile.absolutePath}")
-                        logger.warn("Create secrets/supabaseCredentialsFile.json with 'url' and 'anonKey' fields")
+                        logger.warn("Create secrets/live/supabase/supabaseCredentialsFile.json with 'url' and 'anonKey' fields")
                         Pair("", "")
                     }
 
                     outputFile.parentFile.mkdirs()
-                    val isConfigured = url.isNotBlank() && anonKey.isNotBlank()
 
                     outputFile.writeText(
                         """
                         |/*
-                        | * Copyright 2026 Mifos Initiative
+                        | * Copyright 2025 Mifos Initiative
                         | *
                         | * This Source Code Form is subject to the terms of the Mozilla Public
                         | * License, v. 2.0. If a copy of the MPL was not distributed with this
                         | * file, You can obtain one at https://mozilla.org/MPL/2.0/.
                         | *
-                        | * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+                        | * See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
                         | */
-                        |package org.mifospay.core.network.config
+                        |package $currentPackage
+                        |
+                        |import kpt.core.base.network.SupabaseCredentials as BaseSupabaseCredentials
                         |
                         |/**
-                        | * Generated Supabase credentials from secrets/supabaseCredentialsFile.json
+                        | * Generated Supabase credentials from secrets/live/supabase/supabaseCredentialsFile.json
                         | * DO NOT EDIT - This file is generated by SupabaseConfigConventionPlugin
                         | */
-                        |object SupabaseCredentials {
-                        |    const val URL: String = "$url"
-                        |    const val ANON_KEY: String = "$anonKey"
-                        |    const val isConfigured: Boolean = $isConfigured
+                        |object SupabaseCredentials : BaseSupabaseCredentials {
+                        |    override val url: String = "$url"
+                        |    override val anonKey: String = "$anonKey"
                         |}
                         """.trimMargin()
                     )
@@ -114,4 +170,15 @@ class SupabaseConfigConventionPlugin : Plugin<Project> {
 
         return Pair(url, anonKey)
     }
+}
+
+/**
+ * Extension for configuring SupabaseConfigConventionPlugin.
+ */
+open class SupabaseConfigExtension {
+    /**
+     * The package name for the generated SupabaseCredentials object.
+     * If not set, defaults to the module's android namespace + ".config"
+     */
+    var packageName: String? = null
 }

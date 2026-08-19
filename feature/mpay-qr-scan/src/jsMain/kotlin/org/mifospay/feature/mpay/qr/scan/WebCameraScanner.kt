@@ -5,7 +5,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 package org.mifospay.feature.mpay.qr.scan
 
@@ -42,15 +42,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.browser.document
 import kotlinx.coroutines.await
-import mobile_wallet.feature.mpay_qr_scan.generated.resources.Res
-import mobile_wallet.feature.mpay_qr_scan.generated.resources.feature_qr_camera_access_denied
-import mobile_wallet.feature.mpay_qr_scan.generated.resources.feature_qr_camera_denied_message
-import mobile_wallet.feature.mpay_qr_scan.generated.resources.feature_qr_camera_error
-import mobile_wallet.feature.mpay_qr_scan.generated.resources.feature_qr_camera_view_active
-import mobile_wallet.feature.mpay_qr_scan.generated.resources.feature_qr_initializing_camera
-import mobile_wallet.feature.mpay_qr_scan.generated.resources.feature_qr_position_qr_code
-import mobile_wallet.feature.mpay_qr_scan.generated.resources.feature_qr_scan_qr_code
-import mobile_wallet.feature.mpay_qr_scan.generated.resources.feature_qr_select_from_gallery
+import mifos_pay.feature.mpay_qr_scan.generated.resources.Res
+import mifos_pay.feature.mpay_qr_scan.generated.resources.feature_qr_camera_access_denied
+import mifos_pay.feature.mpay_qr_scan.generated.resources.feature_qr_camera_denied_message
+import mifos_pay.feature.mpay_qr_scan.generated.resources.feature_qr_camera_error
+import mifos_pay.feature.mpay_qr_scan.generated.resources.feature_qr_camera_view_active
+import mifos_pay.feature.mpay_qr_scan.generated.resources.feature_qr_initializing_camera
+import mifos_pay.feature.mpay_qr_scan.generated.resources.feature_qr_position_qr_code
+import mifos_pay.feature.mpay_qr_scan.generated.resources.feature_qr_scan_qr_code
+import mifos_pay.feature.mpay_qr_scan.generated.resources.feature_qr_select_from_gallery
 import org.jetbrains.compose.resources.stringResource
 import org.mifospay.core.designsystem.icon.MifosIcons
 import org.w3c.dom.HTMLDivElement

@@ -5,13 +5,12 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 package org.mifospay.core.datastore
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
-import org.mifospay.core.common.DataState
 import org.mifospay.core.model.account.DefaultAccount
 import org.mifospay.core.model.client.Client
 import org.mifospay.core.model.client.UpdatedClient
@@ -43,23 +42,23 @@ interface UserPreferencesRepository {
 
     val language: StateFlow<Language>
 
-    suspend fun updateToken(token: String): DataState<Unit>
+    suspend fun updateToken(token: String)
 
-    suspend fun updateUserInfo(user: UserInfo): DataState<Unit>
+    suspend fun updateUserInfo(user: UserInfo)
 
-    suspend fun setLanguage(language: Language): DataState<Unit>
+    suspend fun setLanguage(language: Language)
 
-    suspend fun updateClientInfo(client: Client): DataState<Unit>
+    suspend fun updateClientInfo(client: Client)
 
-    suspend fun updateClientProfile(client: UpdatedClient): DataState<Unit>
+    suspend fun updateClientProfile(client: UpdatedClient)
 
-    suspend fun updateDefaultAccount(account: DefaultAccount): DataState<Unit>
+    suspend fun updateDefaultAccount(account: DefaultAccount)
 
-    suspend fun updateSelectedInstance(instance: ServerInstance): DataState<Unit>
+    suspend fun updateSelectedInstance(instance: ServerInstance)
 
-    suspend fun updateSelectedInterbankInstance(instance: InterbankServer): DataState<Unit>
+    suspend fun updateSelectedInterbankInstance(instance: InterbankServer)
 
-    suspend fun updateAccountExternalIds(accountExternalIds: Map<Long, String>): DataState<Unit>
+    suspend fun updateAccountExternalIds(accountExternalIds: Map<Long, String>)
 
     fun getAccountExternalId(accountId: Long): String?
 

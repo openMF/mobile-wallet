@@ -5,7 +5,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 package org.mifospay.feature.accounts
 
@@ -14,25 +14,28 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.mapLatest
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import mobile_wallet.feature.accounts.generated.resources.Res
-import mobile_wallet.feature.accounts.generated.resources.delete_beneficiary_subtitle
-import mobile_wallet.feature.accounts.generated.resources.delete_beneficiary_title
-import mobile_wallet.feature.accounts.generated.resources.feature_accounts_beneficiary_deleted
-import mobile_wallet.feature.accounts.generated.resources.feature_accounts_default_account_updated
+import kpt.core.base.store.submit.SubmitState
+import kpt.core.base.store.submit.submitHandler
+import mifos_pay.feature.accounts.generated.resources.Res
+import mifos_pay.feature.accounts.generated.resources.delete_beneficiary_subtitle
+import mifos_pay.feature.accounts.generated.resources.delete_beneficiary_title
+import mifos_pay.feature.accounts.generated.resources.feature_accounts_beneficiary_deleted
+import mifos_pay.feature.accounts.generated.resources.feature_accounts_default_account_updated
 import org.jetbrains.compose.resources.StringResource
-import org.mifospay.core.common.DataState
+import org.mifospay.core.common.ScreenState
 import org.mifospay.core.data.repository.SelfServiceRepository
 import org.mifospay.core.datastore.UserPreferencesRepository
 import org.mifospay.core.model.account.Account
 import org.mifospay.core.model.account.DefaultAccount
 import org.mifospay.core.model.beneficiary.Beneficiary
 import org.mifospay.core.ui.utils.BaseViewModel
-import org.mifospay.feature.accounts.AccountAction.Internal.BeneficiaryDeleteResultReceived
 import org.mifospay.feature.accounts.AccountAction.Internal.DeleteBeneficiary
 import org.mifospay.feature.accounts.AccountEvent.OnAddEditSavingsAccount
 import org.mifospay.feature.accounts.savingsaccount.SavingsAddEditType
@@ -54,28 +57,57 @@ class AccountViewModel(
         )
     },
 ) {
+    // Phase-5 Batch-4: cut over from the transitional
+    // `getAccountAndBeneficiaryList` (Flow<DataState<T>>) to the store-native
+    // `getAccountAndBeneficiaryListScreen` (Flow<ScreenState<T>>), which folds
+    // the network-account stream + store-backed beneficiary stream through a
+    // manual `combine {}` fold over the FORK's ScreenState (priority ladder:
+    // NoNetwork > Loading > Unauthenticated > Error > Empty > Content). See
+    // `SelfServiceRepositoryImpl.foldAccountAndBeneficiary` for the fold's
+    // implementation; the template's `combineScreenStates` helper cannot be
+    // used verbatim because it is typed against the template's ScreenState.
     val accountState = mutableStateFlow
         .flatMapLatest { currentState ->
             val clientId = currentState.clientId
             if (clientId != null) {
-                repository.getAccountAndBeneficiaryList(clientId)
+                repository.getAccountAndBeneficiaryListScreen(clientId, viewModelScope)
             } else {
-                flowOf(DataState.Error(IllegalStateException("Client ID not available")))
+                flowOf(
+                    ScreenState.Error(IllegalStateException("Client ID not available")) as ScreenState<org.mifospay.core.model.account.AccountContent>,
+                )
             }
         }
-        .mapLatest {
-            when (it) {
-                is DataState.Loading -> AccountState.ViewState.Loading
-                is DataState.Error -> AccountState.ViewState.Error(it.exception.message.toString())
-                is DataState.Success -> {
-                    val sortedAccounts = it.data.accounts.sortedWith(
+        .mapLatest { screenState ->
+            when (screenState) {
+                is ScreenState.Loading -> AccountState.ViewState.Loading
+
+                is ScreenState.Empty ->
+                    // Empty account-list branch → render an empty Content
+                    // (screen still shows the FAB + empty-state copy; no
+                    // dedicated Empty ViewState variant exists here).
+                    AccountState.ViewState.Content(
+                        accounts = emptyList(),
+                        beneficiaries = emptyList(),
+                    )
+
+                is ScreenState.NoNetwork ->
+                    AccountState.ViewState.Error("No network connection")
+
+                is ScreenState.Unauthenticated ->
+                    AccountState.ViewState.Error("Session expired — please sign in")
+
+                is ScreenState.Error ->
+                    AccountState.ViewState.Error(screenState.error.message.toString())
+
+                is ScreenState.Content -> {
+                    val sortedAccounts = screenState.data.accounts.sortedWith(
                         compareByDescending<Account> { account -> account.status.active }
                             .thenBy { account -> account.number },
                     )
 
                     AccountState.ViewState.Content(
                         accounts = sortedAccounts,
-                        beneficiaries = it.data.beneficiaries,
+                        beneficiaries = screenState.data.beneficiaries,
                     )
                 }
             }
@@ -85,6 +117,44 @@ class AccountViewModel(
             started = SharingStarted.WhileSubscribed(5_000),
             initialValue = AccountState.ViewState.Loading,
         )
+
+    // Template idiom (core-base/store): the beneficiary-delete write goes through a
+    // SubmitHandler instead of a hand-folded DataState result action. The handler owns
+    // the Submitting/Submitted/Failed lifecycle; we observe it here to drive this
+    // screen's existing delete dialog + toast, so the Screen is unchanged.
+    private val submitDeleteBeneficiary = viewModelScope.submitHandler<Unit>()
+
+    init {
+        submitDeleteBeneficiary.state
+            .onEach { submitState ->
+                when (submitState) {
+                    is SubmitState.Submitting -> {
+                        mutableStateFlow.update {
+                            it.copy(dialogState = AccountState.DialogState.Loading)
+                        }
+                    }
+
+                    is SubmitState.Submitted -> {
+                        mutableStateFlow.update { it.copy(dialogState = null) }
+                        sendEvent(
+                            AccountEvent.ShowToast(Res.string.feature_accounts_beneficiary_deleted),
+                        )
+                        submitDeleteBeneficiary.reset()
+                    }
+
+                    is SubmitState.Failed -> {
+                        val message = submitState.error.message.toString()
+                        mutableStateFlow.update {
+                            it.copy(dialogState = AccountState.DialogState.Error(message))
+                        }
+                        submitDeleteBeneficiary.reset()
+                    }
+
+                    SubmitState.Idle -> Unit
+                }
+            }
+            .launchIn(viewModelScope)
+    }
 
     override fun handleAction(action: AccountAction) {
         when (action) {
@@ -144,8 +214,6 @@ class AccountViewModel(
             }
 
             is DeleteBeneficiary -> handleDeleteBeneficiary(action)
-
-            is BeneficiaryDeleteResultReceived -> handleBeneficiaryDeleteResult(action)
         }
     }
 
@@ -164,38 +232,11 @@ class AccountViewModel(
     }
 
     private fun handleDeleteBeneficiary(action: DeleteBeneficiary) {
-        mutableStateFlow.update { it.copy(dialogState = AccountState.DialogState.Loading) }
-
-        launchIO {
-            val result = repository.deleteBeneficiary(action.beneficiaryId)
-
-            sendAction(BeneficiaryDeleteResultReceived(result))
-        }
-    }
-
-    private fun handleBeneficiaryDeleteResult(action: BeneficiaryDeleteResultReceived) {
-        when (action.result) {
-            is DataState.Success -> {
-                mutableStateFlow.update {
-                    it.copy(dialogState = null)
-                }
-
-                sendEvent(AccountEvent.ShowToast(Res.string.feature_accounts_beneficiary_deleted))
-            }
-
-            is DataState.Error -> {
-                val message = action.result.exception.message.toString()
-
-                mutableStateFlow.update {
-                    it.copy(dialogState = AccountState.DialogState.Error(message))
-                }
-            }
-
-            DataState.Loading -> {
-                mutableStateFlow.update {
-                    it.copy(dialogState = AccountState.DialogState.Loading)
-                }
-            }
+        // Submit through the handler — it drives Submitting/Submitted/Failed, observed
+        // in `init`. The repository write returns Unit and throws on failure; the
+        // handler maps that to Submitted/Failed.
+        submitDeleteBeneficiary.submit {
+            repository.deleteBeneficiary(action.beneficiaryId)
         }
     }
 }
@@ -264,6 +305,5 @@ sealed interface AccountAction {
 
     sealed interface Internal : AccountAction {
         data class DeleteBeneficiary(val beneficiaryId: Long) : Internal
-        data class BeneficiaryDeleteResultReceived(val result: DataState<String>) : Internal
     }
 }

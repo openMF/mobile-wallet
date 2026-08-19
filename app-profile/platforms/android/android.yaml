@@ -1,0 +1,15 @@
+# app-profile/platforms/android/android.yaml — Android-only (Play Store + Firebase) values.
+# Only values that DIFFER from the common app.yaml live here.
+android:
+  category: 'Finance'                          # store.android.category
+  short_description: 'A reference implementation of Mifos platform wallet and payment capabilities.'  # real, from dev fastlane/metadata/android/en-GB/short_description.txt
+  changelog: 'Initial Production Release'   # real, from dev fastlane/metadata/android/en-GB/changelogs/1.txt (the version-scoped one — the "default" one there is a stray merge-commit message, not real copy, not used)
+  video_url: ""                              # store.android.video.url (Play Store promo YouTube URL)
+  # play_tracks_by_flavor: "prod=internal,demo=internal"   # android.play.tracks.by_flavor (optional override)
+  firebase:
+    app_id_prod: 1:728434912738:android:0490c291986f0a691a1dbb   # firebase.android.prod.app.id — org.mifospay (cmp-android/google-services.json)
+    app_id_demo: 1:728434912738:android:48ccd9153349f31e1a1dbb   # firebase.android.demo.app.id — org.mifospay.demo (cmp-android/google-services.json)
+    groups: mifos-mobile-apps                # firebase.groups (Firebase App Distribution tester group) — deployment/android/firebase/config.yaml
+  play_testers:
+    internal_googlegroup: ""                 # play.testers.internal.googlegroup
+    closed_googlegroup: ""                   # play.testers.closed.googlegroup

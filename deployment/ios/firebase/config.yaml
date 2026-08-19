@@ -1,0 +1,15 @@
+# deployment/ios/firebase/config.yaml
+target: ios-firebase
+platform: ios
+tier: 1
+owning_capability: ios-firebase-distribute
+output_format: ipa
+output_path: "cmp-ios/build/iosApp.ipa"
+version_format: "firebase"
+signing: ios-match-adhoc
+distribution_groups: ["internal-testers"]
+retention: "30 days"
+runners:
+  local: { command: "bundle exec fastlane ios deploy_on_firebase" }
+  ci:    { workflow_snippet: workflow-snippet.yml }
+requires_confirm: false

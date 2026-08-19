@@ -5,7 +5,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 package org.mifospay.feature.upi.setup.screens
 
@@ -39,11 +39,11 @@ import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import mobile_wallet.feature.upi_setup.generated.resources.Res
-import mobile_wallet.feature.upi_setup.generated.resources.feature_upi_setup_enter_upi_pin
-import mobile_wallet.feature.upi_setup.generated.resources.feature_upi_setup_invalid_upi_pin
-import mobile_wallet.feature.upi_setup.generated.resources.feature_upi_setup_reenter_upi
-import mobile_wallet.feature.upi_setup.generated.resources.feature_upi_setup_upi_pin_setup
+import mifos_pay.feature.upi_setup.generated.resources.Res
+import mifos_pay.feature.upi_setup.generated.resources.feature_upi_setup_enter_upi_pin
+import mifos_pay.feature.upi_setup.generated.resources.feature_upi_setup_invalid_upi_pin
+import mifos_pay.feature.upi_setup.generated.resources.feature_upi_setup_reenter_upi
+import mifos_pay.feature.upi_setup.generated.resources.feature_upi_setup_upi_pin_setup
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.mifospay.core.designsystem.theme.MifosTheme

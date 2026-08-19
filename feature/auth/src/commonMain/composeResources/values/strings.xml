@@ -6,7 +6,7 @@
     If a copy of the MPL was not distributed with this file,
     You can obtain one at https://mozilla.org/MPL/2.0/.
 
-    See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+    See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
 -->
 <resources>
     <!-- General Auth -->
@@ -66,6 +66,7 @@
     <string name="feature_auth_error_mobile_invalid">Mobile number must be 10 digits long.</string>
     <string name="feature_auth_error_password_required">The password field cannot be empty.</string>
     <string name="feature_auth_error_password_invalid">Your password does not meet requirements.</string>
+    <string name="feature_auth_error_login_failed">Login failed. Please check your credentials and try again.</string>
     <string name="feature_auth_error_confirm_password_required">The confirm password field cannot be empty.</string>
     <string name="feature_auth_error_passwords_mismatch">Passwords do not match.</string>
     <string name="feature_auth_error_address_line1_required">Please enter your address line 1.</string>

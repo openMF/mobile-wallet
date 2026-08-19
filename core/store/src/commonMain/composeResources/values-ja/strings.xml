@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copyright 2026 Mifos Initiative
+
+    This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+    If a copy of the MPL was not distributed with this file,
+    You can obtain one at https://mozilla.org/MPL/2.0/.
+
+    See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
+-->
+<resources>
+    <string name="screenstate_empty_title">まだ何もありません</string>
+    <string name="screenstate_empty_message">データができたら、ここに表示されます。</string>
+    <string name="screenstate_error_title">問題が発生しました</string>
+    <string name="screenstate_error_retry">再試行</string>
+    <string name="screenstate_nonet_title">オフラインです</string>
+    <string name="screenstate_nonet_message">再接続したら自動的に再試行します。</string>
+    <string name="screenstate_nonet_retry">今すぐ再試行</string>
+    <string name="screenstate_captive_title">WiFi にサインイン</string>
+    <string name="screenstate_captive_message">接続する前にネットワークへのサインインが必要です。</string>
+    <string name="screenstate_captive_action">サインインページを開く</string>
+    <string name="error_category_network">サーバーに接続できません。接続を確認してください。</string>
+    <string name="error_category_auth">セッションの有効期限が切れました。再度サインインしてください。</string>
+    <string name="error_category_ratelimit">リクエストが多すぎます。しばらく待ってから再試行してください。</string>
+    <string name="error_category_server">サーバーで問題が発生しています。しばらくしてから再試行してください。</string>
+    <string name="error_category_generic">問題が発生しました</string>
+</resources>

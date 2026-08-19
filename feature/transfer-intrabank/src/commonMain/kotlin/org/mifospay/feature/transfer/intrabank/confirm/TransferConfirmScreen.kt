@@ -5,7 +5,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 package org.mifospay.feature.transfer.intrabank.confirm
 
@@ -63,22 +63,22 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.repeatOnLifecycle
-import mobile_wallet.feature.transfer_intrabank.generated.resources.Res
-import mobile_wallet.feature.transfer_intrabank.generated.resources.feature_make_transfer_amount
-import mobile_wallet.feature.transfer_intrabank.generated.resources.feature_make_transfer_amount_error
-import mobile_wallet.feature.transfer_intrabank.generated.resources.feature_make_transfer_available_balance
-import mobile_wallet.feature.transfer_intrabank.generated.resources.feature_make_transfer_check_icon_description
-import mobile_wallet.feature.transfer_intrabank.generated.resources.feature_make_transfer_continue_button
-import mobile_wallet.feature.transfer_intrabank.generated.resources.feature_make_transfer_description_label
-import mobile_wallet.feature.transfer_intrabank.generated.resources.feature_make_transfer_from_account
-import mobile_wallet.feature.transfer_intrabank.generated.resources.feature_make_transfer_from_account_title
-import mobile_wallet.feature.transfer_intrabank.generated.resources.feature_make_transfer_no_accounts_found
-import mobile_wallet.feature.transfer_intrabank.generated.resources.feature_make_transfer_oops_title
-import mobile_wallet.feature.transfer_intrabank.generated.resources.feature_make_transfer_review_title
-import mobile_wallet.feature.transfer_intrabank.generated.resources.feature_make_transfer_show_balance
-import mobile_wallet.feature.transfer_intrabank.generated.resources.feature_make_transfer_to_account
-import mobile_wallet.feature.transfer_intrabank.generated.resources.feature_transfer_cancel
-import mobile_wallet.feature.transfer_intrabank.generated.resources.feature_transfer_retry
+import mifos_pay.feature.transfer_intrabank.generated.resources.Res
+import mifos_pay.feature.transfer_intrabank.generated.resources.feature_make_transfer_amount
+import mifos_pay.feature.transfer_intrabank.generated.resources.feature_make_transfer_amount_error
+import mifos_pay.feature.transfer_intrabank.generated.resources.feature_make_transfer_available_balance
+import mifos_pay.feature.transfer_intrabank.generated.resources.feature_make_transfer_check_icon_description
+import mifos_pay.feature.transfer_intrabank.generated.resources.feature_make_transfer_continue_button
+import mifos_pay.feature.transfer_intrabank.generated.resources.feature_make_transfer_description_label
+import mifos_pay.feature.transfer_intrabank.generated.resources.feature_make_transfer_from_account
+import mifos_pay.feature.transfer_intrabank.generated.resources.feature_make_transfer_from_account_title
+import mifos_pay.feature.transfer_intrabank.generated.resources.feature_make_transfer_no_accounts_found
+import mifos_pay.feature.transfer_intrabank.generated.resources.feature_make_transfer_oops_title
+import mifos_pay.feature.transfer_intrabank.generated.resources.feature_make_transfer_review_title
+import mifos_pay.feature.transfer_intrabank.generated.resources.feature_make_transfer_show_balance
+import mifos_pay.feature.transfer_intrabank.generated.resources.feature_make_transfer_to_account
+import mifos_pay.feature.transfer_intrabank.generated.resources.feature_transfer_cancel
+import mifos_pay.feature.transfer_intrabank.generated.resources.feature_transfer_retry
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel

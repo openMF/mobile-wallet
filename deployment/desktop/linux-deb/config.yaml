@@ -1,0 +1,17 @@
+# deployment/desktop/linux-deb/config.yaml
+target: desktop-linux-deb
+platform: desktop
+os: linux
+tier: 1
+owning_capability: github-releases-publish
+output_format: deb
+output_path: "cmp-desktop/build/compose/binaries/main-release/deb/"
+version_format: "git"
+signing: none
+distribution_groups: ["public"]
+retention: "indefinite"
+runners:
+  local: { command: "bash deployment/desktop/linux-deb/script.sh" }
+  ci:    { workflow_snippet: workflow-snippet.yml }
+requires_confirm: false
+enabled_by_default: true

@@ -5,7 +5,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 package org.mifospay.feature.beneficiary.addupdatebeneficiary
 
@@ -18,25 +18,28 @@ import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 import kotlinx.serialization.json.Json
-import mobile_wallet.feature.beneficiary.generated.resources.Res
-import mobile_wallet.feature.beneficiary.generated.resources.feature_beneficiary_account_type_other
-import mobile_wallet.feature.beneficiary.generated.resources.feature_beneficiary_account_type_wallet
-import mobile_wallet.feature.beneficiary.generated.resources.feature_beneficiary_button_save
-import mobile_wallet.feature.beneficiary.generated.resources.feature_beneficiary_button_update
-import mobile_wallet.feature.beneficiary.generated.resources.feature_beneficiary_error_empty_account_number
-import mobile_wallet.feature.beneficiary.generated.resources.feature_beneficiary_error_empty_beneficiary_name
-import mobile_wallet.feature.beneficiary.generated.resources.feature_beneficiary_error_empty_office_name
-import mobile_wallet.feature.beneficiary.generated.resources.feature_beneficiary_error_invalid_transfer_limit
-import mobile_wallet.feature.beneficiary.generated.resources.feature_beneficiary_error_select_account_type
-import mobile_wallet.feature.beneficiary.generated.resources.feature_beneficiary_error_select_locale
-import mobile_wallet.feature.beneficiary.generated.resources.feature_beneficiary_title_add
-import mobile_wallet.feature.beneficiary.generated.resources.feature_beneficiary_title_update
+import kpt.core.base.store.submit.SubmitState
+import kpt.core.base.store.submit.submitHandler
+import mifos_pay.feature.beneficiary.generated.resources.Res
+import mifos_pay.feature.beneficiary.generated.resources.feature_beneficiary_account_type_other
+import mifos_pay.feature.beneficiary.generated.resources.feature_beneficiary_account_type_wallet
+import mifos_pay.feature.beneficiary.generated.resources.feature_beneficiary_added
+import mifos_pay.feature.beneficiary.generated.resources.feature_beneficiary_button_save
+import mifos_pay.feature.beneficiary.generated.resources.feature_beneficiary_button_update
+import mifos_pay.feature.beneficiary.generated.resources.feature_beneficiary_error_empty_account_number
+import mifos_pay.feature.beneficiary.generated.resources.feature_beneficiary_error_empty_beneficiary_name
+import mifos_pay.feature.beneficiary.generated.resources.feature_beneficiary_error_empty_office_name
+import mifos_pay.feature.beneficiary.generated.resources.feature_beneficiary_error_invalid_transfer_limit
+import mifos_pay.feature.beneficiary.generated.resources.feature_beneficiary_error_select_account_type
+import mifos_pay.feature.beneficiary.generated.resources.feature_beneficiary_error_select_locale
+import mifos_pay.feature.beneficiary.generated.resources.feature_beneficiary_title_add
+import mifos_pay.feature.beneficiary.generated.resources.feature_beneficiary_title_update
+import mifos_pay.feature.beneficiary.generated.resources.feature_beneficiary_updated
 import org.jetbrains.compose.resources.StringResource
-import org.mifospay.core.common.DataState
+import org.mifospay.core.common.ScreenState
 import org.mifospay.core.common.getSerialized
 import org.mifospay.core.common.setSerialized
 import org.mifospay.core.data.repository.LocalAssetRepository
@@ -49,7 +52,6 @@ import org.mifospay.core.model.office.Office
 import org.mifospay.core.model.utils.QrCodeData
 import org.mifospay.core.model.utils.QrCodeType
 import org.mifospay.core.ui.utils.BaseViewModel
-import org.mifospay.feature.beneficiary.addupdatebeneficiary.AEBAction.Internal.HandleBeneficiaryAddEditResult
 import org.mifospay.feature.beneficiary.addupdatebeneficiary.AEBState.DialogState.Error
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -130,10 +132,14 @@ internal class AddEditBeneficiaryViewModel(
         started = SharingStarted.WhileSubscribed(5_000),
     )
 
+    // `getOffices` was migrated to a ScreenState stream in Phase-3. This VM
+    // only needs the successful list projection — every non-Content branch
+    // collapses to an empty list (same behaviour as the prior DataState.else
+    // fallthrough).
     val officeList = officeRepository.getOffices()
-        .mapLatest { dataState ->
-            when (dataState) {
-                is DataState.Success -> dataState.data
+        .mapLatest { screenState ->
+            when (screenState) {
+                is ScreenState.Content -> screenState.data
                 else -> emptyList()
             }
         }
@@ -143,9 +149,52 @@ internal class AddEditBeneficiaryViewModel(
             initialValue = emptyList(),
         )
 
+    // Template idiom (core-base/store): the create/update write goes through a
+    // SubmitHandler instead of a hand-folded DataState result action. The handler
+    // owns the Submitting/Submitted/Failed lifecycle; we observe it in `init` to
+    // drive this screen's existing loading/error dialog + toast + QR navigation,
+    // so the Screen is unchanged.
+    private val submitBeneficiary = viewModelScope.submitHandler<Unit>()
+
     init {
         stateFlow
             .onEach { savedStateHandle.setSerialized(key = ADD_EDIT_BENEFICIARY_KEY, value = it) }
+            .launchIn(viewModelScope)
+
+        submitBeneficiary.state
+            .onEach { submitState ->
+                when (submitState) {
+                    is SubmitState.Submitting -> {
+                        mutableStateFlow.update {
+                            it.copy(dialogState = AEBState.DialogState.Loading)
+                        }
+                    }
+
+                    is SubmitState.Submitted -> {
+                        mutableStateFlow.update { it.copy(dialogState = null) }
+                        val successMessage = when (state.addEditType) {
+                            is BeneficiaryAddEditType.AddItem ->
+                                Res.string.feature_beneficiary_added
+
+                            is BeneficiaryAddEditType.EditItem ->
+                                Res.string.feature_beneficiary_updated
+                        }
+                        sendEvent(AEBEvent.ShowToast(successMessage))
+                        navigateAfterSave()
+                        submitBeneficiary.reset()
+                    }
+
+                    is SubmitState.Failed -> {
+                        val message = extractMifosErrorMessage(submitState.error)
+                        mutableStateFlow.update {
+                            it.copy(dialogState = Error.StringMessage(message))
+                        }
+                        submitBeneficiary.reset()
+                    }
+
+                    SubmitState.Idle -> Unit
+                }
+            }
             .launchIn(viewModelScope)
 
         // Resolve office name from officeId when office list is loaded
@@ -241,8 +290,6 @@ internal class AddEditBeneficiaryViewModel(
             AEBAction.SaveBeneficiary -> initiateSaveBeneficiary()
 
             AEBAction.OnQrScanClicked -> sendEvent(AEBEvent.NavigateToQr)
-
-            is HandleBeneficiaryAddEditResult -> handleBeneficiaryAddEditResult(action)
         }
     }
 
@@ -291,7 +338,7 @@ internal class AddEditBeneficiaryViewModel(
             it.copy(dialogState = AEBState.DialogState.Loading)
         }
 
-        when (state.addEditType) {
+        when (val addEditType = state.addEditType) {
             is BeneficiaryAddEditType.AddItem -> {
                 val payload = BeneficiaryPayload(
                     name = state.name,
@@ -302,86 +349,65 @@ internal class AddEditBeneficiaryViewModel(
                     accountType = state.accountType,
                 )
 
-                viewModelScope.launch {
-                    val result = repository.createBeneficiary(payload)
-
-                    sendAction(HandleBeneficiaryAddEditResult(result))
+                // Submit through the handler — it drives Submitting/Submitted/Failed,
+                // observed in `init`. The repository write returns Unit and throws on
+                // failure; the handler maps that to Submitted/Failed.
+                submitBeneficiary.submit {
+                    repository.createBeneficiary(payload)
                 }
             }
 
             is BeneficiaryAddEditType.EditItem -> {
+                val beneficiaryId = state.beneficiaryId ?: return
                 val payload = BeneficiaryUpdatePayload(
                     name = state.name,
                     transferLimit = state.transferLimit,
                 )
 
-                viewModelScope.launch {
-                    val beneficiaryId = state.beneficiaryId ?: return@launch
-
-                    val result = repository.updateBeneficiary(beneficiaryId, payload)
-
-                    sendAction(HandleBeneficiaryAddEditResult(result))
+                submitBeneficiary.submit {
+                    repository.updateBeneficiary(beneficiaryId, payload)
                 }
             }
         }
     }
 
-    private fun handleBeneficiaryAddEditResult(action: HandleBeneficiaryAddEditResult) {
-        when (action.result) {
-            is DataState.Loading -> {
-                mutableStateFlow.update {
-                    it.copy(dialogState = AEBState.DialogState.Loading)
+    /**
+     * Reproduces the post-save navigation the DataState.Success fold used to drive:
+     * QR-source-aware routing to intra/inter-bank transfer, or back otherwise.
+     */
+    private fun navigateAfterSave() {
+        val qrData = state.sourceQrData
+        when (state.sourceQrType) {
+            QrCodeType.INTRA_BANK -> {
+                if (qrData != null) {
+                    // Use full QR data for navigation to TransferConfirm
+                    sendEvent(
+                        AEBEvent.NavigateToIntraBankTransfer(
+                            officeId = qrData.officeId.toInt(),
+                            clientId = qrData.clientId,
+                            accountTypeId = qrData.accountTypeId.toInt(),
+                            accountId = qrData.accountId.toInt(),
+                            amount = qrData.amount.toIntOrNull() ?: 0,
+                            accountName = qrData.clientName,
+                            accountNo = qrData.accountNo,
+                        ),
+                    )
+                } else {
+                    // Fallback: no QR data available, go back
+                    sendEvent(AEBEvent.NavigateBack)
                 }
             }
-
-            is DataState.Error -> {
-                val message = extractMifosErrorMessage(action.result.exception)
-                mutableStateFlow.update {
-                    it.copy(dialogState = Error.StringMessage(message))
-                }
+            QrCodeType.INTER_BANK -> {
+                sendEvent(
+                    AEBEvent.NavigateToInterbankTransfer(
+                        accountNumber = state.accountNumber,
+                        recipientName = state.name,
+                    ),
+                )
             }
-
-            is DataState.Success -> {
-                mutableStateFlow.update {
-                    it.copy(dialogState = null)
-                }
-                sendEvent(AEBEvent.ShowToast(action.result.data))
-
-                // Navigate based on source QR type and QR data
-                val qrData = state.sourceQrData
-                when (state.sourceQrType) {
-                    QrCodeType.INTRA_BANK -> {
-                        if (qrData != null) {
-                            // Use full QR data for navigation to TransferConfirm
-                            sendEvent(
-                                AEBEvent.NavigateToIntraBankTransfer(
-                                    officeId = qrData.officeId.toInt(),
-                                    clientId = qrData.clientId,
-                                    accountTypeId = qrData.accountTypeId.toInt(),
-                                    accountId = qrData.accountId.toInt(),
-                                    amount = qrData.amount.toIntOrNull() ?: 0,
-                                    accountName = qrData.clientName,
-                                    accountNo = qrData.accountNo,
-                                ),
-                            )
-                        } else {
-                            // Fallback: no QR data available, go back
-                            sendEvent(AEBEvent.NavigateBack)
-                        }
-                    }
-                    QrCodeType.INTER_BANK -> {
-                        sendEvent(
-                            AEBEvent.NavigateToInterbankTransfer(
-                                accountNumber = state.accountNumber,
-                                recipientName = state.name,
-                            ),
-                        )
-                    }
-                    else -> {
-                        // No QR source or other types - just go back
-                        sendEvent(AEBEvent.NavigateBack)
-                    }
-                }
+            else -> {
+                // No QR source or other types - just go back
+                sendEvent(AEBEvent.NavigateBack)
             }
         }
     }
@@ -463,7 +489,7 @@ internal data class AEBState(
 internal sealed interface AEBEvent {
     data object NavigateBack : AEBEvent
     data object NavigateToQr : AEBEvent
-    data class ShowToast(val message: String) : AEBEvent
+    data class ShowToast(val message: StringResource) : AEBEvent
 
     /**
      * Navigate to intra-bank transfer screen after successfully adding beneficiary from QR scan.
@@ -503,8 +529,4 @@ internal sealed interface AEBAction {
     data object DismissDialog : AEBAction
     data object NavigateBack : AEBAction
     data object SaveBeneficiary : AEBAction
-
-    sealed interface Internal : AEBAction {
-        data class HandleBeneficiaryAddEditResult(val result: DataState<String>) : Internal
-    }
 }

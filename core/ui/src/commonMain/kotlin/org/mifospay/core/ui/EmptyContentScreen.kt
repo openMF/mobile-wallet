@@ -5,7 +5,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 package org.mifospay.core.ui
 
@@ -32,9 +32,9 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import mobile_wallet.core.ui.generated.resources.Res
-import mobile_wallet.core.ui.generated.resources.artwork
-import mobile_wallet.core.ui.generated.resources.core_ui_money_in
+import kpt.core.ui.generated.resources.Res
+import kpt.core.ui.generated.resources.artwork
+import kpt.core.ui.generated.resources.core_ui_money_in
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
 import org.mifospay.core.designsystem.component.MifosButton

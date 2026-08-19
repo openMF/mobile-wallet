@@ -5,7 +5,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 package org.mifospay.feature.merchants.ui
 
@@ -27,13 +27,13 @@ import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.text.AnnotatedString
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.rememberNavController
-import mobile_wallet.feature.merchants.generated.resources.Res
-import mobile_wallet.feature.merchants.generated.resources.feature_merchants_empty_no_merchants_subtitle
-import mobile_wallet.feature.merchants.generated.resources.feature_merchants_empty_no_merchants_title
-import mobile_wallet.feature.merchants.generated.resources.feature_merchants_error_oops
-import mobile_wallet.feature.merchants.generated.resources.feature_merchants_loading
-import mobile_wallet.feature.merchants.generated.resources.feature_merchants_search
-import mobile_wallet.feature.merchants.generated.resources.feature_merchants_unexpected_error_subtitle
+import mifos_pay.feature.merchants.generated.resources.Res
+import mifos_pay.feature.merchants.generated.resources.feature_merchants_empty_no_merchants_subtitle
+import mifos_pay.feature.merchants.generated.resources.feature_merchants_empty_no_merchants_title
+import mifos_pay.feature.merchants.generated.resources.feature_merchants_error_oops
+import mifos_pay.feature.merchants.generated.resources.feature_merchants_loading
+import mifos_pay.feature.merchants.generated.resources.feature_merchants_search
+import mifos_pay.feature.merchants.generated.resources.feature_merchants_unexpected_error_subtitle
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel

@@ -5,7 +5,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 package org.mifospay.feature.auth.mobileVerify
 
@@ -27,14 +27,14 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.launch
-import mobile_wallet.feature.auth.generated.resources.Res
-import mobile_wallet.feature.auth.generated.resources.feature_auth_enter_mobile_number
-import mobile_wallet.feature.auth.generated.resources.feature_auth_enter_mobile_number_description
-import mobile_wallet.feature.auth.generated.resources.feature_auth_enter_otp
-import mobile_wallet.feature.auth.generated.resources.feature_auth_enter_otp_received
-import mobile_wallet.feature.auth.generated.resources.feature_auth_phone_number
-import mobile_wallet.feature.auth.generated.resources.feature_auth_verify_otp
-import mobile_wallet.feature.auth.generated.resources.feature_auth_verify_phone
+import mifos_pay.feature.auth.generated.resources.Res
+import mifos_pay.feature.auth.generated.resources.feature_auth_enter_mobile_number
+import mifos_pay.feature.auth.generated.resources.feature_auth_enter_mobile_number_description
+import mifos_pay.feature.auth.generated.resources.feature_auth_enter_otp
+import mifos_pay.feature.auth.generated.resources.feature_auth_enter_otp_received
+import mifos_pay.feature.auth.generated.resources.feature_auth_phone_number
+import mifos_pay.feature.auth.generated.resources.feature_auth_verify_otp
+import mifos_pay.feature.auth.generated.resources.feature_auth_verify_phone
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel

@@ -5,7 +5,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 package org.mifospay.feature.fastmpay
 
@@ -45,7 +45,7 @@ import kotlin.test.assertNotNull
 class FastMpayProcessorTest {
 
     private val testDispatcher = StandardTestDispatcher()
-    private lateinit var fakeBeneficiaryRepository: FakeBeneficiaryRepository
+    private lateinit var fakeSelfServiceRepository: FakeSelfServiceRepository
     private lateinit var fakeUserPreferencesRepository: FakeUserPreferencesRepository
     private lateinit var fakeOfficeRepository: FakeOfficeRepository
     private lateinit var processor: FastMpayProcessor
@@ -53,11 +53,15 @@ class FastMpayProcessorTest {
     @BeforeTest
     fun setUp() {
         Dispatchers.setMain(testDispatcher)
-        fakeBeneficiaryRepository = FakeBeneficiaryRepository()
+        fakeSelfServiceRepository = FakeSelfServiceRepository()
         fakeUserPreferencesRepository = FakeUserPreferencesRepository()
+        // Non-null clientId so the store-backed beneficiary read path is
+        // exercised (see FastMpayProcessor.processIntraBankQr — a null
+        // clientId short-circuits to AddBeneficiary).
+        fakeUserPreferencesRepository.setClientId(1L)
         fakeOfficeRepository = FakeOfficeRepository()
         processor = FastMpayProcessor(
-            beneficiaryRepository = fakeBeneficiaryRepository,
+            selfServiceRepository = fakeSelfServiceRepository,
             userPreferencesRepository = fakeUserPreferencesRepository,
             officeRepository = fakeOfficeRepository,
         )
@@ -81,7 +85,7 @@ class FastMpayProcessorTest {
             officeName = "Head Office",
             transferLimit = 0,
         )
-        fakeBeneficiaryRepository.setBeneficiaryList(listOf(existingBeneficiary))
+        fakeSelfServiceRepository.setBeneficiaryList(listOf(existingBeneficiary))
         fakeUserPreferencesRepository.setSelectedInstance(
             ServerInstance(
                 endpoint = "test.com",
@@ -106,7 +110,7 @@ class FastMpayProcessorTest {
         )
 
         // When
-        val result = processor.processQrCode(qrData)
+        val result = processor.processQrCode(qrData, this)
 
         // Then
         assertIs<QrProcessResult.NavigateToMakeTransfer>(result)
@@ -118,7 +122,7 @@ class FastMpayProcessorTest {
     fun givenIntraBankQrWithoutExistingBeneficiary_whenProcess_thenNavigateToAddBeneficiary() =
         runTest {
             // Given
-            fakeBeneficiaryRepository.setBeneficiaryList(emptyList())
+            fakeSelfServiceRepository.setBeneficiaryList(emptyList())
             fakeUserPreferencesRepository.setSelectedInstance(
                 ServerInstance(
                     endpoint = "test.com",
@@ -143,7 +147,7 @@ class FastMpayProcessorTest {
             )
 
             // When
-            val result = processor.processQrCode(qrData)
+            val result = processor.processQrCode(qrData, this)
 
             // Then
             assertIs<QrProcessResult.NavigateToAddBeneficiary>(result)
@@ -178,7 +182,7 @@ class FastMpayProcessorTest {
         )
 
         // When
-        val result = processor.processQrCode(qrData)
+        val result = processor.processQrCode(qrData, this)
 
         // Then
         assertIs<QrProcessResult.BankMismatch>(result)
@@ -190,7 +194,7 @@ class FastMpayProcessorTest {
     @Test
     fun givenIntraBankQrWithSameFspIdCaseInsensitive_whenProcess_thenNotBankMismatch() = runTest {
         // Given - FSP IDs match but different case
-        fakeBeneficiaryRepository.setBeneficiaryList(emptyList())
+        fakeSelfServiceRepository.setBeneficiaryList(emptyList())
         fakeUserPreferencesRepository.setSelectedInstance(
             ServerInstance(
                 endpoint = "test.com",
@@ -215,7 +219,7 @@ class FastMpayProcessorTest {
         )
 
         // When
-        val result = processor.processQrCode(qrData)
+        val result = processor.processQrCode(qrData, this)
 
         // Then - Should not be BankMismatch since FSP IDs match (case-insensitive)
         assertIs<QrProcessResult.NavigateToAddBeneficiary>(result)
@@ -225,7 +229,7 @@ class FastMpayProcessorTest {
     @Test
     fun givenIntraBankQrWithNullFspId_whenProcess_thenNotBankMismatch() = runTest {
         // Given - QR has no FSP ID
-        fakeBeneficiaryRepository.setBeneficiaryList(emptyList())
+        fakeSelfServiceRepository.setBeneficiaryList(emptyList())
         fakeUserPreferencesRepository.setSelectedInstance(
             ServerInstance(
                 endpoint = "test.com",
@@ -250,7 +254,7 @@ class FastMpayProcessorTest {
         )
 
         // When
-        val result = processor.processQrCode(qrData)
+        val result = processor.processQrCode(qrData, this)
 
         // Then - Should not be BankMismatch when QR has no FSP ID
         assertIs<QrProcessResult.NavigateToAddBeneficiary>(result)
@@ -260,7 +264,7 @@ class FastMpayProcessorTest {
     @Test
     fun givenBeneficiaryFetchError_whenProcess_thenFallbackToAddBeneficiary() = runTest {
         // Given
-        fakeBeneficiaryRepository.setShouldReturnError(true)
+        fakeSelfServiceRepository.setShouldReturnError(true)
         fakeUserPreferencesRepository.setSelectedInstance(
             ServerInstance(
                 endpoint = "test.com",
@@ -285,7 +289,7 @@ class FastMpayProcessorTest {
         )
 
         // When
-        val result = processor.processQrCode(qrData)
+        val result = processor.processQrCode(qrData, this)
 
         // Then - On error, should fallback to add beneficiary
         assertIs<QrProcessResult.NavigateToAddBeneficiary>(result)
@@ -313,7 +317,7 @@ class FastMpayProcessorTest {
             )
 
             // When
-            val result = processor.processQrCode(qrData)
+            val result = processor.processQrCode(qrData, this)
 
             // Then
             assertIs<QrProcessResult.NavigateToInterbankTransfer>(result)
@@ -338,7 +342,7 @@ class FastMpayProcessorTest {
         )
 
         // When
-        val result = processor.processQrCode(qrData)
+        val result = processor.processQrCode(qrData, this)
 
         // Then
         assertIs<QrProcessResult.Error>(result)
@@ -361,7 +365,7 @@ class FastMpayProcessorTest {
         )
 
         // When
-        val result = processor.processQrCode(qrData)
+        val result = processor.processQrCode(qrData, this)
 
         // Then
         assertIs<QrProcessResult.Error>(result)
@@ -384,7 +388,7 @@ class FastMpayProcessorTest {
         )
 
         // When
-        val result = processor.processQrCode(qrData)
+        val result = processor.processQrCode(qrData, this)
 
         // Then
         assertIs<QrProcessResult.NavigateToInterbankTransfer>(result)
@@ -414,7 +418,7 @@ class FastMpayProcessorTest {
         )
 
         // When
-        val result = processor.processQrCode(qrData)
+        val result = processor.processQrCode(qrData, this)
 
         // Then
         assertIs<QrProcessResult.NavigateToAddBeneficiary>(result)
@@ -429,7 +433,7 @@ class FastMpayProcessorTest {
     @Test
     fun givenIntraBankQrWithOfficeId_whenProcess_thenResolvesOfficeName() = runTest {
         // Given
-        fakeBeneficiaryRepository.setBeneficiaryList(emptyList())
+        fakeSelfServiceRepository.setBeneficiaryList(emptyList())
         fakeOfficeRepository.setOfficeList(
             listOf(
                 Office(id = 1, name = "Head Office"),
@@ -461,7 +465,7 @@ class FastMpayProcessorTest {
         )
 
         // When
-        val result = processor.processQrCode(qrData)
+        val result = processor.processQrCode(qrData, this)
 
         // Then
         assertIs<QrProcessResult.NavigateToAddBeneficiary>(result)
@@ -473,7 +477,7 @@ class FastMpayProcessorTest {
     @Test
     fun givenOfficeApiError_whenProcess_thenFallbackToDefaultOfficeName() = runTest {
         // Given
-        fakeBeneficiaryRepository.setBeneficiaryList(emptyList())
+        fakeSelfServiceRepository.setBeneficiaryList(emptyList())
         fakeOfficeRepository.setShouldReturnError(true)
         fakeUserPreferencesRepository.setSelectedInstance(
             ServerInstance(
@@ -499,7 +503,7 @@ class FastMpayProcessorTest {
         )
 
         // When
-        val result = processor.processQrCode(qrData)
+        val result = processor.processQrCode(qrData, this)
 
         // Then
         assertIs<QrProcessResult.NavigateToAddBeneficiary>(result)
@@ -511,7 +515,7 @@ class FastMpayProcessorTest {
     @Test
     fun givenOfficeIdNotFound_whenProcess_thenFallbackToDefaultOfficeName() = runTest {
         // Given
-        fakeBeneficiaryRepository.setBeneficiaryList(emptyList())
+        fakeSelfServiceRepository.setBeneficiaryList(emptyList())
         fakeOfficeRepository.setOfficeList(
             listOf(Office(id = 1, name = "Head Office")),
         )
@@ -540,7 +544,7 @@ class FastMpayProcessorTest {
         )
 
         // When
-        val result = processor.processQrCode(qrData)
+        val result = processor.processQrCode(qrData, this)
 
         // Then
         assertIs<QrProcessResult.NavigateToAddBeneficiary>(result)
@@ -570,7 +574,7 @@ class FastMpayProcessorTest {
         )
 
         // When
-        val result = processor.processQrCode(qrData)
+        val result = processor.processQrCode(qrData, this)
 
         // Then
         assertIs<QrProcessResult.NavigateToMerchantPayment>(result)

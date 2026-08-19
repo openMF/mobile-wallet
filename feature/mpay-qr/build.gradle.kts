@@ -5,16 +5,13 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 plugins {
     alias(libs.plugins.cmp.feature.convention)
 }
 
-android {
-    namespace = "org.mifospay.feature.mpay.qr"
-}
-
+// namespace auto-derives from baseNamespace + module path via kmp.library.convention.
 kotlin {
     sourceSets {
         commonMain.dependencies {
@@ -27,12 +24,15 @@ kotlin {
             implementation(libs.qrose)
         }
 
+        androidMain.dependencies {
+            // zxing is a plain JVM/Android library — must live in androidMain, not
+            // top-level `dependencies { }` (AGP-9 KMP-library rejects untargeted
+            // top-level implementation() calls).
+            implementation(libs.zxing)
+        }
+
         commonTest.dependencies {
             implementation(libs.turbine)
         }
     }
-}
-
-dependencies {
-    implementation(libs.zxing)
 }

@@ -5,14 +5,10 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 plugins {
     alias(libs.plugins.cmp.feature.convention)
-}
-
-android {
-    namespace = "org.mifospay.feature.fastmpay"
 }
 
 kotlin {
@@ -25,6 +21,9 @@ kotlin {
             implementation(compose.material3)
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
+            // FastMpayNavigation uses io.ktor.http.encodeURLPathPart for URL-encoding
+            // QR-encoded Base64 payloads in nav routes.
+            implementation(libs.ktor.client.core)
         }
 
         commonTest.dependencies {

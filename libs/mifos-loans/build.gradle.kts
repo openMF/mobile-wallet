@@ -5,7 +5,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 plugins {
     alias(libs.plugins.cmp.feature.convention)
@@ -15,10 +15,7 @@ plugins {
 }
 
 
-android {
-    namespace = "org.mifos.lib.loan"
-}
-
+// namespace auto-derives from baseNamespace + module path via kmp.library.convention.
 kotlin {
     sourceSets {
         commonMain.dependencies {
@@ -39,27 +36,38 @@ kotlin {
 
         androidMain.dependencies {
             implementation(libs.compose.webview.multiplatform)
+            // Android-only deps moved from the top-level `dependencies { }` block —
+            // AGP-9 KMP-library rejects untargeted `implementation()` at the top level.
+            implementation(libs.androidx.appcompat)
+            implementation(libs.androidx.core.ktx)
         }
 
         nativeMain.dependencies {
             implementation(libs.compose.webview.multiplatform)
         }
+
+        commonTest.dependencies {
+            // JUnit moved from top-level `testImplementation` — the KMP source-set-scoped
+            // dependency block is the AGP-9-correct location.
+            implementation(libs.junit)
+        }
+
+        androidInstrumentedTest.dependencies {
+            // AndroidX test / espresso re-wired from top-level `androidTestImplementation`.
+            implementation(libs.androidx.test.ext.junit)
+            implementation(libs.espresso.core)
+        }
     }
 }
 
 dependencies {
-    implementation(libs.androidx.appcompat)
-    implementation(libs.androidx.core.ktx)
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.test.ext.junit)
-    androidTestImplementation(libs.espresso.core)
-
     add("kspCommonMainMetadata", libs.ktorfit.ksp)
     add("kspAndroid", libs.ktorfit.ksp)
     add("kspJs", libs.ktorfit.ksp)
     add("kspWasmJs", libs.ktorfit.ksp)
     add("kspDesktop", libs.ktorfit.ksp)
-    add("kspIosX64", libs.ktorfit.ksp)
+    // kspIosX64 removed — iosX64 target is not registered by the template's KMP
+    // convention on AGP-9 (iosArm64 + iosSimulatorArm64 only).
     add("kspIosArm64", libs.ktorfit.ksp)
     add("kspIosSimulatorArm64", libs.ktorfit.ksp)
 }

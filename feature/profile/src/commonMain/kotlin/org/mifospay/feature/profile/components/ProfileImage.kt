@@ -5,7 +5,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 package org.mifospay.feature.profile.components
 
@@ -27,9 +27,9 @@ import coil3.ImageLoader
 import coil3.compose.AsyncImage
 import coil3.compose.LocalPlatformContext
 import coil3.request.ImageRequest
-import mobile_wallet.feature.profile.generated.resources.Res
-import mobile_wallet.feature.profile.generated.resources.feature_profile_profile_image_description
-import mobile_wallet.feature.profile.generated.resources.placeholder
+import mifos_pay.feature.profile.generated.resources.Res
+import mifos_pay.feature.profile.generated.resources.feature_profile_profile_image_description
+import mifos_pay.feature.profile.generated.resources.placeholder
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.mifospay.core.designsystem.icon.MifosIcons

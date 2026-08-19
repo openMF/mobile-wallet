@@ -5,7 +5,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 package org.mifospay.feature.savedcards.utils
 
@@ -15,13 +15,13 @@ import kotlinx.datetime.Month
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.monthsUntil
 import kotlinx.datetime.toLocalDateTime
-import mobile_wallet.feature.savedcards.generated.resources.Res
-import mobile_wallet.feature.savedcards.generated.resources.amex_logo
-import mobile_wallet.feature.savedcards.generated.resources.diner_clubs
-import mobile_wallet.feature.savedcards.generated.resources.ic_mastercard
-import mobile_wallet.feature.savedcards.generated.resources.ic_visa
-import mobile_wallet.feature.savedcards.generated.resources.maestro
-import mobile_wallet.feature.savedcards.generated.resources.rupay_logo
+import mifos_pay.feature.savedcards.generated.resources.Res
+import mifos_pay.feature.savedcards.generated.resources.amex_logo
+import mifos_pay.feature.savedcards.generated.resources.diner_clubs
+import mifos_pay.feature.savedcards.generated.resources.ic_mastercard
+import mifos_pay.feature.savedcards.generated.resources.ic_visa
+import mifos_pay.feature.savedcards.generated.resources.maestro
+import mifos_pay.feature.savedcards.generated.resources.rupay_logo
 import org.jetbrains.compose.resources.DrawableResource
 import kotlin.time.Clock
 import kotlin.time.ExperimentalTime

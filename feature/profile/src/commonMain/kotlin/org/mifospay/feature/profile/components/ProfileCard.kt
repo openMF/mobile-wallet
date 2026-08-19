@@ -5,7 +5,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 package org.mifospay.feature.profile.components
 
@@ -24,11 +24,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import mobile_wallet.feature.profile.generated.resources.Res
-import mobile_wallet.feature.profile.generated.resources.feature_profile_email
-import mobile_wallet.feature.profile.generated.resources.feature_profile_mobile
-import mobile_wallet.feature.profile.generated.resources.feature_profile_username
-import mobile_wallet.feature.profile.generated.resources.feature_profile_vpa
+import mifos_pay.feature.profile.generated.resources.Res
+import mifos_pay.feature.profile.generated.resources.feature_profile_email
+import mifos_pay.feature.profile.generated.resources.feature_profile_mobile
+import mifos_pay.feature.profile.generated.resources.feature_profile_username
+import mifos_pay.feature.profile.generated.resources.feature_profile_vpa
 import org.jetbrains.compose.resources.stringResource
 import org.mifospay.core.model.client.Client
 import template.core.base.designsystem.theme.KptTheme

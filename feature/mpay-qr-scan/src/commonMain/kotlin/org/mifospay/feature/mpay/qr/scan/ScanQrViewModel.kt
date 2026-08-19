@@ -5,15 +5,13 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 package org.mifospay.feature.mpay.qr.scan
 
-import androidx.lifecycle.ViewModel
 import co.touchlab.kermit.Logger
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.serialization.json.Json
@@ -22,6 +20,7 @@ import org.mifospay.core.data.util.QrRouteResult
 import org.mifospay.core.data.util.QrTransferRouter
 import org.mifospay.core.model.beneficiary.Beneficiary
 import org.mifospay.core.model.utils.QrCodeData
+import org.mifospay.core.ui.utils.BaseViewModel
 
 /**
  * ViewModel for QR code scanning screen.
@@ -29,13 +28,16 @@ import org.mifospay.core.model.utils.QrCodeData
  * Uses [QrTransferRouter] for smart routing:
  * - Compares FSP IDs to determine intra-bank vs inter-bank
  * - Routes to appropriate transfer flow based on the comparison
+ *
+ * One-shot navigation/toast signals are emitted through the MVI [ScanQrEvent] channel
+ * (consumed via `EventsEffect`). The simple camera-UI toggles (torch, help dialog, image
+ * processing) remain plain [StateFlow] surfaces the screen binds directly.
  */
 class ScanQrViewModel(
     private val qrTransferRouter: QrTransferRouter,
-) : ViewModel() {
-
-    private val _eventFlow = MutableStateFlow<ScanQrEvent?>(null)
-    val eventFlow = _eventFlow.asSharedFlow()
+) : BaseViewModel<ScanQrState, ScanQrEvent, ScanQrAction>(
+    initialState = ScanQrState,
+) {
 
     private val _isTorchEnabled = MutableStateFlow(false)
     val isTorchEnabled: StateFlow<Boolean> = _isTorchEnabled.asStateFlow()
@@ -48,6 +50,21 @@ class ScanQrViewModel(
 
     private val _selectedImageBytes = MutableStateFlow<ByteArray?>(null)
     val selectedImageBytes: StateFlow<ByteArray?> = _selectedImageBytes.asStateFlow()
+
+    override fun handleAction(action: ScanQrAction) {
+        when (action) {
+            is ScanQrAction.OnImageQrScanned -> {
+                _isProcessingImage.value = false
+                if (action.data != null) {
+                    sendEvent(ScanQrEvent.OnScanSuccess)
+                    onScanned(action.data)
+                } else {
+                    _selectedImageBytes.value = null
+                    sendEvent(ScanQrEvent.OnNoQrFound)
+                }
+            }
+        }
+    }
 
     fun toggleTorch() {
         _isTorchEnabled.update { !it }
@@ -79,18 +96,7 @@ class ScanQrViewModel(
     }
 
     fun onImageQrScanned(data: String?) {
-        _isProcessingImage.value = false
-        if (data != null) {
-            _eventFlow.update {
-                ScanQrEvent.OnScanSuccess
-            }
-            onScanned(data)
-        } else {
-            _selectedImageBytes.value = null
-            _eventFlow.update {
-                ScanQrEvent.OnNoQrFound
-            }
-        }
+        trySendAction(ScanQrAction.OnImageQrScanned(data))
     }
 
     fun onScanned(data: String): Boolean {
@@ -113,29 +119,25 @@ class ScanQrViewModel(
             when (routeResult) {
                 is QrRouteResult.IntraBank -> {
                     Logger.d { "QR Route -> Intra-bank transfer, emitting event..." }
-                    _eventFlow.update {
-                        ScanQrEvent.OnNavigateToIntraBankTransfer(routeResult.qrData)
-                    }
+                    sendEvent(ScanQrEvent.OnNavigateToIntraBankTransfer(routeResult.qrData))
                     Logger.d { "QR Route -> Event emitted: OnNavigateToIntraBankTransfer" }
                 }
 
                 is QrRouteResult.InterBank -> {
                     Logger.d { "QR Route -> Inter-bank transfer to ${routeResult.accountExternalId}" }
-                    _eventFlow.update {
+                    sendEvent(
                         ScanQrEvent.OnNavigateToInterbankTransfer(
                             accountExternalId = routeResult.accountExternalId,
                             recipientName = routeResult.recipientName ?: "",
                             amount = routeResult.amount ?: "",
-                        )
-                    }
+                        ),
+                    )
                     Logger.d { "QR Route -> Event emitted: OnNavigateToInterbankTransfer" }
                 }
 
                 is QrRouteResult.Error -> {
                     Logger.w { "QR Route -> Error: ${routeResult.message}" }
-                    _eventFlow.update {
-                        ScanQrEvent.ShowToast(routeResult.message)
-                    }
+                    sendEvent(ScanQrEvent.ShowToast(routeResult.message))
                 }
             }
 
@@ -154,9 +156,7 @@ class ScanQrViewModel(
         Logger.d { "QR scanned (fallback parsing): $data" }
 
         if (!trimmedData.startsWith("{") || !trimmedData.endsWith("}")) {
-            _eventFlow.update {
-                ScanQrEvent.ShowToast("Scan a Valid QR Code")
-            }
+            sendEvent(ScanQrEvent.ShowToast("Scan a Valid QR Code"))
             return false
         }
 
@@ -164,23 +164,15 @@ class ScanQrViewModel(
             val beneficiary = parseBeneficiaryFromJson(trimmedData)
             if (beneficiary != null) {
                 val beneficiaryString = Json.encodeToString<Beneficiary>(beneficiary)
-                _eventFlow.update {
-                    ScanQrEvent.OnScanSuccess
-                }
-                _eventFlow.update {
-                    ScanQrEvent.OnNavigateToAddBeneficiary(beneficiaryString)
-                }
+                sendEvent(ScanQrEvent.OnScanSuccess)
+                sendEvent(ScanQrEvent.OnNavigateToAddBeneficiary(beneficiaryString))
                 true
             } else {
-                _eventFlow.update {
-                    ScanQrEvent.ShowToast("Scan a Valid QR Code")
-                }
+                sendEvent(ScanQrEvent.ShowToast("Scan a Valid QR Code"))
                 false
             }
         } catch (_: Exception) {
-            _eventFlow.update {
-                ScanQrEvent.ShowToast("Scan a Valid QR Code")
-            }
+            sendEvent(ScanQrEvent.ShowToast("Scan a Valid QR Code"))
             false
         }
     }
@@ -194,6 +186,8 @@ class ScanQrViewModel(
     }
 }
 
+data object ScanQrState
+
 sealed interface ScanQrEvent {
     data class OnNavigateToIntraBankTransfer(val qrData: QrCodeData) : ScanQrEvent
     data class OnNavigateToInterbankTransfer(
@@ -205,4 +199,8 @@ sealed interface ScanQrEvent {
     data class ShowToast(val message: String) : ScanQrEvent
     data object OnScanSuccess : ScanQrEvent
     data object OnNoQrFound : ScanQrEvent
+}
+
+sealed interface ScanQrAction {
+    data class OnImageQrScanned(val data: String?) : ScanQrAction
 }

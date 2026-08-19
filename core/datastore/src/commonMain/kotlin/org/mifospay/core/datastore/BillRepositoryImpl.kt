@@ -5,13 +5,12 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 package org.mifospay.core.datastore
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
-import org.mifospay.core.common.DataState
 import org.mifospay.core.model.autopay.Bill
 
 /**
@@ -37,50 +36,29 @@ class BillRepositoryImpl(
         }
     }
 
-    override suspend fun saveBill(bill: Bill): DataState<Bill> {
-        return try {
-            val existingBills = billDataSource.bills.first()
+    override suspend fun saveBill(bill: Bill): Bill {
+        val existingBills = billDataSource.bills.first()
 
-            // Check if bill already exists
-            val existingBill = existingBills.find {
-                it.name == bill.name && it.billerId == bill.billerId
-            }
-
-            if (existingBill != null) {
-                DataState.Error(Exception("Bill with this name and biller already exists"))
-            } else {
-                billDataSource.addBill(bill)
-                DataState.Success(bill)
-            }
-        } catch (e: Exception) {
-            DataState.Error(Exception("Failed to save bill: ${e.message}"))
+        // Check if bill already exists
+        val existingBill = existingBills.find {
+            it.name == bill.name && it.billerId == bill.billerId
         }
+        require(existingBill == null) { "Bill with this name and biller already exists" }
+        billDataSource.addBill(bill)
+        return bill
     }
 
-    override suspend fun updateBill(bill: Bill): DataState<Bill> {
-        return try {
-            val existingBills = billDataSource.bills.first().toMutableList()
-            val index = existingBills.indexOfFirst { it.id == bill.id }
-
-            if (index != -1) {
-                existingBills[index] = bill
-                billDataSource.updateBills(existingBills)
-                DataState.Success(bill)
-            } else {
-                DataState.Error(Exception("Bill not found"))
-            }
-        } catch (e: Exception) {
-            DataState.Error(Exception("Failed to update bill: ${e.message}"))
-        }
+    override suspend fun updateBill(bill: Bill): Bill {
+        val existingBills = billDataSource.bills.first().toMutableList()
+        val index = existingBills.indexOfFirst { it.id == bill.id }
+        require(index != -1) { "Bill not found" }
+        existingBills[index] = bill
+        billDataSource.updateBills(existingBills)
+        return bill
     }
 
-    override suspend fun deleteBill(id: String): DataState<Unit> {
-        return try {
-            billDataSource.removeBill(id)
-            DataState.Success(Unit)
-        } catch (e: Exception) {
-            DataState.Error(Exception("Failed to delete bill: ${e.message}"))
-        }
+    override suspend fun deleteBill(id: String) {
+        billDataSource.removeBill(id)
     }
 
     override suspend fun searchBillsByName(query: String): List<Bill> {
@@ -92,12 +70,7 @@ class BillRepositoryImpl(
         }
     }
 
-    override suspend fun clearAllBills(): DataState<Unit> {
-        return try {
-            billDataSource.clearBills()
-            DataState.Success(Unit)
-        } catch (e: Exception) {
-            DataState.Error(Exception("Failed to clear bills: ${e.message}"))
-        }
+    override suspend fun clearAllBills() {
+        billDataSource.clearBills()
     }
 }

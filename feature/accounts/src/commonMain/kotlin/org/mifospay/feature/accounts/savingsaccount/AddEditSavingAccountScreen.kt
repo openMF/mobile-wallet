@@ -5,7 +5,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 package org.mifospay.feature.accounts.savingsaccount
 
@@ -55,21 +55,22 @@ import androidx.compose.ui.unit.toSize
 import androidx.compose.ui.window.PopupProperties
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.launch
-import mobile_wallet.feature.accounts.generated.resources.Res
-import mobile_wallet.feature.accounts.generated.resources.feature_accounts_add_allow_overdraft
-import mobile_wallet.feature.accounts.generated.resources.feature_accounts_add_client_name
-import mobile_wallet.feature.accounts.generated.resources.feature_accounts_add_date_format
-import mobile_wallet.feature.accounts.generated.resources.feature_accounts_add_external_id
-import mobile_wallet.feature.accounts.generated.resources.feature_accounts_add_locale
-import mobile_wallet.feature.accounts.generated.resources.feature_accounts_add_min_required_balance
-import mobile_wallet.feature.accounts.generated.resources.feature_accounts_add_nominal_annual
-import mobile_wallet.feature.accounts.generated.resources.feature_accounts_add_opening_balance
-import mobile_wallet.feature.accounts.generated.resources.feature_accounts_add_overdraft_limit
-import mobile_wallet.feature.accounts.generated.resources.feature_accounts_add_saving_product
-import mobile_wallet.feature.accounts.generated.resources.feature_accounts_add_submitted_date
-import mobile_wallet.feature.accounts.generated.resources.feature_accounts_add_with_hold_tax
-import mobile_wallet.feature.accounts.generated.resources.feature_accounts_add_withdrawal_fee
-import mobile_wallet.feature.accounts.generated.resources.feature_accounts_error_oops
+import mifos_pay.feature.accounts.generated.resources.Res
+import mifos_pay.feature.accounts.generated.resources.feature_accounts_add_allow_overdraft
+import mifos_pay.feature.accounts.generated.resources.feature_accounts_add_client_name
+import mifos_pay.feature.accounts.generated.resources.feature_accounts_add_date_format
+import mifos_pay.feature.accounts.generated.resources.feature_accounts_add_external_id
+import mifos_pay.feature.accounts.generated.resources.feature_accounts_add_locale
+import mifos_pay.feature.accounts.generated.resources.feature_accounts_add_min_required_balance
+import mifos_pay.feature.accounts.generated.resources.feature_accounts_add_nominal_annual
+import mifos_pay.feature.accounts.generated.resources.feature_accounts_add_opening_balance
+import mifos_pay.feature.accounts.generated.resources.feature_accounts_add_overdraft_limit
+import mifos_pay.feature.accounts.generated.resources.feature_accounts_add_saving_product
+import mifos_pay.feature.accounts.generated.resources.feature_accounts_add_submitted_date
+import mifos_pay.feature.accounts.generated.resources.feature_accounts_add_with_hold_tax
+import mifos_pay.feature.accounts.generated.resources.feature_accounts_add_withdrawal_fee
+import mifos_pay.feature.accounts.generated.resources.feature_accounts_error_oops
+import org.jetbrains.compose.resources.getString
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.mifospay.core.designsystem.component.BasicDialogState
@@ -104,7 +105,7 @@ internal fun AddEditSavingAccountScreen(
             is AESEvent.OnNavigateBack -> navigateBack.invoke()
             is AESEvent.ShowToast -> {
                 scope.launch {
-                    snackbarHostState.showSnackbar(event.message)
+                    snackbarHostState.showSnackbar(getString(event.message))
                 }
             }
         }

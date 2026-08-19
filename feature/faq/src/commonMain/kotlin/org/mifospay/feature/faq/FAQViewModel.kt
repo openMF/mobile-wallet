@@ -5,20 +5,20 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 package org.mifospay.feature.faq
 
 import kotlinx.coroutines.flow.update
-import mobile_wallet.feature.faq.generated.resources.Res
-import mobile_wallet.feature.faq.generated.resources.feature_faq_answer1
-import mobile_wallet.feature.faq.generated.resources.feature_faq_answer2
-import mobile_wallet.feature.faq.generated.resources.feature_faq_answer3
-import mobile_wallet.feature.faq.generated.resources.feature_faq_answer4
-import mobile_wallet.feature.faq.generated.resources.feature_faq_question1
-import mobile_wallet.feature.faq.generated.resources.feature_faq_question2
-import mobile_wallet.feature.faq.generated.resources.feature_faq_question3
-import mobile_wallet.feature.faq.generated.resources.feature_faq_question4
+import mifos_pay.feature.faq.generated.resources.Res
+import mifos_pay.feature.faq.generated.resources.feature_faq_answer1
+import mifos_pay.feature.faq.generated.resources.feature_faq_answer2
+import mifos_pay.feature.faq.generated.resources.feature_faq_answer3
+import mifos_pay.feature.faq.generated.resources.feature_faq_answer4
+import mifos_pay.feature.faq.generated.resources.feature_faq_question1
+import mifos_pay.feature.faq.generated.resources.feature_faq_question2
+import mifos_pay.feature.faq.generated.resources.feature_faq_question3
+import mifos_pay.feature.faq.generated.resources.feature_faq_question4
 import org.mifospay.core.ui.utils.BaseViewModel
 
 internal class FAQViewModel : BaseViewModel<FaqState, FaqEvent, FaqAction>(

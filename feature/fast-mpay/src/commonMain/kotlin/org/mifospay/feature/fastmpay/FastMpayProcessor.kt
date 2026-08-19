@@ -5,15 +5,17 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 package org.mifospay.feature.fastmpay
 
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.first
 import kotlinx.serialization.json.Json
-import org.mifospay.core.common.DataState
-import org.mifospay.core.data.repository.BeneficiaryRepository
+import org.mifospay.core.common.ScreenState
 import org.mifospay.core.data.repository.OfficeRepository
+import org.mifospay.core.data.repository.SelfServiceRepository
+import org.mifospay.core.data.util.toForkScreenStateFlow
 import org.mifospay.core.datastore.UserPreferencesRepository
 import org.mifospay.core.model.beneficiary.Beneficiary
 import org.mifospay.core.model.utils.QrCodeData
@@ -26,12 +28,35 @@ import org.mifospay.feature.fastmpay.model.QrProcessResult
  * Receives [QrCodeData] and determines the appropriate navigation target
  * based on [QrCodeData.type].
  *
- * @param beneficiaryRepository Repository for checking existing beneficiaries
- * @param userPreferencesRepository Repository for user preferences including current FSP
- * @param officeRepository Repository for resolving office names from IDs
+ * Phase-5 Batch-3 rewiring:
+ * - The beneficiary read used to walk `BeneficiaryRepository.getBeneficiaryList()`
+ *   (a non-store transitional shim). It now walks
+ *   [SelfServiceRepository.getBeneficiaryListStream] — the Phase-5 Batch-1
+ *   store-backed reader (offline-first via the `wallet_beneficiaries` Room SoT,
+ *   CACHE_FIRST_SWR band) — so the beneficiary lookup is offline-first + cheap
+ *   on repeated QR scans within the freshness band. No new BeneficiaryStore is
+ *   emitted for the fast-mpay surface; the batch-1 store is REUSED.
+ * - The office read used to walk `OfficeRepository.getOffices()` (a non-store
+ *   transitional shim). It now walks [OfficeRepository.getOfficesStream] — the
+ *   Phase-5 Batch-3 store-backed reader (offline-first via `wallet_offices`
+ *   Room SoT, 60-minute TTL because office reference data is effectively
+ *   static). One cache slot per app install (singleton-keyed on `OfficesKey`).
+ *
+ * Both reads take the caller's `scope` so Store5 can subscribe its refresh
+ * trigger to the caller's lifecycle. `processQrCode(qrData, scope)` therefore
+ * exposes a `scope` parameter, and the caller ([FastMpayViewModel]) passes its
+ * `viewModelScope`.
+ *
+ * @param selfServiceRepository Repository for reading the beneficiary list via
+ *   the store-backed screen stream (batch-1 `AppStoreRegistry.Beneficiary`).
+ * @param userPreferencesRepository Repository for user preferences including
+ *   current FSP and the current logged-in clientId (used as the beneficiary /
+ *   offices store cache key).
+ * @param officeRepository Repository for resolving office names from IDs, via
+ *   the store-backed screen stream (batch-3 `AppStoreRegistry.Offices`).
  */
 class FastMpayProcessor(
-    private val beneficiaryRepository: BeneficiaryRepository,
+    private val selfServiceRepository: SelfServiceRepository,
     private val userPreferencesRepository: UserPreferencesRepository,
     private val officeRepository: OfficeRepository,
 ) {
@@ -47,13 +72,17 @@ class FastMpayProcessor(
      * by matching accountNumber. If found, navigates to MakeTransfer,
      * otherwise navigates to AddBeneficiary.
      *
-     * @param qrData The decoded QR code data
-     * @return [QrProcessResult] indicating where to navigate
+     * @param qrData The decoded QR code data.
+     * @param scope The caller's [CoroutineScope] (typically `viewModelScope`).
+     *   Store5's [SelfServiceRepository.getBeneficiaryListStream] and
+     *   [OfficeRepository.getOfficesStream] subscribe their internal refresh
+     *   triggers to this scope.
+     * @return [QrProcessResult] indicating where to navigate.
      */
-    suspend fun processQrCode(qrData: QrCodeData): QrProcessResult {
+    suspend fun processQrCode(qrData: QrCodeData, scope: CoroutineScope): QrProcessResult {
         return when (qrData.type) {
             QrCodeType.INTRA_BANK -> {
-                processIntraBankQr(qrData)
+                processIntraBankQr(qrData, scope)
             }
 
             QrCodeType.INTER_BANK -> {
@@ -71,7 +100,7 @@ class FastMpayProcessor(
 
             QrCodeType.BENEFICIARY -> {
                 // Beneficiary: Pre-fill beneficiary form
-                val officeName = resolveOfficeName(qrData)
+                val officeName = resolveOfficeName(qrData, scope)
                 val beneficiaryJson = convertToBeneficiaryJson(qrData, officeName)
                 val qrDataJson = Json.encodeToString(QrCodeData.serializer(), qrData)
                 QrProcessResult.NavigateToAddBeneficiary(
@@ -93,11 +122,16 @@ class FastMpayProcessor(
      *
      * First checks if the QR code belongs to the same bank (FSP).
      * If different bank, returns BankMismatch result.
-     * If same bank, checks if beneficiary already exists by matching accountNumber.
+     * If same bank, checks if beneficiary already exists by matching accountNumber
+     * (reading through the batch-1 `AppStoreRegistry.Beneficiary` store-backed
+     * `SelfServiceRepository.getBeneficiaryListStream(clientId, scope)`).
      * If found, navigates to MakeTransfer with the existing beneficiary.
      * If not found, navigates to AddBeneficiary with pre-filled data.
      */
-    private suspend fun processIntraBankQr(qrData: QrCodeData): QrProcessResult {
+    private suspend fun processIntraBankQr(
+        qrData: QrCodeData,
+        scope: CoroutineScope,
+    ): QrProcessResult {
         // Check for bank mismatch first
         val currentFspId = userPreferencesRepository.selectedInstance.value?.platformTenantId
         val qrFspId = qrData.fspId
@@ -113,68 +147,59 @@ class FastMpayProcessor(
         }
 
         // Resolve office name early for beneficiary creation
-        val officeName = resolveOfficeName(qrData)
+        val officeName = resolveOfficeName(qrData, scope)
 
         return try {
-            // Skip Loading state and get the actual result (Success or Error)
-            val beneficiaryResult = beneficiaryRepository.getBeneficiaryList()
-                .first { it !is DataState.Loading }
+            // Read the beneficiary list through the batch-1 store-backed reader
+            // (SelfServiceRepository.getBeneficiaryListStream). ScreenState
+            // discipline: skip Loading; treat Empty as "no existing beneficiary"
+            // (fall through to AddBeneficiary); Content carries the list.
+            // Error/NoNetwork/Unauthenticated fall back to AddBeneficiary — the
+            // pre-store shape did the same on any non-Success emission.
+            val clientId = userPreferencesRepository.clientId.value
 
-            when (beneficiaryResult) {
-                is DataState.Success -> {
-                    val existingBeneficiary = beneficiaryResult.data.find {
-                        it.accountNumber == qrData.accountNo
+            if (clientId == null) {
+                // No logged-in clientId available — cannot address the
+                // per-client beneficiary cache. Fall through to AddBeneficiary.
+                buildAddBeneficiaryResult(qrData, officeName, QrCodeType.INTRA_BANK)
+            } else {
+                val beneficiaryResult = selfServiceRepository
+                    .getBeneficiaryListStream(clientId = clientId, scope = scope)
+                    .state.toForkScreenStateFlow()
+                    .first { it !is ScreenState.Loading }
+
+                when (beneficiaryResult) {
+                    is ScreenState.Content -> {
+                        val existingBeneficiary = beneficiaryResult.data.find {
+                            it.accountNumber == qrData.accountNo
+                        }
+
+                        if (existingBeneficiary != null) {
+                            // Beneficiary exists -> Navigate to MakeTransfer directly
+                            QrProcessResult.NavigateToMakeTransfer(
+                                qrData = qrData,
+                                beneficiaryName = existingBeneficiary.clientName,
+                            )
+                        } else {
+                            // Beneficiary doesn't exist -> Navigate to AddBeneficiary
+                            buildAddBeneficiaryResult(qrData, officeName, QrCodeType.INTRA_BANK)
+                        }
                     }
 
-                    if (existingBeneficiary != null) {
-                        // Beneficiary exists -> Navigate to MakeTransfer directly
-                        QrProcessResult.NavigateToMakeTransfer(
-                            qrData = qrData,
-                            beneficiaryName = existingBeneficiary.clientName,
-                        )
-                    } else {
-                        // Beneficiary doesn't exist -> Navigate to AddBeneficiary
-                        val beneficiaryJson = convertToBeneficiaryJson(qrData, officeName)
-                        val qrDataJson = Json.encodeToString(QrCodeData.serializer(), qrData)
-                        QrProcessResult.NavigateToAddBeneficiary(
-                            beneficiaryData = beneficiaryJson,
-                            sourceQrType = QrCodeType.INTRA_BANK,
-                            sourceQrData = qrDataJson,
-                        )
-                    }
-                }
-
-                is DataState.Error -> {
-                    // On error, fallback to add beneficiary flow
-                    val beneficiaryJson = convertToBeneficiaryJson(qrData, officeName)
-                    val qrDataJson = Json.encodeToString(QrCodeData.serializer(), qrData)
-                    QrProcessResult.NavigateToAddBeneficiary(
-                        beneficiaryData = beneficiaryJson,
-                        sourceQrType = QrCodeType.INTRA_BANK,
-                        sourceQrData = qrDataJson,
-                    )
-                }
-
-                is DataState.Loading -> {
-                    // Should not happen since we filter out Loading state
-                    val beneficiaryJson = convertToBeneficiaryJson(qrData, officeName)
-                    val qrDataJson = Json.encodeToString(QrCodeData.serializer(), qrData)
-                    QrProcessResult.NavigateToAddBeneficiary(
-                        beneficiaryData = beneficiaryJson,
-                        sourceQrType = QrCodeType.INTRA_BANK,
-                        sourceQrData = qrDataJson,
-                    )
+                    // Empty page = "no beneficiaries yet" — proceed to
+                    // AddBeneficiary just like the pre-store shape treated
+                    // an empty Success list.
+                    is ScreenState.Empty,
+                    is ScreenState.Error,
+                    is ScreenState.NoNetwork,
+                    is ScreenState.Unauthenticated,
+                    is ScreenState.Loading, // unreachable — filtered above
+                    -> buildAddBeneficiaryResult(qrData, officeName, QrCodeType.INTRA_BANK)
                 }
             }
         } catch (e: Exception) {
             // On exception, fallback to add beneficiary flow
-            val beneficiaryJson = convertToBeneficiaryJson(qrData, officeName)
-            val qrDataJson = Json.encodeToString(QrCodeData.serializer(), qrData)
-            QrProcessResult.NavigateToAddBeneficiary(
-                beneficiaryData = beneficiaryJson,
-                sourceQrType = QrCodeType.INTRA_BANK,
-                sourceQrData = qrDataJson,
-            )
+            buildAddBeneficiaryResult(qrData, officeName, QrCodeType.INTRA_BANK)
         }
     }
 
@@ -182,32 +207,60 @@ class FastMpayProcessor(
      * Resolves office name from QR data.
      *
      * Uses officeName directly from QR if available (new QR format).
-     * Falls back to looking up by officeId for backward compatibility (old QR format).
+     * Falls back to looking up by officeId for backward compatibility (old QR format),
+     * consulting the batch-3 store-backed `OfficeRepository.getOfficesStream(scope)`.
      *
-     * @param qrData The QR code data containing office info
-     * @return The office name from QR, or resolved from officeId, or [DEFAULT_OFFICE_NAME]
+     * @param qrData The QR code data containing office info.
+     * @param scope The caller's [CoroutineScope] — threaded to the store-backed
+     *   offices reader.
+     * @return The office name from QR, or resolved from officeId, or [DEFAULT_OFFICE_NAME].
      */
-    private suspend fun resolveOfficeName(qrData: QrCodeData): String {
+    private suspend fun resolveOfficeName(
+        qrData: QrCodeData,
+        scope: CoroutineScope,
+    ): String {
         // Use officeName directly if available (new QR format)
         if (qrData.officeName.isNotBlank()) {
             return qrData.officeName
         }
 
-        // Fallback: resolve from officeId (backward compatibility with old QR codes)
+        // Fallback: resolve from officeId (backward compatibility with old QR codes),
+        // reading through the batch-3 offices store.
         return try {
-            // Skip Loading state and get the actual result
-            val result = officeRepository.getOffices()
-                .first { it !is DataState.Loading }
+            val result = officeRepository.getOfficesStream(scope)
+                .state.toForkScreenStateFlow()
+                .first { it !is ScreenState.Loading }
             when (result) {
-                is DataState.Success -> {
+                is ScreenState.Content -> {
                     result.data.find { it.id == qrData.officeId }?.name
                         ?: DEFAULT_OFFICE_NAME
                 }
+                // Empty / Error / NoNetwork / Unauthenticated / Loading (unreachable)
+                // all fall through to the default name — same as the pre-store shape.
                 else -> DEFAULT_OFFICE_NAME
             }
         } catch (e: Exception) {
             DEFAULT_OFFICE_NAME
         }
+    }
+
+    /**
+     * Builds a NavigateToAddBeneficiary result from the QR data + resolved office
+     * name. Extracted so the multiple fallback paths in [processIntraBankQr]
+     * (empty list, error, exception) share the same construction.
+     */
+    private fun buildAddBeneficiaryResult(
+        qrData: QrCodeData,
+        officeName: String,
+        sourceType: QrCodeType,
+    ): QrProcessResult.NavigateToAddBeneficiary {
+        val beneficiaryJson = convertToBeneficiaryJson(qrData, officeName)
+        val qrDataJson = Json.encodeToString(QrCodeData.serializer(), qrData)
+        return QrProcessResult.NavigateToAddBeneficiary(
+            beneficiaryData = beneficiaryJson,
+            sourceQrType = sourceType,
+            sourceQrData = qrDataJson,
+        )
     }
 
     /**

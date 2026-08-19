@@ -1,0 +1,1 @@
+Send and receive money, pay merchants, and track transactions with an open-source wallet powered by Mifos X / Fineract.

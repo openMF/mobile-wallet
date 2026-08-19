@@ -5,11 +5,11 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 import androidx.compose.ui.window.ComposeUIViewController
-import org.mifospay.shared.MifosPaySharedApp
-import org.mifospay.shared.di.initKoin
+import cmp.shared.SharedApp
+import cmp.shared.utils.initKoin
 import platform.Foundation.NSUserDefaults
 
 @Suppress("ktlint:standard:function-naming")
@@ -18,16 +18,26 @@ fun MifosViewController() = ComposeUIViewController(
         initKoin()
     },
 ) {
-    MifosPaySharedApp(
+    SharedApp(
+        // iOS shell has no screen-capture / activity-recreate / dark-mode-broadcast
+        // primitives to wire — supply no-ops. Locale handling stays as before
+        // (writes AppleLanguages user-defaults + synchronize).
+        updateScreenCapture = {},
+        handleRecreate = {},
+        handleThemeMode = {},
         handleAppLocale = { languageTag ->
             if (languageTag != null) {
                 // Set specific language
-                NSUserDefaults.standardUserDefaults.setObject(listOf(languageTag), forKey = "AppleLanguages")
+                NSUserDefaults.standardUserDefaults.setObject(
+                    listOf(languageTag),
+                    forKey = "AppleLanguages",
+                )
             } else {
                 // System Default: remove app-specific language setting
                 NSUserDefaults.standardUserDefaults.removeObjectForKey("AppleLanguages")
             }
             NSUserDefaults.standardUserDefaults.synchronize()
         },
+        onSplashScreenRemoved = {},
     )
 }

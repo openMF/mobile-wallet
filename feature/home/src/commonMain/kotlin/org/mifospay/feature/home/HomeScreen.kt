@@ -5,7 +5,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 package org.mifospay.feature.home
 
@@ -79,28 +79,28 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.launch
-import mobile_wallet.feature.home.generated.resources.Res
-import mobile_wallet.feature.home.generated.resources.arrow_backward
-import mobile_wallet.feature.home.generated.resources.coin_image
-import mobile_wallet.feature.home.generated.resources.feature_home_account_number
-import mobile_wallet.feature.home.generated.resources.feature_home_account_type
-import mobile_wallet.feature.home.generated.resources.feature_home_arrow_up
-import mobile_wallet.feature.home.generated.resources.feature_home_autopay
-import mobile_wallet.feature.home.generated.resources.feature_home_coin_image
-import mobile_wallet.feature.home.generated.resources.feature_home_desc
-import mobile_wallet.feature.home.generated.resources.feature_home_mark_default
-import mobile_wallet.feature.home.generated.resources.feature_home_no_account
-import mobile_wallet.feature.home.generated.resources.feature_home_pocket_desc
-import mobile_wallet.feature.home.generated.resources.feature_home_pocket_title
-import mobile_wallet.feature.home.generated.resources.feature_home_request
-import mobile_wallet.feature.home.generated.resources.feature_home_request_money
-import mobile_wallet.feature.home.generated.resources.feature_home_send
-import mobile_wallet.feature.home.generated.resources.feature_home_send_money
-import mobile_wallet.feature.home.generated.resources.feature_home_view_more
-import mobile_wallet.feature.home.generated.resources.feature_home_wallet_balance
-import mobile_wallet.feature.home.generated.resources.home_no_transactions_found
-import mobile_wallet.feature.home.generated.resources.home_transaction_history
-import mobile_wallet.feature.home.generated.resources.start_sending_your_money_tax_free
+import mifos_pay.feature.home.generated.resources.Res
+import mifos_pay.feature.home.generated.resources.arrow_backward
+import mifos_pay.feature.home.generated.resources.coin_image
+import mifos_pay.feature.home.generated.resources.feature_home_account_number
+import mifos_pay.feature.home.generated.resources.feature_home_account_type
+import mifos_pay.feature.home.generated.resources.feature_home_arrow_up
+import mifos_pay.feature.home.generated.resources.feature_home_autopay
+import mifos_pay.feature.home.generated.resources.feature_home_coin_image
+import mifos_pay.feature.home.generated.resources.feature_home_desc
+import mifos_pay.feature.home.generated.resources.feature_home_mark_default
+import mifos_pay.feature.home.generated.resources.feature_home_no_account
+import mifos_pay.feature.home.generated.resources.feature_home_pocket_desc
+import mifos_pay.feature.home.generated.resources.feature_home_pocket_title
+import mifos_pay.feature.home.generated.resources.feature_home_request
+import mifos_pay.feature.home.generated.resources.feature_home_request_money
+import mifos_pay.feature.home.generated.resources.feature_home_send
+import mifos_pay.feature.home.generated.resources.feature_home_send_money
+import mifos_pay.feature.home.generated.resources.feature_home_view_more
+import mifos_pay.feature.home.generated.resources.feature_home_wallet_balance
+import mifos_pay.feature.home.generated.resources.home_no_transactions_found
+import mifos_pay.feature.home.generated.resources.home_transaction_history
+import mifos_pay.feature.home.generated.resources.start_sending_your_money_tax_free
 import org.jetbrains.compose.resources.getString
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource

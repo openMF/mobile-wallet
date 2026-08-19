@@ -5,15 +5,15 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 package org.mifospay.core.network.config
 
 import kotlinx.coroutines.flow.Flow
-import org.mifospay.core.common.DataState
+import org.mifospay.core.common.ScreenState
 import org.mifospay.core.model.instance.InstancesConfig
 
 interface InstanceConfigLoader {
-    suspend fun fetchInstancesConfig(): DataState<InstancesConfig>
-    fun observeInstancesConfig(): Flow<DataState<InstancesConfig>>
+    suspend fun fetchInstancesConfig(): InstancesConfig
+    fun observeInstancesConfig(): Flow<ScreenState<InstancesConfig>>
 }

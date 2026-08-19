@@ -5,7 +5,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 package org.mifospay.feature.invoices.details
 
@@ -29,15 +29,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import mobile_wallet.feature.invoices.generated.resources.Res
-import mobile_wallet.feature.invoices.generated.resources.feature_invoices_amount
-import mobile_wallet.feature.invoices.generated.resources.feature_invoices_consumer_id
-import mobile_wallet.feature.invoices.generated.resources.feature_invoices_date
-import mobile_wallet.feature.invoices.generated.resources.feature_invoices_invoice_details
-import mobile_wallet.feature.invoices.generated.resources.feature_invoices_items_bought
-import mobile_wallet.feature.invoices.generated.resources.feature_invoices_merchant_id
-import mobile_wallet.feature.invoices.generated.resources.feature_invoices_status
-import mobile_wallet.feature.invoices.generated.resources.feature_invoices_transaction_id
+import mifos_pay.feature.invoices.generated.resources.Res
+import mifos_pay.feature.invoices.generated.resources.feature_invoices_amount
+import mifos_pay.feature.invoices.generated.resources.feature_invoices_consumer_id
+import mifos_pay.feature.invoices.generated.resources.feature_invoices_date
+import mifos_pay.feature.invoices.generated.resources.feature_invoices_invoice_details
+import mifos_pay.feature.invoices.generated.resources.feature_invoices_items_bought
+import mifos_pay.feature.invoices.generated.resources.feature_invoices_merchant_id
+import mifos_pay.feature.invoices.generated.resources.feature_invoices_status
+import mifos_pay.feature.invoices.generated.resources.feature_invoices_transaction_id
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.mifospay.core.common.Constants

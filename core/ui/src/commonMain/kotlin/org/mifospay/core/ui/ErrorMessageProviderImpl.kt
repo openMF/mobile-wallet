@@ -5,37 +5,37 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 package org.mifospay.core.ui
 
-import mobile_wallet.core.ui.generated.resources.Res
-import mobile_wallet.core.ui.generated.resources.core_ui_error_msg_access_denied
-import mobile_wallet.core.ui.generated.resources.core_ui_error_msg_bad_gateway
-import mobile_wallet.core.ui.generated.resources.core_ui_error_msg_conflict
-import mobile_wallet.core.ui.generated.resources.core_ui_error_msg_gateway_timeout
-import mobile_wallet.core.ui.generated.resources.core_ui_error_msg_generic
-import mobile_wallet.core.ui.generated.resources.core_ui_error_msg_invalid_request
-import mobile_wallet.core.ui.generated.resources.core_ui_error_msg_not_found
-import mobile_wallet.core.ui.generated.resources.core_ui_error_msg_request_timeout
-import mobile_wallet.core.ui.generated.resources.core_ui_error_msg_server_error
-import mobile_wallet.core.ui.generated.resources.core_ui_error_msg_service_unavailable
-import mobile_wallet.core.ui.generated.resources.core_ui_error_msg_too_many_requests
-import mobile_wallet.core.ui.generated.resources.core_ui_error_msg_unauthorized
-import mobile_wallet.core.ui.generated.resources.core_ui_error_msg_validation_error
-import mobile_wallet.core.ui.generated.resources.core_ui_error_title_access_denied
-import mobile_wallet.core.ui.generated.resources.core_ui_error_title_bad_gateway
-import mobile_wallet.core.ui.generated.resources.core_ui_error_title_conflict
-import mobile_wallet.core.ui.generated.resources.core_ui_error_title_gateway_timeout
-import mobile_wallet.core.ui.generated.resources.core_ui_error_title_invalid_request
-import mobile_wallet.core.ui.generated.resources.core_ui_error_title_not_found
-import mobile_wallet.core.ui.generated.resources.core_ui_error_title_request_error
-import mobile_wallet.core.ui.generated.resources.core_ui_error_title_request_timeout
-import mobile_wallet.core.ui.generated.resources.core_ui_error_title_server_error
-import mobile_wallet.core.ui.generated.resources.core_ui_error_title_service_unavailable
-import mobile_wallet.core.ui.generated.resources.core_ui_error_title_too_many_requests
-import mobile_wallet.core.ui.generated.resources.core_ui_error_title_unauthorized
-import mobile_wallet.core.ui.generated.resources.core_ui_error_title_validation_error
+import kpt.core.ui.generated.resources.Res
+import kpt.core.ui.generated.resources.core_ui_error_msg_access_denied
+import kpt.core.ui.generated.resources.core_ui_error_msg_bad_gateway
+import kpt.core.ui.generated.resources.core_ui_error_msg_conflict
+import kpt.core.ui.generated.resources.core_ui_error_msg_gateway_timeout
+import kpt.core.ui.generated.resources.core_ui_error_msg_generic
+import kpt.core.ui.generated.resources.core_ui_error_msg_invalid_request
+import kpt.core.ui.generated.resources.core_ui_error_msg_not_found
+import kpt.core.ui.generated.resources.core_ui_error_msg_request_timeout
+import kpt.core.ui.generated.resources.core_ui_error_msg_server_error
+import kpt.core.ui.generated.resources.core_ui_error_msg_service_unavailable
+import kpt.core.ui.generated.resources.core_ui_error_msg_too_many_requests
+import kpt.core.ui.generated.resources.core_ui_error_msg_unauthorized
+import kpt.core.ui.generated.resources.core_ui_error_msg_validation_error
+import kpt.core.ui.generated.resources.core_ui_error_title_access_denied
+import kpt.core.ui.generated.resources.core_ui_error_title_bad_gateway
+import kpt.core.ui.generated.resources.core_ui_error_title_conflict
+import kpt.core.ui.generated.resources.core_ui_error_title_gateway_timeout
+import kpt.core.ui.generated.resources.core_ui_error_title_invalid_request
+import kpt.core.ui.generated.resources.core_ui_error_title_not_found
+import kpt.core.ui.generated.resources.core_ui_error_title_request_error
+import kpt.core.ui.generated.resources.core_ui_error_title_request_timeout
+import kpt.core.ui.generated.resources.core_ui_error_title_server_error
+import kpt.core.ui.generated.resources.core_ui_error_title_service_unavailable
+import kpt.core.ui.generated.resources.core_ui_error_title_too_many_requests
+import kpt.core.ui.generated.resources.core_ui_error_title_unauthorized
+import kpt.core.ui.generated.resources.core_ui_error_title_validation_error
 import org.jetbrains.compose.resources.getString
 import org.mifospay.core.common.ErrorMessageProvider
 

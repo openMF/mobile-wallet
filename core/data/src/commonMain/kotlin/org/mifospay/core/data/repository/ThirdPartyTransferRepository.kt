@@ -5,12 +5,11 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 package org.mifospay.core.data.repository
 
-import kotlinx.coroutines.flow.Flow
-import org.mifospay.core.common.DataState
+import org.mifospay.core.common.ScreenStateStream
 import org.mifospay.core.network.model.entity.TPTResponse
 import org.mifospay.core.network.model.entity.payload.TransferPayload
 import org.mifospay.core.network.model.entity.templates.account.AccountOptionsTemplate
@@ -18,5 +17,9 @@ import org.mifospay.core.network.model.entity.templates.account.AccountOptionsTe
 interface ThirdPartyTransferRepository {
     suspend fun getTransferTemplate(): AccountOptionsTemplate
 
-    fun makeTransfer(payload: TransferPayload): Flow<DataState<TPTResponse>>
+    // Phase-3 cutover — Flow-shaped submission surface exposes ScreenState
+    // so screens can consume Loading / Content / Error uniformly.
+    // Underlying network call remains a POST (a semantic write) but the
+    // read-facing envelope is aligned with the rest of the fork.
+    fun makeTransfer(payload: TransferPayload): ScreenStateStream<TPTResponse>
 }

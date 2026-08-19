@@ -5,7 +5,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 package org.mifospay.feature.auth.login
 
@@ -34,13 +34,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.launch
-import mobile_wallet.feature.auth.generated.resources.Res
-import mobile_wallet.feature.auth.generated.resources.feature_auth_connected_to
-import mobile_wallet.feature.auth.generated.resources.feature_auth_login
-import mobile_wallet.feature.auth.generated.resources.feature_auth_password
-import mobile_wallet.feature.auth.generated.resources.feature_auth_sign_up
-import mobile_wallet.feature.auth.generated.resources.feature_auth_username
-import mobile_wallet.feature.auth.generated.resources.feature_auth_welcome_back
+import kpt.core.base.platform.PlatformBuildConfig
+import mifos_pay.feature.auth.generated.resources.Res
+import mifos_pay.feature.auth.generated.resources.feature_auth_connected_to
+import mifos_pay.feature.auth.generated.resources.feature_auth_login
+import mifos_pay.feature.auth.generated.resources.feature_auth_password
+import mifos_pay.feature.auth.generated.resources.feature_auth_sign_up
+import mifos_pay.feature.auth.generated.resources.feature_auth_username
+import mifos_pay.feature.auth.generated.resources.feature_auth_welcome_back
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
@@ -55,7 +56,6 @@ import org.mifospay.core.ui.MifosPasswordField
 import org.mifospay.core.ui.MifosProgressIndicatorOverlay
 import org.mifospay.core.ui.utils.EventsEffect
 import template.core.base.designsystem.theme.KptTheme
-import template.core.base.platform.PlatformBuildConfig
 import template.core.base.ui.detectMultiTapGesture
 
 @Composable

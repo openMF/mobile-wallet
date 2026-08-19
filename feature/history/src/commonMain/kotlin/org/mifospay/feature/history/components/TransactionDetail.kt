@@ -5,7 +5,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 package org.mifospay.feature.history.components
 
@@ -26,11 +26,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
-import mobile_wallet.feature.history.generated.resources.Res
-import mobile_wallet.feature.history.generated.resources.feature_history_debited_from
-import mobile_wallet.feature.history.generated.resources.feature_history_paid_to
-import mobile_wallet.feature.history.generated.resources.feature_history_transaction_date
-import mobile_wallet.feature.history.generated.resources.feature_history_transaction_id
+import mifos_pay.feature.history.generated.resources.Res
+import mifos_pay.feature.history.generated.resources.feature_history_debited_from
+import mifos_pay.feature.history.generated.resources.feature_history_paid_to
+import mifos_pay.feature.history.generated.resources.feature_history_transaction_date
+import mifos_pay.feature.history.generated.resources.feature_history_transaction_id
 import org.jetbrains.compose.resources.stringResource
 import org.mifospay.core.common.CurrencyFormatter
 import org.mifospay.core.common.DateHelper

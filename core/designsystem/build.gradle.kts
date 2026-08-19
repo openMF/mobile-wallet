@@ -1,42 +1,21 @@
 /*
- * Copyright 2024 Mifos Initiative
+ * Copyright 2025 Mifos Initiative
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
- */
-
-/*
- * Copyright 2024 Mifos Initiative
- *
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at https://mozilla.org/MPL/2.0/.
- *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 plugins {
     alias(libs.plugins.kmp.library.convention)
     alias(libs.plugins.jetbrainsCompose)
     alias(libs.plugins.compose.compiler)
-    alias(libs.plugins.roborazzi)
 }
 
-android {
-    defaultConfig {
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-    }
-    namespace = "org.mifospay.core.designsystem"
-}
 
 kotlin {
     sourceSets {
-        androidMain.dependencies {
-            implementation(libs.androidx.compose.ui.tooling.preview)
-            implementation(libs.androidx.activity.compose)
-        }
         androidInstrumentedTest.dependencies {
             implementation(libs.androidx.compose.ui.test)
         }
@@ -44,19 +23,38 @@ kotlin {
             implementation(libs.androidx.compose.ui.test)
         }
         commonMain.dependencies {
-            implementation(libs.coil.kt.compose)
+            api(projects.coreBase.designsystem)
+            // Theme wires LocalScreenStateDefaults from core/store so every screen
+            // wrapped by MifosTheme picks up the app's branded ScreenState defaults.
+            implementation(projects.core.store)
+
+            implementation(compose.ui)
+            implementation(compose.uiUtil)
             implementation(compose.runtime)
             implementation(compose.foundation)
             implementation(compose.material3)
             implementation(compose.materialIconsExtended)
-            implementation(compose.ui)
-            implementation(compose.uiUtil)
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
-            api(libs.back.handler)
-            api(libs.window.size)
+
+            implementation(libs.coil.kt.compose)
+
+            // Fork-specific: BottomSheet.kt uses com.arkivanov.essenty.backhandler.BackCallback
+            // for KMP-safe hardware back-button handling. Template's core/designsystem doesn't
+            // ship a BottomSheet — it consumes M3's ModalBottomSheet directly per-feature.
+            implementation(libs.back.handler)
+
+            // Fork-specific: MifosIcons.kt references FluentIcons (Coin/Person/Wallet variants)
+            // for brand-consistent iconography beyond Material's Icons.Default.* set.
             implementation(libs.fluentui.system.icons)
-            api(projects.coreBase.designsystem)
+        }
+        // Fork-specific androidMain deps for PermissionBox.kt (androidx.activity
+        // rememberLauncherForActivityResult / ActivityResultContracts + androidx.core
+        // ContextCompat/ActivityCompat). Template doesn't ship PermissionBox so its
+        // core/designsystem module doesn't need these.
+        androidMain.dependencies {
+            implementation(libs.androidx.activity.compose)
+            implementation(libs.androidx.core.ktx)
         }
     }
 }
@@ -64,4 +62,5 @@ kotlin {
 compose.resources {
     publicResClass = true
     generateResClass = always
+    packageOfResClass = "kpt.core.designsystem.generated.resources"
 }

@@ -5,106 +5,136 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 package org.mifospay.core.data.repositoryImpl
 
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
-import org.mifospay.core.common.DataState
-import org.mifospay.core.common.asDataStateFlow
+import kpt.core.base.store.infra.FetchedAtRepository
+import kpt.core.base.store.screen.FetchPolicy
+import kpt.core.base.store.screen.ScreenDataStream
+import kpt.core.base.store.screen.asScreenStream
+import kpt.core.store.AppStoreRegistry
+import kpt.core.store.wallet.standinginstruction.StandingInstructionKey
+import org.mifospay.core.common.ScreenState
+import org.mifospay.core.common.asScreenStateFlow
 import org.mifospay.core.data.repository.StandingInstructionRepository
 import org.mifospay.core.model.standinginstruction.SITemplate
 import org.mifospay.core.model.standinginstruction.SIUpdatePayload
 import org.mifospay.core.model.standinginstruction.StandingInstruction
 import org.mifospay.core.model.standinginstruction.StandingInstructionPayload
 import org.mifospay.core.network.FineractApiManager
+import org.mobilenativefoundation.store.store5.Store
+import kpt.core.data.infra.NetworkMonitor as StoreNetworkMonitor
 
 class StandingInstructionRepositoryImpl(
     private val apiManager: FineractApiManager,
     private val ioDispatcher: CoroutineDispatcher,
+    // Phase-5 Batch-3 LEDGER wiring — injected by RepositoryModule so the
+    // store-backed getAllStandingInstructionsScreen(...) can consume Store5 via
+    // asScreenStream(...). Nullable-default so existing unit tests without the
+    // store harness continue to compile; getAllStandingInstructions(...) — the
+    // legacy asScreenStateFlow path — is unaffected.
+    private val standingInstructionStore: Store<StandingInstructionKey, List<StandingInstruction>>? = null,
+    private val storeNetworkMonitor: StoreNetworkMonitor? = null,
+    private val fetchedAtRepository: FetchedAtRepository? = null,
 ) : StandingInstructionRepository {
     override fun getStandingInstructionTemplate(
         fromOfficeId: Long,
         fromClientId: Long,
         fromAccountType: Long,
-    ): Flow<DataState<SITemplate>> {
+    ): Flow<ScreenState<SITemplate>> {
         return apiManager.standingInstructionApi
             .getStandingInstructionTemplate(fromOfficeId, fromClientId, fromAccountType)
-            .catch { DataState.Error(it, null) }
-            .asDataStateFlow().flowOn(ioDispatcher)
+            .asScreenStateFlow()
+            .flowOn(ioDispatcher)
     }
 
     override fun getAllStandingInstructions(
         clientId: Long,
-    ): Flow<DataState<List<StandingInstruction>>> {
+    ): Flow<ScreenState<List<StandingInstruction>>> {
         return apiManager.standingInstructionApi
             .getAllStandingInstructions(clientId)
-            .catch { DataState.Error(it, null) }
             .map { it.pageItems }
-            .asDataStateFlow().flowOn(ioDispatcher)
+            .asScreenStateFlow(isEmpty = { it.isEmpty() })
+            .flowOn(ioDispatcher)
+    }
+
+    // Phase-5 Batch-3 LEDGER read — GOAL D13 (`createStore` + CACHE_FIRST_SWR).
+    //
+    // See the interface KDoc for the shape contract. Requires the three store-adapter
+    // dependencies (standingInstructionStore + NetworkMonitor + FetchedAtRepository).
+    // If any is null (test wiring), we IllegalState — production DI in
+    // RepositoryModule wires all three unconditionally.
+    override fun getAllStandingInstructionsStream(
+        clientId: Long,
+        scope: CoroutineScope,
+    ): ScreenDataStream<List<StandingInstruction>> {
+        val store = checkNotNull(standingInstructionStore) {
+            "getAllStandingInstructionsStream requires the `standingInstruction` Store5 wiring. Verify " +
+                "RepositoryModule bound AppStoreRegistry.StandingInstruction and injected it here."
+        }
+        val netMon = checkNotNull(storeNetworkMonitor) {
+            "getAllStandingInstructionsStream requires kmptoolkit NetworkMonitor. Verify DataModule bound it."
+        }
+        val fetchedAtRepo = checkNotNull(fetchedAtRepository) {
+            "getAllStandingInstructionsStream requires FetchedAtRepository. Verify DataModule bound it."
+        }
+        return store.asScreenStream(
+            key = StandingInstructionKey(clientId),
+            networkMonitor = netMon,
+            fetchedAtRepository = fetchedAtRepo,
+            cacheKey = "wallet_standing_instructions-$clientId",
+            scope = scope,
+            isEmpty = { it.isEmpty() },
+            fetchPolicy = FetchPolicy.CACHE_FIRST_SWR,
+            ttl = AppStoreRegistry.Ttl.STANDING_INSTRUCTION,
+        )
     }
 
     override fun getStandingInstruction(
         instructionId: Long,
-    ): Flow<DataState<StandingInstruction>> {
+    ): Flow<ScreenState<StandingInstruction>> {
         return apiManager.standingInstructionApi
             .getStandingInstruction(instructionId)
-            .catch { DataState.Error(it, null) }
-            .asDataStateFlow().flowOn(ioDispatcher)
+            .asScreenStateFlow()
+            .flowOn(ioDispatcher)
     }
 
     override suspend fun createStandingInstruction(
         payload: StandingInstructionPayload,
-    ): DataState<String> {
-        return try {
-            withContext(ioDispatcher) {
-                apiManager.standingInstructionApi.createStandingInstruction(payload)
-            }
-
-            DataState.Success("Standing Instruction created successfully")
-        } catch (e: Exception) {
-            DataState.Error(e, null)
+    ) {
+        withContext(ioDispatcher) {
+            apiManager.standingInstructionApi.createStandingInstruction(payload)
         }
     }
 
     override suspend fun updateStandingInstruction(
         instructionId: Long,
         payload: SIUpdatePayload,
-    ): DataState<String> {
-        return try {
-            withContext(ioDispatcher) {
-                apiManager.standingInstructionApi.updateStandingInstruction(
-                    instructionId = instructionId,
-                    payload = payload,
-                    command = "update",
-                )
-            }
-
-            DataState.Success("Standing Instruction updated successfully")
-        } catch (e: Exception) {
-            DataState.Error(e, null)
+    ) {
+        withContext(ioDispatcher) {
+            apiManager.standingInstructionApi.updateStandingInstruction(
+                instructionId = instructionId,
+                payload = payload,
+                command = "update",
+            )
         }
     }
 
     override suspend fun deleteStandingInstruction(
         instructionId: Long,
-    ): DataState<String> {
-        return try {
-            withContext(ioDispatcher) {
-                apiManager.standingInstructionApi.deleteStandingInstruction(
-                    instructionId = instructionId,
-                    command = "delete",
-                )
-            }
-
-            DataState.Success("Standing Instruction deleted successfully")
-        } catch (e: Exception) {
-            DataState.Error(e, null)
+    ) {
+        withContext(ioDispatcher) {
+            apiManager.standingInstructionApi.deleteStandingInstruction(
+                instructionId = instructionId,
+                command = "delete",
+            )
         }
     }
 }

@@ -5,28 +5,31 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 package org.mifospay.core.data.repository
 
 import kotlinx.coroutines.flow.Flow
-import org.mifospay.core.common.DataState
+import org.mifospay.core.common.ScreenState
 import org.mifospay.core.model.beneficiary.Beneficiary
 import org.mifospay.core.model.beneficiary.BeneficiaryPayload
 import org.mifospay.core.model.beneficiary.BeneficiaryUpdatePayload
 import org.mifospay.core.network.model.entity.templates.beneficiary.BeneficiaryTemplate
 
 interface BeneficiaryRepository {
-    suspend fun getBeneficiaryList(): Flow<DataState<List<Beneficiary>>>
+    // Phase-3 cutover — reads on ScreenState.
+    suspend fun getBeneficiaryList(): Flow<ScreenState<List<Beneficiary>>>
 
-    suspend fun getBeneficiaryTemplate(): Flow<DataState<BeneficiaryTemplate>>
+    suspend fun getBeneficiaryTemplate(): Flow<ScreenState<BeneficiaryTemplate>>
 
-    suspend fun createBeneficiary(beneficiaryPayload: BeneficiaryPayload): DataState<String>
+    // Writes execute the network call and throw on failure (no offline write
+    // stores yet). Callers surface errors via their own try/catch.
+    suspend fun createBeneficiary(beneficiaryPayload: BeneficiaryPayload)
 
     suspend fun updateBeneficiary(
         beneficiaryId: Long,
         payload: BeneficiaryUpdatePayload,
-    ): DataState<String>
+    )
 
-    suspend fun deleteBeneficiary(beneficiaryId: Long): DataState<String>
+    suspend fun deleteBeneficiary(beneficiaryId: Long)
 }

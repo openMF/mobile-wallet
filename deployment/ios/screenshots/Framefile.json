@@ -1,0 +1,44 @@
+{
+  "device_frame_version": "latest",
+  "default": {
+    "keyword": {
+      "font": "fonts/OpenSans-Regular.ttf",
+      "color": "#333333"
+    },
+    "title": {
+      "font": "fonts/OpenSans-Bold.ttf",
+      "color": "#333333"
+    },
+    "background": "./backgrounds/background.png",
+    "padding": 50,
+    "show_complete_frame": false,
+    "stack_title": false,
+    "title_below_image": false
+  },
+  "data": [
+    {
+      "filter": "01_Home",
+      "title": "Track Finances\nAnywhere"
+    },
+    {
+      "filter": "02_Loans",
+      "title": "Manage\nYour Loans"
+    },
+    {
+      "filter": "03_Bills",
+      "title": "Never Miss\na Bill"
+    },
+    {
+      "filter": "04_Rates",
+      "title": "Live Currency\nRates"
+    },
+    {
+      "filter": "05_Calculator",
+      "title": "EMI\nCalculator"
+    },
+    {
+      "filter": "06_Economics",
+      "title": "Global Economic\nIndicators"
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+identity:
+  app_id: com.acme.moneyapp
+  app_name: Acme Money
+  namespace: com.acme.moneyapp
+store:
+  title: Money Toolkit
+  subtitle: PLACEHOLDER
+  description: 'TODO write the store description'

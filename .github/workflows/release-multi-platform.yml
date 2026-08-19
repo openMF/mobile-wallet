@@ -1,0 +1,393 @@
+# .github/workflows/release-multi-platform.yml
+#
+# Thin wrapper → openMF/mifos-x-actionhub/.github/workflows/release-multi-platform-v2.yaml@v1.0.63
+#
+# All orchestration logic lives in the centralized reusable workflow.
+# This file just declares the dispatch inputs + passes secrets through.
+#
+# History of fixes landed in this PR:
+#   1. Input-name mismatch — was passing `*_rung` but orchestrator declares
+#      `*_target`. GHA silently dropped unknown inputs, so the dispatch UI
+#      values were ignored — orchestrator was always using its own defaults.
+#      Fixed: `with:` block now maps `*_rung` → `*_target` correctly.
+#   2. Broken upstream pin — @v1.0.23 transitively pinned publish-desktop-kmp
+#      @v2.0.5 which had a `uses: …/${{ inputs.target }}@v2.0.0` dynamic-uses
+#      bug that GHA parser rejects. Even non-desktop dispatches failed at
+#      parse time. Fixed: bumped to @v1.0.24, which pins publish-desktop-kmp
+#      @v2.0.6 (the cross-repo fix landed in
+#      therajanmaurya/mifos-x-actionhub-publish-desktop-kmp PR #3).
+#   3. Cross-org secret passing — this chain crosses an org boundary at every
+#      hop (therajanmaurya fork → openMF orchestrator → therajanmaurya publish).
+#      `secrets: inherit` does NOT carry secrets across an org boundary (verified
+#      2026-06-21: every secret arrived len=0 at the orchestrator), so secrets
+#      are passed EXPLICITLY via a `secrets:` map below. Do NOT switch back to
+#      `secrets: inherit` — it silently breaks signing ("keystore not found").
+#
+# Default mode (just click "Run workflow"):
+#   Android  → ladder up to internal (firebase + internal auto-fire if envs configured)
+#   iOS      → ladder up to internal (firebase + TestFlight auto-fire)
+#   macOS    → ladder up to internal (Mac TestFlight)
+#   Windows  → prerelease (GH Pre-release)
+#   Linux    → prerelease (GH Pre-release)
+#   Web      → preview
+#   version_tag → auto-computed YYYY.M.D
+#
+# Promote with a single dispatch:
+#   Pick `<platform>_rung: production` → publish-* workflow runs ALL stages
+#   sequentially (firebase → internal → beta → production), pausing at each
+#   environment-gated stage with an in-graph "Approve and deploy" button.
+#
+# Required one-time setup in repo Settings → Environments:
+#   android-firebase, android-play-internal, android-play-beta, android-play-production
+#   ios-firebase, ios-testflight-internal, ios-testflight-external, ios-app-store
+#   mac-testflight-internal, mac-testflight-external, mac-app-store
+#   desktop-<artifact>-prerelease/beta/stable
+#   web-<host>-preview/staging/production
+#   Configure required reviewers per environment to control where promote
+#   buttons appear in the workflow graph.
+
+name: Release · Multi-Platform
+run-name: "🚀 Release ${{ inputs.version_tag || format('auto-{0}', github.run_number) }} · Android=${{ inputs.android_rung }} · iOS=${{ inputs.ios_rung }}"
+
+on:
+  workflow_dispatch:
+    inputs:
+      version_tag:
+        description: 'Version tag (leave EMPTY to auto-compute YYYY.M.D)'
+        required: false
+        type: string
+        default: ''
+
+      android_rung:
+        description: 'Android — top rung to reach (lower rungs auto-fire)'
+        required: false
+        type: choice
+        options: [skip, firebase, firebase+internal, internal, closed, beta, production]
+        default: firebase+internal
+
+      ios_rung:
+        description: 'iOS — top rung to reach (Firebase dropped 2026-06-22; TestFlight covers testing)'
+        required: false
+        type: choice
+        options: [skip, internal, beta, production]
+        default: internal
+
+      mac_rung:
+        description: 'macOS MAS — top rung to reach'
+        required: false
+        type: choice
+        options: [skip, internal, beta, production]
+        default: internal
+
+      desktop_win_rung:
+        description: 'Windows — top rung'
+        required: false
+        type: choice
+        options: [skip, prerelease, beta, stable]
+        default: skip
+
+      desktop_win_artifact:
+        description: 'Windows artifact format'
+        required: false
+        type: choice
+        options: [windows-msi-signed, windows-exe, windows-microsoft-store]
+        default: windows-msi-signed
+
+      desktop_linux_rung:
+        description: 'Linux DEB — top rung'
+        required: false
+        type: choice
+        options: [skip, prerelease, beta, stable]
+        default: prerelease
+
+      web_rung:
+        description: 'Web — top rung'
+        required: false
+        type: choice
+        options: [skip, preview, staging, production]
+        default: preview
+
+      web_host:
+        description: 'Web host provider'
+        required: false
+        type: choice
+        options: [gh-pages, cloudflare-pages, netlify, vercel]
+        default: gh-pages
+
+      production_rollout:
+        description: 'Android production rollout fraction (0.0-1.0; 1.0 = full release, <1.0 = staged). Only used when android_rung=production.'
+        required: false
+        type: string
+        default: '1.0'
+
+      # ── kmp-product-flavors dimension (deploy-gha-product-flavors Phase 5) ──
+      # Free-text (NOT `type: choice`) per GOAL D10 — zero drift surface. The
+      # authoritative flavor list lives in `build-logic/convention/…/KMPFlavorsConventionPlugin.kt`
+      # `kmpFlavors {}` DSL; the `validate-flavor` job below re-emits
+      # `cmp-shared/build/kmp-flavors/variants.json` from the DSL and validates
+      # this input against it at dispatch time. Adding / renaming / removing a
+      # flavor in the DSL auto-propagates to CI with zero workflow edit (D9).
+      #
+      # SINGLE flavor per dispatch → one clean per-platform environment-gated
+      # deployment (the pre-flavor design). Release multiple flavors by
+      # dispatching once per flavor; do NOT matrix-wrap the gated release —
+      # GitHub Environments are repo-level singletons, so a flavor matrix
+      # collides on the shared per-platform approval gates and cancels legs.
+      flavor:
+        description: 'flavor: demo | prod — single flavor per dispatch, validated at runtime against the DSL manifest'
+        required: false
+        type: string
+        default: 'prod'
+
+      build_type:
+        description: 'build_type: release | staging | debug — validated at runtime against the DSL manifest'
+        required: false
+        type: string
+        default: 'release'
+
+jobs:
+  # Store-listing preflight + sync now live in the REUSABLE CHAIN, so every consumer inherits
+  # them — no per-consumer job here (2026-06-22):
+  #   • preflight → publish-android-kmp `validate-store-listing` job (release.yaml@v2.0.19+)
+  #   • full sync (metadata + screenshots + feature graphic) → deployInternal's supply upload
+  #     (metadata_path + skip_upload_{metadata,changelogs,images,screenshots}: false)
+  # scripts/store/store-listing-preflight.sh stays as a LOCAL pre-push validation helper.
+
+  # Validate `(flavor, build_type)` against the DSL manifest — the single
+  # derivation point that stays truthful even as flavors are added / renamed
+  # in `kmpFlavors {}` (D9 zero-hardcode). Runs BEFORE any platform build so
+  # an invalid dispatch (`flavor=nonesuch`) fails fast without burning runner
+  # minutes. FAIL-FAST VALIDATION ONLY — emits no matrix; the gated release
+  # runs single-pass for the one dispatched flavor (per-platform environment
+  # gates must never be matrix-duplicated).
+  validate-flavor:
+    name: Validate product flavor
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+      - name: Emit variants.json from kmpFlavors {} DSL
+        # Task lives on `:cmp-shared` per KMPFlavorsConventionPlugin — output at
+        # `cmp-shared/build/kmp-flavors/variants.json`. Task is @DisableCachingByDefault
+        # so it regenerates every run; no cache staleness class exists.
+        run: ./gradlew :cmp-shared:exportKmpFlavorsManifest -q
+      - id: validate
+        shell: bash
+        env:
+          FLAVOR: ${{ inputs.flavor }}
+          BUILD_TYPE: ${{ inputs.build_type }}
+        run: |
+          set -euo pipefail
+          MANIFEST="cmp-shared/build/kmp-flavors/variants.json"
+          test -f "$MANIFEST" || { echo "❌ manifest missing at $MANIFEST"; exit 1; }
+          VALID_FLAVORS=$(jq -r '.flavors[].name' "$MANIFEST" | paste -sd, -)
+          VALID_TYPES=$(jq   -r '.buildTypes[].name' "$MANIFEST" | paste -sd, -)
+          if ! jq -e --arg f "$FLAVOR" '.flavors[]|select(.name==$f)' "$MANIFEST" >/dev/null; then
+            echo "❌ unknown flavor '$FLAVOR' — valid: [$VALID_FLAVORS] (single flavor per dispatch)"; exit 1
+          fi
+          if ! jq -e --arg b "$BUILD_TYPE" '.buildTypes[]|select(.name==$b)' "$MANIFEST" >/dev/null; then
+            echo "❌ unknown build_type '$BUILD_TYPE' — valid: [$VALID_TYPES]"; exit 1
+          fi
+          echo "✅ validated flavor='$FLAVOR' build_type='$BUILD_TYPE' against the DSL manifest"
+
+  release:
+    name: Release
+    # Single-pass, per-platform environment-gated deployment for the ONE dispatched
+    # flavor (validated above). NO strategy.matrix — matrix-wrapping the gated
+    # release duplicates every platform job per flavor and collides on the shared
+    # repo-level Environments + concurrency groups (which cancels legs). Release
+    # multiple flavors by dispatching once per flavor.
+    needs: [validate-flavor]
+    # Permissions cascade through nested reusable workflows (this → orchestrator
+    # → publish-*-kmp). Declare here at the caller boundary so the deepest jobs
+    # — publish-web-kmp's gh-pages/cloudflare/netlify/vercel stages — can
+    # actually inherit what they require:
+    #   contents: write — gh release edit (desktop stages 2/3), gh-pages branch push (web)
+    #   pages:    write — actions/deploy-pages target (web gh-pages host)
+    #   id-token: write — OIDC for actions/deploy-pages (web gh-pages host)
+    # Other platforms (Android/iOS/Mac/Desktop-build) ignore the extra scopes.
+    permissions:
+      contents: write
+      pages:    write
+      id-token: write
+    # PROD pin — immutable. GHA forbids expressions in workflow_call uses:
+    # (parse-time literal only). For local-dev iteration use the companion
+    # workflow `release-multi-platform-local.yml`, which pins @dev and is
+    # dispatched by `/ci local-actions` against the fork.
+    #
+    # @v1.0.49 ships the additive `flavor` / `build_type` inputs on
+    # release-multi-platform-v2.yaml (pins publish-android @v2.0.22, publish-apple
+    # @v2.0.15, publish-desktop @v2.0.8, publish-web @v2.0.10 — all carry the flavor
+    # dimension). The `with:` block below threads the single dispatched
+    # `inputs.flavor` / `inputs.build_type` straight through.
+    uses: openMF/mifos-x-actionhub/.github/workflows/release-multi-platform-v2.yaml@v1.0.63
+    with:
+      version_tag:          ${{ inputs.version_tag }}
+      android_package_name: cmp-android
+      # NOTE: applicationId is NOT threaded as an input — release-multi-platform-v2.yaml@v1.0.61
+      # (latest actionhub tag) declares no `application_id` input; it resolves the Android app-id
+      # for the firebase preflight from `firebase_android_app_id` / `firebase_android_demo_app_id`
+      # (inherited secrets) per flavor. Passing `application_id` made the whole workflow invalid at
+      # startup ("Invalid workflow file"). Product-flavor selection flows via `flavor`/`build_type`.
+      ios_package_name:     cmp-ios
+      mac_package_name:     cmp-desktop
+      shared_module:        cmp-shared
+      desktop_package_name: cmp-desktop
+      web_package_name:     cmp-web
+      # === FIX 1: rung → target name mapping (orchestrator's declared input names) ===
+      android_target:       ${{ inputs.android_rung }}
+      ios_target:           ${{ inputs.ios_rung }}
+      mac_target:           ${{ inputs.mac_rung }}
+      desktop_win_target:   ${{ inputs.desktop_win_rung }}
+      desktop_win_artifact: ${{ inputs.desktop_win_artifact }}
+      desktop_linux_target: ${{ inputs.desktop_linux_rung }}
+      web_target:           ${{ inputs.web_rung }}
+      web_host:             ${{ inputs.web_host }}
+      production_rollout:   ${{ inputs.production_rollout }}
+      # kmp-product-flavors additive inputs — SINGLE flavor per dispatch (validated
+      # by the upstream `validate-flavor` job). Threaded straight from the dispatch
+      # inputs into v2, which threads to each platform build. No matrix: the
+      # per-platform environment-gated ladder runs once for this flavor.
+      flavor:               ${{ inputs.flavor }}
+      build_type:           ${{ inputs.build_type }}
+      # PROD pins kept in lockstep with actionhub @v1.0.32 (which hardcodes
+      # @v2.0.12 internally — GHA forbids expressions in workflow_call uses:).
+      # Local dispatches override these via release-multi-platform-local.yml.
+      runner_pool_linux:    '["ubuntu-latest"]'
+      runner_pool_mac:      '["macos-15"]'   # macos-14 ships Xcode 16.1 (no CMP/UIViewLayoutRegion symbols);
+                                              # macos-15 has Xcode 26.x — the image the last green iOS build
+                                              # used (pr-check.yml). Compose MP 1.11 needs it. (2026-06-22)
+      # === FIX 2: opt into RULE-DEPLOYMENT-MANIFEST-001 deployment/<platform>/<target>/lane.rb layout ===
+      # Our lanes live at deployment/Fastfile + deployment/<platform>/<target>/lane.rb,
+      # not at root fastlane/Fastfile. The publish-* @v2.0.11 wrappers support this
+      # via fastlane_mode=pre-materialized + fastlane_cwd=deployment + a consumer-
+      # provided pre_fastlane_script that inlines secret materialization.
+      fastlane_mode:        pre-materialized
+      fastlane_cwd:         deployment
+      pre_fastlane_script: |
+        set -euo pipefail
+        # Select the newest installed Xcode. The macOS runner defaults to Xcode 15.4, but the
+        # Firebase pods use the Swift 6 `sending` keyword → need Xcode 16+ ("cannot find type
+        # 'sending' in scope"). System-wide xcode-select persists to the build step. (2026-06-22)
+        if [ -d /Applications ]; then
+          LATEST_XCODE=$(ls -d /Applications/Xcode_*.app 2>/dev/null | sort -V | tail -1 || true)
+          if [ -n "${LATEST_XCODE:-}" ]; then
+            sudo xcode-select -s "$LATEST_XCODE/Contents/Developer" 2>/dev/null || true
+            echo "✅ Selected Xcode: $LATEST_XCODE ($(xcodebuild -version 2>/dev/null | head -1))"
+          fi
+        fi
+        # ── Secrets are materialized into PLATFORM-NAMESPACED dirs (2026-06-22) ──
+        #   secrets/live/android/  secrets/live/apple/  secrets/live/apple/  secrets/web/  secrets/shared/
+        # Apple ASC key + Match are SHARED by iOS and macOS-desktop → secrets/live/apple/.
+        # ── Materialize secrets via the resolver (secrets/LAYOUT.yaml is the SoT) ──
+        # Every path + encoding (base64, raw-PEM-or-base64, literals) is declared in
+        # LAYOUT.yaml; `build-secrets` owns decode + destination. NO inline paths here —
+        # reorganizing secrets/ is a LAYOUT.yaml edit, this workflow never changes.
+        BS="deployment/scripts/build-secrets"
+        mkdir -p ~/.ssh
+        "$BS" materialize upload_keystore          --from-env UPLOAD_KEYSTORE_B64  && echo "✅ Android keystore"
+        "$BS" materialize google_services          --from-env GOOGLE_SERVICES_B64  && echo "✅ google-services.json"
+        "$BS" materialize firebase_service_account --from-env FIREBASE_CREDS_B64   && echo "✅ Firebase SA"
+        "$BS" materialize play_service_account     --from-env PLAYSTORE_CREDS_B64  && echo "✅ Play Store SA"
+        "$BS" materialize appstore_auth_key        --from-env APPSTORE_AUTH_KEY_B64
+        "$BS" materialize match_ssh_key            --from-env MATCH_GIT_PRIVATE_KEY
+        "$BS" materialize match_git_url
+        "$BS" materialize match_git_branch
+        # Emit the Gradle path map (build_secrets.rb#export-paths → gradle/secrets-paths.properties, SoT
+        # projection): the JVM build reads THIS at configuration time instead of shelling out to the
+        # resolver — cross-platform + configuration-cache-correct. Regenerated here from the live tree.
+        mkdir -p gradle && "$BS" export-paths > gradle/secrets-paths.properties \
+          && echo "✅ gradle/secrets-paths.properties ($(grep -c = gradle/secrets-paths.properties) keys)"
+        # Sanity-validate the resolved files (no secret VALUE is ever echoed).
+        if [ -n "${APPSTORE_AUTH_KEY_B64:-}" ]; then
+          grep -q "PRIVATE KEY" "$("$BS" path appstore_auth_key)" \
+            || { echo "❌ AuthKey.p8 is not a valid PEM — check APPSTORE_AUTH_KEY encoding."; exit 1; }
+          echo "✅ App Store Connect .p8 (valid PEM)"
+        fi
+        if [ -n "${MATCH_GIT_PRIVATE_KEY:-}" ]; then
+          MK="$("$BS" path match_ssh_key)"
+          grep -qa "OPENSSH PRIVATE KEY\|BEGIN.*PRIVATE KEY" "$MK" \
+            || { echo "❌ Match SSH key invalid (expected ~419B raw key, NOT a .tar.gz bundle)."; exit 1; }
+          echo "✅ Match SSH key ($(wc -c < "$MK" | tr -d ' ')B, valid)"
+        fi
+        # Match repo coordinates also exported as env (config.rb reads MATCH_GIT_URL/BRANCH env).
+        echo "MATCH_GIT_URL=$("$BS" value match_git_url)"       >> "$GITHUB_ENV"
+        echo "MATCH_GIT_BRANCH=$("$BS" value match_git_branch)" >> "$GITHUB_ENV"
+        echo "✅ Match repo: $("$BS" value match_git_url) ($("$BS" value match_git_branch))"
+        # Map env-var names the deployment/Fastfile lanes expect
+        # (config.rb's get_android_signing_config reads KEY_ALIAS, KEY_PASSWORD)
+        if [ -n "${KEYSTORE_ALIAS:-}" ]; then
+          echo "KEY_ALIAS=$KEYSTORE_ALIAS" >> "$GITHUB_ENV"
+        fi
+        if [ -n "${KEYSTORE_ALIAS_PASSWORD:-}" ]; then
+          echo "KEY_PASSWORD=$KEYSTORE_ALIAS_PASSWORD" >> "$GITHUB_ENV"
+        fi
+        if [ -n "${KEYSTORE_PASSWORD:-}" ]; then
+          # IMPORTANT: pass RELATIVE path (relative to DEPLOYMENT_REPO_ROOT = repo root).
+          # deployment/_shared/config.rb's buildAndSignApp does
+          #   File.expand_path(File.join(DEPLOYMENT_REPO_ROOT, keystore))
+          # which concatenates (Ruby's File.join doesn't strip the leading / on the
+          # second arg) — so an absolute path here produces a duplicated /<root>/<abs>
+          # gradle property and signing validation fails to find the keystore.
+          # RESOLVE THE PATH — never hardcode it. `$BS materialize upload_keystore`
+          # just wrote the keystore to secrets/live/… ; ask the resolver where it
+          # landed (live-wins-else-sample, relative). Hardcoding the flat path broke
+          # signing the instant secrets/ was restructured into live/+sample/.
+          echo "KEYSTORE_PATH=$("$BS" path upload_keystore)" >> "$GITHUB_ENV"
+        fi
+        echo "✅ pre_fastlane_script complete"
+    # EXPLICIT secret map (NOT inherit). This chain is cross-ORG at every hop:
+    # therajanmaurya/kmp-project-template (this fork) → openMF/mifos-x-actionhub
+    # (orchestrator) → therajanmaurya/...-publish-android-kmp. `secrets: inherit`
+    # does NOT carry secrets across an organization boundary — verified empirically
+    # 2026-06-21: every secret arrived len=0 at the orchestrator under inherit, so
+    # the pre_fastlane_script materialize guards no-op'd and signing failed
+    # ("keystore not found"). Explicit `${{ secrets.NAME }}` is the only reliable
+    # cross-org pattern. Fork secrets are UPPERCASE; orchestrator declares
+    # lower_snake_case — map each here. (GHA secret refs are case-insensitive.)
+    secrets:
+      google_services:              ${{ secrets.GOOGLE_SERVICES }}
+      firebase_creds:               ${{ secrets.FIREBASE_CREDS }}
+      playstore_creds:              ${{ secrets.PLAYSTORE_CREDS }}
+      upload_keystore:              ${{ secrets.UPLOAD_KEYSTORE }}
+      keystore_password:            ${{ secrets.KEYSTORE_PASSWORD }}
+      keystore_alias:               ${{ secrets.KEYSTORE_ALIAS }}
+      keystore_alias_password:      ${{ secrets.KEYSTORE_ALIAS_PASSWORD }}
+      firebase_android_app_id:      ${{ secrets.FIREBASE_ANDROID_APP_ID }}
+      firebase_android_demo_app_id: ${{ secrets.FIREBASE_ANDROID_DEMO_APP_ID }}
+      appstore_key_id:              ${{ secrets.APPSTORE_KEY_ID }}
+      appstore_issuer_id:           ${{ secrets.APPSTORE_ISSUER_ID }}
+      appstore_auth_key:            ${{ secrets.APPSTORE_AUTH_KEY }}
+      match_password:               ${{ secrets.MATCH_PASSWORD }}
+      match_ssh_private_key:        ${{ secrets.MATCH_SSH_PRIVATE_KEY }}
+      SOPS_AGE_KEY:                 ${{ secrets.SOPS_AGE_KEY }}
+      # macOS .p12 signing (Tier-3). Certs are provisioned as base64 secrets (managed via the
+      # openMF/ios-provisioning-profile fastlane-match repo, exported for the manual mac keychain
+      # import). App-distribution cert + installer-distribution cert + the embedded provisioning
+      # profile. The p12s are password-less (the tier-3 import uses `-P ""`).
+      mac_signing_certificate:            ${{ secrets.MAC_APP_DISTRIBUTION_CERTIFICATE_B64 }}
+      mac_signing_certificate_password:   ${{ secrets.MAC_SIGNING_CERTIFICATE_PASSWORD }}
+      mac_installer_certificate:          ${{ secrets.MAC_INSTALLER_DISTRIBUTION_CERTIFICATE_B64 }}
+      mac_installer_certificate_password: ${{ secrets.MAC_INSTALLER_CERTIFICATE_PASSWORD }}
+      mac_provisioning_profile_base64:    ${{ secrets.MAC_EMBEDDED_PROVISION_B64 }}
+      keychain_password:                  ${{ secrets.KEYCHAIN_PASSWORD }}
+      # --- NEW: Web host tokens + Vercel project identity ---
+      cloudflare_api_token:         ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      netlify_auth_token:           ${{ secrets.NETLIFY_AUTH_TOKEN }}
+      vercel_token:                 ${{ secrets.VERCEL_TOKEN }}
+      vercel_org_id:                ${{ secrets.VERCEL_ORG_ID }}
+      vercel_project_id:            ${{ secrets.VERCEL_PROJECT_ID }}
+      # --- NEW: Windows Azure Trusted Signing + Partner Center (Tier-3, blocked-on-onboarding) ---
+      azure_client_id:                ${{ secrets.AZURE_CLIENT_ID }}
+      azure_tenant_id:                ${{ secrets.AZURE_TENANT_ID }}
+      azure_subscription_id:          ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      azure_trusted_signing_endpoint: ${{ secrets.AZURE_TRUSTED_SIGNING_ENDPOINT }}
+      azure_trusted_signing_account:  ${{ secrets.AZURE_TRUSTED_SIGNING_ACCOUNT }}
+      azure_cert_profile_name:        ${{ secrets.AZURE_CERT_PROFILE_NAME }}
+      microsoft_store_client_id:      ${{ secrets.MICROSOFT_STORE_CLIENT_ID }}
+      microsoft_store_client_secret:  ${{ secrets.MICROSOFT_STORE_CLIENT_SECRET }}

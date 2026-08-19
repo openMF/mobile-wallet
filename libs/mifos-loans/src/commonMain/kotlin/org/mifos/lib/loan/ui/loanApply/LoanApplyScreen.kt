@@ -5,7 +5,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 package org.mifos.lib.loan.ui.loanApply
 
@@ -26,20 +26,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import mobile_wallet.libs.mifos_loans.generated.resources.Res
-import mobile_wallet.libs.mifos_loans.generated.resources.feature_apply_loan_button_continue
-import mobile_wallet.libs.mifos_loans.generated.resources.feature_apply_loan_hint_applicant_name
-import mobile_wallet.libs.mifos_loans.generated.resources.feature_apply_loan_hint_disbursement_date
-import mobile_wallet.libs.mifos_loans.generated.resources.feature_apply_loan_hint_loan_product
-import mobile_wallet.libs.mifos_loans.generated.resources.feature_apply_loan_hint_principal_amount
-import mobile_wallet.libs.mifos_loans.generated.resources.feature_apply_loan_hint_purpose
-import mobile_wallet.libs.mifos_loans.generated.resources.feature_apply_loan_label_applicant_name
-import mobile_wallet.libs.mifos_loans.generated.resources.feature_apply_loan_label_disbursement_date
-import mobile_wallet.libs.mifos_loans.generated.resources.feature_apply_loan_label_loan_product
-import mobile_wallet.libs.mifos_loans.generated.resources.feature_apply_loan_label_principal_amount
-import mobile_wallet.libs.mifos_loans.generated.resources.feature_apply_loan_label_purpose
-import mobile_wallet.libs.mifos_loans.generated.resources.feature_apply_loan_section_fill_details
-import mobile_wallet.libs.mifos_loans.generated.resources.feature_select_loan_type_network_issue
+import mifos_pay.libs.mifos_loans.generated.resources.Res
+import mifos_pay.libs.mifos_loans.generated.resources.feature_apply_loan_button_continue
+import mifos_pay.libs.mifos_loans.generated.resources.feature_apply_loan_hint_applicant_name
+import mifos_pay.libs.mifos_loans.generated.resources.feature_apply_loan_hint_disbursement_date
+import mifos_pay.libs.mifos_loans.generated.resources.feature_apply_loan_hint_loan_product
+import mifos_pay.libs.mifos_loans.generated.resources.feature_apply_loan_hint_principal_amount
+import mifos_pay.libs.mifos_loans.generated.resources.feature_apply_loan_hint_purpose
+import mifos_pay.libs.mifos_loans.generated.resources.feature_apply_loan_label_applicant_name
+import mifos_pay.libs.mifos_loans.generated.resources.feature_apply_loan_label_disbursement_date
+import mifos_pay.libs.mifos_loans.generated.resources.feature_apply_loan_label_loan_product
+import mifos_pay.libs.mifos_loans.generated.resources.feature_apply_loan_label_principal_amount
+import mifos_pay.libs.mifos_loans.generated.resources.feature_apply_loan_label_purpose
+import mifos_pay.libs.mifos_loans.generated.resources.feature_apply_loan_section_fill_details
+import mifos_pay.libs.mifos_loans.generated.resources.feature_select_loan_type_network_issue
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.mifospay.core.designsystem.component.MifosButton

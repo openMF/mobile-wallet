@@ -5,7 +5,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 package org.mifospay.feature.savedcards.createOrUpdate
 
@@ -15,10 +15,15 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
-import org.mifospay.core.common.DataState
+import kpt.core.base.store.submit.SubmitState
+import kpt.core.base.store.submit.submitHandler
+import mifos_pay.feature.savedcards.generated.resources.Res
+import mifos_pay.feature.savedcards.generated.resources.feature_savedcards_card_added_successfully
+import mifos_pay.feature.savedcards.generated.resources.feature_savedcards_card_updated_successfully
+import org.jetbrains.compose.resources.StringResource
+import org.mifospay.core.common.ScreenState
 import org.mifospay.core.common.getSerialized
 import org.mifospay.core.common.setSerialized
 import org.mifospay.core.data.repository.SavedCardRepository
@@ -26,7 +31,6 @@ import org.mifospay.core.datastore.UserPreferencesRepository
 import org.mifospay.core.model.savedcards.CardPayload
 import org.mifospay.core.model.savedcards.SavedCard
 import org.mifospay.core.ui.utils.BaseViewModel
-import org.mifospay.feature.savedcards.createOrUpdate.AECardAction.Internal.HandleAddEditCardResult
 import org.mifospay.feature.savedcards.createOrUpdate.AECardAction.Internal.HandleCardResult
 import org.mifospay.feature.savedcards.utils.CardType
 import org.mifospay.feature.savedcards.utils.CreditCardUtils.detectCardType
@@ -55,7 +59,51 @@ internal class AddEditCardViewModel(
         private const val ADD_EDIT_CARD_STATE_KEY = "add_edit_card_state"
     }
 
+    // Template idiom (core-base/store): the one-shot card WRITE (addSavedCard /
+    // updateCard) goes through a SubmitHandler instead of a hand-folded DataState
+    // result action. The handler owns the Submitting/Submitted/Failed lifecycle;
+    // we observe it in `init` to drive this screen's existing Loading/Error dialog
+    // + success toast/navigate, so the Screen is unchanged. The existing-card
+    // READ (getSavedCard → HandleCardResult) is left on its ScreenState fold.
+    private val submitCard = viewModelScope.submitHandler<Unit>()
+
     init {
+        submitCard.state
+            .onEach { submitState ->
+                when (submitState) {
+                    is SubmitState.Submitting -> {
+                        mutableStateFlow.update {
+                            it.copy(dialogState = AECardState.DialogState.Loading)
+                        }
+                    }
+
+                    is SubmitState.Submitted -> {
+                        mutableStateFlow.update { it.copy(dialogState = null) }
+                        val successMessage = when (state.type) {
+                            is CardAddEditType.AddItem ->
+                                Res.string.feature_savedcards_card_added_successfully
+
+                            is CardAddEditType.EditItem ->
+                                Res.string.feature_savedcards_card_updated_successfully
+                        }
+                        sendEvent(AECardEvent.ShowToast(successMessage))
+                        sendEvent(AECardEvent.OnNavigateBack)
+                        submitCard.reset()
+                    }
+
+                    is SubmitState.Failed -> {
+                        val message = submitState.error.message.toString()
+                        mutableStateFlow.update {
+                            it.copy(dialogState = AECardState.DialogState.Error(message))
+                        }
+                        submitCard.reset()
+                    }
+
+                    SubmitState.Idle -> Unit
+                }
+            }
+            .launchIn(viewModelScope)
+
         stateFlow
             .onEach { savedStateHandle.setSerialized(key = ADD_EDIT_CARD_STATE_KEY, value = it) }
             .launchIn(viewModelScope)
@@ -117,8 +165,6 @@ internal class AddEditCardViewModel(
 
             AECardAction.SaveCard -> initiateSaveCard()
 
-            is HandleAddEditCardResult -> handleAddEditCardResult(action)
-
             is HandleCardResult -> handleCardResult(action)
         }
     }
@@ -176,83 +222,82 @@ internal class AddEditCardViewModel(
     }
 
     private fun initiateAddOrEditCard() {
-        mutableStateFlow.update {
-            it.copy(dialogState = AECardState.DialogState.Loading)
-        }
+        // Submit through the handler — it drives Submitting/Submitted/Failed, observed
+        // in `init`. The repository write returns the success message and throws on
+        // failure; the handler maps that to Submitted/Failed.
+        submitCard.submit {
+            when (val type = state.type) {
+                is CardAddEditType.AddItem -> repository.addSavedCard(
+                    clientId = state.clientId,
+                    card = state.cardPayload,
+                )
 
-        viewModelScope.launch {
-            when (state.type) {
-                is CardAddEditType.AddItem -> {
-                    val result = repository.addSavedCard(state.clientId, state.cardPayload)
-
-                    sendAction(HandleAddEditCardResult(result))
-                }
-
-                is CardAddEditType.EditItem -> {
-                    val result = repository.updateCard(
-                        clientId = state.clientId,
-                        cardId = state.type.savedCardId!!,
-                        card = state.cardPayload,
-                    )
-
-                    sendAction(HandleAddEditCardResult(result))
-                }
-            }
-        }
-    }
-
-    private fun handleAddEditCardResult(action: HandleAddEditCardResult) {
-        when (action.result) {
-            is DataState.Loading -> {
-                mutableStateFlow.update {
-                    it.copy(dialogState = AECardState.DialogState.Loading)
-                }
-            }
-
-            is DataState.Error -> {
-                val message = action.result.exception.message.toString()
-
-                mutableStateFlow.update {
-                    it.copy(dialogState = AECardState.DialogState.Error(message))
-                }
-            }
-
-            is DataState.Success -> {
-                mutableStateFlow.update {
-                    it.copy(dialogState = null)
-                }
-
-                sendEvent(AECardEvent.ShowToast("Card saved successfully"))
-                sendEvent(AECardEvent.OnNavigateBack)
+                is CardAddEditType.EditItem -> repository.updateCard(
+                    clientId = state.clientId,
+                    cardId = type.savedCardId!!,
+                    card = state.cardPayload,
+                )
             }
         }
     }
 
     private fun handleCardResult(action: HandleCardResult) {
-        when (action.result) {
-            is DataState.Loading -> {
+        // `getSavedCard` was migrated to `Flow<ScreenState<SavedCard>>`.
+        // Content prefills the edit form; the various error branches surface
+        // the same dialog the prior DataState.Error path used. Empty is
+        // defensively surfaced as an error (single-record endpoint shouldn't
+        // emit Empty). NoNetwork / Unauthenticated fold into the existing
+        // Error dialog until Phase-4 wires per-branch surfaces.
+        when (val result = action.result) {
+            is ScreenState.Loading -> {
                 mutableStateFlow.update {
                     it.copy(dialogState = AECardState.DialogState.Loading)
                 }
             }
 
-            is DataState.Error -> {
-                val message = action.result.exception.message.toString()
+            is ScreenState.Empty -> {
+                mutableStateFlow.update {
+                    it.copy(dialogState = AECardState.DialogState.Error("Card not found."))
+                }
+            }
+
+            is ScreenState.Error -> {
+                val message = result.error.message.toString()
 
                 mutableStateFlow.update {
                     it.copy(dialogState = AECardState.DialogState.Error(message))
                 }
             }
 
-            is DataState.Success -> {
+            is ScreenState.NoNetwork -> {
                 mutableStateFlow.update {
                     it.copy(
-                        firstName = action.result.data.firstName,
-                        lastName = action.result.data.lastName,
-                        cardNumber = action.result.data.cardNumber,
-                        cvv = action.result.data.cvv,
-                        expiryDate = action.result.data.expiryDate,
-                        backgroundColor = action.result.data.backgroundColor,
+                        dialogState = AECardState.DialogState.Error(
+                            "No network. Please check your connection.",
+                        ),
+                    )
+                }
+            }
+
+            is ScreenState.Unauthenticated -> {
+                mutableStateFlow.update {
+                    it.copy(
+                        dialogState = AECardState.DialogState.Error(
+                            "Session expired. Please log in again.",
+                        ),
+                    )
+                }
+            }
+
+            is ScreenState.Content -> {
+                mutableStateFlow.update {
+                    it.copy(
+                        firstName = result.data.firstName,
+                        lastName = result.data.lastName,
+                        cardNumber = result.data.cardNumber,
+                        cvv = result.data.cvv,
+                        expiryDate = result.data.expiryDate,
+                        backgroundColor = result.data.backgroundColor,
                         dialogState = null,
                     )
                 }
@@ -319,7 +364,7 @@ internal data class AECardState(
 
 internal sealed interface AECardEvent {
     data object OnNavigateBack : AECardEvent
-    data class ShowToast(val message: String) : AECardEvent
+    data class ShowToast(val message: StringResource) : AECardEvent
 }
 
 internal sealed interface AECardAction {
@@ -335,7 +380,13 @@ internal sealed interface AECardAction {
     data object NavigateBack : AECardAction
 
     sealed interface Internal : AECardAction {
-        data class HandleCardResult(val result: DataState<SavedCard>) : Internal
-        data class HandleAddEditCardResult(val result: DataState<String>) : Internal
+        /**
+         * Existing-card load result. Uses [ScreenState] (not [DataState]) —
+         * `getSavedCard` was migrated to `Flow<ScreenState<SavedCard>>` in
+         * Phase-3. The add/edit save WRITE no longer has a result action: it
+         * goes through the [submitCard] SubmitHandler (template idiom), whose
+         * SubmitState is observed in `init`.
+         */
+        data class HandleCardResult(val result: ScreenState<SavedCard>) : Internal
     }
 }

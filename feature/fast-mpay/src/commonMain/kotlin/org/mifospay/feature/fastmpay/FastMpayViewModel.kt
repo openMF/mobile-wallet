@@ -5,18 +5,18 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 package org.mifospay.feature.fastmpay
 
 import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.mifospay.core.data.util.MpayQrCodeProcessor
+import org.mifospay.core.ui.utils.BaseViewModel
 import org.mifospay.feature.fastmpay.model.QrProcessResult
 import org.mifospay.feature.fastmpay.navigation.QR_DATA_ARG
 import kotlin.coroutines.cancellation.CancellationException
@@ -26,11 +26,17 @@ import kotlin.coroutines.cancellation.CancellationException
  *
  * Receives encoded QR data from navigation, decodes it,
  * processes it using [FastMpayProcessor], and emits the navigation result.
+ *
+ * The decode/process pass is kicked off from `init` through the MVI [FastMpayAction]
+ * channel. The [resultFlow]/[errorFlow]/[isLoading] surfaces stay plain [MutableStateFlow]
+ * state the screen collects and reacts to (clearing them after consumption).
  */
 class FastMpayViewModel(
     savedStateHandle: SavedStateHandle,
     private val processor: FastMpayProcessor,
-) : ViewModel() {
+) : BaseViewModel<FastMpayState, FastMpayEvent, FastMpayAction>(
+    initialState = FastMpayState,
+) {
 
     private val _resultFlow = MutableStateFlow<QrProcessResult?>(null)
     val resultFlow = _resultFlow.asStateFlow()
@@ -43,7 +49,16 @@ class FastMpayViewModel(
 
     init {
         val encodedQrData = savedStateHandle.get<String>(QR_DATA_ARG)
+        trySendAction(FastMpayAction.ProcessQrData(encodedQrData))
+    }
 
+    override fun handleAction(action: FastMpayAction) {
+        when (action) {
+            is FastMpayAction.ProcessQrData -> processQrData(action.encodedQrData)
+        }
+    }
+
+    private fun processQrData(encodedQrData: String?) {
         viewModelScope.launch {
             if (encodedQrData == null) {
                 _errorFlow.update { "QR data is missing" }
@@ -53,7 +68,11 @@ class FastMpayViewModel(
 
             try {
                 val qrData = MpayQrCodeProcessor.decodeMpayString(encodedQrData)
-                val result = processor.processQrCode(qrData)
+                // Phase-5 Batch-3: processor now consumes the store-backed
+                // `getBeneficiaryListScreen(clientId, scope)` (batch-1 reuse)
+                // and `getOfficesScreen(scope)` (batch-3 new), so it needs the
+                // caller's CoroutineScope for Store5 refresh-trigger wiring.
+                val result = processor.processQrCode(qrData, viewModelScope)
                 _resultFlow.update { result }
             } catch (e: CancellationException) {
                 throw e
@@ -78,4 +97,12 @@ class FastMpayViewModel(
     fun clearError() {
         _errorFlow.update { null }
     }
+}
+
+data object FastMpayState
+
+sealed interface FastMpayEvent
+
+sealed interface FastMpayAction {
+    data class ProcessQrData(val encodedQrData: String?) : FastMpayAction
 }

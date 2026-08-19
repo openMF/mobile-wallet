@@ -5,13 +5,12 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 package org.mifospay.core.domain
 
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
-import org.mifospay.core.common.DataState
 import org.mifospay.core.common.utils.OpenForMokkery
 import org.mifospay.core.data.repository.AuthenticationRepository
 import org.mifospay.core.data.repository.ClientRepository
@@ -25,56 +24,48 @@ class LoginUseCase(
     private val userPreferencesRepository: UserPreferencesRepository,
     private val ioDispatcher: CoroutineDispatcher,
 ) {
-    suspend operator fun invoke(username: String, password: String): DataState<UserInfo> {
-        val result = withContext(ioDispatcher) {
-            repository.authenticate(username, password)
+    /**
+     * Authenticates the user, persists the session token + resolved client/user
+     * info into preferences, and returns the [UserInfo] on success. Throws on any
+     * failure — the caller (LoginViewModel's SubmitHandler) maps the thrown
+     * exception to its Failed state and surfaces a feature StringResource. The
+     * exception messages below are diagnostic (not surfaced verbatim to the user).
+     */
+    suspend operator fun invoke(username: String, password: String): UserInfo {
+        val userInfo = try {
+            withContext(ioDispatcher) {
+                repository.authenticate(username, password)
+            }
+        } catch (e: Exception) {
+            throw IllegalStateException("Invalid credentials", e)
         }
 
-        return when (result) {
-            is DataState.Loading -> DataState.Loading
-            is DataState.Error -> DataState.Error(Exception("Invalid credentials"))
-            is DataState.Success -> {
-                if (result.data.clients.isEmpty()) {
-                    return DataState.Error(Exception("No clients found"))
-                }
-                updateUserInfo(result.data)
-            }
+        if (userInfo.clients.isEmpty()) {
+            error("No clients found")
         }
+
+        return persistSession(userInfo)
     }
 
-    private suspend fun updateUserInfo(userInfo: UserInfo): DataState<UserInfo> {
-        val updateResult = withContext(ioDispatcher) {
+    private suspend fun persistSession(userInfo: UserInfo): UserInfo {
+        withContext(ioDispatcher) {
             userPreferencesRepository.updateToken(userInfo.base64EncodedAuthenticationKey)
         }
 
-        return when (updateResult) {
-            is DataState.Success -> updateClientInfo(userInfo)
-            is DataState.Error -> DataState.Error(Exception("Something went wrong"))
-            is DataState.Loading -> DataState.Loading
-        }
-    }
-
-    private suspend fun updateClientInfo(userInfo: UserInfo): DataState<UserInfo> {
-        val clientInfo = withContext(ioDispatcher) {
-            clientRepository.getClient(userInfo.clients.first())
-        }
-
-        return when (clientInfo) {
-            is DataState.Success -> {
-                withContext(ioDispatcher) {
-                    userPreferencesRepository.updateClientInfo(clientInfo.data)
-                    userPreferencesRepository.updateUserInfo(userInfo)
-                }
-
-                DataState.Success(userInfo)
+        val client = try {
+            withContext(ioDispatcher) {
+                clientRepository.getClient(userInfo.clients.first())
             }
-
-            is DataState.Error -> {
-                userPreferencesRepository.logOut()
-                DataState.Error(Exception("No client found"))
-            }
-
-            is DataState.Loading -> DataState.Loading
+        } catch (e: Exception) {
+            userPreferencesRepository.logOut()
+            throw IllegalStateException("No client found", e)
         }
+
+        withContext(ioDispatcher) {
+            userPreferencesRepository.updateClientInfo(client)
+            userPreferencesRepository.updateUserInfo(userInfo)
+        }
+
+        return userInfo
     }
 }

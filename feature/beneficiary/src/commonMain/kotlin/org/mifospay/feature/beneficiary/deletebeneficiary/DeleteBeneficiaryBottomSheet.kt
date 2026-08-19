@@ -5,7 +5,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 package org.mifospay.feature.beneficiary.deletebeneficiary
 
@@ -30,13 +30,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import mobile_wallet.feature.beneficiary.generated.resources.Res
-import mobile_wallet.feature.beneficiary.generated.resources.feature_beneficiary_cancel
-import mobile_wallet.feature.beneficiary.generated.resources.feature_beneficiary_delete
-import mobile_wallet.feature.beneficiary.generated.resources.feature_beneficiary_delete_beneficiary
-import mobile_wallet.feature.beneficiary.generated.resources.feature_beneficiary_delete_confirmation_message
-import mobile_wallet.feature.beneficiary.generated.resources.feature_beneficiary_delete_failed
-import mobile_wallet.feature.beneficiary.generated.resources.feature_beneficiary_ok
+import mifos_pay.feature.beneficiary.generated.resources.Res
+import mifos_pay.feature.beneficiary.generated.resources.feature_beneficiary_cancel
+import mifos_pay.feature.beneficiary.generated.resources.feature_beneficiary_delete
+import mifos_pay.feature.beneficiary.generated.resources.feature_beneficiary_delete_beneficiary
+import mifos_pay.feature.beneficiary.generated.resources.feature_beneficiary_delete_confirmation_message
+import mifos_pay.feature.beneficiary.generated.resources.feature_beneficiary_delete_failed
+import mifos_pay.feature.beneficiary.generated.resources.feature_beneficiary_ok
 import org.jetbrains.compose.resources.stringResource
 import org.mifospay.core.designsystem.component.MifosBottomSheet
 import org.mifospay.core.designsystem.component.MifosButton

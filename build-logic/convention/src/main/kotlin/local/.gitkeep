@@ -1,0 +1,4 @@
+# This directory is reserved for consumer-app flavor extensions.
+# Create build-logic/convention/src/main/kotlin/local/LocalFlavors.kt to add
+# your own flavors / dimensions / overrides — see docs/FLAVORS_EXTENSION.md.
+# This file (.gitkeep) is here so the directory survives empty checkouts.

@@ -5,12 +5,11 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 package org.mifospay.core.datastore
 
 import kotlinx.coroutines.flow.Flow
-import org.mifospay.core.common.DataState
 import org.mifospay.core.model.autopay.Bill
 
 interface BillRepository {
@@ -25,19 +24,19 @@ interface BillRepository {
     suspend fun getBillById(id: String): Bill?
 
     /**
-     * Save a new bill
+     * Save a new bill. Returns the saved bill or throws on failure.
      */
-    suspend fun saveBill(bill: Bill): DataState<Bill>
+    suspend fun saveBill(bill: Bill): Bill
 
     /**
-     * Update an existing bill
+     * Update an existing bill. Returns the updated bill or throws on failure.
      */
-    suspend fun updateBill(bill: Bill): DataState<Bill>
+    suspend fun updateBill(bill: Bill): Bill
 
     /**
-     * Delete a bill
+     * Delete a bill. Throws on failure.
      */
-    suspend fun deleteBill(id: String): DataState<Unit>
+    suspend fun deleteBill(id: String)
 
     /**
      * Search bills by name
@@ -45,7 +44,7 @@ interface BillRepository {
     suspend fun searchBillsByName(query: String): List<Bill>
 
     /**
-     * Clear all bills
+     * Clear all bills. Throws on failure.
      */
-    suspend fun clearAllBills(): DataState<Unit>
+    suspend fun clearAllBills()
 }

@@ -1,9 +1,26 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript {
+    repositories {
+        google {
+            content {
+                includeGroupByRegex("com\\.android.*")
+                includeGroupByRegex("com\\.google.*")
+                includeGroupByRegex("androidx.*")
+            }
+        }
+        mavenCentral()
+        gradlePluginPortal()
+    }
     dependencies {
         classpath(libs.google.oss.licenses.plugin) {
             exclude(group = "com.google.protobuf")
         }
+        // Pin R8 to a version that understands Kotlin 2.3 metadata. The R8 bundled
+        // with AGP 8.12.3 reads up to Kotlin metadata 2.1 only, so every release-mode
+        // build with Kotlin 2.3.20 emits "R8: An error occurred when parsing kotlin
+        // metadata" warnings for almost every class. Override it with R8 9.1.x stable.
+        // Compatibility matrix: https://developer.android.com/studio/build/kotlin-d8-r8-versions
+        classpath("com.android.tools:r8:9.1.31")
     }
 }
 
@@ -32,8 +49,33 @@ plugins {
     alias(libs.plugins.compose.compiler) apply false
     alias(libs.plugins.kotlinMultiplatform) apply false
     alias(libs.plugins.wire) apply false
-    alias(libs.plugins.ktorfit) apply false
+    // Template renamed the ktorfit plugin alias to `ktrofit`; the merged catalog
+    // also exposes `ktorfit` so the fork's original accessor works too.
+    alias(libs.plugins.ktrofit) apply false
 
+    alias(libs.plugins.room) apply false
+
+    // Kover — root-level aggregation.
+    //
+    // Per-module kover application happens via `org.convention.kover.plugin`
+    // chained from base convention plugins (AndroidApplication / KMPLibrary /
+    // KMPCoreBaseLibrary). cmp-desktop applies it directly.
+    //
+    // Aggregation list (below) is auto-discovered from `subprojects` — any new
+    // module under :feature:*, :core:*, or :core-base:* is picked up with zero
+    // manual maintenance.
+    //
+    // Filter/verify config (further below) stays inline at root because moving
+    // it into a build-logic convention plugin would require kover-gradle-plugin
+    // on build-logic's runtime classpath, which transitively conflicts with
+    // AGP's kotlin-gradle-plugin (kover issue #135, confirmed by trial). Kover's
+    // own multi-module KMP guide recommends root-level config for the same
+    // reason: https://kotlin.github.io/kotlinx-kover/gradle-plugin/#multi-module-kotlin-multiplatform-project
+    //
+    // Tasks: ./gradlew koverHtmlReport | koverXmlReport | koverVerify
+    alias(libs.plugins.kover) apply false
+    alias(libs.plugins.kover.convention)
+    id("org.convention.fork.sync-config")
 }
 
 object DynamicVersion {
@@ -59,6 +101,38 @@ tasks.register("printModulePaths") {
     }
 }
 
+// Force consistent versions across all subprojects to fix KLIB resolver duplicate warnings.
+// The conflict is between org.jetbrains.androidx.* (CMP) and androidx.* (Google) transitive deps.
+subprojects {
+    configurations.all {
+        resolutionStrategy.eachDependency {
+            // Replace Google androidx.lifecycle with JetBrains fork for non-Android targets.
+            // Pin to the version shipped WITH compose-multiplatform 1.11.1 — Compose's
+            // emitted IR symbols (LocalViewModelStoreOwner etc.) require this exact
+            // version. Without strictly{}, Gradle prefers stable 2.9.6 over pre-release
+            // 2.11.0-beta01 and produces 'IrPropertySymbolImpl is already bound' on
+            // Kotlin/JS compile.
+            if (requested.group == "org.jetbrains.androidx.lifecycle") {
+                useVersion("2.11.0-beta01")
+                because("Compose Multiplatform 1.11.1 bundles 2.11.0-beta01")
+            }
+            if (requested.group == "org.jetbrains.androidx.savedstate") {
+                useVersion("1.3.6")
+            }
+        }
+    }
+
+    // Gradle 9+ defaults Test.failOnNoDiscoveredTests to true. AGP unit-test
+    // tasks (testDemoDebugUnitTest, testProdReleaseUnitTest, etc.) then fail
+    // on KMP `androidUnitTest` source sets that contain expect/actual TEST
+    // HELPERS but no @Test classes — those test classes legitimately live in
+    // `commonTest` or `desktopTest`. Disabling per-task unblocks the kover
+    // coverage gate without weakening real-test signal.
+    tasks.withType<org.gradle.api.tasks.testing.Test>().configureEach {
+        failOnNoDiscoveredTests = false
+    }
+}
+
 // Configuration for CMP module dependency graph
 moduleGraphAssert {
     configurations += setOf("commonMainImplementation", "commonMainApi")
@@ -67,4 +141,35 @@ moduleGraphAssert {
     configurations += setOf("jsMainImplementation", "jsMainApi")
     configurations += setOf("nativeMainImplementation", "nativeMainApi")
     configurations += setOf("wasmJsMainImplementation", "wasmJsMainApi")
+}
+
+// ── Detekt baseline (fork) ────────────────────────────────────────────────────────────────────
+// The offline-first template migration adopted the template's stricter detekt config
+// (detekt-formatting + twitter-detekt-compose), surfacing ~544 pre-existing violations across the
+// fork's existing code (MaxLineLength, ComposableParamOrder, ViewModelForwarding,
+// CyclomaticComplexMethod, ModifierReused, LongMethod, …). A committed baseline accepts the CURRENT
+// set so CI is green while NEW violations still fail — the standard detekt "adopt-on-existing-
+// codebase" mechanism. Wired HERE (not in the template-mirrored build-logic/.../Detekt.kt) so that
+// convention file stays canonical. Regenerate after fixing violations: `./gradlew detektBaseline`.
+allprojects {
+    tasks.matching { it.name == "detekt" }.configureEach {
+        (this as? io.gitlab.arturbosch.detekt.Detekt)?.baseline?.set(
+            rootProject.file("config/detekt/baseline.xml"),
+        )
+    }
+    tasks.matching { it.name == "detektBaseline" }.configureEach {
+        (this as? io.gitlab.arturbosch.detekt.DetektCreateBaselineTask)?.apply {
+            setSource(rootProject.files(rootProject.rootDir))
+            baseline.set(rootProject.file("config/detekt/baseline.xml"))
+            include("**/*.kt")
+            exclude("**/*.kts")
+            exclude("**/resources/**")
+            exclude("**/build/**")
+            exclude("**/generated/**")
+            exclude("**/build-logic/**")
+            exclude("**/spotless/**")
+            exclude("core-base/designsystem/**")
+            exclude("feature/home/**")
+        }
+    }
 }

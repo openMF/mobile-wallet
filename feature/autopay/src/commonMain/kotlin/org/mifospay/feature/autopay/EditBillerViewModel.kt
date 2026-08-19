@@ -5,16 +5,19 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 package org.mifospay.feature.autopay
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
-import org.mifospay.core.common.DataState
+import kpt.core.base.store.submit.SubmitState
+import kpt.core.base.store.submit.submitHandler
 import org.mifospay.core.common.getSerialized
 import org.mifospay.core.data.util.BillerValidator
 import org.mifospay.core.datastore.BillerRepository
@@ -33,7 +36,40 @@ class EditBillerViewModel(
 
     private val billerId: String = savedStateHandle["billerId"] ?: ""
 
+    // Template idiom (core-base/store): the one-shot update goes through a SubmitHandler
+    // instead of a hand-folded DataState result. The handler owns the
+    // Submitting/Submitted/Failed lifecycle; we observe it to drive this screen's
+    // existing loading/success/error UX, so the Screen is unchanged.
+    private val submitBiller = viewModelScope.submitHandler<Biller>()
+
     init {
+        submitBiller.state
+            .onEach { submitState ->
+                when (submitState) {
+                    is SubmitState.Submitting -> {
+                        mutableStateFlow.update { it.copy(isLoading = true) }
+                    }
+
+                    is SubmitState.Submitted -> {
+                        sendEvent(EditBillerEvent.BillerUpdated(submitState.result))
+                        submitBiller.reset()
+                    }
+
+                    is SubmitState.Failed -> {
+                        mutableStateFlow.update {
+                            it.copy(
+                                isLoading = false,
+                                error = "Failed to update biller: ${submitState.error.message}",
+                            )
+                        }
+                        submitBiller.reset()
+                    }
+
+                    SubmitState.Idle -> Unit
+                }
+            }
+            .launchIn(viewModelScope)
+
         loadBiller()
     }
 
@@ -188,45 +224,22 @@ class EditBillerViewModel(
             return
         }
 
-        viewModelScope.launch {
-            mutableStateFlow.update { it.copy(isLoading = true) }
+        val formData = mutableStateFlow.value.formData
+        val biller = Biller(
+            id = billerId,
+            name = formData.name,
+            accountNumber = formData.accountNumber,
+            contactNumber = formData.contactNumber,
+            email = formData.email.takeIf { it.isNotBlank() },
+            category = formData.category!!,
+            address = formData.address.takeIf { it.isNotBlank() },
+        )
 
-            try {
-                val formData = mutableStateFlow.value.formData
-                val biller = Biller(
-                    id = billerId,
-                    name = formData.name,
-                    accountNumber = formData.accountNumber,
-                    contactNumber = formData.contactNumber,
-                    email = formData.email.takeIf { it.isNotBlank() },
-                    category = formData.category!!,
-                    address = formData.address.takeIf { it.isNotBlank() },
-                )
-
-                when (val result = billerRepository.updateBiller(biller)) {
-                    is DataState.Success -> {
-                        sendEvent(EditBillerEvent.BillerUpdated(result.data))
-                    }
-                    is DataState.Error -> {
-                        mutableStateFlow.update {
-                            it.copy(
-                                isLoading = false,
-                                error = "Failed to update biller: ${result.exception.message}",
-                            )
-                        }
-                    }
-                    is DataState.Loading -> {
-                        // Loading state is already handled by setting isLoading = true above
-                    }
-                }
-            } catch (e: Exception) {
-                mutableStateFlow.update {
-                    it.copy(
-                        isLoading = false,
-                        error = "Failed to update biller: ${e.message}",
-                    )
-                }
-            }
+        // Submit through the handler — it drives Submitting/Submitted/Failed, observed
+        // in `init`. The repository returns the updated biller or throws on failure,
+        // which the handler surfaces as Failed.
+        submitBiller.submit {
+            billerRepository.updateBiller(biller)
         }
     }
 

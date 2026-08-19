@@ -5,7 +5,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 package org.mifos.lib.loan.component
 
@@ -23,10 +23,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
-import mobile_wallet.libs.mifos_loans.generated.resources.Res
-import mobile_wallet.libs.mifos_loans.generated.resources.feature_upload_docs_bank_account
-import mobile_wallet.libs.mifos_loans.generated.resources.feature_upload_docs_collateral
-import mobile_wallet.libs.mifos_loans.generated.resources.feature_upload_docs_signature
+import mifos_pay.libs.mifos_loans.generated.resources.Res
+import mifos_pay.libs.mifos_loans.generated.resources.feature_upload_docs_bank_account
+import mifos_pay.libs.mifos_loans.generated.resources.feature_upload_docs_collateral
+import mifos_pay.libs.mifos_loans.generated.resources.feature_upload_docs_signature
 import org.jetbrains.compose.resources.stringResource
 import org.mifos.lib.loan.ui.uploadDocs.UploadDocsAction
 import org.mifos.lib.loan.ui.uploadDocs.UploadDocsState

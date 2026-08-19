@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copyright 2026 Mifos Initiative
+
+    This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+    If a copy of the MPL was not distributed with this file,
+    You can obtain one at https://mozilla.org/MPL/2.0/.
+
+    See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
+-->
+<resources>
+    <!-- ===== Screen-state default copy (consumed by AppScreenStateDefaults) ===== -->
+    <string name="screenstate_empty_title">Nothing here yet</string>
+    <string name="screenstate_empty_message">When you have data, it'll show up here.</string>
+    <string name="screenstate_error_title">Something went wrong</string>
+    <string name="screenstate_error_retry">Try again</string>
+    <string name="screenstate_nonet_title">You're offline</string>
+    <string name="screenstate_nonet_message">We'll retry when you reconnect.</string>
+    <string name="screenstate_nonet_retry">Retry now</string>
+    <string name="screenstate_captive_title">Sign in to WiFi</string>
+    <string name="screenstate_captive_message">Your network needs you to sign in before connecting.</string>
+    <string name="screenstate_captive_action">Open sign-in page</string>
+    <string name="error_category_network">Can't reach the server. Check your connection.</string>
+    <string name="error_category_auth">Your session expired. Please sign in again.</string>
+    <string name="error_category_ratelimit">Too many requests. Please wait and try again.</string>
+    <string name="error_category_server">Our servers are having a moment. Try again in a bit.</string>
+    <string name="error_category_generic">Something went wrong</string>
+</resources>

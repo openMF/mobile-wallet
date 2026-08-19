@@ -53,7 +53,7 @@ done
 module_paths=$(./gradlew -q printModulePaths --no-configuration-cache)
 
 # Ensure the output directory exists
-mkdir -p docs/images/graphs-kmp/
+mkdir -p docs/images/graphs/
 
 # Function to check and create a README.md for modules which don't have one.
 check_and_create_readme() {
@@ -65,9 +65,9 @@ check_and_create_readme() {
     readme_path="${readme_path}/README.md" #Append the filename
 
     # Check if README.md exists and create it if not
-    # if [[ ! -f "$readme_path" ]]; then
-    #     echo "Creating README.md for ${module_path}"
-    # fi
+    if [[ ! -f "$readme_path" ]]; then
+        echo "Creating README.md for ${module_path}"
+
         # Determine the depth of the module based on the number of colons
         local depth=$(awk -F: '{print NF-1}' <<< "${module_path}")
 
@@ -76,11 +76,12 @@ check_and_create_readme() {
         for ((i=1; i<$depth; i++)); do
             relative_image_path+="../"
         done
-        relative_image_path+="docs/images/graphs-kmp/${file_name}.svg"
+        relative_image_path+="docs/images/graphs/${file_name}.svg"
 
-        # echo "# ${module_path} module" >> "$readme_path"
-        # echo "## Dependency graph" >> "$readme_path"
-        # echo "![Dependency graph](${relative_image_path})" >> "$readme_path"
+        echo "# ${module_path} module" > "$readme_path"
+        echo "## Dependency graph" >> "$readme_path"
+        echo "![Dependency graph](${relative_image_path})" >> "$readme_path"
+    fi
 }
 
 # Loop through each module path
@@ -100,7 +101,7 @@ echo "$module_paths" | while read -r module_path; do
           -Pmodules.graph.of.module="${module_path}" </dev/null
 
         # Convert to SVG using dot, remove unnecessary comments, and reformat
-        dot -Tsvg "/tmp/${file_name}.gv" > "docs/images/graphs-kmp/${file_name}.svg"
+        dot -Tsvg "/tmp/${file_name}.gv" > "docs/images/graphs/${file_name}.svg"
         # Remove the temporary .gv file
         rm "/tmp/${file_name}.gv"
     fi

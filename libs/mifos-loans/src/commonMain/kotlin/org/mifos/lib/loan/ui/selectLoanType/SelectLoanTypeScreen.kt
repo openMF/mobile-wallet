@@ -5,7 +5,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 package org.mifos.lib.loan.ui.selectLoanType
 
@@ -22,10 +22,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import mobile_wallet.libs.mifos_loans.generated.resources.Res
-import mobile_wallet.libs.mifos_loans.generated.resources.feature_select_loan_type_choose_loan
-import mobile_wallet.libs.mifos_loans.generated.resources.feature_select_loan_type_empty
-import mobile_wallet.libs.mifos_loans.generated.resources.feature_select_loan_type_top_bar_title
+import mifos_pay.libs.mifos_loans.generated.resources.Res
+import mifos_pay.libs.mifos_loans.generated.resources.feature_select_loan_type_choose_loan
+import mifos_pay.libs.mifos_loans.generated.resources.feature_select_loan_type_empty
+import mifos_pay.libs.mifos_loans.generated.resources.feature_select_loan_type_top_bar_title
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.mifos.lib.loan.component.LoanCard

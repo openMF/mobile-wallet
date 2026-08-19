@@ -5,7 +5,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 package org.mifospay.feature.accounts.savingsaccount.details
 
@@ -50,20 +50,20 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.launch
-import mobile_wallet.feature.accounts.generated.resources.Res
-import mobile_wallet.feature.accounts.generated.resources.feature_accounts_detail_account_balance
-import mobile_wallet.feature.accounts.generated.resources.feature_accounts_detail_account_details
-import mobile_wallet.feature.accounts.generated.resources.feature_accounts_detail_account_summary
-import mobile_wallet.feature.accounts.generated.resources.feature_accounts_detail_arrow
-import mobile_wallet.feature.accounts.generated.resources.feature_accounts_detail_available_balance
-import mobile_wallet.feature.accounts.generated.resources.feature_accounts_detail_interest_not_posted
-import mobile_wallet.feature.accounts.generated.resources.feature_accounts_detail_product_name
-import mobile_wallet.feature.accounts.generated.resources.feature_accounts_detail_total_deposits
-import mobile_wallet.feature.accounts.generated.resources.feature_accounts_detail_total_interest_posted
-import mobile_wallet.feature.accounts.generated.resources.feature_accounts_detail_total_overdraft
-import mobile_wallet.feature.accounts.generated.resources.feature_accounts_detail_total_withdrawals
-import mobile_wallet.feature.accounts.generated.resources.feature_accounts_detail_wallet_balance
-import mobile_wallet.feature.accounts.generated.resources.feature_accounts_error_oops
+import mifos_pay.feature.accounts.generated.resources.Res
+import mifos_pay.feature.accounts.generated.resources.feature_accounts_detail_account_balance
+import mifos_pay.feature.accounts.generated.resources.feature_accounts_detail_account_details
+import mifos_pay.feature.accounts.generated.resources.feature_accounts_detail_account_summary
+import mifos_pay.feature.accounts.generated.resources.feature_accounts_detail_arrow
+import mifos_pay.feature.accounts.generated.resources.feature_accounts_detail_available_balance
+import mifos_pay.feature.accounts.generated.resources.feature_accounts_detail_interest_not_posted
+import mifos_pay.feature.accounts.generated.resources.feature_accounts_detail_product_name
+import mifos_pay.feature.accounts.generated.resources.feature_accounts_detail_total_deposits
+import mifos_pay.feature.accounts.generated.resources.feature_accounts_detail_total_interest_posted
+import mifos_pay.feature.accounts.generated.resources.feature_accounts_detail_total_overdraft
+import mifos_pay.feature.accounts.generated.resources.feature_accounts_detail_total_withdrawals
+import mifos_pay.feature.accounts.generated.resources.feature_accounts_detail_wallet_balance
+import mifos_pay.feature.accounts.generated.resources.feature_accounts_error_oops
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.mifospay.core.common.CurrencyFormatter

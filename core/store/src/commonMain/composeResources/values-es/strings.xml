@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copyright 2026 Mifos Initiative
+
+    This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+    If a copy of the MPL was not distributed with this file,
+    You can obtain one at https://mozilla.org/MPL/2.0/.
+
+    See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
+-->
+<resources>
+    <string name="screenstate_empty_title">Aún no hay nada aquí</string>
+    <string name="screenstate_empty_message">Cuando tengas datos, aparecerán aquí.</string>
+    <string name="screenstate_error_title">Algo salió mal</string>
+    <string name="screenstate_error_retry">Reintentar</string>
+    <string name="screenstate_nonet_title">Estás sin conexión</string>
+    <string name="screenstate_nonet_message">Lo intentaremos de nuevo cuando te reconectes.</string>
+    <string name="screenstate_nonet_retry">Reintentar ahora</string>
+    <string name="screenstate_captive_title">Inicia sesión en el WiFi</string>
+    <string name="screenstate_captive_message">Tu red requiere que inicies sesión antes de conectarte.</string>
+    <string name="screenstate_captive_action">Abrir página de inicio de sesión</string>
+    <string name="error_category_network">No se puede conectar al servidor. Comprueba tu conexión.</string>
+    <string name="error_category_auth">Tu sesión expiró. Inicia sesión de nuevo.</string>
+    <string name="error_category_ratelimit">Demasiadas solicitudes. Espera e inténtalo de nuevo.</string>
+    <string name="error_category_server">Nuestros servidores están teniendo problemas. Inténtalo más tarde.</string>
+    <string name="error_category_generic">Algo salió mal</string>
+</resources>

@@ -5,7 +5,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 package org.mifospay.shared.ui.components
 
@@ -24,13 +24,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import mobile_wallet.cmp_shared.generated.resources.upi_and_autopay
-import mobile_wallet.feature.payments.generated.resources.Res
-import mobile_wallet.feature.payments.generated.resources.feature_payments_inter_bank_transfer_description
-import mobile_wallet.feature.payments.generated.resources.feature_payments_inter_bank_transfer_title
-import mobile_wallet.feature.payments.generated.resources.feature_payments_intra_bank_transfer_description
-import mobile_wallet.feature.payments.generated.resources.feature_payments_intra_bank_transfer_title
-import mobile_wallet.feature.payments.generated.resources.feature_payments_transfer_options_title
+import cmp.shared.generated.resources.upi_and_autopay
+import mifos_pay.feature.payments.generated.resources.Res
+import mifos_pay.feature.payments.generated.resources.feature_payments_inter_bank_transfer_description
+import mifos_pay.feature.payments.generated.resources.feature_payments_inter_bank_transfer_title
+import mifos_pay.feature.payments.generated.resources.feature_payments_intra_bank_transfer_description
+import mifos_pay.feature.payments.generated.resources.feature_payments_intra_bank_transfer_title
+import mifos_pay.feature.payments.generated.resources.feature_payments_transfer_options_title
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
@@ -38,7 +38,7 @@ import org.mifospay.core.designsystem.component.MifosBottomSheet
 import org.mifospay.core.designsystem.theme.MifosTheme
 import org.mifospay.shared.TransferOptionsViewModel
 import template.core.base.designsystem.theme.KptTheme
-import mobile_wallet.cmp_shared.generated.resources.Res as SharedRes
+import cmp.shared.generated.resources.Res as SharedRes
 
 @Composable
 fun TransferOptionsBottomSheet(

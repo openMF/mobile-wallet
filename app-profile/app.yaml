@@ -1,0 +1,135 @@
+# app-profile/app.yaml — fork-owned white-label deployment SoT (COMMON, platform-agnostic).
+#
+# This is the SINGLE source of truth for all fork-owned deployment data (text + media).
+# Edit HERE — never gradle/fork.properties (now a generated/fallback build-bridge).
+# deployment/ reads this via deployment/_shared/config.rb (AppProfile.get).
+# `sync-dirs.sh` NEVER rewrites app-profile/** (owner: fork in customization-surface.yaml).
+#
+# Platform-DIFFERENT values live in app-profile/platforms/<platform>/*.yaml — no duplication.
+
+identity:
+  app_id: org.mifospay                    # SoT for appId; mirrored to gradle/libs.versions.toml
+  app_name: Mifos Pay                      # Android app_name, iOS CFBundleDisplayName, settings footer
+  namespace: org.mifospay                 # mirrors app_id
+
+# Per-flavor network endpoints + demo credentials + log tag. syncForkConfig emits these into
+# gradle/fork.properties (network.base.url.{demo,prod} / demo.username / demo.password / log.tag),
+# which KMPFlavorsConventionPlugin reads into per-flavor BuildConfig (BASE_URL / DEMO_USERNAME /
+# DEMO_PASSWORD / LOG_TAG). Blank falls back to the template default baked into the plugin. (B4)
+network:
+  demo_base_url: https://demo.openmf.org    # demo-flavor Mifos X platform endpoint
+  prod_base_url: https://api.openmf.org      # prod-flavor Mifos X platform endpoint
+  demo_username: demo
+  demo_password: demo
+  log_tag: MifosPay
+  # Declarative access-point topology — every REST + Supabase endpoint the app talks to, in ONE place.
+  # mifos-pay talks to a single Mifos X (Fineract) platform API; the per-flavor BASE_URL above
+  # (demo/prod) is what KMPFlavorsConventionPlugin actually wires into BuildConfig today — this
+  # access_points list is the AppAccessPoints.kt SoT for forks that adopt core/network's
+  # AccessPointRegistry (not yet wired into this fork's core/network, so it's descriptive only).
+  access_points:
+    - id: main
+      type: rest
+      base_url: https://api.openmf.org/
+      loggable_host: api.openmf.org
+
+org:
+  name: Mifos Initiative
+  email: info@mifos.org                      # real App Store review contact email, from dev fastlane/metadata/ios/review_information
+  first_name: Hekmatullah                    # real App Store review contact first name, from dev fastlane/metadata/ios/review_information
+  last_name: Amin                            # real App Store review contact last name, from dev fastlane/metadata/ios/review_information
+  phone: "+44 7391462187"                    # real App Store review contact phone, from dev fastlane/metadata/ios/review_information
+  copyright: "© 2025 The Mifos Initiative"    # desktop / Mac App Store packaging copyright (org.copyright) — from dev fastlane/metadata/ios/copyright.txt
+  marketing_url: ""                        # matches dev's real (blank) marketing_url.txt
+  privacy_url: https://openmf.github.io/privacy_policy_mifos_mobile.html   # real, from dev fastlane/metadata/ios/en-US/privacy_url.txt
+  support_url: https://mifos.org/resources/support/   # real, from dev fastlane/metadata/ios/en-US/support_url.txt
+
+legal:
+  company_name: Mifos Initiative
+  jurisdiction: United States
+  effective_date: June 6, 2026
+  contact_email: team@mifos.org
+
+keystore_dn:
+  org_unit: Mobile
+  city: Arusha
+  state: Arusha
+  country: TZ
+
+store:
+  primary_locale: en-US
+  # Store copy pulled from the real, previously-authored listing already published on the `dev`
+  # branch (fastlane/metadata/**), not invented — see fastlane/metadata/ios/en-US/*.txt +
+  # fastlane/metadata/android/en-GB/*.txt on dev for the source of truth this was copied from.
+  title: 'Mifos Pay'                          # app display name (App Store name / Play title)
+  subtitle: 'Open-source digital wallet'
+  promotional_text: 'Send and receive money, pay merchants, and track transactions with an open-source wallet powered by Mifos X / Fineract.'
+  description: >-
+    Mifos Pay is a simple, secure way to send, request, and track money. Create a wallet account,
+    add a card, share a QR to get paid, set standing instructions for recurring transfers, and
+    manage invoices—all from one clean, modern app.
+
+
+    WHAT YOU CAN DO
+
+    • Sign up as a customer or merchant and complete a guided registration
+
+    • Create a wallet savings account (subject to approval) and see your balance at a glance
+
+    • Send money using a Virtual Payment Address (VPA), mobile number, or account number
+
+    • Request money with your personal QR code; optionally set the amount and currency before sharing
+
+    • Add and manage cards; view masked details and remove or edit when needed
+
+    • Track everything in Payments: filter History by debits or credits, view statements, and see real-time notifications
+
+    • Set SI (Standing Instructions) for automatic transfers on a fixed schedule (weeks, months, years)
+
+    • Create and review invoices; see invoice status, items, and transaction IDs
+
+    • Keep profile details up to date—name, address, phone, VPA—and link a bank account
+
+    • Upload documents for KYC or support directly in the app
+
+    • Get help fast with built-in FAQs
+  release_notes: ''                           # matches dev's real (blank) release notes — no fabricated "what's new"
+  copyright: '© 2025 The Mifos Initiative'
+  age_rating: '4+'                            # iOS + macOS App Store age rating (store.ios.age.rating)
+  review:
+    # Real, community-documented demo instance + account for App Store/Play reviewers — from the
+    # Mifos Mobile Apps Community wiki (Instance 2: mifos-bank-2), specifically the "Wallet User"
+    # role row for Mifos Wallet (Mifos Pay): https://mifosforge.jira.com/wiki/spaces/MP/pages/4537024513
+    notes: >-
+      In the app's instance picker, select or add the demo instance at
+      https://mifos-bank-2.mifos.community/ and sign in with the credentials below.
+    demo_user: "andromeda"
+    demo_password: "password"
+  app_description: Mifos Pay                   # desktop packaging description (app.description)
+
+media:
+  root: media
+
+# ── Deploy targets — fork-facing PLATFORM on/off intent ───────────────────────
+# This block is the FORK-owned answer to "which PLATFORMS does my fork ship?".
+# It is COARSE (one row per platform) and pairs with the template-owned, FINE-grained
+# deployment/DEPLOYMENT_MANIFEST.yaml (one row per deploy TARGET, e.g. android-firebase,
+# ios-testflight, desktop-msi-signed).
+#
+#   • app.yaml#targets      → which PLATFORMS a fork ships   (this file, owner: fork)
+#   • DEPLOYMENT_MANIFEST    → which TARGETS exist per platform (owner: merge — new template
+#                              targets propagate on sync; the fork keeps its enabled/tier)
+#
+# A concrete deploy TARGET is active iff BOTH hold:
+#   (1) its platform is enabled here in app.yaml#targets, AND
+#   (2) the target's own `enabled:` is true in DEPLOYMENT_MANIFEST.yaml.
+# The two coexist at different granularity — neither replaces the other.
+# NOTE: macOS deploy targets live UNDER the manifest's `desktop` platform (mac-app-store,
+# mac-testflight, dmg-notarized) — there is no separate `macos` platform block in the manifest.
+targets:
+  android: { enabled: true, tier: internal }
+  ios:     { enabled: true, tier: internal }
+  macos:   { enabled: true, tier: internal }
+  web:     { enabled: true, tier: internal }
+  windows: { enabled: true, tier: internal }
+  ubuntu:  { enabled: true, tier: internal }

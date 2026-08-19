@@ -1,0 +1,26 @@
+# deployment-layer/store-listing/variants/v1/app-content/ios/en-US/export-compliance.yaml
+# feeds App Store Connect "Export Compliance" declaration (per-build, asked at submission) +
+# the Info.plist `ITSAppUsesNonExemptEncryption` key. Folds 1:1 into
+# app-profile/platforms/apple/ios/app-content/export-compliance.yaml on `--sync`.
+#
+# App Toolkit posture: uses only standard OS-provided HTTPS/TLS (URLSession/Ktor over TLS) for
+# its three read-only public-data calls (FRED interest rates, World Bank macro data, currency
+# exchange rates). No custom/proprietary cryptography, no cryptography beyond what iOS itself
+# provides for standard networking.
+
+uses_encryption: true               # HTTPS/TLS counts as "uses encryption" for the ASC question
+encryption_is_exempt: true          # exempt under Category 5 Part 2 (standard OS-provided TLS only)
+exemption_reason: >
+  Uses only standard, OS-provided HTTPS/TLS for outbound requests to public
+  read-only data APIs (FRED, World Bank, currency exchange rate feeds). No
+  proprietary/custom encryption algorithm is implemented or shipped.
+
+itsappusesnonexemptencryption: false   # Info.plist ITSAppUsesNonExemptEncryption
+
+annual_self_classification_report_required: false
+notes: >
+  Because the only encryption used is standard TLS for networking (App
+  Store Connect Category 5 Part 2 exemption, 15 CFR 740.17(b)(1)), no French
+  import declaration or U.S. annual self-classification report is required.
+  Re-evaluate if a future feature adds end-to-end encryption, a custom
+  crypto library, or encrypts user content beyond transport security.

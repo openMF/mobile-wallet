@@ -5,7 +5,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 package org.mifospay.feature.send.money
 
@@ -40,17 +40,17 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import mobile_wallet.feature.send_money.generated.resources.Res
-import mobile_wallet.feature.send_money.generated.resources.feature_send_money_autopay
-import mobile_wallet.feature.send_money.generated.resources.feature_send_money_bank_transfer
-import mobile_wallet.feature.send_money.generated.resources.feature_send_money_choose_method
-import mobile_wallet.feature.send_money.generated.resources.feature_send_money_fineract_payments
-import mobile_wallet.feature.send_money.generated.resources.feature_send_money_merchants
-import mobile_wallet.feature.send_money.generated.resources.feature_send_money_more
-import mobile_wallet.feature.send_money.generated.resources.feature_send_money_pay_anyone
-import mobile_wallet.feature.send_money.generated.resources.feature_send_money_people
-import mobile_wallet.feature.send_money.generated.resources.feature_send_money_scan_qr_code
-import mobile_wallet.feature.send_money.generated.resources.feature_send_money_title
+import mifos_pay.feature.send_money.generated.resources.Res
+import mifos_pay.feature.send_money.generated.resources.feature_send_money_autopay
+import mifos_pay.feature.send_money.generated.resources.feature_send_money_bank_transfer
+import mifos_pay.feature.send_money.generated.resources.feature_send_money_choose_method
+import mifos_pay.feature.send_money.generated.resources.feature_send_money_fineract_payments
+import mifos_pay.feature.send_money.generated.resources.feature_send_money_merchants
+import mifos_pay.feature.send_money.generated.resources.feature_send_money_more
+import mifos_pay.feature.send_money.generated.resources.feature_send_money_pay_anyone
+import mifos_pay.feature.send_money.generated.resources.feature_send_money_people
+import mifos_pay.feature.send_money.generated.resources.feature_send_money_scan_qr_code
+import mifos_pay.feature.send_money.generated.resources.feature_send_money_title
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.mifospay.core.common.CurrencyFormatter

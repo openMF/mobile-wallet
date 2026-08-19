@@ -5,7 +5,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 package org.mifospay.feature.history.components
 
@@ -36,11 +36,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import mobile_wallet.core.ui.generated.resources.core_ui_money_in
-import mobile_wallet.core.ui.generated.resources.core_ui_money_out
-import mobile_wallet.feature.history.generated.resources.Res
-import mobile_wallet.feature.history.generated.resources.arrow_outward
-import mobile_wallet.feature.history.generated.resources.feature_history_description
+import kpt.core.ui.generated.resources.core_ui_money_in
+import kpt.core.ui.generated.resources.core_ui_money_out
+import mifos_pay.feature.history.generated.resources.Res
+import mifos_pay.feature.history.generated.resources.arrow_outward
+import mifos_pay.feature.history.generated.resources.feature_history_description
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.resources.vectorResource
@@ -49,7 +49,7 @@ import org.mifospay.core.model.savingsaccount.Transaction
 import org.mifospay.core.model.savingsaccount.TransactionType
 import org.mifospay.feature.history.HistoryAction
 import template.core.base.designsystem.theme.KptTheme
-import mobile_wallet.core.ui.generated.resources.Res as UiRes
+import kpt.core.ui.generated.resources.Res as UiRes
 
 @Composable
 internal fun TransactionList(
@@ -148,7 +148,7 @@ internal fun TransactionItem(
 
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Icon(
-                        imageVector = vectorResource(mobile_wallet.feature.history.generated.resources.Res.drawable.arrow_outward),
+                        imageVector = vectorResource(mifos_pay.feature.history.generated.resources.Res.drawable.arrow_outward),
                         modifier = when (transaction.transactionType) {
                             TransactionType.DEBIT -> Modifier.size(16.dp)
                             TransactionType.CREDIT -> Modifier.graphicsLayer(rotationZ = 180f)

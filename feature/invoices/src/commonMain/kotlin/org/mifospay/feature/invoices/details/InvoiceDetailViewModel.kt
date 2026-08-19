@@ -5,7 +5,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 package org.mifospay.feature.invoices.details
 
@@ -15,14 +15,13 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.serialization.Serializable
-import org.mifospay.core.common.DataState
+import org.mifospay.core.common.ScreenState
 import org.mifospay.core.common.getSerialized
 import org.mifospay.core.common.setSerialized
 import org.mifospay.core.data.repository.InvoiceRepository
 import org.mifospay.core.datastore.UserPreferencesRepository
 import org.mifospay.core.model.datatables.invoice.Invoice
 import org.mifospay.core.ui.utils.BaseViewModel
-import org.mifospay.feature.invoices.details.InvoiceDetailAction.Internal.InvoiceDetailResultReceived
 import org.mifospay.feature.invoices.details.InvoiceDetailState.ViewState.Content
 import org.mifospay.feature.invoices.details.InvoiceDetailState.ViewState.Error
 
@@ -52,9 +51,13 @@ internal class InvoiceDetailViewModel(
             .onEach { savedStateHandle.setSerialized(key = KEY_STATE, value = it) }
             .launchIn(viewModelScope)
 
-        repository.getInvoice(state.clientId, state.invoiceId).onEach {
-            sendAction(InvoiceDetailResultReceived(it))
-        }.launchIn(viewModelScope)
+        // Use BaseViewModel's `observeScreen` bridge to fold the ScreenState
+        // stream directly into the feature's MVI state. The internal
+        // `InvoiceDetailResultReceived` action (which used to shuttle
+        // DataState) is no longer needed — the reducer folds inline.
+        repository.getInvoice(state.clientId, state.invoiceId).observeScreen { screenState ->
+            mutableStateFlow.update { it.copy(viewState = screenState.toViewState()) }
+        }
     }
 
     override fun handleAction(action: InvoiceDetailAction) {
@@ -62,33 +65,25 @@ internal class InvoiceDetailViewModel(
             is InvoiceDetailAction.NavigateBack -> {
                 sendEvent(InvoiceDetailEvent.OnNavigateBack)
             }
-
-            is InvoiceDetailResultReceived -> handleInvoiceDetailResult(action)
         }
     }
+}
 
-    private fun handleInvoiceDetailResult(action: InvoiceDetailResultReceived) {
-        when (action.result) {
-            is DataState.Loading -> {
-                mutableStateFlow.update {
-                    it.copy(viewState = InvoiceDetailState.ViewState.Loading)
-                }
-            }
-
-            is DataState.Error -> {
-                val message = action.result.exception.message.toString()
-                mutableStateFlow.update {
-                    it.copy(viewState = Error(message))
-                }
-            }
-
-            is DataState.Success -> {
-                mutableStateFlow.update {
-                    it.copy(viewState = Content(action.result.data))
-                }
-            }
-        }
-    }
+/**
+ * Fold the 6-branch [ScreenState] into the feature's existing 3-branch
+ * [InvoiceDetailState.ViewState] (Loading/Error/Content). Detail flows should
+ * never emit [ScreenState.Empty] (single-item endpoints return Content or
+ * Error), but we defensively route it to Error so the UI shows a message
+ * rather than sitting on Loading forever. [ScreenState.NoNetwork] and
+ * [ScreenState.Unauthenticated] fold into Error until Phase-4 differentiates.
+ */
+private fun ScreenState<Invoice>.toViewState(): InvoiceDetailState.ViewState = when (this) {
+    is ScreenState.Loading -> InvoiceDetailState.ViewState.Loading
+    is ScreenState.Empty -> Error("Invoice not found.")
+    is ScreenState.Content -> Content(data)
+    is ScreenState.Error -> Error(error.message.toString())
+    is ScreenState.NoNetwork -> Error("No network. Please check your connection.")
+    is ScreenState.Unauthenticated -> Error("Session expired. Please log in again.")
 }
 
 @Serializable
@@ -116,8 +111,4 @@ internal sealed interface InvoiceDetailEvent {
 
 internal sealed interface InvoiceDetailAction {
     data object NavigateBack : InvoiceDetailAction
-
-    sealed interface Internal : InvoiceDetailAction {
-        data class InvoiceDetailResultReceived(val result: DataState<Invoice>) : Internal
-    }
 }

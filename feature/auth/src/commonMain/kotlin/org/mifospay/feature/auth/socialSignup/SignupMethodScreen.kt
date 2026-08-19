@@ -5,7 +5,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 package org.mifospay.feature.auth.socialSignup
 
@@ -24,11 +24,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import mobile_wallet.feature.auth.generated.resources.Res
-import mobile_wallet.feature.auth.generated.resources.feature_auth_create_an_account
-import mobile_wallet.feature.auth.generated.resources.feature_auth_or
-import mobile_wallet.feature.auth.generated.resources.feature_auth_sign_up_as_customer
-import mobile_wallet.feature.auth.generated.resources.feature_auth_sign_up_as_merchant
+import mifos_pay.feature.auth.generated.resources.Res
+import mifos_pay.feature.auth.generated.resources.feature_auth_create_an_account
+import mifos_pay.feature.auth.generated.resources.feature_auth_or
+import mifos_pay.feature.auth.generated.resources.feature_auth_sign_up_as_customer
+import mifos_pay.feature.auth.generated.resources.feature_auth_sign_up_as_merchant
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.mifospay.core.data.util.Constants.WALLET_ACCOUNT_SAVINGS_PRODUCT_ID
