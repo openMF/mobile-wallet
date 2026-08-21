@@ -25,7 +25,7 @@ import org.mifospay.core.data.util.toForkScreenStateFlow
 import org.mifospay.core.datastore.UserPreferencesRepository
 import org.mifospay.core.model.account.RecentPayee
 import org.mifospay.core.model.beneficiary.Beneficiary
-import org.mifospay.core.network.model.entity.templates.account.AccountOption
+import org.mifospay.core.model.network.entity.templates.account.AccountOption
 import org.mifospay.core.ui.utils.BaseViewModel
 
 class IntraBankHubViewModel(

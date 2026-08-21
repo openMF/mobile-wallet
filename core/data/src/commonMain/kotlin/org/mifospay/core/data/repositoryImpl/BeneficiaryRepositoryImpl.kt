@@ -19,8 +19,8 @@ import org.mifospay.core.data.repository.BeneficiaryRepository
 import org.mifospay.core.model.beneficiary.Beneficiary
 import org.mifospay.core.model.beneficiary.BeneficiaryPayload
 import org.mifospay.core.model.beneficiary.BeneficiaryUpdatePayload
+import org.mifospay.core.model.network.entity.templates.beneficiary.BeneficiaryTemplate
 import org.mifospay.core.network.SelfServiceApiManager
-import org.mifospay.core.network.model.entity.templates.beneficiary.BeneficiaryTemplate
 
 class BeneficiaryRepositoryImpl(
     private val apiManager: SelfServiceApiManager,

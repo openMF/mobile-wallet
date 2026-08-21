@@ -2,7 +2,7 @@
 #
 # remove-demo.sh — strip the kmp-project-template demo showcase, leaving a clean fork.
 #
-# Invoked by `customizer.sh --clean`. Convention (showcase-framework-separation epic):
+# Invoked by `scripts/white-label/customize.sh --clean`. Convention (showcase-framework-separation epic):
 #   • demo domain code lives under **/demo/** packages,
 #   • demo feature modules are include()d inside a `// demo:begin … // demo:end` block
 #     in settings.gradle.kts,
@@ -12,6 +12,10 @@
 # Removal = strip every marked block + delete every **/demo/** package + delete the demo
 # feature modules + reset the DB schema to a fresh-fork baseline + swap the demo-coupled
 # app shell (home dashboard + nav) for a minimal placeholder.
+#
+# NOTE: feature-name regex accepts [A-Za-z0-9_-]+ (Kotlin-idiomatic include(":feature:PascalCase")
+# + digit-suffixed feature dirs are legal). Regression-tested by
+# tests/fixtures/remove-demo-regex-canary/{red,green}/.
 #
 # Usage:
 #   remove-demo.sh                 # DRY RUN (default) — report what would change, touch nothing
@@ -40,7 +44,7 @@ say() { if [ "$APPLY" -eq 1 ]; then echo "  $*"; else echo "  [dry-run] would $*
 
 # ── 1. Demo feature names (parsed from the settings demo-block BEFORE it is stripped) ──
 DEMO_FEATURES=$(awk '/demo:begin/{s=1;next} /demo:end/{s=0} s' settings.gradle.kts \
-                  | grep -oE 'feature:[a-z-]+' | sed 's/feature://' || true)
+                  | grep -oE 'feature:[A-Za-z0-9_-]+' | sed 's/feature://' || true)
 
 # ── 2. Marked files to strip (convention-discovered) ──────────────────────────────────
 MARKED_FILES=$(grep -rl 'demo:begin' --include='*.kt' --include='*.kts' . 2>/dev/null | grep -v '/build/' || true)
@@ -61,7 +65,7 @@ done <<< "$MARKED_FILES"
 #     (an `import kpt.core.<m>.demo.…` or `import kpt.feature.<demoFeature>.…` whose target
 #      was just deleted is an unresolved-reference compile error, not a warning — drop them.)
 echo "remove dangling demo imports:"
-DEMO_PKGS=$(echo "$DEMO_FEATURES" | tr -d '-' | paste -sd'|' -)
+DEMO_PKGS=$(echo "$DEMO_FEATURES" | sed 's/-//g' | paste -sd'|' -)
 [ -z "$DEMO_PKGS" ] && DEMO_PKGS="__none__"
 say "strip 'import kpt.core.*.demo.*' + demo-feature imports from surviving .kt files"
 if [ "$APPLY" -eq 1 ]; then

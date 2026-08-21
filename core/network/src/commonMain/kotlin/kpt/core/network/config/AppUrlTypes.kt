@@ -21,14 +21,18 @@ import kpt.core.base.network.UrlType
  * the extras below are illustrative of how a multi-server fork would extend it.
  */
 object AppUrlTypes {
-    /** The primary endpoint (generic default from core-base). */
+    /** Primary REST endpoint (generic default from core-base). */
     val MAIN: UrlType = UrlType.MAIN
 
-    // Example additions a multi-server fork would declare — name them for your domain:
-    //   val SERVER1: UrlType = UrlType("SERVER1")
-    //   val STAGING: UrlType = UrlType("STAGING")
-    //   val PAYMENT_GATEWAY: UrlType = UrlType("PAYMENT_GATEWAY")
+    /** Secondary REST endpoint — e.g. a staging / mirror server. */
+    val STAGING: UrlType = UrlType("STAGING")
 
-    /** All endpoint types this project exposes (extend as you add more above). */
-    val all: List<UrlType> = listOf(MAIN)
+    /** Supabase data-plane access point (Postgrest by default). */
+    val SUPABASE_DATA: UrlType = UrlType("SUPABASE_DATA")
+
+    /**
+     * All endpoint types this project exposes. Base URLs for each are declared once in
+     * [AppAccessPoints]; a fork renames / adds / removes entries here and there in lockstep.
+     */
+    val all: List<UrlType> = listOf(MAIN, STAGING, SUPABASE_DATA)
 }

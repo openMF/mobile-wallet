@@ -1,9 +1,9 @@
 # NetworkMonitor contract — operator guide
 
 `cmp-network-monitor` (from MobileByteLabs KmpToolkit, v3.3.1+) is the canonical
-network-state library this template integrates against. The Money Toolkit wraps
-it through `org.mifos.core.data.infra.NetworkMonitor` (a typealias) and the
-contract is documented in `org.mifos.core.data.infra.NetworkMonitorContract`.
+network-state library this template integrates against. The template wraps
+it through `kpt.core.base.data.infra.NetworkMonitor` (a typealias) and the
+contract is documented in `kpt.core.base.data.infra.NetworkMonitorContract`.
 
 ## Contract invariants (enforced via NetworkMonitorContractTest)
 

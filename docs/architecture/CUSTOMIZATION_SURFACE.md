@@ -2,12 +2,12 @@
 
 `customization-surface.yaml` (repo root) is the **single declared source of truth
 for who owns each path** when a fork syncs template updates. It replaces ownership
-knowledge that was previously implicit and scattered across `sync-dirs.sh`
-(`SYNC_DIRS` + `EXCLUSIONS`), `customizer.sh`, and the `syncForkConfig` copy map.
+knowledge that was previously implicit and scattered across `scripts/white-label/sync-dirs.sh`
+(`SYNC_DIRS` + `EXCLUSIONS`), `scripts/white-label/customize.sh`, and the `syncForkConfig` copy map.
 
 ## Why it exists
 
-A fork runs `sync-dirs.sh` to pull template updates while keeping its own branding
+A fork runs `scripts/white-label/sync-dirs.sh` to pull template updates while keeping its own branding
 + features. The hard question is *"which files may the sync overwrite?"* When that
 answer lives only in an ad-hoc `EXCLUSIONS` list, a path with no exclusion gets
 **blind-overwritten** — and that silently drops fork edits. The motivating case:
@@ -27,6 +27,11 @@ that whole class of silent loss becomes impossible.
 | `template` | template is the sole author | **overwrite** the fork's copy. A fork edit here is drift — a genuine fix belongs **upstream** as a PR to `openMF/kmp-project-template`. |
 | `fork` | the fork is the sole author | **never touch** it (branding, demo, the `core/store` seam, generated `Config.xcconfig`, local flavors, icons, store listings, fork identity). |
 | `merge` | both author | **3-way merge**, never a blind copy (`AndroidManifest.xml`, `strings.xml`, `libs.versions.toml`, `settings.gradle.kts`, nav host). |
+
+> The most-edited `owner: fork` files are the **white-label extension seams** — the registries a fork
+> uses to add features, tabs, the home body, and startup hooks without touching template infra. They are
+> documented in
+> [`cmp-navigation/.../registry/README.md`](../../cmp-navigation/src/commonMain/kotlin/cmp/navigation/registry/README.md).
 
 ## Precedence
 
@@ -65,13 +70,13 @@ cs_resolve_owner    "gradle/libs.versions.toml"   # → merge
 cs_resolve_strategy "gradle/libs.versions.toml"   # → catalog-3way
 ```
 
-## How `sync-dirs.sh` uses it
+## How `scripts/white-label/sync-dirs.sh` uses it
 
-1. **Advisory report** — before the sync, `sync-dirs.sh` sources the reader and
+1. **Advisory report** — before the sync, `scripts/white-label/sync-dirs.sh` sources the reader and
    prints the `merge`-owned paths in the sync surface (fully guarded, cannot abort).
 2. **3-way merge of `merge`-owned files** — after checking out the upstream copy of
    a directory, for every file that changed between the fork base and upstream and
-   resolves to `owner: merge`, `sync-dirs.sh` runs `cs_merge <strategy> ours base
+   resolves to `owner: merge`, `scripts/white-label/sync-dirs.sh` runs `cs_merge <strategy> ours base
    theirs` instead of taking the blind upstream copy:
    - `ours` = fork's current file (`BASE_BRANCH`)
    - `theirs` = upstream file (`temp_branch`)
@@ -106,7 +111,7 @@ never silently clobber a fork later):
 
 ## Roadmap (follow-ups)
 
-1. ~~Merge engine adoption~~ — **done**: `sync-dirs.sh` 3-way merges `merge`-owned
+1. ~~Merge engine adoption~~ — **done**: `scripts/white-label/sync-dirs.sh` 3-way merges `merge`-owned
    files (`manifest-union` semantic + `git merge-file` for the rest). Remaining:
    fold the `fork`/`template` decisions into the same contract lookup and retire the
    hand-maintained `EXCLUSIONS` map (the reader can already answer `fork` → skip /

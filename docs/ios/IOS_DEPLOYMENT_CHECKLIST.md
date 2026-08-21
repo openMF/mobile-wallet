@@ -90,7 +90,7 @@ grep -A1 "ITSAppUsesNonExemptEncryption" cmp-ios/iosApp/Info.plist
 ### 4. Configuration Files ✓
 
 **project_config.rb:**
-- [ ] `IOS[:app_identifier]` set to `org.mifos.kmp.template`
+- [ ] `IOS[:app_identifier]` set to your fork's bundle id (from `app-profile`, e.g. `com.example.app`)
 - [ ] `IOS[:metadata_path]` set to `"./fastlane/metadata"`
 - [ ] `IOS_SHARED[:testflight][:uses_non_exempt_encryption]` is `false`
 - [ ] `IOS_SHARED[:appstore][:skip_app_version_update]` is `false`

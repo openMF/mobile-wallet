@@ -12,13 +12,13 @@ package org.mifospay.core.data.repository
 import kotlinx.coroutines.CoroutineScope
 import kpt.core.base.store.screen.ScreenDataStream
 import org.mifospay.core.common.ScreenStateStream
+import org.mifospay.core.model.network.entity.Page
 import org.mifospay.core.model.savingsaccount.CreateNewSavingEntity
 import org.mifospay.core.model.savingsaccount.SavingAccountDetail
 import org.mifospay.core.model.savingsaccount.SavingAccountTemplate
 import org.mifospay.core.model.savingsaccount.SavingsWithAssociationsEntity
 import org.mifospay.core.model.savingsaccount.Transaction
 import org.mifospay.core.model.savingsaccount.UpdateSavingAccountEntity
-import org.mifospay.core.network.model.entity.Page
 
 interface SavingsAccountRepository {
     // Phase-3 cutover — Flow-shaped reads on ScreenState.

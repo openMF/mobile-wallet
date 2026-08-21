@@ -9,23 +9,11 @@
  */
 package kpt.core.database.di
 
-import androidx.sqlite.driver.bundled.BundledSQLiteDriver
-import kotlinx.coroutines.Dispatchers
-import kpt.core.base.database.AppDatabaseFactory
+import kpt.core.base.database.platformDatabaseModule
 import kpt.core.database.AppDatabase
 import org.koin.core.module.Module
-import org.koin.dsl.module
 
-actual val platformModule: Module = module {
-    single {
-        AppDatabaseFactory(databaseDirName = "MifosDatabase")
-            .createDatabase<AppDatabase>(
-                databaseName = AppDatabase.DATABASE_NAME,
-            )
-            .fallbackToDestructiveMigration(dropAllTables = true)
-            .fallbackToDestructiveMigrationOnDowngrade(false)
-            .setDriver(BundledSQLiteDriver())
-            .setQueryCoroutineContext(Dispatchers.IO)
-            .build()
-    }
-}
+// Delegates to the template-owned platformDatabaseModule<T> (core-base/database), which owns
+// the desktop SQLite driver + IO dispatcher + fallback and resolves the OS data dir from
+// appDatabaseNaming.desktopDirName.
+actual val platformModule: Module = platformDatabaseModule<AppDatabase>(appDatabaseNaming)

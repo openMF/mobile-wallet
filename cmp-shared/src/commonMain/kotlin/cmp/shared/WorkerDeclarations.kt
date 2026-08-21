@@ -14,7 +14,10 @@ import kpt.sync.infra.DataSyncWorker
 import kpt.sync.infra.NotificationWorker
 
 /**
- * Worker registry declaration site for the Money Toolkit Mifos template.
+ * Worker registry declaration site for the template's BASE workers (owner: template — do not fork-edit).
+ * A fork declares ITS OWN workers in ForkWorkerDeclarations.kt (owner: fork); the KSP processor scans
+ * cmp-shared/commonMain for every @WorkerKmpWorkers site and aggregates both. This keeps the module
+ * white-label: a template sync full-copies this file while the fork's workers survive in the seam file.
  *
  * KSP processor (`cmp-worker-app-ksp`) reads this annotation and generates per-platform
  * `installWorkerKmp{Platform}()` files under `cmp-shared/build/generated/worker-kmp-app/...`.

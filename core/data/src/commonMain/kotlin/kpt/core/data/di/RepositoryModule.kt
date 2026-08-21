@@ -14,9 +14,9 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kpt.core.base.common.di.CommonModule
+import kpt.core.base.data.infra.NetworkMonitor
 import kpt.core.base.store.infra.FetchedAtRepository
-import kpt.core.data.infra.NetworkMonitor
-import kpt.core.data.infra.impl.RoomFetchedAtRepository
+import kpt.core.base.store.infra.impl.RoomFetchedAtRepository
 import kpt.core.data.user.UserDataRepository
 import kpt.core.data.user.UserLogoutManager
 import kpt.core.data.user.impl.UserDataRepositoryImpl
@@ -30,12 +30,18 @@ import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind
 import org.koin.dsl.module
 
+/**
+ * DataModule — the INFRA-ONLY (framework) data aggregator, `owner: template` (E1 / C1).
+ *
+ * The demo repositories / outboxes / offline-submit syncers relocated to the fork-owned
+ * [kpt.core.data.demo.di.ProjectRepositoryModule]; this aggregator now carries ZERO `kpt.core.*.demo.*`
+ * imports so a template sync can blind-copy it without re-introducing demo wiring a fork already
+ * stripped. The demo module is installed via the fork-owned `FeatureRegistry.featureKoinModules`
+ * demo block; both go away together on `customize.sh --clean`.
+ */
 val DataModule = module {
     includes(platformModule, CommonModule, DatabaseModule, DatastoreModule, NetworkModule)
 
-    // Backed by kmptoolkit cmp-network-monitor 3.6.0+ (AndroidNetworkMonitor seed fix: seeds
-    // online on INTERNET presence while Android's async VALIDATED probe is pending — cold-start
-    // no longer reads offline). The former mifos-pay-local jordond experiment is retired.
     single<NetworkMonitor> { NetworkMonitorProvider.install() }
     singleOf(::UserDataRepositoryImpl) bind UserDataRepository::class
 

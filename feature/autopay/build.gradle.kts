@@ -22,6 +22,9 @@ kotlin {
 
             implementation(projects.core.common)
             implementation(projects.core.ui)
+            // org.mifospay.core.model.network.entity.Page (needed by AutoPayHistoryViewModel) comes
+            // transitively via core/data's api(core.model) re-export — features never depend on
+            // core/network directly.
             // Template idiom: SubmitHandler (core-base/store) for one-shot writes.
             implementation(projects.coreBase.store)
         }

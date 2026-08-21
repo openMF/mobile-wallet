@@ -18,12 +18,12 @@ import de.jensklingenberg.ktorfit.http.PUT
 import de.jensklingenberg.ktorfit.http.Path
 import de.jensklingenberg.ktorfit.http.Query
 import kotlinx.coroutines.flow.Flow
-import org.mifospay.core.network.model.ClientResponseEntity
-import org.mifospay.core.network.model.entity.Page
-import org.mifospay.core.network.model.entity.client.ClientAccountsEntity
-import org.mifospay.core.network.model.entity.client.ClientEntity
-import org.mifospay.core.network.model.entity.client.NewClientEntity
-import org.mifospay.core.network.model.entity.client.UpdateClientEntity
+import org.mifospay.core.model.network.ClientResponseEntity
+import org.mifospay.core.model.network.entity.Page
+import org.mifospay.core.model.network.entity.client.ClientAccountsEntity
+import org.mifospay.core.model.network.entity.client.ClientEntity
+import org.mifospay.core.model.network.entity.client.NewClientEntity
+import org.mifospay.core.model.network.entity.client.UpdateClientEntity
 import org.mifospay.core.network.utils.ApiEndPoints
 
 interface ClientService {

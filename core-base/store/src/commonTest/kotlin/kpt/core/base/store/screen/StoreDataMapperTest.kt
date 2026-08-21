@@ -14,7 +14,6 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.mobilenativefoundation.store.store5.StoreReadResponse
 import org.mobilenativefoundation.store.store5.StoreReadResponseOrigin
-import kpt.core.base.common.DataState
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
@@ -252,52 +251,6 @@ class StoreDataTest {
         assertEquals(DataOrigin.NETWORK, mapped.origin)
         assertTrue(mapped.isRefreshing)
         assertEquals(mark, mapped.fetchedAt)
-    }
-}
-
-// --- DataState bridge tests ---
-
-class StoreDataBridgeTest {
-
-    @Test
-    fun toDataStateSuccess() {
-        val data = StoreData("test", DataOrigin.NETWORK)
-        assertTrue(data.toDataState() is DataState.Success)
-    }
-
-    @Test
-    fun toDataStatePendingWhenRefreshing() {
-        val data = StoreData("cached", DataOrigin.CACHE, isRefreshing = true)
-        val state = data.toDataState()
-        assertTrue(state is DataState.Pending)
-        assertEquals("cached", state.data)
-    }
-
-    @Test
-    fun toDataStateErrorWithData() {
-        val data = StoreData("stale", DataOrigin.CACHE, error = RuntimeException("fail"))
-        val state = data.toDataState()
-        assertTrue(state is DataState.Error)
-        assertEquals("stale", state.data)
-    }
-
-    @Test
-    fun toDataStateLoadingWhenEmpty() {
-        val data = StoreData("", DataOrigin.NETWORK, isEmpty = true)
-        assertTrue(data.toDataState() is DataState.Loading)
-    }
-
-    @Test
-    fun toDataStateErrorWithNoData() {
-        val data = StoreData(
-            "",
-            DataOrigin.NETWORK,
-            error = RuntimeException("fail"),
-            isEmpty = true,
-        )
-        val state = data.toDataState()
-        assertTrue(state is DataState.Error)
-        assertNull(state.data)
     }
 }
 

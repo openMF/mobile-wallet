@@ -31,6 +31,9 @@ platform :ios do
       force:                                true,   # skip HTML verification prompt
     )
 
+    # Record the pushed hash so a subsequent deploy lane's drift-checked sync correctly skips.
+    record_store_listing_synced("ios", ios_config[:metadata_path])
+
     UI.success("✅ App Store listing synced (no binary uploaded, not submitted)")
   end
 end

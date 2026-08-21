@@ -48,6 +48,23 @@ internal expect fun HttpClientConfig<*>.installProxyPlugin(
 )
 
 /**
+ * The auth-credential providers for [setupDefaultHttpClient], grouped so the client builder stays under
+ * the parameter-count limit. All null (the default) installs no `Auth` plugin. When more than one is
+ * supplied, Bearer takes precedence, then Basic, then Digest (mirrors the builder's `when` order).
+ *
+ * @param basic Provider for Basic authentication credentials.
+ * @param digest Provider for Digest authentication credentials.
+ * @param bearer Provider for Bearer token authentication.
+ * @param bearerRefresh Optional refresh logic for Bearer tokens (only used if [bearer] is configured).
+ */
+data class AuthProviders(
+    val basic: (() -> BasicAuthCredentials)? = null,
+    val digest: (() -> DigestAuthCredentials)? = null,
+    val bearer: (() -> BearerTokens)? = null,
+    val bearerRefresh: (() -> BearerTokens)? = null,
+)
+
+/**
  * Provides a default [HttpClientConfig] setup for use with a Ktor-based HTTP client.
  *
  * This function simplifies client configuration by handling common concerns such as:
@@ -73,10 +90,8 @@ internal expect fun HttpClientConfig<*>.installProxyPlugin(
  * @param loggableHosts A list of hostnames for which HTTP logging is enabled.
  * @param sensitiveHeaders List of headers to be hidden in logs (defaults to Authorization).
  * @param jsonConfig Custom [Json] configuration used by `ContentNegotiation`.
- * @param basicCredentialsProvider Provider for Basic authentication credentials.
- * @param digestCredentialsProvider Provider for Digest authentication credentials.
- * @param bearerTokensProvider Provider for Bearer token authentication.
- * @param bearerRefreshProvider Optional refresh logic for Bearer tokens (only used if Bearer auth is configured).
+ * @param authProviders The Basic/Digest/Bearer credential providers (see [AuthProviders]). Default
+ *   installs no auth plugin.
  * @param certificatePinConfig TLS certificate pin configuration. Pins are applied by platform
  *   engines that support it (OkHttp on Android/Desktop). Other platforms ignore this parameter.
  * @param proxiedHosts Hostnames whose requests should be transparently routed through
@@ -86,6 +101,12 @@ internal expect fun HttpClientConfig<*>.installProxyPlugin(
  *   after `?` — corsproxy.io format: `https://proxy/?<original-url>`. corsproxy.io is the
  *   default (free, sets CORS headers on all responses). Replace with a self-hosted proxy in
  *   production.
+ * @param multiUrlProvider Optional [MultiUrlConfigProvider] for apps that expose more than one
+ *   named endpoint. When supplied, [DynamicBaseUrlPlugin] resolves the base URL per [urlType] at
+ *   call time. Takes precedence over [dynamicUrlProvider]. Default null preserves the plain
+ *   static-URL path (no regression).
+ * @param urlType The named endpoint to resolve from [multiUrlProvider]. Ignored unless
+ *   [multiUrlProvider] is set. Defaults to [UrlType.MAIN].
  *
  * @return A configuration lambda to be passed into the Ktor [HttpClient].
  */
@@ -112,16 +133,19 @@ fun setupDefaultHttpClient(
         // a `*.UNKNOWN`/default fallback that only works with this flag enabled.
         coerceInputValues = true
     },
-    basicCredentialsProvider: (() -> BasicAuthCredentials)? = null,
-    digestCredentialsProvider: (() -> DigestAuthCredentials)? = null,
-    bearerTokensProvider: (() -> BearerTokens)? = null,
-    bearerRefreshProvider: (() -> BearerTokens)? = null,
+    authProviders: AuthProviders = AuthProviders(),
     certificatePinConfig: CertificatePinConfig = CertificatePinConfig.default(),
     proxiedHosts: List<String> = emptyList(),
     corsProxyBaseUrl: String = "https://corsproxy.io",
+    multiUrlProvider: MultiUrlConfigProvider? = null,
+    urlType: UrlType = UrlType.MAIN,
     dynamicUrlProvider: DynamicUrlConfigProvider? = null,
 ): HttpClientConfig<*>.() -> Unit = {
     val refreshMutex = Mutex()
+    val basicCredentialsProvider = authProviders.basic
+    val digestCredentialsProvider = authProviders.digest
+    val bearerTokensProvider = authProviders.bearer
+    val bearerRefreshProvider = authProviders.bearerRefresh
 
     when {
         bearerTokensProvider != null -> {
@@ -205,12 +229,19 @@ fun setupDefaultHttpClient(
         json(jsonConfig)
     }
 
-    // Runtime base-URL switching (opt-in). When a [DynamicUrlConfigProvider] is supplied, the
-    // [DynamicBaseUrlPlugin] rewrites each request's host/scheme from the provider at call time —
-    // the [baseUrl] above becomes a static fallback. Consumers wire a provider in their DI (see
-    // core/network NetworkModule); default null keeps the plain static-URL behaviour (no regression).
-    if (dynamicUrlProvider != null) {
-        install(DynamicBaseUrlPlugin) {
+    // Runtime base-URL switching (opt-in). The [DynamicBaseUrlPlugin] rewrites each request's
+    // host/scheme at call time — the [baseUrl] above becomes a static fallback. A
+    // [MultiUrlConfigProvider] + [urlType] resolves the base URL per named endpoint (multi-server
+    // apps); a plain [DynamicUrlConfigProvider] keeps the single-URL behaviour. Consumers wire a
+    // provider in their DI (see core/network NetworkModule); both default null, so the plain
+    // static-URL path is unchanged (no regression).
+    when {
+        multiUrlProvider != null -> install(DynamicBaseUrlPlugin) {
+            multiConfigProvider = multiUrlProvider
+            this.urlType = urlType
+        }
+
+        dynamicUrlProvider != null -> install(DynamicBaseUrlPlugin) {
             configProvider = dynamicUrlProvider
         }
     }

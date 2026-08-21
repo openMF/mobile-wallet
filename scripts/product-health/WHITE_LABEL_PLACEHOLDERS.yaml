@@ -45,3 +45,32 @@ placeholders:
     - 'Your App'
     - "Your app's"
     - 'Your Organization'
+
+# ── example_identity — the template's COMMITTED reference/demo identity ──────────────────
+# The kmp-project-template ships as a WORKING Mifos "Money Toolkit" example (a real, deployable
+# demo), NOT as neutral placeholders. Template-mode identity gates (fork-identity /
+# deployment-whitelabel B1/B3/B7/B8 / store-listing / appid-consistency / ios-pbxproj-identity)
+# ACCEPT exactly these reference values; a FORK must DIVERGE from them (a fork still shipping the
+# Mifos reference → FAIL "rebrand your fork"). A value that is neither a placeholder NOR this
+# reference is a foreign-brand leak on the template → FAIL.
+# Signing categories (apple_team_id, apple_match_git_url) intentionally have NO example block —
+# they stay placeholder-only on the template; real signing identity is injected at deploy time
+# from the vault, never committed.
+example_identity:
+  bundle_id:
+    - '^org\.mifos\.kmp\.template$'
+  app_display_name:
+    - '^Money Toolkit$'
+  org_name:
+    - '^Mifos Initiative$'
+  # Store-copy reference strings the template ships (case-insensitive), consumed by B8/store-listing.
+  # 'Mifos Initiative' is deliberately EXCLUDED here: unlike 'Money Toolkit' (a unique demo app name
+  # no real fork should ever carry), 'Mifos Initiative' is the genuine, real org/copyright text of
+  # every legitimate sibling fork in the openMF Mifos-family (this project included) — flagging it
+  # unconditionally false-positives on every real Mifos app, not just un-rebranded copies.
+  # 'org\.mifos\.kmp\.template' is anchored to the FULL template package name (matching bundle_id's
+  # own anchoring above) — the previous bare 'org\.mifos' substring false-matched any real Mifos
+  # package id (e.g. 'org.mifospay'), which is completely unrelated to the template placeholder.
+  store_copy_reference:
+    - 'Money Toolkit'
+    - 'org\.mifos\.kmp\.template'

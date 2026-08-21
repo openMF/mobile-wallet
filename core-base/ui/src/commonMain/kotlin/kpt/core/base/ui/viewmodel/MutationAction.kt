@@ -32,4 +32,17 @@ sealed interface MutationAction<out T> {
 
     /** Dismiss the result overlay and return the submit state to `SubmitState.Idle`. */
     data object Dismiss : MutationAction<Nothing>
+
+    // ── Draft-resolution actions (the three-case resume flow) ────────────────────────────────
+    // Emitted by draft-backed forms from DraftResolutionPrompt / DraftPickerList when the user
+    // re-opens a form that already has a saved draft. No-ops for in-session (non-draft) forms.
+
+    /** Resume the saved draft — the screen pre-fills from [MutationUiState.resumableDraft]; dismisses the prompt. */
+    data object ResumeDraft : MutationAction<Nothing>
+
+    /** Permanently delete the saved draft, then edit blank. */
+    data object DiscardSavedDraft : MutationAction<Nothing>
+
+    /** Keep the saved draft (recoverable in Settings → Sync & Drafts) but start a blank new entry. */
+    data object StartFreshDraft : MutationAction<Nothing>
 }

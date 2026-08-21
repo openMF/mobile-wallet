@@ -114,20 +114,15 @@ them.
 
 ---
 
-## Pre-2026-05 `Mifos*` prefix — deprecated
+## Neutral `Kpt*` naming (brand-prefixed aliases removed)
 
-Before 2026-05, framework-neutral symbols carried a `Mifos*` brand prefix
-inherited from the upstream Mifos Initiative template. As part of the Money
-Toolkit pivot the framework-shared layer was rebranded to `Kpt*`.
+Every framework-shared symbol uses the brand-neutral `Kpt*` prefix. Earlier
+brand-prefixed aliases (and their deprecated typealias shims) have been fully
+removed — there is no brand-prefixed name left to migrate off. New code uses
+`Kpt*` exclusively.
 
-The old `Mifos*` names are retained as `@Deprecated` typealias shims for one
-release window (located in sibling `*.deprecated.kt` files), so existing
-forks keep compiling. The shims will be removed in a later release; new code
-MUST use `Kpt*` exclusively.
-
-If you see a `Mifos*` reference in fork code, run the IDE's "Replace with
-Kpt-equivalent" intention or `git grep "Mifos<symbol>"` and migrate by hand —
-the typealiases map 1:1.
+If you are porting an older fork that still references a brand-prefixed symbol,
+map it to its `Kpt*` equivalent by hand (the rename was 1:1).
 
 ---
 

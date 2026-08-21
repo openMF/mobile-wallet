@@ -19,8 +19,12 @@ kotlin {
             api(libs.cmp.network.monitor)
             api(libs.koin.core)
             implementation(libs.kotlinx.coroutines.core)
+            // RoomSubmitOutbox (infra/impl) serializes offline draft payloads via KSerializer/Json.
+            implementation(libs.kotlinx.serialization.json)
             implementation(project(":core-base:common"))
             implementation(project(":core-base:observability"))
+            // StoreCacheManagerImpl (infra) clears Draft/Bookkeeper rows via the framework DAOs.
+            implementation(project(":core-base:database"))
         }
 
         commonTest.dependencies {

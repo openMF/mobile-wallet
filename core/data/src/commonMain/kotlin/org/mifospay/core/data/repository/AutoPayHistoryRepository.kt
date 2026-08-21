@@ -11,7 +11,7 @@ package org.mifospay.core.data.repository
 
 import org.mifospay.core.common.ScreenStateStream
 import org.mifospay.core.model.autopay.AutoPayHistory
-import org.mifospay.core.network.model.entity.Page
+import org.mifospay.core.model.network.entity.Page
 
 // TODO: Align repository with final API response/request schema once confirmed by backend
 

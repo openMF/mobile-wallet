@@ -50,17 +50,23 @@ public interface WorkScheduler {
     public suspend fun enqueueDataSync(mode: WorkMode = WorkMode.Background): WorkHandle
 
     /**
-     * Schedule a one-shot notification fire-and-forget. The
-     * [NotificationWorker] posts the notification via the multiplatform
-     * KMPNotifier `localNotifier` (see `SyncNotifier.kt`).
+     * Schedule a one-shot notification. The [NotificationWorker] posts the notification via the
+     * multiplatform KMPNotifier `localNotifier` (see `SyncNotifier.kt`).
      *
      * @param delay non-negative; pass [Duration.ZERO] for immediate. Backed by
      *   `OneTimeWorkRequest.initialDelay`.
+     * @param uniqueName when non-null the request is enqueued as unique work with REPLACE — a later
+     *   schedule under the same name replaces the pending one (e.g. re-scheduling a bill after an edit).
+     *   Null = fire-and-forget (no de-duplication).
+     * @param tags extra tags added to the request (beyond the framework notification tag) so callers
+     *   can cancel a logical group via [cancelWorkByTag] (e.g. one tag per bill + one shared tag).
      */
     public suspend fun scheduleNotification(
         content: NotificationContent,
         delay: Duration = Duration.ZERO,
         mode: WorkMode = WorkMode.Background,
+        uniqueName: String? = null,
+        tags: List<String> = emptyList(),
     ): WorkHandle
 
     /**
@@ -71,4 +77,7 @@ public interface WorkScheduler {
 
     /** Cancel a previously-enqueued work unit by handle. */
     public suspend fun cancelWork(handle: WorkHandle)
+
+    /** Cancel every enqueued work unit carrying [tag] (e.g. all bill-reminder notifications). */
+    public suspend fun cancelWorkByTag(tag: String)
 }

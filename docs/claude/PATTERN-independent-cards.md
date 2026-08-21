@@ -169,7 +169,7 @@ For the full screen-archetype taxonomy table, see [core/store/README.md](../../c
 
 ## Reference implementation
 
-The Money Toolkit's `Home` dashboard (`feature/home/`) is the canonical example
+The demo `Home` dashboard (`feature/home/`) is the canonical example
 once it's refactored onto this pattern — see Phase 9-10 of the
 `core-base-store-coverage` epic for the worked migration. Until then, the
 framework primitives (`IndependentCardLayout`, `DashboardProgressBar`,

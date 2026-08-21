@@ -46,19 +46,17 @@ else
     fail=1
   elif wl_matches_any "$app_id" bundle_id; then
     [ "$is_template" != "1" ] && { echo "❌ B1: identity.app_id '$app_id' is a template placeholder (WHITE_LABEL_PLACEHOLDERS.yaml#bundle_id) — set your fork's app id."; fail=1; }
+  elif wl_matches_example "$app_id" bundle_id; then
+    [ "$is_template" != "1" ] && { echo "❌ B1: identity.app_id '$app_id' is the template's Mifos REFERENCE id — fork must rebrand to its own (WHITE_LABEL_PLACEHOLDERS.yaml#example_identity.bundle_id)."; fail=1; }
   else
-    [ "$is_template" = "1" ] && { echo "❌ B1: identity.app_id '$app_id' authored on the NEUTRAL TEMPLATE — must remain a placeholder (WHITE_LABEL_PLACEHOLDERS.yaml#bundle_id)."; fail=1; }
+    [ "$is_template" = "1" ] && { echo "❌ B1: identity.app_id '$app_id' is a foreign brand on the TEMPLATE — must be the Mifos reference id or a placeholder (WHITE_LABEL_PLACEHOLDERS.yaml#bundle_id / #example_identity.bundle_id)."; fail=1; }
   fi
 fi
 
 # ── B2 — no template org identity as a LITERAL in template-owned deployment logic ─
 # The value must be TOKENIZED (read from app-profile via config.rb), never hardcoded.
 # Comments and metadata .txt / README are excluded.
-# NOTE: intentionally does NOT match a bare "Mifos Initiative" org name — the template's own
-# maintainer (Mifos Initiative) also publishes real downstream forks (e.g. mifos-pay), for which
-# that literal is the genuine, correct publisher identity, not leaked template branding. Match only
-# the template's OWN demo-app-specific identity strings instead.
-PATTERNS='org\.mifos\.kmp\.template|mifos-x-web|MifosInitiative\.MoneyToolkit|Money[ ]?Toolkit'
+PATTERNS='Mifos Initiative|org\.mifos\.kmp\.template|mifos-x-web|MifosInitiative\.MoneyToolkit'
 b2_hits=()
 if [ -d "$HEALTH_ROOT/deployment" ]; then
   while IFS= read -r f; do
@@ -170,14 +168,14 @@ if [ -n "$marker_re" ] && grep -rIlE "$marker_re" $STORE_YAMLS >/dev/null 2>&1; 
   [ "$is_template" != "1" ] && { echo "❌ B7: placeholder marker (WHITE_LABEL_PLACEHOLDERS.yaml#store_copy_marker) in the app-profile store schema — author your copy."; fail=1; }
 fi
 
-# ── B8 — a fork must not ship the template's default store copy (blocking; template self-skips at top) ──
-# NOTE: deliberately does NOT match a bare "Mifos Initiative" org name or the "org.mifos" bundle-id
-# fragment — both collide with genuinely correct, authored content for a real Mifos-family fork
-# (a real copyright line naming Mifos Initiative; the app's own real "org.mifospay" bundle id, which
-# contains "org.mifos" as a substring). Match only the template's OWN demo-app-specific identity string.
+# ── B8 — the Mifos REFERENCE store copy is the template's committed example; a FORK must replace it ──
+# Registry-driven (WHITE_LABEL_PLACEHOLDERS.yaml#example_identity.store_copy_reference). Directional:
+# on the template the reference copy IS the intended committed state (no fail); on a fork it is an
+# un-rebranded leak that BLOCKS.
+ref_re="$(wl_example_load store_copy_reference | paste -sd'|' -)"
 # shellcheck disable=SC2086
-if grep -rIlE 'Money[ ]?Toolkit|org\.mifos\.kmp\.template' $STORE_YAMLS >/dev/null 2>&1; then
-  echo "❌ B8: template default store copy ('Money Toolkit' / 'org.mifos.kmp.template') in the app-profile store schema — author this fork's own listing."; fail=1
+if [ -n "$ref_re" ] && grep -rIlE "$ref_re" $STORE_YAMLS >/dev/null 2>&1; then
+  [ "$is_template" != "1" ] && { echo "❌ B8: the Mifos reference store copy ('Money Toolkit' / 'Mifos Initiative' / 'org.mifos') is present — this fork must author its own listing (WHITE_LABEL_PLACEHOLDERS.yaml#example_identity.store_copy_reference)."; fail=1; }
 fi
 
 # ── B9 — deployment/ metadata drifted from the app-profile key SoT (WARN, non-blocking) ──

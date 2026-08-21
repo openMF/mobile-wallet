@@ -45,3 +45,13 @@ fun <P> SubmitOutbox<P>.resumeStateFor(formKey: String): Flow<DraftResumeState<P
     observePending(formKey).map { entry ->
         if (entry != null) DraftResumeState.HasDraft(entry) else DraftResumeState.None
     }
+
+/**
+ * Multi-pending-aware overload. When [uniqueKey] is non-null, observes the PENDING draft for that
+ * exact `(formKey, uniqueKey)` pair (one of N concurrent drafts); when null, behaves exactly like
+ * the singleton [resumeStateFor] above. Used by `BaseMutationViewModel` (in `MutationMode.Draft`)
+ * so every draft form — singleton or multi-pending — exposes a uniform resume stream.
+ */
+fun <P> SubmitOutbox<P>.resumeStateFor(formKey: String, uniqueKey: String?): Flow<DraftResumeState<P>> =
+    (if (uniqueKey == null) observePending(formKey) else observePendingByUniqueKey(formKey, uniqueKey))
+        .map { entry -> if (entry != null) DraftResumeState.HasDraft(entry) else DraftResumeState.None }

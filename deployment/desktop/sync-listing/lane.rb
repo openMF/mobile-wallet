@@ -46,7 +46,10 @@ platform :desktop do
       UI.message("📋 Syncing Mac App Store listing...")
 
       mac_metadata_path    = File.join(DEPLOYMENT_REPO_ROOT, "deployment/desktop/mac-app-store/metadata")
-      mac_screenshots_path = File.join(DEPLOYMENT_REPO_ROOT, "deployment/desktop/mac-app-store/screenshots")
+      # screenshots live UNDER metadata/ (deliver's screenshots_path convention, parity with iOS) — the
+      # bare mac-app-store/screenshots path finds nothing → deliver syncs 0 screenshots. Matches
+      # MAC_APP_STORE_SCREENSHOTS_PATH in deployment/desktop/mac-app-store/lane.rb.
+      mac_screenshots_path = File.join(DEPLOYMENT_REPO_ROOT, "deployment/desktop/mac-app-store/metadata/screenshots")
 
       unless File.directory?(mac_metadata_path)
         UI.important("⚠️  Mac App Store metadata not found at #{mac_metadata_path} — skipping Mac sync")
@@ -69,6 +72,9 @@ platform :desktop do
         run_precheck_before_submit:           false,
         force:                                true,
       )
+
+      # Record the pushed hash so a subsequent mac deploy lane's drift-checked sync correctly skips.
+      record_store_listing_synced("mac", mac_metadata_path)
 
       UI.success("✅ Mac App Store listing synced (no binary uploaded)")
     end

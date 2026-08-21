@@ -29,6 +29,9 @@ dependencies {
     compileOnly(libs.ktlint.gradlePlugin)
     compileOnly(libs.spotless.gradle)
     implementation(libs.truth)
+    // SnakeYAML — lets SyncForkConfigPlugin parse app-profile/app.yaml + platforms/**/*.yaml
+    // (the fork-owned white-label SoT). Not in the version catalog; literal coordinate.
+    implementation("org.yaml:snakeyaml:2.2")
     compileOnly(libs.androidx.room.gradle.plugin)
     compileOnly(libs.firebase.crashlytics.gradlePlugin)
     compileOnly(libs.firebase.performance.gradlePlugin)
@@ -38,9 +41,10 @@ dependencies {
     // META-INF/gradle-plugins descriptor is on the build-logic runtime classpath,
     // letting WorkerComposeConventionPlugin apply it via pluginManager.apply(id).
     implementation(libs.worker.app.plugin)
-    // SnakeYAML — lets SyncForkConfigPlugin parse app-profile/app.yaml + platforms/**/*.yaml
-    // (the fork-owned white-label SoT). Not in the version catalog; literal coordinate.
-    implementation("org.yaml:snakeyaml:2.2")
+    // roborazzi gradle plugin — `implementation` so its plugin descriptor is on the build-logic
+    // runtime classpath, letting CMPFeatureConventionPlugin apply it via pluginManager.apply(id)
+    // to give every feature module the device-free verifyRoborazziDesktop render tier.
+    implementation(libs.roborazzi.gradlePlugin)
 }
 
 tasks {

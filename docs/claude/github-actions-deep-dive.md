@@ -301,10 +301,13 @@ steps:
 **Purpose:** Build and upload iOS IPA to Firebase
 
 **Inputs:**
-- `ios_package_name` - iOS module name
-- `use_cocoapods` - Use CocoaPods (default: `true`)
-- `shared_module` - Shared module name
-- `xcode_version` - Xcode version (default: `15.2`)
+- `ios_package_name` - iOS module name (`cmp-ios`)
+- `shared_module` - Shared module name (`cmp-shared`; the `ComposeApp` XCFramework producer)
+- `xcode_version` - Xcode version
+
+> The old CocoaPods toggle input is gone — since the E6 SwiftPM/XCFramework migration the
+> iOS job assembles the Kotlin `ComposeApp` XCFramework via Gradle and archives the plain
+> `.xcodeproj` (no CocoaPods step).
 
 **Secrets:**
 - `appstore_key_id` - App Store Connect API key ID
@@ -335,16 +338,12 @@ steps:
       mkdir -p secrets
       echo "${{ secrets.appstore_auth_key }}" | base64 -d > secrets/apple/appstore/AuthKey.p8
 
-  # 4. Install dependencies
+  # 4. Install Ruby gems (Fastlane)
   - run: bundle install
-  - run: |
-      if [ "${{ inputs.use_cocoapods }}" == "true" ]; then
-        cd ${{ inputs.ios_package_name }}
-        pod install
-        cd ..
-      fi
 
-  # 5. Run Fastlane lane
+  # 5. Run Fastlane lane — the lane calls `assemble_ios_xcframework`, which runs
+  #    `./gradlew :cmp-shared:assembleComposeApp{Debug,Release}XCFramework` and then
+  #    `build_app` archives cmp-ios/iosApp.xcodeproj (no CocoaPods step).
   - run: bundle exec fastlane ios deploy_on_firebase
 
   # 6. Clean up secrets
@@ -759,13 +758,19 @@ gh secret set KEYSTORE_FILE < keystores/original-release-key.jks.b64
       ${{ runner.os }}-gradle-
 ```
 
-**CocoaPods Caching:**
+**Kotlin/Native + SwiftPM Caching (iOS):**
+
+Since the E6 SwiftPM/XCFramework migration there is no CocoaPods `Pods/` directory or
+lockfile to cache. The iOS job caches the Kotlin/Native (`konan`) toolchain + the resolved
+SwiftPM packages instead — the actionhub `pr-check-v2` iOS job already does this:
 
 ```yaml
 - uses: actions/cache@v4
   with:
-    path: cmp-ios/Pods
-    key: ${{ runner.os }}-pods-${{ hashFiles('cmp-ios/Podfile.lock') }}
+    path: |
+      ~/.konan
+      ~/Library/Caches/org.swift.swiftpm
+    key: ${{ runner.os }}-kmp-ios-${{ hashFiles('gradle/libs.versions.toml', 'cmp-ios/Package.swift') }}
 ```
 
 ---
@@ -921,7 +926,7 @@ The job running on runner ... has exceeded the maximum execution time of 360 min
 ```
 
 **Fix:**
-- Add caching (Gradle, CocoaPods)
+- Add caching (Gradle, Kotlin/Native `konan`, SwiftPM)
 - Split into smaller jobs
 - Use faster runners (if available)
 

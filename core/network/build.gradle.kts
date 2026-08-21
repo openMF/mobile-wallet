@@ -15,10 +15,13 @@ plugins {
     alias(libs.plugins.ktrofit)
     alias(libs.plugins.buildkonfig)
     alias(libs.plugins.kmp.supabase.config)
-    alias(libs.plugins.jetbrainsCompose)
-    alias(libs.plugins.compose.compiler)
     id("kotlinx-serialization")
     id("com.google.devtools.ksp")
+    // Fork addition: SupabaseInstanceConfigLoader's fallback config (composeResources/files/
+    // instances_config_default.json) needs the `compose` extension for org.jetbrains.compose.
+    // resources.ExperimentalResourceApi + the generated `Res` accessor.
+    alias(libs.plugins.jetbrainsCompose)
+    alias(libs.plugins.compose.compiler)
 }
 
 val localProps = Properties().apply {
@@ -31,6 +34,12 @@ buildkonfig {
     // `kpt.core.network.BuildKonfig` is imported without ceremony.
     packageName = "kpt.core.network"
     defaultConfigs {
+        // FRED_API_KEY is a VAULT-managed client secret, NOT a hardcoded key. It is declared as the
+        // `mifos-x-fred-api-key` alias (category env_var_client) in secrets-manifest.yaml, and the "fred"
+        // access point in app-profile/app.yaml references it. `/secrets pull` materializes it to
+        // local.properties (the sanctioned KMP env_var_client target, RULE-SECRETS-LAYOUT-001); CI reads
+        // the FRED_API_KEY env var (from `/secrets sync-to-ci`). A compiled-in client key must be read at
+        // build time — this IS that sanctioned read, so no secret value ever lives in a tracked file.
         buildConfigField(
             STRING, "FRED_API_KEY",
             System.getenv("FRED_API_KEY") ?: localProps.getProperty("FRED_API_KEY", ""),
@@ -38,7 +47,7 @@ buildkonfig {
     }
 }
 
-// Supabase credentials are sourced dynamically from the gitignored `secrets/supabaseCredentialsFile.json`
+// Supabase credentials are sourced dynamically from the gitignored `secrets/live/supabase/supabaseCredentialsFile.json`
 // (url + anonKey) via the shared SupabaseConfigConventionPlugin — the project's established secrets
 // mechanism — which generates `kpt.core.network.config.SupabaseCredentials`. When the file is absent
 // (the toolkit ships no Supabase project) it generates empty creds, so SupabaseConfigClient stays inert.
@@ -64,6 +73,12 @@ kotlin {
 
             implementation(projects.core.datastore)
 
+            // Fork addition: applying the compose-compiler plugin (above) requires the Compose
+            // Runtime on the classpath for every target it compiles — see core/common's build.gradle.kts
+            // for the same fix + rationale.
+            implementation(compose.runtime)
+            implementation(compose.components.resources)
+
             implementation(libs.kotlinx.serialization.json)
 
             implementation(libs.ktor.client.core)
@@ -77,11 +92,6 @@ kotlin {
             implementation(libs.ktorfit.lib)
 
             implementation(libs.squareup.okio)
-
-            // Compose Multiplatform resources: SupabaseInstanceConfigLoader uses
-            // Res.readBytes("files/instances_config_default.json") from commonMain/composeResources.
-            implementation(compose.runtime)
-            implementation(compose.components.resources)
         }
 
         androidMain.dependencies {
@@ -112,12 +122,4 @@ dependencies {
     add("kspDesktop", libs.ktorfit.ksp)
     add("kspIosArm64", libs.ktorfit.ksp)
     add("kspIosSimulatorArm64", libs.ktorfit.ksp)
-}
-
-// Package the generated Res class under the module-scoped namespace referenced by
-// SupabaseInstanceConfigLoader (`import mifos_pay.core.network.generated.resources.Res`).
-compose.resources {
-    publicResClass = true
-    generateResClass = always
-    packageOfResClass = "mifos_pay.core.network.generated.resources"
 }

@@ -14,7 +14,7 @@
 #                  appstore certs. Run manually or via the monthly CI schedule.
 #
 # WHEN TO RUN
-#   • Immediately when `deployProdIpaOnFirebase` (or any iOS lane) fails with:
+#   • Immediately when any iOS lane (e.g. `beta` / `release`) fails with:
 #       "Your certificate '<ID>.cer' is not valid, please check end date"
 #   • Proactively via monthly GitHub Actions schedule (cert-renewal.yml (openMF/ios-provisioning-profile))
 #
@@ -58,7 +58,7 @@ platform :ios do
     UI.header("Step 3 — Creating fresh App Store certificate (TestFlight + App Store)")
     fetch_certificates_with_match(match_type: "appstore")
 
-    UI.success("Certificate renewal complete. Run deployProdIpaOnFirebase to continue.")
+    UI.success("Certificate renewal complete. Run the iOS TestFlight lane (`ios beta`) to continue.")
   end
 
   desc <<~DESC

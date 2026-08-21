@@ -20,7 +20,7 @@ import de.jensklingenberg.ktorfit.http.Path
 import io.ktor.client.request.forms.MultiPartFormDataContent
 import io.ktor.http.content.PartData
 import kotlinx.coroutines.flow.Flow
-import org.mifospay.core.network.model.entity.noncore.Document
+import org.mifospay.core.model.network.entity.noncore.Document
 import org.mifospay.core.network.utils.ApiEndPoints
 
 interface DocumentService {

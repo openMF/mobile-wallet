@@ -13,7 +13,11 @@
 #   ios_screenshots            — frame + upload (generation is a /release step)
 
 FRAMEFILE_PATH       = File.expand_path("Framefile.json", __dir__).freeze
-IOS_SCREENSHOTS_PATH = File.expand_path("../../appstore/metadata/screenshots", __dir__).freeze
+# __dir__ is deployment/ios/screenshots — up ONE level is deployment/ios, then appstore/metadata/
+# screenshots. The old "../../appstore/..." went up TWO levels to deployment/appstore/... (a nonexistent
+# sibling), so deliver's screenshots_path pointed at an empty dir and "uploaded all" ZERO screenshots
+# (silent vacuous success). (2026-08-10 — matches config.rb's deployment/ios/appstore/metadata/screenshots.)
+IOS_SCREENSHOTS_PATH = File.expand_path("../appstore/metadata/screenshots", __dir__).freeze
 
 platform :ios do
   desc "Frame iOS screenshots with device bezels via frameit"
@@ -43,6 +47,17 @@ platform :ios do
       skip_metadata:        true,
       skip_screenshots:     false,
       overwrite_screenshots: true,
+      # metadata/ holds the screenshots/ subdir + review_information/ + per-device scaffolding dirs that
+      # are NOT ASC locale folders; without this deliver aborts "Unsupported directory name(s)". Matches
+      # the promoteToAppStore lane (deployment/ios/appstore/lane.rb) which sets the same flag.
+      ignore_language_directory_validation: true,
+      # Screenshots-only upload — never run precheck (it can't check In-App Purchases with an ASC API key
+      # and would fail the lane after a successful screenshot upload). We are not submitting for review.
+      run_precheck_before_submit: false,
+      # A version already "Waiting for Review" LOCKS its screenshots ("Can't Delete Screenshot After
+      # Submit for review"). Reject it back to Prepare-for-Submission so the corrected screenshots can
+      # replace the stale set; the version is then editable + re-submittable. (2026-08-10)
+      reject_if_possible: true,
       force:                appstore_config[:force],
     )
 

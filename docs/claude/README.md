@@ -68,7 +68,7 @@ This directory contains comprehensive guides for understanding and working with 
 **Covers:**
 - Complete secrets inventory (30+ secrets)
 - File-to-secret mapping
-- Generating secrets with keystore-manager.sh
+- Generating secrets with scripts/white-label/keystore.sh
 - Adding secrets to GitHub Actions
 - Rotating secrets
 - Security best practices

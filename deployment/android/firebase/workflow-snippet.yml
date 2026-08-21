@@ -29,9 +29,12 @@ jobs:
       - name: Materialize secrets (manual-mode)
         if: ${{ secrets.SOPS_AGE_KEY == '' }}
         run: |
-          mkdir -p secrets/live/android/keystores secrets
+          # Canonical secret path resolved via the ONE resolver (build_secrets.rb over secrets/LAYOUT.yaml,
+          # SoT) — no hand-typed secrets/live path, no parallel resolver (RULE-SECRETS-LAYOUT-001 SL5).
+          FIREBASE_SA_PATH="$(deployment/scripts/build-secrets path firebase_service_account)"
+          mkdir -p "$(dirname "$FIREBASE_SA_PATH")" secrets/live/android/keystores secrets
           echo "${{ secrets.ANDROID_RELEASE_KEYSTORE_B64 }}" | base64 -d > keystores/upload_keystore.keystore
-          echo '${{ secrets.FIREBASE_SERVICE_ACCOUNT_JSON }}' > secrets/live/android/firebaseAppDistributionServiceCredentialsFile.json
+          echo '${{ secrets.FIREBASE_SERVICE_ACCOUNT_JSON }}' > "$FIREBASE_SA_PATH"
 
       - name: Run Fastlane (prod)
         if: ${{ inputs.flavor == 'prod' }}

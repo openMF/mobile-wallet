@@ -15,13 +15,13 @@ import de.jensklingenberg.ktorfit.http.POST
 import de.jensklingenberg.ktorfit.http.Path
 import de.jensklingenberg.ktorfit.http.Query
 import kotlinx.coroutines.flow.Flow
+import org.mifospay.core.model.network.entity.Page
 import org.mifospay.core.model.savingsaccount.BlockUnblockResponseEntity
 import org.mifospay.core.model.savingsaccount.CreateNewSavingEntity
 import org.mifospay.core.model.savingsaccount.SavingAccountTemplate
 import org.mifospay.core.model.savingsaccount.SavingsWithAssociationsEntity
 import org.mifospay.core.model.savingsaccount.TransactionsEntity
 import org.mifospay.core.model.savingsaccount.UpdateSavingAccountEntity
-import org.mifospay.core.network.model.entity.Page
 import org.mifospay.core.network.utils.ApiEndPoints
 
 interface SavingsAccountsService {

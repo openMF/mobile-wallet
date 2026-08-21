@@ -33,9 +33,9 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import mifos_pay.feature.settings.generated.resources.Res
-import mifos_pay.feature.settings.generated.resources.feature_settings_change_language_placeholder_text
-import mifos_pay.feature.settings.generated.resources.feature_settings_change_language_text
+import kpt.feature.settings.generated.resources.Res
+import kpt.feature.settings.generated.resources.feature_settings_change_language_placeholder_text
+import kpt.feature.settings.generated.resources.feature_settings_change_language_text
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.mifospay.core.model.user.Language

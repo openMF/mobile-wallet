@@ -9,8 +9,8 @@
  */
 package org.mifospay.core.data.mapper
 
+import org.mifospay.core.model.network.entity.SearchedEntity
 import org.mifospay.core.model.search.SearchResult
-import org.mifospay.core.network.model.entity.SearchedEntity
 
 fun SearchedEntity.toModel(): SearchResult {
     return SearchResult(

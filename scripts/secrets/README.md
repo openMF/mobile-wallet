@@ -44,7 +44,7 @@ gradle/fork.properties → default`, so once the files are in place, `fastlane` 
 Non-secret identity (team id, Match git URL, app ids, store copy) lives in
 **`gradle/fork.properties`** (copy `gradle/fork.properties.template`), *not* here.
 
-## Framework users (Mifos maintainers)
+## Framework users (template maintainers)
 
 If you work inside the Claude Product Cycle framework, you don't fill these by hand — the
 vault has them. From a project-bound session:

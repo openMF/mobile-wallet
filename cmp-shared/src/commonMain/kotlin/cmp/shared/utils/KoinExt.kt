@@ -9,6 +9,14 @@
  */
 package cmp.shared.utils
 
+import cmp.navigation.di.KoinModules
+import cmp.shared.generated.WorkerKmpAuto
+import kpt.sync.infra.initSyncNotifier
+import org.koin.core.context.startKoin
+import org.koin.dsl.KoinAppDeclaration
+import org.koin.dsl.koinApplication
+import org.mifospay.shared.di.KoinModules as ForkKoinModules
+
 // Fork feature Koin surface. The template shell's `cmp.navigation.di.KoinModules.allModules`
 // carries the fork's core/network/data/domain/passcode/preferences modules. The pieces MISSING
 // from that list — and REQUIRED by the bridged fork `MifosApp` which composes ~60 fork feature
@@ -21,13 +29,6 @@ package cmp.shared.utils
 // (`sharedModule`: MifosPayViewModel, InstanceSelectorViewModel, TransferOptionsViewModel). Both
 // are `internal val` in `org.mifospay.shared.di.KoinModules` (same `:cmp-shared` module) and are
 // imported below aliased as `ForkKoinModules`.
-import cmp.navigation.di.KoinModules
-import cmp.shared.generated.WorkerKmpAuto
-import kpt.sync.infra.initSyncNotifier
-import org.koin.core.context.startKoin
-import org.koin.dsl.KoinAppDeclaration
-import org.koin.dsl.koinApplication
-import org.mifospay.shared.di.KoinModules as ForkKoinModules
 
 // One splice list — kept as a `val` (not inlined below) so `koinConfiguration()` and
 // `initKoin()` share the exact same module set. Order: template modules first (they establish

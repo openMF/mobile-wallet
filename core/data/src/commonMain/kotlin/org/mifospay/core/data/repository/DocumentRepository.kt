@@ -11,7 +11,7 @@ package org.mifospay.core.data.repository
 
 import io.ktor.http.content.PartData
 import org.mifospay.core.common.ScreenStateStream
-import org.mifospay.core.network.model.entity.noncore.Document
+import org.mifospay.core.model.network.entity.noncore.Document
 
 interface DocumentRepository {
     // Flow-shaped surfaces on ScreenState.

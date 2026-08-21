@@ -63,9 +63,19 @@ class SupabaseConfigClient(
     }
 
     /**
-     * Direct access to Postgrest for database operations.
+     * Direct access to Postgrest for database operations (the default data plane).
+     *
+     * Postgrest is installed by default (see [client]), so this is the always-available surface.
+     * Auth / Realtime / Storage are OPT-IN — a fork installs those modules explicitly in its own
+     * client builder; they are out of scope for this default exposer.
      */
     val postgrest get() = client.postgrest
+
+    /**
+     * Default data-plane exposer — Postgrest. Prefer [data] in fork call-sites so the default
+     * transport can evolve without touching every caller.
+     */
+    val data get() = postgrest
 
     /**
      * Checks if Supabase is properly configured.
@@ -85,7 +95,7 @@ class SupabaseConfigClient(
  * ## Generated Implementation
  *
  * If using the SupabaseConfigConventionPlugin, credentials are
- * automatically generated from `secrets/supabaseCredentialsFile.json`:
+ * automatically generated from `secrets/live/supabase/supabaseCredentialsFile.json`:
  *
  * ```kotlin
  * // Auto-generated SupabaseCredentials object

@@ -21,6 +21,8 @@ kotlin {
             api(libs.ktor.client.auth)
             api(libs.ktorfit.lib)
             api(libs.kermit.logging)
+            // restApi<T> DSL registers Koin singles + resolves the AccessPointRegistry via get().
+            api(libs.koin.core)
             implementation(projects.coreBase.security)
             api(libs.supabase.postgrest)
         }

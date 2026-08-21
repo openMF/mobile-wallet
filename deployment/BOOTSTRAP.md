@@ -9,7 +9,7 @@ one that matches your team's secret-management posture.
 
 > ⚠️  **Seeing `/release: command not found`?** You're on the OSS-fork path
 > (you don't have the `claude-product-cycle` framework cloned). That's
-> expected — use `bundle exec fastlane --fastlane-dir deployment <lane>`
+> expected — use `cd deployment && bundle exec fastlane <lane>`
 > instead. See **Path A** below for the canonical OSS-fork commands.
 >
 > Optional convenience: `source deployment/_shared/scripts/release-fallback.sh`
@@ -46,8 +46,8 @@ point for Path A. Use these primary invocations instead:
 
 ```bash
 # Local deploy (developer's machine — runs Fastlane directly)
-bundle exec fastlane --fastlane-dir deployment android deployInternal
-bundle exec fastlane --fastlane-dir deployment ios release
+cd deployment && bundle exec fastlane android deployInternal
+cd deployment && bundle exec fastlane ios release
 bash deployment/web/cloudflare-pages/script.sh   # non-Fastlane targets ship script.sh
 
 # CI deploy (GitHub Actions on push or workflow_dispatch)
@@ -110,7 +110,7 @@ vault preflight + PROMOTION_LOG audit but is **NOT** required for Path A.
 
 ```bash
 # Local
-bundle exec fastlane --fastlane-dir deployment android deployReleaseApkOnFirebase
+cd deployment && bundle exec fastlane android deployReleaseApkOnFirebase
 
 # CI
 gh workflow run release-android.yml -f target=firebase-app-distribution
@@ -124,8 +124,8 @@ Required secrets (from `deployment/android/firebase-app-distribution/secrets-nee
 ### Path A — example: iOS TestFlight
 
 ```bash
-# Local (requires Xcode + CocoaPods)
-bundle exec fastlane --fastlane-dir deployment ios beta
+# Local (requires Xcode — SwiftPM/XCFramework, no CocoaPods)
+cd deployment && bundle exec fastlane ios beta
 
 # CI
 gh workflow run release-ios.yml -f target=testflight
@@ -291,7 +291,7 @@ What `/release` does:
   computes the capability id (e.g. `android-firebase-app-distribution`).
 - Runs `/secrets verify --required-for android-firebase-app-distribution`.
   PASS → proceeds; FAIL → halts with the missing alias list.
-- Dispatches `bundle exec fastlane --fastlane-dir deployment android
+- Dispatches `cd deployment && bundle exec fastlane android
   deployReleaseApkOnFirebase`.
 - On success, appends a row to `PROMOTION_LOG.yaml` with timestamp, target,
   mode (`vault`), git-sha, fastlane exit code, lane.rb sha, secrets-needs
@@ -351,7 +351,7 @@ admin to push. Once the upstream tags land, a follow-up PR (the
    6 PR Check jobs to confirm green on the post-deletion tree.
 
 Until then, the per-target deployment dirs are **functionally complete** —
-direct `bundle exec fastlane --fastlane-dir deployment <lane>` invocations
+direct `cd deployment && bundle exec fastlane <lane>` invocations
 work against the new tree right now. The legacy `fastlane/` block exists
 only as a fallback for unmigrated callers.
 

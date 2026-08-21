@@ -1,15 +1,8 @@
-# .template-version — the openMF/kmp-project-template state this working tree corresponds to.
-#
-# In the TEMPLATE repo (openMF/kmp-project-template) this is the release baseline the tree
-# corresponds to. In a FORK it is the template commit the fork last synced FROM — updated
-# automatically by scripts/white-label/sync-dirs.sh on every /kmp-project-template-sync.
-#
-# DO NOT hand-edit. It lets a fork tell whether it is behind the template (compare template_sha
-# against the template's latest release) and anchors the next sync's 3-way merge base.
-#
-# Format: bash-parseable `key=value` (same convention as gradle/fork.properties).
+# .template-version — the openMF/kmp-project-template commit this tree last synced from.
+# Managed by scripts/white-label/sync-dirs.sh — DO NOT hand-edit.
+# Format: bash-parseable key=value (same convention as gradle/fork.properties).
 template_repo=openMF/kmp-project-template
 template_ref=dev
-template_sha=7f38d2be7cc0d5a0bd194139406ede8628558c48
+template_sha=6fe88bade82f36c5b8ab0b66569087ea6e340ef2
 template_tag=
-synced_at=2026-08-15T00:00:00Z
+synced_at=2026-08-19T18:21:27Z

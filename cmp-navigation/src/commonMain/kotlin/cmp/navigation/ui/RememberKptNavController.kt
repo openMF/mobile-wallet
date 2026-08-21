@@ -15,7 +15,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.Navigator
 import androidx.navigation.compose.rememberNavController
 import co.touchlab.kermit.Logger
-import kpt.core.base.analytics.AnalyticsHelper
+import io.github.mobilebytelabs.kmptoolkit.firebase.analytics.AnalyticsHelper
 
 @Composable
 fun rememberKptNavController(name: String, vararg navigators: Navigator<out NavDestination>): NavHostController =

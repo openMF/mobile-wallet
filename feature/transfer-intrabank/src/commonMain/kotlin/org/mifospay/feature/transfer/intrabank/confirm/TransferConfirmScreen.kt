@@ -87,7 +87,7 @@ import org.mifospay.core.designsystem.component.MifosButton
 import org.mifospay.core.designsystem.component.MifosTextField
 import org.mifospay.core.designsystem.component.MifosTopBar
 import org.mifospay.core.designsystem.icon.MifosIcons
-import org.mifospay.core.network.model.entity.templates.account.AccountOption
+import org.mifospay.core.model.network.entity.templates.account.AccountOption
 import org.mifospay.core.ui.AvatarBox
 import org.mifospay.core.ui.EmptyContentScreen
 import org.mifospay.core.ui.ErrorBottomSheet

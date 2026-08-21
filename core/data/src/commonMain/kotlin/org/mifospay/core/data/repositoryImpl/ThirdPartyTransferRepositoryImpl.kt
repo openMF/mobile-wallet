@@ -16,10 +16,10 @@ import org.mifospay.core.common.ScreenStateStream
 import org.mifospay.core.common.asScreenStateFlow
 import org.mifospay.core.data.repository.ThirdPartyTransferRepository
 import org.mifospay.core.data.util.parseMifosError
+import org.mifospay.core.model.network.entity.TPTResponse
+import org.mifospay.core.model.network.entity.payload.TransferPayload
+import org.mifospay.core.model.network.entity.templates.account.AccountOptionsTemplate
 import org.mifospay.core.network.SelfServiceApiManager
-import org.mifospay.core.network.model.entity.TPTResponse
-import org.mifospay.core.network.model.entity.payload.TransferPayload
-import org.mifospay.core.network.model.entity.templates.account.AccountOptionsTemplate
 
 class ThirdPartyTransferRepositoryImpl(
     private val apiManager: SelfServiceApiManager,

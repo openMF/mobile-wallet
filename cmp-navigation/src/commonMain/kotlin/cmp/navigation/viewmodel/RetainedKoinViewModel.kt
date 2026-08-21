@@ -37,10 +37,7 @@ import org.koin.compose.viewmodel.koinNavViewModel
  *   - cmp.navigation.AppViewModel                                          (chrome; outside destinations)
  *   - cmp.navigation.rootnav.RootNavViewModel                              (chrome; outside destinations)
  *   - cmp.navigation.splash.SplashViewModel                                (chrome; outside destinations)
- *   - (Phase 2 nav-chunk skeleton: `AuthenticatedNavbarNavigationViewModel`
- *      was deleted — the template's tab-shell VM is unused now that the fork's
- *      `MifosApp` is wholesale-bridged as `authenticatedContent`; its own VM
- *      state lives inside `rememberMifosAppState`.)
+ *   - cmp.navigation.authenticatednavbar.AuthenticatedNavbarNavigationViewModel (chrome; the tab shell itself)
  *   - every other feature VM not listed above    (default until a screen opts in)
  *
  * ### D14 fence

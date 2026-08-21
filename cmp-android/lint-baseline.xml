@@ -33,17 +33,6 @@
     </issue>
 
     <issue
-        id="SimpleDateFormat"
-        message="To get local formatting use `getDateInstance()`, `getDateTimeInstance()`, or `getTimeInstance()`, or use `new SimpleDateFormat(String template, Locale locale)` with for example `Locale.US` for ASCII dates."
-        errorLine1="            val format = SimpleDateFormat(&quot;yyyy-MM-dd HH:mm:ss&quot;)"
-        errorLine2="                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/java/org/mifospay/utils/NotificationUtils.kt"
-            line="247"
-            column="26"/>
-    </issue>
-
-    <issue
         id="GradleDependency"
         message="A newer version of com.google.guava:guava than 27.0.1-android is available: 33.0.0-android"
         errorLine1="    implementation(&quot;com.google.guava:guava:27.0.1-android&quot;)"
@@ -52,17 +41,6 @@
             file="build.gradle.kts"
             line="25"
             column="20"/>
-    </issue>
-
-    <issue
-        id="VisibleForTests"
-        message="This method should only be accessed from tests or within private scope"
-        errorLine1="    private val assets: LocalAssetManager = JvmLocalAssetManager,"
-        errorLine2="                                            ~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/kotlin/org/mifospay/core/network/localAssets/MifosLocalAssetDataSource.kt"
-            line="30"
-            column="45"/>
     </issue>
 
     <issue
@@ -107,61 +85,6 @@
             file="src/main/res/values-tr-rTR/strings.xml"
             line="179"
             column="48"/>
-    </issue>
-
-    <issue
-        id="TrustAllX509TrustManager"
-        message="`checkClientTrusted` is empty, which could cause insecure network traffic due to trusting arbitrary TLS/SSL certificates presented by peers"
-        errorLine1="                        override fun checkClientTrusted("
-        errorLine2="                                     ~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/kotlin/org/mifospay/core/network/MifosWalletOkHttpClient.kt"
-            line="34"
-            column="38"/>
-    </issue>
-
-    <issue
-        id="TrustAllX509TrustManager"
-        message="`checkServerTrusted` is empty, which could cause insecure network traffic due to trusting arbitrary TLS/SSL certificates presented by peers"
-        errorLine1="                        override fun checkServerTrusted("
-        errorLine2="                                     ~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/kotlin/org/mifospay/core/network/MifosWalletOkHttpClient.kt"
-            line="41"
-            column="38"/>
-    </issue>
-
-    <issue
-        id="CustomX509TrustManager"
-        message="Implementing a custom `X509TrustManager` is error-prone and likely to be insecure. It is likely to disable certificate validation altogether, and is non-trivial to implement correctly without calling Android&apos;s default implementation."
-        errorLine1="                    object : X509TrustManager {"
-        errorLine2="                    ~~~~~~">
-        <location
-            file="src/main/kotlin/org/mifospay/core/network/MifosWalletOkHttpClient.kt"
-            line="32"
-            column="21"/>
-    </issue>
-
-    <issue
-        id="ObsoleteSdkInt"
-        message="Unnecessary; SDK_INT is always >= 26"
-        errorLine1="        VERSION.SDK_INT >= VERSION_CODES.M ->"
-        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/java/org/mifospay/core/data/util/ConnectivityManagerNetworkMonitor.kt"
-            line="77"
-            column="9"/>
-    </issue>
-
-    <issue
-        id="ObsoleteSdkInt"
-        message="Unnecessary; SDK_INT is always >= 26"
-        errorLine1="            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT_WATCH) {"
-        errorLine2="                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/java/org/mifospay/utils/NotificationUtils.kt"
-            line="215"
-            column="17"/>
     </issue>
 
     <issue
@@ -1106,13 +1029,6 @@
 
     <issue
         id="UnusedResources"
-        message="The resource `R.drawable.mifospay_round_logo` appears to be unused">
-        <location
-            file="src/main/res/drawable/mifospay_round_logo.png"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
         message="The resource `R.drawable.money_in` appears to be unused">
         <location
             file="src/main/res/drawable/money_in.png"/>
@@ -1425,13 +1341,6 @@
 
     <issue
         id="IconLocation"
-        message="Found bitmap drawable `res/drawable/feature_receipt_mifospay_round_logo.png` in densityless folder">
-        <location
-            file="src/main/res/drawable/feature_receipt_mifospay_round_logo.png"/>
-    </issue>
-
-    <issue
-        id="IconLocation"
         message="Found bitmap drawable `res/drawable/lib_mifos_passcode_mifos_logo.jpg` in densityless folder">
         <location
             file="src/main/res/drawable/lib_mifos_passcode_mifos_logo.jpg"/>
@@ -1477,13 +1386,6 @@
         message="Found bitmap drawable `res/drawable/logo_sbi.png` in densityless folder">
         <location
             file="src/main/res/drawable/logo_sbi.png"/>
-    </issue>
-
-    <issue
-        id="IconLocation"
-        message="Found bitmap drawable `res/drawable/mifospay_round_logo.png` in densityless folder">
-        <location
-            file="src/main/res/drawable/mifospay_round_logo.png"/>
     </issue>
 
     <issue

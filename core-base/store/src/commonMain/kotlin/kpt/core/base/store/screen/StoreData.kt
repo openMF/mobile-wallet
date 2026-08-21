@@ -9,7 +9,6 @@
  */
 package kpt.core.base.store.screen
 
-import kpt.core.base.common.DataState
 import kotlin.time.Clock
 import kotlin.time.Duration
 import kotlin.time.ExperimentalTime
@@ -78,21 +77,3 @@ enum class DataOrigin {
     MEMORY,
 }
 
-/**
- * Converts [StoreData] to [DataState] for ViewModels using DataState patterns.
- *
- * Mapping:
- * - [isEmpty] + no error -> [DataState.Loading] (no data yet)
- * - [isRefreshing] + data -> [DataState.Pending] (cached data, refresh in progress)
- * - [error] != null -> [DataState.Error] (with optional stale data)
- * - data present, no error -> [DataState.Success]
- */
-@Suppress("DEPRECATION")
-fun <T> StoreData<T>.toDataState(): DataState<T> {
-    return when {
-        isEmpty && error == null -> DataState.Loading
-        error != null -> DataState.Error(error, if (isEmpty) null else data)
-        isRefreshing -> DataState.Pending(data)
-        else -> DataState.Success(data)
-    }
-}

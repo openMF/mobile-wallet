@@ -17,7 +17,7 @@ package kpt.core.base.observability
  * [kpt.core.base.observability.di.observabilityModule] binding in their app module
  * with a real implementation (Firebase Crashlytics, Sentry, Bugsnag, Datadog RUM, etc.).
  *
- * ## Why a separate seam from [kpt.core.base.analytics.AnalyticsHelper]?
+ * ## Why a separate seam from the cmp-firebase `AnalyticsHelper`?
  *
  * Crash reporting and analytics serve different audiences:
  * - **Analytics** is high-volume, sampled, event-stream (button clicks, screen views) routed

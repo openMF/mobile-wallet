@@ -1,11 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  Mac App Store entitlements TEMPLATE. syncForkConfig substitutes L432S2FZP5 and
+  L432S2FZP5.org.mifospay from app-profile (apple.team_id + identity.app_id) into the shipped
+  cmp-desktop/mac-app-store.entitlements — do NOT hand-edit the generated .entitlements file.
+-->
 <plist version="1.0">
 <dict>
     <!-- Required for Mac App Store -->
     <key>com.apple.security.app-sandbox</key>
     <true/>
-    <!-- Network access for FRED, World Bank, currency rate APIs -->
+    <!-- Network access for API clients -->
     <key>com.apple.security.network.client</key>
     <true/>
     <!-- Read-only access to user's files (for export features) -->
@@ -13,7 +18,7 @@
     <true/>
     <!-- Application identifier required by TestFlight / Mac App Store provisioning profile -->
     <key>com.apple.application-identifier</key>
-    <string>L432S2FZP5.org.mifos.kmp.template</string>
+    <string>L432S2FZP5.org.mifospay</string>
     <!-- Team identifier required alongside application-identifier -->
     <key>com.apple.developer.team-identifier</key>
     <string>L432S2FZP5</string>

@@ -78,7 +78,7 @@ cd /path/to/your/project
 ### 2. Make Executable
 
 ```bash
-chmod +x firebase-setup.sh
+chmod +x scripts/white-label/firebase.sh
 ```
 
 ### 3. Authenticate with Firebase
@@ -121,7 +121,7 @@ The script automatically reads this value to configure all Firebase app variants
 ### Basic Syntax
 
 ```bash
-bash firebase-setup.sh <firebase-project-id> <ios-bundle-id>
+bash scripts/white-label/firebase.sh <firebase-project-id> <ios-bundle-id>
 ```
 
 ### Parameters
@@ -137,13 +137,13 @@ bash firebase-setup.sh <firebase-project-id> <ios-bundle-id>
 
 ```bash
 # Standard setup
-bash firebase-setup.sh mycompany-app-production com.mycompany.myapp
+bash scripts/white-label/firebase.sh mycompany-app-production com.mycompany.myapp
 
 # Development environment
-bash firebase-setup.sh mycompany-app-dev com.mycompany.myapp.dev
+bash scripts/white-label/firebase.sh mycompany-app-dev com.mycompany.myapp.dev
 
 # Staging environment
-bash firebase-setup.sh mycompany-app-staging com.mycompany.myapp.staging
+bash scripts/white-label/firebase.sh mycompany-app-staging com.mycompany.myapp.staging
 ```
 
 ## Execution Flow
@@ -445,13 +445,13 @@ Use descriptive, environment-specific Firebase project IDs:
 
 ```bash
 # Production
-bash firebase-setup.sh mycompany-myapp-prod com.mycompany.myapp
+bash scripts/white-label/firebase.sh mycompany-myapp-prod com.mycompany.myapp
 
 # Staging
-bash firebase-setup.sh mycompany-myapp-staging com.mycompany.myapp
+bash scripts/white-label/firebase.sh mycompany-myapp-staging com.mycompany.myapp
 
 # Development
-bash firebase-setup.sh mycompany-myapp-dev com.mycompany.myapp
+bash scripts/white-label/firebase.sh mycompany-myapp-dev com.mycompany.myapp
 ```
 
 ### Environment Separation
@@ -547,7 +547,7 @@ For projects with multiple iOS targets:
 
 ```bash
 # Setup primary target
-bash firebase-setup.sh myapp-prod com.mycompany.myapp
+bash scripts/white-label/firebase.sh myapp-prod com.mycompany.myapp
 
 # Manually register additional targets via Firebase Console
 firebase apps:create IOS com.mycompany.myapp.widget \

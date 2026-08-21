@@ -31,13 +31,13 @@ import org.mifospay.core.model.client.Client
 import org.mifospay.core.model.client.UpdatedClient
 import org.mifospay.core.model.instance.InterbankServer
 import org.mifospay.core.model.instance.ServerInstance
+import org.mifospay.core.model.network.entity.Page
+import org.mifospay.core.model.network.entity.authentication.AuthenticationPayload
+import org.mifospay.core.model.network.entity.user.User
 import org.mifospay.core.model.office.Office
 import org.mifospay.core.model.savingsaccount.Transaction
 import org.mifospay.core.model.user.Language
 import org.mifospay.core.model.user.UserInfo
-import org.mifospay.core.network.model.entity.Page
-import org.mifospay.core.network.model.entity.authentication.AuthenticationPayload
-import org.mifospay.core.network.model.entity.user.User
 import kpt.core.base.store.screen.ScreenState as StoreScreenState
 
 /**

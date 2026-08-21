@@ -7,6 +7,10 @@
 # customization-surface contract library (white-label-template-completion E0/T3).
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
+# Capture the invocation args verbatim so the self-update re-exec (below) can restart the sync with
+# the SAME flags (--dry-run / --only / --force …) on the freshly-materialized engine.
+ORIGINAL_ARGS=("$@")
+
 # ── Atomic self-guard (E0/T3, FIX-01-R2-ATOMIC) ──────────────────────────────
 # The operative-contract flip preserves fork paths by reading customization-surface.yaml. If a consumer
 # pulled this mechanism flip WITHOUT the T1 ownership fix (mid-atomic-window), the contract is wrong and
@@ -405,6 +409,22 @@ merge_settings_include_union() {
         fi
         print_step "include-union: preserved $(printf '%s\n' "$fork_only" | grep -c . ) fork-local module include(s) in ${BOLD}$(basename "$out")${NC}"
     fi
+    # Prune PHANTOM includes: the union starts from the TEMPLATE file, which declares the template's OWN
+    # demo/app feature modules (feature/showcase, feature/loans, feature/rates, …) that a downstream fork
+    # does NOT have and the sync does NOT copy in. Left in, they reference non-existent module dirs and
+    # Gradle configuration hard-fails ("Configuring project ':feature:showcase' without an existing
+    # directory"), blocking even syncForkConfig. Drop every include(":a:b") whose resolved dir a/b/ is
+    # absent on disk (relative to the settings.gradle.kts dir) — keep the fork's real + synced modules.
+    local _iu_root _iu_out _iu_dropped=0 _iu_coord
+    _iu_root="$(cd "$(dirname "$out")" 2>/dev/null && pwd)"; [ -n "$_iu_root" ] || _iu_root="$(pwd)"
+    _iu_out="$(mktemp)"
+    while IFS= read -r _iu_line || [ -n "$_iu_line" ]; do
+        _iu_coord="$(printf '%s' "$_iu_line" | sed -nE 's/^[[:space:]]*include\("?:([A-Za-z0-9:_.-]+)"?\).*/\1/p')"
+        if [ -n "$_iu_coord" ] && [ ! -d "$_iu_root/${_iu_coord//://}" ]; then _iu_dropped=$((_iu_dropped + 1)); continue; fi
+        printf '%s\n' "$_iu_line"
+    done < "$tmp" > "$_iu_out"
+    mv "$_iu_out" "$tmp"
+    [ "$_iu_dropped" -gt 0 ] && print_step "include-union: pruned ${BOLD}$_iu_dropped${NC} phantom include(s) (module dir absent in this fork) from ${BOLD}$(basename "$out")${NC}"
     mv "$tmp" "$out"
     return 0
 }
@@ -882,13 +902,55 @@ if ! git rev-parse --verify "origin/dev" >/dev/null 2>&1; then
     BASE_BRANCH="$DEFAULT_BRANCH"
 fi
 
-# Create sync branch
-SYNC_BRANCH=$(get_sync_branch_name)
-print_step "Creating sync branch: ${BOLD}$SYNC_BRANCH${NC}"
+# ── SELF-UPDATE + RE-EXEC — always run the LATEST engine (close the stale-engine chicken-and-egg) ──
+# sync-dirs.sh is template-owned + self-propagating, but a fork runs its OWN copy, which only updates
+# MID dir-loop (in `scripts/`) — too late for the current run. A fork carrying a stale engine (e.g. one
+# missing the STEP-0 merge-protection bootstrap above) would clobber before it ever picks up the fix.
+# So: if the template's engine differs from the running one, create the sync branch NOW, COMMIT the
+# fresh engine + merge-protection contract onto it, and RE-EXEC — the whole run then executes the latest
+# engine. Committing first keeps the working tree CLEAN across the branch dance (no mid-run edit of the
+# running script → no bash re-read hazard, no `checkout` clobber). Guarded (SYNC_DIRS_SELF_UPDATED)
+# against an infinite loop; requires a clean tree; skipped in --dry-run (warns instead of mutating).
+_self_rel="scripts/white-label/sync-dirs.sh"
+if [ "${SYNC_DIRS_SELF_UPDATED:-0}" != "1" ] && [ "$DRY_RUN" = false ] \
+   && git cat-file -e "$TEMPLATE_REMOTE/$BASE_BRANCH:$_self_rel" 2>/dev/null; then
+    _tpl_engine="$(git rev-parse "$TEMPLATE_REMOTE/$BASE_BRANCH:$_self_rel" 2>/dev/null || echo "")"
+    _loc_engine="$(git hash-object "$_self_rel" 2>/dev/null || echo "")"
+    if [ -n "$_tpl_engine" ] && [ "$_tpl_engine" != "$_loc_engine" ]; then
+        if ! git diff --quiet 2>/dev/null || ! git diff --cached --quiet 2>/dev/null; then
+            print_warning "sync engine is stale but the tree is dirty — skipping self-update; running the CURRENT engine (commit/clean the tree to auto-update next run)."
+        else
+            _su_branch="$(get_sync_branch_name)"
+            print_step "Self-updating the sync engine from the template on ${BOLD}$_su_branch${NC}, then re-running on the latest…"
+            if git checkout -b "$_su_branch" "$BASE_BRANCH" >/dev/null 2>&1; then
+                for _up in "$_self_rel" scripts/customization-surface.sh customization-surface.yaml; do
+                    git cat-file -e "$TEMPLATE_REMOTE/$BASE_BRANCH:$_up" 2>/dev/null || continue
+                    mkdir -p "$(dirname "$_up")"
+                    git show "$TEMPLATE_REMOTE/$BASE_BRANCH:$_up" > "$_up" 2>/dev/null
+                done
+                chmod +x "$_self_rel" scripts/customization-surface.sh 2>/dev/null || true
+                git add "$_self_rel" scripts/customization-surface.sh customization-surface.yaml >/dev/null 2>&1
+                git commit -q -m "chore(sync): self-update engine + merge-protection contract from template" >/dev/null 2>&1 || true
+                SYNC_DIRS_SELF_UPDATED=1 SYNC_PREBUILT_BRANCH="$_su_branch" exec bash "$_self_rel" ${ORIGINAL_ARGS[@]+"${ORIGINAL_ARGS[@]}"}
+            fi
+            print_warning "self-update could not create its branch — proceeding on the CURRENT engine."
+        fi
+    fi
+fi
+
+# Create sync branch (or REUSE the one the self-update pre-built the fresh engine onto)
+if [ -n "${SYNC_PREBUILT_BRANCH:-}" ]; then
+    SYNC_BRANCH="$SYNC_PREBUILT_BRANCH"
+    print_step "Reusing self-update sync branch: ${BOLD}$SYNC_BRANCH${NC}"
+else
+    SYNC_BRANCH=$(get_sync_branch_name)
+    print_step "Creating sync branch: ${BOLD}$SYNC_BRANCH${NC}"
+fi
 
 if [ "$DRY_RUN" = false ]; then
-    # Create sync branch from base branch
-    if ! git checkout -b "$SYNC_BRANCH" "$BASE_BRANCH"; then
+    # Create sync branch from base branch — SKIP when the self-update already created + checked it out
+    # (we are already on it, with the fresh engine committed and the tree clean).
+    if [ -z "${SYNC_PREBUILT_BRANCH:-}" ] && ! git checkout -b "$SYNC_BRANCH" "$BASE_BRANCH"; then
         handle_error "Failed to create sync branch"
     fi
     show_progress
@@ -910,6 +972,28 @@ if [ "$DRY_RUN" = false ]; then
 
     # Preserve root-level excluded files
     preserve_root_files
+
+    # ── STEP 0 BOOTSTRAP — the merge-protection contract MUST be on disk before ANY dir syncs ──
+    # is_excluded()'s fork-ownership check AND the 3-way merge engine (cs_merge) both silently
+    # NO-OP when scripts/customization-surface.sh or the root customization-surface.yaml are absent.
+    # Because `scripts/` sits mid-SYNC_DIRS (after cmp-android / cmp-shared / core) and
+    # customization-surface.yaml is a SYNC_FILE (synced AFTER every dir), a fork that has not yet
+    # committed the contract (a legacy / pre-white-label base — e.g. syncing onto a dev branch whose
+    # white-label adoption is still on an unmerged PR) would sync cmp-android + ~14 dirs with ZERO
+    # merge protection — blind-overwriting merge-owned files like AndroidManifest.xml and dropping
+    # the fork's CAMERA / RECORD_AUDIO permissions. Materialize the contract from the template FIRST
+    # (both files are owner:template / copy-exact, so this is idempotent + safe) so EVERY subsequent
+    # dir gets full is_excluded + 3-way-merge protection. Self-bootstrap → auto-resolve; this is what
+    # makes the sync run cleanly on a not-yet-white-labelled base instead of clobbering or halting.
+    for _bp in customization-surface.yaml scripts/customization-surface.sh; do
+        if git cat-file -e "$TEMP_BRANCH:$_bp" 2>/dev/null; then
+            mkdir -p "$(dirname "$_bp")"
+            if git show "$TEMP_BRANCH:$_bp" > "$_bp" 2>/dev/null; then
+                print_step "bootstrapped merge-protection contract: ${BOLD}$_bp${NC}"
+            fi
+        fi
+    done
+    [ -f scripts/customization-surface.sh ] && chmod +x scripts/customization-surface.sh 2>/dev/null || true
 fi
 
 # ── customization-surface advisory (fork-ownership contract) ──────────────────
@@ -918,8 +1002,8 @@ fi
 # preserves fork edits (e.g. AndroidManifest permissions). The mechanical sync
 # below is UNCHANGED — the contract is the declared source of truth the merge
 # engine adopts next. Fully guarded so it can never abort a sync.
-CS_READER="$(dirname "$0")/scripts/customization-surface.sh"
-if [ -f "$CS_READER" ] && [ -f "$(dirname "$0")/customization-surface.yaml" ]; then
+CS_READER="$SCRIPT_DIR/../customization-surface.sh"
+if [ -f "$CS_READER" ] && [ -f "$SCRIPT_DIR/../../customization-surface.yaml" ]; then
     # shellcheck source=/dev/null
     source "$CS_READER" 2>/dev/null || true
     if declare -F cs_match_g >/dev/null 2>&1; then

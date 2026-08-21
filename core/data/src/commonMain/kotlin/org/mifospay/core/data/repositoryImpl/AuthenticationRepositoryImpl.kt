@@ -13,9 +13,9 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import org.mifospay.core.data.mapper.toUserInfo
 import org.mifospay.core.data.repository.AuthenticationRepository
+import org.mifospay.core.model.network.entity.authentication.AuthenticationPayload
 import org.mifospay.core.model.user.UserInfo
 import org.mifospay.core.network.SelfServiceApiManager
-import org.mifospay.core.network.model.entity.authentication.AuthenticationPayload
 
 class AuthenticationRepositoryImpl(
     private val apiManager: SelfServiceApiManager,

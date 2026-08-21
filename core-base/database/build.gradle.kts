@@ -26,6 +26,10 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             api(libs.androidx.room.runtime)
+            // Koin + coroutines: the template-owned platformDatabaseModule<T> builder lives here so a
+            // fork's core/database never re-authors the platform driver/dispatcher/fallback boilerplate.
+            api(libs.koin.core)
+            implementation(libs.kotlinx.coroutines.core)
         }
 
         commonTest.dependencies {
@@ -42,6 +46,8 @@ kotlin {
         }
         androidMain.dependencies {
             api(libs.androidx.sqlite.bundled)
+            // platformDatabaseModule (android) resolves the Application via androidApplication().
+            implementation(libs.koin.android)
         }
 
         jsMain.dependencies {

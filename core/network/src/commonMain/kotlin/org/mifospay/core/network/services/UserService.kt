@@ -16,12 +16,12 @@ import de.jensklingenberg.ktorfit.http.POST
 import de.jensklingenberg.ktorfit.http.PUT
 import de.jensklingenberg.ktorfit.http.Path
 import kotlinx.coroutines.flow.Flow
-import org.mifospay.core.network.model.CommonResponse
-import org.mifospay.core.network.model.GenericResponse
-import org.mifospay.core.network.model.entity.UserWithRole
-import org.mifospay.core.network.model.entity.user.NewUserEntity
-import org.mifospay.core.network.model.entity.user.UpdateUserEntityPassword
-import org.mifospay.core.network.model.entity.user.UpdateUserPasswordResponse
+import org.mifospay.core.model.network.CommonResponse
+import org.mifospay.core.model.network.GenericResponse
+import org.mifospay.core.model.network.entity.UserWithRole
+import org.mifospay.core.model.network.entity.user.NewUserEntity
+import org.mifospay.core.model.network.entity.user.UpdateUserEntityPassword
+import org.mifospay.core.model.network.entity.user.UpdateUserPasswordResponse
 import org.mifospay.core.network.utils.ApiEndPoints
 
 interface UserService {

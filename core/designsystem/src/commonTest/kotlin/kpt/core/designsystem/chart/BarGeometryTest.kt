@@ -9,6 +9,7 @@
  */
 package kpt.core.designsystem.chart
 
+import kpt.core.base.designsystem.chart.BarGeometry
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue

@@ -40,7 +40,7 @@ configurations across multiple environments and CI/CD pipelines.
 
 1. Make it executable:
    ```bash
-   chmod +x keystore-manager.sh
+   chmod +x scripts/white-label/keystore.sh
    ```
 
 2. Ensure you have the required dependencies:
@@ -62,7 +62,7 @@ configurations across multiple environments and CI/CD pipelines.
 ### Generating Keystores
 
 ```bash
-./keystore-manager.sh generate
+scripts/white-label/keystore.sh generate
 ```
 
 This command:
@@ -79,7 +79,7 @@ This command:
 ### Viewing Secrets
 
 ```bash
-./keystore-manager.sh view
+scripts/white-label/keystore.sh view
 ```
 
 Displays all secrets from `secrets/shared/secrets.env` in a nicely formatted table. For multiline
@@ -91,7 +91,7 @@ values (like base64-encoded keystores), it shows `[MULTILINE VALUE]` instead of 
 ### Adding Secrets to GitHub
 
 ```bash
-./keystore-manager.sh add --repo=username/repo
+scripts/white-label/keystore.sh add --repo=username/repo
 ```
 
 **DEPRECATED.** Adds all secrets from `secrets/shared/secrets.env` to the specified GitHub
@@ -103,13 +103,13 @@ directly and does not require an intermediate `secrets.env` bundle.
 You can target a specific GitHub environment:
 
 ```bash
-./keystore-manager.sh add --repo=username/repo --env=production
+scripts/white-label/keystore.sh add --repo=username/repo --env=production
 ```
 
 ### Listing GitHub Secrets
 
 ```bash
-./keystore-manager.sh list --repo=username/repo
+scripts/white-label/keystore.sh list --repo=username/repo
 ```
 
 Lists all secrets currently stored in the specified GitHub repository.
@@ -117,7 +117,7 @@ Lists all secrets currently stored in the specified GitHub repository.
 ### Deleting GitHub Secrets
 
 ```bash
-./keystore-manager.sh delete --repo=username/repo --name=SECRET_NAME
+scripts/white-label/keystore.sh delete --repo=username/repo --name=SECRET_NAME
 ```
 
 Deletes a specific secret from the GitHub repository.
@@ -125,7 +125,7 @@ Deletes a specific secret from the GitHub repository.
 ### Deleting All GitHub Secrets
 
 ```bash
-./keystore-manager.sh delete-all --repo=username/repo
+scripts/white-label/keystore.sh delete-all --repo=username/repo
 ```
 
 **DEPRECATED.** Deletes all secrets defined in `secrets/shared/secrets.env` from the GitHub
@@ -134,7 +134,7 @@ repository (excluding certificate information and local configuration values).
 To also delete excluded secrets:
 
 ```bash
-./keystore-manager.sh delete-all --repo=username/repo --include-excluded
+scripts/white-label/keystore.sh delete-all --repo=username/repo --include-excluded
 ```
 
 ## Configuration
@@ -154,7 +154,7 @@ To populate the password files run `scripts/secrets/setup-secrets.sh android` or
 `setup-project.sh` write them automatically.
 
 The legacy `secrets/shared/secrets.env` bundle is still used by the iOS/macOS sync flow
-(`keystore-manager.sh sync`) — it is not removed, only the Android keystore password section
+(`scripts/white-label/keystore.sh sync`) — it is not removed, only the Android keystore password section
 is retired from it.
 
 ### Files Updated by Script
@@ -207,9 +207,9 @@ project/
 │   └── keystore_alias_password
 ├── gradle/fork.properties                           # Keystore DN + org identity (gitignored)
 ├── fastlane-config/
-│   └── project_config.rb                            # Updated by keystore-manager.sh generate
+│   └── project_config.rb                            # Updated by scripts/white-label/keystore.sh generate
 └── cmp-android/
-    └── build.gradle.kts                             # Updated by keystore-manager.sh generate
+    └── build.gradle.kts                             # Updated by scripts/white-label/keystore.sh generate
 ```
 
 > `secrets.env` at the repo root has been retired (2026-06-23).
@@ -256,7 +256,7 @@ default.
 
 **Q: How do I change the keystore passwords?**  
 A: Edit the per-value files in `secrets/android/keystores/` (keystore_password, keystore_alias,
-keystore_alias_password), then re-run `./keystore-manager.sh generate`. The script reads those
+keystore_alias_password), then re-run `scripts/white-label/keystore.sh generate`. The script reads those
 files directly — `secrets.env` is retired.
 
 **Q: Can I use this script in CI/CD pipelines?**  

@@ -278,7 +278,7 @@ File google-services.json is missing
 ls -la cmp-android/google-services.json
 
 # 2. Run Firebase setup if missing
-./firebase-setup.sh
+scripts/white-label/firebase.sh
 
 # 3. Or download manually from Firebase Console
 # - Go to Firebase Console
@@ -315,10 +315,10 @@ No key with alias 'MyKey' found in keystore
 
 ```bash
 # 1. Generate keystores if missing
-./keystore-manager.sh generate
+scripts/white-label/keystore.sh generate
 
 # 2. View keystore info
-./keystore-manager.sh view
+scripts/white-label/keystore.sh view
 
 # 3. Check signing configuration in build.gradle.kts
 cat cmp-android/build.gradle.kts | grep -A 20 "signingConfigs"
@@ -377,7 +377,7 @@ cat gradle/fork.properties | grep apple.match
 cat secrets/apple/match/.match_password | wc -c   # verify password file exists
 
 # 5. Check Xcode signing settings
-open cmp-ios/iosApp.xcworkspace
+open cmp-ios/iosApp.xcodeproj
 # Target → Signing & Capabilities → check Team and Profile
 
 # 6. Force new certificates if needed
@@ -393,43 +393,46 @@ bundle exec fastlane match appstore --force_for_new_devices
 
 ---
 
-### Issue 2: Sandbox Not in Sync with Podfile.lock
+### Issue 2: ComposeApp XCFramework Missing or Stale
 
 **Symptoms:**
 ```
-The sandbox is not in sync with the Podfile.lock
+error: no such module 'ComposeApp'
+# or a stale UI — code changes in cmp-shared don't show up in the app
 ```
 
+> Since the E6 SwiftPM/XCFramework migration there is no CocoaPods step — iOS links the
+> Kotlin `ComposeApp` framework as an XCFramework assembled by Gradle and embedded by the
+> Xcode `[KMP] Embed and Sign ComposeApp XCFramework` Run-Script phase. This issue replaces
+> the old CocoaPods "sandbox out of sync" failure.
+
 **Causes:**
-- CocoaPods dependencies out of sync
-- Podfile modified without running `pod install`
-- Corrupted CocoaPods cache
+- The `ComposeApp` XCFramework was never assembled (a fresh checkout / clean build dir)
+- A stale XCFramework slice from an earlier `cmp-shared` state
+- The Run-Script build phase was disabled or the framework search paths were edited
 
 **Solutions:**
 
 ```bash
-# 1. Deintegrate and reinstall
-cd cmp-ios
-pod deintegrate
-pod install --repo-update
+# 1. Assemble the ComposeApp XCFramework fresh (Debug + Release slices)
+./gradlew :cmp-shared:assembleComposeAppXCFramework
+#   → cmp-shared/build/XCFrameworks/{debug,release}/ComposeApp.xcframework
 
-# 2. Clean CocoaPods cache
-rm -rf ~/Library/Caches/CocoaPods
-pod install
-
-# 3. Update CocoaPods
-sudo gem install cocoapods
-
-# 4. Verify Podfile.lock matches Podfile
-git diff cmp-ios/Podfile.lock
-
-# 5. Clean Xcode derived data
+# 2. Clean Xcode derived data, then rebuild — the Run-Script phase re-assembles
+#    and re-embeds the flavor-matched framework on every build
 rm -rf ~/Library/Developer/Xcode/DerivedData/*
+
+# 3. Rebuild (the app is a plain .xcodeproj, no .xcworkspace)
+xcodebuild -project cmp-ios/iosApp.xcodeproj \
+  -scheme iosApp \
+  -configuration Debug \
+  -sdk iphonesimulator \
+  clean build
 ```
 
 **Files:**
-- `cmp-ios/Podfile`
-- `cmp-ios/Podfile.lock`
+- `cmp-ios/Package.swift` (SwiftPM binary target → `ComposeApp.xcframework`)
+- `cmp-ios/scripts/embed-xcframework.sh` (the `[KMP] Embed and Sign …` Run-Script phase)
 
 ---
 
@@ -437,59 +440,13 @@ rm -rf ~/Library/Developer/Xcode/DerivedData/*
 
 **Symptoms:**
 ```
-ld: framework not found 'SomeFramework'
+ld: framework not found 'ComposeApp'
 ```
 
 **Causes:**
-- Missing CocoaPods dependency
+- `ComposeApp` XCFramework not assembled
 - Shared module not built
 - Framework search paths incorrect
-
-**Solutions:**
-
-```bash
-# 1. Update and install pods
-cd cmp-ios
-pod repo update
-pod install
-
-# 2. Build shared module
-cd ..
-./gradlew :cmp-shared:assemble
-
-# 3. Generate XCFramework
-./gradlew :cmp-shared:assembleXCFramework
-
-# 4. Reinstall pods
-cd cmp-ios
-pod install
-
-# 5. Clean derived data
-rm -rf ~/Library/Developer/Xcode/DerivedData/*
-
-# 6. Clean and rebuild in Xcode
-# Product → Clean Build Folder (Cmd+Shift+K)
-# Product → Build (Cmd+B)
-
-# 7. Check framework search paths
-open iosApp.xcodeproj
-# Target → Build Settings → Framework Search Paths
-```
-
----
-
-### Issue 4: No Such Module 'shared'
-
-**Symptoms:**
-```
-No such module 'shared'
-import shared
-```
-
-**Causes:**
-- KMP shared module not built
-- Framework not imported correctly
-- CocoaPods integration issue
 
 **Solutions:**
 
@@ -497,25 +454,56 @@ import shared
 # 1. Build shared module
 ./gradlew :cmp-shared:assemble
 
-# 2. Generate XCFramework
-./gradlew :cmp-shared:assembleXCFramework
+# 2. Assemble the ComposeApp XCFramework (both slices via the umbrella task)
+./gradlew :cmp-shared:assembleComposeAppXCFramework
 
-# 3. Reinstall CocoaPods
-cd cmp-ios
-pod deintegrate
-pod install
-
-# 4. Check Podfile configuration
-cat Podfile | grep -A 5 "shared"
-
-# 5. Verify framework is in build directory
-ls -la ../cmp-shared/build/XCFrameworks/
-
-# 6. Clean Xcode
+# 3. Clean derived data
 rm -rf ~/Library/Developer/Xcode/DerivedData/*
 
-# 7. Rebuild
-xcodebuild -workspace iosApp.xcworkspace \
+# 4. Clean and rebuild in Xcode
+# Product → Clean Build Folder (Cmd+Shift+K)
+# Product → Build (Cmd+B)
+
+# 5. Check framework search paths
+open cmp-ios/iosApp.xcodeproj
+# Target → Build Settings → Framework Search Paths
+```
+
+---
+
+### Issue 4: No Such Module 'ComposeApp'
+
+**Symptoms:**
+```
+No such module 'ComposeApp'
+import ComposeApp
+```
+
+**Causes:**
+- KMP shared module not built
+- `ComposeApp` XCFramework not assembled / not embedded
+- SwiftPM package or Run-Script embed phase misconfigured
+
+**Solutions:**
+
+```bash
+# 1. Build shared module
+./gradlew :cmp-shared:assemble
+
+# 2. Assemble the ComposeApp XCFramework
+./gradlew :cmp-shared:assembleComposeAppReleaseXCFramework
+
+# 3. Verify the framework is in the build directory (the path Package.swift points at)
+ls -la cmp-shared/build/XCFrameworks/release/ComposeApp.xcframework
+
+# 4. In Xcode, re-resolve SwiftPM packages if you consume via Package.swift
+# File → Packages → Reset Package Caches, then File → Packages → Resolve Package Versions
+
+# 5. Clean Xcode
+rm -rf ~/Library/Developer/Xcode/DerivedData/*
+
+# 6. Rebuild (plain .xcodeproj, no .xcworkspace)
+xcodebuild -project cmp-ios/iosApp.xcodeproj \
   -scheme iosApp \
   -configuration Debug \
   clean build
@@ -913,7 +901,7 @@ gh secret set KEYSTORE_FILE < keystores/original-release-key.jks.b64
 gh secret set UPLOAD_KEYSTORE_FILE < keystores/original-release-key.jks.b64
 
 # Or use keystore-manager which handles both
-./keystore-manager.sh add
+scripts/white-label/keystore.sh add
 ```
 
 **See:** [BUGS_AND_ISSUES.md#2](../analysis/BUGS_AND_ISSUES.md#2-signing-parameter-naming-inconsistency-critical)
@@ -941,10 +929,10 @@ Error: Secret FIREBASECREDS not found
 gh secret list
 
 # 2. Add missing secrets
-./keystore-manager.sh add
+scripts/white-label/keystore.sh add
 
 # 3. Or manually encode and add
-./keystore-manager.sh encode-secrets
+scripts/white-label/keystore.sh encode-secrets
 # Copy output and add via GitHub UI
 
 # 4. Verify secret name matches workflow
@@ -1130,7 +1118,7 @@ rm -rf build/
 rm -rf */build/
 rm -rf ~/.gradle/caches
 rm -rf ~/Library/Developer/Xcode/DerivedData/*
-cd cmp-ios && pod deintegrate && pod install
+./gradlew :cmp-shared:assembleComposeAppXCFramework   # re-assemble the iOS ComposeApp XCFramework
 ./gradlew build
 ```
 
@@ -1138,10 +1126,10 @@ cd cmp-ios && pod deintegrate && pod install
 
 ```bash
 # 1. Verify all secrets
-./keystore-manager.sh view
+scripts/white-label/keystore.sh view
 
 # 2. Re-add all secrets
-./keystore-manager.sh add
+scripts/white-label/keystore.sh add
 
 # 3. Verify iOS setup
 ./scripts/ios/verify_ios_deployment.sh

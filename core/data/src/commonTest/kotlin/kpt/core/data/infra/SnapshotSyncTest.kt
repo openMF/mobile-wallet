@@ -8,9 +8,10 @@
  * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 package kpt.core.data.infra
-
 import kotlinx.coroutines.test.runTest
-import kpt.core.datastore.infra.ChangeListVersions
+import kpt.core.base.data.infra.Synchronizer
+import kpt.core.base.data.infra.snapshotSync
+import kpt.core.base.datastore.infra.ChangeListVersions
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse

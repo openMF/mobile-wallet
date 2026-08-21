@@ -8,15 +8,18 @@
  * See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 
-@file:OptIn(org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeCacheApi::class)
-
-import org.jetbrains.kotlin.gradle.plugin.mpp.DisableCacheInKotlinVersion
 import org.jetbrains.kotlin.gradle.plugin.mpp.NativeBuildType
 import org.jetbrains.kotlin.gradle.plugin.mpp.apple.XCFramework
 
 plugins {
     alias(libs.plugins.kmp.library.convention)
     alias(libs.plugins.cmp.feature.convention)
+    // SKIE — Swift-friendly export of the ComposeApp framework (sealed classes,
+    // suspend → async/await, Flow → AsyncSequence, default arguments). Applies to
+    // the KMP `binaries.framework { }` export below; the XCFramework the iOS app
+    // consumes therefore ships the SKIE-enhanced Swift API. E6 (SwiftPM/XCFramework)
+    // migration off the Kotlin CocoaPods plugin — see 07-ios-swiftpm.md.
+    alias(libs.plugins.skie)
     // worker-kmp v4.0.0 — applies @WorkerKmpApp/@WorkerKmpWorkers codegen pipeline.
     // KSP processor scans this module's commonMain for @WorkerKmpWorkers (see
     // cmp/shared/WorkerDeclarations.kt) + emits per-platform installWorkerKmp{Platform}
@@ -27,13 +30,20 @@ plugins {
     id("io.github.mobilebytelabs.worker-app")
 }
 
+// SKIE (Swift-ergonomic API bridging) is wired but DISABLED by default: the current SKIE release
+// does not yet support Kotlin 2.4.0 (SKIE gates the compiler version and fails the whole build on a
+// mismatch). Flip to `true` once a Kotlin-2.4.0-compatible SKIE version is pinned in libs.versions.toml.
+skie {
+    isEnabled = false
+}
+
 kotlin {
     // E6 — SwiftPM/XCFramework export (replaces the Kotlin CocoaPods plugin).
     // Assemble a single `ComposeApp.xcframework` from the iOS device + simulator
     // slices; the iOS app consumes it via `cmp-ios/Package.swift` (SwiftPM binary
     // target) + the flavor-aware `cmp-ios/scripts/embed-xcframework.sh` Xcode
-    // Run-Script build phase. `assembleComposeApp{Debug,Release}XCFramework` (and the
-    // umbrella `assembleComposeAppXCFramework`) Gradle tasks are registered
+    // Run-Script build phase. The `assembleComposeApp{Debug,Release}XCFramework`
+    // (and umbrella `assembleComposeAppXCFramework`) Gradle tasks are registered
     // automatically by this `XCFramework(...)` DSL — the deploy lanes call them
     // instead of `pod install`.
     val xcf = XCFramework("ComposeApp")
@@ -49,19 +59,6 @@ kotlin {
             optimized = buildType == NativeBuildType.RELEASE
             xcf.add(this)
         }
-        // compose-signature:1.0.1 ships an iosArm64 klib that fails Kotlin/Native
-        // static-cache generation on Kotlin 2.4.0 — the CI iOS build aborts with
-        // "error: Failed to build cache for .../compose-signature-iosArm64Main-1.0.1.klib".
-        // Disable the native cache for every binary of this target (framework + the
-        // CocoaPods-plugin framework the CI xcodebuild links) so the klib is linked
-        // directly. The `kotlin.native.cacheKind.<target>` gradle property that used to
-        // do this was removed in 2.3.20; this per-binary DSL is its replacement.
-        iosTarget.binaries.configureEach {
-            disableNativeCache(
-                DisableCacheInKotlinVersion.`2_4_0`,
-                reason = "compose-signature:1.0.1 iosArm64 klib fails static-cache build on Kotlin 2.4.0",
-            )
-        }
     }
 
     sourceSets {
@@ -69,8 +66,9 @@ kotlin {
             // Navigation Modules
             implementation(projects.cmpNavigation)
             implementation(compose.components.resources)
-            implementation(projects.coreBase.platform)
-            implementation(projects.coreBase.ui)
+            implementation(projects.core.ui)
+            // core/platform re-exports the core-base/platform surface the app-shell uses.
+            implementation(projects.core.platform)
 
             implementation(libs.coil.kt.compose)
 
@@ -93,9 +91,8 @@ kotlin {
             implementation(libs.worker.compose.all)
             // Worker classes referenced from the @WorkerKmpWorkers annotation live here.
             implementation(projects.sync)
-            // DataSyncWorker's constructor params come from core:data (CurrencyRepository,
-            // MacroIndicatorsRepository) + core:datastore (SyncStatePersister). The
-            // @WorkerKmpWorkers KSP codegen reads every worker ctor param type for Koin
+            // DataSyncWorker's constructor params come from core:datastore (SyncStatePersister).
+            // The @WorkerKmpWorkers KSP codegen reads every worker ctor param type for Koin
             // autowiring, and KSP metadata resolution needs them on the DIRECT classpath
             // (transitive-via-:sync klibs are not resolved) — else "could not resolve type
             // of constructor parameter ...".
@@ -109,6 +106,10 @@ kotlin {
             implementation(projects.core.common)
             implementation(projects.core.domain)
             implementation(projects.core.network)
+            // MifosPayApp wraps the PlatformAuthenticatorCompositionProvider + PasscodeManager
+            // biometrics/passcode seams directly.
+            implementation(libs.mifos.authenticator.biometrics)
+            implementation(libs.mifos.authenticator.passcode)
             implementation(projects.feature.auth)
             implementation(projects.feature.home)
             implementation(projects.feature.settings)
@@ -152,6 +153,14 @@ kotlin {
         }
     }
 
+    // NOTE — the flavor-aware `{flavor}{BuildType}` → Kotlin/Native build-type mapping
+    // that the removed CocoaPods `xcodeConfigurationToNativeBuildType[...]` block
+    // performed is now reproduced OUTSIDE Gradle, in the Xcode Run-Script build phase
+    // `cmp-ios/scripts/embed-xcframework.sh`: it reads `$CONFIGURATION`
+    // (`demoDebug` / `prodStaging` / `prodRelease` / …), maps a debuggable variant
+    // → Debug and everything else → Release (identical semantics), then invokes the
+    // matching `:cmp-shared:embedAndSignAppleFrameworkForXcode` with a canonical
+    // Debug/Release `CONFIGURATION` so the KMP embed task selects the right slice.
 }
 
 compose.resources {

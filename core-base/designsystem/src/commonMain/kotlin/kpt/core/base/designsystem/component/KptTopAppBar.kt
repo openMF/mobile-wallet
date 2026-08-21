@@ -93,6 +93,7 @@ fun KptTopAppBar(configuration: KptTopAppBarConfiguration) {
             IconButton(
                 onClick = action.onClick,
                 enabled = action.enabled,
+                modifier = action.testTag?.let { Modifier.testTag(it) } ?: Modifier,
             ) {
                 Icon(
                     imageVector = action.icon,

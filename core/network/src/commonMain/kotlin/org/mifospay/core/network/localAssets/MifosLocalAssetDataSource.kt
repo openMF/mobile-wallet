@@ -11,9 +11,9 @@ package org.mifospay.core.network.localAssets
 
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.serialization.json.Json
-import org.mifospay.core.network.model.entity.signup.City
-import org.mifospay.core.network.model.entity.signup.Country
-import org.mifospay.core.network.model.entity.signup.State
+import org.mifospay.core.model.network.entity.signup.City
+import org.mifospay.core.model.network.entity.signup.Country
+import org.mifospay.core.model.network.entity.signup.State
 
 class MifosLocalAssetDataSource(
     private val ioDispatcher: CoroutineDispatcher,

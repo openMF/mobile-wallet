@@ -10,7 +10,7 @@
 package kpt.core.data.infra
 
 import kotlinx.serialization.json.Json
-import kpt.core.datastore.infra.ChangeListVersions
+import kpt.core.base.datastore.infra.ChangeListVersions
 import kotlin.test.Test
 import kotlin.test.assertEquals
 

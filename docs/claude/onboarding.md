@@ -113,14 +113,12 @@ brew install git
 # 5. Xcode Command Line Tools
 xcode-select --install
 
-# 6. CocoaPods (for iOS dependencies)
-sudo gem install cocoapods
-
-# 7. Ruby (for Fastlane) - usually pre-installed
+# 6. Ruby (for Fastlane) - usually pre-installed
 ruby --version  # Should be 2.7+
 
-# 8. Bundler (for Fastlane gems)
+# 7. Bundler (for Fastlane gems)
 sudo gem install bundler
+# (iOS links the Kotlin ComposeApp framework via SwiftPM/XCFramework — no CocoaPods to install.)
 
 # Optional: GitHub CLI (for workflow management)
 brew install gh
@@ -173,7 +171,6 @@ scoop install gh
 ✅ Java 17 found
 ✅ Git found
 ✅ Xcode found (macOS only)
-✅ CocoaPods found (macOS only)
 ✅ Ruby found
 ✅ Bundler found
 ```
@@ -270,13 +267,15 @@ ls -la cmp-android/build/outputs/apk/debug/
 ### iOS Build (macOS only)
 
 ```bash
-# Install CocoaPods dependencies
-cd cmp-ios
-pod install
+# iOS integrates the Kotlin ComposeApp framework as an XCFramework (SwiftPM binary
+# target, cmp-ios/Package.swift) — no CocoaPods. Open the Xcode project; its
+# [KMP] Embed and Sign ComposeApp XCFramework Run-Script phase assembles + embeds
+# the framework on every build:
+open cmp-ios/iosApp.xcodeproj
 
-# Build (unsigned, for testing)
-cd ..
-xcodebuild -workspace cmp-ios/iosApp.xcworkspace \
+# Or build unsigned from the CLI (the same Run-Script phase assembles the framework;
+# the app is a plain .xcodeproj, no .xcworkspace):
+xcodebuild -project cmp-ios/iosApp.xcodeproj \
   -scheme iosApp \
   -configuration Debug \
   -sdk iphonesimulator \
@@ -342,7 +341,7 @@ kmp-project-template/
 ├── cmp-ios/                  # iOS application
 │   ├── iosApp/               # Swift code
 │   ├── iosApp.xcodeproj
-│   ├── Podfile               # CocoaPods dependencies
+│   ├── Package.swift          # SwiftPM binary target (ComposeApp XCFramework)
 │   └── GoogleService-Info.plist
 │
 ├── cmp-macos/                # macOS application
@@ -632,11 +631,9 @@ struct ContentView: View {
 ./gradlew :cmp-android:assembleDebug
 ./gradlew :cmp-android:connectedDebugAndroidTest
 
-# Test iOS (if on macOS)
-cd cmp-ios
-pod install
-cd ..
-xcodebuild test -workspace cmp-ios/iosApp.xcworkspace -scheme iosApp
+# Test iOS (if on macOS) — no CocoaPods step; the Xcode Run-Script phase assembles the
+# ComposeApp XCFramework, and the app builds from the .xcodeproj (no .xcworkspace)
+xcodebuild test -project cmp-ios/iosApp.xcodeproj -scheme iosApp
 
 # Test Desktop
 ./gradlew :cmp-desktop:run
@@ -801,7 +798,6 @@ gh workflow run multi-platform-build-and-publish.yml \
   -f desktop_package_name=cmp-desktop \
   -f web_package_name=cmp-web \
   -f distribute_ios_firebase=true \
-  -f use_cocoapods=true \
   -f shared_module=cmp-shared
 ```
 
@@ -849,17 +845,16 @@ dependencies {
 
 #### To iOS Only
 
-Edit `cmp-ios/Podfile`:
+iOS integrates native Swift dependencies via SwiftPM. Add the package to
+`cmp-ios/Package.swift` (or via Xcode → File → Add Package Dependencies…):
 
-```ruby
-pod 'SomeLibrary', '~> 1.0'
+```swift
+dependencies: [
+    .package(url: "https://github.com/example/SomeLibrary.git", from: "1.0.0"),
+],
 ```
 
-Then run:
-```bash
-cd cmp-ios
-pod install
-```
+Xcode resolves the package on the next build — there is no CocoaPods step.
 
 **After adding dependencies:**
 

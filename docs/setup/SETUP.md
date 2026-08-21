@@ -20,9 +20,9 @@ Before you begin, ensure your development environment meets the following requir
 
 #### iOS Development
 - **macOS 13.0+**: Required for iOS development
-- **Xcode 14.1+**: Apple's IDE for iOS development
-- **CocoaPods 1.11.0+**: Dependency manager for Swift and Objective-C projects
-- **Ruby 2.7+**: Required for Fastlane and CocoaPods
+- **Xcode 14.1+**: Apple's IDE for iOS development (resolves SwiftPM packages)
+- **Ruby 2.7+**: Required for Fastlane
+- No CocoaPods — iOS links the Kotlin `ComposeApp` framework as an XCFramework via SwiftPM (`cmp-ios/Package.swift`)
 
 #### Desktop Development
 - **IntelliJ IDEA 2022.3+**: Recommended IDE for desktop development (Community Edition is sufficient)
@@ -52,7 +52,7 @@ cd kmp-project-template
 The project includes a customization script that will update package names, application IDs, and other project identifiers to match your organization's naming conventions.
 
 ```bash
-./customizer.sh org.example.myapp MyKMPProject
+scripts/white-label/customize.sh org.example.myapp MyKMPProject
 ```
 
 Parameters:
@@ -74,12 +74,14 @@ The project uses Gradle's dependency management, so no additional steps are requ
 
 #### iOS
 
-If you're developing for iOS, you need to install CocoaPods dependencies:
+iOS integrates the Kotlin `ComposeApp` framework as an XCFramework (SwiftPM binary
+target, `cmp-ios/Package.swift`) — there is no CocoaPods step. Assemble the framework,
+then open the project in Xcode; its `[KMP] Embed and Sign ComposeApp XCFramework`
+Run-Script phase assembles + embeds it on every build:
 
 ```bash
-cd cmp-ios
-pod install
-cd ..
+./gradlew :cmp-shared:assembleComposeAppXCFramework
+open cmp-ios/iosApp.xcodeproj
 ```
 
 #### Web
@@ -97,7 +99,7 @@ cd ..
 If you plan to use CI/CD or need to manage keystores for Android app signing, configure the Secrets Manager:
 
 ```bash
-./keystore-manager.sh generate
+scripts/white-label/keystore.sh generate
 ```
 
 This will:
@@ -197,12 +199,11 @@ sdk.dir=/path/to/your/Android/sdk
 
 ### iOS Build Issues
 
-1. Make sure CocoaPods is properly installed and the pods are up-to-date:
+1. Make sure the Kotlin `ComposeApp` XCFramework is assembled and up-to-date (SwiftPM/XCFramework; no CocoaPods):
 
 ```bash
-cd cmp-ios
-pod repo update
-pod install --repo-update
+./gradlew :cmp-shared:assembleComposeAppXCFramework
+rm -rf ~/Library/Developer/Xcode/DerivedData/*
 ```
 
 2. Check that Xcode command line tools are installed:
@@ -217,10 +218,10 @@ If you need to sync your fork with the upstream repository:
 
 ```bash
 # Basic sync with the provided script
-./sync-dirs.sh
+scripts/white-label/sync-dirs.sh
 
 # Sync with preview (dry run)
-./sync-dirs.sh --dry-run
+scripts/white-label/sync-dirs.sh --dry-run
 ```
 
 ## Next Steps

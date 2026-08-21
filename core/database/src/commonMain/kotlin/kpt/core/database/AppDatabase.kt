@@ -14,12 +14,12 @@ import androidx.room3.ConstructedBy
 import androidx.room3.Database
 import androidx.room3.RoomDatabase
 import androidx.room3.RoomDatabaseConstructor
+import kpt.core.base.database.infra.dao.FetchedAtDao
+import kpt.core.base.database.infra.entity.FetchedAtEntity
 import kpt.core.database.infra.dao.BookkeeperDao
 import kpt.core.database.infra.dao.DraftDao
-import kpt.core.database.infra.dao.FetchedAtDao
 import kpt.core.database.infra.entity.BookkeeperEntity
 import kpt.core.database.infra.entity.DraftEntity
-import kpt.core.database.infra.entity.FetchedAtEntity
 import kpt.core.database.wallet.account.SavingAccountDetailDao
 import kpt.core.database.wallet.account.SavingAccountDetailEntity
 import kpt.core.database.wallet.beneficiary.BeneficiaryDao

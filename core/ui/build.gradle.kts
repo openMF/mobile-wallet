@@ -23,32 +23,29 @@ kotlin {
         }
 
         commonMain.dependencies {
-            implementation(projects.core.analytics)
+            implementation(projects.core.firebase)
             implementation(projects.core.designsystem)
             implementation(projects.core.model)
             implementation(projects.core.common)
             // For rememberKptPullToRefreshState(pagingStream) bridge — observes
             // ScreenState freshness + calls pagingStream.refresh() on pull.
             implementation(projects.coreBase.store)
+            // Re-export core-base/ui (ScreenContent + Store5 UI wrappers) as core/ui's public API so
+            // feature modules depend on core/ui, never core-base/ui directly (encapsulation, Phase A).
+            api(projects.coreBase.ui)
             implementation(libs.jb.composeViewmodel)
             implementation(libs.jb.lifecycleViewmodel)
             implementation(libs.jb.lifecycleViewmodelSavedState)
             implementation(libs.coil.kt)
             implementation(libs.coil.kt.compose)
             implementation(compose.material3)
+            // Fork addition: PasswordStrengthIndicator.kt uses Icons.Filled.CheckCircle/Close.
+            implementation(compose.materialIconsExtended)
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
             implementation(libs.jb.composeNavigation)
             implementation(libs.filekit.compose)
             implementation(libs.filekit.core)
-
-            // Fork-specific: MifosProgressIndicator uses Compottie (Lottie for CMP)
-            // for progress/success/failure animations distinct from the Store5 core-base
-            // default set. PasswordStrengthIndicator uses M3 material-icons-extended
-            // (Icons.filled.CheckCircle, Icons.filled.Close).
-            implementation(libs.compottie)
-            implementation(libs.compottie.resources)
-            implementation(compose.materialIconsExtended)
         }
         androidInstrumentedTest.dependencies {
             implementation(libs.bundles.androidx.compose.ui.test)

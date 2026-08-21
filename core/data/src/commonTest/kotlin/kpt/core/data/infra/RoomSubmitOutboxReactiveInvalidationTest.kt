@@ -12,7 +12,7 @@ package kpt.core.data.infra
 import app.cash.turbine.test
 import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.builtins.serializer
-import kpt.core.data.infra.impl.RoomSubmitOutbox
+import kpt.core.base.store.infra.impl.RoomSubmitOutbox
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull

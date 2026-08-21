@@ -1,14 +1,27 @@
 # ═════════════════════════════════════════════════════════════════════════════
 # DEPLOYMENT_MANIFEST.yaml — kmp-project-template
 #
-# Source-of-truth manifest enumerating every deploy target across all platforms.
-# Per-target enable/disable surface — consumers fork this file and flip
-# `enabled: true` for targets they actually ship.
+# Pure TEMPLATE CATALOG enumerating every deploy TARGET available across all platforms.
+# owner: template (E1 / D-1) — full-copies on sync exactly like core-base/**. The per-fork
+# enable/tier/confirm state was RELOCATED OUT to the fork-owned app-profile/deploy-targets.yaml
+# so this file carries no fork data. The `enabled:`/`tier:`/`requires_confirm:` fields below are
+# CATALOG DEFAULTS; a fork's actual choices live in app-profile/deploy-targets.yaml and OVERRIDE
+# these at resolve time (scripts/deployment-manifest-validate.sh).
+#
+# Relationship to app-profile/ (fork-owned intent):
+#   • app-profile/app.yaml#targets       → which PLATFORMS a fork ships (coarse, one row per
+#                                           platform: android/ios/macos/web/desktop; owner: fork).
+#   • app-profile/deploy-targets.yaml     → which of THIS catalog's targets a fork enables + at
+#                                           what tier / confirm gate (fine, one row per target; owner: fork).
+#   • THIS file (DEPLOYMENT_MANIFEST)     → which TARGETS EXIST per platform (the template catalog; owner: template).
+#   A target is ACTIVE iff its platform is enabled in app.yaml#targets AND its `enabled:` is true
+#   in app-profile/deploy-targets.yaml. (macOS targets live under the `desktop` platform below.)
 #
 # Schema:     core/schemas/deployment-manifest.schema.json
-# Validator:  core/scripts/deployment-manifest-validate.sh
+# Validator:  scripts/deployment-manifest-validate.sh (reads app-profile/deploy-targets.yaml for enabled/tier)
 # Rule:       RULE-DEPLOYMENT-MANIFEST-001 (layers/release/rules/)
-# Promotion:  appends to deployment/PROMOTION_LOG.yaml on every deploy
+# Promotion:  /idea-deploy appends to the framework deployment-layer/deploy-state/PROMOTION_LOG.yaml (E1/D-4);
+#             community GitHub Actions deploys keep their audit trail in the Actions run history.
 #
 # Tier convention:
 #   1 = Tier-1 platforms (Android+iOS+Desktop unsigned+Web GH-Pages) — default ON

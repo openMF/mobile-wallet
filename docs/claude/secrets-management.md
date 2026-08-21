@@ -13,7 +13,7 @@ This guide covers complete secrets management for all platforms.
 **What you'll learn:**
 - Complete secrets inventory (30+ secrets)
 - File-to-secret mapping
-- Generating secrets with `keystore-manager.sh`
+- Generating secrets with `scripts/white-label/keystore.sh`
 - Adding secrets to GitHub Actions
 - Rotating secrets
 - Security best practices
@@ -52,7 +52,7 @@ This guide covers complete secrets management for all platforms.
 # 2. Run iOS setup (if needed)
 ./scripts/ios/setup_ios_complete.sh
 
-# 3. Push secrets to GitHub (new model — replaces keystore-manager.sh add)
+# 3. Push secrets to GitHub (new model — replaces scripts/white-label/keystore.sh add)
 bash scripts/secrets/sync-secrets-to-github.sh --repo=owner/repo
 ```
 
@@ -60,7 +60,7 @@ bash scripts/secrets/sync-secrets-to-github.sh --repo=owner/repo
 
 ```bash
 # Re-scan secrets/ directory and update secrets/shared/secrets.env
-./keystore-manager.sh sync
+scripts/white-label/keystore.sh sync
 ```
 
 **What sync does:**
@@ -202,9 +202,9 @@ keystores/
 
 ## Generating Secrets
 
-### Master Script: keystore-manager.sh
+### Master Script: scripts/white-label/keystore.sh
 
-**Location:** `./keystore-manager.sh`
+**Location:** `scripts/white-label/keystore.sh`
 
 **Purpose:** Generate, encode, and manage all secrets
 
@@ -213,7 +213,7 @@ keystores/
 ### Step 1: Generate Android Keystores
 
 ```bash
-./keystore-manager.sh generate
+scripts/white-label/keystore.sh generate
 ```
 
 **Reads (new model — no prompts for DN or passwords):**
@@ -242,7 +242,7 @@ keystores/
 ### Step 2: Setup Firebase
 
 ```bash
-./firebase-setup.sh
+scripts/white-label/firebase.sh
 ```
 
 **Requires:**
@@ -427,10 +427,10 @@ base64 -i secrets/linux_signing.key -o secrets/linux_signing.key.b64
 
 ## Adding to GitHub Actions
 
-### Option 1: Automated (keystore-manager.sh)
+### Option 1: Automated (scripts/white-label/keystore.sh)
 
 ```bash
-./keystore-manager.sh add
+scripts/white-label/keystore.sh add
 ```
 
 **Prerequisites:**
@@ -458,7 +458,7 @@ base64 -i secrets/linux_signing.key -o secrets/linux_signing.key.b64
 **1. Encode Secrets**
 
 ```bash
-./keystore-manager.sh encode-secrets
+scripts/white-label/keystore.sh encode-secrets
 ```
 
 **Output:** Base64 strings for each file
@@ -497,7 +497,7 @@ echo "alias_password" | gh secret set KEYSTORE_ALIAS_PASSWORD
 
 ```bash
 # List all secrets
-./keystore-manager.sh list
+scripts/white-label/keystore.sh list
 
 # Or use gh directly
 gh secret list
@@ -573,13 +573,13 @@ MACOS_INSTALLER_CERTIFICATE
 
 ```bash
 # 1. Generate new keystore
-./keystore-manager.sh generate
+scripts/white-label/keystore.sh generate
 
 # 2. Re-encode
-./keystore-manager.sh encode-secrets
+scripts/white-label/keystore.sh encode-secrets
 
 # 3. Update GitHub secrets
-./keystore-manager.sh add
+scripts/white-label/keystore.sh add
 ```
 
 **For published apps:** Can only rotate upload keystore (if using App Signing by Google Play)
@@ -616,7 +616,7 @@ bundle exec fastlane match adhoc --force
 bundle exec fastlane match appstore --force
 
 # Update secrets (if SSH key changed)
-./keystore-manager.sh add
+scripts/white-label/keystore.sh add
 ```
 
 **Option 2: Renew Expired**
@@ -690,8 +690,8 @@ git diff --cached | grep -i "password\|api_key\|secret\|token"
 # For keystore passwords
 openssl rand -base64 32
 
-# Or use keystore-manager.sh auto-generation
-./keystore-manager.sh generate
+# Or use scripts/white-label/keystore.sh auto-generation
+scripts/white-label/keystore.sh generate
 # → Enter blank when prompted to auto-generate
 ```
 
@@ -776,7 +776,7 @@ tar -xzf secrets.tar.gz
 
 **Audit command:**
 ```bash
-./keystore-manager.sh view
+scripts/white-label/keystore.sh view
 
 # Check certificate expiration
 keytool -list -v -keystore keystores/original-release-key.jks | grep "Valid"
@@ -805,7 +805,7 @@ gh secret list | grep KEYSTORE_FILE
 # Secret name must match exactly
 
 # 3. Re-add secret
-./keystore-manager.sh add
+scripts/white-label/keystore.sh add
 
 # 4. Check secret is repository-level (not environment)
 # Settings → Secrets and variables → Actions → Repository secrets
@@ -855,7 +855,7 @@ keytool -list -v -keystore keystores/upload_keystore.keystore \
 
 # 3. Re-generate keystore if password lost
 # ⚠️ Only for new apps — fill gradle/fork.properties + secrets/android/keystores/ first
-./keystore-manager.sh generate
+scripts/white-label/keystore.sh generate
 ```
 
 ---
@@ -891,7 +891,7 @@ gh secret set MATCH_SSH_PRIVATE_KEY < match_ci_key.b64
 
 ## Additional Resources
 
-- **keystore-manager.sh Help:** `./keystore-manager.sh --help`
+- **scripts/white-label/keystore.sh Help:** `scripts/white-label/keystore.sh --help`
 - **GitHub Secrets Docs:** https://docs.github.com/en/actions/security-guides/encrypted-secrets
 - **Firebase Service Accounts:** https://firebase.google.com/docs/admin/setup#initialize-sdk
 - **App Store Connect API:** https://developer.apple.com/documentation/appstoreconnectapi

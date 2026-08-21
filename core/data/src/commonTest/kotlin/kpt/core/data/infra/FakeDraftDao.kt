@@ -11,8 +11,8 @@ package kpt.core.data.infra
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import kpt.core.database.infra.dao.DraftDao
-import kpt.core.database.infra.entity.DraftEntity
+import kpt.core.base.database.infra.dao.DraftDao
+import kpt.core.base.database.infra.entity.DraftEntity
 
 /**
  * In-memory fake of [DraftDao] whose reactive reads are **cold snapshots** — each
@@ -60,10 +60,21 @@ internal class FakeDraftDao : DraftDao {
             )
         }
 
+    override fun observeAll(): Flow<List<DraftEntity>> =
+        flow {
+            emit(
+                rows.filter { it.status in nonTerminal }
+                    .sortedByDescending { it.updatedAtMs },
+            )
+        }
+
     override suspend fun getAllPending(): List<DraftEntity> = rows.filter { it.status == "PENDING" }
 
     override suspend fun markRetrying(id: Long, nowMs: Long) =
         updateRow(id) { it.copy(status = "RETRYING", updatedAtMs = nowMs) }
+
+    override suspend fun requeue(id: Long, nowMs: Long) =
+        updateRow(id) { it.copy(status = "PENDING", errorMessage = null, updatedAtMs = nowMs) }
 
     override suspend fun markSubmitted(id: Long, nowMs: Long) =
         updateRow(id) { it.copy(status = "SUBMITTED", updatedAtMs = nowMs) }
@@ -80,6 +91,10 @@ internal class FakeDraftDao : DraftDao {
 
     override suspend fun deleteByUniqueKey(formKey: String, uniqueKey: String) {
         rows.removeAll { it.formKey == formKey && it.uniqueKey == uniqueKey }
+    }
+
+    override suspend fun deleteById(id: Long) {
+        rows.removeAll { it.id == id }
     }
 
     override suspend fun deleteAll() {

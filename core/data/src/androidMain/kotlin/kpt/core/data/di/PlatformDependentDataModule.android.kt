@@ -10,8 +10,8 @@
 package kpt.core.data.di
 
 import kpt.core.base.common.di.CommonModule
-import kpt.core.data.infra.TimeZoneMonitor
-import kpt.core.data.infra.impl.TimeZoneMonitorImpl
+import kpt.core.base.data.infra.TimeZoneMonitor
+import kpt.core.base.data.infra.impl.TimeZoneMonitorImpl
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind

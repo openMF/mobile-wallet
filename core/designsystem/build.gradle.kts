@@ -22,10 +22,15 @@ kotlin {
         androidUnitTest.dependencies {
             implementation(libs.androidx.compose.ui.test)
         }
+        androidMain.dependencies {
+            // Fork addition: PermissionBox.kt needs the Activity permission-request APIs
+            // (ContextCompat/ActivityCompat/rememberLauncherForActivityResult).
+            implementation(libs.androidx.activity.compose)
+        }
         commonMain.dependencies {
             api(projects.coreBase.designsystem)
             // Theme wires LocalScreenStateDefaults from core/store so every screen
-            // wrapped by MifosTheme picks up the app's branded ScreenState defaults.
+            // wrapped by KptTheme picks up the app's branded ScreenState defaults.
             implementation(projects.core.store)
 
             implementation(compose.ui)
@@ -39,22 +44,11 @@ kotlin {
 
             implementation(libs.coil.kt.compose)
 
-            // Fork-specific: BottomSheet.kt uses com.arkivanov.essenty.backhandler.BackCallback
-            // for KMP-safe hardware back-button handling. Template's core/designsystem doesn't
-            // ship a BottomSheet — it consumes M3's ModalBottomSheet directly per-feature.
+            // Fork addition: BottomSheet.kt's predictive-back handling needs arkivanov Essenty's
+            // BackCallback.
             implementation(libs.back.handler)
-
-            // Fork-specific: MifosIcons.kt references FluentIcons (Coin/Person/Wallet variants)
-            // for brand-consistent iconography beyond Material's Icons.Default.* set.
+            // Fork addition: MifosIcons.kt draws from the FluentUI icon set.
             implementation(libs.fluentui.system.icons)
-        }
-        // Fork-specific androidMain deps for PermissionBox.kt (androidx.activity
-        // rememberLauncherForActivityResult / ActivityResultContracts + androidx.core
-        // ContextCompat/ActivityCompat). Template doesn't ship PermissionBox so its
-        // core/designsystem module doesn't need these.
-        androidMain.dependencies {
-            implementation(libs.androidx.activity.compose)
-            implementation(libs.androidx.core.ktx)
         }
     }
 }

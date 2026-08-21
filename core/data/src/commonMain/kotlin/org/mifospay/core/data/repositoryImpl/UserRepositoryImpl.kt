@@ -16,12 +16,12 @@ import org.mifospay.core.common.ScreenStateStream
 import org.mifospay.core.common.asScreenStateFlow
 import org.mifospay.core.data.mapper.toEntity
 import org.mifospay.core.data.repository.UserRepository
+import org.mifospay.core.model.network.CommonResponse
+import org.mifospay.core.model.network.GenericResponse
+import org.mifospay.core.model.network.entity.UserWithRole
+import org.mifospay.core.model.network.entity.user.UpdateUserEntityPassword
 import org.mifospay.core.model.user.NewUser
 import org.mifospay.core.network.SelfServiceApiManager
-import org.mifospay.core.network.model.CommonResponse
-import org.mifospay.core.network.model.GenericResponse
-import org.mifospay.core.network.model.entity.UserWithRole
-import org.mifospay.core.network.model.entity.user.UpdateUserEntityPassword
 
 class UserRepositoryImpl(
     private val selfServiceApiManager: SelfServiceApiManager,

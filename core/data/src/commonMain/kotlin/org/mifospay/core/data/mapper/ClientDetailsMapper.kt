@@ -15,13 +15,13 @@ import org.mifospay.core.model.client.ClientStatus
 import org.mifospay.core.model.client.ClientTimeline
 import org.mifospay.core.model.client.NewClient
 import org.mifospay.core.model.client.UpdatedClient
-import org.mifospay.core.network.model.entity.Page
-import org.mifospay.core.network.model.entity.client.Address
-import org.mifospay.core.network.model.entity.client.ClientEntity
-import org.mifospay.core.network.model.entity.client.ClientTimelineEntity
-import org.mifospay.core.network.model.entity.client.NewClientEntity
-import org.mifospay.core.network.model.entity.client.Status
-import org.mifospay.core.network.model.entity.client.UpdateClientEntity
+import org.mifospay.core.model.network.entity.Page
+import org.mifospay.core.model.network.entity.client.Address
+import org.mifospay.core.model.network.entity.client.ClientEntity
+import org.mifospay.core.model.network.entity.client.ClientTimelineEntity
+import org.mifospay.core.model.network.entity.client.NewClientEntity
+import org.mifospay.core.model.network.entity.client.Status
+import org.mifospay.core.model.network.entity.client.UpdateClientEntity
 
 fun ClientEntity.toModel(): Client {
     return Client(

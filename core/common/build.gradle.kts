@@ -10,36 +10,40 @@
 plugins {
     alias(libs.plugins.kmp.library.convention)
     alias(libs.plugins.kotlin.parcelize)
+    // Fork addition: StringResourceSerializer + DialogManager/DialogMessage need the `compose`
+    // extension (compose.components.resources) for org.jetbrains.compose.resources.StringResource.
     alias(libs.plugins.jetbrainsCompose)
     alias(libs.plugins.compose.compiler)
 }
-
-// core/common has no @Composable definitions, only references StringResource + suspend
-// getString(...) from compose-resources. Ensure the compose runtime is on the classpath
-// so the compose compiler plugin's classpath check passes.
 
 kotlin {
     sourceSets {
         commonMain.dependencies {
             implementation(libs.kotlinx.coroutines.core)
+            // Fork addition: applying the compose-compiler plugin (below) requires the Compose
+            // Runtime on the classpath for every target it compiles, including androidMain — the
+            // multiplatform `compose.runtime` accessor (not the versionless `libs.androidx.compose.
+            // runtime` catalog alias, which relies on a BOM/transitive constraint this module has
+            // none of) resolves a real pinned version on its own, matching core/designsystem,
+            // core/firebase, core/analytics, core/store et al.
+            implementation(compose.runtime)
+            // Fork addition: StringResourceSerializer + DialogManager/DialogMessage (dialogManager/)
+            // resolve resource-id strings via org.jetbrains.compose.resources.StringResource.
+            implementation(compose.components.resources)
+            // Fork addition: DateAsStringSerializer's ImmutableListSerializer serializes
+            // ImmutableList<String> (toPersistentList()).
+            implementation(libs.kotlinx.collections.immutable)
+            // Fork addition: SavedStateHandleExtensions (getSerialized/setSerialized) needs the KMP
+            // SavedStateHandle type — same alias core/ui already uses for the same purpose.
+            implementation(libs.jb.lifecycleViewmodelSavedState)
+            // Fork addition: AppErrorMapper maps Ktor exceptions (ClientRequestException /
+            // ServerResponseException / kotlinx.io.IOException, transitively brought in by ktor-io).
+            implementation(libs.ktor.client.core)
             api(libs.kermit.logging)
             api(libs.kotlinx.datetime)
-
-            // ktor http types used by DataState / SafeApiCall (ClientRequestException,
-            // ServerResponseException, bodyAsText); also brings kotlinx-io transitively
-            // for kotlinx.io.IOException.
-            implementation(libs.ktor.client.core)
-
-            // ImmutableList / persistent collections used by DateAsStringSerializer.
-            implementation(libs.kotlinx.collections.immutable)
-
-            // SavedStateHandle in commonMain (androidx.lifecycle package, KMP artifact).
-            implementation(libs.jb.lifecycleViewmodelSavedState)
-
-            // Compose Multiplatform resources: StringResource + suspend getString(...)
-            // used by StringProvider / StringResourceSerializer / DialogManager.
-            implementation(compose.runtime)
-            implementation(compose.components.resources)
+            // Re-export core-base/common (CommonModule DI, base utilities) so app-shell + feature
+            // modules depend on core/common, never core-base/common directly (encapsulation, Phase A).
+            api(projects.coreBase.common)
         }
     }
 }

@@ -9,29 +9,33 @@
  */
 package kpt.core.database.di
 
-import kpt.core.base.security.FieldEncryptor
+import kpt.core.base.database.DatabaseNaming
 import kpt.core.database.AppDatabase
+import kpt.core.database.DatabaseConfig
 import org.koin.core.module.Module
 import org.koin.dsl.module
 
 /**
- * Marker singleton — its instantiation has the side effect of wiring [FieldEncryptor]
- * into [ChargeTypeConverters] before any database access. Bound with `createdAtStart = true`
- * so the install runs eagerly at Koin start, ahead of the first [AppDatabase] resolution.
- *
- * Room 3 KMP instantiates `@ColumnTypeConverters` classes via no-arg constructor, so the
- * encryptor cannot be passed in by constructor — it's injected post-construction through
- * the [ChargeTypeConverters.install] static method.
+ * Per-fork database naming, sourced from the syncForkConfig-generated [DatabaseConfig]
+ * (both values derive from `app-profile/app.yaml`). Threaded into every platform actual
+ * of [platformModule] so the on-disk file + desktop directory are unique per fork.
  */
-private object ChargeTypeConvertersInstalled
+internal val appDatabaseNaming = DatabaseNaming(
+    fileName = DatabaseConfig.NAME,
+    desktopDirName = DatabaseConfig.DESKTOP_DIR_NAME,
+)
 
 /**
- * Koin module that provides the [AppDatabase] instance and all DAO singletons.
+ * Koin module that provides the [AppDatabase] instance and the framework-infra DAO singletons.
  *
- * Delegates platform-specific database construction to [platformModule], which each
- * source set (`androidMain`, `desktopMain`, `nativeMain`, `jsMain`, `wasmJsMain`)
- * implements using the appropriate [AppDatabaseFactory][kpt.core.base.database.AppDatabaseFactory]
- * and SQLite driver.
+ * Delegates platform-specific database construction to [platformModule], whose actuals defer
+ * entirely to the template-owned `platformDatabaseModule<T>` in core-base/database — so this
+ * module and its actuals carry ZERO driver/dispatcher/fallback boilerplate.
+ *
+ * INFRA-ONLY, owner: template (E1 / C3). The demo DAO providers + the ChargeTypeConverters install
+ * relocated to the fork-owned [kpt.core.database.demo.di.ProjectDatabaseModule]; this aggregator carries
+ * ZERO `kpt.core.*.demo.*` imports so a template sync can blind-copy it without re-introducing demo
+ * wiring a fork already stripped.
  */
 val DatabaseModule = module {
     includes(platformModule)
@@ -42,10 +46,10 @@ val DatabaseModule = module {
 /**
  * Platform-specific Koin module that provides the [AppDatabase] singleton.
  *
- * Each platform actual configures the database builder with the correct
- * [SQLiteDriver][androidx.sqlite.SQLiteDriver] and [CoroutineDispatcher][kotlinx.coroutines.CoroutineDispatcher]:
- * - **Android/Desktop**: [BundledSQLiteDriver][androidx.sqlite.driver.bundled.BundledSQLiteDriver] + `Dispatchers.IO`
- * - **Native (iOS)**: [BundledSQLiteDriver][androidx.sqlite.driver.bundled.BundledSQLiteDriver] + `Dispatchers.Default`
- * - **JS/WasmJS**: SQLiteWeb driver (OPFS-backed) + `Dispatchers.Default`
+ * Each source set's actual is a one-line delegation to the template-owned
+ * [platformDatabaseModule][kpt.core.base.database.platformDatabaseModule] (core-base/database),
+ * which owns the correct [SQLiteDriver][androidx.sqlite.SQLiteDriver], coroutine dispatcher and
+ * destructive-migration fallback per platform. The fork supplies only its concrete [AppDatabase]
+ * type and the generated [appDatabaseNaming].
  */
 expect val platformModule: Module

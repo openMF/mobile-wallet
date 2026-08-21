@@ -18,12 +18,12 @@ import kpt.core.database.wallet.linkableaccount.toDomain
 import kpt.core.database.wallet.linkableaccount.toEntity
 import kpt.core.database.wallet.pocket.PocketDao
 import org.mifospay.core.model.enums.AccountType
+import org.mifospay.core.model.network.entity.client.ClientAccountsEntity
+import org.mifospay.core.model.network.entity.loanAccount.LoanStatusResponseDto
+import org.mifospay.core.model.network.entity.shareAccount.ShareStatusResponseDto
 import org.mifospay.core.model.pocket.AccountStatus
 import org.mifospay.core.model.pocket.LinkableAccount
 import org.mifospay.core.network.SelfServiceApiManager
-import org.mifospay.core.network.model.entity.client.ClientAccountsEntity
-import org.mifospay.core.network.model.entity.loanAccount.LoanStatusResponseDto
-import org.mifospay.core.network.model.entity.shareAccount.ShareStatusResponseDto
 import org.mobilenativefoundation.store.store5.Fetcher
 import org.mobilenativefoundation.store.store5.SourceOfTruth
 import org.mobilenativefoundation.store.store5.Store

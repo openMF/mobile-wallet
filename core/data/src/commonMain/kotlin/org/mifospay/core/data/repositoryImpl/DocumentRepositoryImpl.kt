@@ -20,8 +20,8 @@ import kotlinx.coroutines.withContext
 import org.mifospay.core.common.ScreenStateStream
 import org.mifospay.core.common.asScreenStateFlow
 import org.mifospay.core.data.repository.DocumentRepository
+import org.mifospay.core.model.network.entity.noncore.Document
 import org.mifospay.core.network.FineractApiManager
-import org.mifospay.core.network.model.entity.noncore.Document
 
 class DocumentRepositoryImpl(
     private val apiManager: FineractApiManager,

@@ -10,9 +10,9 @@
 package org.mifospay.core.data.mapper.pocket
 
 import org.mifospay.core.model.enums.AccountType
+import org.mifospay.core.model.network.entity.pocket.PocketAccountDto
+import org.mifospay.core.model.network.entity.pocket.PocketResponseDto
 import org.mifospay.core.model.pocket.PocketAccount
-import org.mifospay.core.network.model.entity.pocket.PocketAccountDto
-import org.mifospay.core.network.model.entity.pocket.PocketResponseDto
 
 fun PocketResponseDto.toDomainList(): List<PocketAccount> {
     val all = mutableListOf<PocketAccount>()
@@ -32,7 +32,7 @@ private fun PocketAccountDto.toDomain(type: AccountType) = PocketAccount(
     accountNumber = this.accountNumber ?: "",
 )
 
-fun org.mifospay.core.network.model.entity.loanAccount.LoanStatusResponseDto.toAccountStatus(): org.mifospay.core.model.pocket.AccountStatus =
+fun org.mifospay.core.model.network.entity.loanAccount.LoanStatusResponseDto.toAccountStatus(): org.mifospay.core.model.pocket.AccountStatus =
     when {
         active == true -> org.mifospay.core.model.pocket.AccountStatus.ACTIVE
         pendingApproval == true -> org.mifospay.core.model.pocket.AccountStatus.PENDING
@@ -57,7 +57,7 @@ fun org.mifospay.core.model.savingsaccount.Status.toAccountStatus(): org.mifospa
         else -> org.mifospay.core.model.pocket.AccountStatus.UNKNOWN
     }
 
-fun org.mifospay.core.network.model.entity.shareAccount.ShareStatusResponseDto.toAccountStatus(): org.mifospay.core.model.pocket.AccountStatus =
+fun org.mifospay.core.model.network.entity.shareAccount.ShareStatusResponseDto.toAccountStatus(): org.mifospay.core.model.pocket.AccountStatus =
     when {
         active == true -> org.mifospay.core.model.pocket.AccountStatus.ACTIVE
         submittedAndPendingApproval == true -> org.mifospay.core.model.pocket.AccountStatus.PENDING

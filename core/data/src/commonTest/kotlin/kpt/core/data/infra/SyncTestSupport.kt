@@ -20,8 +20,9 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kpt.core.base.data.infra.Synchronizer
+import kpt.core.base.datastore.infra.ChangeListVersions
 import kpt.core.base.store.infra.FetchedAtRepository
-import kpt.core.datastore.infra.ChangeListVersions
 import kotlin.time.ExperimentalTime
 import kotlin.time.Instant
 
