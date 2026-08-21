@@ -22,7 +22,7 @@ import org.mifospay.core.model.autopay.AutoPayPayload
 import org.mifospay.core.model.autopay.AutoPayTemplate
 import org.mifospay.core.model.autopay.AutoPayUpdatePayload
 import org.mifospay.core.model.autopay.UpcomingPayment
-import org.mifospay.core.network.model.entity.Page
+import org.mifospay.core.model.network.entity.Page
 import org.mifospay.core.network.utils.ApiEndPoints
 
 /**

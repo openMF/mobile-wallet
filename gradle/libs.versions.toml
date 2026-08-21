@@ -9,7 +9,7 @@ appId            = "org.mifospay"   # Android applicationId + iOS bundle ID
 appDisplayName   = "Mifos Pay"    # Android app_name, iOS CFBundleDisplayName
 desktopAppName   = "Mifos Pay"     # JVM package name, dock name
 projectName      = "mifos-pay"      # rootProject.name, Fastlane PROJECT_NAME
-iosTeamId        = "YOUR_TEAM_ID"             # Apple Developer Team ID (PLACEHOLDER — set in app-profile/platforms/apple/apple.yaml#team_id)
+iosTeamId        = "L432S2FZP5"                      # Apple Developer Team ID
 # ─────────────────────────────────────────────────────────────────────────────────────────────────
 # Android
 androidDesugarJdkLibs = "2.1.5"

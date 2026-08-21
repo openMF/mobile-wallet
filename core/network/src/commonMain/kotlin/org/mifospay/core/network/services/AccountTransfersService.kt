@@ -16,10 +16,10 @@ import de.jensklingenberg.ktorfit.http.Path
 import de.jensklingenberg.ktorfit.http.Query
 import kotlinx.coroutines.flow.Flow
 import org.mifospay.core.model.account.AccountTransferPayload
+import org.mifospay.core.model.network.entity.templates.account.AccountOptionsTemplate
 import org.mifospay.core.model.savingsaccount.TransactionsEntity
 import org.mifospay.core.model.savingsaccount.TransferDetail
 import org.mifospay.core.model.search.AccountResult
-import org.mifospay.core.network.model.entity.templates.account.AccountOptionsTemplate
 import org.mifospay.core.network.utils.ApiEndPoints
 
 interface AccountTransfersService {

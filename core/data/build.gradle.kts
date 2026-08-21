@@ -9,6 +9,10 @@
  */
 plugins {
     alias(libs.plugins.kmp.library.convention)
+    // Fork addition: AssetRepositoryImpl.kt's fallback (composeResources/files/countries.json)
+    // needs the `compose` extension for org.jetbrains.compose.resources.ExperimentalResourceApi.
+    alias(libs.plugins.jetbrainsCompose)
+    alias(libs.plugins.compose.compiler)
 }
 
 androidComponents {
@@ -32,9 +36,16 @@ kotlin {
             // SyncManager, TimeZoneMonitor) so existing core/data consumers (features, sync,
             // cmp-android) keep the transitive visibility they had when it lived in core/data.
             api(projects.coreBase.data)
-            implementation(projects.core.datastore)
-            implementation(projects.core.model)
-            implementation(projects.core.network)
+            // api: core/data is auto-wired into every feature module via cmp.feature.convention
+            // (commonMainImplementation project(":core:data")) — re-exporting these means feature
+            // modules that read domain types (org.mifospay.core.model.*), UserPreferencesRepository
+            // (org.mifospay.core.datastore.*), or network DTOs (org.mifospay.core.network.model.*)
+            // get them for free instead of every feature module repeating its own
+            // implementation(projects.core.{model,datastore,network}) — features must never depend
+            // on core/network directly; core/data is the sole consumer/re-exporter of it.
+            api(projects.core.datastore)
+            api(projects.core.model)
+            api(projects.core.network)
             implementation(projects.core.firebase)
 
             implementation(projects.coreBase.common)
@@ -44,6 +55,16 @@ kotlin {
             implementation(libs.kotlinx.coroutines.core)
             implementation(libs.kotlinx.datetime)
             api(libs.cmp.network.monitor)
+
+            // Fork addition: applying the compose-compiler plugin (above) requires the Compose
+            // Runtime on the classpath — see core/common's build.gradle.kts for the same fix + rationale.
+            implementation(compose.runtime)
+            implementation(compose.components.resources)
+
+            // Fork addition: BiometricsSetupAdapterImpl / MifosPasscodeAdapterImpl wrap the
+            // mifos-authenticator biometrics/passcode storage adapters.
+            implementation(libs.mifos.authenticator.biometrics)
+            implementation(libs.mifos.authenticator.passcode)
         }
 
         androidMain.dependencies {

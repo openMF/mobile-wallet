@@ -22,6 +22,13 @@ kotlin {
             implementation(compose.components.uiToolingPreview)
             implementation(libs.coil.kt.compose)
             implementation(libs.qrose)
+
+            // Fork addition: MpayQrScreen/MpayQrViewModel read org.mifospay.core.common
+            // (MifosDispatchers/getSerialized/ScreenState). org.mifospay.core.model.* /
+            // org.mifospay.core.datastore.UserPreferencesRepository come transitively via
+            // core/data's api(core.model)/api(core.datastore) re-export.
+            implementation(projects.core.common)
+            implementation(libs.kermit.logging)
         }
 
         androidMain.dependencies {

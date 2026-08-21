@@ -14,6 +14,9 @@ plugins {
 kotlin {
     sourceSets {
         commonMain.dependencies {
+            // org.mifospay.core.model.* / org.mifospay.core.datastore.UserPreferencesRepository
+            // (needed by SpecificTransactionsViewModel/TransactionDetailViewModel) come
+            // transitively via core/data's api(core.model)/api(core.datastore) re-export.
             implementation(projects.core.common)
             implementation(compose.ui)
             implementation(compose.foundation)

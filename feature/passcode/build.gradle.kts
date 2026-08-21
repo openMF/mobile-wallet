@@ -18,6 +18,11 @@ kotlin {
             implementation(projects.core.data)
             implementation(projects.coreBase.ui)
             implementation(projects.coreBase.datastore)
+            // Fork addition: BiometricsSetupScreen reads
+            // org.mifospay.core.designsystem.{component,theme}.* (MifosDialogBox/MifosScaffold/MifosTheme).
+            // org.mifospay.core.model.client.Client and org.mifospay.core.datastore.UserPreferencesRepository
+            // come transitively via core/data's api(core.model)/api(core.datastore) re-export.
+            implementation(projects.core.designsystem)
             implementation(compose.material3)
             implementation(compose.materialIconsExtended)
             implementation(compose.foundation)
@@ -27,6 +32,11 @@ kotlin {
             // BiometricsSetupScreen + MifosPasscode use NavigationBackHandler +
             // rememberNavigationEventState from AndroidX's KMP back-handling API.
             implementation(libs.androidx.navigationevent.compose)
+            // Fork addition: BiometricErrorMessages/MifosPasscodeViewModel/MifosPasscode/
+            // BiometricsSetupScreenViewmodel wrap the mifos-authenticator biometrics + passcode
+            // libraries (platformAuthenticator, PasscodeManager, PasscodeScreen et al.).
+            implementation(libs.mifos.authenticator.biometrics)
+            implementation(libs.mifos.authenticator.passcode)
         }
     }
 }

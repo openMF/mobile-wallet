@@ -12,9 +12,9 @@ package org.mifospay.core.network.services
 import de.jensklingenberg.ktorfit.http.Body
 import de.jensklingenberg.ktorfit.http.GET
 import de.jensklingenberg.ktorfit.http.POST
-import org.mifospay.core.network.model.entity.TPTResponse
-import org.mifospay.core.network.model.entity.payload.TransferPayload
-import org.mifospay.core.network.model.entity.templates.account.AccountOptionsTemplate
+import org.mifospay.core.model.network.entity.TPTResponse
+import org.mifospay.core.model.network.entity.payload.TransferPayload
+import org.mifospay.core.model.network.entity.templates.account.AccountOptionsTemplate
 import org.mifospay.core.network.utils.ApiEndPoints
 
 interface ThirdPartyTransferService {

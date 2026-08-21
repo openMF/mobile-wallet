@@ -21,7 +21,7 @@ kotlin {
             //
             // Fork-owned platform-specific code (expect/actual bridges a fork adds) also belongs here.
             // The bill-reminder scheduler that previously lived in this module migrated to feature/bills
-            // + the cross-platform sync worker infra (worker-kmp + KMPNotifier).
+            // + the cross-platform sync worker infra (worker-kmp + KMPNotifier) — see sync/WorkScheduler.kt.
             api(projects.coreBase.platform)
         }
     }

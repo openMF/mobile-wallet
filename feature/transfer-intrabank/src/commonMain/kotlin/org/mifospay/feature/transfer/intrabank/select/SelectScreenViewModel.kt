@@ -15,7 +15,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 import org.mifospay.core.data.repository.ThirdPartyTransferRepository
-import org.mifospay.core.network.model.entity.templates.account.AccountOption
+import org.mifospay.core.model.network.entity.templates.account.AccountOption
 import org.mifospay.core.ui.utils.BaseViewModel
 
 class SelectScreenViewModel(

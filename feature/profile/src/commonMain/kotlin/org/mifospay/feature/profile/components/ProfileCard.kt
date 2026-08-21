@@ -24,11 +24,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import mifos_pay.feature.profile.generated.resources.Res
-import mifos_pay.feature.profile.generated.resources.feature_profile_email
-import mifos_pay.feature.profile.generated.resources.feature_profile_mobile
-import mifos_pay.feature.profile.generated.resources.feature_profile_username
-import mifos_pay.feature.profile.generated.resources.feature_profile_vpa
+import kpt.feature.profile.generated.resources.Res
+import kpt.feature.profile.generated.resources.feature_profile_email
+import kpt.feature.profile.generated.resources.feature_profile_mobile
+import kpt.feature.profile.generated.resources.feature_profile_username
+import kpt.feature.profile.generated.resources.feature_profile_vpa
 import org.jetbrains.compose.resources.stringResource
 import org.mifospay.core.model.client.Client
 import template.core.base.designsystem.theme.KptTheme

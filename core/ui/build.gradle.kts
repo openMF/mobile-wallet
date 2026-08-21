@@ -39,6 +39,8 @@ kotlin {
             implementation(libs.coil.kt)
             implementation(libs.coil.kt.compose)
             implementation(compose.material3)
+            // Fork addition: PasswordStrengthIndicator.kt uses Icons.Filled.CheckCircle/Close.
+            implementation(compose.materialIconsExtended)
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
             implementation(libs.jb.composeNavigation)

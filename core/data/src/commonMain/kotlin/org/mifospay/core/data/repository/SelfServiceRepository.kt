@@ -19,10 +19,10 @@ import org.mifospay.core.model.beneficiary.Beneficiary
 import org.mifospay.core.model.beneficiary.BeneficiaryPayload
 import org.mifospay.core.model.beneficiary.BeneficiaryUpdatePayload
 import org.mifospay.core.model.client.Client
+import org.mifospay.core.model.network.entity.Page
+import org.mifospay.core.model.network.entity.authentication.AuthenticationPayload
+import org.mifospay.core.model.network.entity.user.User
 import org.mifospay.core.model.savingsaccount.Transaction
-import org.mifospay.core.network.model.entity.Page
-import org.mifospay.core.network.model.entity.authentication.AuthenticationPayload
-import org.mifospay.core.network.model.entity.user.User
 
 interface SelfServiceRepository {
     // Point-lookup — one-shot suspend; returns the value and throws on error.

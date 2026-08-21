@@ -13,8 +13,8 @@ import de.jensklingenberg.ktorfit.http.GET
 import de.jensklingenberg.ktorfit.http.POST
 import de.jensklingenberg.ktorfit.http.Query
 import kotlinx.coroutines.flow.Flow
-import org.mifospay.core.network.model.twofactor.AccessToken
-import org.mifospay.core.network.model.twofactor.DeliveryMethod
+import org.mifospay.core.model.network.twofactor.AccessToken
+import org.mifospay.core.model.network.twofactor.DeliveryMethod
 import org.mifospay.core.network.utils.ApiEndPoints
 
 interface TwoFactorAuthService {

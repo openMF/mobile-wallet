@@ -42,13 +42,13 @@ import org.mifospay.core.data.mapper.pocket.toDomainList
 import org.mifospay.core.data.repository.PocketRepository
 import org.mifospay.core.data.util.NetworkMonitor
 import org.mifospay.core.model.enums.AccountType
+import org.mifospay.core.model.network.entity.pocket.PocketDelinkRequest
+import org.mifospay.core.model.network.entity.pocket.PocketLinkRequest
 import org.mifospay.core.model.payload.PocketLinkPayload
 import org.mifospay.core.model.pocket.DetailedPocketAccount
 import org.mifospay.core.model.pocket.LinkableAccount
 import org.mifospay.core.model.pocket.PocketAccount
 import org.mifospay.core.network.SelfServiceApiManager
-import org.mifospay.core.network.model.entity.pocket.PocketDelinkRequest
-import org.mifospay.core.network.model.entity.pocket.PocketLinkRequest
 import org.mobilenativefoundation.store.store5.Store
 import kpt.core.data.infra.NetworkMonitor as StoreNetworkMonitor
 

@@ -10,21 +10,41 @@
 package cmp.shared.utils
 
 import cmp.navigation.di.KoinModules
-import cmp.navigation.registry.AppInitializers
 import cmp.shared.generated.WorkerKmpAuto
 import kpt.sync.infra.initSyncNotifier
 import org.koin.core.context.startKoin
 import org.koin.dsl.KoinAppDeclaration
 import org.koin.dsl.koinApplication
+import org.mifospay.shared.di.KoinModules as ForkKoinModules
+
+// Fork feature Koin surface. The template shell's `cmp.navigation.di.KoinModules.allModules`
+// carries the fork's core/network/data/domain/passcode/preferences modules. The pieces MISSING
+// from that list — and REQUIRED by the bridged fork `MifosApp` which composes ~60 fork feature
+// screens with `koinViewModel()`-resolved VMs — are the fork's per-feature Koin modules aggregate
+// (`featureModules`: Auth, Home, Payments, History, AutoPay, Accounts, Beneficiary, Pocket,
+// Profile, IntraBank, interbankTransfer, MpayQr, MpayQrScan, FastMpay, Merchants, UpiSetup,
+// SendMoney, LoanApplication, Notification, SavedCards, KYC, Invoices, EditPassword, Faq,
+// Settings, StandingInstruction, Receipt + MifosAuthenticatorModule — Koin's `includes()` is
+// identity-deduplicated so re-registration is a no-op) plus the fork's shared VM module
+// (`sharedModule`: MifosPayViewModel, InstanceSelectorViewModel, TransferOptionsViewModel). Both
+// are `internal val` in `org.mifospay.shared.di.KoinModules` (same `:cmp-shared` module) and are
+// imported below aliased as `ForkKoinModules`.
+
+// One splice list — kept as a `val` (not inlined below) so `koinConfiguration()` and
+// `initKoin()` share the exact same module set. Order: template modules first (they establish
+// the core/network/data/domain graph the fork feature modules depend on), then fork
+// feature/shared modules layered on top.
+private val allModulesForNewShell = KoinModules.allModules +
+    listOf(ForkKoinModules.featureModules, ForkKoinModules.sharedModule)
 
 fun koinConfiguration() = koinApplication {
-    modules(KoinModules.allModules)
+    modules(allModulesForNewShell)
 }
 
 fun initKoin(config: KoinAppDeclaration? = null) {
     startKoin {
         config?.invoke(this)
-        modules(KoinModules.allModules)
+        modules(allModulesForNewShell)
     }
 
     // worker-kmp single-API: ONE commonMain call wires the workers on EVERY platform
@@ -39,11 +59,4 @@ fun initKoin(config: KoinAppDeclaration? = null) {
     // KMPNotifier one-time setup — commonMain, every platform. NotificationWorker posts
     // local notifications through NotifierManager.getLocalNotifier() (all worker code lives in sync/).
     initSyncNotifier()
-
-    // Fork-owned app-startup hooks (analytics, crash reporting, remote-config, …) from the
-    // white-label AppInitializers seam. commonMain, so EVERY platform (Android / iOS / Desktop /
-    // Web) runs them once after Koin init — no per-platform app-class edit (S3/S4 heal, T7,
-    // epic pure-white-label-store5-network). A fork registers hooks in cmp-navigation's
-    // AppInitializers; the template entry points stay untouched.
-    AppInitializers.runAll()
 }

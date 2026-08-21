@@ -10,9 +10,9 @@
 package org.mifospay.core.data.repository
 
 import org.mifospay.core.common.ScreenStateStream
-import org.mifospay.core.network.model.entity.TPTResponse
-import org.mifospay.core.network.model.entity.payload.TransferPayload
-import org.mifospay.core.network.model.entity.templates.account.AccountOptionsTemplate
+import org.mifospay.core.model.network.entity.TPTResponse
+import org.mifospay.core.model.network.entity.payload.TransferPayload
+import org.mifospay.core.model.network.entity.templates.account.AccountOptionsTemplate
 
 interface ThirdPartyTransferRepository {
     suspend fun getTransferTemplate(): AccountOptionsTemplate

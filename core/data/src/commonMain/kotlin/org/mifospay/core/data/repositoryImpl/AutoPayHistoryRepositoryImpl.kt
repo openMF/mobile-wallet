@@ -18,8 +18,8 @@ import org.mifospay.core.data.repository.AutoPayHistoryRepository
 import org.mifospay.core.data.repository.AutoPayHistoryStatistics
 import org.mifospay.core.model.autopay.AutoPayHistory
 import org.mifospay.core.model.autopay.PaymentStatus
+import org.mifospay.core.model.network.entity.Page
 import org.mifospay.core.network.FineractApiManager
-import org.mifospay.core.network.model.entity.Page
 
 // TODO: Align repository with final API response/request schema once confirmed by backend
 

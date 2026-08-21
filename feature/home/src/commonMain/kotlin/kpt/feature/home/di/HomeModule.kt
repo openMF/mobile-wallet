@@ -9,12 +9,12 @@
  */
 package kpt.feature.home.di
 
-import kpt.feature.home.demo.ui.HomeViewModel
-import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
 
-val HomeModule = module {
-    // demo:begin
-    viewModelOf(::HomeViewModel)
-    // demo:end
-}
+/**
+ * The backbone home module — [kpt.feature.home.HomeScreen] carries zero demo imports and takes
+ * no ViewModel of its own (the `homeBody` seam is supplied by `cmp-navigation`'s
+ * `BackboneRegistry.homeBody`, whose own definitions live wherever that body's real
+ * implementation is installed). Empty on purpose.
+ */
+val HomeModule = module {}

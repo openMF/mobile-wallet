@@ -9,12 +9,12 @@
  */
 package org.mifospay.core.data.mapper
 
+import org.mifospay.core.model.network.entity.Role
+import org.mifospay.core.model.network.entity.user.NewUserEntity
+import org.mifospay.core.model.network.entity.user.User
 import org.mifospay.core.model.user.NewUser
 import org.mifospay.core.model.user.RoleInfo
 import org.mifospay.core.model.user.UserInfo
-import org.mifospay.core.network.model.entity.Role
-import org.mifospay.core.network.model.entity.user.NewUserEntity
-import org.mifospay.core.network.model.entity.user.User
 
 private const val OFFICE_ID = 1
 private const val MOBILE_WALLET_ROLE_ID = 2

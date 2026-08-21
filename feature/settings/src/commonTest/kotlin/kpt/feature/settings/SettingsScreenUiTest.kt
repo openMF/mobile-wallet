@@ -14,17 +14,15 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.runComposeUiTest
 import kpt.core.designsystem.theme.KptTheme
-import kpt.feature.settings.demo.SettingsDemoBody
 import kotlin.test.Test
 
 /**
- * Compose Multiplatform UI test for the settings inner body [SettingsDemoBody] (the fork-owned seam
- * rendered by `cmp-navigation`'s `BackboneRegistry.settingsBody` inside the template `SettingsScreen`
- * shell).
+ * Compose Multiplatform UI test for [SettingsScreenContent] — the template-owned Settings shell,
+ * always rendered regardless of dialog state (RULE-KMP-COMPOSE-UITEST-001 CU-1..CU-3).
  *
- * It is a pure-UI body — all dialog state is managed internally; no ViewModel is needed. The test
- * renders it directly inside [KptTheme] with no-op callbacks and asserts the always-present root
- * scaffold node identified by [TestTags.Settings.SCREEN].
+ * This fork has no demo dialog/dev-menu seam, so the shell is exercised directly with no-op
+ * callbacks; production wires the real callbacks via `cmp-navigation`. Asserts the always-present
+ * root scaffold node identified by [TestTags.Settings.SCREEN].
  */
 @OptIn(ExperimentalTestApi::class)
 class SettingsScreenUiTest {
@@ -33,9 +31,10 @@ class SettingsScreenUiTest {
     fun screenIsDisplayed() = runComposeUiTest {
         setContent {
             KptTheme {
-                // In production cmp-navigation's BackboneRegistry.settingsBody supplies this body.
-                SettingsDemoBody(
+                SettingsScreenContent(
                     onBackClick = {},
+                    onThemeCardClick = {},
+                    onLanguageCardClick = {},
                     onSyncAndDraftsClick = {},
                 )
             }

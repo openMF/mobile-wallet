@@ -67,7 +67,7 @@ import org.mifospay.core.designsystem.component.MifosScaffold
 import org.mifospay.core.designsystem.component.MifosTopBar
 import org.mifospay.core.designsystem.icon.MifosIcons
 import org.mifospay.core.designsystem.theme.toRoundedCornerShape
-import org.mifospay.core.network.model.entity.templates.account.AccountOption
+import org.mifospay.core.model.network.entity.templates.account.AccountOption
 import org.mifospay.core.ui.AvatarBox
 import org.mifospay.core.ui.EmptyContentScreen
 import org.mifospay.core.ui.MifosProgressIndicator

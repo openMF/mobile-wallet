@@ -31,10 +31,10 @@ import org.mifospay.core.model.account.Account
 import org.mifospay.core.model.client.Client
 import org.mifospay.core.model.client.NewClient
 import org.mifospay.core.model.client.UpdatedClient
+import org.mifospay.core.model.network.entity.Page
+import org.mifospay.core.model.network.entity.client.ClientAccountsEntity
 import org.mifospay.core.network.FineractApiManager
 import org.mifospay.core.network.SelfServiceApiManager
-import org.mifospay.core.network.model.entity.Page
-import org.mifospay.core.network.model.entity.client.ClientAccountsEntity
 import org.mobilenativefoundation.store.store5.Store
 import kpt.core.data.infra.NetworkMonitor as StoreNetworkMonitor
 

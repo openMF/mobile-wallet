@@ -44,8 +44,16 @@ for key in "${!FIELD_CAT[@]}"; do
       fail=1
     fi
   elif wl_matches_example "$val" "$cat"; then
-    # value IS the template's committed Mifos reference identity
-    if [ "$is_template" != "1" ]; then
+    # value IS the template's committed Mifos reference identity.
+    #
+    # org_name is EXEMPT from the must-diverge rule that governs bundle_id / app_display_name.
+    # Those two uniquely identify THIS app and must differ per fork; org_name identifies the
+    # PARENT ORGANIZATION, which many genuine sibling forks in the openMF/Mifos family (this one
+    # included) correctly share as "Mifos Initiative" — that is their real, authored identity, not
+    # an un-rebranded copy of the template's reference example. The unfilled-placeholder branch
+    # above (CHANGEME / empty / "Your Organization Name" / "App Toolkit") still fully applies —
+    # only the reference-match branch is skipped for org_name.
+    if [ "$is_template" != "1" ] && [ "$cat" != "org_name" ]; then
       echo "❌ '$key=$val' is the template's Mifos REFERENCE identity — a fork must rebrand to its own (see WHITE_LABEL_PLACEHOLDERS.yaml#example_identity.$cat)"
       fail=1
     fi

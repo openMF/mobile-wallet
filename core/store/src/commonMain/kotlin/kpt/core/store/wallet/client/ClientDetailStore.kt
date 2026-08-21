@@ -19,10 +19,10 @@ import kpt.core.database.wallet.client.toEntity
 import org.mifospay.core.model.client.Client
 import org.mifospay.core.model.client.ClientStatus
 import org.mifospay.core.model.client.ClientTimeline
+import org.mifospay.core.model.network.entity.client.ClientEntity
+import org.mifospay.core.model.network.entity.client.ClientTimelineEntity
+import org.mifospay.core.model.network.entity.client.Status
 import org.mifospay.core.network.SelfServiceApiManager
-import org.mifospay.core.network.model.entity.client.ClientEntity
-import org.mifospay.core.network.model.entity.client.ClientTimelineEntity
-import org.mifospay.core.network.model.entity.client.Status
 import org.mobilenativefoundation.store.store5.Fetcher
 import org.mobilenativefoundation.store.store5.SourceOfTruth
 import org.mobilenativefoundation.store.store5.Store

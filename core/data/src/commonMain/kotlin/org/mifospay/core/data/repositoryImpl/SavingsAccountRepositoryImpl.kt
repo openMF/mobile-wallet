@@ -26,6 +26,7 @@ import org.mifospay.core.common.asScreenStateFlow
 import org.mifospay.core.data.mapper.toModel
 import org.mifospay.core.data.mapper.toSavingDetail
 import org.mifospay.core.data.repository.SavingsAccountRepository
+import org.mifospay.core.model.network.entity.Page
 import org.mifospay.core.model.savingsaccount.CreateNewSavingEntity
 import org.mifospay.core.model.savingsaccount.SavingAccountDetail
 import org.mifospay.core.model.savingsaccount.SavingAccountTemplate
@@ -34,7 +35,6 @@ import org.mifospay.core.model.savingsaccount.Transaction
 import org.mifospay.core.model.savingsaccount.TransactionsEntity
 import org.mifospay.core.model.savingsaccount.UpdateSavingAccountEntity
 import org.mifospay.core.network.SelfServiceApiManager
-import org.mifospay.core.network.model.entity.Page
 import org.mobilenativefoundation.store.store5.Store
 import kpt.core.data.infra.NetworkMonitor as StoreNetworkMonitor
 

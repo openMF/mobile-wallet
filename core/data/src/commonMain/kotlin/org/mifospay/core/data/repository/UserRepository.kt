@@ -10,10 +10,10 @@
 package org.mifospay.core.data.repository
 
 import org.mifospay.core.common.ScreenStateStream
+import org.mifospay.core.model.network.CommonResponse
+import org.mifospay.core.model.network.GenericResponse
+import org.mifospay.core.model.network.entity.UserWithRole
 import org.mifospay.core.model.user.NewUser
-import org.mifospay.core.network.model.CommonResponse
-import org.mifospay.core.network.model.GenericResponse
-import org.mifospay.core.network.model.entity.UserWithRole
 
 interface UserRepository {
     // Phase-3 cutover — Flow-shaped surfaces on ScreenState.

@@ -10,8 +10,8 @@
 package org.mifospay.core.data.repository
 
 import org.mifospay.core.common.ScreenStateStream
-import org.mifospay.core.network.model.twofactor.AccessToken
-import org.mifospay.core.network.model.twofactor.DeliveryMethod
+import org.mifospay.core.model.network.twofactor.AccessToken
+import org.mifospay.core.model.network.twofactor.DeliveryMethod
 
 interface TwoFactorAuthRepository {
     // Phase-3 cutover — Flow-shaped 2FA reads/submissions on ScreenState.

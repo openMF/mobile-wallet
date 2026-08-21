@@ -9,6 +9,46 @@
     See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
 -->
 <resources>
+    <!-- Template Theme card / settings shell — same key set every locale ships -->
+    <string name="feature_settings_title">Settings</string>
+    <string name="feature_settings_loading">Loading…</string>
+    <string name="feature_settings_theme">Theme</string>
+    <string name="feature_settings_brand_default">Default</string>
+    <string name="feature_settings_brand_android">Android</string>
+    <string name="feature_settings_dark_mode_preference">Dark mode preference</string>
+    <string name="feature_settings_dark_mode_config_system_default">System default</string>
+    <string name="feature_settings_dark_mode_config_light">Light</string>
+    <string name="feature_settings_dark_mode_config_dark">Dark</string>
+    <string name="feature_settings_dynamic_color_preference">Use Dynamic Color</string>
+    <string name="feature_settings_dynamic_color_yes">Yes</string>
+    <string name="feature_settings_dynamic_color_no">No</string>
+    <string name="feature_settings_dismiss_dialog_button_text">OK</string>
+    <string name="feature_settings_change_theme_text">Change Theme</string>
+    <string name="feature_settings_change_theme_placeholder_text">Change Theme</string>
+
+    <!-- NotificationScreen — empty state -->
+    <string name="feature_settings_notifications_empty_title">No notifications yet</string>
+    <string name="feature_settings_notifications_empty_message">You\'ll see bill reminders and rate alerts here.</string>
+
+    <!-- Sync &amp; Drafts screen (template-level draft/sync inventory) -->
+    <string name="feature_settings_sync_drafts_row">Sync &amp; Drafts</string>
+    <string name="feature_settings_sync_drafts_row_description">View and manage drafts and pending syncs</string>
+    <string name="feature_settings_sync_drafts_title">Sync &amp; Drafts</string>
+    <string name="feature_settings_sync_drafts_empty_title">Nothing to sync</string>
+    <string name="feature_settings_sync_drafts_empty_message">Drafts you save offline and records waiting to sync will appear here.</string>
+    <string name="feature_settings_sync_drafts_section_drafts">Drafts</string>
+    <string name="feature_settings_sync_drafts_section_syncing">Syncing</string>
+    <string name="feature_settings_sync_drafts_section_failed">Failed</string>
+    <string name="feature_settings_sync_drafts_status_pending">Pending</string>
+    <string name="feature_settings_sync_drafts_status_retrying">Retrying</string>
+    <string name="feature_settings_sync_drafts_status_failed">Failed</string>
+    <string name="feature_settings_sync_drafts_retry">Retry</string>
+    <string name="feature_settings_sync_drafts_discard">Discard</string>
+    <string name="feature_settings_sync_drafts_prune">Prune expired</string>
+    <string name="feature_settings_sync_drafts_discard_confirm_title">Discard draft?</string>
+    <string name="feature_settings_sync_drafts_discard_confirm_message">This permanently deletes the saved draft. This can\'t be undone.</string>
+    <string name="feature_settings_sync_drafts_discard_confirm_cancel">Cancel</string>
+
     <string name="feature_settings_alert_disable_account">Are you sure you want to disable account?</string>
     <string name="feature_settings_notification_settings">Notification Settings</string>
     <string name="feature_settings_faq">FAQ</string>

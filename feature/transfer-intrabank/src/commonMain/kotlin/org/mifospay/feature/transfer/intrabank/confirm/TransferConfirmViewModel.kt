@@ -36,8 +36,8 @@ import org.mifospay.core.common.utils.capitalizeWords
 import org.mifospay.core.data.repository.ClientRepository
 import org.mifospay.core.data.repository.ThirdPartyTransferRepository
 import org.mifospay.core.data.repository.UserVerificationRepository
-import org.mifospay.core.network.model.entity.payload.TransferPayload
-import org.mifospay.core.network.model.entity.templates.account.AccountOption
+import org.mifospay.core.model.network.entity.payload.TransferPayload
+import org.mifospay.core.model.network.entity.templates.account.AccountOption
 import org.mifospay.core.ui.DefaultErrorMessageProvider
 import org.mifospay.core.ui.utils.BaseViewModel
 import org.mifospay.feature.transfer.intrabank.navigation.TransferConfirmRoute

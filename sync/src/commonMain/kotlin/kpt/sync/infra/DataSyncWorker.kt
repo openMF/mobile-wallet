@@ -14,35 +14,22 @@ package kpt.sync.infra
 import io.github.mobilebytelabs.worker.CoroutineWorker
 import io.github.mobilebytelabs.worker.WorkResult
 import io.github.mobilebytelabs.worker.WorkerContext
-import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
-import kotlinx.coroutines.coroutineScope
 import kpt.core.base.data.infra.Synchronizer
 import kpt.core.base.datastore.infra.ChangeListVersions
 import kpt.core.base.datastore.infra.SyncStatePersister
-import kpt.core.data.demo.currency.CurrencyRepository
-import kpt.core.data.demo.economic.MacroIndicatorsRepository
 
 /**
- * Single data-sync worker. Implements [Synchronizer] so its two [Syncable]
- * collaborators ([CurrencyRepository], [MacroIndicatorsRepository]) can read +
+ * Single data-sync worker. Implements [Synchronizer] so [Syncable] collaborators can read +
  * write [ChangeListVersions] through `this` without an extra abstraction.
  *
- * **No `getAll<Syncable>()`** — the two repos are constructor-injected as named interfaces. Adding a third
- * Syncable (e.g. FRED interest rates) requires editing this class signature +
- * the [SyncModule] binding — not a runtime discovery.
- *
- * The `awaitAll` shape means partial failure is full failure — if one repo
- * throws, the entire sync is `Result.retry()`. This matches NiA's surface
- * (single `Flow<Boolean>` to observers) and is what the template's home
- * dashboard expects.
+ * This fork has no periodic-refresh [Syncable] collaborators of its own (per-screen Store5
+ * FetchPolicy handles network freshness instead — see `core/store/README.md`); the template's
+ * demo currency/economic-indicator syncers were stripped with the rest of the demo scaffolding.
+ * Add a real [Syncable] here (constructor-injected, matching [SyncModule]'s binding) if a
+ * future feature needs generic background data sync.
  */
 public class DataSyncWorker(
     context: WorkerContext,
-    // demo:begin
-    private val currencyRepository: CurrencyRepository,
-    private val macroIndicatorsRepository: MacroIndicatorsRepository,
-    // demo:end
     private val persister: SyncStatePersister,
 ) : CoroutineWorker(context), Synchronizer {
 
@@ -58,17 +45,6 @@ public class DataSyncWorker(
 
     override suspend fun doWork(): WorkResult {
         workingVersions = persister.read()
-        // demo:begin
-        val ok = runCatching {
-            coroutineScope {
-                listOf(
-                    async { currencyRepository.syncWith(this@DataSyncWorker) },
-                    async { macroIndicatorsRepository.syncWith(this@DataSyncWorker) },
-                ).awaitAll().all { it }
-            }
-        }.getOrDefault(false)
-        if (!ok) return WorkResult.retry()
-        // demo:end
         persister.write(workingVersions)
         return WorkResult.success()
     }

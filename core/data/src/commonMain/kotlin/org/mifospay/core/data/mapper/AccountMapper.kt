@@ -10,10 +10,10 @@
 package org.mifospay.core.data.mapper
 
 import org.mifospay.core.model.account.Account
+import org.mifospay.core.model.network.entity.client.ClientAccountsEntity
 import org.mifospay.core.model.savingsaccount.AccountType
 import org.mifospay.core.model.savingsaccount.SavingAccountEntity
-import org.mifospay.core.network.model.entity.client.ClientAccountsEntity
-import org.mifospay.core.network.model.entity.templates.account.AccountType as NetworkAccountType
+import org.mifospay.core.model.network.entity.templates.account.AccountType as NetworkAccountType
 
 fun ClientAccountsEntity.toAccount(): List<Account> {
     return this.savingsAccounts.toAccount()

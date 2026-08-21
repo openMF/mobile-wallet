@@ -22,6 +22,11 @@ kotlin {
         androidUnitTest.dependencies {
             implementation(libs.androidx.compose.ui.test)
         }
+        androidMain.dependencies {
+            // Fork addition: PermissionBox.kt needs the Activity permission-request APIs
+            // (ContextCompat/ActivityCompat/rememberLauncherForActivityResult).
+            implementation(libs.androidx.activity.compose)
+        }
         commonMain.dependencies {
             api(projects.coreBase.designsystem)
             // Theme wires LocalScreenStateDefaults from core/store so every screen
@@ -38,6 +43,12 @@ kotlin {
             implementation(compose.components.uiToolingPreview)
 
             implementation(libs.coil.kt.compose)
+
+            // Fork addition: BottomSheet.kt's predictive-back handling needs arkivanov Essenty's
+            // BackCallback.
+            implementation(libs.back.handler)
+            // Fork addition: MifosIcons.kt draws from the FluentUI icon set.
+            implementation(libs.fluentui.system.icons)
         }
     }
 }

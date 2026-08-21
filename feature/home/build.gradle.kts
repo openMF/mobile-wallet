@@ -19,6 +19,12 @@ kotlin {
             implementation(projects.core.model)
             implementation(projects.core.store)
             implementation(projects.core.ui)
+            // Fork addition: org.mifospay.feature.home.{HomeScreen,HomeViewModel} (the fork's
+            // pre-existing Home screen, mounted wholesale via cmp-shared's MifosNavHost) read
+            // the org.mifospay.core.designsystem.{component,icon}.* design system surface.
+            // org.mifospay.core.datastore.UserPreferencesRepository comes transitively via
+            // core/data's api(core.datastore) re-export.
+            implementation(projects.core.designsystem)
 
             implementation(compose.ui)
             implementation(compose.material3)
@@ -28,6 +34,11 @@ kotlin {
             // RULE-IMPL-NO-HARDCODED-STRING-001 (W2 of store5-superbrain-v2).
             // Mirrors `feature/loans/build.gradle.kts` wiring.
             implementation(compose.components.resources)
+            // Fork addition: HomeScreen's @Preview composables need the tooling-preview API.
+            implementation(compose.components.uiToolingPreview)
+            // Fork addition: HomeScreen uses androidx.compose.material3.windowsizeclass.* for
+            // calculateWindowSizeClass()/WindowWidthSizeClass adaptive-layout branching.
+            implementation(libs.window.size)
 
             // Phase 3 (store5-screen-state-persistence 03-vm-scoping) — koinNavViewModel()
             // for NavBackStackEntry-scoped VM acquisition on the HomeScreen bottom-nav-tab

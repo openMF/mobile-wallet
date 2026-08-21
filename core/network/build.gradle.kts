@@ -17,6 +17,11 @@ plugins {
     alias(libs.plugins.kmp.supabase.config)
     id("kotlinx-serialization")
     id("com.google.devtools.ksp")
+    // Fork addition: SupabaseInstanceConfigLoader's fallback config (composeResources/files/
+    // instances_config_default.json) needs the `compose` extension for org.jetbrains.compose.
+    // resources.ExperimentalResourceApi + the generated `Res` accessor.
+    alias(libs.plugins.jetbrainsCompose)
+    alias(libs.plugins.compose.compiler)
 }
 
 val localProps = Properties().apply {
@@ -67,6 +72,12 @@ kotlin {
             api(projects.coreBase.network)
 
             implementation(projects.core.datastore)
+
+            // Fork addition: applying the compose-compiler plugin (above) requires the Compose
+            // Runtime on the classpath for every target it compiles — see core/common's build.gradle.kts
+            // for the same fix + rationale.
+            implementation(compose.runtime)
+            implementation(compose.components.resources)
 
             implementation(libs.kotlinx.serialization.json)
 

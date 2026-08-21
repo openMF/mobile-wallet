@@ -14,7 +14,7 @@ import org.mifospay.core.common.ScreenState
 import org.mifospay.core.model.beneficiary.Beneficiary
 import org.mifospay.core.model.beneficiary.BeneficiaryPayload
 import org.mifospay.core.model.beneficiary.BeneficiaryUpdatePayload
-import org.mifospay.core.network.model.entity.templates.beneficiary.BeneficiaryTemplate
+import org.mifospay.core.model.network.entity.templates.beneficiary.BeneficiaryTemplate
 
 interface BeneficiaryRepository {
     // Phase-3 cutover — reads on ScreenState.

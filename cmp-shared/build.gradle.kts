@@ -91,14 +91,59 @@ kotlin {
             implementation(libs.worker.compose.all)
             // Worker classes referenced from the @WorkerKmpWorkers annotation live here.
             implementation(projects.sync)
-            // DataSyncWorker's constructor params come from core:data (CurrencyRepository,
-            // MacroIndicatorsRepository) + core:datastore (SyncStatePersister). The
-            // @WorkerKmpWorkers KSP codegen reads every worker ctor param type for Koin
+            // DataSyncWorker's constructor params come from core:datastore (SyncStatePersister).
+            // The @WorkerKmpWorkers KSP codegen reads every worker ctor param type for Koin
             // autowiring, and KSP metadata resolution needs them on the DIRECT classpath
             // (transitive-via-:sync klibs are not resolved) — else "could not resolve type
             // of constructor parameter ...".
             implementation(projects.core.data)
             implementation(projects.core.datastore)
+
+            // Fork's KoinModules aggregator + MifosPayApp compose every feature/lib/domain/
+            // network module into a single graph. Declared here so `import
+            // org.mifospay.feature.*.di.*Module` + `import org.mifos.lib.loan.di.*`
+            // + `import org.mifospay.core.{common,domain,network}.di.*` resolve.
+            implementation(projects.core.common)
+            implementation(projects.core.domain)
+            implementation(projects.core.network)
+            // MifosPayApp wraps the PlatformAuthenticatorCompositionProvider + PasscodeManager
+            // biometrics/passcode seams directly.
+            implementation(libs.mifos.authenticator.biometrics)
+            implementation(libs.mifos.authenticator.passcode)
+            implementation(projects.feature.auth)
+            implementation(projects.feature.home)
+            implementation(projects.feature.settings)
+            implementation(projects.feature.faq)
+            implementation(projects.feature.editpassword)
+            implementation(projects.feature.profile)
+            implementation(projects.feature.history)
+            implementation(projects.feature.payments)
+            implementation(projects.feature.accounts)
+            implementation(projects.feature.beneficiary)
+            implementation(projects.feature.invoices)
+            implementation(projects.feature.kyc)
+            implementation(projects.feature.notification)
+            implementation(projects.feature.savedcards)
+            implementation(projects.feature.receipt)
+            implementation(projects.feature.standingInstruction)
+            implementation(projects.feature.transferIntrabank)
+            implementation(projects.feature.transferInterbank)
+            implementation(projects.feature.mpayQr)
+            implementation(projects.feature.mpayQrScan)
+            implementation(projects.feature.fastMpay)
+            implementation(projects.feature.merchants)
+            implementation(projects.feature.upiSetup)
+            implementation(projects.feature.passcode)
+            implementation(projects.feature.autopay)
+            implementation(projects.feature.sendMoney)
+            implementation(projects.feature.pocket)
+            implementation(projects.libs.mifosLoans)
+            implementation(projects.feature.finance)
+
+            // MifosAppState + HomeScreen tie to material3 window-size-class multiplatform;
+            // Preview annotations use org.jetbrains.compose.ui.tooling.preview.
+            implementation(libs.window.size)
+            implementation(compose.components.uiToolingPreview)
         }
 
         desktopMain.dependencies {

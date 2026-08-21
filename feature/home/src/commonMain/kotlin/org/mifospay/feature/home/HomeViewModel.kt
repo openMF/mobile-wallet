@@ -18,10 +18,10 @@ import kotlinx.coroutines.flow.update
 import kotlinx.serialization.Serializable
 import kpt.core.base.store.submit.SubmitState
 import kpt.core.base.store.submit.submitHandler
-import mifos_pay.feature.home.generated.resources.Res
-import mifos_pay.feature.home.generated.resources.feature_home_account_error
-import mifos_pay.feature.home.generated.resources.feature_home_account_success
-import mifos_pay.feature.home.generated.resources.feature_home_failed_to_load_accounts
+import kpt.feature.home.generated.resources.Res
+import kpt.feature.home.generated.resources.feature_home_account_error
+import kpt.feature.home.generated.resources.feature_home_account_success
+import kpt.feature.home.generated.resources.feature_home_failed_to_load_accounts
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.getString
 import org.mifospay.core.common.ScreenState

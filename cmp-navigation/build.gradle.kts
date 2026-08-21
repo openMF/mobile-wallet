@@ -39,6 +39,13 @@ kotlin {
             // PlatformAuthenticatorGate). PRESERVED across template syncs — do not drop.
             implementation(projects.core.designsystem)
             implementation(libs.mifos.authenticator.biometrics)
+            // Fork addition: RootNavScreen's login/passcode graph wraps feature/passcode's
+            // rootMifosPasscodeScreen/biometricSetupScreen/reAuthMifosPasscodeScreen composables +
+            // KoinModules wires MifosAuthenticatorModule + PasscodeManager (mifos-authenticator-passcode).
+            implementation(projects.feature.passcode)
+            implementation(libs.mifos.authenticator.passcode)
+            // Fork addition: KoinModules wires org.mifospay.core.domain.di.DomainModule.
+            implementation(projects.core.domain)
 
             // Backbone shell features (template-owned) — always present in every fork.
             implementation(projects.feature.home)

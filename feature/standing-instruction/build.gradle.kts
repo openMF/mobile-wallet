@@ -25,6 +25,9 @@ kotlin {
             // ScreenState directly instead of a fork-ScreenState fold.
             implementation(projects.coreBase.store)
             implementation(projects.coreBase.ui)
+            // Fork addition: AddEditSIViewModel/SIDetailViewModel read org.mifospay.core.common
+            // (ScreenState/CurrencyFormatter/DateHelper/getSerialized/setSerialized).
+            implementation(projects.core.common)
         }
     }
 }

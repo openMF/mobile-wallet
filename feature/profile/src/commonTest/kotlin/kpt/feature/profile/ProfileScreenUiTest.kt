@@ -14,16 +14,15 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.runComposeUiTest
 import kpt.core.designsystem.theme.KptTheme
-import kpt.feature.profile.demo.ProfileDemoBody
 import kotlin.test.Test
 
 /**
- * Compose Multiplatform UI test for [ProfileScreen].
+ * Compose Multiplatform UI test for [ProfileScreen] — the top-level shell, always rendered
+ * regardless of what `profileBody` supplies (RULE-KMP-COMPOSE-UITEST-001 CU-1..CU-3).
  *
- * ProfileScreen is a pure-UI screen with no ViewModel — it renders a static
- * placeholder hero-card. The test renders it directly inside [KptTheme] and
- * asserts the always-present root scaffold node identified by
- * [TestTags.Profile.SCREEN].
+ * This fork has no demo profile body, so `profileBody` is empty here too — production wires it
+ * via `cmp-navigation`'s `BackboneRegistry.profileBody`. Asserts the always-present root scaffold
+ * node identified by [TestTags.Profile.SCREEN].
  */
 @OptIn(ExperimentalTestApi::class)
 class ProfileScreenUiTest {
@@ -32,8 +31,7 @@ class ProfileScreenUiTest {
     fun screenIsDisplayed() = runComposeUiTest {
         setContent {
             KptTheme {
-                // In production cmp-navigation's BackboneRegistry.profileBody supplies this body.
-                ProfileScreen(profileBody = { ProfileDemoBody() })
+                ProfileScreen(profileBody = {})
             }
         }
         onNodeWithTag(TestTags.Profile.SCREEN).assertIsDisplayed()

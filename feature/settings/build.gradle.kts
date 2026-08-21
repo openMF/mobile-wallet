@@ -28,6 +28,13 @@ kotlin {
             implementation(projects.core.store)
             // Firebase analytics (AnalyticsHelper + Compose TrackScreenView/rememberAnalyticsHelper) via core/firebase.
             implementation(projects.core.firebase)
+            // Fork addition: SettingsScreen/SettingsViewModel wrap biometrics setup — reuses
+            // feature/passcode's BiometricErrorMessages/BiometricPromptStrings helpers plus the
+            // mifos-authenticator biometrics/passcode libraries directly (PlatformAuthenticationProvider/
+            // PasscodeManager).
+            implementation(projects.feature.passcode)
+            implementation(libs.mifos.authenticator.biometrics)
+            implementation(libs.mifos.authenticator.passcode)
 
             implementation(compose.ui)
             implementation(compose.foundation)

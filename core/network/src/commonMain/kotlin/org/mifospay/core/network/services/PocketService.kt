@@ -13,10 +13,10 @@ import de.jensklingenberg.ktorfit.http.Body
 import de.jensklingenberg.ktorfit.http.GET
 import de.jensklingenberg.ktorfit.http.POST
 import de.jensklingenberg.ktorfit.http.Query
-import org.mifospay.core.network.model.entity.pocket.PocketCommandResponse
-import org.mifospay.core.network.model.entity.pocket.PocketDelinkRequest
-import org.mifospay.core.network.model.entity.pocket.PocketLinkRequest
-import org.mifospay.core.network.model.entity.pocket.PocketResponseDto
+import org.mifospay.core.model.network.entity.pocket.PocketCommandResponse
+import org.mifospay.core.model.network.entity.pocket.PocketDelinkRequest
+import org.mifospay.core.model.network.entity.pocket.PocketLinkRequest
+import org.mifospay.core.model.network.entity.pocket.PocketResponseDto
 import org.mifospay.core.network.utils.ApiEndPoints
 
 interface PocketService {

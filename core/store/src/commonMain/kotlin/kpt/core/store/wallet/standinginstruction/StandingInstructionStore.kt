@@ -36,7 +36,7 @@ private const val STANDING_INSTRUCTIONS_TABLE = "wallet_standing_instructions"
  * the Room `wallet_standing_instructions` [SourceOfTruth]; the network fetcher
  * pulls from `standingInstructionApi.getAllStandingInstructions(clientId)`
  * (which returns `Flow<Page<StandingInstruction>>`), strips the
- * `pageItems` list out of the Fineract [org.mifospay.core.network.model.entity.Page]
+ * `pageItems` list out of the Fineract [org.mifospay.core.model.network.entity.Page]
  * envelope, and hands the mapped list to the writer for atomic page replacement.
  *
  * The consumer at the repository layer wires this to

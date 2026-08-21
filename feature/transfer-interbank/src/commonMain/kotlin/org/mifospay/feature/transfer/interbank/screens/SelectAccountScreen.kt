@@ -50,9 +50,9 @@ import org.mifospay.core.designsystem.component.MifosTopBar
 import org.mifospay.core.designsystem.icon.MifosIcons
 import org.mifospay.core.designsystem.theme.MifosTheme
 import org.mifospay.core.model.account.Account
+import org.mifospay.core.model.network.entity.templates.account.AccountType
 import org.mifospay.core.model.savingsaccount.Currency
 import org.mifospay.core.model.savingsaccount.Status
-import org.mifospay.core.network.model.entity.templates.account.AccountType
 import org.mifospay.core.ui.AvatarBox
 import org.mifospay.core.ui.EmptyContentScreen
 import org.mifospay.core.ui.MifosProgressIndicator

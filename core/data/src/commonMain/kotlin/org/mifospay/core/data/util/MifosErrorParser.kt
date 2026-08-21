@@ -11,7 +11,7 @@ package org.mifospay.core.data.util
 
 import kotlinx.serialization.json.Json
 import org.mifospay.core.common.ErrorBodyParser
-import org.mifospay.core.network.model.entity.mifoserror.MifosError
+import org.mifospay.core.model.network.entity.mifoserror.MifosError
 
 /**
  * JSON instance configured for lenient parsing of error responses.

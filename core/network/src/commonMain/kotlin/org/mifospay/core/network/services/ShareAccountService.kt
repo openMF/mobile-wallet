@@ -13,7 +13,7 @@ import de.jensklingenberg.ktorfit.http.GET
 import de.jensklingenberg.ktorfit.http.Path
 import de.jensklingenberg.ktorfit.http.Query
 import kotlinx.coroutines.flow.Flow
-import org.mifospay.core.network.model.entity.shareAccount.ShareWithAssociationsResponseDto
+import org.mifospay.core.model.network.entity.shareAccount.ShareWithAssociationsResponseDto
 import org.mifospay.core.network.utils.ApiEndPoints
 
 interface ShareAccountService {

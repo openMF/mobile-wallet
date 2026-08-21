@@ -17,9 +17,9 @@ import kpt.core.database.wallet.selfaccounts.SelfAccountDao
 import kpt.core.database.wallet.selfaccounts.toDomain
 import kpt.core.database.wallet.selfaccounts.toEntity
 import org.mifospay.core.model.account.Account
+import org.mifospay.core.model.network.entity.client.ClientAccountsEntity
 import org.mifospay.core.model.savingsaccount.SavingAccountEntity
 import org.mifospay.core.network.SelfServiceApiManager
-import org.mifospay.core.network.model.entity.client.ClientAccountsEntity
 import org.mobilenativefoundation.store.store5.Fetcher
 import org.mobilenativefoundation.store.store5.SourceOfTruth
 import org.mobilenativefoundation.store.store5.Store
