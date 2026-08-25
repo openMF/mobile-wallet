@@ -58,6 +58,8 @@ import mifos_pay.feature.pocket.generated.resources.feature_pocket_dashboard_tot
 import mifos_pay.feature.pocket.generated.resources.feature_pocket_empty_action
 import mifos_pay.feature.pocket.generated.resources.feature_pocket_empty_description
 import mifos_pay.feature.pocket.generated.resources.feature_pocket_empty_title
+import mifos_pay.feature.pocket.generated.resources.feature_pocket_unknown_account
+import mifos_pay.feature.pocket.generated.resources.feature_pocket_unknown_status
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
