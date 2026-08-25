@@ -24,6 +24,8 @@ import org.mifospay.core.network.SelfServiceApiManager
 import org.mifospay.core.network.model.entity.client.ClientAccountsEntity
 import org.mifospay.core.network.model.entity.loanAccount.LoanStatusResponseDto
 import org.mifospay.core.network.model.entity.pocket.PocketAccountDto
+import org.mifospay.core.network.model.entity.pocket.PocketDelinkRequest
+import org.mifospay.core.network.model.entity.pocket.PocketLinkRequest
 import org.mifospay.core.network.model.entity.pocket.PocketResponseDto
 import org.mifospay.core.network.model.entity.shareAccount.ShareStatusResponseDto
 import org.mobilenativefoundation.store.store5.Fetcher
@@ -122,6 +124,36 @@ fun providePocketStore(
     clock: () -> Long = { Clock.System.now().toEpochMilliseconds() },
 ): Store<PocketKey, List<DetailedPocketAccount>> = StoreFactory.createStore(
     fetcher = Fetcher.of { key: PocketKey ->
+        try {
+            val localPending = dao.getPendingSyncsByClient(key.clientId)
+
+            val pendingLinks = localPending.filter { it.syncStatus == "PENDING_LINK" }
+            val pendingDelinks = localPending.filter { it.syncStatus == "PENDING_DELINK" }
+
+            if (pendingLinks.isNotEmpty()) {
+                val request = PocketLinkRequest(
+                    accountsDetail = pendingLinks.map {
+                        PocketLinkRequest.AccountDetail(
+                            accountId = it.accountId.toString(),
+                            accountType = it.accountType,
+                        )
+                    },
+                )
+                apiManager.pocketApi.linkAccounts(request = request)
+            }
+
+            if (pendingDelinks.isNotEmpty()) {
+                val serverIds = pendingDelinks.filter { it.id > 0 }.map { it.id }
+                if (serverIds.isNotEmpty()) {
+                    val request = PocketDelinkRequest(serverIds)
+                    apiManager.pocketApi.delinkAccounts(request = request)
+                }
+            }
+        } catch (e: Exception) {
+            // Silently swallow push failures; they will remain PENDING in the DB
+            // and the pull phase will preserve them via replacePage.
+        }
+
         // Step 1 — basic pockets (session-scoped on the server side).
         val basicPockets: List<PocketAccount> = apiManager.pocketApi
             .getPocketAccounts()
@@ -140,7 +172,7 @@ fun providePocketStore(
     },
     sourceOfTruth = SourceOfTruth.of(
         reader = { key: PocketKey ->
-            daoFlow(POCKETS_TABLE) { dao.observeByClient(key.clientId) }
+            daoFlow(POCKETS_TABLE) { dao.observeLinkedByClient(key.clientId) }
                 .map { rows -> rows.map { it.toDomain() } }
         },
         writer = { key: PocketKey, pockets: List<DetailedPocketAccount> ->
@@ -232,12 +264,6 @@ private suspend fun addPocketDetails(
             balance = detail?.loanBalance,
             productName = detail?.productName,
             currencyCode = detail?.currency?.code,
-            // Upstream PR #2057 (manage-pocket) surfaces per-currency display glyph
-            // (`"$"`/`"₹"`/…) so the dashboard + manage-pocket sheets render matching
-            // symbols. Value flows through the store fetcher into
-            // `DetailedPocketAccount.currencyDisplaySymbol`; the Room mirror
-            // (`PocketEntity`) does NOT yet carry the column so the SoT-decoded
-            // path surfaces `null` — the store's `fetcher` write wins on next SWR.
             currencyDisplaySymbol = detail?.currency?.displaySymbol,
             decimalPlaces = detail?.currency?.decimalPlaces,
             status = detail?.status?.toAccountStatus(),
@@ -258,7 +284,7 @@ private suspend fun addPocketDetails(
     }
 
     AccountType.SHARE -> {
-        var balance = 0.0
+        var balance: Double? = null
         var productName: String?
         var currencyCode: String?
         var currencyDisplaySymbol: String?

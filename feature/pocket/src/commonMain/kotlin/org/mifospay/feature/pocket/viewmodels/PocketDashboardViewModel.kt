@@ -13,6 +13,7 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
+import kpt.core.base.store.freshness.FreshnessSignal
 import kpt.core.base.store.screen.ScreenState
 import org.mifospay.core.data.repository.PocketRepository
 import org.mifospay.core.datastore.UserPreferencesRepository
@@ -52,6 +53,12 @@ internal class PocketDashboardViewModel(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5_000),
         initialValue = ScreenState.Loading,
+    )
+
+    val freshness: StateFlow<FreshnessSignal> = stream.freshness.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5_000),
+        initialValue = FreshnessSignal.initial(),
     )
 
     fun retry() = stream.refresh()

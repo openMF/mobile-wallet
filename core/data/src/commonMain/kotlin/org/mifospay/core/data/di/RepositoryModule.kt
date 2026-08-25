@@ -252,16 +252,10 @@ val RepositoryModule = module {
             // set from the Room SoT snapshot (pre-store this used the in-memory
             // detailedPocketCache which is now removed).
             pocketStore = get(kpt.core.store.AppStoreRegistry.Pocket),
+            linkableAccountsStore = get(kpt.core.store.AppStoreRegistry.LinkableAccounts),
             storeNetworkMonitor = get(),
             fetchedAtRepository = get(),
             pocketDao = get(),
-            // manage-pocket linkable-accounts Store5 wiring (replaces upstream
-            // PR #2057's multiplatform-settings `linkable_accounts` cache in
-            // `PocketPreferencesDataSource`). Named-qualifier from
-            // AppStoreRegistry.LinkableAccounts; the store itself is bound by
-            // StoreModule (`kpt.core.store.di.StoreModule`) and injects
-            // SelfServiceApiManager + LinkableAccountDao + PocketDao.
-            linkableAccountsStore = get(kpt.core.store.AppStoreRegistry.LinkableAccounts),
         )
     }
 

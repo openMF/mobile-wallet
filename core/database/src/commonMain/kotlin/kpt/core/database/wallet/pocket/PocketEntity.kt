@@ -9,6 +9,7 @@
  */
 package kpt.core.database.wallet.pocket
 
+import androidx.room3.ColumnInfo
 import androidx.room3.Entity
 import androidx.room3.Index
 
@@ -74,7 +75,10 @@ data class PocketEntity(
     val productName: String?,
     val balance: Double?,
     val currencyCode: String?,
+    val currencyDisplaySymbol: String?,
     val decimalPlaces: Int?,
     val status: String?,
     val fetchedAtEpochMs: Long = 0L,
+    @ColumnInfo(defaultValue = "'SYNCED'")
+    val syncStatus: String = "SYNCED",
 )

@@ -9,63 +9,26 @@
  */
 package org.mifospay.feature.pocket.viewmodels
 
-// Upstream PR #2057 (manage-pocket) introduced this VM on top of the pre-migration
-// `getDetailedPocketAccounts(clientId, forceRefresh): Flow<DataState<...>>` read
-// path. This branch had already replaced that read path with the Store5 LEDGER
-// `getDetailedPocketAccountsScreen(clientId, scope): Flow<ScreenState<...>>` (Phase-5
-// Batch-2 — Room SoT + CACHE_FIRST_SWR + no in-memory cache), so this VM is
-// re-authored to consume the ScreenState stream via a `refreshTrigger` +
-// `flatMapLatest` re-subscribe (the same pattern `PocketDashboardViewModel` and
-// `BeneficiaryListViewModel` use).
-//
-// The manage-pocket linkable-accounts Store5 migration THEN did the same for the
-// second read path: `getAvailableAccountsToLink(clientId): Flow<DataState<...>>`
-// was upstream PR #2057's DataState-shaped stream against the in-memory
-// `PocketPreferencesDataSource.linkableAccounts` cache; this VM now consumes the
-// Store5-backed `getAvailableAccountsToLinkScreen(clientId, scope): Flow<ScreenState<...>>`
-// with a direct `collectLatest { handleAvailableAccounts(screenState, ...) }`
-// fold (no `Internal.ReceiveAvailableAccounts` bridge). The UI-side sealed
-// hierarchy (`ManagePocketState` / `ManagePocketAction` / `ManagePocketDialogState` /
-// `ManagePocketEvent` / `ManagePocketAccount` / `AvailablePocketAccount`) is
-// preserved so `ManagePocketScreen` is untouched by either migration.
-//
-// The write paths (`linkAccounts` / `delinkAccounts`) then follow the template
-// SubmitHandler idiom (core-base/store `submitHandler`): the hand-folded
-// `when (DataState) { Success/Error/Loading }` result branches are replaced by
-// `submitLink` / `submitDelink` one-shot handlers whose Submitting/Submitted/Failed
-// lifecycle is observed in `init` and mapped to the SAME dialog UX (Loading overlay,
-// close-on-success + `refreshTrigger` re-fetch, StringResource Error dialog). The
-// Screen is again untouched — the observers reproduce the exact pre-migration state.
-
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
+import kpt.core.base.store.freshness.FreshnessSignal
+import kpt.core.base.store.screen.ScreenState
 import kpt.core.base.store.submit.SubmitState
 import kpt.core.base.store.submit.submitHandler
 import mifos_pay.feature.pocket.generated.resources.Res
 import mifos_pay.feature.pocket.generated.resources.feature_pocket_error_delink_account
 import mifos_pay.feature.pocket.generated.resources.feature_pocket_error_link_accounts
-import mifos_pay.feature.pocket.generated.resources.feature_pocket_error_load_accounts
-import mifos_pay.feature.pocket.generated.resources.feature_pocket_unknown_account
-import org.jetbrains.compose.resources.getString
-import org.mifospay.core.common.ScreenState
 import org.mifospay.core.data.repository.PocketRepository
-import org.mifospay.core.data.util.toForkScreenStateFlow
 import org.mifospay.core.datastore.UserPreferencesRepository
 import org.mifospay.core.model.enums.AccountType
-import org.mifospay.core.model.payload.PocketLinkPayload
-import org.mifospay.core.model.pocket.AccountStatus
 import org.mifospay.core.model.pocket.DetailedPocketAccount
 import org.mifospay.core.model.pocket.LinkableAccount
-import org.mifospay.core.model.pocket.PocketAccount
 import org.mifospay.core.ui.utils.BaseViewModel
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -77,32 +40,41 @@ internal class ManagePocketViewModel(
         clientId = requireNotNull(userPreferencesRepository.clientId.value),
     ),
 ) {
-    // Phase-5 Batch-2: refresh trigger cadence. Each emission re-subscribes to a
-    // fresh `getDetailedPocketAccountsScreen(...)` stream — the Store5 native
-    // way to force a re-fetch (parity with PocketDashboardViewModel /
-    // BeneficiaryListViewModel). Replaces the pre-migration `forceRefresh: Boolean`
-    // signal that used to flow through `getDetailedPocketAccounts(...)`.
-    private val refreshTrigger = MutableSharedFlow<Unit>(extraBufferCapacity = 1)
 
-    private var availableAccountsJob: Job? = null
+    private val linkedStream = pocketRepository.getDetailedPocketAccountsStream(
+        clientId = state.clientId,
+        scope = viewModelScope,
+    )
 
-    // Template idiom (core-base/store): the link/delink one-shot WRITEs go through
-    // SubmitHandlers instead of hand-folded `DataState` result branches. Each handler
-    // owns its Submitting/Submitted/Failed lifecycle; the observers below reproduce the
-    // exact pre-migration dialog UX (Loading overlay → close on success → StringResource
-    // Error dialog on failure) so `ManagePocketScreen` is untouched. Two handlers because
-    // the success/error UX differs: link clears the selection + search on success and
-    // surfaces `feature_pocket_error_link_accounts`; delink just closes the dialog and
-    // surfaces `feature_pocket_error_delink_account`. Both re-fire `refreshTrigger` on
-    // success to pull the updated set back through the Store5 read pipe (parity with the
-    // pre-migration folds — the repo write path stays pure-online per D1).
+    val linkedUiState: StateFlow<ScreenState<List<DetailedPocketAccount>>> = linkedStream.state.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5_000),
+        initialValue = ScreenState.Loading,
+    )
+
+    val linkedFreshness: StateFlow<FreshnessSignal> = linkedStream.freshness.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5_000),
+        initialValue = FreshnessSignal.initial(),
+    )
+
+    private val availableStream = pocketRepository.getAvailableAccountsToLinkStream(
+        clientId = state.clientId,
+        scope = viewModelScope,
+    )
+
+    val availableUiState: StateFlow<ScreenState<List<LinkableAccount>>> = availableStream.state.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5_000),
+        initialValue = ScreenState.Loading,
+    )
+
     private val submitLink = viewModelScope.submitHandler<Unit>()
     private val submitDelink = viewModelScope.submitHandler<Unit>()
 
     init {
         observeLinkSubmit()
         observeDelinkSubmit()
-        loadLinkedAccounts()
     }
 
     private fun observeLinkSubmit() {
@@ -121,9 +93,8 @@ internal class ManagePocketViewModel(
                                 searchQuery = "",
                             )
                         }
-                        // re-fire the read stream so the newly-linked rows flow back
-                        // through the Store5 pipe (Room-write on the next fetch).
-                        refreshTrigger.tryEmit(Unit)
+                        availableStream.refresh()
+                        linkedStream.refresh()
                         submitLink.reset()
                     }
 
@@ -154,8 +125,8 @@ internal class ManagePocketViewModel(
 
                     is SubmitState.Submitted -> {
                         updateState { it.copy(dialogState = null) }
-                        // re-subscribe to pull the updated set through the store.
-                        refreshTrigger.tryEmit(Unit)
+                        availableStream.refresh()
+                        linkedStream.refresh()
                         submitDelink.reset()
                     }
 
@@ -176,22 +147,6 @@ internal class ManagePocketViewModel(
             .launchIn(viewModelScope)
     }
 
-    private fun loadLinkedAccounts() {
-        viewModelScope.launch {
-            val unknownAccount = getString(Res.string.feature_pocket_unknown_account)
-            refreshTrigger.onStart { emit(Unit) }
-                .flatMapLatest {
-                    pocketRepository.getDetailedPocketAccountsStream(
-                        clientId = state.clientId,
-                        scope = viewModelScope,
-                    ).state.toForkScreenStateFlow()
-                }
-                .collectLatest { screenState ->
-                    handleLinkedAccounts(screenState, unknownAccount)
-                }
-        }
-    }
-
     private fun updateState(update: (ManagePocketState) -> ManagePocketState) {
         mutableStateFlow.update(update)
     }
@@ -199,10 +154,15 @@ internal class ManagePocketViewModel(
     override fun handleAction(action: ManagePocketAction) {
         when (action) {
             ManagePocketAction.NavigateBack -> sendEvent(ManagePocketEvent.NavigateBack)
-            ManagePocketAction.Retry -> retry()
+            ManagePocketAction.Retry -> linkedStream.refresh()
+            ManagePocketAction.RetryAvailable -> availableStream.refresh()
             ManagePocketAction.OpenLinkAccounts -> openLinkAccounts()
             ManagePocketAction.DismissDialog -> dismissDialog()
-            is ManagePocketAction.OpenDelinkConfirmation -> openDelinkConfirmation(action.account)
+            is ManagePocketAction.OpenDelinkConfirmation -> openDelinkConfirmation(
+                accountId = action.accountId,
+                accountName = action.accountName,
+                accountNumber = action.accountNumber,
+            )
             is ManagePocketAction.TabSelected -> updateState { it.copy(selectedTab = action.accountType) }
             is ManagePocketAction.SearchQueryChanged -> updateState { it.copy(searchQuery = action.query) }
             is ManagePocketAction.AccountSelectionChanged -> updateSelectedAccount(
@@ -210,32 +170,8 @@ internal class ManagePocketViewModel(
                 accountType = action.accountType,
                 selected = action.selected,
             )
-            ManagePocketAction.LinkSelectedAccounts -> linkSelectedAccounts()
-            is ManagePocketAction.DelinkAccount -> delinkAccount(action.account)
-        }
-    }
-
-    private fun retry() {
-        updateState { it.copy(uiState = ManagePocketUiState.Loading) }
-        refreshTrigger.tryEmit(Unit)
-    }
-
-    private fun loadAvailableAccounts() {
-        availableAccountsJob?.cancel()
-        availableAccountsJob = viewModelScope.launch {
-            val unknownAccount = getString(Res.string.feature_pocket_unknown_account)
-            // manage-pocket linkable-accounts Store5 migration — consume the
-            // ScreenState-shaped read path (`getAvailableAccountsToLinkScreen`)
-            // that reads through the `linkableAccounts` Store5 store. Replaces
-            // the pre-migration DataState-shaped `getAvailableAccountsToLink`
-            // path (which is preserved on the repository interface for any
-            // residual caller compat but no longer consumed by this VM).
-            pocketRepository.getAvailableAccountsToLinkStream(
-                clientId = state.clientId,
-                scope = viewModelScope,
-            ).state.toForkScreenStateFlow().collectLatest { screenState ->
-                handleAvailableAccounts(screenState, unknownAccount)
-            }
+            is ManagePocketAction.LinkSelectedAccounts -> linkSelectedAccounts(action.explicitlyAddedAccounts)
+            is ManagePocketAction.DelinkAccount -> delinkAccount(action.mappingId)
         }
     }
 
@@ -245,280 +181,77 @@ internal class ManagePocketViewModel(
                 dialogState = ManagePocketDialogState.LinkAccounts,
             )
         }
-        loadAvailableAccounts()
     }
 
     private fun dismissDialog() {
         updateState {
             it.copy(
                 dialogState = null,
+                selectedAccountIdentifiers = emptySet(),
+                searchQuery = "",
             )
         }
     }
 
-    private fun openDelinkConfirmation(account: ManagePocketAccount) {
+    private fun openDelinkConfirmation(accountId: Long, accountName: String, accountNumber: String) {
         updateState {
-            it.copy(dialogState = ManagePocketDialogState.DelinkConfirmation(account))
+            it.copy(dialogState = ManagePocketDialogState.DelinkConfirmation(accountId, accountName, accountNumber))
         }
     }
 
-    private fun updateSelectedAccount(accountId: Long, accountType: AccountType, selected: Boolean) {
-        updateState {
+    private fun updateSelectedAccount(
+        accountId: Long,
+        accountType: AccountType,
+        selected: Boolean,
+    ) {
+        updateState { currentState ->
             val identifier = "${accountId}_${accountType.name}"
-            val updated = if (selected) {
-                it.selectedAccountIdentifiers + identifier
+            val newSelection = if (selected) {
+                currentState.selectedAccountIdentifiers + identifier
             } else {
-                it.selectedAccountIdentifiers - identifier
+                currentState.selectedAccountIdentifiers - identifier
             }
-
-            it.copy(selectedAccountIdentifiers = updated)
+            currentState.copy(selectedAccountIdentifiers = newSelection)
         }
     }
 
-    private fun linkSelectedAccounts() {
-        val accountsToLink = state.availableAccounts.filter {
-            "${it.accountId}_${it.accountType.name}" in state.selectedAccountIdentifiers
-        }
+    private fun linkSelectedAccounts(explicitlyAddedAccounts: List<DetailedPocketAccount>) {
+        if (state.selectedAccountIdentifiers.isEmpty()) return
 
-        if (accountsToLink.isEmpty()) return
-
-        val payload = PocketLinkPayload(
-            accountsDetail = accountsToLink.map {
-                PocketLinkPayload.AccountDetail(
-                    accountId = it.accountId.toString(),
-                    accountType = it.accountType,
-                )
-            },
-        )
-
-        val explicitAccounts = accountsToLink.map { it.toDetailedPocketAccount() }
-
-        // Submit through the handler — it drives Submitting/Submitted/Failed, observed
-        // in `observeLinkSubmit()`. The repository write completes normally on success
-        // and throws on failure, so the handler reports Failed directly.
         submitLink.submit {
             pocketRepository.linkAccounts(
-                payload = payload,
-                explicitlyAddedAccounts = explicitAccounts,
+                explicitlyAddedAccounts = explicitlyAddedAccounts,
                 clientId = state.clientId,
             )
         }
     }
 
-    private fun delinkAccount(account: ManagePocketAccount) {
-        // Submit through the handler — Submitting/Submitted/Failed observed in
-        // `observeDelinkSubmit()`; the repository write throws on failure.
+    private fun delinkAccount(mappingId: Long) {
         submitDelink.submit {
             pocketRepository.delinkAccounts(
-                pocketAccountMappingIds = listOf(account.mappingId),
+                pocketAccountMappingIds = listOf(mappingId),
                 clientId = state.clientId,
             )
         }
-    }
-
-    /**
-     * Phase-5 Batch-2: fold the 6-branch [ScreenState] into the feature's UiState.
-     * Replaces the pre-migration `handleLinkedAccounts(DataState<...>)` on the
-     * same VM — the same `linkedAccounts` bucket population runs on the
-     * `Content` branch; `Empty` also renders `linkedAccounts = emptyList()` +
-     * `Success` (matching upstream's `DataState.Success(emptyList())` semantics
-     * — the empty-state UI lives inside `ManagePocketContent`, not a distinct
-     * UiState). `NoNetwork` / `Unauthenticated` fold into `Error` until a
-     * future phase wires per-branch surfaces.
-     */
-    private fun handleLinkedAccounts(
-        screenState: ScreenState<List<DetailedPocketAccount>>,
-        unknownAccount: String,
-    ) {
-        when (screenState) {
-            is ScreenState.Loading -> {
-                updateState { it.copy(uiState = ManagePocketUiState.Loading) }
-            }
-
-            is ScreenState.Empty -> {
-                updateState {
-                    it.copy(
-                        linkedAccounts = emptyList(),
-                        uiState = ManagePocketUiState.Success,
-                    )
-                }
-            }
-
-            is ScreenState.Content -> {
-                val linkedAccounts = screenState.data.map { it.toManagePocketAccount(unknownAccount) }
-                updateState {
-                    it.copy(
-                        linkedAccounts = linkedAccounts,
-                        uiState = ManagePocketUiState.Success,
-                    )
-                }
-            }
-
-            is ScreenState.Error -> {
-                updateState {
-                    it.copy(
-                        uiState = ManagePocketUiState.Error(Res.string.feature_pocket_error_load_accounts),
-                    )
-                }
-            }
-
-            is ScreenState.NoNetwork -> {
-                updateState {
-                    it.copy(
-                        uiState = ManagePocketUiState.Error(Res.string.feature_pocket_error_load_accounts),
-                    )
-                }
-            }
-
-            is ScreenState.Unauthenticated -> {
-                updateState {
-                    it.copy(
-                        uiState = ManagePocketUiState.Error(Res.string.feature_pocket_error_load_accounts),
-                    )
-                }
-            }
-        }
-    }
-
-    /**
-     * manage-pocket linkable-accounts Store5 migration — fold the 6-branch
-     * [ScreenState] into the link-accounts dialog's uiState. Replaces the
-     * pre-migration `handleAvailableAccounts(DataState<...>)` on the same VM
-     * — the same `availableAccounts` bucket population runs on the `Content`
-     * branch. `Empty` renders `availableAccounts = emptyList()` +
-     * `isAvailableAccountsLoading = false` (an empty-linkable-set is a valid
-     * outcome — every eligible account is already linked). `NoNetwork` /
-     * `Unauthenticated` / `Error` fold into the dialog's Error surface (parity
-     * with the pre-migration DataState.Error branch).
-     */
-    private fun handleAvailableAccounts(
-        screenState: ScreenState<List<LinkableAccount>>,
-        unknownAccount: String,
-    ) {
-        when (screenState) {
-            is ScreenState.Loading -> updateState {
-                it.copy(isAvailableAccountsLoading = true)
-            }
-
-            is ScreenState.Empty -> updateState {
-                it.copy(
-                    availableAccounts = emptyList(),
-                    isAvailableAccountsLoading = false,
-                )
-            }
-
-            is ScreenState.Content -> {
-                val availableAccounts = screenState.data.map { account ->
-                    account.toAvailablePocketAccount(unknownAccount)
-                }
-                updateState {
-                    it.copy(
-                        availableAccounts = availableAccounts,
-                        isAvailableAccountsLoading = false,
-                    )
-                }
-            }
-
-            is ScreenState.Error, is ScreenState.NoNetwork, ScreenState.Unauthenticated -> {
-                updateState {
-                    it.copy(
-                        isAvailableAccountsLoading = false,
-                        dialogState = ManagePocketDialogState.Error(
-                            Res.string.feature_pocket_error_load_accounts,
-                        ),
-                    )
-                }
-            }
-        }
-    }
-
-    private fun DetailedPocketAccount.toManagePocketAccount(unknownAccount: String): ManagePocketAccount {
-        return ManagePocketAccount(
-            accountId = pocket.accountId,
-            mappingId = pocket.id,
-            name = productName ?: unknownAccount,
-            accountNumber = pocket.accountNumber,
-            accountType = pocket.accountType,
-        )
-    }
-
-    private fun LinkableAccount.toAvailablePocketAccount(unknownAccount: String): AvailablePocketAccount {
-        return AvailablePocketAccount(
-            accountId = accountId,
-            name = productName ?: unknownAccount,
-            accountNumber = accountNumber.orEmpty(),
-            accountType = accountType,
-            balance = balance,
-            currencyCode = currencyCode,
-            currencyDisplaySymbol = currencyDisplaySymbol,
-            decimalPlaces = decimalPlaces,
-            status = status,
-        )
-    }
-
-    private fun AvailablePocketAccount.toDetailedPocketAccount(): DetailedPocketAccount {
-        val temporaryId = -kotlin.random.Random.nextLong(1L, Long.MAX_VALUE)
-        return DetailedPocketAccount(
-            pocket = PocketAccount(
-                pocketId = temporaryId,
-                id = temporaryId,
-                accountId = accountId,
-                accountType = accountType,
-                accountNumber = accountNumber,
-            ),
-            productName = name,
-            balance = balance,
-            currencyCode = currencyCode,
-            currencyDisplaySymbol = currencyDisplaySymbol,
-            decimalPlaces = decimalPlaces,
-            status = status,
-        )
     }
 }
 
 internal data class ManagePocketState(
     val clientId: Long = 0,
-    val linkedAccounts: List<ManagePocketAccount> = emptyList(),
-    val availableAccounts: List<AvailablePocketAccount> = emptyList(),
     val selectedAccountIdentifiers: Set<String> = emptySet(),
     val selectedTab: AccountType = AccountType.SAVINGS,
     val searchQuery: String = "",
-    val uiState: ManagePocketUiState = ManagePocketUiState.Loading,
     val dialogState: ManagePocketDialogState? = null,
-    val isAvailableAccountsLoading: Boolean = false,
-)
-
-internal sealed interface ManagePocketUiState {
-    data object Loading : ManagePocketUiState
-    data class ErrorString(val message: String) : ManagePocketUiState
-    data class Error(val message: org.jetbrains.compose.resources.StringResource) : ManagePocketUiState
-    data object Success : ManagePocketUiState
-}
-
-data class ManagePocketAccount(
-    val accountId: Long,
-    val mappingId: Long,
-    val name: String,
-    val accountNumber: String,
-    val accountType: AccountType,
-)
-
-internal data class AvailablePocketAccount(
-    val accountId: Long,
-    val name: String,
-    val accountNumber: String,
-    val accountType: AccountType,
-    val balance: Double? = null,
-    val currencyCode: String? = null,
-    val currencyDisplaySymbol: String? = null,
-    val decimalPlaces: Int? = null,
-    val status: AccountStatus? = null,
 )
 
 internal sealed interface ManagePocketDialogState {
     data object LinkAccounts : ManagePocketDialogState
     data object Loading : ManagePocketDialogState
-    data class DelinkConfirmation(val account: ManagePocketAccount) : ManagePocketDialogState
+    data class DelinkConfirmation(
+        val accountId: Long,
+        val accountName: String,
+        val accountNumber: String,
+    ) : ManagePocketDialogState
     data class Error(val message: org.jetbrains.compose.resources.StringResource) : ManagePocketDialogState
 }
 
@@ -529,11 +262,16 @@ internal sealed interface ManagePocketEvent {
 internal sealed interface ManagePocketAction {
     data object NavigateBack : ManagePocketAction
     data object Retry : ManagePocketAction
+    data object RetryAvailable : ManagePocketAction
     data object OpenLinkAccounts : ManagePocketAction
     data object DismissDialog : ManagePocketAction
-    data object LinkSelectedAccounts : ManagePocketAction
-    data class OpenDelinkConfirmation(val account: ManagePocketAccount) : ManagePocketAction
-    data class DelinkAccount(val account: ManagePocketAccount) : ManagePocketAction
+    data class LinkSelectedAccounts(val explicitlyAddedAccounts: List<DetailedPocketAccount>) : ManagePocketAction
+    data class OpenDelinkConfirmation(
+        val accountId: Long,
+        val accountName: String,
+        val accountNumber: String,
+    ) : ManagePocketAction
+    data class DelinkAccount(val mappingId: Long) : ManagePocketAction
     data class TabSelected(val accountType: AccountType) : ManagePocketAction
     data class SearchQueryChanged(val query: String) : ManagePocketAction
     data class AccountSelectionChanged(
@@ -541,13 +279,4 @@ internal sealed interface ManagePocketAction {
         val accountType: AccountType,
         val selected: Boolean,
     ) : ManagePocketAction
-
-    // manage-pocket linkable-accounts Store5 migration: the pre-migration
-    // `Internal.ReceiveAvailableAccounts(DataState<List<LinkableAccount>>, unknownAccount)`
-    // is REMOVED — the ScreenState stream from the new `getAvailableAccountsToLinkScreen`
-    // is consumed DIRECTLY in `loadAvailableAccounts()` (via `collectLatest {
-    // handleAvailableAccounts(screenState, unknownAccount) }`) without the
-    // two-step `trySendAction` indirection (parity with the linked-accounts
-    // read path in `loadLinkedAccounts()`). No `Internal` sealed hierarchy
-    // remains — both reads now consume ScreenState directly.
 }

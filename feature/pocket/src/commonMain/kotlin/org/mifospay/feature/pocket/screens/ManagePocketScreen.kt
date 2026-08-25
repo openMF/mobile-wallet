@@ -9,16 +9,6 @@
  */
 package org.mifospay.feature.pocket.screens
 
-/*
- * Copyright 2026 Mifos Initiative
- *
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at https://mozilla.org/MPL/2.0/.
- *
- * See https://github.com/openMF/mobile-mobile/blob/master/LICENSE.md
- */
-
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -71,6 +61,11 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import kpt.core.base.designsystem.theme.KptTheme
+import kpt.core.base.store.freshness.FreshnessSignal
+import kpt.core.base.store.screen.ScreenState
+import kpt.core.base.ui.freshness.FreshnessIndicator
+import kpt.core.base.ui.screen.ScreenContent
 import mifos_pay.feature.pocket.generated.resources.Res
 import mifos_pay.feature.pocket.generated.resources.feature_pocket_action_cancel
 import mifos_pay.feature.pocket.generated.resources.feature_pocket_action_link
@@ -89,6 +84,7 @@ import mifos_pay.feature.pocket.generated.resources.feature_pocket_no_linked_acc
 import mifos_pay.feature.pocket.generated.resources.feature_pocket_remove_account_detail
 import mifos_pay.feature.pocket.generated.resources.feature_pocket_remove_account_title
 import mifos_pay.feature.pocket.generated.resources.feature_pocket_search_accounts_hint
+import mifos_pay.feature.pocket.generated.resources.feature_pocket_unknown_account
 import mifos_pay.feature.pocket.generated.resources.feature_pocket_you_are_removing
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
@@ -103,18 +99,14 @@ import org.mifospay.core.designsystem.component.MifosTabPager
 import org.mifospay.core.designsystem.icon.MifosIcons
 import org.mifospay.core.designsystem.theme.MifosTheme
 import org.mifospay.core.model.enums.AccountType
-import org.mifospay.core.ui.ErrorScreenContent
-import org.mifospay.core.ui.MifosProgressIndicator
+import org.mifospay.core.model.pocket.DetailedPocketAccount
+import org.mifospay.core.model.pocket.LinkableAccount
 import org.mifospay.core.ui.utils.EventsEffect
-import org.mifospay.feature.pocket.viewmodels.AvailablePocketAccount
-import org.mifospay.feature.pocket.viewmodels.ManagePocketAccount
 import org.mifospay.feature.pocket.viewmodels.ManagePocketAction
 import org.mifospay.feature.pocket.viewmodels.ManagePocketDialogState
 import org.mifospay.feature.pocket.viewmodels.ManagePocketEvent
 import org.mifospay.feature.pocket.viewmodels.ManagePocketState
-import org.mifospay.feature.pocket.viewmodels.ManagePocketUiState
 import org.mifospay.feature.pocket.viewmodels.ManagePocketViewModel
-import template.core.base.designsystem.theme.KptTheme
 
 @Composable
 internal fun ManagePocketScreen(
@@ -122,6 +114,9 @@ internal fun ManagePocketScreen(
     viewModel: ManagePocketViewModel = koinViewModel(),
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
+    val linkedUiState by viewModel.linkedUiState.collectAsStateWithLifecycle()
+    val linkedFreshness by viewModel.linkedFreshness.collectAsStateWithLifecycle()
+    val availableUiState by viewModel.availableUiState.collectAsStateWithLifecycle()
 
     EventsEffect(viewModel) { event ->
         when (event) {
@@ -130,7 +125,8 @@ internal fun ManagePocketScreen(
     }
 
     ManagePocketContent(
-        state = state,
+        linkedUiState = linkedUiState,
+        linkedFreshness = linkedFreshness,
         onAction = remember(viewModel) {
             { viewModel.trySendAction(it) }
         },
@@ -138,6 +134,7 @@ internal fun ManagePocketScreen(
 
     ManagePocketDialogs(
         state = state,
+        availableUiState = availableUiState,
         onAction = remember(viewModel) {
             { viewModel.trySendAction(it) }
         },
@@ -146,7 +143,8 @@ internal fun ManagePocketScreen(
 
 @Composable
 internal fun ManagePocketContent(
-    state: ManagePocketState,
+    linkedUiState: ScreenState<List<DetailedPocketAccount>>,
+    linkedFreshness: FreshnessSignal,
     onAction: (ManagePocketAction) -> Unit,
 ) {
     MifosScaffold(
@@ -159,74 +157,111 @@ internal fun ManagePocketContent(
                 .fillMaxSize()
                 .padding(paddingValues),
         ) {
-            when (state.uiState) {
-                ManagePocketUiState.Loading -> MifosProgressIndicator()
-                is ManagePocketUiState.ErrorString -> {
-                    ErrorScreenContent(
-                        title = state.uiState.message,
-                        onClickRetry = { onAction(ManagePocketAction.Retry) },
-                    )
-                }
-                is ManagePocketUiState.Error -> {
-                    ErrorScreenContent(
-                        title = stringResource(state.uiState.message),
-                        onClickRetry = { onAction(ManagePocketAction.Retry) },
-                    )
-                }
-
-                ManagePocketUiState.Success -> {
+            ScreenContent(
+                state = linkedUiState,
+                onRetry = { onAction(ManagePocketAction.Retry) },
+                empty = {
                     Column(
                         modifier = Modifier
                             .fillMaxSize()
-                            .let {
-                                if (state.linkedAccounts.isNotEmpty()) {
-                                    it.verticalScroll(rememberScrollState())
-                                } else {
-                                    it
-                                }
-                            }
                             .padding(KptTheme.spacing.md),
                     ) {
                         LinkMoreAccountsCard(
                             onLinkClick = { onAction(ManagePocketAction.OpenLinkAccounts) },
                         )
-
-                        if (state.linkedAccounts.isEmpty()) {
-                            Box(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .weight(1f)
-                                    .padding(vertical = KptTheme.spacing.xl),
-                                contentAlignment = Alignment.Center,
-                            ) {
-                                Text(
-                                    text = stringResource(Res.string.feature_pocket_no_linked_accounts),
-                                    style = KptTheme.typography.bodyMedium,
-                                    color = KptTheme.colorScheme.secondary,
-                                )
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .weight(1f)
+                                .padding(vertical = KptTheme.spacing.xl),
+                            contentAlignment = Alignment.Center,
+                        ) {
+                            Text(
+                                text = stringResource(Res.string.feature_pocket_no_linked_accounts),
+                                style = KptTheme.typography.bodyMedium,
+                                color = KptTheme.colorScheme.secondary,
+                            )
+                        }
+                    }
+                },
+            ) { linkedAccounts, _ ->
+                val unknownAccount = stringResource(Res.string.feature_pocket_unknown_account)
+                val mappedLinkedAccounts = linkedAccounts.map {
+                    ManagePocketAccount(
+                        accountId = it.pocket.accountId,
+                        mappingId = it.pocket.id,
+                        name = it.productName ?: unknownAccount,
+                        accountNumber = it.pocket.accountNumber,
+                        accountType = it.pocket.accountType,
+                    )
+                }
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .let {
+                            if (mappedLinkedAccounts.isNotEmpty()) {
+                                it.verticalScroll(rememberScrollState())
+                            } else {
+                                it
                             }
-                        } else {
-                            Spacer(modifier = Modifier.height(KptTheme.spacing.lg))
+                        }
+                        .padding(KptTheme.spacing.md),
+                ) {
+                    LinkMoreAccountsCard(
+                        onLinkClick = { onAction(ManagePocketAction.OpenLinkAccounts) },
+                    )
 
+                    if (mappedLinkedAccounts.isEmpty()) {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .weight(1f)
+                                .padding(vertical = KptTheme.spacing.xl),
+                            contentAlignment = Alignment.Center,
+                        ) {
+                            Text(
+                                text = stringResource(Res.string.feature_pocket_no_linked_accounts),
+                                style = KptTheme.typography.bodyMedium,
+                                color = KptTheme.colorScheme.secondary,
+                            )
+                        }
+                    } else {
+                        Spacer(modifier = Modifier.height(KptTheme.spacing.lg))
+
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
                             Text(
                                 text = stringResource(Res.string.feature_pocket_linked_accounts),
                                 style = KptTheme.typography.titleSmall,
                                 color = KptTheme.colorScheme.primary,
                             )
+                            Spacer(modifier = Modifier.width(KptTheme.spacing.xs))
+                            FreshnessIndicator(
+                                signal = linkedFreshness,
+                                onRefresh = { onAction(ManagePocketAction.Retry) },
+                                modifier = Modifier.size(24.dp),
+                            )
+                        }
 
-                            Spacer(modifier = Modifier.height(KptTheme.spacing.sm))
+                        Spacer(modifier = Modifier.height(KptTheme.spacing.sm))
 
-                            Column(
-                                verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.sm),
-                            ) {
-                                state.linkedAccounts.forEach { account ->
-                                    LinkedPocketAccountCard(
-                                        account = account,
-                                        onRemoveClick = {
-                                            onAction(ManagePocketAction.OpenDelinkConfirmation(account))
-                                        },
-                                    )
-                                }
+                        Column(
+                            verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.sm),
+                        ) {
+                            mappedLinkedAccounts.forEach { account ->
+                                LinkedPocketAccountCard(
+                                    account = account,
+                                    onRemoveClick = {
+                                        onAction(
+                                            ManagePocketAction.OpenDelinkConfirmation(
+                                                accountId = account.mappingId,
+                                                accountName = account.name,
+                                                accountNumber = account.accountNumber,
+                                            ),
+                                        )
+                                    },
+                                )
                             }
                         }
                     }
@@ -239,6 +274,7 @@ internal fun ManagePocketContent(
 @Composable
 private fun ManagePocketDialogs(
     state: ManagePocketState,
+    availableUiState: ScreenState<List<LinkableAccount>>,
     onAction: (ManagePocketAction) -> Unit,
 ) {
     when (val dialogState = state.dialogState) {
@@ -248,6 +284,7 @@ private fun ManagePocketDialogs(
             ) {
                 LinkAccountsSheet(
                     state = state,
+                    availableUiState = availableUiState,
                     onAction = onAction,
                 )
             }
@@ -258,10 +295,11 @@ private fun ManagePocketDialogs(
                 onDismiss = { onAction(ManagePocketAction.DismissDialog) },
             ) {
                 RemoveLinkedAccountSheet(
-                    account = dialogState.account,
+                    accountName = dialogState.accountName,
+                    accountNumber = dialogState.accountNumber,
                     onCancelClick = { onAction(ManagePocketAction.DismissDialog) },
                     onRemoveClick = {
-                        onAction(ManagePocketAction.DelinkAccount(dialogState.account))
+                        onAction(ManagePocketAction.DelinkAccount(dialogState.accountId))
                     },
                 )
             }
@@ -411,9 +449,11 @@ private fun PocketAccountRow(
 @Composable
 private fun LinkAccountsSheet(
     state: ManagePocketState,
+    availableUiState: ScreenState<List<LinkableAccount>>,
     onAction: (ManagePocketAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val unknownAccount = stringResource(Res.string.feature_pocket_unknown_account)
     val tabs = listOf(AccountType.SAVINGS, AccountType.LOAN, AccountType.SHARE)
     val selectedTabIndex = tabs.indexOf(state.selectedTab).coerceAtLeast(0)
     val pagerState = rememberPagerState(
@@ -471,6 +511,10 @@ private fun LinkAccountsSheet(
 
         Spacer(modifier = Modifier.height(KptTheme.spacing.sm))
 
+        val allAccounts = (availableUiState as? ScreenState.Content)?.data ?: emptyList()
+        val isLoading = availableUiState is ScreenState.Loading ||
+            (availableUiState as? ScreenState.Content)?.freshnessSignal?.isRefreshing == true
+
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -485,19 +529,17 @@ private fun LinkAccountsSheet(
                     onAction(ManagePocketAction.TabSelected(tabs[page]))
                 },
             ) { page ->
-                val accounts = state.availableAccounts.filter { it.accountType == tabs[page] }
-
-                when {
-                    state.isAvailableAccountsLoading -> {
-                        Box(
-                            modifier = Modifier.fillMaxSize(),
-                            contentAlignment = Alignment.Center,
-                        ) {
-                            MifosProgressIndicator()
-                        }
+                if (isLoading && allAccounts.isEmpty()) {
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center,
+                    ) {
+                        org.mifospay.core.ui.MifosProgressIndicator()
                     }
+                } else {
+                    val accounts = allAccounts.filter { it.accountType == tabs[page] }
 
-                    accounts.isEmpty() -> {
+                    if (accounts.isEmpty()) {
                         Box(
                             modifier = Modifier.fillMaxSize(),
                             contentAlignment = Alignment.Center,
@@ -508,9 +550,7 @@ private fun LinkAccountsSheet(
                                 color = KptTheme.colorScheme.secondary,
                             )
                         }
-                    }
-
-                    else -> {
+                    } else {
                         LazyColumn(
                             modifier = Modifier.fillMaxSize(),
                             verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.sm),
@@ -538,85 +578,138 @@ private fun LinkAccountsSheet(
                 }
             }
 
-            if (state.searchQuery.isNotBlank()) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .background(KptTheme.colorScheme.surface.copy(alpha = 0.95f)),
-                ) {
-                    val searchResults = state.availableAccounts.filter {
-                        it.accountType == state.selectedTab && (
-                            it.name.contains(state.searchQuery, ignoreCase = true) ||
-                                it.accountNumber.contains(state.searchQuery, ignoreCase = true)
-                            )
-                    }
-
-                    if (searchResults.isEmpty()) {
-                        Box(
-                            modifier = Modifier.fillMaxSize(),
-                            contentAlignment = Alignment.Center,
-                        ) {
-                            Text(
-                                text = stringResource(Res.string.feature_pocket_no_available_accounts),
-                                style = KptTheme.typography.bodyMedium,
-                                color = KptTheme.colorScheme.secondary,
-                            )
-                        }
-                    } else {
-                        LazyColumn(
-                            modifier = Modifier.fillMaxSize(),
-                            verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.sm),
-                        ) {
-                            item { Spacer(modifier = Modifier.height(KptTheme.spacing.xs)) }
-                            items(searchResults, key = { "${it.accountId}_${it.accountType.name}" }) { account ->
-                                SelectablePocketAccountCard(
-                                    account = account,
-                                    selected = "${account.accountId}_${account.accountType.name}" in state.selectedAccountIdentifiers,
-                                    onSelectedChange = { selected ->
-                                        onAction(
-                                            ManagePocketAction.AccountSelectionChanged(
-                                                accountId = account.accountId,
-                                                accountType = account.accountType,
-                                                selected = selected,
-                                            ),
-                                        )
-                                    },
-                                )
-                            }
-                        }
-                    }
-                }
+            if (state.searchQuery.isNotBlank() && allAccounts.isNotEmpty()) {
+                LinkAccountsSearchResults(
+                    allAccounts = allAccounts,
+                    state = state,
+                    onAction = onAction,
+                )
             }
         }
 
         HorizontalDivider(color = KptTheme.colorScheme.outlineVariant)
 
-        MifosButton(
-            onClick = { onAction(ManagePocketAction.LinkSelectedAccounts) },
-            enabled = state.selectedAccountIdentifiers.isNotEmpty(),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = KptTheme.spacing.md),
-            content = {
-                Text(
-                    text = stringResource(
-                        Res.string.feature_pocket_link_selected,
-                        state.selectedAccountIdentifiers.size,
-                    ),
-                    style = KptTheme.typography.labelLarge,
-                )
-            },
+        LinkSelectedAccountsButton(
+            state = state,
+            allAccounts = allAccounts,
+            onAction = onAction,
         )
     }
 }
 
 @Composable
+private fun LinkAccountsSearchResults(
+    allAccounts: List<LinkableAccount>,
+    state: ManagePocketState,
+    onAction: (ManagePocketAction) -> Unit,
+) {
+    val unknownAccount = stringResource(Res.string.feature_pocket_unknown_account)
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(KptTheme.colorScheme.surface.copy(alpha = 0.95f)),
+    ) {
+        val searchResults = allAccounts.filter {
+            it.accountType == state.selectedTab && (
+                (it.productName ?: unknownAccount).contains(state.searchQuery, ignoreCase = true) ||
+                    (it.accountNumber ?: "").contains(state.searchQuery, ignoreCase = true)
+                )
+        }
+
+        if (searchResults.isEmpty()) {
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center,
+            ) {
+                Text(
+                    text = stringResource(Res.string.feature_pocket_no_available_accounts),
+                    style = KptTheme.typography.bodyMedium,
+                    color = KptTheme.colorScheme.secondary,
+                )
+            }
+        } else {
+            LazyColumn(
+                modifier = Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.sm),
+            ) {
+                item { Spacer(modifier = Modifier.height(KptTheme.spacing.xs)) }
+                items(
+                    items = searchResults,
+                    key = { "${it.accountId}_${it.accountType.name}" },
+                ) { account ->
+                    SelectablePocketAccountCard(
+                        account = account,
+                        selected = "${account.accountId}_${account.accountType.name}" in state.selectedAccountIdentifiers,
+                        onSelectedChange = { selected ->
+                            onAction(
+                                ManagePocketAction.AccountSelectionChanged(
+                                    accountId = account.accountId,
+                                    accountType = account.accountType,
+                                    selected = selected,
+                                ),
+                            )
+                        },
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun LinkSelectedAccountsButton(
+    state: ManagePocketState,
+    allAccounts: List<LinkableAccount>,
+    onAction: (ManagePocketAction) -> Unit,
+) {
+    val unknownAccount = stringResource(Res.string.feature_pocket_unknown_account)
+    MifosButton(
+        onClick = {
+            val explicitlyAddedAccounts = allAccounts
+                .filter { "${it.accountId}_${it.accountType.name}" in state.selectedAccountIdentifiers }
+                .map {
+                    org.mifospay.core.model.pocket.DetailedPocketAccount(
+                        pocket = org.mifospay.core.model.pocket.PocketAccount(
+                            pocketId = 0,
+                            id = 0,
+                            accountId = it.accountId,
+                            accountType = it.accountType,
+                            accountNumber = it.accountNumber ?: "",
+                        ),
+                        productName = it.productName ?: unknownAccount,
+                        balance = it.balance,
+                        currencyCode = it.currencyCode,
+                        decimalPlaces = it.decimalPlaces,
+                        status = it.status,
+                        currencyDisplaySymbol = it.currencyDisplaySymbol,
+                    )
+                }
+            onAction(ManagePocketAction.LinkSelectedAccounts(explicitlyAddedAccounts))
+        },
+        enabled = state.selectedAccountIdentifiers.isNotEmpty(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = KptTheme.spacing.md),
+        content = {
+            Text(
+                text = stringResource(
+                    Res.string.feature_pocket_link_selected,
+                    state.selectedAccountIdentifiers.size,
+                ),
+                style = KptTheme.typography.labelLarge,
+            )
+        },
+    )
+}
+
+@Composable
 private fun SelectablePocketAccountCard(
-    account: AvailablePocketAccount,
+    account: LinkableAccount,
     selected: Boolean,
     onSelectedChange: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val unknownAccount = stringResource(Res.string.feature_pocket_unknown_account)
     Row(
         modifier = modifier
             .fillMaxWidth()
@@ -625,7 +718,6 @@ private fun SelectablePocketAccountCard(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Checkbox(
-
             checked = selected,
             onCheckedChange = onSelectedChange,
         )
@@ -638,14 +730,14 @@ private fun SelectablePocketAccountCard(
 
         Column(modifier = Modifier.weight(1f)) {
             Text(
-                text = account.accountNumber,
+                text = account.accountNumber ?: "",
                 style = KptTheme.typography.titleSmall,
                 color = KptTheme.colorScheme.onBackground,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
             )
             Text(
-                text = account.name,
+                text = account.productName ?: unknownAccount,
                 style = KptTheme.typography.bodySmall,
                 color = KptTheme.colorScheme.secondary,
                 maxLines = 1,
@@ -739,7 +831,8 @@ private fun ManagePocketSearchTextField(
 
 @Composable
 private fun RemoveLinkedAccountSheet(
-    account: ManagePocketAccount,
+    accountName: String,
+    accountNumber: String,
     onCancelClick: () -> Unit,
     onRemoveClick: () -> Unit,
     modifier: Modifier = Modifier,
@@ -771,7 +864,6 @@ private fun RemoveLinkedAccountSheet(
             modifier = Modifier.fillMaxWidth(),
             onClick = {},
             enabled = false,
-
             shape = KptTheme.shapes.medium,
             colors = CardDefaults.cardColors(
                 containerColor = KptTheme.colorScheme.primaryContainer.copy(alpha = 0.35f),
@@ -788,14 +880,14 @@ private fun RemoveLinkedAccountSheet(
                     color = KptTheme.colorScheme.secondary,
                 )
                 Text(
-                    text = account.name,
+                    text = accountName,
                     style = KptTheme.typography.titleMedium,
                     color = KptTheme.colorScheme.onSurface,
                 )
                 Text(
                     text = stringResource(
                         Res.string.feature_pocket_remove_account_detail,
-                        account.accountNumber,
+                        accountNumber,
                     ),
                     style = KptTheme.typography.bodyLarge,
                     color = KptTheme.colorScheme.secondary,
@@ -856,32 +948,28 @@ private fun RemoveLinkedAccountSheet(
 private fun ManagePocketContentPreview() {
     MifosTheme {
         ManagePocketContent(
-            state = ManagePocketState(
-                linkedAccounts = listOf(
-                    previewPocketAccount(1, AccountType.SAVINGS, "1004859238", "Emergency Fund"),
-                    previewPocketAccount(2, AccountType.LOAN, "3009284756", "Personal Loan"),
-                    previewPocketAccount(3, AccountType.SHARE, "5001129384", "Company Shares"),
-                ),
-                uiState = ManagePocketUiState.Success,
-            ),
+            linkedUiState = ScreenState.Content(emptyList()),
+            linkedFreshness = FreshnessSignal.initial(),
             onAction = {},
         )
     }
 }
+
+internal data class ManagePocketAccount(
+    val accountId: Long,
+    val mappingId: Long,
+    val name: String,
+    val accountNumber: String,
+    val accountType: AccountType,
+)
 
 @Preview
 @Composable
 private fun LinkAccountsSheetContentPreview() {
     MifosTheme {
         LinkAccountsSheet(
-            state = ManagePocketState(
-                availableAccounts = listOf(
-                    previewAvailablePocketAccount(1, AccountType.SAVINGS, "1004859238", "Emergency Fund"),
-                    previewAvailablePocketAccount(2, AccountType.SAVINGS, "1004859239", "Vacation Savings"),
-                ),
-                selectedAccountIdentifiers = setOf("1_SAVINGS"),
-                uiState = ManagePocketUiState.Success,
-            ),
+            state = ManagePocketState(),
+            availableUiState = ScreenState.Content(emptyList()),
             onAction = {},
         )
     }
@@ -892,34 +980,10 @@ private fun LinkAccountsSheetContentPreview() {
 private fun RemoveLinkedAccountSheetContentPreview() {
     MifosTheme {
         RemoveLinkedAccountSheet(
-            account = previewPocketAccount(1, AccountType.SAVINGS, "1004859238", "Emergency Fund"),
+            accountName = "Emergency Fund",
+            accountNumber = "1004859238",
             onCancelClick = {},
             onRemoveClick = {},
         )
     }
 }
-
-private fun previewPocketAccount(
-    id: Long,
-    type: AccountType,
-    number: String,
-    name: String,
-) = ManagePocketAccount(
-    accountId = id,
-    mappingId = id,
-    name = name,
-    accountNumber = number,
-    accountType = type,
-)
-
-private fun previewAvailablePocketAccount(
-    id: Long,
-    type: AccountType,
-    number: String,
-    name: String,
-) = AvailablePocketAccount(
-    accountId = id,
-    name = name,
-    accountNumber = number,
-    accountType = type,
-)

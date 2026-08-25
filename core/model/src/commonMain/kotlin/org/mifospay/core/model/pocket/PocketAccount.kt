@@ -34,6 +34,7 @@ data class DetailedPocketAccount(
     // pre-manage-pocket rendering (code-only). Fresh network fetches that pass the
     // symbol through populate it end-to-end.
     val currencyDisplaySymbol: String? = null,
+    val syncStatus: String = "SYNCED",
 )
 
 data class LinkableAccount(

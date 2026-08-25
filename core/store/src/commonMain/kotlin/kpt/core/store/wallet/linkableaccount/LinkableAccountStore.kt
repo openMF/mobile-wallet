@@ -9,6 +9,7 @@
  */
 package kpt.core.store.wallet.linkableaccount
 
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kpt.core.base.database.invalidation.daoFlow
@@ -123,24 +124,27 @@ fun provideLinkableAccountsStore(
         // If the pocket table is cold (no fetch yet), an empty set is
         // conservative: surface everything as linkable (mirrors the pre-store
         // cold-cache behavior of `detailedPocketCache`).
-        val alreadyLinkedAccountIds: Set<Long> = pocketDao
-            .observeByClient(key.clientId)
-            .first()
-            .map { it.accountId }
-            .toSet()
-
         // Step 3 — build the LinkableAccount list per account-type. SHARE rows
         // fan out an extra getShareAccountDetails call for market-price resolution.
+        // We now fetch ALL accounts without filtering them here so that we can
+        // do reactive optimistic filtering in the reader below when pockets change.
         buildLinkableAccounts(
             clientAccounts = clientAccounts,
-            alreadyLinkedAccountIds = alreadyLinkedAccountIds,
+            alreadyLinkedAccounts = emptySet(),
             apiManager = apiManager,
         )
     },
     sourceOfTruth = SourceOfTruth.of(
         reader = { key: LinkableAccountKey ->
-            daoFlow(LINKABLE_ACCOUNTS_TABLE) { dao.observeByClient(key.clientId) }
-                .map { rows -> rows.map { it.toDomain() } }
+            combine(
+                daoFlow(LINKABLE_ACCOUNTS_TABLE) { dao.observeByClient(key.clientId) },
+                daoFlow("wallet_pockets") { pocketDao.observeLinkedByClient(key.clientId) },
+            ) { allAccounts, linked ->
+                val linkedSet = linked.map { "${it.accountId}_${it.accountType}" }.toSet()
+                allAccounts
+                    .filter { "${it.accountId}_${it.accountType}" !in linkedSet }
+                    .map { it.toDomain() }
+            }
         },
         writer = { key: LinkableAccountKey, accounts: List<LinkableAccount> ->
             val stamp = clock()
@@ -167,14 +171,26 @@ fun provideLinkableAccountsStore(
 
 private suspend fun buildLinkableAccounts(
     clientAccounts: ClientAccountsEntity,
-    alreadyLinkedAccountIds: Set<Long>,
+    alreadyLinkedAccounts: Set<String>,
     apiManager: SelfServiceApiManager,
 ): List<LinkableAccount> {
     val out = mutableListOf<LinkableAccount>()
 
+    processLoanAccounts(clientAccounts, alreadyLinkedAccounts, out)
+    processSavingsAccounts(clientAccounts, alreadyLinkedAccounts, out)
+    processShareAccounts(clientAccounts, alreadyLinkedAccounts, apiManager, out)
+
+    return out
+}
+
+private fun processLoanAccounts(
+    clientAccounts: ClientAccountsEntity,
+    alreadyLinkedAccounts: Set<String>,
+    out: MutableList<LinkableAccount>,
+) {
     clientAccounts.loanAccounts.forEach { loan ->
         val loanId = loan.id ?: 0L
-        if (loanId !in alreadyLinkedAccountIds) {
+        if ("${loanId}_${AccountType.LOAN.name}" !in alreadyLinkedAccounts) {
             out.add(
                 LinkableAccount(
                     accountId = loanId,
@@ -190,9 +206,15 @@ private suspend fun buildLinkableAccounts(
             )
         }
     }
+}
 
+private fun processSavingsAccounts(
+    clientAccounts: ClientAccountsEntity,
+    alreadyLinkedAccounts: Set<String>,
+    out: MutableList<LinkableAccount>,
+) {
     clientAccounts.savingsAccounts.forEach { savings ->
-        if (savings.id !in alreadyLinkedAccountIds) {
+        if ("${savings.id}_${AccountType.SAVINGS.name}" !in alreadyLinkedAccounts) {
             out.add(
                 LinkableAccount(
                     accountId = savings.id,
@@ -208,10 +230,17 @@ private suspend fun buildLinkableAccounts(
             )
         }
     }
+}
 
+private suspend fun processShareAccounts(
+    clientAccounts: ClientAccountsEntity,
+    alreadyLinkedAccounts: Set<String>,
+    apiManager: SelfServiceApiManager,
+    out: MutableList<LinkableAccount>,
+) {
     clientAccounts.shareAccounts.forEach { share ->
         val shareId = share.id ?: 0L
-        if (shareId !in alreadyLinkedAccountIds) {
+        if ("${shareId}_${AccountType.SHARE.name}" !in alreadyLinkedAccounts) {
             var balance = 0.0
             var currencyCode: String? = share.currency?.code
             var currencyDisplaySymbol: String? = share.currency?.displaySymbol
@@ -249,8 +278,6 @@ private suspend fun buildLinkableAccounts(
             )
         }
     }
-
-    return out
 }
 
 // ---------------------------------------------------------------------------

@@ -27,6 +27,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
@@ -42,7 +43,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import kpt.core.base.designsystem.theme.KptTheme
+import kpt.core.base.store.freshness.FreshnessSignal
 import kpt.core.base.store.screen.ScreenState
+import kpt.core.base.ui.freshness.FreshnessIndicator
 import kpt.core.base.ui.screen.ScreenContent
 import mifos_pay.feature.pocket.generated.resources.Res
 import mifos_pay.feature.pocket.generated.resources.feature_pocket_dashboard_loan_accounts
@@ -74,7 +78,6 @@ import org.mifospay.feature.pocket.viewmodels.DetailedPocket
 import org.mifospay.feature.pocket.viewmodels.PocketDashboardAction
 import org.mifospay.feature.pocket.viewmodels.PocketDashboardEvent
 import org.mifospay.feature.pocket.viewmodels.PocketDashboardViewModel
-import template.core.base.designsystem.theme.KptTheme
 
 @Composable
 internal fun PocketDashboardScreen(
@@ -86,6 +89,7 @@ internal fun PocketDashboardScreen(
     viewModel: PocketDashboardViewModel = koinViewModel(),
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
+    val freshness by viewModel.freshness.collectAsStateWithLifecycle()
 
     EventsEffect(viewModel) { event ->
         when (event) {
@@ -99,6 +103,7 @@ internal fun PocketDashboardScreen(
 
     PocketDashboardContent(
         state = state,
+        freshness = freshness,
         onAction = remember(viewModel) {
             { viewModel.trySendAction(it) }
         },
@@ -110,6 +115,7 @@ internal fun PocketDashboardScreen(
 @Composable
 internal fun PocketDashboardContent(
     state: ScreenState<List<DetailedPocketAccount>>,
+    freshness: FreshnessSignal,
     onAction: (PocketDashboardAction) -> Unit,
     onRetry: () -> Unit,
 ) {
@@ -123,6 +129,19 @@ internal fun PocketDashboardContent(
         backPress = { onAction(PocketDashboardAction.NavigateBack) },
         topBarTitle = stringResource(Res.string.feature_pocket_dashboard_title),
         containerColor = KptTheme.colorScheme.background,
+        actions = {
+            FreshnessIndicator(
+                signal = freshness,
+                onRefresh = { onAction(PocketDashboardAction.Refresh) },
+            )
+            IconButton(onClick = { onAction(PocketDashboardAction.ManagePocket) }) {
+                Icon(
+                    imageVector = MifosIcons.Edit2,
+                    contentDescription = "Manage Pockets",
+                    tint = KptTheme.colorScheme.onSurface,
+                )
+            }
+        },
     ) { paddingValues ->
         PullToRefreshBox(
             isRefreshing = isRefreshing,
@@ -322,15 +341,7 @@ private fun List<DetailedPocketAccount>.toPocketBuckets(
     val formattedTotal = if (balancesByCurrency.isNotEmpty()) {
         balancesByCurrency.joinToString("\n")
     } else {
-        val sampleAccount = this.firstOrNull { it.currencyCode != null }
-        if (sampleAccount != null) {
-            val code = sampleAccount.currencyCode.orEmpty()
-            val displaySymbol = sampleAccount.currencyDisplaySymbol.orEmpty()
-            val formattedNum = CurrencyFormatter.format(0.0, sampleAccount.decimalPlaces)
-            if (code.isNotEmpty()) "$code $displaySymbol$formattedNum" else "$displaySymbol$formattedNum"
-        } else {
-            "0.00"
-        }
+        "0.00"
     }
 
     return PocketBuckets(
@@ -507,6 +518,7 @@ internal fun EmptyPocketContent(
 internal fun PocketDashboardContentPreview() {
     PocketDashboardContent(
         state = ScreenState.Content(samplePocketAccounts),
+        freshness = FreshnessSignal.initial(),
         onAction = {},
         onRetry = {},
     )
