@@ -61,7 +61,7 @@ class AppDatabaseTest {
         // Fork wallet schema — bumped to 8 by the transfer-detail Store5 vertical
         // (AutoMigration(7→8) adding the wallet_transfer_details table). Update this
         // constant when bumping AppDatabase.VERSION so the guardrail stays meaningful.
-        assertEquals(8, AppDatabase.VERSION)
+        assertEquals(9, AppDatabase.VERSION)
     }
 
     @Test

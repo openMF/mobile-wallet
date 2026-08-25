@@ -74,6 +74,8 @@ import mifos_pay.feature.pocket.generated.resources.feature_pocket_action_remove
 import mifos_pay.feature.pocket.generated.resources.feature_pocket_close
 import mifos_pay.feature.pocket.generated.resources.feature_pocket_delink_account_message
 import mifos_pay.feature.pocket.generated.resources.feature_pocket_dialog_error_title
+import mifos_pay.feature.pocket.generated.resources.feature_pocket_empty_action
+import mifos_pay.feature.pocket.generated.resources.feature_pocket_empty_title
 import mifos_pay.feature.pocket.generated.resources.feature_pocket_link_accounts_title
 import mifos_pay.feature.pocket.generated.resources.feature_pocket_link_more_accounts
 import mifos_pay.feature.pocket.generated.resources.feature_pocket_link_selected
@@ -99,9 +101,10 @@ import org.mifospay.core.designsystem.component.MifosTabPager
 import org.mifospay.core.designsystem.icon.MifosIcons
 import org.mifospay.core.designsystem.theme.MifosTheme
 import org.mifospay.core.model.enums.AccountType
-import org.mifospay.core.model.pocket.DetailedPocketAccount
 import org.mifospay.core.model.pocket.LinkableAccount
+import org.mifospay.core.ui.MifosProgressIndicator
 import org.mifospay.core.ui.utils.EventsEffect
+import org.mifospay.feature.pocket.viewmodels.ManagePocketAccount
 import org.mifospay.feature.pocket.viewmodels.ManagePocketAction
 import org.mifospay.feature.pocket.viewmodels.ManagePocketDialogState
 import org.mifospay.feature.pocket.viewmodels.ManagePocketEvent
@@ -114,9 +117,10 @@ internal fun ManagePocketScreen(
     viewModel: ManagePocketViewModel = koinViewModel(),
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
-    val linkedUiState by viewModel.linkedUiState.collectAsStateWithLifecycle()
+    val mappedLinkedAccounts by viewModel.mappedLinkedAccounts.collectAsStateWithLifecycle()
     val linkedFreshness by viewModel.linkedFreshness.collectAsStateWithLifecycle()
     val availableUiState by viewModel.availableUiState.collectAsStateWithLifecycle()
+    val searchResults by viewModel.searchResults.collectAsStateWithLifecycle()
 
     EventsEffect(viewModel) { event ->
         when (event) {
@@ -125,7 +129,7 @@ internal fun ManagePocketScreen(
     }
 
     ManagePocketContent(
-        linkedUiState = linkedUiState,
+        linkedUiState = mappedLinkedAccounts,
         linkedFreshness = linkedFreshness,
         onAction = remember(viewModel) {
             { viewModel.trySendAction(it) }
@@ -135,6 +139,7 @@ internal fun ManagePocketScreen(
     ManagePocketDialogs(
         state = state,
         availableUiState = availableUiState,
+        searchResults = searchResults,
         onAction = remember(viewModel) {
             { viewModel.trySendAction(it) }
         },
@@ -143,7 +148,7 @@ internal fun ManagePocketScreen(
 
 @Composable
 internal fun ManagePocketContent(
-    linkedUiState: ScreenState<List<DetailedPocketAccount>>,
+    linkedUiState: ScreenState<List<ManagePocketAccount>>,
     linkedFreshness: FreshnessSignal,
     onAction: (ManagePocketAction) -> Unit,
 ) {
@@ -184,17 +189,7 @@ internal fun ManagePocketContent(
                         }
                     }
                 },
-            ) { linkedAccounts, _ ->
-                val unknownAccount = stringResource(Res.string.feature_pocket_unknown_account)
-                val mappedLinkedAccounts = linkedAccounts.map {
-                    ManagePocketAccount(
-                        accountId = it.pocket.accountId,
-                        mappingId = it.pocket.id,
-                        name = it.productName ?: unknownAccount,
-                        accountNumber = it.pocket.accountNumber,
-                        accountType = it.pocket.accountType,
-                    )
-                }
+            ) { mappedLinkedAccounts, _ ->
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
@@ -275,6 +270,7 @@ internal fun ManagePocketContent(
 private fun ManagePocketDialogs(
     state: ManagePocketState,
     availableUiState: ScreenState<List<LinkableAccount>>,
+    searchResults: List<LinkableAccount>,
     onAction: (ManagePocketAction) -> Unit,
 ) {
     when (val dialogState = state.dialogState) {
@@ -285,6 +281,7 @@ private fun ManagePocketDialogs(
                 LinkAccountsSheet(
                     state = state,
                     availableUiState = availableUiState,
+                    searchResults = searchResults,
                     onAction = onAction,
                 )
             }
@@ -450,10 +447,10 @@ private fun PocketAccountRow(
 private fun LinkAccountsSheet(
     state: ManagePocketState,
     availableUiState: ScreenState<List<LinkableAccount>>,
+    searchResults: List<LinkableAccount>,
     onAction: (ManagePocketAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val unknownAccount = stringResource(Res.string.feature_pocket_unknown_account)
     val tabs = listOf(AccountType.SAVINGS, AccountType.LOAN, AccountType.SHARE)
     val selectedTabIndex = tabs.indexOf(state.selectedTab).coerceAtLeast(0)
     val pagerState = rememberPagerState(
@@ -534,12 +531,30 @@ private fun LinkAccountsSheet(
                         modifier = Modifier.fillMaxSize(),
                         contentAlignment = Alignment.Center,
                     ) {
-                        org.mifospay.core.ui.MifosProgressIndicator()
+                        MifosProgressIndicator()
                     }
                 } else {
                     val accounts = allAccounts.filter { it.accountType == tabs[page] }
 
-                    if (accounts.isEmpty()) {
+                    if (availableUiState is ScreenState.Error || availableUiState is ScreenState.NoNetwork) {
+                        Column(
+                            modifier = Modifier.fillMaxSize(),
+                            verticalArrangement = Arrangement.Center,
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                        ) {
+                            Text(
+                                text = stringResource(Res.string.feature_pocket_empty_title),
+                                style = KptTheme.typography.bodyMedium,
+                                color = KptTheme.colorScheme.error,
+                            )
+                            Spacer(modifier = Modifier.height(KptTheme.spacing.sm))
+                            MifosButton(
+                                onClick = { onAction(ManagePocketAction.RetryAvailable) },
+                            ) {
+                                Text(stringResource(Res.string.feature_pocket_empty_action))
+                            }
+                        }
+                    } else if (accounts.isEmpty()) {
                         Box(
                             modifier = Modifier.fillMaxSize(),
                             contentAlignment = Alignment.Center,
@@ -580,7 +595,7 @@ private fun LinkAccountsSheet(
 
             if (state.searchQuery.isNotBlank() && allAccounts.isNotEmpty()) {
                 LinkAccountsSearchResults(
-                    allAccounts = allAccounts,
+                    searchResults = searchResults,
                     state = state,
                     onAction = onAction,
                 )
@@ -591,7 +606,6 @@ private fun LinkAccountsSheet(
 
         LinkSelectedAccountsButton(
             state = state,
-            allAccounts = allAccounts,
             onAction = onAction,
         )
     }
@@ -599,23 +613,15 @@ private fun LinkAccountsSheet(
 
 @Composable
 private fun LinkAccountsSearchResults(
-    allAccounts: List<LinkableAccount>,
+    searchResults: List<LinkableAccount>,
     state: ManagePocketState,
     onAction: (ManagePocketAction) -> Unit,
 ) {
-    val unknownAccount = stringResource(Res.string.feature_pocket_unknown_account)
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(KptTheme.colorScheme.surface.copy(alpha = 0.95f)),
     ) {
-        val searchResults = allAccounts.filter {
-            it.accountType == state.selectedTab && (
-                (it.productName ?: unknownAccount).contains(state.searchQuery, ignoreCase = true) ||
-                    (it.accountNumber ?: "").contains(state.searchQuery, ignoreCase = true)
-                )
-        }
-
         if (searchResults.isEmpty()) {
             Box(
                 modifier = Modifier.fillMaxSize(),
@@ -659,32 +665,11 @@ private fun LinkAccountsSearchResults(
 @Composable
 private fun LinkSelectedAccountsButton(
     state: ManagePocketState,
-    allAccounts: List<LinkableAccount>,
     onAction: (ManagePocketAction) -> Unit,
 ) {
-    val unknownAccount = stringResource(Res.string.feature_pocket_unknown_account)
     MifosButton(
         onClick = {
-            val explicitlyAddedAccounts = allAccounts
-                .filter { "${it.accountId}_${it.accountType.name}" in state.selectedAccountIdentifiers }
-                .map {
-                    org.mifospay.core.model.pocket.DetailedPocketAccount(
-                        pocket = org.mifospay.core.model.pocket.PocketAccount(
-                            pocketId = 0,
-                            id = 0,
-                            accountId = it.accountId,
-                            accountType = it.accountType,
-                            accountNumber = it.accountNumber ?: "",
-                        ),
-                        productName = it.productName ?: unknownAccount,
-                        balance = it.balance,
-                        currencyCode = it.currencyCode,
-                        decimalPlaces = it.decimalPlaces,
-                        status = it.status,
-                        currencyDisplaySymbol = it.currencyDisplaySymbol,
-                    )
-                }
-            onAction(ManagePocketAction.LinkSelectedAccounts(explicitlyAddedAccounts))
+            onAction(ManagePocketAction.LinkSelectedAccounts)
         },
         enabled = state.selectedAccountIdentifiers.isNotEmpty(),
         modifier = Modifier
@@ -970,6 +955,7 @@ private fun LinkAccountsSheetContentPreview() {
         LinkAccountsSheet(
             state = ManagePocketState(),
             availableUiState = ScreenState.Content(emptyList()),
+            searchResults = emptyList(),
             onAction = {},
         )
     }

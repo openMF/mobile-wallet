@@ -12,11 +12,14 @@ package org.mifospay.feature.pocket.viewmodels
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kpt.core.base.store.freshness.FreshnessSignal
 import kpt.core.base.store.screen.ScreenState
+import org.mifospay.core.common.CurrencyFormatter
 import org.mifospay.core.data.repository.PocketRepository
 import org.mifospay.core.datastore.UserPreferencesRepository
+import org.mifospay.core.model.enums.AccountType
 import org.mifospay.core.model.pocket.AccountStatus
 import org.mifospay.core.model.pocket.DetailedPocketAccount
 import org.mifospay.core.ui.utils.BaseViewModel
@@ -29,27 +32,27 @@ internal class PocketDashboardViewModel(
         clientId = requireNotNull(userPreferencesRepository.clientId.value),
     ),
 ) {
-    // Template idiom (core-base/store): hold the native ScreenDataStream and
-    // expose its pre-decided `state` straight to the Screen's `ScreenContent`.
-    // The pre-Batch-2 `refreshTrigger` + `flatMapLatest` re-subscribe fold and
-    // the 6→4 `handleScreenState` / `populateFromContent` fork are GONE — the
-    // stream's DecisionEngine owns every Loading / Empty / NoNetwork /
-    // Unauthenticated / Error / Content transition, and `refresh()` drives
-    // pull-to-refresh + retry.
-    //
-    // Exposed as `uiState` (NOT `state`) because [BaseViewModel] already owns a
-    // `protected val state: S` for the MVI action/event state — the two names
-    // cannot collide. Bucketing the raw accounts into savings/loan/share
-    // sections + the multi-currency total now happens screen-side (it needs
-    // `stringResource` fallbacks for missing product name / status), so the
-    // ViewModel carries the raw `List<DetailedPocketAccount>` payload straight
-    // through.
     private val stream = pocketRepository.getDetailedPocketAccountsStream(
         clientId = state.clientId,
         scope = viewModelScope,
     )
 
-    val uiState: StateFlow<ScreenState<List<DetailedPocketAccount>>> = stream.state.stateIn(
+    val uiState: StateFlow<ScreenState<PocketBuckets>> = stream.state.map { state ->
+        when (state) {
+            is ScreenState.Content -> {
+                ScreenState.Content(
+                    data = state.data.toPocketBuckets(unknownStatus = "Unknown", unknownAccount = "Unknown"),
+                    fetchedAt = state.fetchedAt,
+                    freshnessSignal = state.freshnessSignal,
+                )
+            }
+            is ScreenState.Error -> state
+            ScreenState.Loading -> ScreenState.Loading
+            ScreenState.Empty -> ScreenState.Empty
+            is ScreenState.NoNetwork -> state
+            ScreenState.Unauthenticated -> ScreenState.Unauthenticated
+        }
+    }.stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5_000),
         initialValue = ScreenState.Loading,
@@ -112,4 +115,82 @@ internal sealed interface PocketDashboardAction {
     data object LinkFirstAccount : PocketDashboardAction
     data object Refresh : PocketDashboardAction
     data object Retry : PocketDashboardAction
+}
+
+internal data class PocketBuckets(
+    val totalBalance: String,
+    val savingsAccounts: List<DetailedPocket>,
+    val loanAccounts: List<DetailedPocket>,
+    val shareAccounts: List<DetailedPocket>,
+)
+
+private fun formatBalance(
+    balance: Double,
+    currencyCode: String?,
+    displaySymbol: String?,
+    decimalPlaces: Int?,
+): String {
+    val code = currencyCode.orEmpty()
+    val symbol = displaySymbol.orEmpty()
+    val formattedNum = CurrencyFormatter.format(balance, decimalPlaces)
+    return if (code.isNotEmpty()) "$code $symbol$formattedNum" else "$symbol$formattedNum"
+}
+
+private fun DetailedPocketAccount.toUiModel(
+    unknownStatus: String,
+    unknownAccount: String,
+): DetailedPocket {
+    val balanceStr = if (status == AccountStatus.ACTIVE) {
+        balance?.let { formatBalance(it, currencyCode, currencyDisplaySymbol, decimalPlaces) } ?: ""
+    } else {
+        status?.name ?: unknownStatus
+    }
+
+    return DetailedPocket(
+        accountId = pocket.accountId,
+        name = productName ?: unknownAccount,
+        accountNumber = pocket.accountNumber,
+        balanceOrStatus = balanceStr,
+        status = status ?: AccountStatus.UNKNOWN,
+    )
+}
+
+private fun List<DetailedPocketAccount>.toPocketBuckets(
+    unknownStatus: String,
+    unknownAccount: String,
+): PocketBuckets {
+    val loanList = mutableListOf<DetailedPocket>()
+    val savingsList = mutableListOf<DetailedPocket>()
+    val shareList = mutableListOf<DetailedPocket>()
+
+    for (account in this) {
+        val uiModel = account.toUiModel(unknownStatus, unknownAccount)
+        when (account.pocket.accountType) {
+            AccountType.LOAN -> loanList.add(uiModel)
+            AccountType.SAVINGS -> savingsList.add(uiModel)
+            AccountType.SHARE -> shareList.add(uiModel)
+        }
+    }
+
+    val balancesByCurrency = this
+        .filter { it.status == AccountStatus.ACTIVE && it.balance != null && it.currencyCode != null }
+        .groupBy { it.currencyCode!! }
+        .map { (currencyCode, accounts) ->
+            val sum = accounts.sumOf { it.balance ?: 0.0 }
+            val first = accounts.first()
+            formatBalance(sum, currencyCode, first.currencyDisplaySymbol, first.decimalPlaces)
+        }
+
+    val formattedTotal = if (balancesByCurrency.isNotEmpty()) {
+        balancesByCurrency.joinToString("\n")
+    } else {
+        "0.00"
+    }
+
+    return PocketBuckets(
+        totalBalance = formattedTotal,
+        savingsAccounts = savingsList,
+        loanAccounts = loanList,
+        shareAccounts = shareList,
+    )
 }

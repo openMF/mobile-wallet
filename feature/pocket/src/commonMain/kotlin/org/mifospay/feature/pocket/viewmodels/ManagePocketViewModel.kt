@@ -13,7 +13,9 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
@@ -29,6 +31,7 @@ import org.mifospay.core.datastore.UserPreferencesRepository
 import org.mifospay.core.model.enums.AccountType
 import org.mifospay.core.model.pocket.DetailedPocketAccount
 import org.mifospay.core.model.pocket.LinkableAccount
+import org.mifospay.core.model.pocket.PocketAccount
 import org.mifospay.core.ui.utils.BaseViewModel
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -41,12 +44,38 @@ internal class ManagePocketViewModel(
     ),
 ) {
 
-    private val linkedStream = pocketRepository.getDetailedPocketAccountsStream(
+    private val linkedStream = pocketRepository.getLinkedPocketAccountsStream(
         clientId = state.clientId,
         scope = viewModelScope,
     )
 
     val linkedUiState: StateFlow<ScreenState<List<DetailedPocketAccount>>> = linkedStream.state.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5_000),
+        initialValue = ScreenState.Loading,
+    )
+
+    val mappedLinkedAccounts: StateFlow<ScreenState<List<ManagePocketAccount>>> = linkedUiState.map { state ->
+        when (state) {
+            is ScreenState.Content -> {
+                val accounts = state.data.map {
+                    ManagePocketAccount(
+                        accountId = it.pocket.accountId,
+                        mappingId = it.pocket.id,
+                        name = it.productName ?: "Unknown",
+                        accountNumber = it.pocket.accountNumber,
+                        accountType = it.pocket.accountType,
+                    )
+                }
+                ScreenState.Content(accounts, state.fetchedAt, state.freshnessSignal)
+            }
+            is ScreenState.Error -> state
+            ScreenState.Loading -> ScreenState.Loading
+            ScreenState.Empty -> ScreenState.Empty
+            is ScreenState.NoNetwork -> state
+            ScreenState.Unauthenticated -> ScreenState.Unauthenticated
+        }
+    }.stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5_000),
         initialValue = ScreenState.Loading,
@@ -67,6 +96,26 @@ internal class ManagePocketViewModel(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5_000),
         initialValue = ScreenState.Loading,
+    )
+
+    val searchResults: StateFlow<List<LinkableAccount>> = combine(
+        availableUiState,
+        mutableStateFlow,
+    ) { uiState, vmState ->
+        val allAccounts = (uiState as? ScreenState.Content)?.data ?: emptyList()
+        val query = vmState.searchQuery
+        val tab = vmState.selectedTab
+
+        allAccounts.filter { account ->
+            account.accountType == tab && (
+                (account.productName ?: "Unknown").contains(query, ignoreCase = true) ||
+                    (account.accountNumber ?: "").contains(query, ignoreCase = true)
+                )
+        }
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5_000),
+        initialValue = emptyList(),
     )
 
     private val submitLink = viewModelScope.submitHandler<Unit>()
@@ -170,7 +219,7 @@ internal class ManagePocketViewModel(
                 accountType = action.accountType,
                 selected = action.selected,
             )
-            is ManagePocketAction.LinkSelectedAccounts -> linkSelectedAccounts(action.explicitlyAddedAccounts)
+            is ManagePocketAction.LinkSelectedAccounts -> linkSelectedAccounts()
             is ManagePocketAction.DelinkAccount -> delinkAccount(action.mappingId)
         }
     }
@@ -215,8 +264,29 @@ internal class ManagePocketViewModel(
         }
     }
 
-    private fun linkSelectedAccounts(explicitlyAddedAccounts: List<DetailedPocketAccount>) {
+    private fun linkSelectedAccounts() {
         if (state.selectedAccountIdentifiers.isEmpty()) return
+
+        val allAccounts = (availableUiState.value as? ScreenState.Content)?.data ?: emptyList()
+        val explicitlyAddedAccounts = allAccounts
+            .filter { "${it.accountId}_${it.accountType.name}" in state.selectedAccountIdentifiers }
+            .map {
+                DetailedPocketAccount(
+                    pocket = PocketAccount(
+                        pocketId = 0,
+                        id = 0,
+                        accountId = it.accountId,
+                        accountType = it.accountType,
+                        accountNumber = it.accountNumber ?: "",
+                    ),
+                    productName = it.productName ?: "Unknown",
+                    balance = it.balance,
+                    currencyCode = it.currencyCode,
+                    decimalPlaces = it.decimalPlaces,
+                    status = it.status,
+                    currencyDisplaySymbol = it.currencyDisplaySymbol,
+                )
+            }
 
         submitLink.submit {
             pocketRepository.linkAccounts(
@@ -235,6 +305,14 @@ internal class ManagePocketViewModel(
         }
     }
 }
+
+internal data class ManagePocketAccount(
+    val accountId: Long,
+    val mappingId: Long,
+    val name: String,
+    val accountNumber: String,
+    val accountType: AccountType,
+)
 
 internal data class ManagePocketState(
     val clientId: Long = 0,
@@ -265,7 +343,7 @@ internal sealed interface ManagePocketAction {
     data object RetryAvailable : ManagePocketAction
     data object OpenLinkAccounts : ManagePocketAction
     data object DismissDialog : ManagePocketAction
-    data class LinkSelectedAccounts(val explicitlyAddedAccounts: List<DetailedPocketAccount>) : ManagePocketAction
+    data object LinkSelectedAccounts : ManagePocketAction
     data class OpenDelinkConfirmation(
         val accountId: Long,
         val accountName: String,

@@ -140,6 +140,9 @@ fun providePocketStore(
                     },
                 )
                 apiManager.pocketApi.linkAccounts(request = request)
+                pendingLinks.forEach {
+                    dao.upsert(it.copy(syncStatus = "SYNCED"))
+                }
             }
 
             if (pendingDelinks.isNotEmpty()) {
@@ -147,6 +150,9 @@ fun providePocketStore(
                 if (serverIds.isNotEmpty()) {
                     val request = PocketDelinkRequest(serverIds)
                     apiManager.pocketApi.delinkAccounts(request = request)
+                    pendingDelinks.forEach {
+                        dao.deleteById(it.id, key.clientId)
+                    }
                 }
             }
         } catch (e: Exception) {

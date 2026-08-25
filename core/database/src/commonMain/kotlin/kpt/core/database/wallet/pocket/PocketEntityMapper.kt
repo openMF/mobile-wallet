@@ -81,20 +81,20 @@ private fun decodeAccountType(name: String): AccountType =
 private fun decodeAccountStatus(name: String): AccountStatus =
     runCatching { AccountStatus.valueOf(name) }.getOrDefault(AccountStatus.UNKNOWN)
 
-fun PocketAccount.toPendingLinkEntity(clientId: Long, fetchedAtEpochMs: Long): PocketEntity =
+fun DetailedPocketAccount.toPendingLinkEntity(clientId: Long, fetchedAtEpochMs: Long): PocketEntity =
     PocketEntity(
-        id = id,
+        id = if (pocket.id == 0L) kotlin.random.Random.nextLong(Long.MIN_VALUE, -1L) else pocket.id,
         clientId = clientId,
-        pocketId = pocketId,
-        accountId = accountId,
-        accountType = accountType.name,
-        accountNumber = accountNumber,
-        productName = null,
-        balance = null,
-        currencyCode = null,
-        currencyDisplaySymbol = null,
-        decimalPlaces = null,
-        status = null,
+        pocketId = pocket.pocketId,
+        accountId = pocket.accountId,
+        accountType = pocket.accountType.name,
+        accountNumber = pocket.accountNumber,
+        productName = productName,
+        balance = balance,
+        currencyCode = currencyCode,
+        currencyDisplaySymbol = currencyDisplaySymbol,
+        decimalPlaces = decimalPlaces,
+        status = status?.name,
         fetchedAtEpochMs = fetchedAtEpochMs,
         syncStatus = "PENDING_LINK",
     )

@@ -107,12 +107,12 @@ class PocketRepositoryImp(
 
                 // If successful, save directly as SYNCED so the UI updates instantly
                 explicitlyAddedAccounts.forEach {
-                    dao.upsert(it.pocket.toPendingLinkEntity(clientId, stamp).copy(syncStatus = "SYNCED"))
+                    dao.upsert(it.toPendingLinkEntity(clientId, stamp).copy(syncStatus = "SYNCED"))
                 }
             } catch (e: Exception) {
                 // If network fails (e.g. offline), fallback to PENDING_LINK
                 explicitlyAddedAccounts.forEach {
-                    dao.upsert(it.pocket.toPendingLinkEntity(clientId, stamp))
+                    dao.upsert(it.toPendingLinkEntity(clientId, stamp))
                 }
                 // Do NOT throw. Swallow the error so the UI loading dialog closes normally
                 // and the user sees an immediate success state (optimistic UI), since the

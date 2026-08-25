@@ -94,7 +94,10 @@ interface PocketDao {
         deleteByClient(clientId)
         upsertAll(filteredNetworkEntities)
 
-        val pendingLinks = pending.filter { it.syncStatus == "PENDING_LINK" }
+        val networkAccountKeys = entities.map { "${it.accountId}_${it.accountType}" }.toSet()
+        val pendingLinks = pending.filter {
+            it.syncStatus == "PENDING_LINK" && "${it.accountId}_${it.accountType}" !in networkAccountKeys
+        }
         upsertAll(pendingLinks)
     }
 
