@@ -41,7 +41,7 @@ internal class PocketDashboardViewModel(
         when (state) {
             is ScreenState.Content -> {
                 ScreenState.Content(
-                    data = state.data.toPocketBuckets(unknownStatus = "Unknown", unknownAccount = "Unknown"),
+                    data = state.data.toPocketBuckets(),
                     fetchedAt = state.fetchedAt,
                     freshnessSignal = state.freshnessSignal,
                 )
@@ -92,9 +92,9 @@ data class PocketDashboardState(
 
 data class DetailedPocket(
     val accountId: Long,
-    val name: String,
+    val name: String?,
     val accountNumber: String,
-    val balanceOrStatus: String,
+    val balanceOrStatus: String?,
     val status: AccountStatus,
 )
 
@@ -136,35 +136,34 @@ private fun formatBalance(
     return if (code.isNotEmpty()) "$code $symbol$formattedNum" else "$symbol$formattedNum"
 }
 
-private fun DetailedPocketAccount.toUiModel(
-    unknownStatus: String,
-    unknownAccount: String,
-): DetailedPocket {
+private fun DetailedPocketAccount.toUiModel(): DetailedPocket {
     val balanceStr = if (status == AccountStatus.ACTIVE) {
-        balance?.let { formatBalance(it, currencyCode, currencyDisplaySymbol, decimalPlaces) } ?: ""
+        val currentBalance = balance
+        if (currentBalance != null) {
+            formatBalance(currentBalance, currencyCode, currencyDisplaySymbol, decimalPlaces)
+        } else {
+            null
+        }
     } else {
-        status?.name ?: unknownStatus
+        status?.name
     }
 
     return DetailedPocket(
         accountId = pocket.accountId,
-        name = productName ?: unknownAccount,
+        name = productName,
         accountNumber = pocket.accountNumber,
         balanceOrStatus = balanceStr,
         status = status ?: AccountStatus.UNKNOWN,
     )
 }
 
-private fun List<DetailedPocketAccount>.toPocketBuckets(
-    unknownStatus: String,
-    unknownAccount: String,
-): PocketBuckets {
+private fun List<DetailedPocketAccount>.toPocketBuckets(): PocketBuckets {
     val loanList = mutableListOf<DetailedPocket>()
     val savingsList = mutableListOf<DetailedPocket>()
     val shareList = mutableListOf<DetailedPocket>()
 
     for (account in this) {
-        val uiModel = account.toUiModel(unknownStatus, unknownAccount)
+        val uiModel = account.toUiModel()
         when (account.pocket.accountType) {
             AccountType.LOAN -> loanList.add(uiModel)
             AccountType.SAVINGS -> savingsList.add(uiModel)

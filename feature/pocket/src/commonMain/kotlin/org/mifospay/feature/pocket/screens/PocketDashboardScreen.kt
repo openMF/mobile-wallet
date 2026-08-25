@@ -58,6 +58,8 @@ import mifos_pay.feature.pocket.generated.resources.feature_pocket_dashboard_tot
 import mifos_pay.feature.pocket.generated.resources.feature_pocket_empty_action
 import mifos_pay.feature.pocket.generated.resources.feature_pocket_empty_description
 import mifos_pay.feature.pocket.generated.resources.feature_pocket_empty_title
+import mifos_pay.feature.pocket.generated.resources.feature_pocket_unknown_account
+import mifos_pay.feature.pocket.generated.resources.feature_pocket_unknown_status
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
@@ -185,9 +187,11 @@ private fun PocketDashboardContent(
                 buckets.savingsAccounts.forEach { account ->
                     MifosAccountCard(
                         accountId = account.accountId,
-                        accountType = account.name,
+                        accountType = account.name
+                            ?: stringResource(Res.string.feature_pocket_unknown_account),
                         accountNumber = account.accountNumber,
-                        accountStatus = account.balanceOrStatus,
+                        accountStatus = account.balanceOrStatus
+                            ?: stringResource(Res.string.feature_pocket_unknown_status),
                         accountStatusColor = account.status.toColor(),
                         onAccountClick = {
                             onAction(PocketDashboardAction.NavigateToSavingsDetail(account.accountId))
@@ -206,9 +210,11 @@ private fun PocketDashboardContent(
                 buckets.loanAccounts.forEach { account ->
                     MifosAccountCard(
                         accountId = account.accountId,
-                        accountType = account.name,
+                        accountType = account.name
+                            ?: stringResource(Res.string.feature_pocket_unknown_account),
                         accountNumber = account.accountNumber,
-                        accountStatus = account.balanceOrStatus,
+                        accountStatus = account.balanceOrStatus
+                            ?: stringResource(Res.string.feature_pocket_unknown_status),
                         accountStatusColor = account.status.toColor(),
                         onAccountClick = {
                             onAction(PocketDashboardAction.NavigateToLoanDetail(account.accountId))
@@ -227,9 +233,11 @@ private fun PocketDashboardContent(
                 buckets.shareAccounts.forEach { account ->
                     MifosAccountCard(
                         accountId = account.accountId,
-                        accountType = account.name,
+                        accountType = account.name
+                            ?: stringResource(Res.string.feature_pocket_unknown_account),
                         accountNumber = account.accountNumber,
-                        accountStatus = account.balanceOrStatus,
+                        accountStatus = account.balanceOrStatus
+                            ?: stringResource(Res.string.feature_pocket_unknown_status),
                         accountStatusColor = account.status.toColor(),
                         onAccountClick = {
                             onAction(PocketDashboardAction.NavigateToShareDetail(account.accountId))
