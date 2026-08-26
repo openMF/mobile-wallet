@@ -75,6 +75,21 @@ import org.mifospay.feature.pocket.viewmodels.PocketDashboardAction
 import org.mifospay.feature.pocket.viewmodels.PocketDashboardEvent
 import org.mifospay.feature.pocket.viewmodels.PocketDashboardViewModel
 
+/**
+ * Main entry point for the Pocket Dashboard.
+ *
+ * **Architecture Decisions:**
+ * - **ScreenContent Wrapper**: Completely leverages the new KPT offline-first architecture (`ScreenContent`).
+ * - **Empty States**: Specifically implements a custom empty state `EmptyPocketContent` that overrides
+ *   the generic default empty screen, providing a tailored onboarding experience for pockets.
+ *
+ * **Component Structure:**
+ * - `MifosAccountCard`: Used strictly as a dumb, reusable UI component representing a single account
+ *   (Loan, Savings, or Share). It relies on the pre-formatted `accountType` and `accountStatus` strings
+ *   passed down from the ViewModel.
+ * - `PocketDashboardScreen`: Orchestrates the layout by reading the `PocketBuckets` and sequentially
+ *   spawning sections (Savings, Loans, Shares) only if they are not empty.
+ */
 @Composable
 internal fun PocketDashboardScreen(
     navigateBack: () -> Unit,

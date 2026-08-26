@@ -23,7 +23,6 @@ import kpt.core.store.AppStoreRegistry
 import kpt.core.store.wallet.linkableaccount.LinkableAccountKey
 import kpt.core.store.wallet.pocket.PocketKey
 import org.mifospay.core.data.repository.PocketRepository
-import org.mifospay.core.data.util.NetworkMonitor
 import org.mifospay.core.model.pocket.DetailedPocketAccount
 import org.mifospay.core.model.pocket.LinkableAccount
 import org.mifospay.core.network.SelfServiceApiManager
@@ -35,7 +34,6 @@ import kpt.core.data.infra.NetworkMonitor as StoreNetworkMonitor
 
 class PocketRepositoryImp(
     private val dataManager: SelfServiceApiManager,
-    private val networkMonitor: NetworkMonitor,
     private val ioDispatcher: CoroutineDispatcher,
     private val pocketStore: Store<PocketKey, List<DetailedPocketAccount>>? = null,
     private val linkableAccountsStore: Store<
@@ -47,6 +45,13 @@ class PocketRepositoryImp(
     private val pocketDao: PocketDao? = null,
 ) : PocketRepository {
 
+    /**
+     * Retrieves the detailed pocket accounts.
+     *
+     * **FetchPolicy Decision**: Uses `NETWORK_ONLY` because this endpoint fetches highly
+     * granular, ephemeral data (specific ledger transactions) which we do not want to serve stale.
+     * Caching this would risk showing outdated financial transactions.
+     */
     override fun getDetailedPocketAccountsStream(
         clientId: Long,
         scope: CoroutineScope,
@@ -66,6 +71,14 @@ class PocketRepositoryImp(
         )
     }
 
+    /**
+     * Retrieves the linked pocket accounts.
+     *
+     * **FetchPolicy Decision**: Uses `CACHE_FIRST_SWR` (Stale-While-Revalidate) because
+     * the user's linked pockets are core critical data that must be visible instantly on cold start.
+     * This guarantees zero shimmer if local DB data exists, making the app feel incredibly fast
+     * while silently updating in the background.
+     */
     override fun getLinkedPocketAccountsStream(
         clientId: Long,
         scope: CoroutineScope,
@@ -85,6 +98,26 @@ class PocketRepositoryImp(
         )
     }
 
+    /**
+     * Attempts to push pocket account links to the remote API.
+     *
+     * **Offline-First Architecture**:
+     * If the network request fails, this method catches the exception and falls back to saving
+     * the intended links into the local Room database (`wallet_pockets`) with a `syncStatus` of
+     * `PENDING_LINK`. To prevent primary key collisions with future server IDs, a random negative
+     * ID is assigned. A random ID is used because a user might link multiple accounts offline in a row,
+     * and hardcoding `0` would cause SQLite `UNIQUE` constraint collisions.
+     * **Data Preservation (explicitlyAddedAccounts)**: The function accepts `DetailedPocketAccount`
+     * models instead of just account IDs. This is required because when we optimistically write
+     * to the local DB, we need all the details (balance, productName, currency) to render a proper
+     * UI card instantly. If we only had the ID, the user would see an "Unknown Account" with zero
+     * balance until the network returned.
+     *
+     * **Background ID Resolution**: The server assigns a permanent real `id` (pocket mapping ID)
+     * to the relationship once the network push succeeds. This ID must be fetched because
+     * `delinkAccounts` strictly requires that real server ID to successfully remove the mapping.
+     * The `PocketStore` fetcher automatically pulls this real ID in the background once online.
+     */
     override suspend fun linkAccounts(
         explicitlyAddedAccounts: List<DetailedPocketAccount>,
         clientId: Long,
@@ -121,6 +154,20 @@ class PocketRepositoryImp(
         }
     }
 
+    /**
+     * Attempts to remove pocket account links via the remote API.
+     *
+     * **Offline-First Architecture**:
+     * This method explicitly filters out any `id <= 0` (fake optimistic IDs assigned during
+     * an offline link operation). If a user links and then delinks an account entirely offline,
+     * the system gracefully deletes the local row without sending it to the network, because
+     * the backend never knew about the fake negative ID to begin with (sending it would result
+     * in an API error).
+     *
+     * If the network request fails for valid server IDs, the method catches the exception and
+     * falls back to marking the local Room rows as `PENDING_DELINK`. The UI updates instantly,
+     * and the `PocketStore` fetcher will cleanly handle the network push when connectivity returns.
+     */
     override suspend fun delinkAccounts(
         pocketAccountMappingIds: List<Long>,
         clientId: Long,
@@ -156,6 +203,14 @@ class PocketRepositoryImp(
         }
     }
 
+    /**
+     * Retrieves the available accounts that can be linked.
+     *
+     * **FetchPolicy Decision**: Uses `CACHE_FIRST_SWR` (Stale-While-Revalidate) because
+     * fetching available accounts aggregates data across Loans, Savings, and Shares, which can be
+     * a slow network operation. Caching it allows the "Manage Pockets" bottom sheet to open
+     * instantly without forcing the user to stare at a loader every time they want to link an account.
+     */
     override fun getAvailableAccountsToLinkStream(
         clientId: Long,
         scope: CoroutineScope,

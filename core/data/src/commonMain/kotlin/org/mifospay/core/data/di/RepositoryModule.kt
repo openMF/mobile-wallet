@@ -242,7 +242,6 @@ val RepositoryModule = module {
     single<PocketRepository> {
         PocketRepositoryImp(
             dataManager = get(),
-            networkMonitor = get(),
             ioDispatcher = get(ioDispatcher),
             // Phase-5 Batch-2 LEDGER store wiring (GOAL D13). Named-qualifier from
             // AppStoreRegistry.Pocket; NetworkMonitor + FetchedAtRepository bound

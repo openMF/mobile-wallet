@@ -111,6 +111,22 @@ import org.mifospay.feature.pocket.viewmodels.ManagePocketEvent
 import org.mifospay.feature.pocket.viewmodels.ManagePocketState
 import org.mifospay.feature.pocket.viewmodels.ManagePocketViewModel
 
+/**
+ * Screen for managing (linking and delinking) pockets.
+ *
+ * **Architecture Decisions:**
+ * - **Empty States for Available Accounts**: When `availableUiState` is `ScreenState.Error` or
+ *   `NoNetwork`, the UI explicitly renders a retry-able failure state. Failing to explicitly
+ *   display a network error would falsely tell the user "You have no more accounts to link" when in
+ *   reality their internet just dropped.
+ *
+ * **Component Structure:**
+ * - `SelectablePocketAccountCard`: A reusable, interactive card that receives `isSelected` state
+ *   and toggles its background color/checkbox. It intentionally holds no business logic.
+ * - `LinkAccountsSheet`: A Modal Bottom Sheet containing a `ScreenContent` block. It completely
+ *   isolates the "Available to Link" flow from the "Currently Linked" main screen, preventing
+ *   visual overlap and scroll conflicts.
+ */
 @Composable
 internal fun ManagePocketScreen(
     navigateBack: () -> Unit,

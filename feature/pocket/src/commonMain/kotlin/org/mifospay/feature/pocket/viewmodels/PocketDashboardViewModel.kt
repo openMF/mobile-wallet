@@ -24,6 +24,22 @@ import org.mifospay.core.model.pocket.AccountStatus
 import org.mifospay.core.model.pocket.DetailedPocketAccount
 import org.mifospay.core.ui.utils.BaseViewModel
 
+/**
+ * Manages the UI state for the Pocket Dashboard.
+ *
+ * **Architecture & Decisions:**
+ * - **PocketBuckets Model**: Accounts are grouped into `savingsAccounts`, `loanAccounts`, and
+ *   `shareAccounts` in the ViewModel because the Dashboard screen renders distinct horizontal
+ *   or vertical sections for each type. Pre-bucketing them means the Composable just safely
+ *   iterates lists without needing `if/else` filter checks during composition.
+ * - **Pre-computed Balances**: The `balanceStr` string is calculated directly in the mapper
+ *   because currency formatting requires iterating through properties (decimal places, symbols).
+ *   Doing this in the ViewModel ensures it executes exactly once per data emission, preventing
+ *   scroll-lag or frame drops in the UI.
+ * - **Localized Fallbacks**: Missing names or statuses are explicitly output as `null`.
+ *   This allows the Compose UI to use `?: stringResource(...)` to resolve localized
+ *   fallbacks directly at the rendering site, keeping the ViewModel free of hardcoded strings.
+ */
 internal class PocketDashboardViewModel(
     private val pocketRepository: PocketRepository,
     userPreferencesRepository: UserPreferencesRepository,
@@ -136,6 +152,14 @@ private fun formatBalance(
     return if (code.isNotEmpty()) "$code $symbol$formattedNum" else "$symbol$formattedNum"
 }
 
+/**
+ * Maps a raw DetailedPocketAccount into a UI-ready DetailedPocket model.
+ *
+ * The `balanceStr` string is calculated directly in this mapper because currency formatting
+ * requires iterating through properties (decimal places, symbols). Doing this natively in
+ * the ViewModel ensures it executes exactly once per data emission, preventing scroll-lag
+ * or frame drops in the UI during recomposition.
+ */
 private fun DetailedPocketAccount.toUiModel(): DetailedPocket {
     val balanceStr = if (status == AccountStatus.ACTIVE) {
         val currentBalance = balance
@@ -157,6 +181,13 @@ private fun DetailedPocketAccount.toUiModel(): DetailedPocket {
     )
 }
 
+/**
+ * Groups accounts into `savingsAccounts`, `loanAccounts`, and `shareAccounts`.
+ *
+ * Pre-bucketing them here means the Composable just safely iterates these lists without
+ * needing to run heavy `if/else` filter checks repeatedly during composition passes.
+ * It also calculates the total aggregate balance across all accounts by currency.
+ */
 private fun List<DetailedPocketAccount>.toPocketBuckets(): PocketBuckets {
     val loanList = mutableListOf<DetailedPocket>()
     val savingsList = mutableListOf<DetailedPocket>()

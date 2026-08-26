@@ -34,6 +34,23 @@ import org.mifospay.core.model.pocket.LinkableAccount
 import org.mifospay.core.model.pocket.PocketAccount
 import org.mifospay.core.ui.utils.BaseViewModel
 
+/** *
+ * **Architecture & Decisions:**
+ * - **Empty State Evaluation**: `ScreenState.Empty` is only emitted if `fetchedAtInstant != null`
+ *   and `!isRefreshing`. This prevents `204 No Content` API responses (0 items) from getting
+ *   permanently trapped in a shimmer loading state waiting for data that will never arrive.
+ * - **Submit Handlers**: `submitLink` and `submitDelink` are purely UI-layer Coroutine State Managers
+ *   for one-shot button clicks (Submitting, Submitted, Failed). KPT's `submitHandler` provides
+ *   structured states for click events. They are not offline outboxes.
+ *
+ * **Models & Calculations Rationale:**
+ * - **`ManagePocketAccount` UI Model**: This model is created instead of using `DetailedPocketAccount`
+ *   directly in the UI to centralize currency formatting (`balanceStr`) and fallback names out of the
+ *   Composable. This prevents the UI from re-running heavy string operations on every frame.
+ * - **`searchResults` StateFlow**: Searching is calculated in the ViewModel via `combine`
+ *   so the UI can instantly filter the locally cached `availableUiState` list by search query and
+ *   tab selection without triggering a network request, keeping the Compose UI declarative.
+ */
 @OptIn(ExperimentalCoroutinesApi::class)
 internal class ManagePocketViewModel(
     private val pocketRepository: PocketRepository,
@@ -126,6 +143,12 @@ internal class ManagePocketViewModel(
         observeDelinkSubmit()
     }
 
+    /**
+     * Observes the `submitLink` StateFlow (managed by `submitHandler`).
+     * This provides structured states for the link button click (Submitting, Submitted, Failed),
+     * allowing the UI to react instantly (e.g., show loaders, close dialogs) without managing
+     * manual booleans. It is a purely UI-layer Coroutine State Manager.
+     */
     private fun observeLinkSubmit() {
         submitLink.state
             .onEach { submitState ->
@@ -164,6 +187,11 @@ internal class ManagePocketViewModel(
             .launchIn(viewModelScope)
     }
 
+    /**
+     * Observes the `submitDelink` StateFlow (managed by `submitHandler`).
+     * Similar to `observeLinkSubmit`, this maps one-shot asynchronous button clicks into
+     * explicit UI states, ensuring loaders are shown and dialogs are cleared deterministically.
+     */
     private fun observeDelinkSubmit() {
         submitDelink.state
             .onEach { submitState ->
@@ -248,6 +276,11 @@ internal class ManagePocketViewModel(
         }
     }
 
+    /**
+     * Toggles the selection state of a given account in the 'Available to Link' sheet.
+     * The selection is maintained uniquely via an `${accountId}_${accountType}` identifier set
+     * because multiple accounts might share the same underlying ID across different types.
+     */
     private fun updateSelectedAccount(
         accountId: Long,
         accountType: AccountType,
@@ -264,6 +297,13 @@ internal class ManagePocketViewModel(
         }
     }
 
+    /**
+     * Executes the network request to link the currently selected accounts.
+     * Before pushing to the repository, it builds fully hydrated `DetailedPocketAccount`
+     * instances by matching the UI selection against the local `availableUiState`.
+     * This hydration is critical: the repository needs full details (productName, balance, etc)
+     * to perform a robust offline-first optimistic insert.
+     */
     private fun linkSelectedAccounts() {
         if (state.selectedAccountIdentifiers.isEmpty()) return
 
