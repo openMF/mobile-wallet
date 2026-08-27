@@ -27,6 +27,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
@@ -42,7 +43,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import kpt.core.base.designsystem.theme.KptTheme
+import kpt.core.base.store.freshness.FreshnessSignal
 import kpt.core.base.store.screen.ScreenState
+import kpt.core.base.ui.freshness.FreshnessIndicator
 import kpt.core.base.ui.screen.ScreenContent
 import mifos_pay.feature.pocket.generated.resources.Res
 import mifos_pay.feature.pocket.generated.resources.feature_pocket_dashboard_loan_accounts
@@ -60,22 +64,32 @@ import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
-import org.mifospay.core.common.CurrencyFormatter
 import org.mifospay.core.designsystem.component.MifosAccountCard
 import org.mifospay.core.designsystem.component.MifosButton
 import org.mifospay.core.designsystem.component.MifosScaffold
 import org.mifospay.core.designsystem.icon.MifosIcons
-import org.mifospay.core.model.enums.AccountType
 import org.mifospay.core.model.pocket.AccountStatus
-import org.mifospay.core.model.pocket.DetailedPocketAccount
-import org.mifospay.core.model.pocket.PocketAccount
 import org.mifospay.core.ui.utils.EventsEffect
-import org.mifospay.feature.pocket.viewmodels.DetailedPocket
+import org.mifospay.feature.pocket.viewmodels.PocketBuckets
 import org.mifospay.feature.pocket.viewmodels.PocketDashboardAction
 import org.mifospay.feature.pocket.viewmodels.PocketDashboardEvent
 import org.mifospay.feature.pocket.viewmodels.PocketDashboardViewModel
-import template.core.base.designsystem.theme.KptTheme
 
+/**
+ * Main entry point for the Pocket Dashboard.
+ *
+ * **Architecture Decisions:**
+ * - **ScreenContent Wrapper**: Completely leverages the new KPT offline-first architecture (`ScreenContent`).
+ * - **Empty States**: Specifically implements a custom empty state `EmptyPocketContent` that overrides
+ *   the generic default empty screen, providing a tailored onboarding experience for pockets.
+ *
+ * **Component Structure:**
+ * - `MifosAccountCard`: Used strictly as a dumb, reusable UI component representing a single account
+ *   (Loan, Savings, or Share). It relies on the pre-formatted `accountType` and `accountStatus` strings
+ *   passed down from the ViewModel.
+ * - `PocketDashboardScreen`: Orchestrates the layout by reading the `PocketBuckets` and sequentially
+ *   spawning sections (Savings, Loans, Shares) only if they are not empty.
+ */
 @Composable
 internal fun PocketDashboardScreen(
     navigateBack: () -> Unit,
@@ -86,6 +100,7 @@ internal fun PocketDashboardScreen(
     viewModel: PocketDashboardViewModel = koinViewModel(),
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
+    val freshness by viewModel.freshness.collectAsStateWithLifecycle()
 
     EventsEffect(viewModel) { event ->
         when (event) {
@@ -99,6 +114,7 @@ internal fun PocketDashboardScreen(
 
     PocketDashboardContent(
         state = state,
+        freshness = freshness,
         onAction = remember(viewModel) {
             { viewModel.trySendAction(it) }
         },
@@ -109,20 +125,31 @@ internal fun PocketDashboardScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun PocketDashboardContent(
-    state: ScreenState<List<DetailedPocketAccount>>,
+    state: ScreenState<PocketBuckets>,
+    freshness: FreshnessSignal,
     onAction: (PocketDashboardAction) -> Unit,
     onRetry: () -> Unit,
 ) {
     val pullRefreshState = rememberPullToRefreshState()
-    // Pull-to-refresh spinner is driven by the stream's own freshness signal —
-    // true while a background/manual revalidation is in flight over existing
-    // content. Loading / Empty / Error are handled inside ScreenContent.
     val isRefreshing = (state as? ScreenState.Content)?.freshnessSignal?.isRefreshing == true
 
     MifosScaffold(
         backPress = { onAction(PocketDashboardAction.NavigateBack) },
         topBarTitle = stringResource(Res.string.feature_pocket_dashboard_title),
         containerColor = KptTheme.colorScheme.background,
+        actions = {
+            FreshnessIndicator(
+                signal = freshness,
+                onRefresh = { onAction(PocketDashboardAction.Refresh) },
+            )
+            IconButton(onClick = { onAction(PocketDashboardAction.ManagePocket) }) {
+                Icon(
+                    imageVector = MifosIcons.Edit2,
+                    contentDescription = "Manage Pockets",
+                    tint = KptTheme.colorScheme.onSurface,
+                )
+            }
+        },
     ) { paddingValues ->
         PullToRefreshBox(
             isRefreshing = isRefreshing,
@@ -133,13 +160,6 @@ internal fun PocketDashboardContent(
                 .padding(paddingValues),
             contentAlignment = Alignment.TopCenter,
         ) {
-            // Template idiom: `ScreenContent` (core-base/ui) owns every render
-            // branch — loading / empty / no-network / unauthenticated /
-            // error+retry — driven by the stream's pre-decided `ScreenState`.
-            // Only the Content body is authored here; the empty state keeps the
-            // feature's existing "link your first account" call-to-action. The
-            // in-flight banner is suppressed (`refreshingIndicator = null`)
-            // because the PullToRefreshBox spinner already signals refresh.
             ScreenContent(
                 state = state,
                 onRetry = onRetry,
@@ -150,25 +170,15 @@ internal fun PocketDashboardContent(
                         onLinkFirstAccount = { onAction(PocketDashboardAction.LinkFirstAccount) },
                     )
                 },
-            ) { pockets, _ ->
-                // Fallbacks resolved here (Composable scope) so the pure bucket
-                // fold below stays free of `stringResource` / suspend `getString`.
-                val unknownStatus = stringResource(Res.string.feature_pocket_unknown_status)
-                val unknownAccount = stringResource(Res.string.feature_pocket_unknown_account)
-                val buckets = remember(pockets, unknownStatus, unknownAccount) {
-                    pockets.toPocketBuckets(
-                        unknownStatus = unknownStatus,
-                        unknownAccount = unknownAccount,
-                    )
-                }
-                PocketDashboardSuccessContent(buckets = buckets, onAction = onAction)
+            ) { buckets, _ ->
+                PocketDashboardContent(buckets = buckets, onAction = onAction)
             }
         }
     }
 }
 
 @Composable
-private fun PocketDashboardSuccessContent(
+private fun PocketDashboardContent(
     buckets: PocketBuckets,
     onAction: (PocketDashboardAction) -> Unit,
 ) {
@@ -192,9 +202,11 @@ private fun PocketDashboardSuccessContent(
                 buckets.savingsAccounts.forEach { account ->
                     MifosAccountCard(
                         accountId = account.accountId,
-                        accountType = account.name,
+                        accountType = account.name
+                            ?: stringResource(Res.string.feature_pocket_unknown_account),
                         accountNumber = account.accountNumber,
-                        accountStatus = account.balanceOrStatus,
+                        accountStatus = account.balanceOrStatus
+                            ?: stringResource(Res.string.feature_pocket_unknown_status),
                         accountStatusColor = account.status.toColor(),
                         onAccountClick = {
                             onAction(PocketDashboardAction.NavigateToSavingsDetail(account.accountId))
@@ -213,9 +225,11 @@ private fun PocketDashboardSuccessContent(
                 buckets.loanAccounts.forEach { account ->
                     MifosAccountCard(
                         accountId = account.accountId,
-                        accountType = account.name,
+                        accountType = account.name
+                            ?: stringResource(Res.string.feature_pocket_unknown_account),
                         accountNumber = account.accountNumber,
-                        accountStatus = account.balanceOrStatus,
+                        accountStatus = account.balanceOrStatus
+                            ?: stringResource(Res.string.feature_pocket_unknown_status),
                         accountStatusColor = account.status.toColor(),
                         onAccountClick = {
                             onAction(PocketDashboardAction.NavigateToLoanDetail(account.accountId))
@@ -234,9 +248,11 @@ private fun PocketDashboardSuccessContent(
                 buckets.shareAccounts.forEach { account ->
                     MifosAccountCard(
                         accountId = account.accountId,
-                        accountType = account.name,
+                        accountType = account.name
+                            ?: stringResource(Res.string.feature_pocket_unknown_account),
                         accountNumber = account.accountNumber,
-                        accountStatus = account.balanceOrStatus,
+                        accountStatus = account.balanceOrStatus
+                            ?: stringResource(Res.string.feature_pocket_unknown_status),
                         accountStatusColor = account.status.toColor(),
                         onAccountClick = {
                             onAction(PocketDashboardAction.NavigateToShareDetail(account.accountId))
@@ -248,97 +264,6 @@ private fun PocketDashboardSuccessContent(
             Spacer(modifier = Modifier.height(KptTheme.spacing.xl))
         }
     }
-}
-
-/**
- * Screen-side presentation fold of the raw [DetailedPocketAccount] page into
- * per-account-type sections + a formatted multi-currency total. This is the
- * pure (non-suspend, non-Composable) extraction of the pre-migration
- * `PocketDashboardViewModel.populateFromContent` — moved here because it now
- * runs on the stream's `ScreenState.Content` payload directly, and the two
- * missing-value fallbacks resolve from `stringResource` at the call site.
- */
-internal data class PocketBuckets(
-    val totalBalance: String,
-    val savingsAccounts: List<DetailedPocket>,
-    val loanAccounts: List<DetailedPocket>,
-    val shareAccounts: List<DetailedPocket>,
-)
-
-private fun List<DetailedPocketAccount>.toPocketBuckets(
-    unknownStatus: String,
-    unknownAccount: String,
-): PocketBuckets {
-    // Upstream PR #2057 (manage-pocket) rewired per-account balance rendering to
-    // prefix the currency `displaySymbol` in front of the numeric string
-    // (`"$code $displaySymbol$formattedNum"`); kept identical here.
-    fun mapToUiModel(detailed: DetailedPocketAccount): DetailedPocket {
-        val balanceStr = if (detailed.status == AccountStatus.ACTIVE) {
-            if (detailed.balance != null) {
-                val code = detailed.currencyCode.orEmpty()
-                val displaySymbol = detailed.currencyDisplaySymbol.orEmpty()
-                val formattedNum = CurrencyFormatter.format(detailed.balance, detailed.decimalPlaces)
-                if (code.isNotEmpty()) "$code $displaySymbol$formattedNum" else "$displaySymbol$formattedNum"
-            } else {
-                ""
-            }
-        } else {
-            detailed.status?.name ?: unknownStatus
-        }
-
-        return DetailedPocket(
-            accountId = detailed.pocket.accountId,
-            name = detailed.productName ?: unknownAccount,
-            accountNumber = detailed.pocket.accountNumber,
-            balanceOrStatus = balanceStr,
-            status = detailed.status ?: AccountStatus.UNKNOWN,
-        )
-    }
-
-    val loanList = mutableListOf<DetailedPocket>()
-    val savingsList = mutableListOf<DetailedPocket>()
-    val shareList = mutableListOf<DetailedPocket>()
-    for (account in this) {
-        when (account.pocket.accountType) {
-            AccountType.LOAN -> loanList.add(mapToUiModel(account))
-            AccountType.SAVINGS -> savingsList.add(mapToUiModel(account))
-            AccountType.SHARE -> shareList.add(mapToUiModel(account))
-        }
-    }
-
-    // Multi-currency per-code sum, each rendered `"$code $displaySymbol$sum"` and
-    // joined by newline (the total-balance widget renders multi-line text).
-    val balancesByCurrency = this
-        .filter { it.status == AccountStatus.ACTIVE && it.balance != null && it.currencyCode != null }
-        .groupBy { it.currencyCode!! }
-        .map { (currencyCode, accounts) ->
-            val sum = accounts.sumOf { it.balance ?: 0.0 }
-            val decimalPlaces = accounts.first().decimalPlaces
-            val displaySymbol = accounts.first().currencyDisplaySymbol.orEmpty()
-            val formattedNum = CurrencyFormatter.format(sum, decimalPlaces)
-            if (currencyCode.isNotEmpty()) "$currencyCode $displaySymbol$formattedNum" else "$displaySymbol$formattedNum"
-        }
-
-    val formattedTotal = if (balancesByCurrency.isNotEmpty()) {
-        balancesByCurrency.joinToString("\n")
-    } else {
-        val sampleAccount = this.firstOrNull { it.currencyCode != null }
-        if (sampleAccount != null) {
-            val code = sampleAccount.currencyCode.orEmpty()
-            val displaySymbol = sampleAccount.currencyDisplaySymbol.orEmpty()
-            val formattedNum = CurrencyFormatter.format(0.0, sampleAccount.decimalPlaces)
-            if (code.isNotEmpty()) "$code $displaySymbol$formattedNum" else "$displaySymbol$formattedNum"
-        } else {
-            "0.00"
-        }
-    }
-
-    return PocketBuckets(
-        totalBalance = formattedTotal,
-        savingsAccounts = savingsList,
-        loanAccounts = loanList,
-        shareAccounts = shareList,
-    )
 }
 
 @Composable
@@ -506,7 +431,15 @@ internal fun EmptyPocketContent(
 @Composable
 internal fun PocketDashboardContentPreview() {
     PocketDashboardContent(
-        state = ScreenState.Content(samplePocketAccounts),
+        state = ScreenState.Content(
+            PocketBuckets(
+                totalBalance = "10,000.00",
+                savingsAccounts = emptyList(),
+                loanAccounts = emptyList(),
+                shareAccounts = emptyList(),
+            ),
+        ),
+        freshness = FreshnessSignal.initial(),
         onAction = {},
         onRetry = {},
     )
@@ -519,51 +452,3 @@ private fun EmptyPocketContentPreview() {
         onLinkFirstAccount = {},
     )
 }
-
-private val samplePocketAccounts: List<DetailedPocketAccount> = listOf(
-    DetailedPocketAccount(
-        pocket = PocketAccount(
-            pocketId = 1L,
-            id = 1L,
-            accountId = 1L,
-            accountType = AccountType.SAVINGS,
-            accountNumber = "1004859238",
-        ),
-        productName = "Emergency Fund",
-        balance = 5_000.0,
-        currencyCode = "USD",
-        decimalPlaces = 2,
-        status = AccountStatus.ACTIVE,
-        currencyDisplaySymbol = "$",
-    ),
-    DetailedPocketAccount(
-        pocket = PocketAccount(
-            pocketId = 2L,
-            id = 2L,
-            accountId = 3L,
-            accountType = AccountType.LOAN,
-            accountNumber = "3009284756",
-        ),
-        productName = "Personal Loan",
-        balance = 10_000.0,
-        currencyCode = "MXN",
-        decimalPlaces = 2,
-        status = AccountStatus.ACTIVE,
-        currencyDisplaySymbol = "MX$",
-    ),
-    DetailedPocketAccount(
-        pocket = PocketAccount(
-            pocketId = 3L,
-            id = 3L,
-            accountId = 5L,
-            accountType = AccountType.SHARE,
-            accountNumber = "5001129384",
-        ),
-        productName = "Company Shares",
-        balance = 2_500.0,
-        currencyCode = "USD",
-        decimalPlaces = 2,
-        status = AccountStatus.ACTIVE,
-        currencyDisplaySymbol = "$",
-    ),
-)

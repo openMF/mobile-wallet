@@ -70,6 +70,7 @@ object DecisionEngine {
                     is ErrorCategory.ClientError,
                     -> ScreenState.Error(error, isNetworkError = false)
                 }
+                storeData.fetchedAtInstant != null && !storeData.isRefreshing -> ScreenState.Empty
                 else -> ScreenState.Loading
             }
         }

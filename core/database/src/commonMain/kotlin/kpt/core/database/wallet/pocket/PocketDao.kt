@@ -80,7 +80,53 @@ interface PocketDao {
      */
     @Transaction
     suspend fun replacePage(clientId: Long, entities: List<PocketEntity>) {
+        val pending = getPendingSyncsByClient(clientId)
+        val pendingDelinkIds = pending.filter { it.syncStatus == "PENDING_DELINK" }.map { it.id }.toSet()
+
+        val filteredNetworkEntities = entities.map {
+            if (it.id in pendingDelinkIds) {
+                it.copy(syncStatus = "PENDING_DELINK")
+            } else {
+                it
+            }
+        }
+
         deleteByClient(clientId)
-        upsertAll(entities)
+        upsertAll(filteredNetworkEntities)
+
+        val networkAccountKeys = entities.map { "${it.accountId}_${it.accountType}" }.toSet()
+        val pendingLinks = pending.filter {
+            it.syncStatus == "PENDING_LINK" && "${it.accountId}_${it.accountType}" !in networkAccountKeys
+        }
+        upsertAll(pendingLinks)
     }
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun upsert(entity: PocketEntity)
+
+    @Query(
+        """
+        SELECT * FROM wallet_pockets 
+        WHERE clientId = :clientId AND syncStatus != 'PENDING_DELINK' 
+        ORDER BY accountType ASC, accountNumber ASC, id ASC
+        """,
+    )
+    fun observeLinkedByClient(clientId: Long): Flow<List<PocketEntity>>
+
+    @Query("SELECT * FROM wallet_pockets WHERE syncStatus = 'PENDING_LINK' OR syncStatus = 'PENDING_DELINK'")
+    suspend fun getPendingSyncs(): List<PocketEntity>
+
+    @Query(
+        """
+        SELECT * FROM wallet_pockets 
+        WHERE clientId = :clientId AND (syncStatus = 'PENDING_LINK' OR syncStatus = 'PENDING_DELINK')
+        """,
+    )
+    suspend fun getPendingSyncsByClient(clientId: Long): List<PocketEntity>
+
+    @Query("DELETE FROM wallet_pockets WHERE id = :id AND clientId = :clientId")
+    suspend fun deleteById(id: Long, clientId: Long)
+
+    @Query("SELECT * FROM wallet_pockets WHERE clientId = :clientId AND syncStatus != 'PENDING_DELINK'")
+    suspend fun getLinkedAccounts(clientId: Long): List<PocketEntity>
 }

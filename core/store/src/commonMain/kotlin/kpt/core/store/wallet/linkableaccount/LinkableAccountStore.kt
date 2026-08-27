@@ -9,6 +9,7 @@
  */
 package kpt.core.store.wallet.linkableaccount
 
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kpt.core.base.database.invalidation.daoFlow
@@ -85,16 +86,25 @@ private const val LINKABLE_ACCOUNTS_TABLE = "wallet_linkable_accounts"
  * InvalidationTracker fails. On Android/Desktop/iOS the wrap is a microsecond
  * no-op alongside Room's native invalidation.
  *
- * ## Write path (GOAL D1 — WRITES STAY ONLINE)
+ * ## Reactive Offline-First Filtering (Write Path)
  *
- * This is a `Store` (not `MutableStore`) by design. Pocket link/delink flows
- * (`PocketRepository.linkAccounts` / `delinkAccounts`) do NOT call
- * `store.write(...)` and do NOT touch [LinkableAccountDao] directly — they
- * call their existing online repository methods. The `ManagePocketViewModel`
- * emits its `refreshTrigger` after every successful link/delink, which
- * re-subscribes this stream; the fresh fetch re-snapshots the linked set
- * (from the just-updated `wallet_pockets` LEDGER) and emits the correctly
- * filtered list.
+ * This is a `Store` (not `MutableStore`) by design. The actual source of truth for filtering
+ * available accounts is derived by combining the local `wallet_linkable_accounts` list with
+ * the local `wallet_pockets` list natively in Room via `combine`.
+ *
+ * **Offline Interactions:** When a user links an account while offline, `PocketRepository`
+ * directly writes an optimistic row into `wallet_pockets` (with a fake negative primary key,
+ * but the correct `accountId` and `accountType`).
+ *
+ * **Data Preservation:** The fetcher explicitly pulls full details (balance, productName, etc)
+ * so that when an account is linked offline, the optimistic `wallet_pockets` row has all the data
+ * necessary to instantly render a beautiful UI card, avoiding a flicker to "Unknown Account".
+ *
+ * **Safe Reactive Filtering:** Filtering using the local `PocketEntity` is reliable because
+ * the reader explicitly `combine`s `pocketDao.observeLinkedByClient`. The newly linked
+ * account instantly disappears from the UI's available accounts list—purely reactively, without
+ * requiring a network refresh, manual UI list manipulation, or any `MutableStateFlow` hacks.
+ * This guarantees perfect synchronization between the Linked and Available screens, even entirely offline.
  *
  * ## Inline mappers
  *
@@ -123,29 +133,32 @@ fun provideLinkableAccountsStore(
         // If the pocket table is cold (no fetch yet), an empty set is
         // conservative: surface everything as linkable (mirrors the pre-store
         // cold-cache behavior of `detailedPocketCache`).
-        val alreadyLinkedAccountIds: Set<Long> = pocketDao
-            .observeByClient(key.clientId)
-            .first()
-            .map { it.accountId }
-            .toSet()
-
         // Step 3 — build the LinkableAccount list per account-type. SHARE rows
         // fan out an extra getShareAccountDetails call for market-price resolution.
+        // We now fetch ALL accounts without filtering them here so that we can
+        /* do reactive optimistic filtering in the reader below when pockets change. */
         buildLinkableAccounts(
             clientAccounts = clientAccounts,
-            alreadyLinkedAccountIds = alreadyLinkedAccountIds,
+            alreadyLinkedAccounts = emptySet(),
             apiManager = apiManager,
         )
     },
     sourceOfTruth = SourceOfTruth.of(
         reader = { key: LinkableAccountKey ->
-            daoFlow(LINKABLE_ACCOUNTS_TABLE) { dao.observeByClient(key.clientId) }
-                .map { rows -> rows.map { it.toDomain() } }
+            combine(
+                daoFlow(LINKABLE_ACCOUNTS_TABLE) { dao.observeByClient(key.clientId) },
+                daoFlow("wallet_pockets") { pocketDao.observeLinkedByClient(key.clientId) },
+            ) { allAccounts, linked ->
+                val linkedSet = linked.map { "${it.accountId}_${it.accountType}" }.toSet()
+                allAccounts
+                    .filter { "${it.accountId}_${it.accountType}" !in linkedSet }
+                    .map { it.toDomain() }
+            }
         },
         writer = { key: LinkableAccountKey, accounts: List<LinkableAccount> ->
             val stamp = clock()
-            // ATOMIC page replacement — see [LinkableAccountDao.replacePage]
-            // KDoc for the S5-PAGE-ATOMIC invariant this write path preserves.
+            /* ATOMIC page replacement — see [LinkableAccountDao.replacePage]
+             * KDoc for the S5-PAGE-ATOMIC invariant this write path preserves. */
             dao.replacePage(
                 clientId = key.clientId,
                 entities = accounts.map {
@@ -158,23 +171,33 @@ fun provideLinkableAccountsStore(
     ),
 )
 
-// ---------------------------------------------------------------------------
-// LinkableAccount builder — mirrors PocketRepositoryImp#getAvailableAccountsToLink
-// verbatim (LOAN + SAVINGS + SHARE branches, SHARE market-price fan-out with
-// try/catch fallback). See `provideLinkableAccountsStore` ## Inline mappers
-// KDoc for rationale (module-cycle avoidance).
-// ---------------------------------------------------------------------------
+/* LinkableAccount builder — mirrors PocketRepositoryImp#getAvailableAccountsToLink
+ * verbatim (LOAN + SAVINGS + SHARE branches, SHARE market-price fan-out with
+ * try/catch fallback). See `provideLinkableAccountsStore` ## Inline mappers
+ * KDoc for rationale (module-cycle avoidance). */
 
 private suspend fun buildLinkableAccounts(
     clientAccounts: ClientAccountsEntity,
-    alreadyLinkedAccountIds: Set<Long>,
+    alreadyLinkedAccounts: Set<String>,
     apiManager: SelfServiceApiManager,
 ): List<LinkableAccount> {
     val out = mutableListOf<LinkableAccount>()
 
+    processLoanAccounts(clientAccounts, alreadyLinkedAccounts, out)
+    processSavingsAccounts(clientAccounts, alreadyLinkedAccounts, out)
+    processShareAccounts(clientAccounts, alreadyLinkedAccounts, apiManager, out)
+
+    return out
+}
+
+private fun processLoanAccounts(
+    clientAccounts: ClientAccountsEntity,
+    alreadyLinkedAccounts: Set<String>,
+    out: MutableList<LinkableAccount>,
+) {
     clientAccounts.loanAccounts.forEach { loan ->
         val loanId = loan.id ?: 0L
-        if (loanId !in alreadyLinkedAccountIds) {
+        if ("${loanId}_${AccountType.LOAN.name}" !in alreadyLinkedAccounts) {
             out.add(
                 LinkableAccount(
                     accountId = loanId,
@@ -190,9 +213,15 @@ private suspend fun buildLinkableAccounts(
             )
         }
     }
+}
 
+private fun processSavingsAccounts(
+    clientAccounts: ClientAccountsEntity,
+    alreadyLinkedAccounts: Set<String>,
+    out: MutableList<LinkableAccount>,
+) {
     clientAccounts.savingsAccounts.forEach { savings ->
-        if (savings.id !in alreadyLinkedAccountIds) {
+        if ("${savings.id}_${AccountType.SAVINGS.name}" !in alreadyLinkedAccounts) {
             out.add(
                 LinkableAccount(
                     accountId = savings.id,
@@ -208,10 +237,17 @@ private suspend fun buildLinkableAccounts(
             )
         }
     }
+}
 
+private suspend fun processShareAccounts(
+    clientAccounts: ClientAccountsEntity,
+    alreadyLinkedAccounts: Set<String>,
+    apiManager: SelfServiceApiManager,
+    out: MutableList<LinkableAccount>,
+) {
     clientAccounts.shareAccounts.forEach { share ->
         val shareId = share.id ?: 0L
-        if (shareId !in alreadyLinkedAccountIds) {
+        if ("${shareId}_${AccountType.SHARE.name}" !in alreadyLinkedAccounts) {
             var balance = 0.0
             var currencyCode: String? = share.currency?.code
             var currencyDisplaySymbol: String? = share.currency?.displaySymbol
@@ -229,9 +265,9 @@ private suspend fun buildLinkableAccounts(
                     ?: currencyDisplaySymbol
                 decimalPlaces = shareAccountDetails.currency?.decimalPlaces ?: decimalPlaces
             } catch (@Suppress("TooGenericExceptionCaught") e: Exception) {
-                // Fall back to the client-accounts row values (already assigned above).
-                // Mirrors the pre-store try/catch swallow — same reasoning: the
-                // market-price fetch is a nice-to-have; the row still renders.
+                /* Fall back to the client-accounts row values (already assigned above).
+                 * Mirrors the pre-store try/catch swallow — same reasoning: the
+                 * market-price fetch is a nice-to-have; the row still renders. */
             }
 
             out.add(
@@ -249,15 +285,11 @@ private suspend fun buildLinkableAccounts(
             )
         }
     }
-
-    return out
 }
 
-// ---------------------------------------------------------------------------
-// Status DTO → AccountStatus decoders. IDENTICAL to the sibling functions in
-// PocketStore.kt (kept in lockstep — see PocketStore's inline-mappers KDoc for
-// the module-cycle-avoidance rationale).
-// ---------------------------------------------------------------------------
+/* Status DTO → AccountStatus decoders. IDENTICAL to the sibling functions in
+ * PocketStore.kt (kept in lockstep — see PocketStore's inline-mappers KDoc for
+ * the module-cycle-avoidance rationale). */
 
 private fun LoanStatusResponseDto.toAccountStatus(): AccountStatus = when {
     active == true -> AccountStatus.ACTIVE
@@ -272,13 +304,13 @@ private fun LoanStatusResponseDto.toAccountStatus(): AccountStatus = when {
 }
 
 private fun SavingsStatus.toAccountStatus(): AccountStatus = when {
-    active == true -> AccountStatus.ACTIVE
-    submittedAndPendingApproval == true -> AccountStatus.PENDING
-    approved == true -> AccountStatus.APPROVED
-    rejected == true -> AccountStatus.REJECTED
-    withdrawnByApplicant == true -> AccountStatus.WITHDRAWN
-    matured == true -> AccountStatus.MATURED
-    closed == true || prematureClosed == true -> AccountStatus.CLOSED
+    active -> AccountStatus.ACTIVE
+    submittedAndPendingApproval -> AccountStatus.PENDING
+    approved -> AccountStatus.APPROVED
+    rejected -> AccountStatus.REJECTED
+    withdrawnByApplicant -> AccountStatus.WITHDRAWN
+    matured -> AccountStatus.MATURED
+    closed || prematureClosed -> AccountStatus.CLOSED
     else -> AccountStatus.UNKNOWN
 }
 

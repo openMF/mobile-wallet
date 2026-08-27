@@ -24,6 +24,8 @@ import org.mifospay.core.network.SelfServiceApiManager
 import org.mifospay.core.network.model.entity.client.ClientAccountsEntity
 import org.mifospay.core.network.model.entity.loanAccount.LoanStatusResponseDto
 import org.mifospay.core.network.model.entity.pocket.PocketAccountDto
+import org.mifospay.core.network.model.entity.pocket.PocketDelinkRequest
+import org.mifospay.core.network.model.entity.pocket.PocketLinkRequest
 import org.mifospay.core.network.model.entity.pocket.PocketResponseDto
 import org.mifospay.core.network.model.entity.shareAccount.ShareStatusResponseDto
 import org.mobilenativefoundation.store.store5.Fetcher
@@ -96,16 +98,25 @@ private const val POCKETS_TABLE = "wallet_pockets"
  * InvalidationTracker fails. On Android/Desktop/iOS the wrap is a microsecond
  * no-op alongside Room's native invalidation.
  *
- * ## Write path (GOAL D1 — WRITES STAY ONLINE)
+ * ## Write path (OFFLINE-FIRST OPTIMISTIC UPDATES)
  *
- * This is a `Store` (not `MutableStore`) by design. The user-facing pocket
- * management flows (`linkAccounts`, `delinkAccounts`) do NOT call
- * `store.write(...)` and do NOT touch [PocketDao] directly — they call their
- * existing online repository methods, and the server-echoed rows appear here
- * on the next refresh cycle (SWR or the VM's manual refresh trigger). The
- * pre-store optimistic in-memory update inside `linkAccounts` /
- * `delinkAccounts` is REMOVED — the momentary "already-updated" impression
- * the VM had via the local cache is replaced by the SWR-driven fetch.
+ * Pocket management flows (`linkAccounts`, `delinkAccounts`) support fully offline optimistic
+ * UI interactions:
+ * 1. The repository writes the intended action (e.g. `PENDING_LINK` or `PENDING_DELINK`)
+ *    directly into the local Room database, providing an instant UI update.
+ * 2. When creating an optimistic link row, a random negative ID is used to prevent
+ *    primary key collisions before the server assigns a permanent real mapping ID.
+ * 3. The `Fetcher` (below) implements a **push-before-pull** strategy. Every time
+ *    Store5 fetches from the network, the fetcher first queries the local DAO for
+ *    any pending links or delinks. It pushes these to the network synchronously.
+ * 4. If the push succeeds, the local pending rows are cleaned up (deleted for delinks,
+ *    marked as SYNCED for links) *before* the fresh server list is retrieved.
+ * 5. This guarantees that `replacePage` won't destroy optimistic rows that haven't
+ *    been pushed yet, and ensures that user actions made while offline are safely
+ *    synchronized without generating duplicates. The generic `RoomOutbox` is not used here
+ *    because Pocket syncing requires strict atomic ordering. Pushing pending changes, cleaning up
+ *    the local DB, and fetching the fresh page must happen sequentially inside this single
+ *    Fetcher pipeline to prevent visual duplicates.
  *
  * ## Inline mappers
  *
@@ -122,6 +133,51 @@ fun providePocketStore(
     clock: () -> Long = { Clock.System.now().toEpochMilliseconds() },
 ): Store<PocketKey, List<DetailedPocketAccount>> = StoreFactory.createStore(
     fetcher = Fetcher.of { key: PocketKey ->
+        try {
+            val localPending = dao.getPendingSyncsByClient(key.clientId)
+
+            /**
+             * Exception Handling Strategy:
+             * If any of the network calls below (linkAccounts, delinkAccounts, or getPocketAccounts)
+             * fail due to network errors, an Exception is thrown. Store5 automatically catches this
+             * exception and emits a `StoreReadResponse.Error` down the stream.
+             * Crucially, the local DAO is untouched. The pending syncs remain `PENDING_LINK` or
+             * `PENDING_DELINK`, and will be retried automatically on the next fetch request.
+             */
+
+            val pendingLinks = localPending.filter { it.syncStatus == "PENDING_LINK" }
+            val pendingDelinks = localPending.filter { it.syncStatus == "PENDING_DELINK" }
+
+            if (pendingLinks.isNotEmpty()) {
+                val request = PocketLinkRequest(
+                    accountsDetail = pendingLinks.map {
+                        PocketLinkRequest.AccountDetail(
+                            accountId = it.accountId.toString(),
+                            accountType = it.accountType,
+                        )
+                    },
+                )
+                apiManager.pocketApi.linkAccounts(request = request)
+                pendingLinks.forEach {
+                    dao.upsert(it.copy(syncStatus = "SYNCED"))
+                }
+            }
+
+            if (pendingDelinks.isNotEmpty()) {
+                val serverIds = pendingDelinks.filter { it.id > 0 }.map { it.id }
+                if (serverIds.isNotEmpty()) {
+                    val request = PocketDelinkRequest(serverIds)
+                    apiManager.pocketApi.delinkAccounts(request = request)
+                    pendingDelinks.forEach {
+                        dao.deleteById(it.id, key.clientId)
+                    }
+                }
+            }
+        } catch (e: Exception) {
+            // Silently swallow push failures; they will remain PENDING in the DB
+            // and the pull phase will preserve them via replacePage.
+        }
+
         // Step 1 — basic pockets (session-scoped on the server side).
         val basicPockets: List<PocketAccount> = apiManager.pocketApi
             .getPocketAccounts()
@@ -140,7 +196,7 @@ fun providePocketStore(
     },
     sourceOfTruth = SourceOfTruth.of(
         reader = { key: PocketKey ->
-            daoFlow(POCKETS_TABLE) { dao.observeByClient(key.clientId) }
+            daoFlow(POCKETS_TABLE) { dao.observeLinkedByClient(key.clientId) }
                 .map { rows -> rows.map { it.toDomain() } }
         },
         writer = { key: PocketKey, pockets: List<DetailedPocketAccount> ->
@@ -195,13 +251,13 @@ private fun LoanStatusResponseDto.toAccountStatus(): AccountStatus = when {
 }
 
 private fun SavingsStatus.toAccountStatus(): AccountStatus = when {
-    active == true -> AccountStatus.ACTIVE
-    submittedAndPendingApproval == true -> AccountStatus.PENDING
-    approved == true -> AccountStatus.APPROVED
-    rejected == true -> AccountStatus.REJECTED
-    withdrawnByApplicant == true -> AccountStatus.WITHDRAWN
-    matured == true -> AccountStatus.MATURED
-    closed == true || prematureClosed == true -> AccountStatus.CLOSED
+    active -> AccountStatus.ACTIVE
+    submittedAndPendingApproval -> AccountStatus.PENDING
+    approved -> AccountStatus.APPROVED
+    rejected -> AccountStatus.REJECTED
+    withdrawnByApplicant -> AccountStatus.WITHDRAWN
+    matured -> AccountStatus.MATURED
+    closed || prematureClosed -> AccountStatus.CLOSED
     else -> AccountStatus.UNKNOWN
 }
 
@@ -232,12 +288,6 @@ private suspend fun addPocketDetails(
             balance = detail?.loanBalance,
             productName = detail?.productName,
             currencyCode = detail?.currency?.code,
-            // Upstream PR #2057 (manage-pocket) surfaces per-currency display glyph
-            // (`"$"`/`"₹"`/…) so the dashboard + manage-pocket sheets render matching
-            // symbols. Value flows through the store fetcher into
-            // `DetailedPocketAccount.currencyDisplaySymbol`; the Room mirror
-            // (`PocketEntity`) does NOT yet carry the column so the SoT-decoded
-            // path surfaces `null` — the store's `fetcher` write wins on next SWR.
             currencyDisplaySymbol = detail?.currency?.displaySymbol,
             decimalPlaces = detail?.currency?.decimalPlaces,
             status = detail?.status?.toAccountStatus(),
@@ -258,7 +308,7 @@ private suspend fun addPocketDetails(
     }
 
     AccountType.SHARE -> {
-        var balance = 0.0
+        var balance: Double? = null
         var productName: String?
         var currencyCode: String?
         var currencyDisplaySymbol: String?

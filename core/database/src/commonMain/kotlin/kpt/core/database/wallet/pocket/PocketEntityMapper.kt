@@ -40,8 +40,10 @@ fun PocketEntity.toDomain(): DetailedPocketAccount = DetailedPocketAccount(
     productName = productName,
     balance = balance,
     currencyCode = currencyCode,
+    currencyDisplaySymbol = currencyDisplaySymbol,
     decimalPlaces = decimalPlaces,
     status = status?.let(::decodeAccountStatus),
+    syncStatus = syncStatus,
 )
 
 /**
@@ -66,9 +68,11 @@ fun DetailedPocketAccount.toEntity(clientId: Long, fetchedAtEpochMs: Long): Pock
         productName = productName,
         balance = balance,
         currencyCode = currencyCode,
+        currencyDisplaySymbol = currencyDisplaySymbol,
         decimalPlaces = decimalPlaces,
         status = status?.name,
         fetchedAtEpochMs = fetchedAtEpochMs,
+        syncStatus = "SYNCED",
     )
 
 private fun decodeAccountType(name: String): AccountType =
@@ -76,3 +80,21 @@ private fun decodeAccountType(name: String): AccountType =
 
 private fun decodeAccountStatus(name: String): AccountStatus =
     runCatching { AccountStatus.valueOf(name) }.getOrDefault(AccountStatus.UNKNOWN)
+
+fun DetailedPocketAccount.toPendingLinkEntity(clientId: Long, fetchedAtEpochMs: Long): PocketEntity =
+    PocketEntity(
+        id = if (pocket.id == 0L) kotlin.random.Random.nextLong(Long.MIN_VALUE, -1L) else pocket.id,
+        clientId = clientId,
+        pocketId = pocket.pocketId,
+        accountId = pocket.accountId,
+        accountType = pocket.accountType.name,
+        accountNumber = pocket.accountNumber,
+        productName = productName,
+        balance = balance,
+        currencyCode = currencyCode,
+        currencyDisplaySymbol = currencyDisplaySymbol,
+        decimalPlaces = decimalPlaces,
+        status = status?.name,
+        fetchedAtEpochMs = fetchedAtEpochMs,
+        syncStatus = "PENDING_LINK",
+    )

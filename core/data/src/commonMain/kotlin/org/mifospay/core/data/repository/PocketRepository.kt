@@ -10,17 +10,16 @@
 package org.mifospay.core.data.repository
 
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.Flow
 import kpt.core.base.store.screen.ScreenDataStream
-import org.mifospay.core.common.ScreenState
-import org.mifospay.core.model.payload.PocketLinkPayload
 import org.mifospay.core.model.pocket.DetailedPocketAccount
 import org.mifospay.core.model.pocket.LinkableAccount
-import org.mifospay.core.model.pocket.PocketAccount
 
 interface PocketRepository {
 
-    suspend fun getPocketAccounts(): List<PocketAccount>
+    fun getLinkedPocketAccountsStream(
+        clientId: Long,
+        scope: CoroutineScope,
+    ): ScreenDataStream<List<DetailedPocketAccount>>
 
     /**
      * Phase-5 Batch-2 **LEDGER read** for the `pocket` archetype (GOAL D13) —
@@ -68,59 +67,12 @@ interface PocketRepository {
         scope: CoroutineScope,
     ): ScreenDataStream<List<DetailedPocketAccount>>
 
-    fun getAvailableAccountsToLink(
-        clientId: Long,
-    ): Flow<ScreenState<List<LinkableAccount>>>
-
-    /**
-     * manage-pocket linkable-accounts **LEDGER read** (GOAL D13) —
-     * returns an offline-first `Flow<ScreenState<List<LinkableAccount>>>`
-     * consumed through the `linkableAccounts` Store5
-     * [`Store`][org.mobilenativefoundation.store.store5.Store]
-     * (`createStore` + Room [`SourceOfTruth`][org.mobilenativefoundation.store.store5.SourceOfTruth]
-     * + atomic
-     * [`replacePage`][kpt.core.database.wallet.linkableaccount.LinkableAccountDao.replacePage]
-     * writer) via
-     * [`Store.asScreenStream`][kpt.core.base.store.screen.asScreenStream].
-     *
-     * The store is driven by
-     * [`FetchPolicy.CACHE_FIRST_SWR`][kpt.core.base.store.screen.FetchPolicy.CACHE_FIRST_SWR]
-     * (Phase-5 T10 default) — subscribers see the cached page instantly and a
-     * background revalidation fires on the Stale/VeryStale band edge.
-     *
-     * ### Replaces the multiplatform-settings cache
-     *
-     * REPLACES the [getAvailableAccountsToLink] `Flow<DataState<...>>` path AND
-     * upstream PR #2057's multiplatform-settings `linkable_accounts` cache in
-     * `PocketPreferencesDataSource` (that cache is deleted alongside this
-     * addition — this branch's Store5 architecture serves the same read
-     * offline-first through Room SoT). The `DataState`-shaped [getAvailableAccountsToLink]
-     * method is preserved on the interface for any residual caller compat;
-     * the ManagePocket VM consumes THIS `ScreenState` method exclusively.
-     *
-     * ### Write path (GOAL D1)
-     *
-     * This is a READ path. Link/delink writes ([linkAccounts], [delinkAccounts])
-     * continue to flow through their existing online paths; the VM emits its
-     * `refreshTrigger` on success which re-subscribes this stream. The fresh
-     * fetch snapshots the just-updated `wallet_pockets` LEDGER (see the store
-     * KDoc) and emits the correctly filtered list.
-     *
-     * @param clientId owning client id — the store's page key AND the API path
-     *   parameter for the client-accounts source fetch.
-     * @param scope Coroutine scope for the stream's internal helper coroutines
-     *   (typically `viewModelScope`).
-     */
-    fun getAvailableAccountsToLinkStream(
-        clientId: Long,
-        scope: CoroutineScope,
-    ): ScreenDataStream<List<LinkableAccount>>
+    fun getAvailableAccountsToLinkStream(clientId: Long, scope: CoroutineScope): ScreenDataStream<List<LinkableAccount>>
 
     // Writes complete normally on success and throw on failure; the caller's
     // SubmitHandler maps success/exception to SubmitState. The user-facing dialog
     // copy is a feature StringResource surfaced by the ViewModel, not repo copy.
     suspend fun linkAccounts(
-        payload: PocketLinkPayload,
         explicitlyAddedAccounts: List<DetailedPocketAccount>,
         clientId: Long,
     )
