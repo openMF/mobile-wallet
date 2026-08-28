@@ -265,8 +265,12 @@ class MpayQrViewModel(
                 }
             }
 
+            is MpayQrAction.ShowSnackbar -> {
+                sendEvent(MpayQrEvent.ShowSnackbar(action.message))
+            }
+
             is MpayQrAction.CopyToClipboard -> {
-                sendEvent(MpayQrEvent.ShowSnackbar(action.text))
+                sendEvent(MpayQrEvent.CopyToClipboard(action.text))
             }
 
             is MpayQrAction.ShowAccountPicker -> {
@@ -350,26 +354,36 @@ class MpayQrViewModel(
 
     private fun initiateSetAmount() {
         viewModelScope.launch {
-            val intraBankData = withContext(ioDispatcher) {
-                MpayQrCodeProcessor.encodeMpayString(state.qrData)
-            }
-
-            val interBankData = if (state.accountExternalId.isNotBlank()) {
-                withContext(ioDispatcher) {
-                    MpayQrCodeProcessor.encodeMpayString(state.interBankQrData)
+            try {
+                val intraBankData = withContext(ioDispatcher) {
+                    MpayQrCodeProcessor.encodeMpayString(state.qrData)
                 }
-            } else {
-                null
-            }
 
-            updateContent {
-                it.copy(
-                    intraBankData = intraBankData,
-                    interBankData = interBankData,
-                )
-            }
+                val interBankData = if (state.accountExternalId.isNotBlank()) {
+                    withContext(ioDispatcher) {
+                        MpayQrCodeProcessor.encodeMpayString(state.interBankQrData)
+                    }
+                } else {
+                    null
+                }
 
-            mutableStateFlow.update { it.copy(dialogState = null) }
+                updateContent {
+                    it.copy(
+                        intraBankData = intraBankData,
+                        interBankData = interBankData,
+                    )
+                }
+
+                mutableStateFlow.update { it.copy(dialogState = null) }
+            } catch (e: IllegalArgumentException) {
+                mutableStateFlow.update {
+                    it.copy(
+                        dialogState = null,
+                        qrData = it.qrData.copy(amount = ""),
+                    )
+                }
+                sendEvent(MpayQrEvent.ShowSnackbar(e.message ?: "Invalid amount entered"))
+            }
         }
     }
 
@@ -547,6 +561,7 @@ sealed interface MpayQrEvent {
     data object OnNavigateBack : MpayQrEvent
     data object QrDownloaded : MpayQrEvent
     data class ShowSnackbar(val message: String) : MpayQrEvent
+    data class CopyToClipboard(val text: String) : MpayQrEvent
 }
 
 sealed interface MpayQrAction {
@@ -596,6 +611,7 @@ sealed interface MpayQrAction {
         }
     }
 
+    data class ShowSnackbar(val message: String) : MpayQrAction
     data class CopyToClipboard(val text: String) : MpayQrAction
 
     sealed interface Internal : MpayQrAction {
