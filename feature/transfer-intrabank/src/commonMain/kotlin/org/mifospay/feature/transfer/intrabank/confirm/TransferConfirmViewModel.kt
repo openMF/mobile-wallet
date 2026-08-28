@@ -244,24 +244,33 @@ internal class TransferConfirmViewModel(
         }
     }
 
-    private fun validateTransfer() = when {
-        state.amount.isBlank() -> updateValidationError(Res.string.feature_make_transfer_error_empty_amount)
-
-        state.amount.toDoubleOrNull() == null -> updateValidationError(Res.string.feature_make_transfer_error_invalid_amount)
-
-        state.description.isBlank() -> updateValidationError(Res.string.feature_make_transfer_error_empty_description)
-
-        state.selectedAccount == null -> updateValidationError(Res.string.feature_make_transfer_error_select_account)
-
-        state.selectedAccount?.accountId == state.toAccountId -> {
-            updateValidationError(Res.string.feature_make_transfer_error_same_account)
+    private fun validateTransfer() {
+        if (state.amount.isBlank()) {
+            updateValidationError(Res.string.feature_make_transfer_error_empty_amount)
+            return
         }
 
-        state.amount.toDouble() > state.selectedAccountBalance -> {
-            updateValidationError(Res.string.feature_make_transfer_error_insufficient_balance)
+        val transferAmount = state.amount.toDoubleOrNull()
+        if (transferAmount == null || transferAmount <= 0.0) {
+            updateValidationError(Res.string.feature_make_transfer_error_invalid_amount)
+            return
         }
 
-        else -> initiateTransfer()
+        when {
+            state.description.isBlank() -> updateValidationError(Res.string.feature_make_transfer_error_empty_description)
+
+            state.selectedAccount == null -> updateValidationError(Res.string.feature_make_transfer_error_select_account)
+
+            state.selectedAccount?.accountId == state.toAccountId -> {
+                updateValidationError(Res.string.feature_make_transfer_error_same_account)
+            }
+
+            transferAmount > state.selectedAccountBalance -> {
+                updateValidationError(Res.string.feature_make_transfer_error_insufficient_balance)
+            }
+
+            else -> initiateTransfer()
+        }
     }
 
     private fun initiateTransfer() {
@@ -475,7 +484,8 @@ internal data class TransferConfirmState(
     val userVerificationResult: Boolean? = null,
 ) {
     val amountIsValid: Boolean
-        get() = amount.isNotEmpty() && amount.toDoubleOrNull() != null && amount.toDouble() <= selectedAccountBalance
+        get() = amount.isNotEmpty() &&
+            amount.toDoubleOrNull()?.let { it > 0.0 && it <= selectedAccountBalance } == true
 
     val descriptionIsValid: Boolean
         get() = description.trim().isNotEmpty()
