@@ -109,11 +109,11 @@ class FakePocketRepository : PocketRepository {
     private val availableState = MutableSharedFlow<ScreenState<List<LinkableAccount>>>(replay = 1)
     private val detailedPocketAccounts = screenDataStreamForTesting(
         detailedState.asSharedFlow(),
-        freshness = emptyFlow()
+        freshness = emptyFlow(),
     )
     private val availableAccounts = screenDataStreamForTesting(
         availableState.asSharedFlow(),
-        freshness = emptyFlow()
+        freshness = emptyFlow(),
     )
 
     var linkAccountsResult: DataState<Unit> = DataState.Success(Unit)
@@ -155,7 +155,7 @@ class FakePocketRepository : PocketRepository {
 
     override fun getAvailableAccountsToLinkStream(
         clientId: Long,
-        scope: CoroutineScope
+        scope: CoroutineScope,
     ): ScreenDataStream<List<LinkableAccount>> {
         lastAvailableClientId = clientId
         return availableAccounts

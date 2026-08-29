@@ -207,15 +207,15 @@ class PocketDashboardViewModelTest {
         assertEvent(PocketDashboardAction.LinkFirstAccount, PocketDashboardEvent.ManagePocket)
         assertEvent(
             PocketDashboardAction.NavigateToLoanDetail(10L),
-            PocketDashboardEvent.NavigateToLoanDetail(10L)
+            PocketDashboardEvent.NavigateToLoanDetail(10L),
         )
         assertEvent(
             PocketDashboardAction.NavigateToSavingsDetail(11L),
-            PocketDashboardEvent.NavigateToSavingsDetail(11L)
+            PocketDashboardEvent.NavigateToSavingsDetail(11L),
         )
         assertEvent(
             PocketDashboardAction.NavigateToShareDetail(12L),
-            PocketDashboardEvent.NavigateToShareDetail(12L)
+            PocketDashboardEvent.NavigateToShareDetail(12L),
         )
     }
 

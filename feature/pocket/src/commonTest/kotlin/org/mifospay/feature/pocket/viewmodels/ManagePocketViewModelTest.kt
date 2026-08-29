@@ -86,7 +86,7 @@ class ManagePocketViewModelTest {
 
         val state = viewModel.stateFlow.value
         val account = assertIs<ScreenState.Content<List<ManagePocketAccount>>>(
-            viewModel.mappedLinkedAccounts.value
+            viewModel.mappedLinkedAccounts.value,
         ).data.single()
         assertEquals(1L, state.clientId)
         assertEquals(101L, account.accountId)

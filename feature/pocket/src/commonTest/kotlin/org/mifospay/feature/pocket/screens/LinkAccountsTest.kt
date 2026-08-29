@@ -45,7 +45,7 @@ class LinkAccountsTest {
         0.0,
         "USD",
         2,
-        AccountStatus.ACTIVE
+        AccountStatus.ACTIVE,
     )
 
     /** Verifies that an available account is rendered with its product name and number. */
@@ -79,7 +79,7 @@ class LinkAccountsTest {
         var emittedAction: ManagePocketAction? = null
         val state = ManagePocketState(
             dialogState = ManagePocketDialogState.LinkAccounts,
-            selectedAccountIdentifiers = setOf("101_SAVINGS")
+            selectedAccountIdentifiers = setOf("101_SAVINGS"),
         )
         val available = ScreenState.Content(listOf(account()))
         lateinit var linkSelected: String
