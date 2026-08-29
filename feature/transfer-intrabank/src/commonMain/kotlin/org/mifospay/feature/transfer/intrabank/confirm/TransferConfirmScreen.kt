@@ -63,6 +63,13 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.repeatOnLifecycle
+import kpt.core.ui.generated.resources.core_ui_add_to_pocket_message
+import kpt.core.ui.generated.resources.core_ui_add_to_pocket_title
+import kpt.core.ui.generated.resources.core_ui_error
+import kpt.core.ui.generated.resources.core_ui_no
+import kpt.core.ui.generated.resources.core_ui_ok
+import kpt.core.ui.generated.resources.core_ui_success
+import kpt.core.ui.generated.resources.core_ui_yes
 import mifos_pay.feature.transfer_intrabank.generated.resources.Res
 import mifos_pay.feature.transfer_intrabank.generated.resources.feature_make_transfer_amount
 import mifos_pay.feature.transfer_intrabank.generated.resources.feature_make_transfer_amount_error
@@ -78,12 +85,12 @@ import mifos_pay.feature.transfer_intrabank.generated.resources.feature_make_tra
 import mifos_pay.feature.transfer_intrabank.generated.resources.feature_make_transfer_show_balance
 import mifos_pay.feature.transfer_intrabank.generated.resources.feature_make_transfer_to_account
 import mifos_pay.feature.transfer_intrabank.generated.resources.feature_transfer_cancel
-import mifos_pay.feature.transfer_intrabank.generated.resources.feature_transfer_retry
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
 import org.mifospay.core.designsystem.component.MifosBottomSheetScaffold
 import org.mifospay.core.designsystem.component.MifosButton
+import org.mifospay.core.designsystem.component.MifosDialogBox
 import org.mifospay.core.designsystem.component.MifosTextField
 import org.mifospay.core.designsystem.component.MifosTopBar
 import org.mifospay.core.designsystem.icon.MifosIcons
@@ -97,6 +104,7 @@ import org.mifospay.core.ui.MifosProgressIndicatorOverlay
 import org.mifospay.core.ui.utils.EventsEffect
 import template.core.base.designsystem.KptTheme
 import template.core.base.designsystem.theme.KptTheme
+import kpt.core.ui.generated.resources.Res as UiRes
 
 /**
  * Intra-bank transfer confirmation route. Owns the **passcode/biometric
@@ -181,6 +189,9 @@ internal fun TransferConfirmScreen(
         onRetry = remember(viewModel) {
             { viewModel.trySendAction(TransferConfirmAction.RetryTransfer) }
         },
+        onAction = remember(viewModel) {
+            { viewModel.trySendAction(it) }
+        },
     )
 
     TransferConfirmScreen(
@@ -197,8 +208,40 @@ private fun TransferConfirmDialogs(
     dialogState: TransferConfirmState.DialogState?,
     onDismissRequest: () -> Unit,
     onRetry: () -> Unit,
+    onAction: (TransferConfirmAction) -> Unit = {},
 ) {
     when (dialogState) {
+        is TransferConfirmState.DialogState.AddToPocketConfirmation -> {
+            MifosDialogBox(
+                showDialogState = true,
+                onDismiss = { onAction(TransferConfirmAction.ConfirmAddToPocket(false)) },
+                title = stringResource(UiRes.string.core_ui_add_to_pocket_title),
+                message = stringResource(UiRes.string.core_ui_add_to_pocket_message),
+                confirmButtonText = stringResource(UiRes.string.core_ui_yes),
+                onConfirm = { onAction(TransferConfirmAction.ConfirmAddToPocket(true)) },
+                dismissButtonText = stringResource(UiRes.string.core_ui_no),
+            )
+        }
+        is TransferConfirmState.DialogState.Error.ResourceMessage -> {
+            MifosDialogBox(
+                showDialogState = true,
+                onDismiss = { onAction(TransferConfirmAction.DismissDialog) },
+                title = stringResource(UiRes.string.core_ui_error),
+                message = dialogState.message,
+                confirmButtonText = stringResource(UiRes.string.core_ui_ok),
+                onConfirm = { onAction(TransferConfirmAction.DismissDialog) },
+            )
+        }
+        is TransferConfirmState.DialogState.Success -> {
+            MifosDialogBox(
+                showDialogState = true,
+                onDismiss = { onAction(TransferConfirmAction.DismissDialog) },
+                title = stringResource(UiRes.string.core_ui_success),
+                message = dialogState.message,
+                confirmButtonText = stringResource(UiRes.string.core_ui_ok),
+                onConfirm = { onAction(TransferConfirmAction.DismissDialog) },
+            )
+        }
         is TransferConfirmState.DialogState.Error.ValidationError -> {
             ErrorBottomSheet(
                 title = stringResource(Res.string.feature_make_transfer_oops_title),
@@ -223,12 +266,12 @@ private fun TransferConfirmDialogs(
                 errorType = errorType,
                 onDismiss = onDismissRequest,
                 onRetry = onRetry,
-                dismissButtonText = stringResource(Res.string.feature_transfer_cancel),
-                retryButtonText = stringResource(Res.string.feature_transfer_retry),
             )
         }
 
-        is TransferConfirmState.DialogState.Loading -> MifosProgressIndicatorOverlay()
+        TransferConfirmState.DialogState.Loading -> {
+            MifosProgressIndicatorOverlay()
+        }
 
         null -> Unit
     }

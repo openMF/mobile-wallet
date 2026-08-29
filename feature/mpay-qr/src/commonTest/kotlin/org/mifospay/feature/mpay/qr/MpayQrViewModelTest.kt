@@ -29,6 +29,7 @@ import kpt.core.base.store.screen.screenDataStreamForTesting
 import org.mifospay.core.common.ScreenState
 import org.mifospay.core.data.repository.AccountRepository
 import org.mifospay.core.data.repository.LocalAssetRepository
+import org.mifospay.core.data.repository.PocketRepository
 import org.mifospay.core.datastore.UserPreferencesRepository
 import org.mifospay.core.model.account.Account
 import org.mifospay.core.model.account.AccountTransferPayload
@@ -37,6 +38,9 @@ import org.mifospay.core.model.client.Client
 import org.mifospay.core.model.client.UpdatedClient
 import org.mifospay.core.model.instance.InterbankServer
 import org.mifospay.core.model.instance.ServerInstance
+import org.mifospay.core.model.pocket.DetailedPocketAccount
+import org.mifospay.core.model.pocket.LinkableAccount
+import org.mifospay.core.model.pocket.PocketAccount
 import org.mifospay.core.model.savingsaccount.Transaction
 import org.mifospay.core.model.savingsaccount.TransferDetail
 import org.mifospay.core.model.search.AccountResult
@@ -71,6 +75,7 @@ class MpayQrViewModelTest {
     private lateinit var fakeUserPreferencesRepository: FakeUserPreferencesRepository
     private lateinit var fakeLocalAssetRepository: FakeLocalAssetRepository
     private lateinit var fakeAccountRepository: FakeAccountRepository
+    private lateinit var fakePocketRepository: FakePocketRepository
     private lateinit var savedStateHandle: SavedStateHandle
 
     @BeforeTest
@@ -84,6 +89,7 @@ class MpayQrViewModelTest {
         )
         fakeLocalAssetRepository = FakeLocalAssetRepository()
         fakeAccountRepository = FakeAccountRepository()
+        fakePocketRepository = FakePocketRepository()
         savedStateHandle = SavedStateHandle()
     }
 
@@ -97,6 +103,7 @@ class MpayQrViewModelTest {
             localRepository = fakeLocalAssetRepository,
             repository = fakeUserPreferencesRepository,
             accountRepository = fakeAccountRepository,
+            pocketRepository = fakePocketRepository,
             savedStateHandle = savedStateHandle,
             ioDispatcher = testDispatcher,
         )
@@ -492,4 +499,39 @@ private class FakeAccountRepository : AccountRepository {
         screenDataStreamForTesting(state = flowOf(StoreScreenState.Empty))
 
     override suspend fun makeTransfer(payload: AccountTransferPayload) {}
+}
+
+private class FakePocketRepository : PocketRepository {
+    @OptIn(ExperimentalScreenDataStreamTestingApi::class)
+    override fun getLinkedPocketAccountsStream(
+        clientId: Long,
+        scope: CoroutineScope,
+    ): ScreenDataStream<List<DetailedPocketAccount>> =
+        screenDataStreamForTesting(state = flowOf(StoreScreenState.Empty))
+
+    @OptIn(ExperimentalScreenDataStreamTestingApi::class)
+    override fun getDetailedPocketAccountsStream(
+        clientId: Long,
+        scope: CoroutineScope,
+    ): ScreenDataStream<List<DetailedPocketAccount>> =
+        screenDataStreamForTesting(state = flowOf(StoreScreenState.Empty))
+
+    override fun observeLinkedPocketAccounts(clientId: Long): Flow<List<PocketAccount>> = flowOf(emptyList())
+
+    @OptIn(ExperimentalScreenDataStreamTestingApi::class)
+    override fun getAvailableAccountsToLinkStream(
+        clientId: Long,
+        scope: CoroutineScope,
+    ): ScreenDataStream<List<LinkableAccount>> =
+        screenDataStreamForTesting(state = flowOf(StoreScreenState.Empty))
+
+    override suspend fun linkAccounts(
+        explicitlyAddedAccounts: List<DetailedPocketAccount>,
+        clientId: Long,
+    ) = Unit
+
+    override suspend fun delinkAccounts(
+        pocketAccountMappingIds: List<Long>,
+        clientId: Long,
+    ) = Unit
 }

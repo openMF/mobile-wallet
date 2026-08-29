@@ -14,10 +14,18 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.serialization.Serializable
+import kpt.core.base.store.submit.SubmitState
+import kpt.core.base.store.submit.submitHandler
+import kpt.core.ui.generated.resources.core_ui_error_msg_generic
+import kpt.core.ui.generated.resources.core_ui_error_no_network
+import kpt.core.ui.generated.resources.core_ui_error_session_expired
+import kpt.core.ui.generated.resources.core_ui_pocket_add_failed
+import kpt.core.ui.generated.resources.core_ui_pocket_added_successfully
 import mifos_pay.feature.transfer_intrabank.generated.resources.Res
 import mifos_pay.feature.transfer_intrabank.generated.resources.feature_make_transfer_error_empty_amount
 import mifos_pay.feature.transfer_intrabank.generated.resources.feature_make_transfer_error_empty_description
@@ -27,20 +35,26 @@ import mifos_pay.feature.transfer_intrabank.generated.resources.feature_make_tra
 import mifos_pay.feature.transfer_intrabank.generated.resources.feature_make_transfer_error_select_account
 import mifos_pay.feature.transfer_intrabank.generated.resources.feature_make_transfer_user_verification_failed
 import org.jetbrains.compose.resources.StringResource
+import org.jetbrains.compose.resources.getString
 import org.mifospay.core.common.DateHelper
 import org.mifospay.core.common.ScreenState
-import org.mifospay.core.common.StringResourceSerializer
 import org.mifospay.core.common.UiError
 import org.mifospay.core.common.toUiError
 import org.mifospay.core.common.utils.capitalizeWords
 import org.mifospay.core.data.repository.ClientRepository
+import org.mifospay.core.data.repository.PocketRepository
 import org.mifospay.core.data.repository.ThirdPartyTransferRepository
 import org.mifospay.core.data.repository.UserVerificationRepository
+import org.mifospay.core.model.enums.AccountType
+import org.mifospay.core.model.pocket.DetailedPocketAccount
+import org.mifospay.core.model.pocket.PocketAccount
+import org.mifospay.core.model.savingsaccount.SavingAccountEntity
 import org.mifospay.core.network.model.entity.payload.TransferPayload
 import org.mifospay.core.network.model.entity.templates.account.AccountOption
 import org.mifospay.core.ui.DefaultErrorMessageProvider
 import org.mifospay.core.ui.utils.BaseViewModel
 import org.mifospay.feature.transfer.intrabank.navigation.TransferConfirmRoute
+import kpt.core.ui.generated.resources.Res as CoreUiRes
 
 /**
  * `SavedStateHandle` key written by `internalMifosPasscodeScreen` and read by
@@ -77,6 +91,7 @@ const val INTRA_BANK_TRANSFER_VERIFICATION_KEY = "intra-banking_transfer_verific
  */
 internal class TransferConfirmViewModel(
     private val repository: ThirdPartyTransferRepository,
+    private val pocketRepository: PocketRepository,
     private val clientRepo: ClientRepository,
     private val userVerificationRepository: UserVerificationRepository,
     savedStateHandle: SavedStateHandle,
@@ -95,90 +110,107 @@ internal class TransferConfirmViewModel(
     },
 ) {
 
+    private val submitLink = viewModelScope.submitHandler<Unit>()
+
     init {
         viewModelScope.launch {
             getFromAccounts()
         }
+
+        submitLink.state
+            .onEach { submitState ->
+                when (submitState) {
+                    is SubmitState.Submitting -> Unit
+                    is SubmitState.Submitted -> {
+                        mutableStateFlow.update {
+                            it.copy(
+                                dialogState = TransferConfirmState.DialogState.Success(
+                                    getString(CoreUiRes.string.core_ui_pocket_added_successfully),
+                                ),
+                                pocketAccountIds = it.pocketAccountIds +
+                                    (it.selectedAccount?.accountId?.toLong() ?: 0L),
+                            )
+                        }
+                        submitLink.reset()
+                    }
+                    is SubmitState.Failed -> {
+                        mutableStateFlow.update {
+                            it.copy(
+                                dialogState = TransferConfirmState.DialogState.Error.ResourceMessage(
+                                    getString(CoreUiRes.string.core_ui_pocket_add_failed),
+                                ),
+                            )
+                        }
+                        submitLink.reset()
+                    }
+                    SubmitState.Idle -> Unit
+                }
+            }
+            .launchIn(viewModelScope)
     }
 
     override fun handleAction(action: TransferConfirmAction) {
         when (action) {
-            TransferConfirmAction.NavigateBack -> {
-                sendEvent(TransferConfirmEvent.OnNavigateBack)
-            }
+            TransferConfirmAction.NavigateBack -> navigateBack()
+            is TransferConfirmAction.AmountChanged -> updateAmount(action.amount)
+            is TransferConfirmAction.DescriptionChanged -> updateDescription(action.desc)
+            is TransferConfirmAction.SelectAccount -> selectAccount(action.account)
+            is TransferConfirmAction.DismissDialog -> dismissDialog()
+            is TransferConfirmAction.InitiateTransfer -> startTransfer()
+            is TransferConfirmAction.ConfirmAddToPocket -> confirmAddToPocket(action.add)
+            TransferConfirmAction.RetryTransfer -> retryTransfer()
+            TransferConfirmAction.CloseBottomSheet -> setBottomSheetVisible(false)
+            TransferConfirmAction.OpenBottomSheet -> setBottomSheetVisible(true)
+            is TransferConfirmAction.UpdateUserVerificationResult -> updateVerificationResult(action.result)
+        }
+    }
 
-            is TransferConfirmAction.AmountChanged -> {
-                mutableStateFlow.update {
-                    it.copy(
-                        amount = action.amount,
-                    )
-                }
-            }
+    private fun navigateBack() = sendEvent(TransferConfirmEvent.OnNavigateBack)
 
-            is TransferConfirmAction.DescriptionChanged -> {
-                mutableStateFlow.update {
-                    it.copy(
-                        description = action.desc,
-                    )
-                }
-            }
+    private fun updateAmount(amount: String) = mutableStateFlow.update { it.copy(amount = amount) }
 
-            is TransferConfirmAction.SelectAccount -> {
-                mutableStateFlow.update {
-                    it.copy(
-                        selectedAccount = action.account,
-                        selectedAccountBalance = state.balanceMap.getOrElse(
-                            action.account?.accountNo ?: "",
-                        ) { 0.0 },
-                        showBottomSheet = false,
-                    )
-                }
-            }
+    private fun updateDescription(description: String) =
+        mutableStateFlow.update { it.copy(description = description) }
 
-            is TransferConfirmAction.DismissDialog -> {
-                mutableStateFlow.update {
-                    it.copy(dialogState = null)
-                }
-            }
+    private fun selectAccount(account: AccountOption?) {
+        mutableStateFlow.update {
+            it.copy(
+                selectedAccount = account,
+                selectedAccountBalance = state.balanceMap[account?.accountNo] ?: 0.0,
+                showBottomSheet = false,
+            )
+        }
+    }
 
-            is TransferConfirmAction.InitiateTransfer -> {
-                if (state.isProcessing) return
-                mutableStateFlow.update {
-                    it.copy(
-                        isProcessing = true,
-                        dialogState = null,
-                    )
-                }
-                validateTransfer()
-            }
+    private fun dismissDialog() {
+        val wasPocketSuccess = state.dialogState is TransferConfirmState.DialogState.Success
+        mutableStateFlow.update { it.copy(dialogState = null) }
+        if (wasPocketSuccess) validateTransfer()
+    }
 
-            TransferConfirmAction.RetryTransfer -> {
-                mutableStateFlow.update {
-                    it.copy(dialogState = null)
-                }
-                trySendAction(TransferConfirmAction.InitiateTransfer)
+    private fun startTransfer() {
+        if (state.isProcessing) return
+        mutableStateFlow.update { it.copy(isProcessing = true, dialogState = null) }
+        if (state.selectedAccount?.accountId?.toLong() !in state.pocketAccountIds) {
+            mutableStateFlow.update {
+                it.copy(dialogState = TransferConfirmState.DialogState.AddToPocketConfirmation, isProcessing = false)
             }
+        } else {
+            validateTransfer()
+        }
+    }
 
-            TransferConfirmAction.CloseBottomSheet -> {
-                mutableStateFlow.update {
-                    it.copy(showBottomSheet = false)
-                }
-            }
+    private fun retryTransfer() {
+        mutableStateFlow.update { it.copy(dialogState = null) }
+        trySendAction(TransferConfirmAction.InitiateTransfer)
+    }
 
-            TransferConfirmAction.OpenBottomSheet -> {
-                mutableStateFlow.update {
-                    it.copy(showBottomSheet = true)
-                }
-            }
+    private fun setBottomSheetVisible(visible: Boolean) =
+        mutableStateFlow.update { it.copy(showBottomSheet = visible) }
 
-            is TransferConfirmAction.UpdateUserVerificationResult -> {
-                mutableStateFlow.update {
-                    it.copy(
-                        userVerificationResult = action.result,
-                        isAwaitingPasscodeVerification = false,
-                    )
-                }
-            }
+    private fun updateVerificationResult(result: Boolean) {
+        mutableStateFlow.update {
+            it.copy(userVerificationResult = result, isAwaitingPasscodeVerification = false)
         }
     }
 
@@ -195,11 +227,27 @@ internal class TransferConfirmViewModel(
                     )
                 }
             } else {
-                mutableStateFlow.update {
-                    it.copy(
-                        fromAccountOptions = fromAccounts,
-                    )
+                val clientId = fromAccounts.firstOrNull()?.clientId?.toLong() ?: -1L
+                if (clientId != -1L) {
+                    pocketRepository.observeLinkedPocketAccounts(clientId).onEach { pocketAccounts ->
+                        val pocketAccountIds = pocketAccounts.filter { it.accountType == AccountType.SAVINGS }
+                            .mapNotNull { it.accountId }.toSet()
+                        mutableStateFlow.update { state ->
+                            /*
+                             * Pocket Account Suggestion Feature:
+                             * Sorts the accounts so that linked pocket accounts appear at the top.
+                             */
+                            val sortedAccounts = state.fromAccountOptions
+                                ?.sortedByDescending { it.accountId?.toLong() in pocketAccountIds }
+                            state.copy(
+                                pocketAccountIds = pocketAccountIds,
+                                fromAccountOptions = sortedAccounts ?: state.fromAccountOptions,
+                            )
+                        }
+                    }.launchIn(viewModelScope)
                 }
+
+                mutableStateFlow.update { it.copy(fromAccountOptions = fromAccounts) }
                 getBalanceOfAccounts()
             }
         } catch (e: Exception) {
@@ -219,10 +267,12 @@ internal class TransferConfirmViewModel(
                 result.savingsAccounts.associate { account ->
                     account.accountNo to account.accountBalance
                 }
+            val savingsAccountsMap = result.savingsAccounts.associateBy { it.accountNo }
             mutableStateFlow.update {
                 it.copy(
                     state = TransferConfirmState.State.Success,
                     balanceMap = balanceMap,
+                    savingsAccountsMap = savingsAccountsMap,
                 )
             }
             val firstAccount = state.fromAccountOptions?.first()
@@ -241,6 +291,53 @@ internal class TransferConfirmViewModel(
                     state = TransferConfirmState.State.Error(e.message ?: ""),
                 )
             }
+        }
+    }
+
+    /**
+     * Handles the user's decision to add the selected account to their Pocket.
+     * If true, it initiates a link submission using the PocketRepository.
+     * If false, it simply proceeds to the next step.
+     */
+    private fun confirmAddToPocket(add: Boolean) {
+        mutableStateFlow.update { it.copy(dialogState = null) }
+        if (add) {
+            val accountId = state.selectedAccount?.accountId?.toLong()
+            val accountNumber = state.selectedAccount?.accountNo
+            if (accountId == null || accountNumber.isNullOrBlank()) {
+                return
+            }
+            val savingsAccount = state.savingsAccountsMap[accountNumber]
+            val detailedAccount = DetailedPocketAccount(
+                pocket = PocketAccount(
+                    pocketId = 0,
+                    id = 0,
+                    accountId = accountId,
+                    accountType = AccountType.SAVINGS,
+                    accountNumber = accountNumber,
+                ),
+                productName = savingsAccount?.productName ?: state.selectedAccount?.clientName,
+                balance = savingsAccount?.accountBalance ?: state.balanceMap[accountNumber],
+                currencyCode = savingsAccount?.currency?.code,
+                decimalPlaces = savingsAccount?.currency?.decimalPlaces,
+                status = savingsAccount?.status?.let {
+                    when {
+                        it.active -> org.mifospay.core.model.pocket.AccountStatus.ACTIVE
+                        it.approved -> org.mifospay.core.model.pocket.AccountStatus.APPROVED
+                        it.rejected -> org.mifospay.core.model.pocket.AccountStatus.REJECTED
+                        it.closed -> org.mifospay.core.model.pocket.AccountStatus.CLOSED
+                        it.submittedAndPendingApproval -> org.mifospay.core.model.pocket.AccountStatus.PENDING
+                        else -> null
+                    }
+                },
+                currencyDisplaySymbol = savingsAccount?.currency?.displaySymbol,
+            )
+            val clientId = state.selectedAccount?.clientId?.toLong() ?: return
+            submitLink.submit {
+                pocketRepository.linkAccounts(listOf(detailedAccount), clientId)
+            }
+        } else {
+            validateTransfer()
         }
     }
 
@@ -315,13 +412,12 @@ internal class TransferConfirmViewModel(
                 }
 
                 is ScreenState.Empty -> {
-                    val uiError = IllegalStateException(
-                        "Transfer submission returned no response.",
-                    ).toUiError(DefaultErrorMessageProvider)
                     mutableStateFlow.update {
                         it.copy(
                             isProcessing = false,
-                            dialogState = TransferConfirmState.DialogState.Error.ApiError(uiError),
+                            dialogState = TransferConfirmState.DialogState.Error.ResourceMessage(
+                                getString(kpt.core.ui.generated.resources.Res.string.core_ui_error_msg_generic),
+                            ),
                         )
                     }
                 }
@@ -338,25 +434,23 @@ internal class TransferConfirmViewModel(
                 }
 
                 is ScreenState.NoNetwork -> {
-                    val uiError = Exception(
-                        "No network. Please check your connection.",
-                    ).toUiError(DefaultErrorMessageProvider)
                     mutableStateFlow.update {
                         it.copy(
                             isProcessing = false,
-                            dialogState = TransferConfirmState.DialogState.Error.ApiError(uiError),
+                            dialogState = TransferConfirmState.DialogState.Error.ResourceMessage(
+                                getString(kpt.core.ui.generated.resources.Res.string.core_ui_error_no_network),
+                            ),
                         )
                     }
                 }
 
                 is ScreenState.Unauthenticated -> {
-                    val uiError = Exception(
-                        "Session expired. Please log in again.",
-                    ).toUiError(DefaultErrorMessageProvider)
                     mutableStateFlow.update {
                         it.copy(
                             isProcessing = false,
-                            dialogState = TransferConfirmState.DialogState.Error.ApiError(uiError),
+                            dialogState = TransferConfirmState.DialogState.Error.ResourceMessage(
+                                getString(kpt.core.ui.generated.resources.Res.string.core_ui_error_session_expired),
+                            ),
                         )
                     }
                 }
@@ -437,7 +531,6 @@ internal class TransferConfirmViewModel(
     }
 }
 
-@Serializable
 internal data class TransferConfirmState(
     val toOfficeId: Int? = null,
     val toClientId: Long? = null,
@@ -455,6 +548,8 @@ internal data class TransferConfirmState(
     val dialogState: DialogState? = null,
     val fromAccountOptions: List<AccountOption>? = emptyList(),
     val balanceMap: Map<String, Double> = emptyMap(),
+    val savingsAccountsMap: Map<String, SavingAccountEntity> = emptyMap(),
+    val pocketAccountIds: Set<Long> = emptySet(),
     val isProcessing: Boolean = false,
     /**
      * `true` between [TransferConfirmEvent.NavigateForPasscodeVerification]
@@ -497,12 +592,13 @@ internal data class TransferConfirmState(
             dateFormat = DateHelper.SHORT_MONTH,
         )
 
-    @Serializable
     sealed interface DialogState {
-        @Serializable
         data object Loading : DialogState
 
-        @Serializable
+        data object AddToPocketConfirmation : DialogState
+
+        data class Success(val message: String) : DialogState
+
         sealed class Error : DialogState {
             abstract val canRetry: Boolean
 
@@ -510,11 +606,13 @@ internal data class TransferConfirmState(
              * Validation error with a string resource message.
              * Used for client-side validation errors.
              */
-            @Serializable
             data class ValidationError(
-                @Serializable(with = StringResourceSerializer::class)
                 val message: StringResource,
             ) : Error() {
+                override val canRetry: Boolean = false
+            }
+
+            data class ResourceMessage(val message: String) : Error() {
                 override val canRetry: Boolean = false
             }
 
@@ -541,7 +639,6 @@ internal data class TransferConfirmState(
 /**
  * Transfer result data containing all the details of a successful transfer.
  */
-@Serializable
 data class TransferResult(
     val transactionId: String,
     val amount: Double,
@@ -568,6 +665,7 @@ internal sealed interface TransferConfirmEvent {
 
 internal sealed interface TransferConfirmAction {
     data object NavigateBack : TransferConfirmAction
+    data class ConfirmAddToPocket(val add: Boolean) : TransferConfirmAction
     data object DismissDialog : TransferConfirmAction
     data object InitiateTransfer : TransferConfirmAction
     data object RetryTransfer : TransferConfirmAction

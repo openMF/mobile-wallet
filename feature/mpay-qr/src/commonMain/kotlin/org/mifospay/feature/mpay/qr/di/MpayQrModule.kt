@@ -20,6 +20,7 @@ val MpayQrModule = module {
             localRepository = get(),
             repository = get(),
             accountRepository = get(),
+            pocketRepository = get(),
             savedStateHandle = get(),
             ioDispatcher = get(named(MifosDispatchers.IO.name)),
         )

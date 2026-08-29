@@ -14,37 +14,52 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.todayIn
-import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 import kpt.core.base.store.submit.SubmitState
 import kpt.core.base.store.submit.submitHandler
+import kpt.core.ui.generated.resources.core_ui_error_msg_generic
+import kpt.core.ui.generated.resources.core_ui_pocket_add_failed
+import kpt.core.ui.generated.resources.core_ui_pocket_added_successfully
 import mifos_pay.feature.transfer_interbank.generated.resources.Res
+import mifos_pay.feature.transfer_interbank.generated.resources.feature_send_interbank_error_amount_greater_than_zero
+import mifos_pay.feature.transfer_interbank.generated.resources.feature_send_interbank_error_enter_amount
+import mifos_pay.feature.transfer_interbank.generated.resources.feature_send_interbank_error_enter_description
 import mifos_pay.feature.transfer_interbank.generated.resources.feature_send_interbank_error_failed_to_search_recipient
+import mifos_pay.feature.transfer_interbank.generated.resources.feature_send_interbank_error_invalid_amount
 import mifos_pay.feature.transfer_interbank.generated.resources.feature_send_interbank_error_no_network
 import mifos_pay.feature.transfer_interbank.generated.resources.feature_send_interbank_error_phone_number_digits
+import mifos_pay.feature.transfer_interbank.generated.resources.feature_send_interbank_error_select_recipient
+import mifos_pay.feature.transfer_interbank.generated.resources.feature_send_interbank_error_select_sender_account
 import mifos_pay.feature.transfer_interbank.generated.resources.feature_send_interbank_error_session_expired
 import mifos_pay.feature.transfer_interbank.generated.resources.feature_send_interbank_no_recipients_found
 import org.jetbrains.compose.resources.getString
 import org.mifospay.core.common.DateHelper
 import org.mifospay.core.common.ScreenState
 import org.mifospay.core.data.repository.InterBankRepository
+import org.mifospay.core.data.repository.PocketRepository
 import org.mifospay.core.data.repository.SelfServiceRepository
 import org.mifospay.core.datastore.UserPreferencesRepository
 import org.mifospay.core.model.account.Account
 import org.mifospay.core.model.client.Client
+import org.mifospay.core.model.enums.AccountType
 import org.mifospay.core.model.interbank.Amount
 import org.mifospay.core.model.interbank.InterBankPartyInfoResponse
 import org.mifospay.core.model.interbank.InterBankTransferRequest
 import org.mifospay.core.model.interbank.InterBankTransferResponse
 import org.mifospay.core.model.interbank.Party
 import org.mifospay.core.model.interbank.TransactionType
+import org.mifospay.core.model.pocket.AccountStatus
+import org.mifospay.core.model.pocket.DetailedPocketAccount
+import org.mifospay.core.model.pocket.PocketAccount
 import org.mifospay.core.ui.utils.BaseViewModel
 import kotlin.time.Clock
 import kotlin.time.ExperimentalTime
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
+import kpt.core.ui.generated.resources.Res as CoreUiRes
 
 const val INTER_BANK_TRANSFER_VERIFICATION_KEY = "inter-banking_transfer_verification_key"
 
@@ -55,6 +70,7 @@ const val INTER_BANK_TRANSFER_VERIFICATION_KEY = "inter-banking_transfer_verific
 class InterbankTransferViewModel(
     private val selfServiceRepository: SelfServiceRepository,
     private val interBankRepository: InterBankRepository,
+    private val pocketRepository: PocketRepository,
     private val preferencesRepository: UserPreferencesRepository,
     private val savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<InterbankTransferState, InterbankTransferEvent, InterbankTransferAction>(
@@ -69,11 +85,27 @@ class InterbankTransferViewModel(
     // the Submitting/Submitted/Failed lifecycle; we observe it to drive this flow's
     // existing processing/success/failed steps + events, so the Screens are unchanged.
     private val submitTransfer = viewModelScope.submitHandler<InterBankTransferResponse>()
+    private val submitLink = viewModelScope.submitHandler<Unit>()
 
     init {
         launchIO {
             loadFromAccounts()
         }
+
+        pocketRepository.observeLinkedPocketAccounts(state.client.id)
+            .onEach { pocketAccounts ->
+                val pocketAccountIds = pocketAccounts.filter { it.accountType == AccountType.SAVINGS }
+                    .map { it.accountId }.toSet()
+                /*
+                 * Pocket Account Suggestion Feature:
+                 * Sorts the accounts so that linked pocket accounts appear at the top.
+                 */
+                mutableStateFlow.update { state ->
+                    val sortedAccounts = state.fromAccounts.sortedByDescending { it.id in pocketAccountIds }
+                    state.copy(pocketAccountIds = pocketAccountIds, fromAccounts = sortedAccounts)
+                }
+            }
+            .launchIn(viewModelScope)
 
         submitTransfer.state
             .onEach { submitState ->
@@ -115,84 +147,61 @@ class InterbankTransferViewModel(
                 }
             }
             .launchIn(viewModelScope)
+
+        submitLink.state
+            .onEach { submitState ->
+                when (submitState) {
+                    is SubmitState.Submitting -> Unit
+                    is SubmitState.Submitted -> {
+                        mutableStateFlow.update {
+                            it.copy(
+                                dialogState = InterbankTransferState.DialogState.Success(
+                                    getString(CoreUiRes.string.core_ui_pocket_added_successfully),
+                                ),
+                                pocketAccountIds = it.pocketAccountIds + (it.selectedFromAccount?.id ?: 0L),
+                            )
+                        }
+                        submitLink.reset()
+                    }
+                    is SubmitState.Failed -> {
+                        mutableStateFlow.update {
+                            it.copy(
+                                dialogState = InterbankTransferState.DialogState.ErrorResource(
+                                    getString(CoreUiRes.string.core_ui_pocket_add_failed),
+                                ),
+                            )
+                        }
+                        submitLink.reset()
+                    }
+                    SubmitState.Idle -> Unit
+                }
+            }
+            .launchIn(viewModelScope)
     }
 
     override fun handleAction(action: InterbankTransferAction) {
         when (action) {
             // Navigation actions
-            is InterbankTransferAction.NavigateToRecipientSearch -> {
-                mutableStateFlow.update {
-                    it.copy(
-                        currentStep = InterbankTransferState.Step.SearchRecipient,
-                        selectedFromAccount = action.account,
-                    )
-                }
-            }
+            is InterbankTransferAction.ConfirmAddToPocket -> confirmAddToPocket(action.add)
+            is InterbankTransferAction.DismissDialog -> dismissDialog()
+            is InterbankTransferAction.NavigateToRecipientSearch -> selectFromAccount(action.account)
 
-            is InterbankTransferAction.NavigateToTransferDetails -> {
-                mutableStateFlow.update {
-                    it.copy(
-                        currentStep = InterbankTransferState.Step.TransferDetails,
-                        selectedParticipantInfo = action.participantInfo,
-                    )
-                }
-            }
+            is InterbankTransferAction.NavigateToTransferDetails -> showTransferDetails(action.participantInfo)
 
-            is InterbankTransferAction.NavigateToPreview -> {
-                mutableStateFlow.update {
-                    it.copy(currentStep = InterbankTransferState.Step.PreviewTransfer)
-                }
-            }
+            is InterbankTransferAction.NavigateToPreview -> showPreview()
 
-            InterbankTransferAction.NavigateBack -> {
-                val previousStep = when (state.currentStep) {
-                    InterbankTransferState.Step.SelectAccount -> {
-                        sendEvent(InterbankTransferEvent.OnNavigateBack)
-                        return
-                    }
+            InterbankTransferAction.NavigateBack -> navigateBack()
 
-                    InterbankTransferState.Step.SearchRecipient -> InterbankTransferState.Step.SelectAccount
-                    InterbankTransferState.Step.TransferDetails -> InterbankTransferState.Step.SearchRecipient
-                    InterbankTransferState.Step.PreviewTransfer -> InterbankTransferState.Step.TransferDetails
-                    InterbankTransferState.Step.TransferSuccess -> InterbankTransferState.Step.PreviewTransfer
-                    InterbankTransferState.Step.TransferFailed -> InterbankTransferState.Step.PreviewTransfer
-                }
-                mutableStateFlow.update {
-                    it.copy(currentStep = previousStep)
-                }
-            }
+            InterbankTransferAction.EditFromAccount -> editFromAccount()
 
-            InterbankTransferAction.EditFromAccount -> {
-                mutableStateFlow.update {
-                    it.copy(currentStep = InterbankTransferState.Step.SelectAccount)
-                }
-            }
-
-            InterbankTransferAction.EditRecipient -> {
-                mutableStateFlow.update {
-                    it.copy(currentStep = InterbankTransferState.Step.SearchRecipient)
-                }
-            }
+            InterbankTransferAction.EditRecipient -> editRecipient()
 
             // Transfer details actions
-            is InterbankTransferAction.UpdateAmount -> {
-                mutableStateFlow.update {
-                    it.copy(transferAmount = action.amount)
-                }
-            }
+            is InterbankTransferAction.UpdateAmount -> updateAmount(action.amount)
 
-            is InterbankTransferAction.UpdateDate -> {
-                val date = DateHelper.getDateAsStringFromLong(action.date)
-                mutableStateFlow.update {
-                    it.copy(transferDate = date)
-                }
-            }
+            is InterbankTransferAction.UpdateDate -> updateDate(action.date)
 
-            is InterbankTransferAction.UpdateDescription -> {
-                mutableStateFlow.update {
-                    it.copy(transferDescription = action.description)
-                }
-            }
+            is InterbankTransferAction.UpdateDescription -> updateDescription(action.description)
 
             // Transfer confirmation
             InterbankTransferAction.ConfirmTransfer -> {
@@ -200,23 +209,86 @@ class InterbankTransferViewModel(
             }
 
             // Error handling
-            InterbankTransferAction.RetryTransfer -> {
-                mutableStateFlow.update {
-                    it.copy(currentStep = InterbankTransferState.Step.PreviewTransfer)
-                }
-            }
+            InterbankTransferAction.RetryTransfer -> retryTransfer()
 
-            InterbankTransferAction.DismissError -> {
-                mutableStateFlow.update {
-                    it.copy(errorMessage = null)
-                }
-            }
+            InterbankTransferAction.DismissError -> dismissError()
 
             is InterbankTransferAction.SearchRecipient -> {
                 searchRecipient(action.phoneNumber)
             }
         }
     }
+
+    private fun dismissDialog() {
+        val wasPocket = state.dialogState is InterbankTransferState.DialogState.Success ||
+            state.dialogState is InterbankTransferState.DialogState.ErrorResource
+        mutableStateFlow.update { it.copy(dialogState = null) }
+        if (wasPocket && state.currentStep == InterbankTransferState.Step.SelectAccount) {
+            mutableStateFlow.update { it.copy(currentStep = InterbankTransferState.Step.SearchRecipient) }
+        }
+    }
+
+    private fun selectFromAccount(account: Account) = mutableStateFlow.update {
+        it.copy(
+            selectedFromAccount = account,
+            currentStep = if (account.id in state.pocketAccountIds) {
+                InterbankTransferState.Step.SearchRecipient
+            } else {
+                state.currentStep
+            },
+            dialogState = if (account.id in state.pocketAccountIds) {
+                null
+            } else {
+                InterbankTransferState.DialogState.AddToPocketConfirmation
+            },
+        )
+    }
+
+    private fun showTransferDetails(info: InterBankPartyInfoResponse) = mutableStateFlow.update {
+        it.copy(currentStep = InterbankTransferState.Step.TransferDetails, selectedParticipantInfo = info)
+    }
+
+    private fun showPreview() = mutableStateFlow.update {
+        it.copy(currentStep = InterbankTransferState.Step.PreviewTransfer)
+    }
+
+    private fun navigateBack() {
+        val previousStep = when (state.currentStep) {
+            InterbankTransferState.Step.SelectAccount -> {
+                sendEvent(InterbankTransferEvent.OnNavigateBack)
+                return
+            }
+            InterbankTransferState.Step.SearchRecipient -> InterbankTransferState.Step.SelectAccount
+            InterbankTransferState.Step.TransferDetails -> InterbankTransferState.Step.SearchRecipient
+            InterbankTransferState.Step.PreviewTransfer -> InterbankTransferState.Step.TransferDetails
+            InterbankTransferState.Step.TransferSuccess -> InterbankTransferState.Step.PreviewTransfer
+            InterbankTransferState.Step.TransferFailed -> InterbankTransferState.Step.PreviewTransfer
+        }
+        mutableStateFlow.update { it.copy(currentStep = previousStep) }
+    }
+
+    private fun editFromAccount() = mutableStateFlow.update {
+        it.copy(currentStep = InterbankTransferState.Step.SelectAccount)
+    }
+
+    private fun editRecipient() = mutableStateFlow.update {
+        it.copy(currentStep = InterbankTransferState.Step.SearchRecipient)
+    }
+
+    private fun updateAmount(amount: String) = mutableStateFlow.update { it.copy(transferAmount = amount) }
+
+    private fun updateDate(date: Long) = mutableStateFlow.update {
+        it.copy(transferDate = DateHelper.getDateAsStringFromLong(date))
+    }
+
+    private fun updateDescription(description: String) =
+        mutableStateFlow.update { it.copy(transferDescription = description) }
+
+    private fun retryTransfer() = mutableStateFlow.update {
+        it.copy(currentStep = InterbankTransferState.Step.PreviewTransfer)
+    }
+
+    private fun dismissError() = mutableStateFlow.update { it.copy(errorMessage = null) }
 
     private suspend fun loadFromAccounts() {
         try {
@@ -225,7 +297,7 @@ class InterbankTransferViewModel(
             }
 
             selfServiceRepository.getActiveAccountsWithAccountTransferTemplate(state.client.id)
-                .collect { screenState ->
+                .onEach { screenState ->
                     when (screenState) {
                         is ScreenState.Loading -> {
                             mutableStateFlow.update {
@@ -257,7 +329,9 @@ class InterbankTransferViewModel(
                                 mutableStateFlow.update {
                                     it.copy(
                                         loadingState = InterbankTransferState.LoadingState.Success,
-                                        fromAccounts = accounts,
+                                        fromAccounts = accounts.sortedByDescending { acc ->
+                                            acc.id in it.pocketAccountIds
+                                        },
                                     )
                                 }
                             }
@@ -267,7 +341,7 @@ class InterbankTransferViewModel(
                             mutableStateFlow.update {
                                 it.copy(
                                     loadingState = InterbankTransferState.LoadingState.Error(
-                                        screenState.error.message ?: "Failed to load accounts",
+                                        getString(CoreUiRes.string.core_ui_error_msg_generic),
                                     ),
                                 )
                             }
@@ -277,7 +351,7 @@ class InterbankTransferViewModel(
                             mutableStateFlow.update {
                                 it.copy(
                                     loadingState = InterbankTransferState.LoadingState.Error(
-                                        "No network. Please check your connection.",
+                                        getString(Res.string.feature_send_interbank_error_no_network),
                                     ),
                                 )
                             }
@@ -287,18 +361,18 @@ class InterbankTransferViewModel(
                             mutableStateFlow.update {
                                 it.copy(
                                     loadingState = InterbankTransferState.LoadingState.Error(
-                                        "Session expired. Please log in again.",
+                                        getString(Res.string.feature_send_interbank_error_session_expired),
                                     ),
                                 )
                             }
                         }
                     }
-                }
+                }.launchIn(viewModelScope)
         } catch (e: Exception) {
             mutableStateFlow.update {
                 it.copy(
                     loadingState = InterbankTransferState.LoadingState.Error(
-                        e.message ?: "Failed to load accounts",
+                        getString(CoreUiRes.string.core_ui_error_msg_generic),
                     ),
                 )
             }
@@ -309,8 +383,11 @@ class InterbankTransferViewModel(
     private fun validateAndInitiateTransfer() {
         val validationError = validateTransferDetails()
         if (validationError != null) {
-            mutableStateFlow.update {
-                it.copy(errorMessage = validationError)
+            viewModelScope.launch {
+                val errorString = getString(validationError)
+                mutableStateFlow.update {
+                    it.copy(errorMessage = errorString)
+                }
             }
             return
         }
@@ -355,14 +432,70 @@ class InterbankTransferViewModel(
         }
     }
 
-    private fun validateTransferDetails(): String? {
+    /**
+     * Handles the user's decision to add the selected account to their Pocket.
+     * If true, it initiates a link submission using the PocketRepository.
+     * If false, it simply proceeds to the next step.
+     */
+    private fun confirmAddToPocket(add: Boolean) {
+        if (!add) {
+            mutableStateFlow.update {
+                it.copy(
+                    dialogState = null,
+                    currentStep = InterbankTransferState.Step.SearchRecipient,
+                )
+            }
+            return
+        }
+        mutableStateFlow.update { it.copy(dialogState = null) }
+        if (add) {
+            val accountId = state.selectedFromAccount?.id
+            val accountNumber = state.selectedFromAccount?.number
+            if (accountId == null || accountNumber.isNullOrBlank()) {
+                return
+            }
+            val detailedAccount = DetailedPocketAccount(
+                pocket = PocketAccount(
+                    pocketId = 0,
+                    id = 0,
+                    accountId = accountId,
+                    accountType = AccountType.SAVINGS,
+                    accountNumber = accountNumber,
+                ),
+                productName = state.selectedFromAccount?.productName ?: state.selectedFromAccount?.name,
+                balance = state.selectedFromAccount?.balance,
+                currencyCode = state.selectedFromAccount?.currency?.code,
+                decimalPlaces = state.selectedFromAccount?.currency?.decimalPlaces,
+                status = state.selectedFromAccount?.status?.let {
+                    when {
+                        it.active -> AccountStatus.ACTIVE
+                        it.approved -> AccountStatus.APPROVED
+                        it.rejected -> AccountStatus.REJECTED
+                        it.closed -> AccountStatus.CLOSED
+                        it.submittedAndPendingApproval -> AccountStatus.PENDING
+                        else -> null
+                    }
+                },
+                currencyDisplaySymbol = state.selectedFromAccount?.currency?.displaySymbol,
+            )
+            val clientId = state.client.id
+            submitLink.submit {
+                pocketRepository.linkAccounts(listOf(detailedAccount), clientId)
+            }
+        } else {
+            if (state.currentStep == InterbankTransferState.Step.SelectAccount) {
+                mutableStateFlow.update { it.copy(currentStep = InterbankTransferState.Step.SearchRecipient) }
+            }
+        }
+    }
+    private fun validateTransferDetails(): org.jetbrains.compose.resources.StringResource? {
         return when {
-            state.selectedFromAccount == null -> "Please select a sender account"
-            state.selectedParticipantInfo == null -> "Please select a recipient"
-            state.transferAmount.isBlank() -> "Please enter an amount"
-            state.transferAmount.toDoubleOrNull() == null -> "Invalid amount"
-            state.transferAmount.toDouble() <= 0 -> "Amount must be greater than 0"
-            state.transferDescription.isBlank() -> "Please enter a description"
+            state.selectedFromAccount == null -> Res.string.feature_send_interbank_error_select_sender_account
+            state.selectedParticipantInfo == null -> Res.string.feature_send_interbank_error_select_recipient
+            state.transferAmount.isBlank() -> Res.string.feature_send_interbank_error_enter_amount
+            state.transferAmount.toDoubleOrNull() == null -> Res.string.feature_send_interbank_error_invalid_amount
+            state.transferAmount.toDouble() <= 0 -> Res.string.feature_send_interbank_error_amount_greater_than_zero
+            state.transferDescription.isBlank() -> Res.string.feature_send_interbank_error_enter_description
             else -> null
         }
     }
@@ -384,7 +517,7 @@ class InterbankTransferViewModel(
             interBankRepository.findParticipant(
                 partyId = phoneNumber,
                 currencyCode = mutableStateFlow.value.selectedFromAccount?.currency?.code ?: "MXN",
-            ).collect { screenState ->
+            ).onEach { screenState ->
                 when (screenState) {
                     is ScreenState.Loading -> {
                         mutableStateFlow.update {
@@ -452,7 +585,6 @@ class InterbankTransferViewModel(
 }
 
 @OptIn(ExperimentalTime::class)
-@Serializable
 data class InterbankTransferState(
     val client: Client,
     val currentStep: Step = Step.SelectAccount,
@@ -474,52 +606,44 @@ data class InterbankTransferState(
     val transferResponse: String? = null,
     val searchRecipientState: SearchRecipientState = SearchRecipientState.Idle,
     val searchResults: List<InterBankPartyInfoResponse> = emptyList(),
+    val pocketAccountIds: Set<Long> = emptySet(),
+    @Transient val dialogState: DialogState? = null,
 ) {
-    @Serializable
+    sealed interface DialogState {
+        data object Loading : DialogState
+        data object AddToPocketConfirmation : DialogState
+        data class Success(val message: String) : DialogState
+        data class ErrorResource(val message: String) : DialogState
+    }
     sealed interface Step {
-        @Serializable
         data object SelectAccount : Step
 
-        @Serializable
         data object SearchRecipient : Step
 
-        @Serializable
         data object TransferDetails : Step
 
-        @Serializable
         data object PreviewTransfer : Step
 
-        @Serializable
         data object TransferSuccess : Step
 
-        @Serializable
         data object TransferFailed : Step
     }
 
-    @Serializable
     sealed interface LoadingState {
-        @Serializable
         data object Loading : LoadingState
 
-        @Serializable
         data object Success : LoadingState
 
-        @Serializable
         data class Error(val message: String) : LoadingState
     }
 
-    @Serializable
     sealed interface SearchRecipientState {
-        @Serializable
         data object Idle : SearchRecipientState
 
-        @Serializable
         data object Loading : SearchRecipientState
 
-        @Serializable
         data object Success : SearchRecipientState
 
-        @Serializable
         data class Error(val message: String) : SearchRecipientState
     }
 }
@@ -553,4 +677,6 @@ sealed interface InterbankTransferAction {
     data object ConfirmTransfer : InterbankTransferAction
     data object RetryTransfer : InterbankTransferAction
     data object DismissError : InterbankTransferAction
+    data class ConfirmAddToPocket(val add: Boolean) : InterbankTransferAction
+    data object DismissDialog : InterbankTransferAction
 }

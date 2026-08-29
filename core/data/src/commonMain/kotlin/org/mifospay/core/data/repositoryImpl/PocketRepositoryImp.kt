@@ -11,13 +11,17 @@ package org.mifospay.core.data.repositoryImpl
 
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import kpt.core.base.store.infra.FetchedAtRepository
 import kpt.core.base.store.screen.FetchPolicy
 import kpt.core.base.store.screen.ScreenDataStream
 import kpt.core.base.store.screen.asScreenStream
 import kpt.core.database.wallet.pocket.PocketDao
+import kpt.core.database.wallet.pocket.toDomain
 import kpt.core.database.wallet.pocket.toPendingLinkEntity
 import kpt.core.store.AppStoreRegistry
 import kpt.core.store.wallet.linkableaccount.LinkableAccountKey
@@ -25,6 +29,7 @@ import kpt.core.store.wallet.pocket.PocketKey
 import org.mifospay.core.data.repository.PocketRepository
 import org.mifospay.core.model.pocket.DetailedPocketAccount
 import org.mifospay.core.model.pocket.LinkableAccount
+import org.mifospay.core.model.pocket.PocketAccount
 import org.mifospay.core.network.SelfServiceApiManager
 import org.mifospay.core.network.model.entity.pocket.PocketDelinkRequest
 import org.mifospay.core.network.model.entity.pocket.PocketLinkRequest
@@ -211,6 +216,13 @@ class PocketRepositoryImp(
      * a slow network operation. Caching it allows the "Manage Pockets" bottom sheet to open
      * instantly without forcing the user to stare at a loader every time they want to link an account.
      */
+    override fun observeLinkedPocketAccounts(clientId: Long): Flow<List<PocketAccount>> {
+        val dao = pocketDao ?: return emptyFlow()
+        return dao.observeLinkedByClient(clientId).map { entities ->
+            entities.map { it.toDomain().pocket }
+        }
+    }
+
     override fun getAvailableAccountsToLinkStream(
         clientId: Long,
         scope: CoroutineScope,
