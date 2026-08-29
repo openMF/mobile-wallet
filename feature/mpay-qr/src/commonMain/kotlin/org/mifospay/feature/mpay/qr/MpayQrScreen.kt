@@ -47,6 +47,13 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import io.github.alexzhirkevich.qrose.ImageFormat
 import io.github.alexzhirkevich.qrose.rememberQrCodePainter
 import io.github.alexzhirkevich.qrose.toByteArray
+import kpt.core.ui.generated.resources.core_ui_add_to_pocket_message
+import kpt.core.ui.generated.resources.core_ui_add_to_pocket_title
+import kpt.core.ui.generated.resources.core_ui_error
+import kpt.core.ui.generated.resources.core_ui_no
+import kpt.core.ui.generated.resources.core_ui_ok
+import kpt.core.ui.generated.resources.core_ui_success
+import kpt.core.ui.generated.resources.core_ui_yes
 import mifos_pay.feature.mpay_qr.generated.resources.Res
 import mifos_pay.feature.mpay_qr.generated.resources.feature_mpay_qr_copied
 import mifos_pay.feature.mpay_qr.generated.resources.feature_mpay_qr_downloaded
@@ -59,14 +66,14 @@ import mifos_pay.feature.mpay_qr.generated.resources.feature_request_money_set_a
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
-import org.mifospay.core.designsystem.component.LoadingDialogState
 import org.mifospay.core.designsystem.component.MifosButton
-import org.mifospay.core.designsystem.component.MifosLoadingDialog
+import org.mifospay.core.designsystem.component.MifosDialogBox
 import org.mifospay.core.designsystem.component.MifosOutlinedButton
 import org.mifospay.core.designsystem.component.MifosScaffold
 import org.mifospay.core.model.account.DefaultAccount
 import org.mifospay.core.model.client.Client
 import org.mifospay.core.ui.MifosProgressIndicator
+import org.mifospay.core.ui.MifosProgressIndicatorOverlay
 import org.mifospay.core.ui.utils.EventsEffect
 import org.mifospay.feature.mpay.qr.components.AccountIdSection
 import org.mifospay.feature.mpay.qr.components.AccountPickerBottomSheet
@@ -77,6 +84,7 @@ import org.mifospay.feature.mpay.qr.components.QrCodeCard
 import org.mifospay.feature.mpay.qr.components.QrType
 import template.core.base.designsystem.KptMaterialTheme
 import template.core.base.designsystem.theme.KptTheme
+import kpt.core.ui.generated.resources.Res as UiRes
 
 @Composable
 internal fun MpayQrScreen(
@@ -113,6 +121,7 @@ internal fun MpayQrScreen(
                 onAction = viewModel::trySendAction,
             )
         },
+        onAction = viewModel::trySendAction,
     )
 
     MpayQrScreen(
@@ -129,13 +138,45 @@ internal fun MpayQrScreen(
 private fun MpayQrDialogs(
     dialogState: MpayQrState.DialogState?,
     showAmountDialog: @Composable () -> Unit,
+    onAction: (MpayQrAction) -> Unit,
 ) {
     when (dialogState) {
         is MpayQrState.DialogState.ShowSetAmountDialog -> showAmountDialog.invoke()
 
-        is MpayQrState.DialogState.Loading -> MifosLoadingDialog(
-            visibilityState = LoadingDialogState.Shown,
-        )
+        is MpayQrState.DialogState.Loading -> MifosProgressIndicatorOverlay()
+
+        is MpayQrState.DialogState.AddToPocketConfirmation -> {
+            MifosDialogBox(
+                showDialogState = true,
+                onDismiss = { onAction(MpayQrAction.ConfirmAddToPocket(false)) },
+                title = stringResource(UiRes.string.core_ui_add_to_pocket_title),
+                message = stringResource(UiRes.string.core_ui_add_to_pocket_message),
+                confirmButtonText = stringResource(UiRes.string.core_ui_yes),
+                onConfirm = { onAction(MpayQrAction.ConfirmAddToPocket(true)) },
+                dismissButtonText = stringResource(UiRes.string.core_ui_no),
+            )
+        }
+
+        is MpayQrState.DialogState.Error -> {
+            MifosDialogBox(
+                showDialogState = true,
+                onDismiss = { onAction(MpayQrAction.DismissDialog) },
+                title = stringResource(UiRes.string.core_ui_error),
+                message = stringResource(dialogState.messageRes),
+                confirmButtonText = stringResource(UiRes.string.core_ui_ok),
+                onConfirm = { onAction(MpayQrAction.DismissDialog) },
+            )
+        }
+        is MpayQrState.DialogState.Success -> {
+            MifosDialogBox(
+                showDialogState = true,
+                onDismiss = { onAction(MpayQrAction.DismissDialog) },
+                title = stringResource(UiRes.string.core_ui_success),
+                message = stringResource(dialogState.messageRes),
+                confirmButtonText = stringResource(UiRes.string.core_ui_ok),
+                onConfirm = { onAction(MpayQrAction.DismissDialog) },
+            )
+        }
 
         null -> Unit
     }

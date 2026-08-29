@@ -17,10 +17,20 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import kpt.core.ui.generated.resources.core_ui_add_to_pocket_message
+import kpt.core.ui.generated.resources.core_ui_add_to_pocket_title
+import kpt.core.ui.generated.resources.core_ui_error
+import kpt.core.ui.generated.resources.core_ui_no
+import kpt.core.ui.generated.resources.core_ui_ok
+import kpt.core.ui.generated.resources.core_ui_success
+import kpt.core.ui.generated.resources.core_ui_yes
+import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
 import org.mifospay.core.common.CurrencyFormatter
+import org.mifospay.core.designsystem.component.MifosDialogBox
 import org.mifospay.core.designsystem.theme.MifosTheme
+import org.mifospay.core.ui.MifosProgressIndicatorOverlay
 import org.mifospay.core.ui.utils.EventsEffect
 import org.mifospay.feature.transfer.interbank.screens.PreviewTransferScreen
 import org.mifospay.feature.transfer.interbank.screens.SearchRecipientScreen
@@ -28,6 +38,7 @@ import org.mifospay.feature.transfer.interbank.screens.SelectAccountScreen
 import org.mifospay.feature.transfer.interbank.screens.TransferDetailsScreen
 import org.mifospay.feature.transfer.interbank.screens.TransferFailedScreen
 import org.mifospay.feature.transfer.interbank.screens.TransferSuccessScreen
+import kpt.core.ui.generated.resources.Res as UiRes
 
 /**
  * Main orchestrator screen for the interbank transfer flow
@@ -209,6 +220,43 @@ fun InterbankTransferFlowScreen(
                 modifier = modifier,
             )
         }
+    }
+    when (val dialogState = state.dialogState) {
+        is InterbankTransferState.DialogState.AddToPocketConfirmation -> {
+            MifosDialogBox(
+                showDialogState = true,
+                onDismiss = { viewModel.trySendAction(InterbankTransferAction.ConfirmAddToPocket(false)) },
+                title = stringResource(UiRes.string.core_ui_add_to_pocket_title),
+                message = stringResource(UiRes.string.core_ui_add_to_pocket_message),
+                confirmButtonText = stringResource(UiRes.string.core_ui_yes),
+                onConfirm = { viewModel.trySendAction(InterbankTransferAction.ConfirmAddToPocket(true)) },
+                dismissButtonText = stringResource(UiRes.string.core_ui_no),
+            )
+        }
+        is InterbankTransferState.DialogState.ErrorResource -> {
+            MifosDialogBox(
+                showDialogState = true,
+                onDismiss = { viewModel.trySendAction(InterbankTransferAction.DismissDialog) },
+                title = stringResource(UiRes.string.core_ui_error),
+                message = dialogState.message,
+                confirmButtonText = stringResource(UiRes.string.core_ui_ok),
+                onConfirm = { viewModel.trySendAction(InterbankTransferAction.DismissDialog) },
+            )
+        }
+        is InterbankTransferState.DialogState.Success -> {
+            MifosDialogBox(
+                showDialogState = true,
+                onDismiss = { viewModel.trySendAction(InterbankTransferAction.DismissDialog) },
+                title = stringResource(UiRes.string.core_ui_success),
+                message = dialogState.message,
+                confirmButtonText = stringResource(UiRes.string.core_ui_ok),
+                onConfirm = { viewModel.trySendAction(InterbankTransferAction.DismissDialog) },
+            )
+        }
+        is InterbankTransferState.DialogState.Loading -> {
+            MifosProgressIndicatorOverlay()
+        }
+        null -> Unit
     }
 }
 

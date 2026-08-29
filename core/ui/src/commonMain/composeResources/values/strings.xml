@@ -71,6 +71,21 @@
     <string name="core_ui_error_msg_service_unavailable">The service is temporarily unavailable. Please try again later.</string>
     <string name="core_ui_error_msg_gateway_timeout">The server took too long to respond. Please try again.</string>
     <string name="core_ui_error_msg_generic">An error occurred. Please try again.</string>
+    <string name="core_ui_unknown">Unknown</string>
+    <string name="core_ui_add_to_pocket_title">Add to Pocket?</string>
+    <string name="core_ui_add_to_pocket_message">Would you like to add this account to your pocket?</string>
+    <string name="core_ui_adding_to_pocket">Adding to Pocket</string>
+    <string name="core_ui_please_wait">Please wait...</string>
+    <string name="core_ui_yes">Yes</string>
+    <string name="core_ui_no">No</string>
+    <string name="core_ui_error">Error</string>
+    <string name="core_ui_ok">Ok</string>
+
+    <string name="core_ui_error_failed_to_load_accounts">Failed to load accounts</string>
+    <string name="core_ui_error_no_response">Transfer submission returned no response.</string>
+    <string name="core_ui_error_no_network">No network. Please check your connection.</string>
+    <string name="core_ui_error_session_expired">Session expired. Please log in again.</string>
+
     <string name="core_ui_error_msg_network">Please check your internet connection and try again.</string>
 
     <!-- Bank Mismatch Info -->
@@ -88,4 +103,8 @@
     <string name="core_ui_confirm_qr_amount_title">Confirm Payment Amount</string>
     <string name="core_ui_confirm_qr_amount_message">This QR code contains a pre-filled amount of %1$s %2$s.\n\nPlease verify this is the correct amount before proceeding with the payment.</string>
     <string name="core_ui_proceed_payment">Proceed</string>
+
+    <string name="core_ui_pocket_added_successfully">Account successfully added to pocket.</string>
+    <string name="core_ui_pocket_add_failed">Sorry, the account was not added to pocket.</string>
+    <string name="core_ui_success">Success</string>
 </resources>

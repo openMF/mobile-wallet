@@ -10,9 +10,11 @@
 package org.mifospay.core.data.repository
 
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.Flow
 import kpt.core.base.store.screen.ScreenDataStream
 import org.mifospay.core.model.pocket.DetailedPocketAccount
 import org.mifospay.core.model.pocket.LinkableAccount
+import org.mifospay.core.model.pocket.PocketAccount
 
 interface PocketRepository {
 
@@ -66,6 +68,8 @@ interface PocketRepository {
         clientId: Long,
         scope: CoroutineScope,
     ): ScreenDataStream<List<DetailedPocketAccount>>
+
+    fun observeLinkedPocketAccounts(clientId: Long): Flow<List<PocketAccount>>
 
     fun getAvailableAccountsToLinkStream(clientId: Long, scope: CoroutineScope): ScreenDataStream<List<LinkableAccount>>
 

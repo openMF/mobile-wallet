@@ -29,6 +29,7 @@ import io.github.alexzhirkevich.qrose.options.circle
 import io.github.alexzhirkevich.qrose.options.solid
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
@@ -36,32 +37,47 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.Transient
+import kpt.core.base.store.screen.ScreenState
+import kpt.core.base.store.submit.SubmitState
+import kpt.core.base.store.submit.submitHandler
+import kpt.core.ui.generated.resources.core_ui_error_msg_generic
+import kpt.core.ui.generated.resources.core_ui_pocket_add_failed
+import kpt.core.ui.generated.resources.core_ui_pocket_added_successfully
 import mifos_pay.feature.mpay_qr.generated.resources.Res
+import mifos_pay.feature.mpay_qr.generated.resources.feature_mpay_qr_external_id_required
+import mifos_pay.feature.mpay_qr.generated.resources.feature_mpay_qr_failed_to_generate
+import mifos_pay.feature.mpay_qr.generated.resources.feature_mpay_qr_no_default_account
 import mifos_pay.feature.mpay_qr.generated.resources.logo
+import org.jetbrains.compose.resources.getString
 import org.jetbrains.compose.resources.painterResource
-import org.mifospay.core.common.ScreenState
 import org.mifospay.core.common.getSerialized
 import org.mifospay.core.common.setSerialized
 import org.mifospay.core.data.repository.AccountRepository
 import org.mifospay.core.data.repository.LocalAssetRepository
+import org.mifospay.core.data.repository.PocketRepository
 import org.mifospay.core.data.util.MpayQrCodeProcessor
-import org.mifospay.core.data.util.toForkScreenStateFlow
 import org.mifospay.core.datastore.UserPreferencesRepository
 import org.mifospay.core.model.account.Account
 import org.mifospay.core.model.account.DefaultAccount
 import org.mifospay.core.model.client.Client
+import org.mifospay.core.model.enums.AccountType
+import org.mifospay.core.model.pocket.AccountStatus
+import org.mifospay.core.model.pocket.DetailedPocketAccount
+import org.mifospay.core.model.pocket.PocketAccount
 import org.mifospay.core.model.utils.QrCodeData
 import org.mifospay.core.model.utils.QrCodeType
 import org.mifospay.core.ui.utils.BaseViewModel
 import org.mifospay.core.ui.utils.MimeType
 import org.mifospay.core.ui.utils.ShareFileModel
 import org.mifospay.core.ui.utils.ShareUtils
+import kpt.core.ui.generated.resources.Res as UiRes
+import mifos_pay.feature.mpay_qr.generated.resources.Res as MpayQrRes
 
 class MpayQrViewModel(
     localRepository: LocalAssetRepository,
     repository: UserPreferencesRepository,
     private val accountRepository: AccountRepository,
+    private val pocketRepository: PocketRepository,
     savedStateHandle: SavedStateHandle,
     private val ioDispatcher: CoroutineDispatcher,
 ) : BaseViewModel<MpayQrState, MpayQrEvent, MpayQrAction>(
@@ -75,7 +91,7 @@ class MpayQrViewModel(
             activationDate = emptyList(),
             firstname = "",
             lastname = "",
-            displayName = "Unknown",
+            displayName = "",
             mobileNo = "",
             emailAddress = "",
             dateOfBirth = emptyList(),
@@ -116,12 +132,46 @@ class MpayQrViewModel(
         initialValue = emptyList(),
     )
 
+    private val submitLink = viewModelScope.submitHandler<Unit>()
+
     init {
+        observeLinkSubmit()
         stateFlow.onEach {
             savedStateHandle.setSerialized(key = KEY_STATE, value = it)
         }.launchIn(viewModelScope)
 
         loadAccounts()
+    }
+
+    private fun observeLinkSubmit() {
+        submitLink.state.onEach { submitState ->
+            when (submitState) {
+                is SubmitState.Submitting -> {
+                    Unit
+                }
+                is SubmitState.Submitted -> {
+                    mutableStateFlow.update {
+                        it.copy(
+                            dialogState = MpayQrState.DialogState.Success(
+                                UiRes.string.core_ui_pocket_added_successfully,
+                            ),
+                        )
+                    }
+                    submitLink.reset()
+                }
+                is SubmitState.Failed -> {
+                    mutableStateFlow.update {
+                        it.copy(
+                            dialogState = MpayQrState.DialogState.Error(
+                                UiRes.string.core_ui_pocket_add_failed,
+                            ),
+                        )
+                    }
+                    submitLink.reset()
+                }
+                SubmitState.Idle -> Unit
+            }
+        }.launchIn(viewModelScope)
     }
 
     private fun loadAccounts() {
@@ -136,168 +186,159 @@ class MpayQrViewModel(
         // NoNetwork / Unauthenticated all log + regenerate with the default
         // account until Phase-4 differentiates them.
         viewModelScope.launch {
-            accountRepository.getSelfAccountsStream(
-                clientId = state.client.id,
-                scope = viewModelScope,
-            )
-                .state
-                .toForkScreenStateFlow()
-                .collect { result ->
-                    when (result) {
-                        is ScreenState.Content -> {
-                            val accounts = result.data
-                            val defaultAcc = accounts.find { it.id == state.defaultAccount.accountId }
-                                ?: accounts.firstOrNull()
+            combine(
+                accountRepository.getSelfAccountsStream(
+                    clientId = state.client.id,
+                    scope = viewModelScope,
+                ).state,
+                pocketRepository.observeLinkedPocketAccounts(state.client.id),
+            ) { result, pocketAccounts ->
+                val pocketAccountIds = pocketAccounts
+                    .filter { it.accountType == org.mifospay.core.model.enums.AccountType.SAVINGS }
+                    .map { it.accountId }
+                    .toSet()
 
-                            mutableStateFlow.update {
-                                it.copy(
-                                    accounts = accounts,
-                                    selectedAccount = defaultAcc,
+                mutableStateFlow.update { it.copy(pocketAccountIds = pocketAccountIds) }
+                result
+            }.collect { result ->
+                when (result) {
+                    is ScreenState.Content<*> -> {
+                        val unsortedAccounts = result.data as List<Account>
+                        val accounts = unsortedAccounts.sortedByDescending { it.id in state.pocketAccountIds }
+                        val defaultAcc = state.selectedAccount ?: accounts.firstOrNull()
+
+                        mutableStateFlow.update {
+                            it.copy(
+                                accounts = accounts,
+                                selectedAccount = defaultAcc,
+                                accountExternalId = defaultAcc?.externalId ?: "",
+                                qrData = it.qrData.copy(
+                                    currency = defaultAcc?.currency?.code ?: QrCodeData.DEFAULT_CURRENCY,
+                                    accountNo = defaultAcc?.number ?: "",
+                                    accountId = defaultAcc?.id ?: 0L,
                                     accountExternalId = defaultAcc?.externalId ?: "",
-                                    qrData = it.qrData.copy(
-                                        currency = defaultAcc?.currency?.code ?: QrCodeData.DEFAULT_CURRENCY,
-                                        accountNo = defaultAcc?.number ?: "",
-                                        accountId = defaultAcc?.id ?: 0L,
-                                        accountExternalId = defaultAcc?.externalId ?: "",
-                                        officeId = defaultAcc?.officeId?.toLong() ?: it.qrData.officeId,
-                                        officeName = defaultAcc?.officeName ?: it.qrData.officeName,
-                                    ),
-                                )
-                            }
-                            sendAction(MpayQrAction.Internal.GenerateQr)
+                                    officeId = defaultAcc?.officeId?.toLong() ?: it.qrData.officeId,
+                                    officeName = defaultAcc?.officeName ?: it.qrData.officeName,
+                                ),
+                            )
                         }
+                        sendAction(MpayQrAction.Internal.GenerateQr)
+                    }
 
-                        is ScreenState.Empty -> {
-                            // No accounts returned — fall back to default and generate QR.
-                            sendAction(MpayQrAction.Internal.GenerateQr)
-                        }
+                    is ScreenState.Empty -> {
+                        // No accounts returned — fall back to default and generate QR.
+                        sendAction(MpayQrAction.Internal.GenerateQr)
+                    }
 
-                        is ScreenState.Error -> {
-                            Logger.e { "Failed to load accounts: ${result.error.message}" }
-                            // Still generate QR with default account
-                            sendAction(MpayQrAction.Internal.GenerateQr)
-                        }
+                    is ScreenState.Error -> {
+                        Logger.e { "Failed to load accounts: ${result.error.message}" }
+                        // Still generate QR with default account
+                        sendAction(MpayQrAction.Internal.GenerateQr)
+                    }
 
-                        is ScreenState.NoNetwork -> {
-                            Logger.e { "Failed to load accounts: no network" }
-                            sendAction(MpayQrAction.Internal.GenerateQr)
-                        }
+                    is ScreenState.NoNetwork -> {
+                        Logger.e { "Failed to load accounts: no network" }
+                        sendAction(MpayQrAction.Internal.GenerateQr)
+                    }
 
-                        is ScreenState.Unauthenticated -> {
-                            Logger.e { "Failed to load accounts: unauthenticated" }
-                            sendAction(MpayQrAction.Internal.GenerateQr)
-                        }
+                    is ScreenState.Unauthenticated -> {
+                        Logger.e { "Failed to load accounts: unauthenticated" }
+                        sendAction(MpayQrAction.Internal.GenerateQr)
+                    }
 
-                        is ScreenState.Loading -> {
-                            // Loading state handled by viewState
-                        }
+                    is ScreenState.Loading -> {
+                        // Loading state handled by viewState
                     }
                 }
+            }
         }
     }
 
     override fun handleAction(action: MpayQrAction) {
         when (action) {
-            is MpayQrAction.NavigateBack -> {
-                sendEvent(MpayQrEvent.OnNavigateBack)
-            }
-
-            is MpayQrAction.AmountChanged -> {
-                updateQrData {
-                    it.copy(amount = action.amount)
-                }
-            }
-
-            is MpayQrAction.CurrencyChanged -> {
-                updateQrData {
-                    it.copy(currency = action.currency)
-                }
-            }
-
-            is MpayQrAction.PageChanged -> {
-                mutableStateFlow.update {
-                    it.copy(selectedPage = action.page)
-                }
-            }
-
-            is MpayQrAction.ConfirmSetAmount -> {
-                mutableStateFlow.update {
-                    it.copy(dialogState = MpayQrState.DialogState.Loading)
-                }
-
-                initiateSetAmount()
-            }
-
-            is MpayQrAction.DismissDialog -> {
-                mutableStateFlow.update {
-                    it.copy(dialogState = null)
-                }
-            }
-
-            is MpayQrAction.ShowSetAmountDialog -> {
-                mutableStateFlow.update {
-                    it.copy(dialogState = MpayQrState.DialogState.ShowSetAmountDialog)
-                }
-            }
-
-            is MpayQrAction.ShareQrCode -> {
-                viewModelScope.launch {
-                    ShareUtils.shareFile(
-                        file = ShareFileModel(
-                            fileName = "qr_code.png",
-                            bytes = action.data,
-                            mime = MimeType.IMAGE,
-                        ),
-                    )
-                }
-            }
-
-            is MpayQrAction.DownloadQrCode -> {
-                viewModelScope.launch {
-                    ShareUtils.shareFile(
-                        file = ShareFileModel(
-                            fileName = "mpay_qr_code.png",
-                            bytes = action.bytes,
-                            mime = MimeType.IMAGE,
-                        ),
-                    )
-                    sendEvent(MpayQrEvent.QrDownloaded)
-                }
-            }
-
-            is MpayQrAction.CopyToClipboard -> {
-                sendEvent(MpayQrEvent.ShowSnackbar(action.text))
-            }
-
-            is MpayQrAction.ShowAccountPicker -> {
-                mutableStateFlow.update { it.copy(isAccountPickerVisible = true) }
-            }
-
-            is MpayQrAction.DismissAccountPicker -> {
-                mutableStateFlow.update { it.copy(isAccountPickerVisible = false) }
-            }
-
-            is MpayQrAction.SelectAccount -> {
-                mutableStateFlow.update {
-                    it.copy(
-                        selectedAccount = action.account,
-                        accountExternalId = action.account.externalId ?: "",
-                        isAccountPickerVisible = false,
-                        qrData = it.qrData.copy(
-                            currency = action.account.currency.code,
-                            accountNo = action.account.number,
-                            accountId = action.account.id,
-                            accountExternalId = action.account.externalId ?: "",
-                            officeId = action.account.officeId?.toLong() ?: it.qrData.officeId,
-                            officeName = action.account.officeName ?: it.qrData.officeName,
-                        ),
-                    )
-                }
-                generateQr() // Regenerate QR for new account
-            }
-
+            is MpayQrAction.NavigateBack -> sendEvent(MpayQrEvent.OnNavigateBack)
+            is MpayQrAction.AmountChanged -> updateAmount(action.amount)
+            is MpayQrAction.CurrencyChanged -> updateCurrency(action.currency)
+            is MpayQrAction.PageChanged -> updatePage(action.page)
+            is MpayQrAction.ConfirmSetAmount -> confirmSetAmount()
+            is MpayQrAction.DismissDialog -> dismissDialog()
+            is MpayQrAction.ShowSetAmountDialog -> showSetAmountDialog()
+            is MpayQrAction.ShareQrCode -> shareQrCode(action.data)
+            is MpayQrAction.DownloadQrCode -> downloadQrCode(action.bytes)
+            is MpayQrAction.CopyToClipboard -> copyToClipboard(action.text)
+            is MpayQrAction.ShowAccountPicker -> showAccountPicker(true)
+            is MpayQrAction.DismissAccountPicker -> showAccountPicker(false)
+            is MpayQrAction.SelectAccount -> selectAccount(action)
+            is MpayQrAction.ConfirmAddToPocket -> confirmAddToPocket(action.add)
             is MpayQrAction.Internal.GenerateQr -> generateQr()
         }
+    }
+
+    private fun updateAmount(amount: String) = updateQrData { it.copy(amount = amount) }
+
+    private fun updateCurrency(currency: String) = updateQrData { it.copy(currency = currency) }
+
+    private fun updatePage(page: Int) = mutableStateFlow.update { it.copy(selectedPage = page) }
+
+    private fun confirmSetAmount() {
+        mutableStateFlow.update { it.copy(dialogState = MpayQrState.DialogState.Loading) }
+        initiateSetAmount()
+    }
+
+    private fun dismissDialog() = mutableStateFlow.update { it.copy(dialogState = null) }
+
+    private fun showSetAmountDialog() = mutableStateFlow.update {
+        it.copy(dialogState = MpayQrState.DialogState.ShowSetAmountDialog)
+    }
+
+    private fun shareQrCode(data: ByteArray) {
+        viewModelScope.launch {
+            ShareUtils.shareFile(
+                file = ShareFileModel(
+                    fileName = "qr_code.png",
+                    bytes = data,
+                    mime = MimeType.IMAGE,
+                ),
+            )
+        }
+    }
+
+    private fun downloadQrCode(bytes: ByteArray) {
+        viewModelScope.launch {
+            ShareUtils.shareFile(
+                file = ShareFileModel(
+                    fileName = "mpay_qr_code.png",
+                    bytes = bytes,
+                    mime = MimeType.IMAGE,
+                ),
+            )
+            sendEvent(MpayQrEvent.QrDownloaded)
+        }
+    }
+
+    private fun copyToClipboard(text: String) = sendEvent(MpayQrEvent.ShowSnackbar(text))
+
+    private fun showAccountPicker(show: Boolean) = mutableStateFlow.update { it.copy(isAccountPickerVisible = show) }
+
+    private fun selectAccount(action: MpayQrAction.SelectAccount) {
+        mutableStateFlow.update {
+            it.copy(
+                selectedAccount = action.account,
+                accountExternalId = action.account.externalId ?: "",
+                qrData = it.qrData.copy(
+                    accountNo = action.account.number,
+                    accountId = action.account.id,
+                    accountExternalId = action.account.externalId ?: "",
+                    officeId = action.account.officeId?.toLong() ?: it.qrData.officeId,
+                    officeName = action.account.officeName ?: it.qrData.officeName,
+                ),
+                isAccountPickerVisible = false,
+            )
+        }
+        if (action.account.id !in state.pocketAccountIds) {
+            mutableStateFlow.update { it.copy(dialogState = MpayQrState.DialogState.AddToPocketConfirmation) }
+        }
+        generateQr() // Regenerate QR for new account
     }
 
     private fun generateQr() {
@@ -307,7 +348,7 @@ class MpayQrViewModel(
                 mutableStateFlow.update {
                     it.copy(
                         viewState = MpayQrState.ViewState.Error(
-                            "No default account set. Please set a default account first.",
+                            getString(MpayQrRes.string.feature_mpay_qr_no_default_account),
                         ),
                     )
                 }
@@ -326,12 +367,12 @@ class MpayQrViewModel(
             val (interBankData, interBankReason) = withContext(ioDispatcher) {
                 if (state.accountExternalId.isBlank()) {
                     // No external ID - return null with reason
-                    null to "External ID not configured. Contact your bank to enable inter-bank transfers."
+                    null to getString(MpayQrRes.string.feature_mpay_qr_external_id_required)
                 } else {
                     try {
                         MpayQrCodeProcessor.encodeMpayString(state.interBankQrData) to null
                     } catch (e: IllegalArgumentException) {
-                        null to (e.message ?: "Failed to generate inter-bank QR code")
+                        null to (e.message ?: getString(MpayQrRes.string.feature_mpay_qr_failed_to_generate))
                     }
                 }
             }
@@ -373,6 +414,44 @@ class MpayQrViewModel(
         }
     }
 
+    private fun confirmAddToPocket(add: Boolean) {
+        mutableStateFlow.update { it.copy(dialogState = null) }
+        if (add) {
+            val accountId = state.selectedAccount?.id
+            val accountNumber = state.selectedAccount?.number
+            if (accountId == null || accountNumber.isNullOrBlank()) {
+                return
+            }
+            val detailedAccount = DetailedPocketAccount(
+                pocket = PocketAccount(
+                    pocketId = 0,
+                    id = 0,
+                    accountId = accountId,
+                    accountType = AccountType.SAVINGS,
+                    accountNumber = accountNumber,
+                ),
+                productName = state.selectedAccount?.productName ?: state.selectedAccount?.name,
+                balance = state.selectedAccount?.balance,
+                currencyCode = state.selectedAccount?.currency?.code,
+                decimalPlaces = state.selectedAccount?.currency?.decimalPlaces,
+                status = state.selectedAccount?.status?.let {
+                    when {
+                        it.active -> AccountStatus.ACTIVE
+                        it.approved -> AccountStatus.APPROVED
+                        it.rejected -> AccountStatus.REJECTED
+                        it.closed -> AccountStatus.CLOSED
+                        it.submittedAndPendingApproval -> AccountStatus.PENDING
+                        else -> null
+                    }
+                },
+                currencyDisplaySymbol = state.selectedAccount?.currency?.displaySymbol,
+            )
+            submitLink.submit {
+                pocketRepository.linkAccounts(listOf(detailedAccount), state.client.id)
+            }
+        }
+    }
+
     private inline fun updateQrData(
         crossinline block: (QrCodeData) -> QrCodeData,
     ) {
@@ -403,21 +482,19 @@ data class MpayQrState(
     /**
      * All accounts available for the user. Loaded from AccountRepository.
      */
-    @Transient
     val accounts: List<Account> = emptyList(),
 
     /**
      * Currently selected account for QR generation.
      * Defaults to the default account on initial load.
      */
-    @Transient
     val selectedAccount: Account? = null,
 
     /**
      * Whether the account picker bottom sheet is visible.
      */
-    @Transient
     val isAccountPickerVisible: Boolean = false,
+    val pocketAccountIds: Set<Long> = emptySet(),
 
     /**
      * The FSP ID (bank/tenant identifier) used for routing.
@@ -431,7 +508,6 @@ data class MpayQrState(
      */
     val accountExternalId: String = "",
 
-    @Transient
     val viewState: ViewState = ViewState.Loading,
 
     // 0=Intra-bank, 1=Inter-bank
@@ -450,7 +526,6 @@ data class MpayQrState(
         currency = selectedAccount?.currency?.code ?: QrCodeData.DEFAULT_CURRENCY,
         amount = "",
     ),
-    @Transient
     val dialogState: DialogState? = null,
 ) {
     /**
@@ -538,7 +613,16 @@ data class MpayQrState(
     }
 
     sealed interface DialogState {
+        data object AddToPocketConfirmation : DialogState
+        data class Error(
+            val messageRes: org.jetbrains.compose.resources.StringResource =
+                UiRes.string.core_ui_error_msg_generic,
+        ) : DialogState
         data object Loading : DialogState
+        data class Success(
+            val messageRes: org.jetbrains.compose.resources.StringResource =
+                UiRes.string.core_ui_pocket_added_successfully,
+        ) : DialogState
         data object ShowSetAmountDialog : DialogState
     }
 }
@@ -554,6 +638,7 @@ sealed interface MpayQrAction {
     data object NavigateBack : MpayQrAction
     data object ShowSetAmountDialog : MpayQrAction
     data object DismissDialog : MpayQrAction
+    data class ConfirmAddToPocket(val add: Boolean) : MpayQrAction
 
     // Account picker actions
     data object ShowAccountPicker : MpayQrAction

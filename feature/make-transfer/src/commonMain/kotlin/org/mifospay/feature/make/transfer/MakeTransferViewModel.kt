@@ -9,6 +9,22 @@
  */
 package org.mifospay.feature.make.transfer
 
+import kotlinx.coroutines.flow.combine
+import org.mifospay.core.model.pocket.AccountStatus
+import org.mifospay.core.model.pocket.PocketAccount
+import org.jetbrains.compose.resources.getString
+import kpt.core.ui.generated.resources.core_ui_pocket_added_successfully
+import kpt.core.ui.generated.resources.core_ui_pocket_add_failed
+import kpt.core.ui.generated.resources.core_ui_success
+import kpt.core.ui.generated.resources.Res as UiRes
+import kpt.core.ui.generated.resources.core_ui_error_msg_generic
+import kpt.core.ui.generated.resources.core_ui_error_failed_to_load_accounts
+import kpt.core.ui.generated.resources.core_ui_error_no_network
+import kpt.core.ui.generated.resources.core_ui_error_session_expired
+import org.mifospay.core.model.enums.AccountType
+import org.mifospay.core.model.pocket.DetailedPocketAccount
+import org.mifospay.core.data.repository.AccountRepository
+import org.mifospay.core.data.repository.PocketRepository
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -20,8 +36,6 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
-import kpt.core.base.store.submit.SubmitState
-import kpt.core.base.store.submit.submitHandler
 import mifos_pay.feature.make_transfer.generated.resources.Res
 import mifos_pay.feature.make_transfer.generated.resources.feature_make_transfer_error_empty_amount
 import mifos_pay.feature.make_transfer.generated.resources.feature_make_transfer_error_empty_description
@@ -32,14 +46,14 @@ import mifos_pay.feature.make_transfer.generated.resources.feature_make_transfer
 import mifos_pay.feature.make_transfer.generated.resources.feature_make_transfer_error_select_account
 import org.jetbrains.compose.resources.StringResource
 import org.mifospay.core.common.DateHelper
-import org.mifospay.core.common.ScreenState
+import kpt.core.base.store.screen.ScreenState
+import kpt.core.base.store.submit.SubmitState
+import kpt.core.base.store.submit.submitHandler
 import org.mifospay.core.common.getSerialized
 import org.mifospay.core.common.setSerialized
 import org.mifospay.core.common.utils.capitalizeWords
-import org.mifospay.core.data.repository.AccountRepository
 import org.mifospay.core.data.util.UpiQrCodeProcessor
 import org.mifospay.core.datastore.UserPreferencesRepository
-import org.mifospay.core.model.account.Account
 import org.mifospay.core.model.account.AccountTransferPayload
 import org.mifospay.core.model.utils.PaymentQrData
 import org.mifospay.core.ui.utils.BaseViewModel
@@ -48,6 +62,7 @@ import org.mifospay.feature.make.transfer.navigation.TRANSFER_ARG
 
 internal class MakeTransferViewModel(
     private val accountRepository: AccountRepository,
+    private val pocketRepository: PocketRepository,
     repository: UserPreferencesRepository,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<MakeTransferState, MakeTransferEvent, MakeTransferAction>(
@@ -76,30 +91,44 @@ internal class MakeTransferViewModel(
     // behavior). NoNetwork / Unauthenticated fold into Error until Phase-4
     // differentiates.
     @OptIn(ExperimentalCoroutinesApi::class)
-    val accountsState = accountRepository.getSelfAccounts(state.fromClientId)
-        .mapLatest { result ->
-            when (result) {
-                is ScreenState.Loading -> ViewState.Loading
-                is ScreenState.Empty -> ViewState.Empty
-                is ScreenState.Content -> {
-                    if (result.data.isEmpty()) {
+    val accountsState = combine(
+            accountRepository.getSelfAccountsStream(state.fromClientId, viewModelScope).state,
+            pocketRepository.observeLinkedPocketAccounts(state.fromClientId)
+        ) { accountsState, pocketAccounts ->
+            if (accountsState is ScreenState.Loading) {
+                return@combine ViewState.Loading
+            }
+            val pocketAccountIds = pocketAccounts
+                .filter { it.accountType == AccountType.SAVINGS }
+                .map { it.accountId }
+                .toSet()
+
+            mutableStateFlow.update { it.copy(pocketAccountIds = pocketAccountIds) }
+
+            when (accountsState) {
+                is ScreenState.Content<*> -> {
+                    if (accountsState.data.isEmpty()) {
                         ViewState.Empty
                     } else {
-                        val account = result.data.firstOrNull { it.id == state.defaultAccountId }
-                            ?: result.data.first()
-                        sendAction(MakeTransferAction.SelectAccount(account))
-                        ViewState.Content(result.data)
+                        val sortedAccounts = accountsState.data.sortedByDescending { it.id in pocketAccountIds }
+                        val account = state.selectedAccount ?: sortedAccounts.firstOrNull()
+                        if (account != null) {
+                            sendAction(MakeTransferAction.SelectAccount(account))
+                        }
+                        ViewState.Content(sortedAccounts)
                     }
                 }
+                is ScreenState.Empty -> ViewState.Empty
                 is ScreenState.Error -> ViewState.Error(
-                    result.error.message ?: "Failed to load accounts",
+                    accountsState.error.message ?: getString(UiRes.string.core_ui_error_failed_to_load_accounts),
                 )
                 is ScreenState.NoNetwork -> ViewState.Error(
-                    "No network. Please check your connection.",
+                    getString(UiRes.string.core_ui_error_no_network),
                 )
                 is ScreenState.Unauthenticated -> ViewState.Error(
-                    "Session expired. Please log in again.",
+                    getString(UiRes.string.core_ui_error_session_expired),
                 )
+                is ScreenState.Loading -> ViewState.Loading
             }
         }.stateIn(
             scope = viewModelScope,
@@ -113,6 +142,7 @@ internal class MakeTransferViewModel(
     // double-submit guard for the transfer); we observe it to drive this screen's EXISTING
     // Loading dialog / error dialog / OnTransferSuccess navigation, so the Screen is unchanged.
     private val submitTransfer = viewModelScope.submitHandler<Unit>()
+    private val submitLink = viewModelScope.submitHandler<Unit>()
 
     init {
         submitTransfer.state
@@ -149,6 +179,36 @@ internal class MakeTransferViewModel(
             }
             .launchIn(viewModelScope)
 
+        submitLink.state
+            .onEach { submitState ->
+                when (submitState) {
+                    is SubmitState.Submitting -> Unit
+                    is SubmitState.Submitted -> {
+                        mutableStateFlow.update {
+                            it.copy(
+                                dialogState = MakeTransferState.DialogState.Success(
+                                    kpt.core.ui.generated.resources.Res.string.core_ui_pocket_added_successfully,
+                                ),
+                                pocketAccountIds = it.pocketAccountIds + (it.selectedAccount?.id ?: 0L),
+                            )
+                        }
+                        submitLink.reset()
+                    }
+                    is SubmitState.Failed -> {
+                        mutableStateFlow.update {
+                            it.copy(
+                                dialogState = MakeTransferState.DialogState.Error.ResourceMessage(
+                                    kpt.core.ui.generated.resources.Res.string.core_ui_pocket_add_failed,
+                                ),
+                            )
+                        }
+                        submitLink.reset()
+                    }
+                    SubmitState.Idle -> Unit
+                }
+            }
+            .launchIn(viewModelScope)
+
         stateFlow
             .onEach { savedStateHandle.setSerialized(key = KEY_STATE, value = it) }
             .launchIn(viewModelScope)
@@ -156,36 +216,37 @@ internal class MakeTransferViewModel(
 
     override fun handleAction(action: MakeTransferAction) {
         when (action) {
-            MakeTransferAction.NavigateBack -> {
-                sendEvent(MakeTransferEvent.OnNavigateBack)
-            }
-
-            is MakeTransferAction.AmountChanged -> {
-                mutableStateFlow.update {
-                    it.copy(amount = action.amount)
-                }
-            }
-
-            is MakeTransferAction.DescriptionChanged -> {
-                mutableStateFlow.update {
-                    it.copy(description = action.desc)
-                }
-            }
-
-            is MakeTransferAction.SelectAccount -> {
-                mutableStateFlow.update {
-                    it.copy(selectedAccount = action.account)
-                }
-            }
-
-            is MakeTransferAction.DismissDialog -> {
-                mutableStateFlow.update {
-                    it.copy(dialogState = null)
-                }
-            }
-
+            MakeTransferAction.NavigateBack -> navigateBack()
+            is MakeTransferAction.AmountChanged -> updateAmount(action.amount)
+            is MakeTransferAction.DescriptionChanged -> updateDescription(action.desc)
+            is MakeTransferAction.SelectAccount -> selectAccount(action)
+            is MakeTransferAction.DismissDialog -> dismissDialog()
             is MakeTransferAction.InitiateTransfer -> validateTransfer()
+            is MakeTransferAction.ConfirmAddToPocket -> confirmAddToPocket(action.add)
         }
+    }
+
+    private fun navigateBack() {
+        sendEvent(MakeTransferEvent.OnNavigateBack)
+    }
+
+    private fun updateAmount(amount: String) {
+        mutableStateFlow.update { it.copy(amount = amount) }
+    }
+
+    private fun updateDescription(desc: String) {
+        mutableStateFlow.update { it.copy(description = desc) }
+    }
+
+    private fun selectAccount(action: MakeTransferAction.SelectAccount) {
+        mutableStateFlow.update { it.copy(selectedAccount = action.account) }
+        if (action.account.id !in state.pocketAccountIds ) {
+            mutableStateFlow.update { it.copy(dialogState = MakeTransferState.DialogState.AddToPocketConfirmation) }
+        }
+    }
+
+    private fun dismissDialog() {
+        mutableStateFlow.update { it.copy(dialogState = null) }
     }
 
     private fun validateTransfer() = when {
@@ -210,6 +271,45 @@ internal class MakeTransferViewModel(
         }
 
         else -> initiateTransfer()
+    }
+
+
+    private fun confirmAddToPocket(add: Boolean) {
+        mutableStateFlow.update { it.copy(dialogState = null) }
+        if (add) {
+            val accountId = state.selectedAccount?.id
+            val accountNumber = state.selectedAccount?.number
+            if (accountId == null || accountNumber.isNullOrBlank()) {
+                return
+            }
+            val detailedAccount = DetailedPocketAccount(
+                        pocket = PocketAccount(
+                            pocketId = 0,
+                            id = 0,
+                            accountId = accountId,
+                            accountType = AccountType.SAVINGS,
+                            accountNumber = accountNumber
+                        ),
+                        productName = state.selectedAccount?.productName ?: state.selectedAccount?.name,
+                        balance = state.selectedAccount?.balance,
+                        currencyCode = state.selectedAccount?.currency?.code,
+                        decimalPlaces = state.selectedAccount?.currency?.decimalPlaces,
+                        status = state.selectedAccount?.status?.let {
+                            when {
+                                it.active -> AccountStatus.ACTIVE
+                                it.approved -> AccountStatus.APPROVED
+                                it.rejected -> AccountStatus.REJECTED
+                                it.closed -> AccountStatus.CLOSED
+                                it.submittedAndPendingApproval -> AccountStatus.PENDING
+                                else -> null
+                            }
+                        },
+                        currencyDisplaySymbol = state.selectedAccount?.currency?.displaySymbol
+                    )
+            submitLink.submit {
+                pocketRepository.linkAccounts(listOf(detailedAccount), state.fromClientId)
+            }
+        }
     }
 
     private fun initiateTransfer() {
@@ -240,6 +340,7 @@ internal data class MakeTransferState(
     val amount: String = toClientData.amount,
     val description: String = "",
     val selectedAccount: Account? = null,
+    val pocketAccountIds: Set<Long> = emptySet(),
     @Transient val dialogState: DialogState? = null,
 ) {
     val amountIsValid: Boolean
@@ -267,6 +368,8 @@ internal data class MakeTransferState(
 
     sealed interface DialogState {
         data object Loading : DialogState
+        data object AddToPocketConfirmation : DialogState
+        data class Success(val message: StringResource) : DialogState
 
         sealed interface Error : DialogState {
             data class StringMessage(val message: String) : Error
@@ -299,4 +402,5 @@ internal sealed interface MakeTransferAction {
     data class DescriptionChanged(val desc: String) : MakeTransferAction
 
     data class SelectAccount(val account: Account) : MakeTransferAction
+    data class ConfirmAddToPocket(val add: Boolean) : MakeTransferAction
 }
