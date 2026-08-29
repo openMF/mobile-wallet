@@ -5,7 +5,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 package org.mifospay.feature.pocket.screens
 
@@ -14,8 +14,13 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.runComposeUiTest
+import kpt.core.base.store.screen.ScreenState
+import mifos_pay.feature.pocket.generated.resources.Res
+import mifos_pay.feature.pocket.generated.resources.feature_pocket_link_selected
+import org.jetbrains.compose.resources.stringResource
 import org.mifospay.core.model.enums.AccountType
-import org.mifospay.feature.pocket.viewmodels.AvailablePocketAccount
+import org.mifospay.core.model.pocket.AccountStatus
+import org.mifospay.core.model.pocket.LinkableAccount
 import org.mifospay.feature.pocket.viewmodels.ManagePocketAction
 import org.mifospay.feature.pocket.viewmodels.ManagePocketDialogState
 import org.mifospay.feature.pocket.viewmodels.ManagePocketState
@@ -23,84 +28,66 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
+/**
+ * UI coverage for selecting accounts in the Link Accounts sheet.
+ *
+ * The sheet receives its state and available accounts as inputs; the tests therefore
+ * focus on what a contributor can observe and on the actions emitted by user input.
+ */
 @OptIn(ExperimentalTestApi::class)
 class LinkAccountsTest {
+    /** Keeps the fixture representative of a real savings account available for linking. */
+    private fun account() = LinkableAccount(
+        101L,
+        "New Savings",
+        "1234567890",
+        AccountType.SAVINGS,
+        0.0,
+        "USD",
+        2,
+        AccountStatus.ACTIVE
+    )
 
+    /** Verifies that an available account is rendered with its product name and number. */
     @Test
     fun givenLinkAccountsState_thenAvailableAccountsAreDisplayed() = runComposeUiTest {
-        val state = ManagePocketState(
-            dialogState = ManagePocketDialogState.LinkAccounts,
-            availableAccounts = listOf(
-                AvailablePocketAccount(
-                    accountId = 101L,
-                    name = "New Savings",
-                    accountNumber = "1234567890",
-                    accountType = AccountType.SAVINGS,
-                ),
-            ),
-            selectedTab = AccountType.SAVINGS,
-        )
-
-        setContent {
-            LinkAccountsSheet(state = state, onAction = {})
-        }
-
+        val state = ManagePocketState(dialogState = ManagePocketDialogState.LinkAccounts)
+        val available = ScreenState.Content(listOf(account()))
+        setContent { LinkAccountsSheet(state, available, listOf(account()), {}) }
         onNodeWithText("New Savings").assertIsDisplayed()
         onNodeWithText("1234567890").assertIsDisplayed()
     }
 
+    /** Verifies that selecting an account emits the identifier and selected state to the parent. */
     @Test
     fun whenAvailableAccountIsClicked_thenSelectionActionIsEmitted() = runComposeUiTest {
         var emittedAction: ManagePocketAction? = null
-        val state = ManagePocketState(
-            dialogState = ManagePocketDialogState.LinkAccounts,
-            availableAccounts = listOf(
-                AvailablePocketAccount(
-                    accountId = 101L,
-                    name = "New Savings",
-                    accountNumber = "1234567890",
-                    accountType = AccountType.SAVINGS,
-                ),
-            ),
-            selectedTab = AccountType.SAVINGS,
-        )
-
-        setContent {
-            LinkAccountsSheet(state = state, onAction = { emittedAction = it })
-        }
-
+        val state = ManagePocketState(dialogState = ManagePocketDialogState.LinkAccounts)
+        val available = ScreenState.Content(listOf(account()))
+        setContent { LinkAccountsSheet(state, available, listOf(account()), { emittedAction = it }) }
         onNodeWithText("New Savings").performClick()
-
         assertTrue(emittedAction is ManagePocketAction.AccountSelectionChanged)
         val action = emittedAction as ManagePocketAction.AccountSelectionChanged
         assertEquals(101L, action.accountId)
         assertEquals(AccountType.SAVINGS, action.accountType)
-        assertEquals(true, action.selected)
+        assertTrue(action.selected)
     }
 
+    /** Verifies that submitting the current selection emits the link command. */
     @Test
     fun whenSelectedAccountsAreSubmitted_thenLinkActionIsEmitted() = runComposeUiTest {
         var emittedAction: ManagePocketAction? = null
         val state = ManagePocketState(
             dialogState = ManagePocketDialogState.LinkAccounts,
-            availableAccounts = listOf(
-                AvailablePocketAccount(
-                    accountId = 101L,
-                    name = "New Savings",
-                    accountNumber = "1234567890",
-                    accountType = AccountType.SAVINGS,
-                ),
-            ),
-            selectedTab = AccountType.SAVINGS,
-            selectedAccountIdentifiers = setOf("101_SAVINGS"),
+            selectedAccountIdentifiers = setOf("101_SAVINGS")
         )
-
+        val available = ScreenState.Content(listOf(account()))
+        lateinit var linkSelected: String
         setContent {
-            LinkAccountsSheet(state = state, onAction = { emittedAction = it })
+            linkSelected = stringResource(Res.string.feature_pocket_link_selected, 1)
+            LinkAccountsSheet(state, available, listOf(account()), { emittedAction = it })
         }
-
-        onNodeWithText("Link Selected (1)").performClick()
-
+        onNodeWithText(linkSelected).performClick()
         assertEquals(ManagePocketAction.LinkSelectedAccounts, emittedAction)
     }
 }

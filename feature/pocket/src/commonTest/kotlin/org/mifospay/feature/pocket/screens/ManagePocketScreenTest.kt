@@ -5,7 +5,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 package org.mifospay.feature.pocket.screens
 
@@ -14,21 +14,32 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.runComposeUiTest
+import kpt.core.base.store.freshness.FreshnessSignal
+import kpt.core.base.store.screen.ScreenState
+import mifos_pay.feature.pocket.generated.resources.Res
+import mifos_pay.feature.pocket.generated.resources.feature_pocket_link_more_accounts
+import mifos_pay.feature.pocket.generated.resources.feature_pocket_no_linked_accounts
+import org.jetbrains.compose.resources.stringResource
 import org.mifospay.core.model.enums.AccountType
 import org.mifospay.feature.pocket.viewmodels.ManagePocketAccount
 import org.mifospay.feature.pocket.viewmodels.ManagePocketAction
-import org.mifospay.feature.pocket.viewmodels.ManagePocketState
-import org.mifospay.feature.pocket.viewmodels.ManagePocketUiState
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
+/**
+ * UI coverage for the linked-account portion of the Manage Pocket screen.
+ *
+ * These tests render the stateless content composable directly so they verify
+ * presentation and user actions without requiring navigation or a real repository.
+ */
 @OptIn(ExperimentalTestApi::class)
 class ManagePocketScreenTest {
 
+    /** Verifies that linked account details are visible in the normal content state. */
     @Test
     fun givenSuccessState_withLinkedAccounts_thenAccountsAreDisplayed() = runComposeUiTest {
-        val state = ManagePocketState(
-            linkedAccounts = listOf(
+        val linkedUiState = ScreenState.Content(
+            listOf(
                 ManagePocketAccount(
                     accountId = 1L,
                     name = "Vacation Savings",
@@ -37,42 +48,53 @@ class ManagePocketScreenTest {
                     mappingId = 1L,
                 ),
             ),
-            uiState = ManagePocketUiState.Success,
         )
 
         setContent {
-            ManagePocketContent(state = state, onAction = {})
+            ManagePocketContent(
+                linkedUiState = linkedUiState,
+                linkedFreshness = FreshnessSignal.initial(),
+                onAction = {},
+            )
         }
 
         onNodeWithText("Vacation Savings").assertIsDisplayed()
         onNodeWithText("9988776655").assertIsDisplayed()
     }
 
+    /** Verifies that the empty-state call to action emits the link-account action. */
     @Test
     fun givenSuccessState_whenLinkMoreAccountsIsClicked_thenLinkActionIsEmitted() = runComposeUiTest {
         var emittedAction: ManagePocketAction? = null
 
+        lateinit var linkMoreLabel: String
         setContent {
+            linkMoreLabel = stringResource(Res.string.feature_pocket_link_more_accounts)
             ManagePocketContent(
-                state = ManagePocketState(uiState = ManagePocketUiState.Success),
+                linkedUiState = ScreenState.Content(emptyList()),
+                linkedFreshness = FreshnessSignal.initial(),
                 onAction = { emittedAction = it },
             )
         }
 
-        onNodeWithText("Link").performClick()
+        onNodeWithText(linkMoreLabel).performClick()
 
         assertEquals(ManagePocketAction.OpenLinkAccounts, emittedAction)
     }
 
+    /** Verifies that the localized empty-state message is shown when no account is linked. */
     @Test
     fun givenSuccessState_withoutLinkedAccounts_thenEmptyMessageIsDisplayed() = runComposeUiTest {
+        lateinit var emptyMessage: String
         setContent {
+            emptyMessage = stringResource(Res.string.feature_pocket_no_linked_accounts)
             ManagePocketContent(
-                state = ManagePocketState(uiState = ManagePocketUiState.Success),
+                linkedUiState = ScreenState.Content(emptyList()),
+                linkedFreshness = FreshnessSignal.initial(),
                 onAction = {},
             )
         }
 
-        onNodeWithText("No accounts are linked to pocket").assertIsDisplayed()
+        onNodeWithText(emptyMessage).assertIsDisplayed()
     }
 }

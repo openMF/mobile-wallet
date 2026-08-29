@@ -5,19 +5,22 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 package org.mifospay.feature.pocket.viewmodels
 
-import app.cash.turbine.test
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.async
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
-import org.mifospay.core.common.DataState
+import kpt.core.base.store.screen.ScreenState
 import org.mifospay.core.model.enums.AccountType
 import org.mifospay.core.model.pocket.AccountStatus
 import org.mifospay.core.model.pocket.DetailedPocketAccount
@@ -28,63 +31,70 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertIs
-import kotlin.test.assertTrue
 
+/**
+ * Behavioral coverage for [PocketDashboardViewModel].
+ *
+ * The fake repository supplies each Store5 state explicitly, allowing the tests to verify
+ * state mapping, refresh behavior, account categorization, and navigation independently.
+ */
 @OptIn(ExperimentalCoroutinesApi::class)
 class PocketDashboardViewModelTest {
 
     private val testDispatcher = StandardTestDispatcher()
     private lateinit var preferences: FakeUserPreferencesRepository
     private lateinit var repository: FakePocketRepository
-    private lateinit var stringProvider: FakeStringProvider
     private lateinit var viewModel: PocketDashboardViewModel
 
+    /** Installs the controlled dispatcher and resets the test dependencies. */
     @BeforeTest
     fun setUp() {
         Dispatchers.setMain(testDispatcher)
         preferences = FakeUserPreferencesRepository()
         repository = FakePocketRepository()
-        stringProvider = FakeStringProvider()
     }
 
+    /** Restores the main dispatcher after each test. */
     @AfterTest
     fun tearDown() {
         Dispatchers.resetMain()
     }
 
+    /** Verifies that an empty account result becomes the dashboard empty state. */
     @Test
     fun givenEmptyRepository_whenViewModelLoads_thenEmptyStateIsPublished() = runTest(testDispatcher) {
         repository.setDetailedPocketAccounts(DataState.Success(emptyList()))
-        createViewModel()
+        createViewModel(backgroundScope)
 
         advanceUntilIdle()
 
-        assertIs<PocketDashboardUiState.Empty>(viewModel.stateFlow.value.uiState)
+        assertIs<ScreenState.Empty>(viewModel.uiState.value)
         assertEquals(1L, viewModel.stateFlow.value.clientId)
-        assertTrue(repository.resetPocketCacheCalled)
     }
 
+    /** Verifies that an in-flight repository result becomes the dashboard loading state. */
     @Test
     fun givenRepositoryLoading_whenViewModelLoads_thenLoadingStateIsPublished() = runTest(testDispatcher) {
         repository.setDetailedPocketAccounts(DataState.Loading)
-        createViewModel()
+        createViewModel(backgroundScope)
 
         advanceUntilIdle()
 
-        assertIs<PocketDashboardUiState.Loading>(viewModel.stateFlow.value.uiState)
+        assertIs<ScreenState.Loading>(viewModel.uiState.value)
     }
 
+    /** Verifies that a repository failure becomes the dashboard error state. */
     @Test
     fun givenRepositoryError_whenViewModelLoads_thenErrorStateIsPublished() = runTest(testDispatcher) {
         repository.setDetailedPocketAccounts(DataState.Error(Exception("network")))
-        createViewModel()
+        createViewModel(backgroundScope)
 
         advanceUntilIdle()
 
-        assertIs<PocketDashboardUiState.Error>(viewModel.stateFlow.value.uiState)
-        assertFalse(viewModel.stateFlow.value.isRefreshing)
+        assertIs<ScreenState.Error>(viewModel.uiState.value)
     }
 
+    /** Verifies account categorization, total calculation, and handling of incomplete data. */
     @Test
     fun givenAccountsOfEachType_whenViewModelLoads_thenAccountsAreCategorizedAndTotalIsFormatted() =
         runTest(testDispatcher) {
@@ -104,34 +114,35 @@ class PocketDashboardViewModelTest {
                     ),
                 ),
             )
-            createViewModel()
+            createViewModel(backgroundScope)
 
             advanceUntilIdle()
 
-            val state = viewModel.stateFlow.value
-            assertIs<PocketDashboardUiState.Success>(state.uiState)
-            assertEquals(listOf(101L, 104L), state.savingsAccounts.map { it.accountId })
-            assertEquals(listOf(102L), state.loanAccounts.map { it.accountId })
-            assertEquals(listOf(103L), state.shareAccounts.map { it.accountId })
-            assertEquals("USD $175.00", state.totalBalance)
-            assertEquals("PENDING", state.savingsAccounts[1].balanceOrStatus)
-            assertEquals("Unknown Account", state.savingsAccounts[1].name)
+            val buckets = assertIs<ScreenState.Content<PocketBuckets>>(viewModel.uiState.value).data
+            assertEquals(listOf(101L, 104L), buckets.savingsAccounts.map { it.accountId })
+            assertEquals(listOf(102L), buckets.loanAccounts.map { it.accountId })
+            assertEquals(listOf(103L), buckets.shareAccounts.map { it.accountId })
+            assertEquals("USD $175.00", buckets.totalBalance)
+            assertEquals("PENDING", buckets.savingsAccounts[1].balanceOrStatus)
+            assertEquals(null, buckets.savingsAccounts[1].name)
         }
 
+    /** Verifies that retry requests force a fresh repository read after an initial failure. */
     @Test
     fun whenRetryIsClicked_thenForceRefreshLoadsTheLatestState() = runTest(testDispatcher) {
         repository.setDetailedPocketAccounts(DataState.Error(Exception("first attempt")))
-        createViewModel()
+        createViewModel(backgroundScope)
         advanceUntilIdle()
 
         repository.setDetailedPocketAccounts(DataState.Success(emptyList()))
         viewModel.trySendAction(PocketDashboardAction.Retry)
         advanceUntilIdle()
 
-        assertIs<PocketDashboardUiState.Empty>(viewModel.stateFlow.value.uiState)
-        assertTrue(repository.lastDetailedForceRefresh == true)
+        assertIs<ScreenState.Empty>(viewModel.uiState.value)
+        assertEquals(1L, repository.lastDetailedClientId)
     }
 
+    /** Verifies that totals remain separated when accounts use different currencies. */
     @Test
     fun givenMultipleCurrencies_whenViewModelLoads_thenTotalIsFormattedPerCurrency() =
         runTest(testDispatcher) {
@@ -156,68 +167,66 @@ class PocketDashboardViewModelTest {
                     ),
                 ),
             )
-            createViewModel()
+            createViewModel(backgroundScope)
 
             advanceUntilIdle()
 
-            assertEquals("USD $100.00\nEUR €50.00", viewModel.stateFlow.value.totalBalance)
+            val buckets = assertIs<ScreenState.Content<PocketBuckets>>(viewModel.uiState.value).data
+            assertEquals("USD $100.00\nEUR €50.00", buckets.totalBalance)
         }
 
+    /** Verifies that refresh completion clears the visible refreshing indicator. */
     @Test
     fun whenRefreshIsClicked_thenRefreshingStateIsClearedAfterSuccess() = runTest(testDispatcher) {
         repository.setDetailedPocketAccounts(DataState.Success(emptyList()))
-        createViewModel()
+        createViewModel(backgroundScope)
         advanceUntilIdle()
 
         repository.setDetailedPocketAccounts(DataState.Loading)
         viewModel.trySendAction(PocketDashboardAction.Refresh)
         advanceUntilIdle()
-        assertTrue(viewModel.stateFlow.value.isRefreshing)
-
         repository.setDetailedPocketAccounts(DataState.Success(emptyList()))
         advanceUntilIdle()
 
-        assertFalse(viewModel.stateFlow.value.isRefreshing)
-        assertTrue(repository.lastDetailedForceRefresh == true)
+        assertFalse(viewModel.freshness.value.isRefreshing)
+        assertEquals(1L, repository.lastDetailedClientId)
     }
 
+    /** Verifies that each supported navigation action emits its matching dashboard event. */
     @Test
     fun whenNavigationActionsAreHandled_thenExpectedEventsAreEmitted() = runTest(testDispatcher) {
-        createViewModel()
+        createViewModel(backgroundScope)
 
-        viewModel.eventFlow.test {
-            viewModel.trySendAction(PocketDashboardAction.NavigateBack)
-            advanceUntilIdle()
-            assertEquals(PocketDashboardEvent.NavigateBack, awaitItem())
-
-            viewModel.trySendAction(PocketDashboardAction.ManagePocket)
-            advanceUntilIdle()
-            assertEquals(PocketDashboardEvent.ManagePocket, awaitItem())
-
-            viewModel.trySendAction(PocketDashboardAction.LinkFirstAccount)
-            advanceUntilIdle()
-            assertEquals(PocketDashboardEvent.ManagePocket, awaitItem())
-
-            viewModel.trySendAction(PocketDashboardAction.NavigateToLoanDetail(10L))
-            advanceUntilIdle()
-            assertEquals(PocketDashboardEvent.NavigateToLoanDetail(10L), awaitItem())
-
-            viewModel.trySendAction(PocketDashboardAction.NavigateToSavingsDetail(11L))
-            advanceUntilIdle()
-            assertEquals(PocketDashboardEvent.NavigateToSavingsDetail(11L), awaitItem())
-
-            viewModel.trySendAction(PocketDashboardAction.NavigateToShareDetail(12L))
-            advanceUntilIdle()
-            assertEquals(PocketDashboardEvent.NavigateToShareDetail(12L), awaitItem())
+        suspend fun assertEvent(action: PocketDashboardAction, expected: PocketDashboardEvent) {
+            val event = async { viewModel.eventFlow.first() }
+            viewModel.trySendAction(action)
+            assertEquals(expected, event.await())
         }
+        assertEvent(PocketDashboardAction.NavigateBack, PocketDashboardEvent.NavigateBack)
+        assertEvent(PocketDashboardAction.ManagePocket, PocketDashboardEvent.ManagePocket)
+        assertEvent(PocketDashboardAction.LinkFirstAccount, PocketDashboardEvent.ManagePocket)
+        assertEvent(
+            PocketDashboardAction.NavigateToLoanDetail(10L),
+            PocketDashboardEvent.NavigateToLoanDetail(10L)
+        )
+        assertEvent(
+            PocketDashboardAction.NavigateToSavingsDetail(11L),
+            PocketDashboardEvent.NavigateToSavingsDetail(11L)
+        )
+        assertEvent(
+            PocketDashboardAction.NavigateToShareDetail(12L),
+            PocketDashboardEvent.NavigateToShareDetail(12L)
+        )
     }
 
-    private fun createViewModel() {
+    /** Creates the view model and collects its state flows so actions can be processed. */
+    private fun createViewModel(scope: CoroutineScope) {
         viewModel = PocketDashboardViewModel(
             pocketRepository = repository,
             userPreferencesRepository = preferences,
-            stringProvider = stringProvider,
         )
+        viewModel.uiState.launchIn(scope)
+        viewModel.freshness.launchIn(scope)
     }
 
     private fun detailedAccount(

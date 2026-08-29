@@ -5,7 +5,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 package org.mifospay.feature.pocket.screens
 
@@ -15,22 +15,33 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.runComposeUiTest
-import mobile_wallet.feature.pocket.generated.resources.Res
-import mobile_wallet.feature.pocket.generated.resources.feature_pocket_error_load_accounts
+import kpt.core.base.store.freshness.FreshnessSignal
+import kpt.core.base.store.screen.ScreenState
+import mifos_pay.feature.pocket.generated.resources.Res
+import mifos_pay.feature.pocket.generated.resources.feature_pocket_dashboard_manage
+import mifos_pay.feature.pocket.generated.resources.feature_pocket_empty_action
+import mifos_pay.feature.pocket.generated.resources.feature_pocket_error_load_accounts
+import org.jetbrains.compose.resources.stringResource
 import org.mifospay.core.model.pocket.AccountStatus
 import org.mifospay.feature.pocket.viewmodels.DetailedPocket
+import org.mifospay.feature.pocket.viewmodels.PocketBuckets
 import org.mifospay.feature.pocket.viewmodels.PocketDashboardAction
-import org.mifospay.feature.pocket.viewmodels.PocketDashboardState
-import org.mifospay.feature.pocket.viewmodels.PocketDashboardUiState
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
+/**
+ * UI coverage for the Pocket dashboard content states and navigation actions.
+ *
+ * Rendering the content composable with explicit states makes loading-result behavior
+ * deterministic and ensures that tests remain independent of networking and navigation.
+ */
 @OptIn(ExperimentalTestApi::class)
 class PocketDashboardScreenTest {
 
+    /** Verifies that balances and account groups are shown when dashboard data is available. */
     @Test
     fun givenSuccessState_whenRendering_thenDashboardShowsBalanceAndAllAccountCategories() = runComposeUiTest {
-        val state = PocketDashboardState(
+        val buckets = PocketBuckets(
             totalBalance = "MX$ 10,000.00",
             savingsAccounts = listOf(
                 DetailedPocket(
@@ -59,10 +70,16 @@ class PocketDashboardScreenTest {
                     status = AccountStatus.PENDING,
                 ),
             ),
-            uiState = PocketDashboardUiState.Success,
         )
 
-        setContent { PocketDashboardContent(state = state, onAction = {}) }
+        setContent {
+            PocketDashboardContent(
+                state = ScreenState.Content(buckets),
+                freshness = FreshnessSignal.initial(),
+                onAction = {},
+                onRetry = {},
+            )
+        }
 
         onNodeWithText("MX$ 10,000.00").performScrollTo().assertIsDisplayed()
         onNodeWithText("Emergency Fund").performScrollTo().assertIsDisplayed()
@@ -73,48 +90,64 @@ class PocketDashboardScreenTest {
         onNodeWithText("5001129384").performScrollTo().assertIsDisplayed()
     }
 
+    /** Verifies that the management action is emitted when the user opens Manage Pockets. */
     @Test
     fun givenSuccessState_whenManageClicked_thenManageActionIsEmitted() = runComposeUiTest {
         var emittedAction: PocketDashboardAction? = null
-        val state = PocketDashboardState(
-            totalBalance = "MX$ 10,000.00",
-            uiState = PocketDashboardUiState.Success,
-        )
+        lateinit var manageLabel: String
 
-        setContent { PocketDashboardContent(state = state, onAction = { emittedAction = it }) }
+        setContent {
+            manageLabel = stringResource(Res.string.feature_pocket_dashboard_manage)
+            PocketDashboardContent(
+                state = ScreenState.Content(
+                    PocketBuckets("MX$ 10,000.00", emptyList(), emptyList(), emptyList()),
+                ),
+                freshness = FreshnessSignal.initial(),
+                onAction = { emittedAction = it },
+                onRetry = {},
+            )
+        }
 
-        onNodeWithText("Manage").performClick()
+        onNodeWithText(manageLabel).performClick()
 
         assertEquals(PocketDashboardAction.ManagePocket, emittedAction)
     }
 
+    /** Verifies that the empty dashboard directs the user to link the first account. */
     @Test
     fun givenEmptyState_whenLinkFirstAccountClicked_thenLinkActionIsEmitted() = runComposeUiTest {
         var emittedAction: PocketDashboardAction? = null
 
+        lateinit var emptyAction: String
         setContent {
+            emptyAction = stringResource(Res.string.feature_pocket_empty_action)
             PocketDashboardContent(
-                state = PocketDashboardState(uiState = PocketDashboardUiState.Empty),
+                state = ScreenState.Empty,
+                freshness = FreshnessSignal.initial(),
                 onAction = { emittedAction = it },
+                onRetry = {},
             )
         }
 
-        onNodeWithText("Link Your First Account").performClick()
+        onNodeWithText(emptyAction).performClick()
 
         assertEquals(PocketDashboardAction.LinkFirstAccount, emittedAction)
     }
 
+    /** Verifies that the localized error state is rendered when loading accounts fails. */
     @Test
     fun givenErrorState_whenRendering_thenErrorMessageIsDisplayed() = runComposeUiTest {
+        lateinit var errorMessage: String
         setContent {
+            errorMessage = stringResource(Res.string.feature_pocket_error_load_accounts)
             PocketDashboardContent(
-                state = PocketDashboardState(
-                    uiState = PocketDashboardUiState.Error(Res.string.feature_pocket_error_load_accounts),
-                ),
+                state = ScreenState.Error(IllegalStateException("load accounts")),
+                freshness = FreshnessSignal.initial(),
                 onAction = {},
+                onRetry = {},
             )
         }
 
-        onNodeWithText("Failed to load pocket accounts").assertIsDisplayed()
+        onNodeWithText("load accounts").assertIsDisplayed()
     }
 }

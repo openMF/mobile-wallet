@@ -261,13 +261,15 @@ internal fun ManagePocketContent(
                             verticalArrangement = Arrangement.spacedBy(KptTheme.spacing.sm),
                         ) {
                             mappedLinkedAccounts.forEach { account ->
+                                val displayName = account.name
+                                    ?: stringResource(Res.string.feature_pocket_unknown_account)
                                 LinkedPocketAccountCard(
                                     account = account,
                                     onRemoveClick = {
                                         onAction(
                                             ManagePocketAction.OpenDelinkConfirmation(
                                                 accountId = account.mappingId,
-                                                accountName = account.name,
+                                                accountName = displayName,
                                                 accountNumber = account.accountNumber,
                                             ),
                                         )
@@ -445,7 +447,7 @@ private fun PocketAccountRow(
                 overflow = TextOverflow.Ellipsis,
             )
             Text(
-                text = account.name,
+                text = account.name ?: stringResource(Res.string.feature_pocket_unknown_account),
                 style = KptTheme.typography.bodySmall,
                 color = KptTheme.colorScheme.secondary,
                 maxLines = 1,
@@ -460,7 +462,7 @@ private fun PocketAccountRow(
 }
 
 @Composable
-private fun LinkAccountsSheet(
+internal fun LinkAccountsSheet(
     state: ManagePocketState,
     availableUiState: ScreenState<List<LinkableAccount>>,
     searchResults: List<LinkableAccount>,
@@ -831,7 +833,7 @@ private fun ManagePocketSearchTextField(
 }
 
 @Composable
-private fun RemoveLinkedAccountSheet(
+internal fun RemoveLinkedAccountSheet(
     accountName: String,
     accountNumber: String,
     onCancelClick: () -> Unit,

@@ -5,35 +5,48 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ * See See https://github.com/openMF/kmp-project-template/blob/main/LICENSE
  */
 package org.mifospay.feature.pocket.viewmodels
 
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flowOf
+import kpt.core.base.store.screen.ScreenDataStream
+import kpt.core.base.store.screen.ScreenState
+import kpt.core.base.store.screen.screenDataStreamForTesting
 import org.jetbrains.compose.resources.StringResource
-import org.mifospay.core.common.DataState
 import org.mifospay.core.common.StringProvider
 import org.mifospay.core.data.repository.PocketRepository
 import org.mifospay.core.datastore.UserPreferencesRepository
 import org.mifospay.core.model.account.DefaultAccount
 import org.mifospay.core.model.client.Client
 import org.mifospay.core.model.client.UpdatedClient
-import org.mifospay.core.model.enums.AccountType
 import org.mifospay.core.model.instance.InterbankServer
 import org.mifospay.core.model.instance.ServerInstance
 import org.mifospay.core.model.payload.PocketLinkPayload
 import org.mifospay.core.model.pocket.DetailedPocketAccount
 import org.mifospay.core.model.pocket.LinkableAccount
-import org.mifospay.core.model.pocket.PocketAccount
 import org.mifospay.core.model.user.UserInfo
 
+/** Small fixture-only state wrapper used to feed deterministic values into Store5-shaped streams. */
+sealed interface DataState<out T> {
+    data object Loading : DataState<Nothing>
+    data class Success<T>(val data: T) : DataState<T>
+    data class Error(val exception: Throwable) : DataState<Nothing>
+}
+
+/** Returns one predictable localized value for view-model tests that do not exercise resources. */
 class FakeStringProvider(private val value: String = "Unknown Account") : StringProvider {
     override suspend fun get(resource: StringResource, vararg formatArgs: Any): String = value
 }
 
+/** Supplies an isolated client and preference state without requiring persistent storage. */
 class FakeUserPreferencesRepository : UserPreferencesRepository {
     private val _clientId = MutableStateFlow<Long?>(1L)
     override val clientId: StateFlow<Long?> = _clientId
@@ -44,9 +57,8 @@ class FakeUserPreferencesRepository : UserPreferencesRepository {
     private val _language = MutableStateFlow(org.mifospay.core.model.user.Language.DEFAULT)
     override val language: StateFlow<org.mifospay.core.model.user.Language> = _language
 
-    override suspend fun setLanguage(language: org.mifospay.core.model.user.Language): DataState<Unit> {
+    override suspend fun setLanguage(language: org.mifospay.core.model.user.Language) {
         _language.value = language
-        return DataState.Success(Unit)
     }
 
     fun setClientId(id: Long?) {
@@ -76,22 +88,33 @@ class FakeUserPreferencesRepository : UserPreferencesRepository {
     override val selectedInterbankInstance: StateFlow<InterbankServer?> = MutableStateFlow(null)
     override val accountExternalIds: StateFlow<Map<Long, String>> = MutableStateFlow(emptyMap())
 
-    override suspend fun updateToken(token: String): DataState<Unit> = DataState.Success(Unit)
-    override suspend fun updateUserInfo(user: UserInfo): DataState<Unit> = DataState.Success(Unit)
-    override suspend fun updateClientInfo(client: Client): DataState<Unit> = DataState.Success(Unit)
-    override suspend fun updateClientProfile(client: UpdatedClient): DataState<Unit> = DataState.Success(Unit)
-    override suspend fun updateDefaultAccount(account: DefaultAccount): DataState<Unit> = DataState.Success(Unit)
-    override suspend fun updateSelectedInstance(instance: ServerInstance): DataState<Unit> = DataState.Success(Unit)
-    override suspend fun updateSelectedInterbankInstance(instance: InterbankServer): DataState<Unit> = DataState.Success(Unit)
-    override suspend fun updateAccountExternalIds(accountExternalIds: Map<Long, String>): DataState<Unit> = DataState.Success(Unit)
+    override suspend fun updateToken(token: String) {}
+    override suspend fun updateUserInfo(user: UserInfo) {}
+    override suspend fun updateClientInfo(client: Client) {}
+    override suspend fun updateClientProfile(client: UpdatedClient) {}
+    override suspend fun updateDefaultAccount(account: DefaultAccount) {}
+    override suspend fun updateSelectedInstance(instance: ServerInstance) {}
+    override suspend fun updateSelectedInterbankInstance(instance: InterbankServer) {}
+    override suspend fun updateAccountExternalIds(accountExternalIds: Map<Long, String>) {}
     override fun getAccountExternalId(accountId: Long): String? = null
     override suspend fun logOut() {}
 }
 
+/**
+ * In-memory Pocket repository fake that exposes controllable Store5-style states and records
+ * commands. Recorded arguments let tests verify the contract without mocking implementation code.
+ */
 class FakePocketRepository : PocketRepository {
-    private val pocketAccounts = MutableStateFlow<DataState<List<PocketAccount>>>(DataState.Success(emptyList()))
-    private val detailedPocketAccounts = MutableStateFlow<DataState<List<DetailedPocketAccount>>>(DataState.Success(emptyList()))
-    private val availableAccounts = MutableStateFlow<DataState<List<LinkableAccount>>>(DataState.Success(emptyList()))
+    private val detailedState = MutableSharedFlow<ScreenState<List<DetailedPocketAccount>>>(replay = 1)
+    private val availableState = MutableSharedFlow<ScreenState<List<LinkableAccount>>>(replay = 1)
+    private val detailedPocketAccounts = screenDataStreamForTesting(
+        detailedState.asSharedFlow(),
+        freshness = emptyFlow()
+    )
+    private val availableAccounts = screenDataStreamForTesting(
+        availableState.asSharedFlow(),
+        freshness = emptyFlow()
+    )
 
     var linkAccountsResult: DataState<Unit> = DataState.Success(Unit)
     var delinkAccountsResult: DataState<Unit> = DataState.Success(Unit)
@@ -107,61 +130,71 @@ class FakePocketRepository : PocketRepository {
     var lastDelinkClientId: Long? = null
     var resetPocketCacheCalled: Boolean = false
 
+    /** Publishes the next detailed-account state observed by dashboard and manage-pocket tests. */
     fun setDetailedPocketAccounts(state: DataState<List<DetailedPocketAccount>>) {
-        detailedPocketAccounts.value = state
+        detailedState.tryEmit(state.toScreenState())
     }
 
+    /** Publishes the accounts eligible for linking in the link-account flow. */
     fun setAvailableAccountsToLink(state: DataState<List<LinkableAccount>>) {
-        availableAccounts.value = state
+        availableState.tryEmit(state.toScreenState())
     }
 
-    override suspend fun getPocketAccounts(): DataState<List<PocketAccount>> {
-        return pocketAccounts.value
-    }
-
-    override suspend fun linkAccount(
-        accountId: Long,
-        accountType: AccountType,
-        accountNumber: String,
-    ): DataState<Unit> = DataState.Success(Unit)
-
-    override suspend fun resetPocketCache() {
-        resetPocketCacheCalled = true
-    }
-
-    override fun getDetailedPocketAccounts(
+    override fun getLinkedPocketAccountsStream(
         clientId: Long,
-        forceRefresh: Boolean,
-    ): Flow<DataState<List<DetailedPocketAccount>>> {
+        scope: CoroutineScope,
+    ): ScreenDataStream<List<DetailedPocketAccount>> = detailedPocketAccounts
+
+    override fun getDetailedPocketAccountsStream(
+        clientId: Long,
+        scope: CoroutineScope,
+    ): ScreenDataStream<List<DetailedPocketAccount>> {
         lastDetailedClientId = clientId
-        lastDetailedForceRefresh = forceRefresh
         return detailedPocketAccounts
     }
 
-    override fun getAvailableAccountsToLink(clientId: Long): Flow<DataState<List<LinkableAccount>>> {
+    override fun getAvailableAccountsToLinkStream(
+        clientId: Long,
+        scope: CoroutineScope
+    ): ScreenDataStream<List<LinkableAccount>> {
         lastAvailableClientId = clientId
         return availableAccounts
     }
 
     override suspend fun linkAccounts(
-        payload: PocketLinkPayload,
         explicitlyAddedAccounts: List<DetailedPocketAccount>,
         clientId: Long,
-    ): DataState<Unit> {
-        lastLinkPayload = payload
+    ) {
+        // Recreate the production payload shape so tests can verify the repository boundary.
+        lastLinkPayload = PocketLinkPayload(
+            explicitlyAddedAccounts.map {
+                PocketLinkPayload.AccountDetail(it.pocket.accountId.toString(), it.pocket.accountType)
+            },
+        )
         lastExplicitlyAddedAccounts = explicitlyAddedAccounts
         lastLinkClientId = clientId
-        detailedAccountsAfterLink?.let { detailedPocketAccounts.value = it }
-        return linkAccountsResult
+        // Emit the post-write state before returning, matching the refresh visible to the UI.
+        detailedAccountsAfterLink?.let { detailedState.tryEmit(it.toScreenState()) }
+        val result = linkAccountsResult
+        if (result is DataState.Error) throw result.exception
     }
 
     override suspend fun delinkAccounts(
         pocketAccountMappingIds: List<Long>,
         clientId: Long,
-    ): DataState<Unit> {
+    ) {
         lastDelinkMappingIds = pocketAccountMappingIds
         lastDelinkClientId = clientId
-        detailedAccountsAfterDelink?.let { detailedPocketAccounts.value = it }
-        return delinkAccountsResult
+        // Emit refreshed linked accounts so successful delink tests can observe removal.
+        detailedAccountsAfterDelink?.let { detailedState.tryEmit(it.toScreenState()) }
+        val result = delinkAccountsResult
+        if (result is DataState.Error) throw result.exception
+    }
+
+    /** Maps the compact fixture state to the same ScreenState variants used by production code. */
+    private fun <T> DataState<T>.toScreenState(): ScreenState<T> = when (this) {
+        DataState.Loading -> ScreenState.Loading
+        is DataState.Success -> if (data is List<*> && data.isEmpty()) ScreenState.Empty else ScreenState.Content(data)
+        is DataState.Error -> ScreenState.Error(exception)
     }
 }

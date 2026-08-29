@@ -82,7 +82,7 @@ interface PocketRepository {
     )
 
     suspend fun delinkAccounts(
-        accountsToDelink: List<PocketAccount>,
+        pocketAccountMappingIds: List<Long>,
         clientId: Long,
     )
 }

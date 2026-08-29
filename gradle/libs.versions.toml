@@ -59,7 +59,7 @@ roborazzi = "1.67.0"
 # Testing Dependencies
 junitVersion = "4.13.2"
 truth = "1.4.5"
-espresso-core = "3.6.1"
+espresso-core = "3.7.0"
 
 # Security Dependencies
 androidxSecurityCrypto = "1.1.0"
