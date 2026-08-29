@@ -37,6 +37,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 import kpt.core.base.store.screen.ScreenState
 import kpt.core.base.store.submit.SubmitState
 import kpt.core.base.store.submit.submitHandler
@@ -48,6 +49,7 @@ import mifos_pay.feature.mpay_qr.generated.resources.feature_mpay_qr_external_id
 import mifos_pay.feature.mpay_qr.generated.resources.feature_mpay_qr_failed_to_generate
 import mifos_pay.feature.mpay_qr.generated.resources.feature_mpay_qr_no_default_account
 import mifos_pay.feature.mpay_qr.generated.resources.logo
+import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.getString
 import org.jetbrains.compose.resources.painterResource
 import org.mifospay.core.common.getSerialized
@@ -136,6 +138,7 @@ class MpayQrViewModel(
 
     init {
         observeLinkSubmit()
+
         stateFlow.onEach {
             savedStateHandle.setSerialized(key = KEY_STATE, value = it)
         }.launchIn(viewModelScope)
@@ -204,6 +207,10 @@ class MpayQrViewModel(
                 when (result) {
                     is ScreenState.Content<*> -> {
                         val unsortedAccounts = result.data as List<Account>
+                        /*
+                         * Pocket Account Suggestion Feature:
+                         * Sorts the accounts so that linked pocket accounts appear at the top.
+                         */
                         val accounts = unsortedAccounts.sortedByDescending { it.id in state.pocketAccountIds }
                         val defaultAcc = state.selectedAccount ?: accounts.firstOrNull()
 
@@ -414,6 +421,11 @@ class MpayQrViewModel(
         }
     }
 
+    /**
+     * Handles the user's decision to add the selected account to their Pocket.
+     * If true, it initiates a link submission using the PocketRepository.
+     * If false, it simply proceeds to the next step.
+     */
     private fun confirmAddToPocket(add: Boolean) {
         mutableStateFlow.update { it.copy(dialogState = null) }
         if (add) {
@@ -482,17 +494,20 @@ data class MpayQrState(
     /**
      * All accounts available for the user. Loaded from AccountRepository.
      */
+    @Transient
     val accounts: List<Account> = emptyList(),
 
     /**
      * Currently selected account for QR generation.
      * Defaults to the default account on initial load.
      */
+    @Transient
     val selectedAccount: Account? = null,
 
     /**
      * Whether the account picker bottom sheet is visible.
      */
+    @Transient
     val isAccountPickerVisible: Boolean = false,
     val pocketAccountIds: Set<Long> = emptySet(),
 
@@ -508,6 +523,7 @@ data class MpayQrState(
      */
     val accountExternalId: String = "",
 
+    @Transient
     val viewState: ViewState = ViewState.Loading,
 
     // 0=Intra-bank, 1=Inter-bank
@@ -526,7 +542,7 @@ data class MpayQrState(
         currency = selectedAccount?.currency?.code ?: QrCodeData.DEFAULT_CURRENCY,
         amount = "",
     ),
-    val dialogState: DialogState? = null,
+    @Transient val dialogState: DialogState? = null,
 ) {
     /**
      * The currently active external ID, prioritizing selectedAccount over the stored accountExternalId.
@@ -615,12 +631,12 @@ data class MpayQrState(
     sealed interface DialogState {
         data object AddToPocketConfirmation : DialogState
         data class Error(
-            val messageRes: org.jetbrains.compose.resources.StringResource =
+            val messageRes: StringResource =
                 UiRes.string.core_ui_error_msg_generic,
         ) : DialogState
         data object Loading : DialogState
         data class Success(
-            val messageRes: org.jetbrains.compose.resources.StringResource =
+            val messageRes: StringResource =
                 UiRes.string.core_ui_pocket_added_successfully,
         ) : DialogState
         data object ShowSetAmountDialog : DialogState

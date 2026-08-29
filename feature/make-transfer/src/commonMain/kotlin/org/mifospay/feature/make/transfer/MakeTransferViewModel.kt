@@ -49,8 +49,6 @@ import org.mifospay.core.common.DateHelper
 import kpt.core.base.store.screen.ScreenState
 import kpt.core.base.store.submit.SubmitState
 import kpt.core.base.store.submit.submitHandler
-import org.mifospay.core.common.getSerialized
-import org.mifospay.core.common.setSerialized
 import org.mifospay.core.common.utils.capitalizeWords
 import org.mifospay.core.data.util.UpiQrCodeProcessor
 import org.mifospay.core.datastore.UserPreferencesRepository
@@ -66,7 +64,7 @@ internal class MakeTransferViewModel(
     repository: UserPreferencesRepository,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<MakeTransferState, MakeTransferEvent, MakeTransferAction>(
-    initialState = savedStateHandle.getSerialized(KEY_STATE) ?: run {
+    initialState = run {
         val fromClientId = requireNotNull(repository.clientId.value)
         val defaultAccountId = requireNotNull(repository.defaultAccountId.value)
         val paymentData = requireNotNull(savedStateHandle.get<String>(TRANSFER_ARG))
@@ -79,11 +77,6 @@ internal class MakeTransferViewModel(
         )
     },
 ) {
-
-    companion object {
-        private const val KEY_STATE = "make_transfer_state"
-    }
-
     // Phase-3 fold: `getSelfAccounts` was migrated to `Flow<ScreenState<List<Account>>>`;
     // fold the 6-branch ScreenState into the existing 4-branch ViewState.
     // Content(emptyList) is defensively mapped to Empty (repo already emits
@@ -110,10 +103,14 @@ internal class MakeTransferViewModel(
                     if (accountsState.data.isEmpty()) {
                         ViewState.Empty
                     } else {
+                        /* 
+                         * Pocket Account Suggestion Feature:
+                         * Sorts the accounts so that linked pocket accounts appear at the top.
+                         */
                         val sortedAccounts = accountsState.data.sortedByDescending { it.id in pocketAccountIds }
                         val account = state.selectedAccount ?: sortedAccounts.firstOrNull()
                         if (account != null) {
-                            sendAction(MakeTransferAction.SelectAccount(account))
+                            mutableStateFlow.update { it.copy(selectedAccount = account) }
                         }
                         ViewState.Content(sortedAccounts)
                     }
@@ -274,6 +271,11 @@ internal class MakeTransferViewModel(
     }
 
 
+    /**
+     * Handles the user's decision to add the selected account to their Pocket.
+     * If true, it initiates a link submission using the PocketRepository.
+     * If false, it simply proceeds to the next step.
+     */
     private fun confirmAddToPocket(add: Boolean) {
         mutableStateFlow.update { it.copy(dialogState = null) }
         if (add) {
@@ -332,7 +334,6 @@ internal class MakeTransferViewModel(
     }
 }
 
-@Serializable
 internal data class MakeTransferState(
     val fromClientId: Long,
     val toClientData: PaymentQrData,

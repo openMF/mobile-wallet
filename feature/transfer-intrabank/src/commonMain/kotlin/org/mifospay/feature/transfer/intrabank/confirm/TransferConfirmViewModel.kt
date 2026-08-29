@@ -233,6 +233,10 @@ internal class TransferConfirmViewModel(
                         val pocketAccountIds = pocketAccounts.filter { it.accountType == AccountType.SAVINGS }
                             .mapNotNull { it.accountId }.toSet()
                         mutableStateFlow.update { state ->
+                            /*
+                             * Pocket Account Suggestion Feature:
+                             * Sorts the accounts so that linked pocket accounts appear at the top.
+                             */
                             val sortedAccounts = state.fromAccountOptions
                                 ?.sortedByDescending { it.accountId?.toLong() in pocketAccountIds }
                             state.copy(
@@ -290,6 +294,11 @@ internal class TransferConfirmViewModel(
         }
     }
 
+    /**
+     * Handles the user's decision to add the selected account to their Pocket.
+     * If true, it initiates a link submission using the PocketRepository.
+     * If false, it simply proceeds to the next step.
+     */
     private fun confirmAddToPocket(add: Boolean) {
         mutableStateFlow.update { it.copy(dialogState = null) }
         if (add) {

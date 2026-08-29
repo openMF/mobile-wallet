@@ -96,6 +96,10 @@ class InterbankTransferViewModel(
             .onEach { pocketAccounts ->
                 val pocketAccountIds = pocketAccounts.filter { it.accountType == AccountType.SAVINGS }
                     .map { it.accountId }.toSet()
+                /*
+                 * Pocket Account Suggestion Feature:
+                 * Sorts the accounts so that linked pocket accounts appear at the top.
+                 */
                 mutableStateFlow.update { state ->
                     val sortedAccounts = state.fromAccounts.sortedByDescending { it.id in pocketAccountIds }
                     state.copy(pocketAccountIds = pocketAccountIds, fromAccounts = sortedAccounts)
@@ -428,6 +432,11 @@ class InterbankTransferViewModel(
         }
     }
 
+    /**
+     * Handles the user's decision to add the selected account to their Pocket.
+     * If true, it initiates a link submission using the PocketRepository.
+     * If false, it simply proceeds to the next step.
+     */
     private fun confirmAddToPocket(add: Boolean) {
         if (!add) {
             mutableStateFlow.update {
