@@ -32,6 +32,7 @@ import org.mifospay.core.model.instance.ServerInstance
 import org.mifospay.core.model.payload.PocketLinkPayload
 import org.mifospay.core.model.pocket.DetailedPocketAccount
 import org.mifospay.core.model.pocket.LinkableAccount
+import org.mifospay.core.model.pocket.PocketAccount
 import org.mifospay.core.model.user.UserInfo
 
 /** Small fixture-only state wrapper used to feed deterministic values into Store5-shaped streams. */
@@ -144,6 +145,9 @@ class FakePocketRepository : PocketRepository {
         clientId: Long,
         scope: CoroutineScope,
     ): ScreenDataStream<List<DetailedPocketAccount>> = detailedPocketAccounts
+
+    /** Supplies the linked accounts used by consumers that combine Pocket data with account data. */
+    override fun observeLinkedPocketAccounts(clientId: Long): Flow<List<PocketAccount>> = flowOf(emptyList())
 
     override fun getDetailedPocketAccountsStream(
         clientId: Long,

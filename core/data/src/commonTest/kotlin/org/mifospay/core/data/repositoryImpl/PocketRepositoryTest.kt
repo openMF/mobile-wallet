@@ -9,13 +9,14 @@
  */
 package org.mifospay.core.data.repositoryImpl
 
+import de.jensklingenberg.ktorfit.Ktorfit
 import io.github.mobilebytelabs.kmptoolkit.networkmonitor.NetworkChangeEvent
 import io.github.mobilebytelabs.kmptoolkit.networkmonitor.NetworkInfo
 import io.github.mobilebytelabs.kmptoolkit.networkmonitor.NetworkMonitor
 import io.github.mobilebytelabs.kmptoolkit.networkmonitor.NetworkStatus
 import io.github.mobilebytelabs.kmptoolkit.networkmonitor.NetworkType
+import io.ktor.client.HttpClient
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -30,16 +31,8 @@ import org.mifospay.core.model.pocket.AccountStatus
 import org.mifospay.core.model.pocket.DetailedPocketAccount
 import org.mifospay.core.model.pocket.LinkableAccount
 import org.mifospay.core.model.pocket.PocketAccount
-import org.mifospay.core.network.PocketDataManager
-import org.mifospay.core.network.model.ClientResponseEntity
-import org.mifospay.core.network.model.entity.Page
-import org.mifospay.core.network.model.entity.client.ClientAccountsEntity
-import org.mifospay.core.network.model.entity.client.ClientEntity
-import org.mifospay.core.network.model.entity.client.NewClientEntity
-import org.mifospay.core.network.model.entity.client.UpdateClientEntity
-import org.mifospay.core.network.services.ClientService
-import org.mifospay.core.network.services.PocketService
-import org.mifospay.core.network.services.ShareAccountService
+import org.mifospay.core.network.KtorfitClient
+import org.mifospay.core.network.SelfServiceApiManager
 import org.mobilenativefoundation.store.store5.Fetcher
 import org.mobilenativefoundation.store.store5.Store
 import org.mobilenativefoundation.store.store5.StoreBuilder
@@ -128,7 +121,7 @@ class PocketRepositoryTest {
         pocketStore: Store<PocketKey, List<DetailedPocketAccount>>? = null,
         linkableAccountsStore: Store<LinkableAccountKey, List<LinkableAccount>>? = null,
     ) = PocketRepositoryImp(
-        dataManager = FakePocketDataManager,
+        dataManager = fakeSelfServiceApiManager,
         ioDispatcher = Dispatchers.Default,
         pocketStore = pocketStore,
         linkableAccountsStore = linkableAccountsStore,
@@ -154,23 +147,18 @@ class PocketRepositoryTest {
     )
 }
 
-/** Fails fast for unrelated API calls, ensuring repository tests only use Store5 read paths. */
-private object FakePocketDataManager : PocketDataManager {
-    override val clientsApi: ClientService = object : ClientService {
-        override suspend fun clients(): Flow<Page<ClientEntity>> = error("unused")
-        override suspend fun getClientForId(clientId: Long): ClientEntity = error("unused")
-        override fun getClient(clientId: Long): Flow<ClientEntity> = error("unused")
-        override suspend fun updateClient(clientId: Long, payload: UpdateClientEntity) = error("unused")
-        override fun getClientImage(clientId: Long): Flow<String> = error("unused")
-        override suspend fun updateClientImage(clientId: Long, typedFile: String) = error("unused")
-        override suspend fun getClientAccounts(clientId: Long): ClientAccountsEntity = error("unused")
-        override fun getAccounts(clientId: Long, accountType: String): Flow<ClientAccountsEntity> = error("unused")
-        override suspend fun createClient(newClient: NewClientEntity): ClientResponseEntity = error("unused")
-        override suspend fun deleteClient(clientId: Int): ClientResponseEntity = error("unused")
-    }
-    override val pocketApi: PocketService get() = error("unused")
-    override val shareAccountApi: ShareAccountService get() = error("unused")
-}
+/**
+ * Uses the production manager type required by [PocketRepositoryImp] without making network calls.
+ * Its lazily-created services are never touched because these tests exercise read-store wiring.
+ */
+private val fakeSelfServiceApiManager = SelfServiceApiManager(
+    KtorfitClient(
+        Ktorfit.Builder()
+            .httpClient(HttpClient())
+            .baseUrl("https://example.com/")
+            .build(),
+    ),
+)
 
 /** Keeps Store5 network behavior online and deterministic for repository stream tests. */
 private object FakeNetworkMonitor : NetworkMonitor {
