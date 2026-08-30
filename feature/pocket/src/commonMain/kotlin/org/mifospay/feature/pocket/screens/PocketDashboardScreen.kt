@@ -145,7 +145,7 @@ internal fun PocketDashboardContent(
             IconButton(onClick = { onAction(PocketDashboardAction.ManagePocket) }) {
                 Icon(
                     imageVector = MifosIcons.Edit2,
-                    contentDescription = "Manage Pockets",
+                    contentDescription = stringResource(Res.string.feature_pocket_dashboard_manage),
                     tint = KptTheme.colorScheme.onSurface,
                 )
             }

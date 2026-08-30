@@ -10,6 +10,7 @@
 package org.mifospay.core.common
 
 import java.text.NumberFormat
+import java.util.Locale
 
 actual object CurrencyFormatter {
 
@@ -18,7 +19,7 @@ actual object CurrencyFormatter {
         currencyCode: String?,
         maximumFractionDigits: Int?,
     ): String {
-        val formatter = NumberFormat.getNumberInstance()
+        val formatter = NumberFormat.getNumberInstance(Locale.US)
         formatter.maximumFractionDigits = maximumFractionDigits ?: 0
         formatter.minimumFractionDigits = maximumFractionDigits ?: 0
         return formatter.format(balance)
@@ -28,7 +29,7 @@ actual object CurrencyFormatter {
         balance: Double?,
         maximumFractionDigits: Int?,
     ): String {
-        val formatter = NumberFormat.getNumberInstance()
+        val formatter = NumberFormat.getNumberInstance(Locale.US)
         formatter.maximumFractionDigits = maximumFractionDigits ?: 0
         formatter.minimumFractionDigits = maximumFractionDigits ?: 0
         return formatter.format(balance)

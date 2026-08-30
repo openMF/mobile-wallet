@@ -79,7 +79,7 @@ internal class ManagePocketViewModel(
                     ManagePocketAccount(
                         accountId = it.pocket.accountId,
                         mappingId = it.pocket.id,
-                        name = it.productName ?: "Unknown",
+                        name = it.productName,
                         accountNumber = it.pocket.accountNumber,
                         accountType = it.pocket.accountType,
                     )
@@ -125,7 +125,7 @@ internal class ManagePocketViewModel(
 
         allAccounts.filter { account ->
             account.accountType == tab && (
-                (account.productName ?: "Unknown").contains(query, ignoreCase = true) ||
+                (account.productName ?: "").contains(query, ignoreCase = true) ||
                     (account.accountNumber ?: "").contains(query, ignoreCase = true)
                 )
         }
@@ -319,7 +319,7 @@ internal class ManagePocketViewModel(
                         accountType = it.accountType,
                         accountNumber = it.accountNumber ?: "",
                     ),
-                    productName = it.productName ?: "Unknown",
+                    productName = it.productName,
                     balance = it.balance,
                     currencyCode = it.currencyCode,
                     decimalPlaces = it.decimalPlaces,
@@ -349,7 +349,7 @@ internal class ManagePocketViewModel(
 internal data class ManagePocketAccount(
     val accountId: Long,
     val mappingId: Long,
-    val name: String,
+    val name: String?,
     val accountNumber: String,
     val accountType: AccountType,
 )

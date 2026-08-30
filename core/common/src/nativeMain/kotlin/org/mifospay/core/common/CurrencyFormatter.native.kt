@@ -9,6 +9,7 @@
  */
 package org.mifospay.core.common
 
+import platform.Foundation.NSLocale
 import platform.Foundation.NSNumber
 import platform.Foundation.NSNumberFormatter
 import platform.Foundation.NSNumberFormatterCurrencyStyle
@@ -21,9 +22,12 @@ actual object CurrencyFormatter {
         maximumFractionDigits: Int?,
     ): String {
         val numberFormatter = NSNumberFormatter()
+        numberFormatter.locale = NSLocale(localeIdentifier = "en_US_POSIX")
         numberFormatter.numberStyle = NSNumberFormatterCurrencyStyle
         numberFormatter.currencyCode = currencyCode ?: "$"
-        numberFormatter.maximumFractionDigits = (maximumFractionDigits ?: 0).toULong()
+        val fractionDigits = (maximumFractionDigits ?: 0).toULong()
+        numberFormatter.maximumFractionDigits = fractionDigits
+        numberFormatter.minimumFractionDigits = fractionDigits
         return numberFormatter.stringFromNumber(NSNumber(balance ?: 0.0)) ?: ""
     }
 
@@ -32,9 +36,11 @@ actual object CurrencyFormatter {
         maximumFractionDigits: Int?,
     ): String {
         val numberFormatter = NSNumberFormatter()
+        numberFormatter.locale = NSLocale(localeIdentifier = "en_US_POSIX")
         numberFormatter.numberStyle = NSNumberFormatterDecimalStyle
-        numberFormatter.maximumFractionDigits =
-            (maximumFractionDigits ?: 0).toULong()
+        val fractionDigits = (maximumFractionDigits ?: 0).toULong()
+        numberFormatter.maximumFractionDigits = fractionDigits
+        numberFormatter.minimumFractionDigits = fractionDigits
         return numberFormatter
             .stringFromNumber(NSNumber(balance ?: 0.0))
             ?: ""
