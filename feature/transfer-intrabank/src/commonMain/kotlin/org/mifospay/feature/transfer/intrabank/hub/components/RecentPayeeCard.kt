@@ -34,6 +34,7 @@ import org.mifospay.core.designsystem.component.MifosTextUserImage
 import org.mifospay.core.model.account.RecentPayee
 import template.core.base.designsystem.KptMaterialTheme
 import template.core.base.designsystem.theme.KptTheme
+import kotlin.math.roundToInt
 
 @Composable
 fun RecentPayeeCard(
@@ -125,8 +126,9 @@ private fun formatAccountDisplay(accountNo: String): String {
  * Formats amount with currency symbol
  */
 private fun formatAmount(currency: String, amount: Double): String {
-    val wholePart = amount.toLong()
-    val decimalPart = ((amount - wholePart) * 100).toInt()
+    val cents = (amount * 100).roundToInt()
+    val wholePart = cents / 100
+    val decimalPart = cents % 100
     val formattedWhole = wholePart.toString()
         .reversed()
         .chunked(3)
